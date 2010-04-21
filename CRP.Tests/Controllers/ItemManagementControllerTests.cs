@@ -124,6 +124,15 @@ namespace CRP.Tests.Controllers
         {
             "~/ItemManagement/SaveTemplate/5".ShouldMapTo<ItemManagementController>(a => a.SaveTemplate(5, "Test"), true);
         }
+
+        /// <summary>
+        /// Tests the details mapping.
+        /// </summary>
+        [TestMethod]
+        public void TestDetailsMapping()
+        {
+            "~/ItemManagement/Details/5".ShouldMapTo<ItemManagementController>(a => a.Details(5));
+        }
         #endregion Route Tests
     }
 }
