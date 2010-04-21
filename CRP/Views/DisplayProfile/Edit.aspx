@@ -20,6 +20,7 @@
        {%>
 
         <%= Html.AntiForgeryToken() %>
+        <%= Html.ClientSideValidation<DisplayProfile>("") %>
 
         <fieldset>
             <legend>Fields</legend>
