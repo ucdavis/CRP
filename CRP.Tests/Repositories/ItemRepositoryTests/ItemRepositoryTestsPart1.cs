@@ -116,6 +116,10 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
                 "Message = \"must be zero or more\"",
                 "Max = 922337203685477"                                                           
             }));
+            expectedFields.Add(new NameAndType("CheckPaymentInstructions", "System.String", new List<string>
+            { 
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
             expectedFields.Add(new NameAndType("CostPerItem", "System.Decimal", new List<AttributeList>(attributeList)));
             //expectedFields.Add(new NameAndType("CostPerItem", "System.Decimal", new List<string>
             //{

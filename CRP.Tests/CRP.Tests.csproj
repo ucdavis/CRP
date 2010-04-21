@@ -155,6 +155,7 @@
     <Compile Include="Repositories\ItemReportColumnRepositoryTests.cs" />
     <Compile Include="Repositories\ItemReportRepositoryTests.cs" />
     <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart1.cs" />
+    <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart10.cs" />
     <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart2.cs" />
     <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart3.cs" />
     <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart4.cs" />
