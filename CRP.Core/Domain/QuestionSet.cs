@@ -41,7 +41,7 @@ namespace CRP.Core.Domain
         //public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<ItemQuestionSet> Items { get; set; }
-        public virtual ICollection<ItemType> ItemTypes { get; set; }
+        public virtual ICollection<ItemTypeQuestionSet> ItemTypes { get; set; }
 
         public virtual void AddQuestion(Question question)
         {
@@ -53,47 +53,45 @@ namespace CRP.Core.Domain
 
         public override bool IsValid()
         {
-            var flag = true;
+            //var flag = true;
 
-            if (CollegeReusable)
-            {
-                if (School == null)
-                {
-                    flag = false;
-                }
-            }
-
-            // should really only be reusable at one level
-            if (SystemReusable && CollegeReusable || SystemReusable && UserReusable || CollegeReusable && UserReusable)
-            {
-                flag = false;
-            }
-
-            return base.IsValid() && flag;
-
-            //TODO: Review using the commented out code.
-            //CollegeReusableSchool = true;
-            //Reusability = true;
             //if (CollegeReusable)
             //{
             //    if (School == null)
             //    {
-            //        CollegeReusableSchool = false;
+            //        flag = false;
             //    }
             //}
+
             //// should really only be reusable at one level
             //if (SystemReusable && CollegeReusable || SystemReusable && UserReusable || CollegeReusable && UserReusable)
             //{
-            //    Reusability = false;
+            //    flag = false;
             //}
 
-            //return base.IsValid();
+            //return base.IsValid() && flag;
+            CollegeReusableSchool = true;
+            Reusability = true;
+            if (CollegeReusable)
+            {
+                if (School == null)
+                {
+                    CollegeReusableSchool = false;
+                }
+            }
+            // should really only be reusable at one level
+            if (SystemReusable && CollegeReusable || SystemReusable && UserReusable || CollegeReusable && UserReusable)
+            {
+                Reusability = false;
+            }
+
+            return base.IsValid();
         }
 
-        //[AssertTrue(Message = "Must have school if college reusable")]
-        //public virtual bool CollegeReusableSchool{ get; set;}
-        //[AssertTrue(Message = "Only one reusable flag may be set to true")]
-        //public virtual bool Reusability { get; set; }
+        [AssertTrue(Message = "Must have school if college reusable")]
+        public virtual bool CollegeReusableSchool { get; set; }
+        [AssertTrue(Message = "Only one reusable flag may be set to true")]
+        public virtual bool Reusability { get; set; }
 
     }
 }
