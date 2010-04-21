@@ -133,6 +133,9 @@ namespace CRP.Tests.Core.Helpers
         public static ExtendedPropertyAnswer ExtendedPropertyAnswer(int? counter)
         {
             var rtValue = new ExtendedPropertyAnswer();
+            rtValue.Answer = "Answer" + counter.Extra();
+            rtValue.Item = new Item();
+            rtValue.ExtendedProperty = new ExtendedProperty();
             //TODO: Populate values
             
             return rtValue;

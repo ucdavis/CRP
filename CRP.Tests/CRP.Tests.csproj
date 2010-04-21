@@ -111,6 +111,7 @@
     <Compile Include="Repositories\CouponRepositoryTests.cs" />
     <Compile Include="Repositories\DisplayProfileRepositoryTests.cs" />
     <Compile Include="Repositories\EditorRepositoryTests.cs" />
+    <Compile Include="Repositories\ExtendedPropertyAnswerRepositoryTests.cs" />
     <Compile Include="Repositories\ExtendedPropertyRepositoryTests.cs" />
     <Compile Include="Repositories\SchoolRepositoryTests.cs" />
     <Compile Include="Repositories\UnitRepositoryTests.cs" />
