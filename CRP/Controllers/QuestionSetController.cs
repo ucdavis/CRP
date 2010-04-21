@@ -244,6 +244,27 @@ namespace CRP.Controllers
                 ModelState.AddModelError("Name", "Contact Information is reserved for internal system use only.");
             }
 
+            //Validation check before we persist, shouldn't really be needed
+            if (itemId.HasValue)
+            {
+                var item = Repository.OfType<Item>().GetNullableByID(itemId.Value);
+                if (item == null)
+                {
+                    Message = "Unable to get associated item.";
+                    return this.RedirectToAction(a => a.List());
+                }
+                MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+            }
+            else if (itemTypeId.HasValue)
+            {
+                var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId.Value);
+                if (itemType == null)
+                {
+                    Message = "Unable to get associated item type.";
+                    return this.RedirectToAction(a => a.List());
+                }
+                MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
+            }
             if (ModelState.IsValid)
             {
                 if (itemId.HasValue)
