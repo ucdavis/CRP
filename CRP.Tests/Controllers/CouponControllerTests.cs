@@ -505,7 +505,9 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("http://sample.com/ItemManagement/Edit/1#Coupons", result.Url);
             Assert.AreEqual("Coupon was unable to update.", Controller.Message);
             CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
-            Controller.ModelState.AssertErrorsAre("Code: may not be null or empty");
+            Controller.ModelState.AssertErrorsAre(
+                "Code: may not be null or empty",
+                "Code: length must be between 10 and 10");            
         }
 
         #endregion Deactivate Tests

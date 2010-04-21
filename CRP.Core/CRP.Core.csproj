@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstractions\SystemTime.cs" />
     <Compile Include="Domain\CatbertClasses.cs" />
     <Compile Include="Domain\Check.cs" />
     <Compile Include="Domain\Coupon.cs" />

@@ -322,7 +322,7 @@ namespace CRP.Tests.Repositories
             expectedFields.Add(new NameAndType("DateReceived", "System.DateTime", new List<string>()));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
                                                                          {
-                                                                             "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                                                                             "[Newtonsoft.Json.JsonPropertyAttribute()]",
                                                                              "[System.Xml.Serialization.XmlIgnoreAttribute()]"
                                                                          }));
             expectedFields.Add(new NameAndType("Notes", "System.String", new List<string>()));

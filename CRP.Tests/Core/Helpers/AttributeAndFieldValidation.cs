@@ -31,10 +31,9 @@ namespace CRP.Tests.Core.Helpers
                 Assert.AreEqual(propertyInfos[i].PropertyType.ToString(), expectedFields[i].Property);
                 var foundAttributes = CustomAttributeData.GetCustomAttributes(propertyInfos[i])
                     .AsQueryable().OrderBy(a => a.ToString()).ToList();
-                Assert.AreEqual(expectedFields[i].Attributes.Count, foundAttributes.Count());
+                Assert.AreEqual(expectedFields[i].Attributes.Count, foundAttributes.Count(), "For Field: " + propertyInfos[i].Name);
                 if (foundAttributes.Count() > 0)
-                {
-                    //Array.Sort(foundAttributes, (attribute1, attribute2)=> attribute1.NamedArguments.ToString().CompareTo(attribute2.NamedArguments.ToString()));
+                {                    
                     for (int j = 0; j < foundAttributes.Count(); j++)
                     {
                         Assert.AreEqual(expectedFields[i].Attributes[j], foundAttributes[j].ToString(), "For Field: " + propertyInfos[i].Name);

@@ -29,7 +29,7 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(10)]
+        [Length(Min = 10, Max = 10)]
         public virtual string Code { get; set; }
         [NotNull]
         public virtual Item Item { get; set; }
@@ -48,5 +48,31 @@ namespace CRP.Core.Domain
         public virtual string UserId { get; set; }
 
         public virtual bool IsActive { get; set; }
+
+        public override bool IsValid()
+        {
+            PopulateComplexLogicFields();
+            return base.IsValid();
+        }
+
+        public override System.Collections.Generic.ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
+        {
+            PopulateComplexLogicFields();
+            return base.ValidationResults();
+        }
+
+        private void PopulateComplexLogicFields()
+        {
+            UnlimitedAndEmail = true;
+            if (Unlimited && string.IsNullOrEmpty(Email != null ? Email.Trim() : string.Empty))
+            {
+                UnlimitedAndEmail = false;
+            }
+        }
+
+        #region Fields ONLY used for complex validation, not in database
+        [AssertTrue(Message = "An unlimited coupon requires an email")]
+        public virtual bool UnlimitedAndEmail { get; set; }
+        #endregion Fields ONLY used for complex validation, not in database
     }
 }
