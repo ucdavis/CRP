@@ -149,7 +149,13 @@
     <Compile Include="Controllers\SearchControllerTests.cs" />
     <Compile Include="Controllers\TagControllerTests.cs" />
     <Compile Include="Controllers\TemplateControllerTests.cs" />
-    <Compile Include="Controllers\TransactionControllerTests.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart1.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart4.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsInit.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart2.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart3.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart5.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart6.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
     <Compile Include="Core\Extensions\RouteTestingExtensions.cs" />
