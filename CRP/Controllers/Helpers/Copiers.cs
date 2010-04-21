@@ -23,6 +23,7 @@ namespace CRP.Controllers.Helpers
             dest.Link = src.Link;
             dest.Available = src.Available;
             dest.Private = src.Private;
+            dest.Unit = src.Unit;
 
             PopulateItem(repository, dest, extendedProperties, tags);
 

@@ -21,7 +21,7 @@
     <p>
         Department display profiles:
     </p>
-    <% Html.Grid(Model.Where(a => !a.SiteMaster && !a.SchoolMaster))
+    <% Html.Grid(Model.Where(a => !a.SchoolMaster))
            .Transactional()
            .Name("DisplayProfiles")
            .PrefixUrlParameters(false)

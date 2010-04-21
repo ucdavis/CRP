@@ -22,3 +22,8 @@
     <%= Html.TextBox("DateReceived", String.Format("{0:d}", Model.DateReceived), new {@class="date"}) %>
     <%= Html.ValidationMessage("DateReceived", "*") %>
 </p>
+<p>
+    <label for="Notes">Notes:</label>
+    <%= Html.TextArea("Notes", Model.Notes) %>
+    <%= Html.ValidationMessage("Notes", "*") %>
+</p>

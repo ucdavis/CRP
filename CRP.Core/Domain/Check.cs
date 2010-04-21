@@ -34,8 +34,8 @@ namespace CRP.Core.Domain
         public virtual int CheckNumber { get; set; }
         public virtual Decimal Amount { get; set; }
         public virtual DateTime DateReceived { get; set; }
-
         public virtual Transaction Transaction { get; set; }
+        public virtual string Notes { get; set; }
 
         //public virtual ICollection<Transaction> Transactions { get; set; }
     }

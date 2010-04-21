@@ -18,6 +18,12 @@
                     $(item2).attr("id", "Checks[" + index + "]_" + $(item2).attr("id"));
                     $(item2).attr("name", "Checks[" + index + "]." + $(item2).attr("name"));
                 });
+
+                var controls2 = $(item).find("textarea");
+                $.each(controls2, function(index2, item2) {
+                    $(item2).attr("id", "Checks[" + index + "]_" + $(item2).attr("id"));
+                    $(item2).attr("name", "Checks[" + index + "]." + $(item2).attr("name"));
+                });
             });
 
             $("img#addCheck").click(function(event) {
@@ -43,16 +49,25 @@
 
                 var controls = $(item).find("input");
                 $.each(controls, function(index2, item2) {
-                    // pull the last part of the name out
-                    var charIndex = ($(item2).attr("id")).indexOf("_");
-                    var nameEnd = ($(item2).attr("id")).substring(charIndex + 1);
+                    RenameControl(index, item2);
+                });
 
-                    $(item2).attr("id", "Checks[" + index + "]_" + nameEnd);
-                    $(item2).attr("name", "Checks[" + index + "]." + nameEnd);
+                var controls2 = $(item).find("textarea");
+                $.each(controls2, function(index2, item2) {
+                    RenameControl(index, item2);
                 });
 
                 $(item).find("input.amount").blur(function(event) { RecalculateTotal(); });
             });
+        }
+
+        function RenameControl(index, obj) {
+            // pull the last part of the name out
+            var charIndex = ($(obj).attr("id")).indexOf("_");
+            var nameEnd = ($(obj).attr("id")).substring(charIndex + 1);
+
+            $(obj).attr("id", "Checks[" + index + "]_" + nameEnd);
+            $(obj).attr("name", "Checks[" + index + "]." + nameEnd);
         }
 
         function RecalculateTotal() {
