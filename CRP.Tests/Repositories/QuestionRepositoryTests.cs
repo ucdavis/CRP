@@ -969,6 +969,59 @@ namespace CRP.Tests.Repositories
             #endregion Assert	
         }
 
+        [TestMethod]
+        public void TestValidationClassesJoinsAsExpected2()
+        {
+            #region Arrange
+            //Repository.OfType<Validator>().DbContext.BeginTransaction();
+            //LoadValidators(3);
+            //Repository.OfType<Validator>().DbContext.CommitTransaction();
+
+            var question = GetValid(null);
+            question.Validators = new List<Validator>();
+            //question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(2));
+            //question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(1));
+            #endregion Arrange
+
+            #region Act
+            var result = question.ValidationClasses;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("", result);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestValidationClassesJoinsAsExpected3()
+        {
+            #region Arrange
+            //Repository.OfType<Validator>().DbContext.BeginTransaction();
+            //LoadValidators(3);
+            //Repository.OfType<Validator>().DbContext.CommitTransaction();
+            var validators = new List<Validator>();
+            for (int i = 0; i < 3; i++)
+            {
+                validators.Add(CreateValidEntities.Validator(i+1));
+            }
+            validators[1].Class = null;
+
+            var question = GetValid(null);
+            question.Validators = new List<Validator>();
+            question.Validators.Add(validators[0]);
+            question.Validators.Add(validators[1]);
+            question.Validators.Add(validators[2]);
+            
+            #endregion Arrange
+
+            #region Act
+            var result = question.ValidationClasses;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Class1  Class3", result); //Two spaces
+            #endregion Assert
+        }
         #endregion ValidationClasses Tests
 
         #region Order Tests

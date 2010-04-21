@@ -87,6 +87,6 @@ namespace CRP.Tests.Repositories
 
         #endregion CRUD Tests
 
-        //TODO: Other Tests
+        //Don't really need any validation tests for Catbert tables
     }
 }
