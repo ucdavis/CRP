@@ -48,6 +48,7 @@ namespace CRP.Tests.Controllers
         protected List<Coupon> Coupons { get; set; }
         protected IRepository<Coupon> CouponRepository { get; set; }
         protected QuestionAnswerParameter[] TransactionAnswerParameters { get; set; }
+        protected QuestionAnswerParameter[] QuantityAnswerParameters { get; set; }
 
         #region Init
         public TransactionControllerTests()
@@ -852,16 +853,119 @@ namespace CRP.Tests.Controllers
             Assert.IsTrue(Coupons[1].Used);
             #endregion Assert
         }
-
-
-
-
         #endregion Coupon Tests
 
 
-        //test coupon variations
-        //test amount is calculated properly
-        //test transaction answers
+        /// <summary>
+        /// Tests the checkout calculates amount correctly.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutCalculatesAmountCorrectly()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 6.01m;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(18.03m, args.Amount);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the checkout calculates amount correctly with coupon.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutCalculatesAmountCorrectlyWithCoupon()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 6.01m;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual((6.01m * 3) - (5.01m * 2), args.Amount);
+            #endregion Assert
+        }
+
+        #region Checkout Transaction Answer Tests
+
+        /// <summary>
+        /// Tests the checkout transaction answers.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswers()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();   
+            SetupDataForAllContactInformationTransactionAnswerParameters();
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(9, args.TransactionAnswers.Count);
+            #endregion Assert		
+        }
+
+
+        //TODO: add a transaction only question set to test the validators
+
+        #endregion Checkout Transaction Answer Tests
+
+        #region Checkout Quantity Answers Tests
+
+        [TestMethod]
+        public void TestCheckoutQuantityAnswers()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            //SetupDataForAllContactInformationTransactionAnswerParameters();
+            SetupDataForQuantityQuestionsAnswerParameters();
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, QuantityAnswerParameters, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            //One because we have a TransactionAnswer here
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(9, args.QuantityAnswers.Count);
+            #endregion Assert			
+        }
+        #endregion Checkout Quantity Answers Tests
+
         //test quantity answers
         //test donation creates another transaction
         //test restricted key
@@ -1466,6 +1570,63 @@ namespace CRP.Tests.Controllers
             TransactionAnswerParameters[0] = new QuestionAnswerParameter();
             TransactionAnswerParameters[0].Answer = "bob@test.com";
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+        }
+
+        /// <summary>
+        /// Setup data for all contact information transaction answer parameters.
+        /// </summary>
+        private void SetupDataForAllContactInformationTransactionAnswerParameters()
+        {
+            var myDict = new Dictionary<int, string>();
+            myDict.Add(0, "FirstName");
+            myDict.Add(1, "LastName");
+            myDict.Add(2, "Address1");
+            myDict.Add(3, "Address2");
+            myDict.Add(4, "City");
+            myDict.Add(5, "CA");
+            myDict.Add(6, "95616");
+            myDict.Add(7, "555 555 5555");
+            myDict.Add(8, "bob@test.com");
+
+            TransactionAnswerParameters = new QuestionAnswerParameter[9];
+            for (int i = 0; i < 9; i++)
+            {
+                TransactionAnswerParameters[i] = new QuestionAnswerParameter();
+                TransactionAnswerParameters[i].QuestionId = Questions[i].Id;
+                TransactionAnswerParameters[i].Answer = myDict[i];
+            }
+        }
+
+        private void SetupDataForQuantityQuestionsAnswerParameters()
+        {
+            var myDict = new Dictionary<int, string>();
+            myDict.Add(0, "FirstName");
+            myDict.Add(1, "LastName");
+            myDict.Add(2, "Fish");
+            QuantityAnswerParameters = new QuestionAnswerParameter[9];
+            ControllerRecordFakes.FakeQuestions(Questions, 2);
+            var questionOffset = 9;
+            Assert.AreEqual(12, Questions.Count, "Question setup needs to be fixed.");
+            Questions[9].Name = "What is your First name?";
+            Questions[9].QuestionSet = QuestionSets[2];
+            Questions[10].Name = "What is your Last name?";
+            Questions[10].QuestionSet = QuestionSets[2];
+            Questions[11].Name = "What is your Favorite Food?";
+            Questions[11].QuestionSet = QuestionSets[2];
+            var counter = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {                    
+                    QuantityAnswerParameters[counter] = new QuestionAnswerParameter();
+                    QuantityAnswerParameters[counter].QuestionId = Questions[questionOffset + j].Id;
+                    QuantityAnswerParameters[counter].Answer = myDict[j] + j;
+                    QuantityAnswerParameters[counter].QuantityIndex = i;
+                    QuantityAnswerParameters[counter].QuestionSetId = Questions[questionOffset + j].QuestionSet.Id;
+                    counter++;
+                }
+            }
+
         }
 
         private void LoadContactInfoQuestions()

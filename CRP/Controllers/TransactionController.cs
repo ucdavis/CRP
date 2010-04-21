@@ -77,6 +77,7 @@ namespace CRP.Controllers
         ///         Transaction answers are populated
         ///     If donation is present, separate transaction record is created and linked to parent object
         ///         Donation field is marked true
+        /// </remarks>
         /// <param name="quantity">The quantity.</param>
         /// <param name="donation">The donation.</param>
         /// <param name="paymentType">Type of the payment.</param>
@@ -158,14 +159,7 @@ namespace CRP.Controllers
                 {
                     // get the answer
                     var answer = transactionAnswers.Where(a => a.QuestionId == emailQ.Id).FirstOrDefault();
-                    if (answer != null)
-                    {
-                        discount = coup.UseCoupon(answer.Answer, quantity);
-                    }
-                    else
-                    {
-                        discount = coup.UseCoupon(null, quantity);
-                    }
+                    discount = coup.UseCoupon(answer != null ? answer.Answer : null, quantity);
                 }
                 else
                 {
@@ -174,7 +168,7 @@ namespace CRP.Controllers
                 //Well, if we passed and found a coupon
                 if(discount == 0)
                 {
-                    ModelState.AddModelError("Coupon", "Coupon could not be used.");
+                    ModelState.AddModelError("Coupon", NotificationMessages.STR_Coupon_could_not_be_used);
                 }
             }
             transaction.Amount = amount - discount;

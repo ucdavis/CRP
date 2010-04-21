@@ -18,6 +18,14 @@ namespace CRP.Controllers.ViewModels
         public bool CreditPayment { get; set; }
         public bool CheckPayment { get; set; }
 
+        /// <summary>
+        /// Creates the specified View Model.
+        /// </summary>
+        /// <param name="repository">The repository.</param>
+        /// <param name="openIdRepository">The open id repository.</param>
+        /// <param name="item">The item.</param>
+        /// <param name="openIdUser">The open id user.</param>
+        /// <returns></returns>
         public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser)
         {
             Check.Require(repository != null, "Repository is required.");

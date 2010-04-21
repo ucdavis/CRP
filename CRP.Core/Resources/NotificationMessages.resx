@@ -175,4 +175,8 @@
   <data name="STR_UnableToUpdate" xml:space="preserve">
     <value>{ObjectType} was unable to update.</value>
   </data>
+  <data name="STR_Coupon_could_not_be_used" xml:space="preserve">
+    <value>Coupon could not be used.</value>
+    <comment>For Model State error</comment>
+  </data>
 </root>

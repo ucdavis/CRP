@@ -79,6 +79,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Coupon could not be used..
+        /// </summary>
+        public static string STR_Coupon_could_not_be_used {
+            get {
+                return ResourceManager.GetString("STR_Coupon_could_not_be_used", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been deactivated..
         /// </summary>
         public static string STR_Deactivated {
