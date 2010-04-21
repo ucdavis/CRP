@@ -38,11 +38,6 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual Item Item { get; set; }
         public virtual DateTime TransactionDate { get; set; }
-        /// <summary>
-        /// The confirmation number from touchnet.
-        /// </summary>
-        [Length(100)]
-        public virtual string PaymentConfirmation { get; set; }
         public virtual bool Credit { get; set; }
         public virtual bool Check { get; set; }
         public virtual bool Paid { get; set; }
@@ -56,6 +51,17 @@ namespace CRP.Core.Domain
 
         public virtual string TransactionNumber { get; set; }
         public virtual OpenIdUser OpenIDUser { get; set; }
+
+        public virtual string PaymentConfirmation { get; set; }
+
+        /// <summary>
+        /// uPay reference number
+        /// </summary>
+        public virtual int? ReferenceNumber { get; set; }
+        /// <summary>
+        /// uPay tracking id
+        /// </summary>
+        public virtual int? TrackingId { get; set; }
 
         public virtual ICollection<Check> Checks { get; set; }
         public virtual ICollection<TransactionAnswer> TransactionAnswers { get; set; }

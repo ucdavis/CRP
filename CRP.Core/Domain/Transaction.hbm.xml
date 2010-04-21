@@ -10,7 +10,6 @@
 
     <many-to-one name="Item" class="CRP.Core.Domain.Item, CRP.Core" column="ItemId" fetch="join" not-null="true" />
     <property name="TransactionDate" column="TransactionDate" />
-    <property name="PaymentConfirmation" column="PaymentConfirmation" />
     <property name="Credit" column="Credit" />
     <property name="Check" column="[Check]" />
     <property name="Paid" column="Paid" />
@@ -20,6 +19,9 @@
     <many-to-one name="ParentTransaction" class="CRP.Core.Domain.Transaction, CRP.Core" column="TransactionId" fetch="join" />
     <property name="TransactionNumber" column="TransactionNumber" insert="false" update="false" />
     <many-to-one name="OpenIDUser" class="CRP.Core.Domain.OpenIdUser, CRP.Core" column="OpenIdUserId" cascade="none" fetch="join" />
+
+    <property name="ReferenceNumber" column="ReferenceNumber" />
+    <property name="TrackingId" column="TrackingId" />
     
     <bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" fetch="select" >
       <key column="TransactionId" />

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
 using CRP.Controllers.ViewModels;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
@@ -16,10 +17,12 @@ namespace CRP.Controllers
     public class TransactionController : SuperController
     {
         private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
+        private readonly IPaymentProvider _paymentProvider;
 
-        public TransactionController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository)
+        public TransactionController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository, IPaymentProvider paymentProvider)
         {
             _openIdUserRepository = openIdUserRepository;
+            _paymentProvider = paymentProvider;
         }
 
         //
@@ -211,8 +214,10 @@ namespace CRP.Controllers
                 if (transaction.Credit)
                 {
                     //TODO: redirect to touchnet to take payment
+                    _paymentProvider.ProcessPayment(amount, transaction.Id, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
-
+                    //for now just accept the payment to simulate payment
+                    _paymentProvider.CompletePayment("success", 12345, transaction.Id, amount, 123456);
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 using Castle.Windsor;
+using CRP.Core.Abstractions;
 using UCDArch.Core.CommonValidator;
 using UCDArch.Core.NHibernateValidator.CommonValidatorAdapter;
 using UCDArch.Core.PersistanceSupport;
@@ -15,6 +16,8 @@ namespace CRP
             container.AddComponent("validator",
                                    typeof(IValidator), typeof(Validator));
             container.AddComponent("dbContext", typeof(IDbContext), typeof(DbContext));
+
+            container.AddComponent("searchProvider", typeof (ISearchTermProvider), typeof (DevSearchTermProvider));
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)

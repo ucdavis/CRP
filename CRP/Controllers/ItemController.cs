@@ -1,5 +1,6 @@
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Controller;
@@ -10,10 +11,12 @@ namespace CRP.Controllers
     public class ItemController : SuperController
     {
         private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
+        private readonly ISearchTermProvider _searchTermProvider;
 
-        public ItemController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository)
+        public ItemController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository, ISearchTermProvider searchTermProvider)
         {
             _openIdUserRepository = openIdUserRepository;
+            _searchTermProvider = searchTermProvider;
         }
 
         //
@@ -85,5 +88,14 @@ namespace CRP.Controllers
             }
         }
 
+        /// <summary>
+        /// GET: /Item/Search/{SearchTerm}
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <returns></returns>
+        public ActionResult Search(string searchTerm)
+        {
+            return View(_searchTermProvider.GetByTerm(searchTerm));
+        }
     }
 }
