@@ -120,6 +120,12 @@
   <data name="ObjectType" xml:space="preserve">
     <value>{ObjectType}</value>
   </data>
+  <data name="STR_Activated" xml:space="preserve">
+    <value>{ObjectType} has been activated.</value>
+  </data>
+  <data name="STR_Deactivated" xml:space="preserve">
+    <value>{ObjectType} has been deactivated.</value>
+  </data>
   <data name="STR_ObjectCreated" xml:space="preserve">
     <value>{ObjectType} has been created successfully.</value>
   </data>

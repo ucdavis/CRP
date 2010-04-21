@@ -148,6 +148,34 @@ namespace CRP.Controllers
             }
         }
 
+        [AcceptPost]
+        public ActionResult ToggleActive(int id)
+        {
+            var itemType = Repository.OfType<ItemType>().GetNullableByID(id);
+
+            if (itemType == null)
+            {
+                return this.RedirectToAction(a => a.ListItemTypes());
+            }
+
+            itemType.IsActive = !itemType.IsActive;
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<ItemType>().EnsurePersistent(itemType);
+
+                Message = itemType.IsActive
+                              ? NotificationMessages.STR_Activated.Replace(NotificationMessages.ObjectType, "Item Type")
+                              :
+                                  NotificationMessages.STR_Deactivated.Replace(NotificationMessages.ObjectType,
+                                                                               "Item Type");
+            }
+
+            return this.RedirectToAction(a => a.ListItemTypes());
+        }
+
         #endregion
 
         #region Display Profiles

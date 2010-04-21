@@ -21,7 +21,15 @@
                         {
                             col.Add(x =>
                                         {%>
-                                            <%= Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(x.Id), "Edit") %>|
+                                            <%= Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(x.Id), "Edit") %> |
+                                            
+                                            <% using(Html.BeginForm<ApplicationManagementController>(a => a.ToggleActive(x.Id))) {%>
+                                            
+                                                <%= Html.AntiForgeryToken() %>
+                                                <a href="javascript:;" class="FormSubmit"><%= x.IsActive ? "Deactivate" : "Activate" %></a>
+                                            
+                                            <%} %>
+                                            
                                         <%});
                             col.Add(x => x.Name);
                             col.Add(x => x.IsActive);
@@ -34,5 +42,10 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("a.FormSubmit").click(function() { $(this).parents("form").submit(); });
+        });
+    </script>
 </asp:Content>
 

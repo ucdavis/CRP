@@ -70,6 +70,24 @@ namespace CRP.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {ObjectType} has been activated..
+        /// </summary>
+        internal static string STR_Activated {
+            get {
+                return ResourceManager.GetString("STR_Activated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {ObjectType} has been deactivated..
+        /// </summary>
+        internal static string STR_Deactivated {
+            get {
+                return ResourceManager.GetString("STR_Deactivated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been created successfully..
         /// </summary>
         internal static string STR_ObjectCreated {

@@ -26,11 +26,6 @@
             </p>
             
             <p>
-                <label for="IsActive">Is Active:</label>
-                <%= Html.CheckBox("IsActive") %>
-            </p>
-            
-            <p>
                 <input type="submit" value="Save" />
             </p>
 
