@@ -149,4 +149,8 @@
     <value>Templates</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>
   </data>
+  <data name="View_PageHeader" xml:space="preserve">
+    <value>~/Views/Shared/PageHeader.ascx</value>
+    <comment>The path to the page header view</comment>
+  </data>
 </root>

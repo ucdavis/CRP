@@ -28,6 +28,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
+        [Authorize(Roles="User")]
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
@@ -60,6 +61,7 @@ namespace CRP.Controllers
         /// <param name="coupon"></param>
         /// <returns></returns>
         [AcceptPost]
+        [Authorize(Roles = "User")]
         public ActionResult Create(int itemId, [Bind(Exclude="Id")]Coupon coupon)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
@@ -137,6 +139,7 @@ namespace CRP.Controllers
         /// <param name="couponId"></param>
         /// <returns></returns>
         [AcceptPost]
+        [Authorize(Roles = "User")]
         public ActionResult Deactivate(int couponId)
         {
             var coupon = Repository.OfType<Coupon>().GetNullableByID(couponId);

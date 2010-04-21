@@ -36,4 +36,18 @@ namespace CRP.Controllers.ViewModels
             return viewModel;
         }
     }
+
+    public class UserItemDetailViewModel
+    {
+        public Item Item { get; set; }
+
+        public static UserItemDetailViewModel Create(IRepository repository, Item item)
+        {
+            Check.Require(repository != null, "Repository is required.");
+
+            var viewModel = new UserItemDetailViewModel() { Item = item };
+
+            return viewModel;
+        }
+    }
 }

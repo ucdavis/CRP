@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ItemDetailViewModel>" %>
+<%@ Import Namespace="Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -6,7 +7,7 @@
 </asp:Content>
 
 <asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
-    <% Html.RenderPartial("~/Views/Shared/PageHeader.ascx", Model.DisplayProfile); %>
+    <% Html.RenderPartial(StaticValues.View_PageHeader, Model.DisplayProfile); %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">

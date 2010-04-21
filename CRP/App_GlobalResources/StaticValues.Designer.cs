@@ -131,5 +131,14 @@ namespace Resources {
                 return ResourceManager.GetString("Tab_Templates", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/PageHeader.ascx.
+        /// </summary>
+        internal static string View_PageHeader {
+            get {
+                return ResourceManager.GetString("View_PageHeader", resourceCulture);
+            }
+        }
     }
 }

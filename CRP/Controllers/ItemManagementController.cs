@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -348,6 +349,24 @@ namespace CRP.Controllers
             }
 
             return new JsonNetResult(false);
+        }
+
+        /// <summary>
+        /// GET: /ItemManagement/Details/{id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Details(int id)
+        {
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+            if (item == null)
+            {
+                return this.RedirectToAction(a => a.List());
+            }
+
+            var viewModel = UserItemDetailViewModel.Create(Repository, item);
+
+            return View(viewModel);
         }
     }
 

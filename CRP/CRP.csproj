@@ -549,6 +549,7 @@
     </Content>
     <Content Include="Images\logo.gif" />
     <Content Include="Views\Coupon\Create.aspx" />
+    <Content Include="Views\ItemManagement\Details.aspx" />
     <Content Include="Views\Shared\PageHeader.ascx" />
     <Content Include="Views\Shared\QuestionForm.ascx" />
   </ItemGroup>

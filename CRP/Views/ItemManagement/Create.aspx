@@ -1,9 +1,16 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ItemViewModel>" %>
+<%@ Import Namespace="Resources"%>
 
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Create
+</asp:Content>
+
+<asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
+
+    <%= Html.RenderPartial(StaticValues.View_PageHeader, new DisplayProfile()) %>
+
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">

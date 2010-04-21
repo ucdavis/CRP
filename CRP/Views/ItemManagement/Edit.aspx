@@ -6,6 +6,12 @@
 	Edit
 </asp:Content>
 
+<asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
+
+    <%= Html.RenderPartial(StaticValues.View_PageHeader, new DisplayProfile()) %>
+
+</asp:Content>
+
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <script type="text/javascript">
         var getExtendedPropertyUrl = '<%= Url.Action("GetExtendedProperties", "ItemManagement") %>';

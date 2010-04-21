@@ -62,5 +62,5 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
-    <% Html.RenderPartial("~/Views/Shared/PageHeader.ascx", new DisplayProfile()); %>
+    <% Html.RenderPartial(StaticValues.View_PageHeader, new DisplayProfile()); %>
 </asp:Content>
