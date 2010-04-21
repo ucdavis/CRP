@@ -73,7 +73,7 @@
                                              });
                                  col.Add(x => x.Name).Title("Question");
                                  col.Add(x => x.QuestionType.Name).Title("Type");
-                                 col.Add(x => x.Options.Count).Title("# of Options");
+                                 col.Add(x => string.Join(", ", x.Options.Select(b => b.Name).ToArray())).Title("Options");
                                  col.Add(x => x.Required);
                              }
                 )

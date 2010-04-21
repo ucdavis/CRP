@@ -41,21 +41,29 @@
             </div>
             
             <div style='display:<%= Model.Item == null && Model.ItemType == null ? Html.Encode("Block"): Html.Encode("None") %>'>
+            
+            <% if (Model.IsAdmin) {%>
             <p>
+                
                 <label for="SystemReusable">SystemReusable:</label>
                 <%= Html.CheckBox("QuestionSet.SystemReusable")%>
                 <%= Html.ValidationMessage("QuestionSet.SystemReusable", "*")%>
             </p>
+            <%} %>            
+            <% if (Model.IsAdmin || Model.IsSchoolAdmin) {%>
             <p>
                 <label for="CollegeReusable">CollegeReusable: (This will be restricted to your college)</label>
                 <%= Html.CheckBox("QuestionSet.CollegeReusable")%>
                 <%= Html.ValidationMessage("QuestionSet.CollegeReusable", "*")%>
             </p>
+            <%} %>            
+            <% if (Model.IsAdmin || Model.IsSchoolAdmin) {%>
             <p>
                 <label for="UserReusable">UserReusable:</label>
                 <%= Html.CheckBox("QuestionSet.UserReusable")%>
                 <%= Html.ValidationMessage("QuestionSet.UserReusable", "*")%>
             </p>
+            <%} %>            
             </div>
             <p>
                 <input type="submit" value="Create" />

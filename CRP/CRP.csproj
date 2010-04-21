@@ -474,6 +474,7 @@
     <Content Include="Views\ItemManagement\Create.aspx" />
     <Content Include="Views\ItemManagement\Edit.aspx" />
     <Content Include="Views\Item\Details.aspx" />
+    <Content Include="Views\QuestionSet\Details.aspx" />
     <Content Include="Views\Shared\ItemForm.ascx" />
     <Content Include="Views\ItemManagement\List.aspx" />
     <Content Include="Views\Shared\ItemBrowse.ascx" />

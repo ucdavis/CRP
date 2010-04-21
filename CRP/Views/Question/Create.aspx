@@ -29,6 +29,11 @@
             </p>
             
             <p>
+                <label for="Required">Required:</label>
+                <%= Html.CheckBox("Required") %>
+            </p>
+            
+            <p>
                 <%= this.Select("QuestionType").Options(Model.QuestionTypes, x=>x.Id, x=>x.Name).FirstOption("--Select a Type--").Label("Question Type:") %>
             </p>
             

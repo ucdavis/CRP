@@ -62,7 +62,14 @@ namespace CRP.Controllers
 
         public ActionResult Details(int id)
         {
-            throw new NotImplementedException();
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
+
+            if (questionSet == null)
+            {
+                return this.RedirectToAction(a => a.List());
+            }
+
+            return View(questionSet);
         }
 
         /// <summary>
@@ -147,6 +154,19 @@ namespace CRP.Controllers
             if (itemTypeId.HasValue) {
                 viewModel.ItemType = Repository.OfType<ItemType>().GetById(itemTypeId.Value);
             }
+
+            if (CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                viewModel.IsAdmin = true;
+            }
+            else if (CurrentUser.IsInRole(RoleNames.SchoolAdmin))
+            {
+                viewModel.IsSchoolAdmin = true;
+            }
+            else
+            {
+                viewModel.IsUser = true;
+            }
             
             return View(viewModel);
         }
@@ -173,10 +193,6 @@ namespace CRP.Controllers
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
             questionSet.User = user;
-            if (questionSet.CollegeReusable) {
-                //TODO: Review that this is ok
-                questionSet.School = user.Units.First().School; 
-            }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
 
@@ -241,6 +257,11 @@ namespace CRP.Controllers
                 }
                 else
                 {
+                    if (!CurrentUser.IsInRole(RoleNames.Admin) && !CurrentUser.IsInRole(RoleNames.SchoolAdmin) && CurrentUser.IsInRole(RoleNames.User))
+                    {
+                        questionSet.UserReusable = true;
+                    }
+
                     //make sure it's some type of reusable
                     if (questionSet.SystemReusable || questionSet.CollegeReusable || questionSet.UserReusable)
                     {

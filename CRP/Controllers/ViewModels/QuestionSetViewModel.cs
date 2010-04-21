@@ -25,6 +25,9 @@ namespace CRP.Controllers.ViewModels
         public QuestionSet QuestionSet { get; set; }
         public Item Item { get; set; }
         public ItemType ItemType { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsSchoolAdmin { get; set; }
+        public bool IsUser { get; set; }
     }
 
     public class QuestionSetLinkViewModel

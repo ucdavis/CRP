@@ -15,6 +15,7 @@
     <h2>User Screens</h2>
     <ul>
         <li><%= Html.ActionLink<ItemManagementController>(a => a.List(), "Items") %></li>
+        <li><%= Html.ActionLink<QuestionSetController>(a => a.List(), "Question Sets") %></li>
     </ul>
     
     <h2>Administrative Screens</h2>
