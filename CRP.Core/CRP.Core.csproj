@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstractions\INotificationProvider.cs" />
     <Compile Include="Abstractions\IPaymentProvider.cs" />
     <Compile Include="Abstractions\IQuestionAnswer.cs" />
     <Compile Include="Abstractions\ISearchTermProvider.cs" />

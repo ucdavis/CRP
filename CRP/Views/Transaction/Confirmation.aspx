@@ -25,7 +25,7 @@
         </p>
         <p>
             <label>Amount: </label>
-            <%= Html.Encode(string.Format("{0:C}", Model.Transaction.AmountTotal))%>
+            <%= Html.Encode(string.Format("{0:C}", Model.Transaction.Total))%>
         </p>
         
         <p>

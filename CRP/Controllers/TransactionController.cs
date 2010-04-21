@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
@@ -20,10 +21,12 @@ namespace CRP.Controllers
     public class TransactionController : SuperController
     {
         private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
+        private readonly INotificationProvider _notificationProvider;
 
-        public TransactionController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository)
+        public TransactionController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository, INotificationProvider notificationProvider)
         {
             _openIdUserRepository = openIdUserRepository;
+            _notificationProvider = notificationProvider;
         }
 
         /// <summary>
@@ -307,7 +310,13 @@ namespace CRP.Controllers
                 {
                     Repository.OfType<Transaction>().EnsurePersistent(transaction);
 
-                    //TODO: send the shopper an email
+                    // attempt to get the contact information question set and retrieve email address
+                    var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+                    if (question != null)
+                    {
+                        // send an email to the user
+                        _notificationProvider.SendConfirmation(transaction, question.Answer);
+                    }
                 }
             }
 
