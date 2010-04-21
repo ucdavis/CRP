@@ -14,9 +14,9 @@
     <property name="Order" column="[Order]" />
     <property name="Required" column="Required" />
     
-    <bag name="Options" table="QuestionOptions" cascade="all-delete-orphan" fetch="join" inverse="true">
+    <bag name="Options" table="QuestionOptions" cascade="all-delete-orphan" inverse="true">
       <key column="QuestionId" />
-      <one-to-many class="CRP.Core.Domain.QuestionOption, MAAPS2.Core" />
+      <one-to-many class="CRP.Core.Domain.QuestionOption, CRP.Core" />
     </bag>
   </class>
 </hibernate-mapping>

@@ -240,7 +240,7 @@ namespace CRP.Tests.Core
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
-                var validEntity = CreateValidEntities.Unit(entriesToAdd);
+                var validEntity = CreateValidEntities.Unit(i + 1);
                 Repository.OfType<Unit>().EnsurePersistent(validEntity);
             }
         }
@@ -255,7 +255,7 @@ namespace CRP.Tests.Core
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
-                var validEntity = CreateValidEntities.Item(entriesToAdd);
+                var validEntity = CreateValidEntities.Item(i + 1);
                 validEntity.Unit = Repository.OfType<Unit>().GetById(1);
                 validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
                 Repository.OfType<Item>().EnsurePersistent(validEntity);
@@ -270,7 +270,7 @@ namespace CRP.Tests.Core
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
-                var validEntity = CreateValidEntities.ItemType(entriesToAdd);
+                var validEntity = CreateValidEntities.ItemType(i + 1);
                 Repository.OfType<ItemType>().EnsurePersistent(validEntity);
             }
         }
@@ -283,7 +283,7 @@ namespace CRP.Tests.Core
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
-                var validEntity = CreateValidEntities.QuestionType(entriesToAdd);
+                var validEntity = CreateValidEntities.QuestionType(i + 1);
                 Repository.OfType<QuestionType>().EnsurePersistent(validEntity);
             }
         }
@@ -296,7 +296,7 @@ namespace CRP.Tests.Core
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
-                var validEntity = CreateValidEntities.User(entriesToAdd);
+                var validEntity = CreateValidEntities.User(i + 1);
                 Repository.OfType<User>().EnsurePersistent(validEntity);
             }
         }
@@ -309,7 +309,7 @@ namespace CRP.Tests.Core
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
-                var validEntity = CreateValidEntities.QuestionSet(entriesToAdd);
+                var validEntity = CreateValidEntities.QuestionSet(i + 1);
                 Repository.OfType<QuestionSet>().EnsurePersistent(validEntity);
             }
         }
@@ -323,7 +323,7 @@ namespace CRP.Tests.Core
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
-                var validEntity = CreateValidEntities.Transaction(entriesToAdd);
+                var validEntity = CreateValidEntities.Transaction(i + 1);
                 validEntity.Item = Repository.OfType<Item>().GetById(1);
                 Repository.OfType<Transaction>().EnsurePersistent(validEntity);
             }
@@ -339,7 +339,7 @@ namespace CRP.Tests.Core
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
-                var validEntity = CreateValidEntities.Question(entriesToAdd);
+                var validEntity = CreateValidEntities.Question(i+1);
                 validEntity.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
                 validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
                 Repository.OfType<Question>().EnsurePersistent(validEntity);
