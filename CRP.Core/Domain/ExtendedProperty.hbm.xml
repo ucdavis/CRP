@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="ExtendedProperty"
+    table="ExtendedPropertys" >
+    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+      <generator class="identity" />
+    </id>
+
+    <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" />
+    <property name="Name" column="Name" />
+    <many-to-one name="QuestionType" class="CRP.Core.Domain.QuestionType, CRP.Core" column="QuestionTypeId" cascade="none" />
+    <property name="Order" column="[Order]" />
+
+  </class>
+</hibernate-mapping>

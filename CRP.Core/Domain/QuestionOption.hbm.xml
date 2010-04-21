@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="QuestionOption"
+    table="QuestionOptions" >
+    <id name="ID" access="nosetter.lowercase" column="QuestionOptionID" unsaved-value="0">
+      <generator class="identity" />
+    </id>
+
+    <property name="Name" column="Name" />
+    <many-to-one name="Question" class="CRP.Core.Domain.Question, CRP.Core" column="QuestionId" cascade="none" />
+
+  </class>
+</hibernate-mapping>

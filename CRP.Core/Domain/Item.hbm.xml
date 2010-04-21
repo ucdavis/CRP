@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="Item"
+    table="Items" >
+    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+      <generator class="identity" />
+    </id>
+
+    <property name="Name" column="Name" />
+    <property name="Description" column="Description" />
+    <property name="Quantity" column="Quantity" />
+    <property name="Expiration" column="Expiration" />
+    <property name="Image" column="Image" />
+    <property name="Link" column="Link" />
+
+    <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" />
+
+    <bag name="Tags" table="Tags" cascade="all-delete-orphan">
+      <key column="ItemId" />
+      <one-to-many class="CRP.Core.Domain.Tag, CRP.Core" />
+    </bag>
+
+    <bag name="ExtendedPropertyAnswers" table="ExtendedPropertyAnswers" cascade="all-delete-orphan">
+      <key column="ItemId" />
+      <one-to-many class="CRP.Core.Domain.ExtendedPropertyAnswer, CRP.Core"/>
+    </bag>
+    
+  </class>
+</hibernate-mapping>
