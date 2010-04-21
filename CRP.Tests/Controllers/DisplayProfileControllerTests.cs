@@ -483,7 +483,7 @@ namespace CRP.Tests.Controllers
         /// <summary>
         /// Tests the get logo does not throw exception when id not found.
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestGetLogoDoesNotThrowExceptionWhenIdNotFound()
         {
             DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
@@ -494,7 +494,7 @@ namespace CRP.Tests.Controllers
         /// <summary>
         /// Tests the get logo when id found but logo is null.
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestGetLogoWhenIdFoundButLogoIsNull()
         {
             FakeDisplayProfiles(1);
@@ -507,7 +507,7 @@ namespace CRP.Tests.Controllers
         /// <summary>
         /// Tests the get logo returns the file contents of logo when it is not null.
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestGetLogoReturnsTheFileContentsOfLogoWhenItIsNotNull()
         {
             FakeDisplayProfiles(1);

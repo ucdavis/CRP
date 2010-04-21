@@ -113,15 +113,8 @@ namespace CRP.Controllers
                 return new JsonNetResult("Invalid code.");
             }
 
-            //This check is all done with the query and null checks above now.            
-            //if (coupon.Item != item || !coupon.IsActive)
-            //{
-            //    return new JsonNetResult("Invalid code.");
-            //}
-
-            //TODO: This needs to work with Coupons that are unlimited.
-            //if (coupon.Used && !coupon.Unlimited) //Suggestion to fix failing test
-            if (coupon.Used)            
+            //Done: This needs to work with Coupons that are unlimited.
+            if (coupon.Used && !coupon.Unlimited) //Suggestion to fix failing test            
             {
                 return new JsonNetResult("Coupon has already been redeemed.");
             }
@@ -154,9 +147,8 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
 
-            //TODO: This needs to work with Coupons that are unlimited.
-            //if (!coupon.IsActive || (coupon.Used && !coupon.Unlimited)) //Suggested fix
-            if (!coupon.IsActive || coupon.Used) 
+            //Done: This needs to work with Coupons that are unlimited.
+            if (!coupon.IsActive || (coupon.Used && !coupon.Unlimited)) 
             {
                 //return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
                 return Redirect(Url.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));

@@ -128,11 +128,11 @@ namespace CRP.Controllers
             // get the original item out
             var destProfile = Repository.OfType<DisplayProfile>().GetNullableByID(id);
 
-            //TODO: Suggest fix for when a passed Id is not found.
-            //if(destProfile == null)
-            //{
-            //    return this.RedirectToAction(a => a.List());
-            //}
+            //Done: Suggest fix for when a passed Id is not found.
+            if (destProfile == null)
+            {
+                return this.RedirectToAction(a => a.List());
+            }
 
             // copy the display profile properties
             destProfile = Copiers.CopyDisplayProfile(displayProfile, destProfile);
@@ -168,9 +168,10 @@ namespace CRP.Controllers
         public ActionResult GetLogo(int id)
         {
             var displayProfile = Repository.OfType<DisplayProfile>().GetNullableByID(id);
-            //TODO: Decide what should happen if Id is not found.
-            //TODO: Decide what should happen if the Logo is null (Or change the domail requirements so it can't be null)
-            //Maybe have a default logo?
+            //if(displayProfile == null)
+            //{
+            //    return null;
+            //}
             return File(displayProfile.Logo, "image/jpg");
         }
     }
