@@ -25,7 +25,6 @@ namespace CRP.Core.Domain
 
         [Required]
         public virtual string Text { get; set; }
-        [NotNull]
         public virtual Item Item { get; set; }
         public virtual bool Default { get; set; }
     }

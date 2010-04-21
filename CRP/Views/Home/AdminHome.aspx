@@ -21,6 +21,7 @@
         <li><%= Html.ActionLink<ApplicationManagementController>(a => a.Index(), "Application Management") %></li>
         <li><%= Html.ActionLink<ReportController>(a => a.ViewSystemReport(null), "System Reports") %></li>
         <li><%= Html.ActionLink<AccountController>(a => a.ManageUsers(), "Manage Users") %></li>
+        <li><%= Html.ActionLink<TemplateController>(a => a.Edit(), "Edit System Confirmation Template") %></li>
     </ul>
 
 </asp:Content>
