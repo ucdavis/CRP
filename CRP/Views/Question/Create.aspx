@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.QuestionViewModel>" %>
+<%@ Import Namespace="CRP.Controllers"%>
 <%@ Import Namespace="CRP.Core.Domain"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -45,7 +46,7 @@
     <% } %>
 
     <div>
-        <%=Html.ActionLink("Back to List", "Index") %>
+        <%= Html.ActionLink<QuestionSetController>(a => a.Edit(Model.QuestionSet.Id), "Back to Question Set") %>
     </div>
 
 </asp:Content>

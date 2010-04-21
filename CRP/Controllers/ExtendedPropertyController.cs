@@ -1,15 +1,14 @@
-using System;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib;
 using MvcContrib.Attributes;
-using UCDArch.Data.NHibernate;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class ExtendedPropertyController : SuperController
     {
         //
@@ -20,13 +19,13 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// GET: /ExtendedProperty/Create/{id}
+        /// GET: /ExtendedProperty/Create/{itemTypeId}
         /// </summary>
-        /// <param name="id">The id of the item type</param>
+        /// <param name="itemTypeId">The id of the item type</param>
         /// <returns></returns>
-        public ActionResult Create(int id)
+        public ActionResult Create(int itemTypeId)
         {
-            var itemType = Repository.OfType<ItemType>().GetNullableByID(id);
+            var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
 
             if (itemType != null)
             {
@@ -39,7 +38,7 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// POST: /ExtendedProperty/Create/{id}
+        /// POST: /ExtendedProperty/Create/{itemTypeId}
         /// </summary>
         /// <remarks>
         /// Description:
@@ -51,13 +50,13 @@ namespace CRP.Controllers
         ///     Extended property created and associated
         ///     User is redirected back to the Edit Item Page
         /// </remarks>
-        /// <param name="id"></param>
+        /// <param name="itemTypeId"></param>
         /// <param name="extendedProperty"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult Create(int id, [Bind(Exclude="Id")] ExtendedProperty extendedProperty)
+        public ActionResult Create(int itemTypeId, [Bind(Exclude="Id")] ExtendedProperty extendedProperty)
         {
-            var itemType = Repository.OfType<ItemType>().GetNullableByID(id);
+            var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
 
             if (itemType != null)
             {
@@ -69,7 +68,7 @@ namespace CRP.Controllers
                 {
                     Repository.OfType<ExtendedProperty>().EnsurePersistent(extendedProperty);
                     Message = "Extended property was added.";
-                    return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(id));
+                    return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
                 }
                 else
                 {
@@ -78,6 +77,23 @@ namespace CRP.Controllers
             }
 
             return this.RedirectToAction<HomeController>(a => a.Index());
+        }
+
+        [AcceptPost]
+        public ActionResult Delete(int id)
+        {
+            var extendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(id);
+
+            if(extendedProperty == null)
+            {
+                return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
+            }
+            
+            var itemTypeId = extendedProperty.ItemType.Id;
+
+            Repository.OfType<ExtendedProperty>().Remove(extendedProperty);
+            Message = "Extended property has been removed.";
+            return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
         }
     }
 }

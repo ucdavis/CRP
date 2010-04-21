@@ -12,12 +12,22 @@
     <property name="CollegeReusable" column="CollegeReusable" />
     <property name="SystemReusable" column="SystemReusable" />
     <property name="UserReusable" column="UserReusable" />
-    <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join" />
+    <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join"  />
     <many-to-one name="User" class="CRP.Core.Domain.User, CRP.Core" column="UserId" cascade="none" fetch="join" />
 
-    <bag name="Questions" table="Questions" fetch="join" cascade="all-delete-orphan" order-by="[Order]">
+    <bag name="Questions" table="Questions" cascade="all-delete-orphan" order-by="[Order]" inverse="true">
       <key column="QuestionSetId" />
       <one-to-many class="CRP.Core.Domain.Question, CRP.Core" />
+    </bag>
+
+    <bag name="Items" table="ItemQuestionSets" cascade="all-delete-orphan" inverse="true" fetch="join" >
+      <key column="QuestionSetId" />
+      <one-to-many class="CRP.Core.Domain.ItemQuestionSet, CRP.Core"/>
+    </bag>
+
+    <bag name="ItemTypes" table="ItemTypesXQuestionSets" cascade="all-delete-orphan">
+      <key column="QuestionSetId" />
+      <many-to-many column="ItemTypeId" class="CRP.Core.Domain.ItemType, CRP.Core" />
     </bag>
     
   </class>

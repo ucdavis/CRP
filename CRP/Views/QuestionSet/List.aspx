@@ -8,7 +8,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <p>
-        <%= Html.ActionLink<QuestionSetController>(a => a.Create(null), "Create") %>
+        <%= Html.ActionLink<QuestionSetController>(a => a.Create(null, null), "Create") %>
     </p>
 
     <% using (Html.BeginForm()) { %>

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
@@ -10,6 +9,7 @@ using MvcContrib;
 
 namespace CRP.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class ApplicationManagementController : SuperController
     {
         //

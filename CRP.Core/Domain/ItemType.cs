@@ -41,5 +41,10 @@ namespace CRP.Core.Domain
             extendedProperty.Order = ExtendedProperties.Count + 1;
             ExtendedProperties.Add(extendedProperty);
         }
+
+        public virtual void AddQuestionSet(QuestionSet questionSet)
+        {
+            QuestionSets.Add(questionSet);
+        }
     }
 }

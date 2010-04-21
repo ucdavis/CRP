@@ -37,7 +37,8 @@ namespace CRP.Core.Domain
 
         //public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
-
+        public virtual ICollection<ItemQuestionSet> Items { get; set; }
+        public virtual ICollection<ItemType> ItemTypes { get; set; }
 
         public virtual void AddQuestion(Question question)
         {
@@ -57,6 +58,12 @@ namespace CRP.Core.Domain
                 {
                     flag = false;
                 }
+            }
+
+            // should really only be reusable at one level
+            if (SystemReusable && CollegeReusable || SystemReusable && UserReusable || CollegeReusable && UserReusable)
+            {
+                flag = false;
             }
 
             return base.IsValid() && flag;

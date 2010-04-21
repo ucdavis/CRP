@@ -19,7 +19,7 @@
     <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" fetch="join" />
     <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" not-null="true" fetch="join" />
     
-    <bag name="Tags" table="ItemXTags" cascade="all-delete-orphan" fetch="join">
+    <bag name="Tags" table="ItemsXTags" cascade="all-delete-orphan" fetch="join">
       <key column="ItemId" />
       <many-to-many column="TagId" class="CRP.Core.Domain.Tag, CRP.Core" />
     </bag>
@@ -30,7 +30,7 @@
     </bag>
 
     <bag name="Coupons" table="Coupons" cascade="all-delete-orphan" inverse="true" fetch="join">
-      <key column="CouponId" />
+      <key column="ItemId" />
       <one-to-many class="CRP.Core.Domain.Coupon, CRP.Core" />
     </bag>
 

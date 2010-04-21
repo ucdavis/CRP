@@ -119,6 +119,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\UCDArch.Web.dll</HintPath>
     </Reference>
+    <Reference Include="UCDArch.Web.Providers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=667f3cb07abadf4b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\UCDArch.Web.Providers.dll</HintPath>
+    </Reference>
     <Reference Include="xVal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f8fbed92c68c4006, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\xVal.dll</HintPath>
@@ -126,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComponentRegistrar.asax.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
@@ -155,6 +160,7 @@
     <Content Include="Images\minus.png" />
     <Content Include="Images\plus.png" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
+    <Content Include="Views\Account\LogOn.aspx" />
     <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
     <Content Include="Views\ApplicationManagement\EditItemType.aspx" />
     <Content Include="Views\ApplicationManagement\Index.aspx" />
@@ -162,6 +168,7 @@
     <Content Include="Views\ExtendedProperty\Create.aspx" />
     <Content Include="Views\QuestionSet\Create.aspx" />
     <Content Include="Views\QuestionSet\Edit.aspx" />
+    <Content Include="Views\QuestionSet\LinkToItemType.aspx" />
     <Content Include="Views\QuestionSet\List.aspx" />
     <Content Include="Views\Question\Create.aspx" />
     <Content Include="Web.config" />

@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.QuestionSetViewModel>" %>
+<%@ Import Namespace="CRP.Controllers"%>
 <%@ Import Namespace="CRP.Core.Domain"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -24,7 +25,7 @@
                 <%= Html.TextBox("QuestionSet.Name") %>
                 <%= Html.ValidationMessage("QuestionSet.Name", "*") %>
             </p>
-            <div style='display:<%= Model.Item == null ? Html.Encode("Block"): Html.Encode("None") %>'>
+            <div style='display:<%= Model.Item == null && Model.ItemType == null ? Html.Encode("Block"): Html.Encode("None") %>'>
             <p>
                 <label for="SystemReusable">SystemReusable:</label>
                 <%= Html.CheckBox("QuestionSet.SystemReusable")%>
@@ -49,7 +50,14 @@
     <% } %>
 
     <div>
-        <%=Html.ActionLink("Back to List", "Index") %>
+    
+        <%= 
+            Model.ItemType != null ?
+                Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(Model.ItemType.Id), "Back to Item Type") : (
+                    Model.Item != null ? 
+                        Html.Encode("//TODO: Add a link back to the item") : 
+                        Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List")
+            ) %>
     </div>
 
 </asp:Content>

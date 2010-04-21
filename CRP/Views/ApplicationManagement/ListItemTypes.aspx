@@ -14,42 +14,22 @@
         <%= Html.ActionLink<ApplicationManagementController>(a => a.CreateItemType(), "Create") %>
     </p>
 
-    <table>
-        <tr>
-            <th></th>
-            <th>
-                Name
-            </th>
-            <th>
-                IsActive
-            </th>
-            <th>
-                Id
-            </th>
-        </tr>
-
-    <% foreach (var item in Model) { %>
-    
-        <tr>
-            <td>
-                <%= Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(item.Id), "Edit") %>|
-                <%= Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })%>
-            </td>
-            <td>
-                <%= Html.Encode(item.Name) %>
-            </td>
-            <td>
-                <%= Html.Encode(item.IsActive) %>
-            </td>
-            <td>
-                <%= Html.Encode(item.Id) %>
-            </td>
-        </tr>
-    
-    <% } %>
-
-    </table>
-
+    <% Html.Grid(Model)
+           .Transactional()
+           .Name("Items")
+           .PrefixUrlParameters(false)
+           .Columns(col =>
+                        {
+                            col.Add(x =>
+                                        {%>
+                                            <%= Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(x.Id), "Edit") %>|
+                                        <%});
+                            col.Add(x => x.Name);
+                            col.Add(x => x.IsActive);
+                        })
+            .Pageable()
+            .Sortable()
+            .Render(); %>
 
 
 </asp:Content>
