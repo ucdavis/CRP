@@ -1,16 +1,21 @@
 ﻿/* */
-body, h3, h1 {margin:0; padding:0; color:#1c1f22; background-color:#f8f8f8;}
+body, h3, h1 {margin:0; padding:0;}
 #brand_bar_content, .page, #main {max-width:1000px; margin:0 auto;}
 .page {text-align:right;}
 #main {margin-top:-1em;}
 td a img {float:left; margin-right:1em; width:200px;}
 td {padding:2.5em 0;}
+.item_details legend{display:none;}
+.item_details {border:none; padding:0; margin:0;}
+.item_details img {padding:0 0 1em 1em;}
+#logindisplay li {display:inline; list-style-type:none; padding-left:50px;}
+#logindisplay ul { margin:0; padding:0 1em 1em 1em;}
 
 a {text-decoration:none; color:#394032;}
 a img {border:none;}
 
 /* top bar */
-#brand_bar {height:56px; background-color:#0d548a; padding:4px 0 0;}
+#brand_bar {height:56px; padding:4px 0 0; border-bottom:1px solid #000000;}
 .brand_bar_caes_h1 {display:none;}
 .brand_bar_caes_img {float:left;}
 .search_box {float:right;}
@@ -22,5 +27,13 @@ a img {border:none;}
 
 
 /* fonts */
-body {font: 12px/20px 'QuicksandBook', Arial, sans-serif; }
-h1, h1 a {color:#32322d; font: 40px/78px 'QuicksandLight', Arial, sans-serif; letter-spacing:5px;}
+body {font: 14px/22px 'QuicksandBook', Arial, sans-serif; }
+h1, h1 a {font: 40px/48px 'QuicksandLight', Arial, sans-serif; letter-spacing:5px;}
+
+
+
+/* colors */
+h1, h1 a {color:#32322d;}
+#brand_bar {background-color:#0d548a;}
+body {color:#1c1f22; background-color:#f8f8f8;}
+h3, h1 {color:#1c1f22;}
