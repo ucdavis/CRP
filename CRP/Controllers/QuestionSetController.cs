@@ -174,6 +174,23 @@ namespace CRP.Controllers
             var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
             viewModel.QuestionSet = existingQs;
 
+            if (!existingQs.SystemReusable && !existingQs.CollegeReusable && !existingQs.UserReusable)
+            {
+                // there should only be one item type or item associated with this question set since it's not reusable
+                var itemType = existingQs.ItemTypes.FirstOrDefault();
+                var item = existingQs.Items.FirstOrDefault();
+
+                if (itemType != null)
+                {
+                    viewModel.ItemType = itemType.ItemType;
+                }
+
+                if (item != null)
+                {
+                    viewModel.Item = item.Item;
+                }
+            }
+
             return View(viewModel);
         }
 
