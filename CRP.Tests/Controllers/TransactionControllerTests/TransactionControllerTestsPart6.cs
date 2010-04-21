@@ -155,7 +155,69 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Assert.AreEqual(" ", args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
         }
-        //TODO: Rest of text bao with validators too.
+
+        /// <summary>
+        /// Tests the checkout transaction answers text box.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersTextBox3()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = string.Empty;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            Questions[8].Name = "Text Box Test";
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout transaction answers text box.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersTextBox4()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = null;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            Questions[8].Name = "Text Box Test";
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.IsNull(args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+        //TODO: Rest of text box with validators too.
 
         #endregion Checkout TextBox Tests
 
