@@ -250,6 +250,105 @@ namespace CRP.Tests.Controllers
             #endregion Assert		
         }
 
+        /// <summary>
+        /// Tests the link to transaction post with invalid data rolls back.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionPostWithInvalidDataRollsBack1()
+        {
+            #region Arrange
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            var dbContext = MockRepository.GenerateMock<IDbContext>();
+            TransactionRepository.Expect(a => a.DbContext).Return(dbContext).Repeat.Any();
+            FakeTransactions(3);
+            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            Transactions[1].Amount = 20.00m;
+            var payments = new PaymentLog[2];
+            payments[0] = CreateValidEntities.PaymentLog(1);
+            payments[1] = CreateValidEntities.PaymentLog(2);
+            payments[0].Amount = 20;
+            payments[1].Amount = 15;                   
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToTransaction(2, payments)
+                .AssertViewRendered()
+                .WithViewData<LinkPaymentViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.DbContext.RollbackTransaction());
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Controller.ModelState.AssertErrorsAre("The check amount has exceeded the total amount. Enter a donation first.");
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the link to transaction post with invalid data rolls back.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionPostWithInvalidDataRollsBack2()
+        {
+            #region Arrange
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            var dbContext = MockRepository.GenerateMock<IDbContext>();
+            TransactionRepository.Expect(a => a.DbContext).Return(dbContext).Repeat.Any();
+            FakeTransactions(3);
+            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            Transactions[1].Amount = 20.00m;
+            var payments = new PaymentLog[2];
+            payments[0] = CreateValidEntities.PaymentLog(1);
+            payments[1] = CreateValidEntities.PaymentLog(2);
+            payments[0].Amount = 10;
+            payments[1].Amount = 10;
+            payments[1].Name = null; //Invalid
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToTransaction(2, payments)
+                .AssertViewRendered()
+                .WithViewData<LinkPaymentViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.DbContext.RollbackTransaction());
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Controller.ModelState.AssertErrorsAre("At least one check is invalid or incomplete");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the link to transaction post where invalid but not accepted check saves.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionPostWhereInvalidButNotAcceptedCheckSaves()
+        {
+            #region Arrange
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            FakeTransactions(3);
+            Transactions[1].Amount = 20;
+            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            var payments = new PaymentLog[2];
+            payments[0] = CreateValidEntities.PaymentLog(1);
+            payments[1] = CreateValidEntities.PaymentLog(2);
+            payments[0].Amount = 10;
+            payments[1].Amount = 10;
+            payments[1].Name = null; //Invalid
+            payments[1].Accepted = false;
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LinkToTransaction(2, payments)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("#Checks", result.Url);
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[1]));
+            Assert.AreEqual("Checks associated with transaction.", Controller.Message);
+            #endregion Assert
+        }
+
         #endregion LinkToTransaction AcceptPost Tests
 
 
