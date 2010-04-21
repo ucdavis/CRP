@@ -92,7 +92,7 @@ namespace CRP.Core.Domain
             // has an email restriction
             if (!string.IsNullOrEmpty(Email) && !ignoreEmail)
             {
-                if (Email == email)
+                if (Email.ToLower() == email.ToLower())
                 {
                     return CalculateDiscount(quantity);
                 }
