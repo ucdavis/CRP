@@ -37,9 +37,6 @@
 	
 
 <% } %>
-	
-	<%= Html.ActionLink<AccountController>( a=> a.CasLogon(Url.RouteUrl(new {controller = "Home", action = "Index"})), "Cas Logon") %>
-	
 
 </asp:Content>
 
