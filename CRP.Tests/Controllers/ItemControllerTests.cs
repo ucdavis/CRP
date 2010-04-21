@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
+using System.Web;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.ViewModels;
@@ -22,6 +24,7 @@ namespace CRP.Tests.Controllers
     [TestClass]
     public class ItemControllerTests : ControllerTestBase<ItemController>
     {
+        protected IRepositoryWithTypedId<OpenIdUser, string> OpenIdUserRepository { get; set; }
         protected List<Item> Items { get; set; }
         protected IRepository<Item> ItemRepository { get; set; }
         protected List<Tag> Tags { get; set; }
@@ -31,10 +34,14 @@ namespace CRP.Tests.Controllers
         protected List<Unit> Units { get; set; }
         protected List<School> Schools { get; set; }
 
+        protected IPrincipal Principal = new MockPrincipal();
+
         #region Init
 
         public ItemControllerTests()
         {
+            Controller.ControllerContext.HttpContext.User = Principal;
+
             Tags = new List<Tag>();
             TagRepository = FakeRepository<Tag>();
             Controller.Repository.Expect(a => a.OfType<Tag>()).Return(TagRepository).Repeat.Any();
@@ -65,7 +72,8 @@ namespace CRP.Tests.Controllers
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<ItemController>();
+            OpenIdUserRepository = MockRepository.GenerateStub<IRepositoryWithTypedId<OpenIdUser, string>>();
+            Controller = new TestControllerBuilder().CreateController<ItemController>(OpenIdUserRepository);
         }
 
         #endregion Init
@@ -157,7 +165,8 @@ namespace CRP.Tests.Controllers
             DisplayProfiles[2].Unit = Units[1];
             DisplayProfiles[3].School = Schools[1];
             DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
-
+            
+            
             var result = Controller.Details(2)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
@@ -296,6 +305,87 @@ namespace CRP.Tests.Controllers
                 Schools[i + offSet].SetIdTo((i + 1 + offSet).ToString());
             }
         }
+        #region mocks
+        /// <summary>
+        /// Mock the Identity. Used for getting the current user name
+        /// </summary>
+        public class MockIdentity : IIdentity
+        {
+            public string AuthenticationType
+            {
+                get
+                {
+                    return "MockAuthentication";
+                }
+            }
+
+            public bool IsAuthenticated
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            public string Name
+            {
+                get
+                {
+                    return "httpUserName";
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Mock the Principal. Used for getting the current user name
+        /// </summary>
+        public class MockPrincipal : IPrincipal
+        {
+            IIdentity _identity;
+
+            public IIdentity Identity
+            {
+                get
+                {
+                    if (_identity == null)
+                    {
+                        _identity = new MockIdentity();
+                    }
+                    return _identity;
+                }
+            }
+
+            public bool IsInRole(string role)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Mock the HttpContext. Used for getting the current user name
+        /// </summary>
+        public class MockHttpContext : HttpContextBase
+        {
+            private IPrincipal _user;
+
+            public override IPrincipal User
+            {
+                get
+                {
+                    if (_user == null)
+                    {
+                        _user = new MockPrincipal();
+                    }
+                    return _user;
+                }
+                set
+                {
+                    _user = value;
+                }
+            }
+        }
+        #endregion mocks
 
         #endregion Helper Methods
     }

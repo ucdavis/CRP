@@ -1,7 +1,10 @@
 ﻿using CRP.Controllers;
+using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
+using Rhino.Mocks;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
 
 namespace CRP.Tests.Controllers
@@ -12,6 +15,7 @@ namespace CRP.Tests.Controllers
     [TestClass]
     public class TransactionControllerTests : ControllerTestBase<TransactionController>
     {
+        protected IRepositoryWithTypedId<OpenIdUser, string> OpenIdUserRepository { get; set; }
         #region Init
 
         /// <summary>
@@ -27,7 +31,8 @@ namespace CRP.Tests.Controllers
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<TransactionController>();
+            OpenIdUserRepository = MockRepository.GenerateStub<IRepositoryWithTypedId<OpenIdUser, string>>();
+            Controller = new TestControllerBuilder().CreateController<TransactionController>(OpenIdUserRepository);
         }
 
         #endregion Init
