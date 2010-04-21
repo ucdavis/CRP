@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
@@ -36,6 +37,7 @@ namespace CRP.Tests.Controllers
         protected IRepository<Transaction> TransactionRepository { get; set; }
         protected IRepository<PaymentLog> PaymentLogRepository { get; set; }
         protected List<Transaction> Transactions { get; set; }
+        public INotificationProvider NotificationProvider { get; set; }
         private readonly Type _controllerClass = typeof(PaymentController);
 
         #region Init
@@ -68,7 +70,8 @@ namespace CRP.Tests.Controllers
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<PaymentController>();
+            NotificationProvider = MockRepository.GenerateStub<INotificationProvider>();
+            Controller = new TestControllerBuilder().CreateController<PaymentController>(NotificationProvider);
         }
 
         #endregion Init
