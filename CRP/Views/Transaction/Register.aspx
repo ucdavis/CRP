@@ -46,12 +46,20 @@
                     var existingContainers = $("div.QuantityContainer");
                     quantity = parseInt(quantity);
 
+                    var counter = existingContainers.length;
+
                     // deal with the situation where we have too many of the containers
                     if (existingContainers.length > quantity) {
+                        do {
+                            $(existingContainers[counter]).remove();
+
+                            counter--;
+                        } while (counter >= quantity);
+
+
                     }
                     // deal with the situation where we don't have enough containers
                     else if (existingContainers.length < quantity) {
-                        var counter = existingContainers.length;
                         do {
                             GenerateQuantityQuestionSet();
                             counter++;
