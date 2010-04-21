@@ -69,18 +69,32 @@ namespace CRP.Controllers.Helpers
                     // the item cannot be null, if we are here.  The question set was created specifically for the item
                     Check.Require(item != null);
 
-                    return HasItemAccess(repository, currentUser, item.Item);
+                    return HasItemAccess(currentUser, item.Item);
                 }
             }
 
             return false;
         }
 
-        public static bool HasItemAccess(IRepository repository, IPrincipal currentUser, Item item)
+        /// <summary>
+        /// Checks access against a user's permission to edit an item
+        /// </summary>
+        /// <param name="currentUser"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool HasItemAccess(IPrincipal currentUser, Item item)
         {
-            //TODO: edit access to the item
+            Check.Require(item != null, "An item is required.");
+            Check.Require(item.Editors != null, "An item must have atleast one editor.");
+            
+            // admin has access to everything
+            if (currentUser.IsInRole(RoleNames.Admin)) return true;
+            
+            // check to see if the user is an editor for the object
+            if (item.Editors.Where(a => a.User.LoginID == currentUser.Identity.Name).Any()) return true;
 
-            return true;
+            // when in doubt, deny
+            return false;
         }
     }
 }

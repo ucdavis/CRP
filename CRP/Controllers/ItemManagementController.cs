@@ -34,12 +34,18 @@ namespace CRP.Controllers
         public ActionResult List()
         {
             // list items that the user has editor rights to
-
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
             var query = from i in Repository.OfType<Item>().Queryable
                         where i.Editors.Any(a => a.User == user)
                         select i;
+
+            // admins can see all
+            if (CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                query = from i in Repository.OfType<Item>().Queryable
+                        select i;
+            }
 
             return View(query);
         }
@@ -161,7 +167,7 @@ namespace CRP.Controllers
         public ActionResult Edit(int id)
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
-            if (item == null)
+            if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
                 return this.RedirectToAction(a => a.List());
             }
@@ -193,8 +199,9 @@ namespace CRP.Controllers
         public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             var destItem = Repository.OfType<Item>().GetNullableByID(id);
-            //TODO: Review the validation below that the current user has editor rights
-            if(destItem == null || destItem.Editors == null || !destItem.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
+            
+            // check rights to edit
+            if(!Access.HasItemAccess(CurrentUser, destItem))
             {
                 //Don't Have editor rights
                 //TODO: Use new resource?
@@ -251,7 +258,8 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
             //Only allow an editor to be removed if the current user is in the editors -JCS
-            if (item.Editors == null || !item.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
+            //if (item.Editors == null || !item.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
+            if (!Access.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 //TODO: Use new resource?
@@ -312,7 +320,8 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
-            if (item.Editors == null || !item.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
+            //if (item.Editors == null || !item.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
+            if (!Access.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 //TODO: Use new resource?
@@ -367,7 +376,7 @@ namespace CRP.Controllers
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
             
-            if (item == null || string.IsNullOrEmpty(text))
+            if (item == null || string.IsNullOrEmpty(text) || !Access.HasItemAccess(CurrentUser, item))
             {
                 return new JsonNetResult(false);
             }
