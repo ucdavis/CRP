@@ -132,6 +132,9 @@ namespace CRP.Controllers
         [AcceptPost]
         public ActionResult EditItemType([Bind(Exclude="Id")]ItemType itemType)
         {
+            //TODO: Review. I think this needs to pass in the id, get it, 
+            //copy over the fields which are edited, then check and persist that.
+            //As the name should not be duplicate, that check would need to be added.
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
 
             if (ModelState.IsValid)
@@ -173,10 +176,6 @@ namespace CRP.Controllers
 
             return this.RedirectToAction(a => a.ListItemTypes());
         }
-
-        #endregion
-
-        #region Display Profiles
 
         #endregion
     }

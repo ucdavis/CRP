@@ -302,6 +302,46 @@ namespace CRP.Tests.Controllers
 
         #endregion CreateItemType Tests (Task 596)
 
+        #region EditItemType Tests
+
+        /// <summary>
+        /// Tests the edit item type returns view when id found.
+        /// </summary>
+        [TestMethod]
+        public void TestEditItemTypeReturnsViewWhenIdFound()
+        {
+            FakeItemTypes(1);
+            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Once();
+            var result = Controller.EditItemType(1)
+                .AssertViewRendered()
+                .WithViewData<ItemType>();
+            Assert.IsNotNull(result);
+            Assert.AreSame(ItemTypes[0], result);
+        }
+
+        /// <summary>
+        /// Tests the edit item type redirects to list when id not found.
+        /// </summary>
+        [TestMethod]
+        public void TestEditItemTypeRedirectsToListWhenIdNotFound()
+        {
+            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Once();
+            Controller.EditItemType(1)
+                .AssertActionRedirect()
+                .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
+        }
+
+        /// <summary>
+        /// Tests the edit item type with valid data saves.
+        /// </summary>
+        [TestMethod]
+        public void TestEditItemTypeWithValidDataSaves()
+        {
+            //TODO: This test
+        }
+
+        #endregion EditItemType Tests
+
         #region Helper Methods
 
         /// <summary>
