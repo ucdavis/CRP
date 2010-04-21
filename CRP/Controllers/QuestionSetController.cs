@@ -351,10 +351,11 @@ namespace CRP.Controllers
             var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
             viewModel.QuestionSet = questionSet;
 
-            if (itemId.HasValue)
-            {
-                viewModel.Item = Repository.OfType<Item>().GetByID(itemId.Value);
-            }
+            if (itemId.HasValue) viewModel.Item = Repository.OfType<Item>().GetNullableByID(itemId.Value);
+            if (itemTypeId.HasValue) viewModel.ItemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId.Value);
+
+            viewModel.Transaction = transaction.HasValue ? transaction.Value : false;
+            viewModel.Quantity = quantity.HasValue ? quantity.Value : false;
 
             if (CurrentUser.IsInRole(RoleNames.Admin))
             {
