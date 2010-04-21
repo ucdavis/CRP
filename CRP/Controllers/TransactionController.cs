@@ -166,10 +166,10 @@ namespace CRP.Controllers
                 // if question is null just drop it
                 if (question != null)
                 {
-
-                    var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
-                                     ? qa.Answer
-                                     : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
+                    //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
+                    //                 ? qa.Answer
+                    //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
+                    var answer = CleanUpAnswer(question.QuestionType.Name, qa);
 
                     // validate each of the validators
                     foreach (var validator in question.Validators)
@@ -199,10 +199,12 @@ namespace CRP.Controllers
                     // if question is null just drop it
                     if (question != null)
                     {
-                        var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
-                                         ? qa.Answer
-                                         : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
+                        //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
+                        //                 ? qa.Answer
+                        //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
 
+                        var answer = CleanUpAnswer(question.QuestionType.Name, qa);
+                        
                         var fieldName = question.Name + " for attendee " + (i + 1);
 
                         // validate each of the validators
@@ -264,7 +266,53 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        
+        /// <summary>
+        /// Cleans up answer.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="qa">The qa.</param>
+        /// <returns>The answer</returns>
+        private static string CleanUpAnswer(string name, QuestionAnswerParameter qa)
+        {
+            string answer;
+            if (name != QuestionTypeText.STR_CheckboxList)
+            {
+                if (name == QuestionTypeText.STR_Boolean)
+                {
+                    //Convert unchecked bool of null to false
+                    if (string.IsNullOrEmpty(qa.Answer) || qa.Answer.ToLower() == "false")
+                    {
+                        answer = "false";
+                    }
+                    else
+                    {
+                        answer = "true";
+                    }
+                }
+                else if (name == QuestionTypeText.STR_RadioButtons)
+                {
+                    answer = qa.Answer ?? string.Empty;
+                }
+                else
+                {
+                    answer = qa.Answer;
+                }
+            }
+            else
+            {
+                if (qa.CblAnswer != null)
+                {
+                    answer = string.Join(", ", qa.CblAnswer);
+                }
+                else
+                {
+                    answer = string.Empty;
+                }
+            }
+            return answer;
+        }
+
+
         /// <summary>
         /// GET: /Transaction/Confirmation/{id}
         /// </summary>
