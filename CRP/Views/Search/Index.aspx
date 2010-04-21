@@ -8,11 +8,34 @@
 
     <h2>Index</h2>
 
-
-    <%= Model.Suggestion %>
+    <p>
+        <span id="suggestion"></span>
+    </p>
 
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <script type="text/javascript">
+
+        var apiKey = "<%= Model.ApiKey %>";
+
+        $(document).ready(function() {
+            var encodedText = escape($("input#searchTerm").val());
+            var spellService = "http://api.bing.net/json.aspx?AppId=" + apiKey + "&Query=" + encodedText + "&Sources=Spell&Version=2.0&Market=en-us&Options=EnableHighlighting&JsonType=callback&JsonCallback=SearchCompleted";
+
+            $.getScript(spellService);
+        });
+
+        function SearchCompleted(result) {
+            console.dir(result);
+            var spellSuggestions = result.SearchResponse.Spell;
+
+            if (spellSuggestions != undefined && spellSuggestions.Total != 0) {
+                var firstSuggestion = spellSuggestions.Results[0].Value;
+                $("#suggestion").text("Did you mean: " + firstSuggestion + " ?");
+            }            
+
+        }
+    </script>
 </asp:Content>
 
