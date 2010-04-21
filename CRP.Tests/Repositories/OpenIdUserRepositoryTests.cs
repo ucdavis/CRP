@@ -1,10 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
+using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
+using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
 {
@@ -97,12 +101,165 @@ namespace CRP.Tests.Repositories
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = GetValid(i + 1);
+                validEntity.UserId = (i + 1).ToString();
                 OpenIdUserRepository.EnsurePersistent(validEntity);
             }
         }
 
         #endregion Init and Overrides
 
-        //TODO: Other tests
+        #region Email Tests
+
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestEmailWithTooLongValueDoesNotSave()
+        {
+            OpenIdUser openIdUser = null;
+            try
+            {
+                #region Arrange
+                openIdUser = GetValid(9);
+                openIdUser.Email = "x".RepeatTimes(256);
+                #endregion Arrange
+
+                #region Act
+                OpenIdUserRepository.DbContext.BeginTransaction();
+                OpenIdUserRepository.EnsurePersistent(openIdUser);
+                OpenIdUserRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(openIdUser);
+                Assert.AreEqual(256, openIdUser.Email.Length);
+                var results = openIdUser.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Email: length must be between 0 and 255");                
+                Assert.IsFalse(openIdUser.IsValid());
+                Assert.IsFalse(openIdUser.IsTransient()); //This is false because we have specifically assiged the userId which sets the id value
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        [TestMethod] public void TestEmailWithNullValueSaves()
+        {
+            #region Arrange
+            var openIdUser = GetValid(9);
+            openIdUser.Email = null;
+            #endregion Arrange
+
+            #region Act
+            OpenIdUserRepository.DbContext.BeginTransaction();
+            OpenIdUserRepository.EnsurePersistent(openIdUser);
+            OpenIdUserRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(openIdUser.IsTransient());
+            Assert.IsTrue(openIdUser.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEmailWithEmptyStringSaves()
+        {
+            #region Arrange
+            var openIdUser = GetValid(9);
+            openIdUser.Email = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            OpenIdUserRepository.DbContext.BeginTransaction();
+            OpenIdUserRepository.EnsurePersistent(openIdUser);
+            OpenIdUserRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(openIdUser.IsTransient());
+            Assert.IsTrue(openIdUser.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEmailWithOneCharacterSaves()
+        {
+            #region Arrange
+            var openIdUser = GetValid(9);
+            openIdUser.Email = "x";
+            #endregion Arrange
+
+            #region Act
+            OpenIdUserRepository.DbContext.BeginTransaction();
+            OpenIdUserRepository.EnsurePersistent(openIdUser);
+            OpenIdUserRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(openIdUser.IsTransient());
+            Assert.IsTrue(openIdUser.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestEmailWithLongValueSaves()
+        {
+            #region Arrange
+            var openIdUser = GetValid(9);
+            openIdUser.Email = "x".RepeatTimes(255);
+            #endregion Arrange
+
+            #region Act
+            OpenIdUserRepository.DbContext.BeginTransaction();
+            OpenIdUserRepository.EnsurePersistent(openIdUser);
+            OpenIdUserRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(255, openIdUser.Email.Length);
+            Assert.IsFalse(openIdUser.IsTransient());
+            Assert.IsTrue(openIdUser.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #endregion Email Tests
+        
+
+        #region Reflection of Database.
+
+        /// <summary>
+        /// Tests all fields in the database have been tested.
+        /// If this fails and no other tests, it means that a field has been added which has not been tested above.
+        /// </summary>
+        [TestMethod]
+        public void TestAllFieldsInTheDatabaseHaveBeenTested()
+        {
+            #region Arrange
+
+            var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("Email", "System.String", new List<string>
+            {
+                 ""
+            }));
+            expectedFields.Add(new NameAndType("Id", "System.String", new List<string>
+            {
+                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+            }));
+            
+            #endregion Arrange
+
+            AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(OpenIdUser));
+
+        }
+        #endregion reflection
     }
 }

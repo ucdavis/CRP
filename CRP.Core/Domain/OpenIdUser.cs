@@ -29,7 +29,7 @@ namespace CRP.Core.Domain
         public virtual string Zip { get; set; }
         [Length(20)]
         public virtual string PhoneNumber { get; set; }
-
+        [NotNull]
         public virtual ICollection<Transaction> Transactions { get; set; }
 
         public virtual string UserId { 
