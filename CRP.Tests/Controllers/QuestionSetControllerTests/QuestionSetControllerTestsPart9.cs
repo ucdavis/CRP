@@ -4,9 +4,11 @@ using CRP.Controllers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
+using CRP.Tests.Core.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
+using UCDArch.Testing;
 
 namespace CRP.Tests.Controllers.QuestionSetControllerTests
 {
@@ -338,9 +340,65 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         }
         #endregion LinkToItem Post Tests
 
-
         #region UnlinkFromItem Post Tests
-        //TODO: UnlinkFromItem tests
+
+        /// <summary>
+        /// Tests the unlink from item redirects to list if item question set not found.
+        /// </summary>
+        [TestMethod]
+        public void TestUnlinkFromItemRedirectsToListIfItemQuestionSetNotFound()
+        {
+            #region Arrange
+            SetupDataForUnlinkFromTests();
+            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+
+            #endregion Arrange
+
+            #region Act
+            Controller.UnlinkFromItem(1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("ItemQuestionSet not found.", Controller.Message);
+            ItemQuestionSetRepository.AssertWasNotCalled(a => a.Remove(Arg<ItemQuestionSet>.Is.Anything));
+            #endregion Assert		
+        }
+
+
+        /// <summary>
+        /// Tests the unlink from item does not save if question set is contact information.
+        /// </summary>
+        [TestMethod]
+        public void TestUnlinkFromItemDoesNotSaveIfQuestionSetIsContactInformation()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+               .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+               .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);            
+            SetupDataForUnlinkFromTests();
+            Items[1].QuestionSets.ElementAt(0).QuestionSet.Name = StaticValues.QuestionSet_ContactInformation;
+            Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
+            Items[1].QuestionSets.ElementAt(0).QuestionSet.SystemReusable = true;
+            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1))
+                .Return(Items[1].QuestionSets.ElementAt(0).QuestionSet).Repeat.Any();
+            
+            #endregion Arrange
+
+            #region Act
+            Controller.UnlinkFromItem(2)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Unable to remove question set.", Controller.Message);
+            ItemQuestionSetRepository.AssertWasNotCalled(a => a.Remove(Arg<ItemQuestionSet>.Is.Anything));
+            Controller.ModelState.AssertErrorsAre("This is a system default question set and cannot be modified.");
+            #endregion Assert		
+        }
         #endregion UnlinkFromItem Post Tests
     }
 }

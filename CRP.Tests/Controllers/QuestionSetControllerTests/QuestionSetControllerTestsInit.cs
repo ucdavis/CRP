@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
@@ -41,7 +42,11 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         protected IRepository<Item> ItemRepository { get; set; }
         protected List<ItemType> ItemTypes { get; set; }
         protected IRepository<ItemType> ItemTypeRepository { get; set; }
+        protected IRepository<ItemQuestionSet> ItemQuestionSetRepository { get; set; }
+        protected List<TransactionAnswer> TransactionAnswers { get; set; }
+        protected IRepository<TransactionAnswer> TransactionAnswerRepository { get; set; }
 
+        
         #region Init
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionSetControllerTests"/> class.
@@ -71,7 +76,14 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Items = new List<Item>();
             ItemRepository = FakeRepository<Item>();
             Controller.Repository.Expect(a => a.OfType<Item>()).Return(ItemRepository).Repeat.Any();
-       
+
+            TransactionAnswers = new List<TransactionAnswer>();
+            TransactionAnswerRepository = FakeRepository<TransactionAnswer>();
+            Controller.Repository.Expect(a => a.OfType<TransactionAnswer>()).Return(TransactionAnswerRepository).Repeat.Any();        
+
+            ItemQuestionSetRepository = FakeRepository<ItemQuestionSet>();
+            Controller.Repository.Expect(a => a.OfType<ItemQuestionSet>()).Return(ItemQuestionSetRepository).Repeat.Any();
+
             Schools = new List<School>();
         }
         //Controller.ControllerContext.HttpContext = new MockHttpContext(1, new [] {RoleNames.Admin});
@@ -96,11 +108,28 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
 
         #region Helper Methods
         /// <summary>
+        /// Setups the data for unlink from tests.
+        /// </summary>
+        private void SetupDataForUnlinkFromTests()
+        {
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            ControllerRecordFakes.FakeTransactionAnswers(TransactionAnswers, 3);
+            ControllerRecordFakes.FakeItems(Items, 3);
+            ControllerRecordFakes.FakeQuestionSets(QuestionSets, 5);
+            Items[1].AddTransactionQuestionSet(QuestionSets[0]);
+            Items[1].AddTransactionQuestionSet(QuestionSets[1]);
+            Items[1].AddQuantityQuestionSet(QuestionSets[1]);
+            Items[1].AddQuantityQuestionSet(QuestionSets[3]);
+
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            TransactionAnswerRepository.Expect(a => a.Queryable).Return(TransactionAnswers.AsQueryable()).Repeat.Any();
+        }
+        /// <summary>
         /// Setups the data for link to tests.
         /// </summary>
         private void SetupDataForLinkToTests()
         {
-            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
             ControllerRecordFakes.FakeItems(Items, 3);
             ControllerRecordFakes.FakeItemTypes(ItemTypes, 3);
             ControllerRecordFakes.FakeUsers(Users, 3);

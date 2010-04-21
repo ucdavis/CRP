@@ -605,6 +605,12 @@ namespace CRP.Controllers
                 }
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
+            if (!Access.HasItemAccess(CurrentUser, item))
+            {
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
             
             // add the questionset
             if (transaction)
@@ -675,14 +681,20 @@ namespace CRP.Controllers
             var itemQuestionSet = Repository.OfType<ItemQuestionSet>().GetNullableByID(id);
             if (itemQuestionSet == null)
             {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemQuestionSet");
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            if (!Access.HasItemAccess(CurrentUser, itemQuestionSet.Item))
+            {
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
 
             var itemId = itemQuestionSet.Item.Id;
             
-            
-
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemQuestionSet.ValidationResults());
+            //We are removing it, we don't care about any invalid data
+            //MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemQuestionSet.ValidationResults());
 
             // check to make sure it isn't the system's default contact information set
             var ciQuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(itemQuestionSet.QuestionSet.Id);

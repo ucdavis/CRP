@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CRP.Core.Domain;
 using UCDArch.Testing;
 
@@ -172,6 +173,21 @@ namespace CRP.Tests.Core.Helpers
             for (int i = 0; i < count; i++)
             {
                 entity.Add(CreateValidEntities.ItemType(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        /// <summary>
+        /// Fakes the transaction answers.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        public static void FakeTransactionAnswers(List<TransactionAnswer> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.TransactionAnswer(i + 1 + offSet));
                 entity[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
