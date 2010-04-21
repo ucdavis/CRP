@@ -514,9 +514,59 @@ namespace CRP.Tests.Controllers
             #endregion Assert
         }
 
-        //test credit card
-        //test check
-        //test not a credit card or check
+        [TestMethod]
+        public void TestCheckoutWithCheckOrCreditNotSpecifiedDoesNotSave()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 1, null, string.Empty, string.Empty, string.Empty, null, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("PaymentType: Payment type was not selected.");
+            #endregion Assert
+        }
+
+        #region Coupon Tests
+        [TestMethod]
+        public void TestCheckoutWithValidDataAndCouponSaves()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Item = Items[1];
+            Coupons[1].Code = "COUPON";
+            Coupons[1].IsActive = true;
+            Coupons[1].DiscountAmount = 5.01m;
+            Coupons[1].Unlimited = true;
+            Coupons[1].MaxQuantity = 2;
+            Coupons[1].Email = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", null, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(49.98m, args.Amount);
+            #endregion Assert
+        }
+        
+        #endregion Coupon Tests
+
+
         //test coupon variations
         //test amount is calculated properly
         //test transaction answers
