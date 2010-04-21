@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
@@ -16,7 +17,7 @@ namespace CRP.Controllers.ViewModels
 
             var viewModel = new ExtendedPropertyViewModel()
                                 {
-                                    QuestionTypes = repository.OfType<QuestionType>().GetAll(),
+                                    QuestionTypes = repository.OfType<QuestionType>().Queryable.Where(a => a.ExtendedProperty).ToList(),
                                     ItemType = itemType
                                 };
 

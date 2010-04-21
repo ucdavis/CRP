@@ -24,8 +24,9 @@
 
         <fieldset>
             <legend>Extended Properties</legend>
-            
+            <p>
             <%= Html.ActionLink<ExtendedPropertyController>(a => a.Create(Model.Id), "Create") %>
+            </p>
             
             <%  Html.Grid(Model.ExtendedProperties)
                     .Transactional()
@@ -43,6 +44,28 @@
         
         <fieldset>
             <legend>Default Question Sets</legend>
+            
+            <p>
+            //TODO: Add a link for adding/creating question set
+            </p>
+            
+            <% Html.Grid(Model.QuestionSets)
+                   .Transactional()
+                   .Name("QuestionSets")
+                   .PrefixUrlParameters(false)
+                   .Columns(col =>
+                                {
+                                    col.Add(a => a.Name).Title("Question Set Name");
+                                    col.Add(a =>
+                                                {%> 
+                                                
+                                                <%= Html.Encode("List of Questions") %> 
+                                                <% });
+                                        
+                                })
+                    .Render();
+                    %>
+            
         </fieldset>
 
         <p>

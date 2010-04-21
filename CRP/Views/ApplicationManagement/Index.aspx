@@ -14,6 +14,7 @@
     
     <ul>
         <li><%= Html.ActionLink<ApplicationManagementController>(a => a.ListItemTypes(), "Item Types")%></li>
+        <li><%= Html.ActionLink<ApplicationManagementController>(a => a.ListQuestionSets(), "Question Sets") %></li>
     </ul>
 
 </asp:Content>

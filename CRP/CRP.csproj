@@ -133,6 +133,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ViewModels\ExtendedPropertyViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -150,9 +151,11 @@
     <Content Include="Images\plus.png" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
+    <Content Include="Views\ApplicationManagement\CreateQuestionSet.aspx" />
     <Content Include="Views\ApplicationManagement\EditItemType.aspx" />
     <Content Include="Views\ApplicationManagement\Index.aspx" />
     <Content Include="Views\ApplicationManagement\ListItemTypes.aspx" />
+    <Content Include="Views\ApplicationManagement\ListQuestionSets.aspx" />
     <Content Include="Views\ExtendedProperty\Create.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\Site.css" />

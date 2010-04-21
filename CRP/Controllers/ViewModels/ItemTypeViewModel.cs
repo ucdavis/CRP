@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
@@ -14,7 +15,12 @@ namespace CRP.Controllers.ViewModels
         {
             Check.Require(respository != null, "Respository required.");
 
-            var viewModel = new ItemTypeViewModel {QuestionTypes = respository.OfType<QuestionType>().GetAll()};
+            var viewModel = new ItemTypeViewModel
+                                {
+                                    QuestionTypes =
+                                        respository.OfType<QuestionType>().Queryable.Where(a => a.ExtendedProperty).
+                                        ToList()
+                                };
 
             return viewModel;
         }

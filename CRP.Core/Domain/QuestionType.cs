@@ -27,5 +27,6 @@ namespace CRP.Core.Domain
         [Length(50)]
         public virtual string Name { get; set; }
         public virtual bool HasOptions { get; set; }
+        public virtual bool ExtendedProperty { get; set; }
     }
 }

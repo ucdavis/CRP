@@ -10,6 +10,7 @@
 
     <property name="Name" column="Name" />
     <property name="HasOptions" column="HasOptions" />
+    <property name="ExtendedProperty" column="ExtendedProperty" />
     
   </class>
 </hibernate-mapping>

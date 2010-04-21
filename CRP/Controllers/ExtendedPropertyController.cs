@@ -41,6 +41,16 @@ namespace CRP.Controllers
         /// <summary>
         /// POST: /ExtendedProperty/Create/{id}
         /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Creates a new extended property and associates it to the item type
+        /// PreCondition:
+        ///     Item Type does not have any existing items associated with this type
+        ///     Item Type does not already have extended property with same name
+        /// PostCondition:
+        ///     Extended property created and associated
+        ///     User is redirected back to the Edit Item Page
+        /// </remarks>
         /// <param name="id"></param>
         /// <param name="extendedProperty"></param>
         /// <returns></returns>

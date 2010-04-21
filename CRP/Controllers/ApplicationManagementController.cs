@@ -47,7 +47,7 @@ namespace CRP.Controllers
         /// Description:
         ///     Creates a new item type with defined extended properties
         /// PreCondition:
-        ///     Item type wiht same name doesn't already exist
+        ///     Item type with same name doesn't already exist
         /// PostCondition:
         ///     Item is created
         ///     Extended properties passed in are saved
@@ -96,60 +96,6 @@ namespace CRP.Controllers
             }
         }
 
-        //[AcceptPost]
-        //public ActionResult CreateItemType([Bind(Exclude="Id, IsActive")]ItemType itemType, string[] ExtendedPropertyName, string[] QuestionType)
-        //{
-        //    // try to add in the extended properties
-        //    for (var i = 0; i < ExtendedPropertyName.Count(); i++ )
-        //    {
-        //        // make sure the items are valid
-        //        var propName = ExtendedPropertyName[i];
-        //        var questionTypeId = QuestionType[i];
-                
-
-        //        // make sure none of them are blank
-        //        if (!string.IsNullOrEmpty(propName) && !string.IsNullOrEmpty(questionTypeId))
-        //        {
-        //            // make sure the question type is a valid number
-        //            var questionType = Repository.OfType<QuestionType>().GetNullableByID(Convert.ToInt32(questionTypeId));
-
-        //            // once we make sure the question type isn't null, go ahead and add it
-        //            if (questionType != null)
-        //            {
-        //                itemType.AddExtendedProperty(new ExtendedProperty()
-        //                    {
-        //                        Name = ExtendedPropertyName[i],
-        //                        QuestionType = questionType
-        //                    });        
-        //            }
-        //        }
-        //    }
-
-        //    // run the validation stuff now
-        //    MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
-
-        //    // make sure the item type doesn't already exist with the same name
-        //    if (Repository.OfType<ItemType>().Queryable.Where(a => a.Name == itemType.Name).Any())
-        //    {
-        //        // name already exists, we have a problem
-        //        ModelState.AddModelError("Name", "A item type of the same name already exists.");
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        Repository.OfType<ItemType>().EnsurePersistent(itemType);
-        //        Message = "Item Type has been saved.";
-        //        return this.RedirectToAction(a => a.ListItemTypes());
-        //    }
-        //    else
-        //    {
-        //        var viewModel = ItemTypeViewModel.Create(Repository);
-        //        viewModel.ItemType = itemType;
-
-        //        return View(viewModel);
-        //    }
-        //}
-
         /// <summary>
         /// GET: /ApplicationManagement/EditItemType/{id}
         /// </summary>
@@ -169,6 +115,38 @@ namespace CRP.Controllers
             }
         }
 
+        #endregion
+
+        #region Question Sets
+        /// <summary>
+        /// GET: /ApplicationManagement/ListQuestionSets
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ListQuestionSets()
+        {
+            return View(Repository.OfType<QuestionSet>().Queryable.Where(a => a.SystemReusable));
+        }
+
+        /// <summary>
+        /// GET: /ApplicationManagement/CreateQuestionSet
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CreateQuestionSet()
+        {
+            return View(QuestionSetViewModel.Create(Repository));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="questionSet"></param>
+        /// <param name="questions"></param>
+        /// <returns></returns>
+        [AcceptPost]
+        public ActionResult CreateQuestionSet(QuestionSet questionSet, Question[] questions)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
