@@ -31,6 +31,7 @@
             <%=  Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List") %>
         <% }%>
             
+        <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
     <fieldset>
         <legend>Properties</legend>
         <% using(Html.BeginForm()) {%>
