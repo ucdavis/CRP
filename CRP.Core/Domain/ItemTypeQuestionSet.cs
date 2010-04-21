@@ -33,6 +33,11 @@ namespace CRP.Core.Domain
         private void PopulateComplexLogicFields()
         {
             TransactionLevelQuantityLevel = TransactionLevel != QuantityLevel;
+            ItemTypeQuestionSetQuestionSet = true;
+            if (QuestionSet != null)
+            {
+                ItemTypeQuestionSetQuestionSet = QuestionSet.IsValid();
+            }
         }
 
         public override bool IsValid()
@@ -50,13 +55,14 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual ItemType ItemType { get; set; }
         [NotNull]
-        [Valid]
         public virtual QuestionSet QuestionSet { get; set; }
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
 
         [AssertTrue(Message = "TransactionLevel must be different from QuantityLevel")]
         public virtual bool TransactionLevelQuantityLevel { get; set; }
+        [AssertTrue(Message = "QuestionSet not valid")]
+        public virtual bool ItemTypeQuestionSetQuestionSet { get; set; }
         
     }
 }

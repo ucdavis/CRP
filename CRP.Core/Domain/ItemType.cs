@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -56,5 +58,74 @@ namespace CRP.Core.Domain
         {
             QuestionSets.Add(new ItemTypeQuestionSet(this, questionSet) { QuantityLevel = true });
         }
+
+        public virtual void RemoveQuestionSet(ItemTypeQuestionSet itemTypeQuestionSet)
+        {
+            QuestionSets.Remove(itemTypeQuestionSet);
+        }
+        public virtual void RemoveQuestionSet(QuestionSet questionSet)
+        {
+            var itemTypeQuestionSet = QuestionSets.Where(a => a.QuestionSet == questionSet).FirstOrDefault();
+            if (itemTypeQuestionSet != null)
+            {
+                QuestionSets.Remove(itemTypeQuestionSet);
+            }
+        }
+        /// <summary>
+        /// Determines whether this instance is valid.
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool IsValid()
+        {
+            PopulateComplexLogicFields();
+            return base.IsValid();
+        }
+
+        public override ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
+        {
+            PopulateComplexLogicFields();
+            return base.ValidationResults();
+        }
+
+        /// <summary>
+        /// Populates the complex logic fields.
+        /// Tag and Item both have a Name field so to avoid confusion, this method is used.
+        /// </summary>
+        private void PopulateComplexLogicFields()
+        {
+            ItemTypeExtendedProperties = true;
+            ItemTypeQuestionSets = true;
+            if (ExtendedProperties != null && ExtendedProperties.Count > 0)
+            {
+                foreach (var extendedProperty in ExtendedProperties)
+                {
+                    if (!extendedProperty.IsValid())
+                    {
+                        ItemTypeExtendedProperties = false;
+                        break;
+                    }
+                }
+            }
+            if (QuestionSets != null && QuestionSets.Count > 0)
+            {
+                foreach (var questionSet in QuestionSets)
+                {
+                    if (!questionSet.IsValid())
+                    {
+                        ItemTypeQuestionSets = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        #region Fields ONLY used for complex validation, not in database
+        [AssertTrue(Message = "One or more Extended Properties is not valid")]
+        public virtual bool ItemTypeExtendedProperties { get; set; }
+        [AssertTrue(Message = "One or more Question Sets is not valid")]
+        public virtual bool ItemTypeQuestionSets { get; set; }
+        #endregion Fields ONLY used for complex validation, not in database
     }
 }

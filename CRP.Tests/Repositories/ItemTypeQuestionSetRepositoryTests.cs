@@ -276,10 +276,10 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(itemTypeQuestionSet);
                 var results = itemTypeQuestionSet.ValidationResults().AsMessageList();
-                results.AssertErrorsAre(
-                    "Name: may not be null or empty",
-                    "CollegeReusableSchool: Must have school if college reusable",
-                    "Reusability: Only one reusable flag may be set to true");
+                results.AssertErrorsAre("ItemTypeQuestionSetQuestionSet: QuestionSet not valid");
+                    //"Name: may not be null or empty",
+                    //"CollegeReusableSchool: Must have school if college reusable",
+                    //"Reusability: Only one reusable flag may be set to true");
                 Assert.IsTrue(itemTypeQuestionSet.IsTransient());
                 Assert.IsFalse(itemTypeQuestionSet.IsValid());
                 #endregion Assert
@@ -453,11 +453,14 @@ namespace CRP.Tests.Repositories
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("ItemTypeQuestionSetQuestionSet", "System.Boolean", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"QuestionSet not valid\")]"
+            }));
             expectedFields.Add(new NameAndType("QuantityLevel", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("QuestionSet", "CRP.Core.Domain.QuestionSet", new List<string>
             {
-                "[NHibernate.Validator.Constraints.NotNullAttribute()]",
-                "[NHibernate.Validator.Constraints.ValidAttribute()]"
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
 
             expectedFields.Add(new NameAndType("TransactionLevel", "System.Boolean", new List<string>()));
@@ -466,6 +469,7 @@ namespace CRP.Tests.Repositories
                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"TransactionLevel must be different from QuantityLevel\")]"
             }));
 
+            
             
 
             #endregion Arrange
