@@ -263,6 +263,23 @@ namespace CRP.Tests.Core
         }
 
         /// <summary>
+        /// Loads the extended property.
+        /// Requires ItemType
+        /// Requires QuestionType
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadExtendedProperty(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.ExtendedProperty(i + 1);
+                validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
+                validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
+                Repository.OfType<ExtendedProperty>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
         /// Loads the item report.
         /// Requires User
         /// Requires Item

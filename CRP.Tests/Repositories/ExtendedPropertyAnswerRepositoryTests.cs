@@ -115,7 +115,7 @@ namespace CRP.Tests.Repositories
 
         #region Answer Tests
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestExtendedPropertyAnswerWithNullAnswerSaves()
         {
             #region Arrange
@@ -135,7 +135,7 @@ namespace CRP.Tests.Repositories
             #endregion Assert		
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestExtendedPropertyAnswerWithEmptyStringAnswerSaves()
         {
             #region Arrange
@@ -155,7 +155,7 @@ namespace CRP.Tests.Repositories
             #endregion Assert
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestExtendedPropertyAnswerWithSpacesOnlyAnswerSaves()
         {
             #region Arrange
@@ -415,7 +415,9 @@ namespace CRP.Tests.Repositories
             #region Arrange
 
             var expectedFields = new List<NameAndType>();
-            expectedFields.Add(new NameAndType("Answer", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("Answer", "System.String", new List<string>{
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
             expectedFields.Add(new NameAndType("ExtendedProperty", "CRP.Core.Domain.ExtendedProperty", new List<string>{
                  "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));

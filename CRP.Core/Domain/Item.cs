@@ -34,6 +34,8 @@ namespace CRP.Core.Domain
             Editors = new List<Editor>();
             QuestionSets = new List<ItemQuestionSet>();
             Templates = new List<Template>();
+            Transactions = new List<Transaction>();
+            Reports = new List<ItemReport>();
 
             DateCreated = SystemTime.Now();
         }
@@ -91,9 +93,11 @@ namespace CRP.Core.Domain
         public virtual ICollection<Editor> Editors { get; set; }
         [NotNull]
         public virtual ICollection<ItemQuestionSet> QuestionSets { get; set; }
+        [NotNull]
         public virtual ICollection<Transaction> Transactions { get; set; }
         [NotNull]
         public virtual ICollection<Template> Templates { get; set; }
+        [NotNull]
         public virtual ICollection<ItemReport> Reports { get; set; }
 
         public virtual Template Template
