@@ -1,6 +1,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcContrib.Routing;
+using MvcContrib;
 
 namespace CRP
 {
@@ -14,6 +15,8 @@ namespace CRP
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
+            
+
             MvcRoute.MappUrl("Tag/{tag}")
                 .WithDefaults(new { controller = "Tag", action = "Index", tag = "" })
                 .AddWithName("Tag", routes);
@@ -21,8 +24,6 @@ namespace CRP
             MvcRoute.MappUrl("{controller}/{action}/{id}")
                 .WithDefaults(new { controller = "Home", action = "Index", id = "" })
                 .AddWithName("Default", routes);
-
-
         }
     }
 }

@@ -47,6 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetOpenAuth, Version=3.4.0.10015, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\DotNetOpenAuth.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah, Version=1.0.11211.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\Elmah.dll</HintPath>
@@ -56,6 +60,10 @@
       <HintPath>..\Bin\HibernatingRhinos.NHibernate.Profiler.Appender.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Microsoft.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -556,9 +564,28 @@
       <LastGenOutput>QuestionTypeText.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <Content Include="Content\openid.css" />
+    <Content Include="Images\aol.gif" />
+    <Content Include="Images\blogger.ico" />
+    <Content Include="Images\claimid.ico" />
+    <Content Include="Images\facebook.gif" />
+    <Content Include="Images\flickr.ico" />
+    <Content Include="Images\google.gif" />
+    <Content Include="Images\livejournal.ico" />
     <Content Include="Images\logo.gif" />
+    <Content Include="Images\myopenid.ico" />
+    <Content Include="Images\openid-inputicon.gif" />
+    <Content Include="Images\openid.gif" />
+    <Content Include="Images\technorati.ico" />
+    <Content Include="Images\verisign.ico" />
+    <Content Include="Images\vidoop.ico" />
+    <Content Include="Images\wordpress.ico" />
+    <Content Include="Images\yahoo.gif" />
     <Content Include="Scripts\jquery.CaesMutioptionControl.js" />
+    <Content Include="Scripts\openid-jquery.js" />
     <Content Include="Scripts\RenameForArray.js" />
+    <Content Include="Views\Account\CasLogon.aspx" />
+    <Content Include="Views\Account\OpenIdLogon.aspx" />
     <Content Include="Views\Check\LinkToTransaction.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />
     <Content Include="Views\ItemManagement\Details.aspx" />
