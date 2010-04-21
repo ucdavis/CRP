@@ -17,6 +17,9 @@
 
     <%= Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.") %>
 
+    <%--Don't really need a form but it's throwing a wierd error--%>
+    <% using(Html.BeginForm()) { %>
+
         <fieldset>
             <legend>Name</legend>
             
@@ -125,6 +128,8 @@
                     %>
             
         </fieldset>
+    <% } %>        
+        
     <div>
         <%= Html.ActionLink<ApplicationManagementController>(a => a.ListItemTypes(), "Back to List") %>
     </div>
