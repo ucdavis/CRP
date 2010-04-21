@@ -139,6 +139,10 @@
   <data name="STR_ObjectCreated" xml:space="preserve">
     <value>{ObjectType} has been created successfully.</value>
   </data>
+  <data name="STR_ObjectNotFound" xml:space="preserve">
+    <value>{ObjectType} not found.</value>
+    <comment>If an expected value like Item isn't found by id</comment>
+  </data>
   <data name="STR_ObjectRemoved" xml:space="preserve">
     <value>{ObjectType} has been removed successfully.</value>
   </data>

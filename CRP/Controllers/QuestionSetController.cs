@@ -204,8 +204,24 @@ namespace CRP.Controllers
             var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
 
             // set the item or item type as needed
-            if (itemId.HasValue) viewModel.Item = Repository.OfType<Item>().GetByID(itemId.Value); 
-            if (itemTypeId.HasValue) viewModel.ItemType = Repository.OfType<ItemType>().GetByID(itemTypeId.Value);
+            if (itemId.HasValue)
+            {
+                viewModel.Item = Repository.OfType<Item>().GetNullableByID(itemId.Value);
+                if (viewModel.Item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                    return this.RedirectToAction(a => a.List());
+                }
+            }
+            if (itemTypeId.HasValue)
+            {
+                viewModel.ItemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId.Value);
+                if(viewModel.ItemType == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemType");
+                    return this.RedirectToAction(a => a.List());
+                }
+            }
 
             viewModel.Transaction = transaction.HasValue ? transaction.Value : false;
             viewModel.Quantity = quantity.HasValue ? quantity.Value : false;

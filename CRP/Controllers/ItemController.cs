@@ -2,6 +2,7 @@ using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Controller;
 using MvcContrib;
@@ -34,7 +35,7 @@ namespace CRP.Controllers
 
             if (item == null || !item.Available)
             {
-                Message = "Item not found.";
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 

@@ -124,6 +124,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {ObjectType} not found..
+        /// </summary>
+        public static string STR_ObjectNotFound {
+            get {
+                return ResourceManager.GetString("STR_ObjectNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been removed successfully..
         /// </summary>
         public static string STR_ObjectRemoved {

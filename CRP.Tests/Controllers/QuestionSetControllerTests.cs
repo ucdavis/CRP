@@ -557,10 +557,10 @@ namespace CRP.Tests.Controllers
         #region Edit Post Tests
 
         /// <summary>
-        /// Tests the edit post when question setid not found redirects to list.
+        /// Tests the edit post when question set id not found redirects to list.
         /// </summary>
         [TestMethod]
-        public void TestEditPostWhenQuestionSetidNotFoundRedirectsToList()
+        public void TestEditPostWhenQuestionSetIdNotFoundRedirectsToList()
         {
             #region Arrange
             ControllerRecordFakes.FakeQuestionSets(QuestionSets, 3);
@@ -870,9 +870,158 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("This is a system default question set and cannot be modified", Controller.Message);
             Controller.ModelState.AssertErrorsAre("This is a system default question set and cannot be modified");
             #endregion Assert		
-        } 
+        }
+
+
+        /// <summary>
+        /// Tests the edit post will not save if the contact name is changed to contact information.
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostWillNotSaveIfTheContactNameIsChangedToContactInformation()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            SetupDataForTests();
+            var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
+            questionSetToUpdate.Name = StaticValues.QuestionSet_ContactInformation.ToUpper();
+            QuestionSetRepository.Expect(a => a.GetNullableByID(10)).Return(QuestionSets[9]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(10, questionSetToUpdate)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionSetRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<QuestionSet>.Is.Anything));
+            Assert.AreEqual(StaticValues.QuestionSet_ContactInformation + " is reserved for internal system use only.", Controller.Message);
+            Controller.ModelState.AssertErrorsAre(StaticValues.QuestionSet_ContactInformation + " is reserved for internal system use only.");
+            #endregion Assert	
+        }
 
         #endregion Edit Post Tests
+
+        #region Create Get Tests
+
+        /// <summary>
+        /// Tests the create get returns view.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetReturnsView()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act/Assert
+            Controller.Create(null, null, null, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act/Assert
+        }
+
+        /// <summary>
+        /// Tests the create get returns view model with only role admin if admin and any others.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetReturnsViewModelWithOnlyRoleAdminIfAdminAndAnyOthers()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.SchoolAdmin, RoleNames.Admin, RoleNames.ManageAll });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, null, null, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.IsAdmin);
+            Assert.IsFalse(result.IsSchoolAdmin);
+            Assert.IsFalse(result.IsUser);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the create get returns view model with only role school admin if school admin and not admin and any others.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetReturnsViewModelWithOnlyRoleSchoolAdminIfSchoolAdminAndNotAdminAndAnyOthers()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.SchoolAdmin, RoleNames.ManageAll });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, null, null, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.IsAdmin);
+            Assert.IsTrue(result.IsSchoolAdmin);
+            Assert.IsFalse(result.IsUser);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the create get returns view model with only role user if not school admin and not admin.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetReturnsViewModelWithOnlyRoleUserIfNotSchoolAdminAndNotAdmin()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.ManageAll });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, null, null, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.IsAdmin);
+            Assert.IsFalse(result.IsSchoolAdmin);
+            Assert.IsTrue(result.IsUser);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCreateGetOnlySetsCertainValuesWhenParametersArePassed()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, null, null, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.Transaction);
+            Assert.IsFalse(result.Quantity);
+            Assert.IsNull(result.Item);
+            Assert.IsNull((result.ItemType));
+            #endregion Assert		
+        }
+
+        #endregion Create Get Tests
 
         #region Reflection Tests
 
@@ -1345,7 +1494,29 @@ namespace CRP.Tests.Controllers
 
         #region Helper Methods
 
-      
+        /// <summary>
+        /// Setups the data for create tests.
+        /// </summary>
+        private void SetupDataForCreateTests()
+        {
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes, 3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
+            ControllerRecordFakes.FakeUnits(Units, 5);
+            ControllerRecordFakes.FakeSchools(Schools, 5);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Units[i].School = Schools[i];
+            }
+
+            Users[1].Units.Add(Units[1]);
+            Users[1].Units.Add(Units[3]);
+            Users[1].Units.Add(Units[4]);
+            Users[1].LoginID = "UserName";
+
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            QuestionTypeRepository.Expect(a => a.GetAll()).Return(QuestionTypes).Repeat.Any();
+        }
 
         /// <summary>
         /// Sets up data for edit tests.

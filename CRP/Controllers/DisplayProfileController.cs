@@ -142,6 +142,7 @@ namespace CRP.Controllers
             //Done: Suggest fix for when a passed Id is not found.
             if (destProfile == null)
             {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "DisplayProfile");
                 return this.RedirectToAction(a => a.List());
             }
 
