@@ -160,6 +160,33 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Payment Canceled.
+        /// </summary>
+        public static string STR_TouchNetCanceled {
+            get {
+                return ResourceManager.GetString("STR_TouchNetCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment Error.
+        /// </summary>
+        public static string STR_TouchNetError {
+            get {
+                return ResourceManager.GetString("STR_TouchNetError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment Successfully processed.
+        /// </summary>
+        public static string STR_TouchNetSuccess {
+            get {
+                return ResourceManager.GetString("STR_TouchNetSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet..
         /// </summary>
         public static string STR_TransactionQuantitySame {

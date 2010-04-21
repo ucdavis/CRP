@@ -81,7 +81,7 @@ namespace CRP.Controllers
         /// <param name="transactionAnswers"></param>
         /// <param name="quantityAnswers"></param>
         /// <returns></returns>
-        [CaptchaValidatorAttribute]
+        [CaptchaValidator]
         [AcceptPost]
         public ActionResult Checkout(int id, int quantity, decimal? donation, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
         {
@@ -268,6 +268,9 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Cleans up answer.
+        /// Null bools get changed to false
+        /// Null radio get set to an empty string (because it may not have the required attribute)
+        /// Null CheckboxList get set to an empty string
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="qa">The qa.</param>
@@ -345,26 +348,51 @@ namespace CRP.Controllers
             byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(PostingKey + EXT_TRANS_ID + AMT));
             return Convert.ToBase64String(data);
         }
+
+        // ReSharper disable InconsistentNaming
+
+        /// <summary>
+        /// The payment was succesfully set to touch net.
+        /// </summary>
+        /// <param name="UPAY_SITE_ID">The touch net U Pay Site id.</param>
+        /// <param name="EXT_TRANS_ID">The transaction Id.</param>
+        /// <returns></returns>
         public ActionResult PaymentSuccess(string UPAY_SITE_ID, string EXT_TRANS_ID)
         {
-            //TODO: Replace these methods ?
-            Message = "Payment Successfully processed";
+            Message = NotificationMessages.STR_TouchNetSuccess;
             return this.RedirectToAction<HomeController>(a => a.Index());
         }
+
+        /// <summary>
+        /// The payment was canceled.
+        /// </summary>
+        /// <param name="UPAY_SITE_ID">The touch net U Pay Site id.</param>
+        /// <param name="EXT_TRANS_ID">The transaction Id.</param>
+        /// <returns></returns>
         public ActionResult PaymentCancel(string UPAY_SITE_ID, string EXT_TRANS_ID)
         {
-            //TODO: Replace these methods ?
-            Message = "Payment Canceled";
+            Message = NotificationMessages.STR_TouchNetCanceled;
             return this.RedirectToAction<HomeController>(a => a.Index());
         }
 
+        /// <summary>
+        /// There was an error from touch net.
+        /// </summary>
+        /// <param name="UPAY_SITE_ID">The touch net U Pay Site id.</param>
+        /// <param name="EXT_TRANS_ID">The transaction Id.</param>
+        /// <returns></returns>
         public ActionResult PaymentError(string UPAY_SITE_ID, string EXT_TRANS_ID)
         {
-            //TODO: Replace these methods ?
-            Message = "Payment Error";
+            Message = NotificationMessages.STR_TouchNetError;
             return this.RedirectToAction<HomeController>(a => a.Index());
         }
+        // ReSharper restore InconsistentNaming
 
+        /// <summary>
+        /// Edit Get
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <returns></returns>
         [AnyoneWithRole]
         public ActionResult Edit(int id)
         {
@@ -399,6 +427,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Edit Post
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        /// <returns></returns>
         [AcceptPost]
         [AnyoneWithRole]
         public ActionResult Edit(Transaction transaction)
@@ -721,113 +754,7 @@ namespace CRP.Controllers
 
             return View();
         }
-        /*
-        public ActionResult PaymentResult(int? EXT_TRANS_ID, string PMT_STATUS, string NAME_ON_ACCT, decimal? PMT_AMT, string TPG_TRANS_ID, string CARD_TYPE)
-        {
-            #region debug1
 
-            // create an email for testing
-            var client = new SmtpClient("smtp.ucdavis.edu");
-
-            var message = new MailMessage("anlai@ucdavis.edu", "anlai@ucdavis.edu");
-            message.To.Add("jasoncsylvestre@gmail.com");
-            message.To.Add("owlanjunk@gmail.com");
-            message.Subject = "Touchnet Post Results";
-            message.IsBodyHtml = true;
-
-            var body = new StringBuilder("Touchnet results<br/><br/>");
-            body.Append(DateTime.Now.ToString() + "<br/>");
-
-            foreach (var k in Request.Params.AllKeys)
-            {
-                body.Append(k + ":" + Request.Params[k]);
-                body.Append("<br/>");
-            }
-
-            body.Append("<br/>Function parameters================<br/>");
-            body.Append("EXT_TRANS_ID:" + (EXT_TRANS_ID.HasValue ? EXT_TRANS_ID.Value.ToString() : string.Empty) + "<br/>");
-            body.Append("PMT_STATUS:" + PMT_STATUS + "<br/>");
-            body.Append("NAME_ON_ACT:" + NAME_ON_ACCT + "<br/>");
-            body.Append("PMT_AMT:" + (PMT_AMT.HasValue ? PMT_AMT.Value.ToString() : string.Empty) + "<br/>");
-            body.Append("TPG_TRANS_ID:" + TPG_TRANS_ID + "<br/>");
-            body.Append("CARD_TYPE" + CARD_TYPE);
-            #endregion
-
-            #region Actual Work
-            // validate to make sure a transaction value was received
-            if (EXT_TRANS_ID.HasValue)
-            {
-                var transaction = Repository.OfType<Transaction>().GetNullableByID(EXT_TRANS_ID.Value);
-
-                // create a payment log
-                var paymentLog = new PaymentLog(transaction.Total);
-                paymentLog.Credit = true;
-
-                // on success, save the valid information
-                if (PMT_STATUS == "success")
-                {
-                    paymentLog.Name = NAME_ON_ACCT;
-                    paymentLog.Amount = PMT_AMT.Value;
-                    paymentLog.Accepted = true;
-                    paymentLog.GatewayTransactionId = TPG_TRANS_ID;
-                    paymentLog.CardType = CARD_TYPE;
-                }
-
-                transaction.AddPaymentLog(paymentLog);
-                //paymentLog.Transaction = transaction;
-
-                paymentLog.TransferValidationMessagesTo(ModelState);
-
-                if (ModelState.IsValid)
-                {
-                    Repository.OfType<Transaction>().EnsurePersistent(transaction);
-
-                    // attempt to get the contact information question set and retrieve email address
-                    var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
-                    if (question != null)
-                    {
-                        // send an email to the user
-                        _notificationProvider.SendConfirmation(transaction, question.Answer);
-                    }
-                }
-
-                #region debug2
-                try
-                {
-                    body.Append("Payment log values:<br/>");
-                    body.Append("Name:" + paymentLog.Name + "<br/>");
-                    body.Append("Amount:" + paymentLog.Amount + "<br/>");
-                    body.Append("Accepted:" + paymentLog.Accepted + "<br/>");
-                    body.Append("Gateway transaction id:" + paymentLog.GatewayTransactionId + "<br/>");
-                    body.Append("Card Type: " + paymentLog.CardType + "<br/>");
-                    body.Append("ModelState: " + ModelState.IsValid);
-
-                    body.Append("<br/><br/>===== modelstate errors text===<br/>");
-                    foreach (var result in ModelState.Values)
-                    {
-                        foreach (var errs in result.Errors)
-                        {
-                            body.Append("Error:" + errs.ErrorMessage + "<br/>");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    body.Append(ex.Message);
-                }
-
-                #endregion
-            }
-            #endregion
-
-            #region debug3
-            message.Body = body.ToString();
-
-            client.Send(message);
-            #endregion
-            return View();
-        }
-        */
 
         /// <summary>
         /// Compares an answer against a regular expression

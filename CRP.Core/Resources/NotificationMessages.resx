@@ -152,6 +152,18 @@
   <data name="STR_SelectUserFirst" xml:space="preserve">
     <value>Select a user first.</value>
   </data>
+  <data name="STR_TouchNetCanceled" xml:space="preserve">
+    <value>Payment Canceled</value>
+    <comment>User canceled credit card payment</comment>
+  </data>
+  <data name="STR_TouchNetError" xml:space="preserve">
+    <value>Payment Error</value>
+    <comment>Something went wrong at TouchNet</comment>
+  </data>
+  <data name="STR_TouchNetSuccess" xml:space="preserve">
+    <value>Payment Successfully processed</value>
+    <comment>Credit Card has gone through (yet to be sent to bank)</comment>
+  </data>
   <data name="STR_TransactionQuantitySame" xml:space="preserve">
     <value>Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.</value>
     <comment>When a QuestionSet is being linked to an Item or an Item type, it must be set to a transaction or a quantity.</comment>
