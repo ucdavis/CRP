@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
+using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.PersistanceSupport;
@@ -14,12 +16,15 @@ namespace CRP.Tests.Repositories
     public class DisplayProfileRepositoryTests : AbstractRepositoryTests<DisplayProfile, int>
     {
         private IRepositoryWithTypedId<School, string> SchoolRepository { get; set; }
+        protected IRepository<DisplayProfile> DisplayProfileRepository { get; set; }
+
 
         #region Init and Overrides
 
         public DisplayProfileRepositoryTests()
         {
             SchoolRepository = new RepositoryWithTypedId<School, string>();
+            DisplayProfileRepository = new Repository<DisplayProfile>();
         }
         /// <summary>
         /// Gets the valid entity of type T
@@ -91,6 +96,437 @@ namespace CRP.Tests.Repositories
 
         #endregion Init and Overrides
 
+        #region Name Tests
+
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the name with null value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithNullValueDoesNotSave()
+        {
+            DisplayProfile displayProfile = null;
+            try
+            {
+                #region Arrange
+                displayProfile = GetValid(9);
+                displayProfile.Name = null;
+                #endregion Arrange
+
+                #region Act
+                DisplayProfileRepository.DbContext.BeginTransaction();
+                DisplayProfileRepository.EnsurePersistent(displayProfile);
+                DisplayProfileRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(displayProfile);
+                var results = displayProfile.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(displayProfile.IsTransient());
+                Assert.IsFalse(displayProfile.IsValid());
+                #endregion Assert
+
+                throw;
+            }		
+        }
+
+        /// <summary>
+        /// Tests the name with empty string does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithEmptyStringDoesNotSave()
+        {
+            DisplayProfile displayProfile = null;
+            try
+            {
+                #region Arrange
+                displayProfile = GetValid(9);
+                displayProfile.Name = string.Empty;
+                #endregion Arrange
+
+                #region Act
+                DisplayProfileRepository.DbContext.BeginTransaction();
+                DisplayProfileRepository.EnsurePersistent(displayProfile);
+                DisplayProfileRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(displayProfile);
+                var results = displayProfile.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(displayProfile.IsTransient());
+                Assert.IsFalse(displayProfile.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the name with spaces only does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithSpacesOnlyDoesNotSave()
+        {
+            DisplayProfile displayProfile = null;
+            try
+            {
+                #region Arrange
+                displayProfile = GetValid(9);
+                displayProfile.Name = " ";
+                #endregion Arrange
+
+                #region Act
+                DisplayProfileRepository.DbContext.BeginTransaction();
+                DisplayProfileRepository.EnsurePersistent(displayProfile);
+                DisplayProfileRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(displayProfile);
+                var results = displayProfile.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(displayProfile.IsTransient());
+                Assert.IsFalse(displayProfile.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Test
+
+        /// <summary>
+        /// Tests the name with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestNameWithOneCharacterSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.Name = "x";
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, displayProfile.Name.Length);
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert				
+        }
+
+        /// <summary>
+        /// Tests the name with many characters saves.
+        /// </summary>
+        [TestMethod]
+        public void TestNameWithManyCharactersSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.Name = "x".RepeatTimes(200);
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(200, displayProfile.Name.Length);
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Test
+        
+        #endregion Name Tests
+
+        #region Unit Tests
+
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the unit with new value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestUnitWithNewValueDoesNotSave()
+        {
+            DisplayProfile displayProfile = null;
+            try
+            {
+                #region Arrange
+                displayProfile = GetValid(9);
+                displayProfile.Unit = new Unit();
+                #endregion Arrange
+
+                #region Act
+                DisplayProfileRepository.DbContext.BeginTransaction();
+                DisplayProfileRepository.EnsurePersistent(displayProfile);
+                DisplayProfileRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(displayProfile);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: CRP.Core.Domain.Unit, Entity: CRP.Core.Domain.Unit", ex.Message);
+                #endregion Assert
+
+                throw;
+            }		
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the unit with valid data saves.
+        /// </summary>
+        [TestMethod]
+        public void TestUnitWithValidDataSaves()
+        {
+            LoadUnits(3);
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.Unit = Repository.OfType<Unit>().GetNullableByID(3);
+            displayProfile.School = null;
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert		
+        }
+
+        #endregion Valid Tests
+        #endregion Unit Tests
+
+        #region School Tests
+
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the School with new value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestSchoolWithNewValueDoesNotSave()
+        {
+            DisplayProfile displayProfile = null;
+            try
+            {
+                #region Arrange
+                displayProfile = GetValid(9);
+                displayProfile.School = new School();
+                displayProfile.Unit = null;
+                #endregion Arrange
+
+                #region Act
+                DisplayProfileRepository.DbContext.BeginTransaction();
+                DisplayProfileRepository.EnsurePersistent(displayProfile);
+                DisplayProfileRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(displayProfile);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: CRP.Core.Domain.School, Entity: CRP.Core.Domain.School", ex.Message);
+                #endregion Assert
+
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the School with valid data saves.
+        /// </summary>
+        [TestMethod]
+        public void TestSchoolWithValidDataSaves()
+        {
+            LoadSchools(3);
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.School = SchoolRepository.GetNullableByID("3");
+            displayProfile.Unit = null;
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion Unit Tests
+
+        #region Logo Tests
+
+        /// <summary>
+        /// Tests the logo with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestLogoWithNullValueSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.Logo = null;
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the logo with content saves.
+        /// </summary>
+        [TestMethod]
+        public void TestLogoWithContentSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.Logo = new byte[] {1, 2, 3, 4, 5, 6, 7};
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the logo with empty content saves.
+        /// </summary>
+        [TestMethod]
+        public void TestLogoWithEmptyContentSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.Logo = new byte[0];
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+        #endregion Logo Tests
+
+        #region SchoolMaster Tests
+
+        /// <summary>
+        /// Tests the school master when true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestSchoolMasterWhenTrueSaves()
+        {
+            LoadSchools(1);
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.School = SchoolRepository.GetNullableByID("1");
+            displayProfile.Unit = null;
+            displayProfile.SchoolMaster = true;
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert		
+        }
+
+
+        /// <summary>
+        /// Tests the school master when false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestSchoolMasterWhenFalseSaves()
+        {
+            LoadSchools(1);
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.School = SchoolRepository.GetNullableByID("1");
+            displayProfile.Unit = null;
+            displayProfile.SchoolMaster = false;
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+        #endregion SchoolMaster Tests
+
+
+        //TODO: Other tests
+
         #region Validation Moved from the controller Tests
 
         /// <summary>
@@ -122,7 +558,7 @@ namespace CRP.Tests.Repositories
                 Assert.IsTrue(displayProfileRecord.IsTransient());
                 Assert.IsFalse(displayProfileRecord.IsValid());
                 throw;
-            }            
+            }
         }
 
         /// <summary>
@@ -153,11 +589,45 @@ namespace CRP.Tests.Repositories
             }
         }
 
-        
+
 
         #endregion Validation Moved from the controller Tests
 
-        //TODO: Other tests
+        #region Reflection of Database.
+
+        /// <summary>
+        /// Tests all fields in the database have been tested.
+        /// If this fails and no other tests, it means that a field has been added which has not been tested above.
+        /// </summary>
+        [TestMethod]
+        public void TestAllFieldsInTheDatabaseHaveBeenTested()
+        {
+            #region Arrange
+
+            var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
+            {
+                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("Logo", "System.Byte[]", new List<string>()));
+            expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
+            {
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("School", "CRP.Core.Domain.School", new List<string>()));
+            expectedFields.Add(new NameAndType("SchoolMaster", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("Unit", "CRP.Core.Domain.Unit", new List<string>()));
+            #endregion Arrange
+
+            AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(DisplayProfile));
+
+        }
+
+
+
+        #endregion Reflection of Database.
+
 
         #region HelperMethods
 

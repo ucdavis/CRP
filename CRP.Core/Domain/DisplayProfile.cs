@@ -33,6 +33,7 @@ namespace CRP.Core.Domain
         {
             UnitAndSchool = true;
             UnitOrSchool = true;
+            SchoolMasterAndSchool = true;
             if (Unit != null && School != null)
             {
                 UnitAndSchool = false;
@@ -41,6 +42,10 @@ namespace CRP.Core.Domain
             {
                 UnitOrSchool = false;
             }     
+            if(School == null && SchoolMaster)
+            {
+                SchoolMasterAndSchool = false;
+            }
         }
 
         [Required]
@@ -70,6 +75,8 @@ namespace CRP.Core.Domain
         public virtual bool UnitAndSchool { get; set; }
         [AssertTrue(Message = "A Unit or School must be specified.")]
         public virtual bool UnitOrSchool { get; set; }
+        [AssertTrue(Message = "SchoolMaster may only be true when School is selected")]
+        public virtual bool SchoolMasterAndSchool { get; set; }
 
         #endregion Fields ONLY used for complex validation, not in database
     }
