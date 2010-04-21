@@ -96,8 +96,12 @@
                                                         <% using(Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(a.Id))) {%>
                                                             <%= Html.AntiForgeryToken() %>
                                                             <a href="javascript:;" class="FormSubmit">Delete</a>
-                                                        
                                                         <%} %>
+                                                        
+                                                        <% if (!a.QuestionSet.SystemReusable || !a.QuestionSet.CollegeReusable || !a.QuestionSet.UserReusable) { %>
+                                                            | 
+                                                            <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.QuestionSet.Id), "Edit") %>
+                                                        <% } %>
                                                     <%});
                                         col.Add(a => a.QuestionSet.Name);
                                         col.Add(a => a.Required);
@@ -127,6 +131,11 @@
                                                             <%= Html.AntiForgeryToken() %>
                                                             <a href="javascript:;" class="FormSubmit">Delete</a>
                                                         <%} %>  
+                                                        
+                                                        <% if (!a.QuestionSet.SystemReusable || !a.QuestionSet.CollegeReusable || !a.QuestionSet.UserReusable) { %>
+                                                            | 
+                                                            <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.QuestionSet.Id), "Edit") %>
+                                                        <% } %>
                                                     <%});
                                         col.Add(a => a.QuestionSet.Name);
                                         col.Add(a => a.Required);
@@ -158,9 +167,12 @@
                                 {
                                     col.Add(a =>
                                                 {%>
-                                                    
-                                                    Deactivate
-                                                
+                                                    <% if (a.IsActive) { %> 
+                                                        <% using (Html.BeginForm<CouponController>(b => b.Deactivate(a.Id), FormMethod.Post)) { %> 
+                                                            <%= Html.AntiForgeryToken() %>
+                                                            <a href="javascript:;" class="FormSubmit">Deactivate</a>    
+                                                        <% } %>
+                                                    <% } %>
                                                 <%});
                                     col.Add(a => a.Code);
                                     col.Add(a => a.DiscountAmount.ToString("C")).Title("Discount Amount");
@@ -168,6 +180,7 @@
                                     col.Add(a => a.Expiration.HasValue ? a.Expiration.Value.ToString("d"): string.Empty).Title("Expiration");
                                     col.Add(a => a.Used);
                                     col.Add(a => a.Unlimited);
+                                    col.Add(a => a.IsActive);
                                 })
                    .Render();
                     %>

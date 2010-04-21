@@ -135,4 +135,7 @@
   <data name="STR_ObjectSaved" xml:space="preserve">
     <value>{ObjectType} has been saved successfully.</value>
   </data>
+  <data name="STR_UnableToUpdate" xml:space="preserve">
+    <value>{ObjectType} was unable to update.</value>
+  </data>
 </root>

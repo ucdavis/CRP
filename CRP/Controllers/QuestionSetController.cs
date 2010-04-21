@@ -6,6 +6,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
+using Resources;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
@@ -445,7 +446,7 @@ namespace CRP.Controllers
                 return LinkToItem(itemId, transaction, quantity);
             }
 
-            return this.RedirectToAction<ItemManagementController>(a => a.Edit(itemId));
+            return Redirect(ReturnUrlGenerator.EditItemUrl(itemId, StaticValues.Tab_Questions));
 
         }
 
@@ -493,7 +494,7 @@ namespace CRP.Controllers
                 Message = "Unable to remove question set.";
             }
 
-            return this.RedirectToAction<ItemManagementController>(a => a.Edit(itemId));
+            return Redirect(ReturnUrlGenerator.EditItemUrl(itemId, StaticValues.Tab_Questions));
         }
     }
 }

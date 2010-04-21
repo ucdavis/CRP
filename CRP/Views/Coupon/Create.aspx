@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.CouponViewModel>" %>
+<%@ Import Namespace="CRP.Controllers.Helpers"%>
 <%@ Import Namespace="Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
@@ -48,7 +49,7 @@
         </fieldset>
     <% } %>
     
-    <a href="<%= Url.Action("Edit", "ItemManagement", new {id=Model.Item.Id}) %>#<%= StaticValues.Tab_Coupons %>">Back to Item</a>
+    <a href="<%= ReturnUrlGenerator.EditItemUrl(Model.Item.Id, StaticValues.Tab_Coupons) %>">Back to Item</a>
     
 </asp:Content>
 

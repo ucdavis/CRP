@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -7,6 +6,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
+using Resources;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
@@ -246,7 +246,7 @@ namespace CRP.Controllers
                 }
             }
 
-            return this.RedirectToAction(a => a.Edit(id));
+            return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace CRP.Controllers
                 Message = "Unable to add editor.";
             }
 
-            return this.RedirectToAction(a => a.Edit(id));
+            return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.QuestionSetLinkViewModel>" %>
+<%@ Import Namespace="CRP.Controllers.Helpers"%>
 <%@ Import Namespace="Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
@@ -52,7 +53,7 @@
             .Render(); %>
 
     <p>
-    <a href="<%= Url.Action("Edit", "ItemManagement", new {id=Model.ItemId}) %>#<%= StaticValues.Tab_Questions %>">Back to Item</a>
+        <a href="<%= ReturnUrlGenerator.EditItemUrl(Model.ItemId, StaticValues.Tab_Questions) %>">Back to Item</a>
     </p>
 
 

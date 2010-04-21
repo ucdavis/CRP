@@ -5,6 +5,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
+using Resources;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Controller;
 using MvcContrib;
@@ -70,16 +71,20 @@ namespace CRP.Controllers
 
             coupon.Code = CouponGenerator.GenerateCouponCode();
             coupon.UserId = CurrentUser.Identity.Name;
-
-            item.AddCoupon(coupon);
+            coupon.Item = item;
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, coupon.ValidationResults());
 
+            if (coupon.DiscountAmount <= 0.00m)
+            {
+                ModelState.AddModelError("Discount Amount", "Discount amount must be more than $0.00");
+            }
+
             if (ModelState.IsValid)
             {
-                Repository.OfType<Item>().EnsurePersistent(item);
+                Repository.OfType<Coupon>().EnsurePersistent(coupon);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Coupon");
-                return this.RedirectToAction<ItemManagementController>(a => a.Edit(item.Id));
+                return Redirect(ReturnUrlGenerator.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
             }
 
             var viewModel = CouponViewModel.Create(Repository, item);
@@ -89,6 +94,8 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Coupon/Validate/{couponCode}
+        /// 
+        /// Validate the coupon code to make sure it can still be used.
         /// </summary>
         /// <param name="couponCode"></param>
         /// <returns></returns>
@@ -102,12 +109,64 @@ namespace CRP.Controllers
                 return new JsonNetResult("Invalid code.");
             }
 
-            if (coupon.Item != item)
+            if (coupon.Item != item || !coupon.IsActive)
             {
                 return new JsonNetResult("Invalid code.");
             }
 
+            if (coupon.Used)
+            {
+                return new JsonNetResult("Coupon has already been redeemed.");
+            }
+
             return new JsonNetResult(coupon.DiscountAmount);
+        }
+
+        /// <summary>
+        /// POST: /Coupon/Deactivate/{id}
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Deactivates an active coupon.
+        /// PreCondition:
+        ///     Coupon is active
+        ///     Coupon is not used
+        /// PostCondition:
+        ///     Coupon's "IsActive" flag is false
+        /// </remarks>
+        /// <param name="couponId"></param>
+        /// <returns></returns>
+        [AcceptPost]
+        public ActionResult Deactivate(int couponId)
+        {
+            var coupon = Repository.OfType<Coupon>().GetNullableByID(couponId);
+
+            if (coupon == null)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            
+            if (!coupon.IsActive || coupon.Used)
+            {
+                return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
+            }
+
+            coupon.IsActive = false;
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, coupon.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<Coupon>().EnsurePersistent(coupon);
+                Message = NotificationMessages.STR_Deactivated.Replace(NotificationMessages.ObjectType, "Coupon");
+            }
+            else
+            {
+                Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Coupon");
+            }
+
+            // redirect to edit with the anchor to coupon
+            return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
         }
     }
 }

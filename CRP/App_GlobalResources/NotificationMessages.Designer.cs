@@ -113,5 +113,14 @@ namespace CRP.App_GlobalResources {
                 return ResourceManager.GetString("STR_ObjectSaved", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {ObjectType} was unable to update..
+        /// </summary>
+        internal static string STR_UnableToUpdate {
+            get {
+                return ResourceManager.GetString("STR_UnableToUpdate", resourceCulture);
+            }
+        }
     }
 }

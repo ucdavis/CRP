@@ -1,4 +1,6 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.QuestionSetViewModel>" %>
+<%@ Import Namespace="Resources"%>
+<%@ Import Namespace="CRP.Controllers.Helpers"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
 
@@ -78,13 +80,13 @@
 
     <div>
     
-        <%= 
-            Model.ItemType != null ?
-                Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(Model.ItemType.Id), "Back to Item Type") : (
-                    Model.Item != null ? 
-                        Html.Encode("//TODO: Add a link back to the item") : 
-                        Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List")
-            ) %>
+        <% if(Model.ItemType != null) { %>
+            <%= Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(Model.ItemType.Id), "Back to Item Type") %>
+        <% } else if (Model.Item != null) { %> 
+            <a href="<%= ReturnUrlGenerator.EditItemUrl(Model.Item.Id, StaticValues.Tab_Questions) %>">Back to Item</a>
+        <% } else { %> 
+            Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List")
+        <% }%>
     </div>
 
 </asp:Content>

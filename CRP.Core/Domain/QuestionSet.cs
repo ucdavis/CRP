@@ -36,6 +36,9 @@ namespace CRP.Core.Domain
         public virtual bool UserReusable { get; set; }
         public virtual School School { get; set; }
         public virtual User User { get; set; }
+        /// <summary>
+        /// Used to determine whether or not a reusable question set should be displayed as an option.
+        /// </summary>
         public virtual bool IsActive { get; set; }
 
         //public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
