@@ -1,5 +1,5 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<Question>" %>
-<%@ Import Namespace="Resources"%>
+<%@ Import Namespace="CRP.Core.Resources"%>
 
     <p>
     

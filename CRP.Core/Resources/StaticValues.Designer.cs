@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Resources {
+namespace CRP.Core.Resources {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "2.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class StaticValues {
+    public class StaticValues {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CRP.App_GlobalResources.StaticValues", typeof(StaticValues).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CRP.Core.Resources.StaticValues", typeof(StaticValues).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Check.
         /// </summary>
-        internal static string Check {
+        public static string Check {
             get {
                 return ResourceManager.GetString("Check", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to indexedControl.
         /// </summary>
-        internal static string Class_indexedControl {
+        public static string Class_indexedControl {
             get {
                 return ResourceManager.GetString("Class_indexedControl", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to CreditCard.
         /// </summary>
-        internal static string CreditCard {
+        public static string CreditCard {
             get {
                 return ResourceManager.GetString("CreditCard", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to OpenId.
         /// </summary>
-        internal static string OpenId {
+        public static string OpenId {
             get {
                 return ResourceManager.GetString("OpenId", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Contact Information.
         /// </summary>
-        internal static string QuestionSet_ContactInformation {
+        public static string QuestionSet_ContactInformation {
             get {
                 return ResourceManager.GetString("QuestionSet_ContactInformation", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to AmountTotal.
         /// </summary>
-        internal static string Report_AmountTotal {
+        public static string Report_AmountTotal {
             get {
                 return ResourceManager.GetString("Report_AmountTotal", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Checks_Amount.
         /// </summary>
-        internal static string Report_Checks_Amount {
+        public static string Report_Checks_Amount {
             get {
                 return ResourceManager.GetString("Report_Checks_Amount", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Checks_CheckNumber.
         /// </summary>
-        internal static string Report_Checks_CheckNumber {
+        public static string Report_Checks_CheckNumber {
             get {
                 return ResourceManager.GetString("Report_Checks_CheckNumber", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Checks_DateReceived.
         /// </summary>
-        internal static string Report_Checks_DateReceived {
+        public static string Report_Checks_DateReceived {
             get {
                 return ResourceManager.GetString("Report_Checks_DateReceived", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Checks_Notes.
         /// </summary>
-        internal static string Report_Checks_Notes {
+        public static string Report_Checks_Notes {
             get {
                 return ResourceManager.GetString("Report_Checks_Notes", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Checks_Payee.
         /// </summary>
-        internal static string Report_Checks_Payee {
+        public static string Report_Checks_Payee {
             get {
                 return ResourceManager.GetString("Report_Checks_Payee", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Checks_TransactionId.
         /// </summary>
-        internal static string Report_Checks_TransactionId {
+        public static string Report_Checks_TransactionId {
             get {
                 return ResourceManager.GetString("Report_Checks_TransactionId", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to DonationTotal.
         /// </summary>
-        internal static string Report_DonationTotal {
+        public static string Report_DonationTotal {
             get {
                 return ResourceManager.GetString("Report_DonationTotal", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Paid.
         /// </summary>
-        internal static string Report_Paid {
+        public static string Report_Paid {
             get {
                 return ResourceManager.GetString("Report_Paid", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to PaymentType.
         /// </summary>
-        internal static string Report_PaymentType {
+        public static string Report_PaymentType {
             get {
                 return ResourceManager.GetString("Report_PaymentType", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Quantity.
         /// </summary>
-        internal static string Report_Quantity {
+        public static string Report_Quantity {
             get {
                 return ResourceManager.GetString("Report_Quantity", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Total.
         /// </summary>
-        internal static string Report_Total {
+        public static string Report_Total {
             get {
                 return ResourceManager.GetString("Report_Total", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Checks.
         /// </summary>
-        internal static string Tab_Checks {
+        public static string Tab_Checks {
             get {
                 return ResourceManager.GetString("Tab_Checks", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Coupons.
         /// </summary>
-        internal static string Tab_Coupons {
+        public static string Tab_Coupons {
             get {
                 return ResourceManager.GetString("Tab_Coupons", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Details.
         /// </summary>
-        internal static string Tab_Details {
+        public static string Tab_Details {
             get {
                 return ResourceManager.GetString("Tab_Details", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Editors.
         /// </summary>
-        internal static string Tab_Editors {
+        public static string Tab_Editors {
             get {
                 return ResourceManager.GetString("Tab_Editors", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questions.
         /// </summary>
-        internal static string Tab_Questions {
+        public static string Tab_Questions {
             get {
                 return ResourceManager.GetString("Tab_Questions", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Reports.
         /// </summary>
-        internal static string Tab_Reports {
+        public static string Tab_Reports {
             get {
                 return ResourceManager.GetString("Tab_Reports", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Templates.
         /// </summary>
-        internal static string Tab_Templates {
+        public static string Tab_Templates {
             get {
                 return ResourceManager.GetString("Tab_Templates", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Transactions.
         /// </summary>
-        internal static string Tab_Transactions {
+        public static string Tab_Transactions {
             get {
                 return ResourceManager.GetString("Tab_Transactions", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to ~/Views/Shared/PageHeader.ascx.
         /// </summary>
-        internal static string View_PageHeader {
+        public static string View_PageHeader {
             get {
                 return ResourceManager.GetString("View_PageHeader", resourceCulture);
             }

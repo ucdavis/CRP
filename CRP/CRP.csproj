@@ -137,21 +137,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_GlobalResources\QuestionTypeText.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionTypeText.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\ScreenText.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScreenText.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\StaticValues.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StaticValues.resx</DependentUpon>
-    </Compile>
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
@@ -197,11 +182,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ModelBinder\CustomModelBinder.cs" />
-    <Compile Include="App_GlobalResources\NotificationMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NotificationMessages.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteConfigurator.asax.cs" />
   </ItemGroup>
@@ -547,25 +527,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_GlobalResources\NotificationMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>NotificationMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\StaticValues.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>StaticValues.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Resources</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\ScreenText.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ScreenText.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Resources</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\QuestionTypeText.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuestionTypeText.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Resources</CustomToolNamespace>
-    </EmbeddedResource>
     <Content Include="Content\openid.css" />
     <Content Include="Images\aol.gif" />
     <Content Include="Images\blogger.ico" />

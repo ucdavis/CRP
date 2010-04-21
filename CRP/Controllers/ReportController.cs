@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
-using CRP.App_GlobalResources;
+//using CRP.App_GlobalResources;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
-using Resources;
+using CRP.Core.Resources;
 using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Validator;

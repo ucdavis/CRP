@@ -1,5 +1,5 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Core.Domain.Item>" %>
-<%@ Import Namespace="Resources"%>
+<%@ Import Namespace="CRP.Core.Resources"%>
 
 <h2>Transaction Level</h2>
 

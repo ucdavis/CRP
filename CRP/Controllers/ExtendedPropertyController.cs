@@ -7,7 +7,8 @@ using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
-using CRP.App_GlobalResources;
+//using CRP.App_GlobalResources;
+using CRP.Core.Resources;
 
 namespace CRP.Controllers
 {

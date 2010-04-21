@@ -10,7 +10,7 @@ using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.RelyingParty;
 using DotNetOpenAuth.Messaging;
 using MvcContrib.Attributes;
-using Resources;
+using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Authentication;
 using UCDArch.Web.Controller;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
-using Resources;
+using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using Check = UCDArch.Core.Utils.Check;
 

@@ -1,9 +1,10 @@
 using System.IO;
 using System.Web.Mvc;
-using CRP.App_GlobalResources;
+//using CRP.App_GlobalResources;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using MvcContrib.Attributes;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Controller;

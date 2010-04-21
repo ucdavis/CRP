@@ -2,11 +2,12 @@ using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 using MvcContrib;
-using CRP.App_GlobalResources;
+//using CRP.App_GlobalResources;
 
 namespace CRP.Controllers
 {

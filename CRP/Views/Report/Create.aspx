@@ -1,6 +1,6 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.CreateReportViewModel>" %>
 <%@ Import Namespace="CRP.Controllers.Helpers"%>
-<%@ Import Namespace="Resources"%>
+<%@ Import Namespace="CRP.Core.Resources"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Create

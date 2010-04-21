@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CRP.Core.Domain;
 
 namespace CRP.Tests.Core.Helpers
@@ -41,6 +42,7 @@ namespace CRP.Tests.Core.Helpers
         {
             var rtValue = new User();
             rtValue.FirstName = "FirstName" + counter.Extra();
+            rtValue.Units = new List<Unit>();
             //TODO: Other Values
 
             return rtValue;

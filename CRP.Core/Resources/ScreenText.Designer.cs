@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Resources {
+namespace CRP.Core.Resources {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "2.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class QuestionTypeText {
+    public class ScreenText {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal QuestionTypeText() {
+        internal ScreenText() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CRP.App_GlobalResources.QuestionTypeText", typeof(QuestionTypeText).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CRP.Core.Resources.ScreenText", typeof(ScreenText).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,65 +61,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Boolean.
+        ///   Looks up a localized string similar to Items.
         /// </summary>
-        internal static string STR_Boolean {
+        public static string STR_QuantityName {
             get {
-                return ResourceManager.GetString("STR_Boolean", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Checkbox List.
-        /// </summary>
-        internal static string STR_CheckboxList {
-            get {
-                return ResourceManager.GetString("STR_CheckboxList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Date.
-        /// </summary>
-        internal static string STR_Date {
-            get {
-                return ResourceManager.GetString("STR_Date", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Drop Down.
-        /// </summary>
-        internal static string STR_DropDown {
-            get {
-                return ResourceManager.GetString("STR_DropDown", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Radio Buttons.
-        /// </summary>
-        internal static string STR_RadioButtons {
-            get {
-                return ResourceManager.GetString("STR_RadioButtons", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Text Area.
-        /// </summary>
-        internal static string STR_TextArea {
-            get {
-                return ResourceManager.GetString("STR_TextArea", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Text Box.
-        /// </summary>
-        internal static string STR_TextBox {
-            get {
-                return ResourceManager.GetString("STR_TextBox", resourceCulture);
+                return ResourceManager.GetString("STR_QuantityName", resourceCulture);
             }
         }
     }

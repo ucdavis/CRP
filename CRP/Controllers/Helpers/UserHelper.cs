@@ -1,6 +1,6 @@
 ﻿using System.Web;
 using System.Web.Security;
-using Resources;
+using CRP.Core.Resources;
 
 namespace CRP.Controllers.Helpers
 {

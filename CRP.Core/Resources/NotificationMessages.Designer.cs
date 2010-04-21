@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CRP.App_GlobalResources {
+namespace CRP.Core.Resources {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace CRP.App_GlobalResources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "2.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class NotificationMessages {
+    public class NotificationMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace CRP.App_GlobalResources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CRP.App_GlobalResources.NotificationMessages", typeof(NotificationMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CRP.Core.Resources.NotificationMessages", typeof(NotificationMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace CRP.App_GlobalResources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace CRP.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to {ObjectType}.
         /// </summary>
-        internal static string ObjectType {
+        public static string ObjectType {
             get {
                 return ResourceManager.GetString("ObjectType", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace CRP.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been activated..
         /// </summary>
-        internal static string STR_Activated {
+        public static string STR_Activated {
             get {
                 return ResourceManager.GetString("STR_Activated", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace CRP.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been deactivated..
         /// </summary>
-        internal static string STR_Deactivated {
+        public static string STR_Deactivated {
             get {
                 return ResourceManager.GetString("STR_Deactivated", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace CRP.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been created successfully..
         /// </summary>
-        internal static string STR_ObjectCreated {
+        public static string STR_ObjectCreated {
             get {
                 return ResourceManager.GetString("STR_ObjectCreated", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace CRP.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been removed successfully..
         /// </summary>
-        internal static string STR_ObjectRemoved {
+        public static string STR_ObjectRemoved {
             get {
                 return ResourceManager.GetString("STR_ObjectRemoved", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace CRP.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been saved successfully..
         /// </summary>
-        internal static string STR_ObjectSaved {
+        public static string STR_ObjectSaved {
             get {
                 return ResourceManager.GetString("STR_ObjectSaved", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace CRP.App_GlobalResources {
         /// <summary>
         ///   Looks up a localized string similar to {ObjectType} was unable to update..
         /// </summary>
-        internal static string STR_UnableToUpdate {
+        public static string STR_UnableToUpdate {
             get {
                 return ResourceManager.GetString("STR_UnableToUpdate", resourceCulture);
             }
