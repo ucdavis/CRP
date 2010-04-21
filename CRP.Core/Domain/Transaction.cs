@@ -109,7 +109,8 @@ namespace CRP.Core.Domain
         /// <summary>
         /// Only donations
         /// </summary>
-        public virtual decimal DonationTotal { 
+        public virtual decimal DonationTotal 
+        { 
             get
             {
                 return ChildTransactions.Where(a => a.Donation).Sum(a => a.Amount);
@@ -117,10 +118,22 @@ namespace CRP.Core.Domain
         }
 
         /// <summary>
+        /// Only Corrections
+        /// </summary>
+        public virtual decimal CorrectionTotal
+        {
+            get
+            {
+                return ChildTransactions.Where(a => !a.Donation).Sum(a => a.Amount);
+            }
+        }
+
+        /// <summary>
         /// All non donation values
         /// </summary>
         public virtual decimal AmountTotal
         {
+            //TODO: JCS - Get all non-negative non donation amounts?
             get
             {
                 return Amount + ChildTransactions.Where(a => !a.Donation).Sum(a => a.Amount);

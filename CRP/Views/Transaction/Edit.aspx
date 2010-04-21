@@ -29,6 +29,10 @@
                    <!--<%= Html.Hidden("TotalAmount", Model.TransactionValue.AmountTotal)%>-->
                 </li>
                 <li>
+                    Correction Total:
+                    <%= Html.Encode(Model.TransactionValue.CorrectionTotal.ToString("C"))%>
+                </li>
+                <li>
                     Donation Total:
                     <%= Html.Encode(Model.TransactionValue.DonationTotal.ToString("C"))%>
                     <!--<%= Html.Hidden("DonationTotal", Model.TransactionValue.DonationTotal)%> -->
