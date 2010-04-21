@@ -1,5 +1,9 @@
 ﻿ USE CRP
  
+ -- //////////////////////////////////////////////////////////////////////////////////////
+ -- Insert the question types
+ -- //////////////////////////////////////////////////////////////////////////////////////
+ 
  IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Text Box' )
  begin
 	 INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
@@ -40,4 +44,13 @@ IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Date' )
 begin
 	INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
 	VALUES ('Date', 0, 1)
+end
+
+-- //////////////////////////////////////////////////////////////////////////////////////
+-- Insert the default site master into the display profiles
+-- //////////////////////////////////////////////////////////////////////////////////////
+IF NOT EXISTS ( select * From displayprofiles where sitemaster = 1 )
+begin
+	insert into displayprofile([name], sitemaster)
+	values ('University of California, Davis', 1)
 end
