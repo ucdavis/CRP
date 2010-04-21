@@ -166,10 +166,10 @@
                     </fieldset>
                 <% } %>
             
-<%--                <fieldset class="check">
+                <fieldset class="check">
                     <legend>Check <span class="checkIndex"><%= Html.Encode(Model.PaymentLogs.Count() + 1)%></span></legend>
-                    <% Html.RenderPartial("~/Views/Shared/CheckView.ascx", new PaymentLog(){Accepted = true}); %>
-                </fieldset>--%>
+                    <% Html.RenderPartial(StaticValues.Partial_CheckView, new PaymentLog(){Accepted = true}); %>
+                </fieldset>
                 
                 <img id="addCheck" src="../../Images/plus.png" style="width:24px; height:24px" />
             </td>
