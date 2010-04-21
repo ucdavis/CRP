@@ -62,10 +62,6 @@ namespace CRP.Controllers
 
             if (itemType != null)
             {
-                //extendedProperty.ItemType = itemType;
-
-                itemType.AddExtendedProperty(extendedProperty);
-
                 MvcValidationAdapter.TransferValidationMessagesTo(ModelState, extendedProperty.ValidationResults());
 
                 // check to make sure it doesn't already have an extended property with the same name already
@@ -76,6 +72,8 @@ namespace CRP.Controllers
                         ModelState.AddModelError("Name", "Item type already has extended property with the same name.");
                     }
                 }
+
+                itemType.AddExtendedProperty(extendedProperty); //Moved to be after the name check above
 
                 if (ModelState.IsValid)
                 {

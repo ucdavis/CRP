@@ -372,6 +372,22 @@ namespace CRP.Tests.Core.Helpers
             return rtValue;
         }
 
+        /// <summary>
+        /// Create a valid entry for tests.
+        /// Repository tests may need to modify this data to supply real linked data.
+        /// </summary>
+        /// <param name="counter">The counter.</param>
+        /// <returns>Valid ItemReportColumn</returns>
+        public static OpenIdUser OpenIdUser(int? counter)
+        {
+            var rtValue = new OpenIdUser();
+            rtValue.FirstName = "FirstName" + counter.Extra();
+            rtValue.LastName = "LastName" + counter.Extra();
+            rtValue.UserId = "UserId" + counter.Extra();
+
+            return rtValue;
+        }
+
         #region Helper Extension
 
         private static string Extra(this int? counter)
