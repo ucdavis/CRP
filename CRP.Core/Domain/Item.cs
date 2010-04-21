@@ -56,7 +56,13 @@ namespace CRP.Core.Domain
         public virtual Unit Unit { get; set; }
 
         public virtual DateTime DateCreated { get; set; }
+        /// <summary>
+        /// Whether or not the item is available for the public to view
+        /// </summary>
         public virtual bool Available { get; set; }
+        /// <summary>
+        /// Whether or not this item should be displayed in the searchable list
+        /// </summary>
         public virtual bool Private { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }

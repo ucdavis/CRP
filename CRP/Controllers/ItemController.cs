@@ -30,13 +30,16 @@ namespace CRP.Controllers
         /// <summary>
         /// GET /Item/Details/{id}
         /// </summary>
+        /// <remarks>
+        /// if the item is not available to the public do not display
+        /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
         public ActionResult Details(int id)
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
 
-            if (item == null)
+            if (item == null || !item.Available)
             {
                 return this.RedirectToAction(a => a.List());
             }

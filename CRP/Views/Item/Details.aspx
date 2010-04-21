@@ -16,6 +16,8 @@
 
     <% Html.RenderPartial("~/Views/Shared/TagView.ascx", Model.Item.Tags); %>
 
+    <%= Model.Item.Expiration < DateTime.Now ? Html.Encode("This item is now expired.") : string.Empty %>
+
     <fieldset>
         <legend>Details</legend>
         
@@ -43,9 +45,11 @@
         
         <% } %>
         
+        <% if (Model.Item.Expiration > DateTime.Now) { %>
         <p>
         <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>'><img src="../../Images/register.png" style="border:0;" /></a>
         </p>
+        <% } %>
         
         <p><%= Model.Item.Description%></p>
         
