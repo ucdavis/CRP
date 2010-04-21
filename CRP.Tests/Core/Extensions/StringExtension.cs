@@ -19,5 +19,15 @@ namespace CRP.Tests.Core.Extensions
             }
             return sb.ToString();
         }
+
+        public static string ByteArrayToString(this byte[] source)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < source.Length; i++)
+            {
+                sb.Append(source[i].ToString());
+            }
+            return sb.ToString();
+        }
     }
 }

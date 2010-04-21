@@ -19,7 +19,7 @@ using UCDArch.Web.ActionResults;
 namespace CRP.Tests.Controllers
 {
     [TestClass]
-    public class CouponControllerRepositoryTests : ControllerTestBase<CouponController>
+    public class CouponControllerTests : ControllerTestBase<CouponController>
     {
         protected List<Item> Items { get; set; }
         protected IRepository<Item> ItemRepository { get; set; }
@@ -29,7 +29,7 @@ namespace CRP.Tests.Controllers
 
         #region Init
 
-        public CouponControllerRepositoryTests()
+        public CouponControllerTests()
         {
             Controller.ControllerContext.HttpContext.User = Principal;
 

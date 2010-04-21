@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -398,7 +399,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestEditWithValidDataSaves()
         {
-            //Mock one files
+            //Mock one file
             Controller.ControllerContext.HttpContext = new MockHttpContext(1);
             var updateDisplayProfile = CreateValidEntities.DisplayProfile(99);
             FakeDisplayProfiles(3);
@@ -413,11 +414,111 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual(updateDisplayProfile.Name, DisplayProfiles[1].Name);
         }
 
-        //TODO: Edit Tests
-        
+        /// <summary>
+        /// Tests the edit does not change unit.
+        /// </summary>
+        [TestMethod]
+        public void TestEditDoesNotChangeUnit()
+        {
+            //Mock one file
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1);
+            FakeUnits(2);
+            FakeDisplayProfiles(1);
+            var updateDisplayProfile = CreateValidEntities.DisplayProfile(99);
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            DisplayProfiles[0].Unit = Units[0];
+            updateDisplayProfile.Unit = Units[1];
+            Assert.AreNotSame(DisplayProfiles[0].Unit, updateDisplayProfile.Unit);
+            Assert.AreNotEqual(DisplayProfiles[0].Unit.FullName, updateDisplayProfile.Unit.FullName);
+            Assert.AreNotEqual(DisplayProfiles[0].Name, updateDisplayProfile.Name);
+
+            Controller.Edit(1, updateDisplayProfile)
+                .AssertActionRedirect()
+                .ToAction<DisplayProfileController>(a => a.List());
+            DisplayProfileRepository.AssertWasCalled(a => a.EnsurePersistent(DisplayProfiles[0]));
+            Assert.AreEqual("Display Profile has been saved successfully.", Controller.Message);
+            Assert.IsNotNull(DisplayProfiles[0].Logo);
+            Assert.AreEqual(updateDisplayProfile.Name, DisplayProfiles[0].Name);
+            Assert.AreNotSame(DisplayProfiles[0].Unit, updateDisplayProfile.Unit);
+            Assert.AreNotEqual(DisplayProfiles[0].Unit.FullName, updateDisplayProfile.Unit.FullName);
+        }
+
+        /// <summary>
+        /// Tests the edit does not change school.
+        /// </summary>
+        [TestMethod]
+        public void TestEditDoesNotChangeSchool()
+        {
+            //Mock one file
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1);
+            FakeSchools(2);
+            FakeDisplayProfiles(1);
+            var updateDisplayProfile = CreateValidEntities.DisplayProfile(99);
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            DisplayProfiles[0].School = Schools[0];
+            DisplayProfiles[0].Unit = null;
+            DisplayProfiles[0].SchoolMaster = true;
+            updateDisplayProfile.School = Schools[1];
+            updateDisplayProfile.Unit = null;
+            updateDisplayProfile.SchoolMaster = true;
+            Assert.AreNotSame(DisplayProfiles[0].School, updateDisplayProfile.School);
+            Assert.AreNotEqual(DisplayProfiles[0].School.LongDescription, updateDisplayProfile.School.LongDescription);
+            Assert.AreNotEqual(DisplayProfiles[0].Name, updateDisplayProfile.Name);
+
+            Controller.Edit(1, updateDisplayProfile)
+                .AssertActionRedirect()
+                .ToAction<DisplayProfileController>(a => a.List());
+            DisplayProfileRepository.AssertWasCalled(a => a.EnsurePersistent(DisplayProfiles[0]));
+            Assert.AreEqual("Display Profile has been saved successfully.", Controller.Message);
+            Assert.IsNotNull(DisplayProfiles[0].Logo);
+            Assert.AreEqual(updateDisplayProfile.Name, DisplayProfiles[0].Name);
+            Assert.AreNotSame(DisplayProfiles[0].School, updateDisplayProfile.School);
+            Assert.AreNotEqual(DisplayProfiles[0].School.LongDescription, updateDisplayProfile.School.LongDescription);
+        }      
 
         #endregion Edit Tests
 
+        #region GetLogo Tests
+
+        /// <summary>
+        /// Tests the get logo does not throw exception when id not found.
+        /// </summary>
+        [TestMethod]
+        public void TestGetLogoDoesNotThrowExceptionWhenIdNotFound()
+        {
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            Controller.GetLogo(1);
+            Assert.Inconclusive("Once GetLogo test gets to here, assert what is returned and remove this line.");
+        }
+
+        /// <summary>
+        /// Tests the get logo when id found but logo is null.
+        /// </summary>
+        [TestMethod]
+        public void TestGetLogoWhenIdFoundButLogoIsNull()
+        {
+            FakeDisplayProfiles(1);
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            DisplayProfiles[0].Logo = null;
+            var result = Controller.GetLogo(1);
+            Assert.IsNotNull(result);
+        }
+
+        /// <summary>
+        /// Tests the get logo returns the file contents of logo when it is not null.
+        /// </summary>
+        [TestMethod]
+        public void TestGetLogoReturnsTheFileContentsOfLogoWhenItIsNotNull()
+        {
+            FakeDisplayProfiles(1);
+            DisplayProfiles[0].Logo = new byte[]{0,5,3,2};
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            var result = Controller.GetLogo(1).AssertResultIs<FileContentResult>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("image/jpg", result.ContentType);
+            Assert.AreEqual("0532", result.FileContents.ByteArrayToString());
+        }
+        #endregion GetLogo Tests
 
         #region Helper Methods
 

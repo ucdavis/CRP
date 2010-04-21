@@ -167,7 +167,9 @@ namespace CRP.Controllers
         public ActionResult GetLogo(int id)
         {
             var displayProfile = Repository.OfType<DisplayProfile>().GetNullableByID(id);
-
+            //TODO: Decide what should happen if Id is not found.
+            //TODO: Decide what should happen if the Logo is null (Or change the domail requirements so it can't be null)
+            //Maybe have a default logo?
             return File(displayProfile.Logo, "image/jpg");
         }
     }
