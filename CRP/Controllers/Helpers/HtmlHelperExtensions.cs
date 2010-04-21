@@ -70,22 +70,6 @@ namespace CRP.Helpers
             StringBuilder formattedEncodedText = new StringBuilder(encodedText);
 
             // replace the escaped characters with the correct strings to allow formatting
-
-            //// <p>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"p"), @"<p>");
-            //// </p>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"/p"), @"</p>");
-
-            //// <strong>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"strong"), @"<strong>");
-            //// </strong>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"/strong"), @"</strong>");
-
-            //// <em>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"em"), @"<em>");
-            //// </em>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"/em"), @"<em>");
-
             ReplaceTagContents(formattedEncodedText, "p");
             ReplaceTagContents(formattedEncodedText, "strong");
             ReplaceTagContents(formattedEncodedText, "em");
@@ -125,28 +109,6 @@ namespace CRP.Helpers
             }
 
             formattedEncodedText = new StringBuilder(temp);
-
-            //// <ul>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"ul"), @"<ul>");
-            //// </ul>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"/ul"), @"</ul>");
-
-            //// <ol>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"ol"), @"<ol>");
-            //// </ol>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"/ol"), @"</ol>");
-
-            //// <li>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"li"), @"<li>");
-            //// </li>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"/li"), @"</li>");
-
-            //formattedEncodedText.Replace(@"&amp;nbsp;", @"&nbsp;");
-
-            //// <address>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"/address"), @"</address>");
-            //// </address>
-            //formattedEncodedText.Replace(string.Format(htmlTag, @"/address"), @"</address>");
 
             return formattedEncodedText.ToString();
         }
