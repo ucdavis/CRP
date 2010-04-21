@@ -11,16 +11,16 @@ var providers_large = {
         url: 'https://www.google.com/accounts/o8/id'
     },
     yahoo: {
-        name: 'Yahoo',      
+        name: 'Yahoo',
         url: 'http://yahoo.com/'
-    },    
+    },
     aol: {
-        name: 'AOL',     
+        name: 'AOL',
         label: 'Enter your AOL screenname.',
         url: 'http://openid.aol.com/{username}/'
     },
     openid: {
-        name: 'OpenID',     
+        name: 'OpenID',
         label: 'Enter your OpenID.',
         url: null
     }
@@ -37,7 +37,7 @@ var providers_small = {
         url: 'http://{username}.livejournal.com/'
     },
     flickr: {
-        name: 'Flickr',        
+        name: 'Flickr',
         label: 'Enter your Flickr username.',
         url: 'http://flickr.com/{username}/'
     },
@@ -170,8 +170,6 @@ var openid = {
             hidden.value = url;
         } else {
             $('#openid_form').append('<input type="hidden" id="' + this.input_id + '" name="' + this.input_id + '" value="' + url + '"/>');
-
-            $("#loginIdentifier").val(url);
         }
     },
     highlight: function(box_id) {

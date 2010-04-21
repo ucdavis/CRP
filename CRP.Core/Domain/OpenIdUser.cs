@@ -1,4 +1,5 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.Collections.Generic;
+using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
@@ -23,6 +24,8 @@ namespace CRP.Core.Domain
         public virtual string Zip { get; set; }
         [Length(20)]
         public virtual string PhoneNumber { get; set; }
+
+        public virtual ICollection<OpenIdUser> OpenIDUsers { get; set; }
 
         public virtual string UserId { 
             set

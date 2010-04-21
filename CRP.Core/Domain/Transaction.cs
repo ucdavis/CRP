@@ -55,6 +55,7 @@ namespace CRP.Core.Domain
         public virtual Transaction ParentTransaction { get; set; }
 
         public virtual string TransactionNumber { get; set; }
+        public virtual OpenIdUser OpenIDUser { get; set; }
 
         public virtual ICollection<Check> Checks { get; set; }
         public virtual ICollection<TransactionAnswer> TransactionAnswers { get; set; }

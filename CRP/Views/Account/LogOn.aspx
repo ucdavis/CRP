@@ -8,9 +8,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
 
-    <% using (Html.BeginForm("OpenIdLogon", "Account", FormMethod.Post))
-       {%>
+
+<!-- Simple OpenID Selector -->
+<% using (Html.BeginForm("Authenticate", "Account", FormMethod.Post, new { @id = "openid_form" }))
+   { %>
+
     <%= Html.AntiForgeryToken() %>
+
 	<input type="hidden" name="action" value="verify" />
 
 	<fieldset>
@@ -31,12 +35,11 @@
 			</noscript>
 	</fieldset>
 	
-	    <input type="hidden" id="loginIdentifier" name="loginIdentifier" />
-	    <input type="submit" value="Login" />
-	
-    <% } %>
 
-    <%= Html.ActionLink<AccountController>( a=> a.CasLogon(), "Cas Logon") %>
+<% } %>
+	
+	<%= Html.ActionLink<AccountController>( a=> a.CasLogon(), "Cas Logon") %>
+	
 
 </asp:Content>
 
