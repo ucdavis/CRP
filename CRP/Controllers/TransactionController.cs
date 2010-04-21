@@ -525,10 +525,13 @@ namespace CRP.Controllers
                     ModelState.AddModelError("TPG_TRANS_ID", "TouchNet TPG_TRANS_ID Error");
                     paymentLog.Accepted = false;
                 }
-                if(touchNetValues.PMT_AMT != transaction.AmountTotal)
+                if (touchNetValues.PMT_AMT != transaction.AmountTotal)
                 {
-                    ModelState.AddModelError("Amount", "TouchNet Amount does not match local amount");
                     paymentLog.Accepted = false;
+                    if (touchNetValues.PMT_AMT != 0 && paymentLog.TnStatus == "S")
+                    {
+                        ModelState.AddModelError("Amount", "TouchNet Amount does not match local amount");
+                    }
                 }
 
                 transaction.AddPaymentLog(paymentLog);
