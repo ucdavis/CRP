@@ -1,0 +1,118 @@
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Controllers.ViewModels.ItemViewModel>" %>
+<%@ Import Namespace="CRP.Core.Domain"%>
+
+
+    <h2>Create</h2>
+
+    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
+
+    <%= Html.ClientSideValidation<Item>("Item") %>
+
+    <% using (Html.BeginForm("Create", "ItemManagement", FormMethod.Post, new {@enctype="multipart/form-data"})) {%>
+    
+        <%= Html.AntiForgeryToken() %>
+        <fieldset>
+            <legend>Fields</legend>
+            
+            <p>
+                <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
+                        .Selected(Model.Item != null ? Model.Item.ItemType.Id : 0) 
+                        .Label("Item Type:")
+                    %>
+            </p>
+            
+            <p>
+                <label for="Item.Name">Name:</label>
+                <%= Html.TextBox("Item.Name") %>
+                <%= Html.ValidationMessage("Item.Name", "*")%>
+            </p>
+            <p>
+                <label for="Item.Description">Description:</label>
+                <%= Html.TextArea("Item.Description")%>
+                <%= Html.ValidationMessage("Item.Description", "*")%>
+            </p>
+            <p>
+                <label for="Item.CostPerItem">CostPerItem:</label>
+                <%= Html.TextBox("Item.CostPerItem")%>
+                <%= Html.ValidationMessage("Item.CostPerItem", "*")%>
+            </p>
+            <p>
+                <label for="Item.Quantity">Quantity:</label>
+                <%= Html.TextBox("Item.Quantity") %>
+                <%= Html.ValidationMessage("Item.Quantity", "*")%>
+            </p>
+            <p>
+                <label for="Item.Expiration">Expiration:</label>
+                <%= Html.TextBox("Item.Expiration")%>
+                <%= Html.ValidationMessage("Item.Expiration", "*")%>
+            </p>
+            <p>
+                <label for="Item.Link">Link:</label>
+                <%= Html.TextBox("Item.Link")%>
+                <%= Html.ValidationMessage("Item.Link", "*")%>
+            </p>
+
+
+        </fieldset>
+        
+        <fieldset>
+            <legend>Extended Properties</legend>
+            
+            <div id="ExtendedProperties">
+            
+                <%  if (Model.Item != null)
+                    {
+                        for (int i = 0; i < Model.Item.ItemType.ExtendedProperties.Count; i++)
+                        {
+                            var ep = Model.Item.ItemType.ExtendedProperties.ToArray()[i];
+                            var ans = Model.Item.ExtendedPropertyAnswers.Where(a => a.ExtendedProperty == ep).FirstOrDefault();
+                    %>
+                                    <p>
+                                        <label for="extendedProperty"><%=Html.Encode(ep.Name)%></label>
+                                        <input type="text" id='<%=Html.Encode("ExtendedProperties[" + i + "]_value")%>' 
+                                                name='<%=Html.Encode("ExtendedProperties[" + i + "].value")%>' 
+                                                value='<%=Html.Encode(ans != null ? ans.Answer : string.Empty)%>'
+                                                />
+                                        <input type="hidden" id='<%=Html.Encode("ExtendedProperties[" + i + "]_propertyId")%>' 
+                                                name='<%=Html.Encode("ExtendedProperties[" + i + "].propertyId")%>' />
+                                    </p>
+                                    <%
+                        }
+                    }%>
+            
+            </div>
+            
+        </fieldset>
+        
+        <fieldset>
+            <legend>Upload Picture</legend>
+            
+            <p>
+                <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item != null ? Model.Item.Id : -1}) %>' />
+            </p>
+            
+            <input type="file" id="file" name="file" />
+        </fieldset>
+        
+        <fieldset>
+            <legend>Tags</legend>
+            
+            <input type="text" id="tagInput" />  <img id="tagAddButton" src="../../Images/plus.png" style="height:24px; width: 24px" />
+            <div id="tagContainer">
+            
+                <% if (Model.Item != null)
+                   {
+                       foreach (var tag in Model.Item.Tags)
+                       { %>
+                    <input type="text" id="Tags" value='<%= tag.Name %>' />
+                <% }
+                   } %>
+            
+            </div>
+            
+        </fieldset>
+        
+            <p>
+                <input type="submit" value="Create" />
+            </p>
+    <% } %>

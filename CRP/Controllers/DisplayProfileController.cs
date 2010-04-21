@@ -57,8 +57,6 @@ namespace CRP.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create(DisplayProfile displayProfile)
         {
-            var test = Request;
-
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
                 var file = Request.Files[0];

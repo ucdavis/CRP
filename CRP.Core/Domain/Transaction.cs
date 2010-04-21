@@ -44,6 +44,7 @@ namespace CRP.Core.Domain
         public virtual bool Paid { get; set; }
         public virtual decimal Amount { get; set; }
         public virtual bool Donation { get; set; }
+        public virtual int Quantity { get; set; }
 
         public virtual ICollection<Check> Checks { get; set; }
 

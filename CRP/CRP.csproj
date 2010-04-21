@@ -140,11 +140,14 @@
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Controllers\Helpers\RoleNames.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\ItemManagementController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
     <Compile Include="Controllers\ViewModels\DisplayProfileViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ExtendedPropertyViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
     <Compile Include="Default.aspx.cs">
@@ -218,6 +221,10 @@
     <Content Include="Views\DisplayProfile\List.aspx" />
     <Content Include="Views\ApplicationManagement\ListItemTypes.aspx" />
     <Content Include="Views\ExtendedProperty\Create.aspx" />
+    <Content Include="Views\ItemManagement\Create.aspx" />
+    <Content Include="Views\ItemManagement\Edit.aspx" />
+    <Content Include="Views\ItemManagement\ItemForm.ascx" />
+    <Content Include="Views\ItemManagement\List.aspx" />
     <Content Include="Views\QuestionSet\Create.aspx" />
     <Content Include="Views\QuestionSet\Edit.aspx" />
     <Content Include="Views\QuestionSet\LinkToItemType.aspx" />

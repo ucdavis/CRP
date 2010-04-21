@@ -18,13 +18,15 @@
 
     <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" fetch="join" />
     <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" not-null="true" fetch="join" />
+
+    <property name="DateCreated" column="DateCreated" />
     
-    <bag name="Tags" table="ItemsXTags" cascade="all-delete-orphan" fetch="join">
+    <bag name="Tags" table="ItemsXTags" cascade="all-delete-orphan" >
       <key column="ItemId" />
       <many-to-many column="TagId" class="CRP.Core.Domain.Tag, CRP.Core" />
     </bag>
 
-    <bag name="ExtendedPropertyAnswers" table="ExtendedPropertyAnswers" cascade="all-delete-orphan" inverse="true" fetch="join">
+    <bag name="ExtendedPropertyAnswers" table="ExtendedPropertyAnswers" cascade="all-delete-orphan" inverse="true" >
       <key column="ItemId" />
       <one-to-many class="CRP.Core.Domain.ExtendedPropertyAnswer, CRP.Core"/>
     </bag>
@@ -34,9 +36,19 @@
       <one-to-many class="CRP.Core.Domain.Coupon, CRP.Core" />
     </bag>
 
-    <bag name="QuestionSets" table="ItemQuestionSets" cascade="all-delete-orphan" inverse="true" fetch="join" order-by="[Order]">
+    <bag name="Editors" table="Editors" cascade="all-delete-orphan" inverse="true" fetch="join">
+      <key column="ItemId" />
+      <one-to-many class="CRP.Core.Domain.Editor, CRP.Core"/>
+    </bag>
+    
+    <bag name="QuestionSets" table="ItemQuestionSets" cascade="all-delete-orphan" inverse="true" order-by="[Order]">
       <key column="ItemId" />
       <one-to-many class="CRP.Core.Domain.ItemQuestionSet, CRP.Core"/>
+    </bag>
+
+    <bag name="Transactions" table="Transactions" cascade="none" inverse="true" >
+      <key column="ItemId" />
+      <one-to-many class="CRP.Core.Domain.Transaction, CRP.Core"/>
     </bag>
     
   </class>

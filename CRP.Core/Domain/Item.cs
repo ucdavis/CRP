@@ -10,6 +10,7 @@ namespace CRP.Core.Domain
     {
         public Item()
         {
+            SetDefaults();
         }
 
         public Item(string name, int quantity)
@@ -17,10 +18,17 @@ namespace CRP.Core.Domain
             Name = name;
             Quantity = quantity;
 
+            SetDefaults();
+        }
+
+        private void SetDefaults()
+        {
             Tags = new List<Tag>();
             ExtendedPropertyAnswers = new List<ExtendedPropertyAnswer>();
             Coupons = new List<Coupon>();
             Editors = new List<Editor>();
+
+            DateCreated = DateTime.Now;
         }
 
         [Required]
@@ -37,11 +45,14 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual Unit Unit { get; set; }
 
+        public virtual DateTime DateCreated { get; set; }
+
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<ExtendedPropertyAnswer> ExtendedPropertyAnswers { get; set; }
         public virtual ICollection<Coupon> Coupons { get; set; }
         public virtual ICollection<Editor> Editors { get; set; }
         public virtual ICollection<ItemQuestionSet> QuestionSets { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
 
         public virtual void AddTag(Tag tag)
         {
