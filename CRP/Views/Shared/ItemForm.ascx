@@ -32,7 +32,7 @@
             </li>
             <li>
             <label for="Item.Unit">Unit:</label><br />
-                <%= this.Select("Item.Unit").Options(Model.CurrentUser.Units, x=>x.Id, x=>x.FullName)
+                <%= this.Select("Item.Unit").Options(Model.Units, x=>x.Id, x=>x.FullName)
                         .Selected(Model.Item != null ? Model.Item.Unit.Id : 0)%>
             </li>
             <li>

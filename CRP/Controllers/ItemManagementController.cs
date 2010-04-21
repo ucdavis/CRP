@@ -56,7 +56,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Create()
         {
-            var viewModel = ItemViewModel.Create(Repository, CurrentUser.Identity.Name);
+            var viewModel = ItemViewModel.Create(Repository, CurrentUser);
 
             return View(viewModel);
         }
@@ -136,7 +136,7 @@ namespace CRP.Controllers
             }
             else
             {
-                var viewModel = ItemViewModel.Create(Repository, CurrentUser.Identity.Name);
+                var viewModel = ItemViewModel.Create(Repository, CurrentUser);
                 viewModel.Item = item;
                 return View(viewModel);
             }
@@ -172,7 +172,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
-            var viewModel = ItemViewModel.Create(Repository, CurrentUser.Identity.Name);
+            var viewModel = ItemViewModel.Create(Repository, CurrentUser);
             viewModel.Item = item;
 
             return View(viewModel);
@@ -227,7 +227,7 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item");
             }
 
-            var viewModel = ItemViewModel.Create(Repository, CurrentUser.Identity.Name);
+            var viewModel = ItemViewModel.Create(Repository, CurrentUser);
             viewModel.Item = destItem;
             return View(viewModel);
         }
