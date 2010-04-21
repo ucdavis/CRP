@@ -1062,7 +1062,159 @@ namespace CRP.Tests.Controllers
         }
 
         #endregion RemoveEditor Tests
+
+        #region AddEditor Tests
+
+        [TestMethod]
+        public void TestAddEditorRedirectsToListIfUserIdParameterIsNull()
+        {
+            Controller.AddEditor(1, null)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+        }
+
+        [TestMethod]
+        public void TestAddEditorRedirectsToListIfIdNotFound()
+        {
+            FakeItems(1);
+            FakeUsers(1);
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
+            Controller.AddEditor(1, 1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+        }
+
+        [TestMethod]
+        public void TestAddEditorRedirectsToListUserIfIdNotFound()
+        {
+            FakeItems(1);
+            FakeUsers(1);
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            Controller.AddEditor(1, 1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+        }
+
+        [TestMethod]
+        public void TestAddEditorWithValidDataSaves()
+        {
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeItems(1);
+            Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
+            FakeUsers(3);
+            Users[1].LoginID = Controller.CurrentUser.Identity.Name;
+            FakeEditors(2);
+            Editors[1].Owner = true;
+            Editors[1].User = Users[1];
+            Editors[1].Item = Items[0];
+            Items[0].Editors.Add(Editors[1]);
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
+
+            Assert.AreEqual(1, Items[0].Editors.Count);
+
+            var result = Controller.AddEditor(1, 1)
+                .AssertHttpRedirect();
+            Assert.AreEqual("#Editors", result.Url);
+            ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
+            Assert.AreEqual(2, Items[0].Editors.Count);
+            Assert.AreEqual("Editor has been saved successfully.", Controller.Message);
+        }
+        [TestMethod]
+        public void TestAddEditorWithInvalidDataDoesNotSave()
+        {
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeItems(1);
+            Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
+            FakeUsers(3);
+            Users[1].LoginID = Controller.CurrentUser.Identity.Name;
+            FakeEditors(2);
+            Editors[1].Owner = true;
+            Editors[1].User = Users[1];
+            Editors[1].Item = Items[0];
+            Items[0].Editors.Add(Editors[1]);
+
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
+
+            Items[0].Name = " ";
+
+            var result = Controller.AddEditor(1, 1)
+                .AssertHttpRedirect();
+            Assert.AreEqual("#Editors", result.Url);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Items[0]));
+            Assert.AreEqual("Unable to add editor.", Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Name: may not be null or empty");
+        }
+
+        [TestMethod]
+        public void TestAddEditorWithCurrentUserNotAnEditorDoesNotSave()
+        {
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeItems(1);
+            Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
+            FakeUsers(3);
+            //Users[1].LoginID = Controller.CurrentUser.Identity.Name;
+            Users[1].LoginID = "NotFound";
+            FakeEditors(2);
+            Editors[1].Owner = true;
+            Editors[1].User = Users[1];
+            Editors[1].Item = Items[0];
+            Items[0].Editors.Add(Editors[1]);
+
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
+
+            Assert.AreEqual(1, Items[0].Editors.Count);
+
+            Controller.AddEditor(1, 1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+
+            
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Items[0]));
+            Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
+        }
+
+        [TestMethod]
+        public void TestAddEditorWithUserAlreadyLinkedThroughEditorDoesNotSave()
+        {
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeItems(1);
+            Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
+            FakeUsers(3);
+            Users[1].LoginID = Controller.CurrentUser.Identity.Name;
+            FakeEditors(2);
+            Editors[1].Owner = true;
+            Editors[1].User = Users[1];
+            Editors[1].Item = Items[0];
+            Items[0].Editors.Add(Editors[1]);
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableByID(2)).Return(Users[1]).Repeat.Any();
+
+            Assert.AreEqual(1, Items[0].Editors.Count);
+
+            Controller.AddEditor(1, 2)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Items[0]));
+            Assert.AreEqual(1, Items[0].Editors.Count);
+            Assert.AreEqual("Editor already attached to that item.", Controller.Message);
+        }
         
+
+        #endregion AddEditor Tests
+
         #region Helper Methods
 
         /// <summary>

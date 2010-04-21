@@ -311,6 +311,22 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
+            if (item.Editors == null || !item.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
+            {
+                //Don't Have editor rights
+                //TODO: Use new resource?
+                Message = "You do not have editor rights to that item.";
+                return this.RedirectToAction(a => a.List());
+            }
+
+            //TODO; Review if this is how it should behave if an editor is already attached to the item
+            if(item.Editors.Where(a => a.User.LoginID == user.LoginID).Any())
+            {
+                //TODO: Use new resource?
+                Message = "Editor already attached to that item.";
+                return this.RedirectToAction(a => a.List());
+            }
+
             item.AddEditor(new Editor(item, user));
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
