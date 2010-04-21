@@ -121,6 +121,8 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             QuestionTypeRepository.Expect(a => a.GetAll()).Return(QuestionTypes).Repeat.Any();
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
             ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetByID(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetByID(2)).Return(ItemTypes[1]).Repeat.Any();
         }
 
         /// <summary>

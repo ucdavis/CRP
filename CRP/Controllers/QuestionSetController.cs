@@ -198,6 +198,9 @@ namespace CRP.Controllers
         /// GET: /QuestionSet/Create
         /// </summary>
         /// <param name="itemId">The id for an item, if it is to be automatically associated with an item</param>
+        /// <param name="itemTypeId">The id for an itemType, if it is to be automatically associated with an itemType</param>
+        /// <param name="transaction">If adding to an item or item type, the questionSet type to add it to</param>
+        /// <param name="quantity">If adding to an item or item type, the questionSet type to add it to</param>
         /// <returns></returns>
         public ActionResult Create(int? itemId, int? itemTypeId, bool? transaction, bool? quantity)
         {
@@ -258,6 +261,9 @@ namespace CRP.Controllers
         /// <param name="itemId">the id for an item to be assigned to</param>
         /// <param name="itemTypeId">the item type id to be associated with</param>
         /// <param name="questionSet"></param>
+        /// <param name="school"></param>
+        /// <param name="transaction"></param>
+        /// <param name="quantity"></param>
         /// <returns></returns>
         [AcceptPost]
         [HandleTransactionsManually]
@@ -292,7 +298,7 @@ namespace CRP.Controllers
                 var item = Repository.OfType<Item>().GetNullableByID(itemId.Value);
                 if (item == null)
                 {
-                    Message = "Unable to get associated item.";
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                     return this.RedirectToAction(a => a.List());
                 }
                 MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
@@ -302,7 +308,7 @@ namespace CRP.Controllers
                 var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId.Value);
                 if (itemType == null)
                 {
-                    Message = "Unable to get associated item type.";
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemType");
                     return this.RedirectToAction(a => a.List());
                 }
                 MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
