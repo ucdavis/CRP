@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
+using Castle.Windsor;
+using CRP.Controllers;
+using Microsoft.Practices.ServiceLocation;
+using MvcContrib.Castle;
+using UCDArch.Web.IoC;
+using UCDArch.Web.ModelBinder;
+using UCDArch.Web.Validator;
 
 namespace CRP
 {
@@ -26,7 +29,30 @@ namespace CRP
 
         protected void Application_Start()
         {
+            #if DEBUG
+            HibernatingRhinos.NHibernate.Profiler.Appender.NHibernateProfiler.Initialize();
+            #endif
+
+            xVal.ActiveRuleProviders.Providers.Add(new ValidatorRulesProvider());
+
             RegisterRoutes(RouteTable.Routes);
+
+            ModelBinders.Binders.DefaultBinder = new UCDArchModelBinder();
+
+            InitializeServiceLocator();
+        }
+
+        private static void InitializeServiceLocator()
+        {
+            IWindsorContainer container = new WindsorContainer();
+            ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
+
+            container.RegisterControllers(typeof(HomeController).Assembly);
+            ComponentRegistrar.AddComponentsTo(container);
+
+            ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
+
+            return;
         }
     }
 }
