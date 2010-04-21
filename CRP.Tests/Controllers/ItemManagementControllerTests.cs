@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
@@ -14,6 +15,7 @@ using MvcContrib.TestHelper;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
+using UCDArch.Web.ActionResults;
 
 namespace CRP.Tests.Controllers
 {
@@ -42,7 +44,7 @@ namespace CRP.Tests.Controllers
         protected IRepository<Unit> UnitRepository { get; set; }
         protected List<ItemTypeQuestionSet> ItemTypeQuestionSets { get; set; }
         protected IRepository<ItemTypeQuestionSet> ItemTypeQuestionSetRepository { get; set; }
-
+       
         #region Init
         public ItemManagementControllerTests()
         {
@@ -587,11 +589,188 @@ namespace CRP.Tests.Controllers
         #endregion Create Tests
 
         #region GetExtendedProperties Tests
-        //TODO: These Tests
+
+        /// <summary>
+        /// Tests the get extended properties return json false when id not found.
+        /// </summary>
+        [TestMethod]
+        public void TestGetExtendedPropertiesReturnJsonFalseWhenIdNotFound()
+        {
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            var result = Controller.GetExtendedProperties(2)
+                .AssertResultIs<JsonNetResult>();
+            Assert.AreEqual(false, result.Data);
+        }
+
+        /// <summary>
+        /// Tests the get extended properties returns json net result with extended properties enumeration for item.
+        /// </summary>
+        [TestMethod]
+        public void TestGetExtendedPropertiesReturnsJsonNetResultWithExtendedPropertiesEnumerationForItem()
+        {
+            FakeItemTypes(2);
+            FakeExtendedProperties(3);
+
+            ItemTypes[1].AddExtendedProperty(ExtendedProperties[0]);
+            ItemTypes[1].AddExtendedProperty(ExtendedProperties[2]);
+
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+
+            var result = Controller.GetExtendedProperties(2)
+                .AssertResultIs<JsonNetResult>();
+            Assert.AreNotEqual(false, result.Data);
+            var extendedProperties = (List<ExtendedProperty>)result.Data;
+            Assert.AreEqual(2, extendedProperties.Count);
+            Assert.AreEqual(ExtendedProperties[0].Name, extendedProperties[0].Name);
+            Assert.AreEqual(ExtendedProperties[2].Name, extendedProperties[1].Name);
+
+
+        }
+
 
 
         #endregion GetExtendedProperties Tests
 
+        #region Edit Tests
+
+        /// <summary>
+        /// Tests the edit with one parameter redirects to list when id not found.
+        /// </summary>
+        [TestMethod]
+        public void TestEditWithOneParameterRedirectsToListWhenIdNotFound()
+        {
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            Controller.Edit(2)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+        }
+
+        /// <summary>
+        /// Tests the edit with one parameter return view when id found.
+        /// </summary>
+        [TestMethod]
+        public void TestEditWithOneParameterReturnViewWhenIdFound()
+        {
+            FakeItems(3);
+            FakeItemTypes(2);
+            FakeUsers(3);
+            Users[1].LoginID = "UserName";
+
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+
+            var result = Controller.Edit(2)
+                .AssertViewRendered()
+                .WithViewData<ItemViewModel>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(Users[1], result.CurrentUser);
+            Assert.AreEqual(3, result.Users.Count());
+            Assert.AreEqual(2, result.ItemTypes.Count());
+            Assert.AreEqual(Items[1], result.Item);
+        }
+
+        /// <summary>
+        /// Tests the edit when id not found does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestEditWhenIdNotFoundDoesNotSave()
+        {             
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+
+            var epp = new ExtendedPropertyParameter[2];
+            epp[0] = new ExtendedPropertyParameter();
+            epp[1] = new ExtendedPropertyParameter();
+            epp[0].propertyId = 1;
+            epp[0].value = "Answer1";
+            epp[1].propertyId = 3;
+            epp[1].value = "Answer3";
+
+            Controller.Edit(2, new Item(), epp, new [] { "Test" }, null)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests the edit redirects to list when user does not have editor rights.
+        /// </summary>
+        [TestMethod]
+        public void TestEditRedirectsToListWhenUserDoesNotHaveEditorRights()
+        {
+            Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
+            FakeUsers(3);
+            foreach (var user in Users)
+            {
+                Assert.AreNotEqual("UserName", user.LoginID);
+            }
+            FakeItems(1);
+            Items[0].AddEditor(new Editor(Items[0], Users[0]));
+            Items[0].AddEditor(new Editor(Items[0], Users[1]));
+            Items[0].AddEditor(new Editor(Items[0], Users[2]));
+
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+
+            var epp = new ExtendedPropertyParameter[2];
+            epp[0] = new ExtendedPropertyParameter();
+            epp[1] = new ExtendedPropertyParameter();
+            epp[0].propertyId = 1;
+            epp[0].value = "Answer1";
+            epp[1].propertyId = 3;
+            epp[1].value = "Answer3";
+
+            Controller.Edit(1, Items[0], epp, new []{"NewTag"},null  )
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests the edit where user has editor rights saves.
+        /// </summary>
+        [TestMethod]
+        public void TestEditWhereUserHasEditorRightsSaves()
+        {
+            //Mock one file
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1);
+
+            Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
+            FakeUsers(3);
+            Users[1].LoginID = Controller.CurrentUser.Identity.Name;
+            FakeItems(1);
+            Items[0].AddEditor(new Editor(Items[0], Users[0]));
+            Items[0].AddEditor(new Editor(Items[0], Users[1]));
+            Items[0].AddEditor(new Editor(Items[0], Users[2]));
+
+            FakeItemTypes(1);
+            FakeTags(2);
+            TagRepository.Expect(a => a.GetAll()).Return(Tags).Repeat.Any();
+
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+
+            var epp = new ExtendedPropertyParameter[2];
+            epp[0] = new ExtendedPropertyParameter();
+            epp[1] = new ExtendedPropertyParameter();
+            epp[0].propertyId = 1;
+            epp[0].value = "Answer1";
+            epp[1].propertyId = 3;
+            epp[1].value = "Answer3";
+
+            Controller.Edit(1, Items[0], epp, new[] {Tags[0].Name}, null)
+                .AssertViewRendered()
+                .WithViewData<ItemViewModel>();
+            Assert.AreEqual("Item has been saved successfully.", Controller.Message);
+            ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
+        }
+
+
+
+        #endregion Edit Tests
+        
         #region Helper Methods
 
         /// <summary>
