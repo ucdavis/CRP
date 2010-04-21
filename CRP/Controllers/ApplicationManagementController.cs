@@ -147,6 +147,11 @@ namespace CRP.Controllers
             //As the name should not be duplicate, that check would need to be added.
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, it.ValidationResults());
 
+            if (Repository.OfType<ItemType>().Queryable.Where(a => a.Name == it.Name && a.Id != id).Any())
+            {
+                ModelState.AddModelError("Name", "The new name already exists with a different item type.");
+            }
+
             if (ModelState.IsValid)
             {
                 Repository.OfType<ItemType>().EnsurePersistent(it);
