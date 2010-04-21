@@ -38,6 +38,7 @@ namespace CRP.Core.Domain
         public virtual void AddExtendedProperty(ExtendedProperty extendedProperty)
         {
             extendedProperty.ItemType = this;
+            extendedProperty.Order = ExtendedProperties.Count + 1;
             ExtendedProperties.Add(extendedProperty);
         }
     }

@@ -43,9 +43,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-657
 		Bin\xVal.dll = Bin\xVal.dll
 	EndProjectSection
 EndProject
+Project("{4F174C21-8C12-11D0-8340-0000F80270F8}") = "CRP.DB", "CRP.DB\CRP.DB.dbp", "{56839976-E154-430C-BAC7-881DC42BF754}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://1x:8080/
 		SccLocalPath0 = .
@@ -58,6 +60,9 @@ Global
 		SccProjectUniqueName3 = CRP\\CRP.csproj
 		SccProjectName3 = CRP
 		SccLocalPath3 = CRP
+		SccProjectUniqueName4 = CRP.DB\\CRP.DB.dbp
+		SccProjectName4 = CRP.DB
+		SccLocalPath4 = CRP.DB
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

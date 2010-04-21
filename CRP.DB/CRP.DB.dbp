@@ -1,0 +1,24 @@
+# Microsoft Developer Studio Project File - Database Project
+Begin DataProject = "CRP.DB"
+   MSDTVersion = "80"
+   DefDBRef = "vogel.CRP.dbo"
+   SccProjectName = "SAK"
+   SccLocalPath = "SAK"
+   SccAuxPath = "SAK"
+   SccProvider = "SAK"
+   Begin Folder = "Change Scripts"
+   End
+   Begin Folder = "Create Scripts"
+      Script = "CreateDB.sql"
+      Script = "InsertLookups.sql"
+   End
+   Begin DBRefFolder = "Database References"
+      Begin DBRefNode = "vogel.CRP.dbo"
+         ConnectStr = "Data Source=vogel;Initial Catalog=CRP;Integrated Security=True"
+         Provider = "{91510608-8809-4020-8897-FBA057E22D54}"
+         Colorizer = 6
+      End
+   End
+   Begin Folder = "Queries"
+   End
+End

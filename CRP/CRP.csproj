@@ -124,6 +124,7 @@
     <Compile Include="Controllers\ApplicationManagementController.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -137,7 +138,13 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Images\minus.png" />
+    <Content Include="Images\plus.png" />
+    <Content Include="Scripts\xVal.jquery.validate.js" />
+    <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
     <Content Include="Views\ApplicationManagement\Index.aspx" />
+    <Content Include="Views\ApplicationManagement\ItemTypeForm.ascx" />
+    <Content Include="Views\ApplicationManagement\ListItemTypes.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.3.2.js" />

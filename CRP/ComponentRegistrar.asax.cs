@@ -15,7 +15,6 @@ namespace CRP
             container.AddComponent("validator",
                                    typeof(IValidator), typeof(Validator));
             container.AddComponent("dbContext", typeof(IDbContext), typeof(DbContext));
-
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)
