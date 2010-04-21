@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
@@ -113,9 +114,43 @@ namespace CRP.Tests.Repositories
             }
 
             #endregion Ok, not that it is setup, delete it and make sure related questions are deleted.
+        }
 
+        /// <summary>
+        /// Tests the question set linked to an item will not delete.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.ObjectDeletedException))]
+        public void TestQuestionSetLinkedToAnItemWillNotDelete()
+        {
+            try
+            {
+                Repository.OfType<Item>().DbContext.BeginTransaction();
+                LoadUnits(1);
+                LoadItemTypes(1);
+                LoadItems(2);
+                Repository.OfType<Item>().DbContext.CommitTransaction();
+
+                var questionSetToDelete = CreateValidEntities.QuestionSet(10);
+                SetupDataToTestCascadeDelete(questionSetToDelete);
+
+                Repository.OfType<Item>().DbContext.BeginTransaction();
+                var item = Repository.OfType<Item>().GetById(1);
+                item.AddTransactionQuestionSet(questionSetToDelete);
+                Repository.OfType<Item>().DbContext.CommitTransaction();
+
+                Repository.OfType<QuestionSet>().DbContext.BeginTransaction();
+                Repository.OfType<QuestionSet>().Remove(questionSetToDelete);
+                Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("deleted object would be re-saved by cascade (remove deleted object from associations)[CRP.Core.Domain.QuestionSet#6]", ex.Message);
+                throw;
+            }
         }
         
+
 
         #endregion CRUD Cascade Tests
 
