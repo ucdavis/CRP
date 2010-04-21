@@ -432,6 +432,47 @@ namespace CRP.Tests.Controllers
 
         #endregion EditItemType Tests
 
+        #region ToggleActive Tests
+
+        [TestMethod]
+        public void TestToggleActiveRedirectsToListWhenIdNotFound()
+        {
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any(); //So It Is Not Found
+            Controller.ToggleActive(2)
+                .AssertActionRedirect()
+                .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
+            ItemTypeRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<ItemType>.Is.Anything));
+        }
+
+        [TestMethod]
+        public void TestToggleActiveToFalseWithFoundId()
+        {
+            FakeItemTypes(1);
+            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Any();
+            ItemTypes[0].IsActive = true;
+            Controller.ToggleActive(1)
+                .AssertActionRedirect()
+                .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
+            Assert.IsFalse(ItemTypes[0].IsActive);
+            ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(ItemTypes[0]));
+            Assert.AreEqual("Item Type has been deactivated.", Controller.Message);
+        }
+
+        [TestMethod]
+        public void TestToggleActiveToTrueWithFoundId()
+        {
+            FakeItemTypes(1);
+            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Any();
+            ItemTypes[0].IsActive = false;
+            Controller.ToggleActive(1)
+                .AssertActionRedirect()
+                .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
+            Assert.IsTrue(ItemTypes[0].IsActive);
+            ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(ItemTypes[0]));
+            Assert.AreEqual("Item Type has been activated.", Controller.Message);
+        }
+        #endregion ToggleActive Tests
+
         #region Helper Methods
 
         /// <summary>
