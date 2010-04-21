@@ -265,8 +265,8 @@ namespace CRP.Tests.Controllers
             ItemTypeRepository.AssertWasNotCalled(a => a.EnsurePersistent(itemTypeToAdd));
             Assert.AreNotEqual("Item Type has been created successfully.", Controller.Message);
             Assert.IsFalse(Controller.ModelState.IsValid);
-            Controller.ModelState.AssertErrorsAre("At least one extended property is not valid.");
-            Assert.AreEqual(2, itemTypeToAdd.ExtendedProperties.ToList().Count);
+            Controller.ModelState.AssertErrorsAre("ItemTypeExtendedProperties: One or more Extended Properties is not valid");
+            Assert.AreEqual(3, itemTypeToAdd.ExtendedProperties.ToList().Count);
             Assert.AreSame(itemTypeToAdd, result.ItemType);
         }
 

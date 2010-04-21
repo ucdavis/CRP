@@ -61,18 +61,26 @@ namespace CRP.Controllers
         [AcceptPost]
         public ActionResult CreateItemType(ItemType itemType, ExtendedProperty[] extendedProperties)
         {
-            foreach(var ep in extendedProperties)
+
+            //foreach (var ep in extendedProperties)
+            //{
+            //    ep.ItemType = itemType;
+
+            //    if (ep.IsValid())
+            //    {
+            //        itemType.AddExtendedProperty(ep);
+            //    }
+            //    else
+            //    {
+            //        ModelState.AddModelError("ExtendedProperty", "At least one extended property is not valid.");
+            //    }
+            //}
+
+            //Validation is done in the domain
+            foreach (var ep in extendedProperties)
             {
                 ep.ItemType = itemType;
-
-                if (ep.IsValid())
-                {
-                    itemType.AddExtendedProperty(ep);
-                }
-                else
-                {
-                    ModelState.AddModelError("ExtendedProperty", "At least one extended property is not valid.");
-                }
+                itemType.AddExtendedProperty(ep);        
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
