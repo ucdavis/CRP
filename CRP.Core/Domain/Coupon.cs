@@ -71,6 +71,14 @@ namespace CRP.Core.Domain
             // coupon is not valid discount is 0.
             return 0.0m;
         }
+        /// <summary>
+        /// Validates to tell you if the coupon is valid for use or not.  Will check against email, usage and date.
+        /// If you are actually using the coupon, do not use this function directly, call UseCoupon(email, quantity)
+        /// </summary>
+        /// <param name="email">Pass null if you just want to know if it's valid or not based on usage and date.</param>
+        /// <param name="quantity"></param>
+        /// <param name="ignoreEmail">Set to true just for checkout validation.  Always use false when using the coupon.</param>
+        /// <returns></returns>
         public virtual decimal? ValidateCoupon(string email, int quantity, bool ignoreEmail)
         {
             // coupon has been used but isn't unlimied, is inactive or has passed expiration

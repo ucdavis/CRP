@@ -116,29 +116,24 @@ namespace CRP.Controllers
             var amount = item.CostPerItem*quantity; // get the initial amount
             decimal discount = 0.0m;
             
-            //TODO: deal with coupon codes
-            // coupon is valid code for this item
-
             // get the email
-            var emailQ = allQuestions.Where(a => a.Name == StaticValues.Question_Email && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).FirstOrDefault();
-            if (emailQ != null)
+            if (coup != null)
             {
-                // get the answer
-                var answer = transactionAnswers.Where(a => a.QuestionId == emailQ.Id).FirstOrDefault();
-
-                if (coup != null)
+                var emailQ = allQuestions.Where(a => a.Name == StaticValues.Question_Email && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).FirstOrDefault();
+                if (emailQ != null)
                 {
+                    // get the answer
+                    var answer = transactionAnswers.Where(a => a.QuestionId == emailQ.Id).FirstOrDefault();
+
                     discount = coup.UseCoupon(answer.Answer, quantity);
                 }
+                else
+                {
+                    discount = coup.UseCoupon(null, quantity);
+                }
             }
-            else
-            {
-                discount = coup.UseCoupon(null, quantity);
-            }
-
             transaction.Amount = amount - discount;
             transaction.Quantity = quantity;
-
 
 
             // deal with the transaction answers
