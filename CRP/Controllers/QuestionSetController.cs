@@ -416,6 +416,8 @@ namespace CRP.Controllers
         /// GET: /QuestionSet/LinkToItemType/{itemTypeId}
         /// </summary>
         /// <param name="itemTypeId">The id of the item type to link to</param>
+        /// <param name="transaction"></param>
+        /// <param name="quantity"></param>
         /// <returns></returns>
         [Authorize(Roles = "Admin")]
         public ActionResult LinkToItemType(int itemTypeId, bool transaction, bool quantity)

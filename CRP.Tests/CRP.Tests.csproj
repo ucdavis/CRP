@@ -143,6 +143,7 @@
     <Compile Include="Controllers\QuestionSetControllerTests\QuestionSetControllerTestsPart5.cs" />
     <Compile Include="Controllers\QuestionSetControllerTests\QuestionSetControllerTestsPart6.cs" />
     <Compile Include="Controllers\QuestionSetControllerTests\QuestionSetControllerTestsPart7.cs" />
+    <Compile Include="Controllers\QuestionSetControllerTests\QuestionSetControllerTestsPart8.cs" />
     <Compile Include="Controllers\ReportControllerTests.cs" />
     <Compile Include="Controllers\TagControllerTests.cs" />
     <Compile Include="Controllers\TransactionControllerTests.cs" />

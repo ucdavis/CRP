@@ -7,6 +7,7 @@ using System.Web;
 using CRP.Controllers;
 using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
@@ -94,7 +95,47 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         #endregion Init
 
         #region Helper Methods
+        /// <summary>
+        /// Setups the data for link to tests.
+        /// </summary>
+        private void SetupDataForLinkToTests()
+        {
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            ControllerRecordFakes.FakeItemTypes(ItemTypes, 3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
+            ControllerRecordFakes.FakeUnits(Units, 5);
+            ControllerRecordFakes.FakeSchools(Schools, 5);
+            for (int i = 0; i < 5; i++)
+            {
+                Units[i].School = Schools[i];
+            }
 
+            Users[1].Units.Add(Units[1]);
+            Users[1].Units.Add(Units[3]);
+            Users[1].Units.Add(Units[4]);
+            Users[1].LoginID = "UserName";
+
+            ControllerRecordFakes.FakeQuestionSets(QuestionSets, 10);
+            QuestionSets[0].UserReusable = true;
+            QuestionSets[0].User = Users[1]; //Has
+            QuestionSets[1].UserReusable = true;
+            QuestionSets[1].User = Users[0]; //Doesn't have
+            QuestionSets[2].UserReusable = true;
+            QuestionSets[2].User = Users[1]; //Has
+            QuestionSets[3].CollegeReusable = true;
+            QuestionSets[3].School = Schools[1]; //Has
+            QuestionSets[4].CollegeReusable = true;
+            QuestionSets[4].School = Schools[2]; //Doesn't have
+            QuestionSets[5].CollegeReusable = true;
+            QuestionSets[5].School = Schools[4]; //Has
+            QuestionSets[6].SystemReusable = true; //Has
+            QuestionSets[7].SystemReusable = true; //System so shouldn't appear
+            QuestionSets[7].Name = StaticValues.QuestionSet_ContactInformation;
+
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.Queryable).Return(QuestionSets.AsQueryable()).Repeat.Any();
+        }
         /// <summary>
         /// Setups the data for create tests.
         /// </summary>
@@ -116,7 +157,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Users[1].Units.Add(Units[3]);
             Users[1].Units.Add(Units[4]);
             Users[1].LoginID = "UserName";
-
+            
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             QuestionTypeRepository.Expect(a => a.GetAll()).Return(QuestionTypes).Repeat.Any();
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
@@ -363,5 +404,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         #endregion
 
         #endregion Helper Methods
+
+
     }
 }
