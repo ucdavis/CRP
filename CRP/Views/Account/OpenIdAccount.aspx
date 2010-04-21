@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Core.Domain.OpenIdUser>" %>
+<%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -80,6 +81,22 @@
                .Name("Transactions")
                .Columns(col =>
                             {
+                                col.Add(a =>
+                                            { %>
+                                              <% using (Html.BeginForm("Lookup", "Transaction", FormMethod.Post)) {
+                                                    //pull the email
+                                                     var answer =
+                                                        a.TransactionAnswers.Where(
+                                                            b =>
+                                                            b.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                                                            b.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+                                                     %>
+                                              
+                                                    <%= Html.Hidden("orderNumber", a.TransactionNumber) %>
+                                                    <%= Html.Hidden("email", answer != null ? answer.Answer : string.Empty ) %>
+                                                    <%= Html.SubmitButton("Submit", "View") %>
+                                              <% } %>  
+                                            <% }); 
                                 col.Add(a => a.TransactionNumber);
                                 col.Add(a => a.TransactionDate);
                                 col.Add(a => a.Quantity);

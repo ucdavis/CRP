@@ -164,10 +164,9 @@ var openid = {
         return true;
     },
     setOpenIdUrl: function(url) {
-
         var hidden = $('#' + this.input_id);
         if (hidden.length > 0) {
-            hidden.value = url;
+            $(hidden).val(url);
         } else {
             $('#openid_form').append('<input type="hidden" id="' + this.input_id + '" name="' + this.input_id + '" value="' + url + '"/>');
         }
