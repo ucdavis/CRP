@@ -389,13 +389,12 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
         #endregion Template Tests
 
         #region Sold Tests 
-        //TODO: Update test to reflect Transaction.IsActive change
 
         /// <summary>
         /// Tests that sold returns expected results.
         /// </summary>
         [TestMethod]
-        public void TestSoldReturnsExpectedResults()
+        public void TestSoldReturnsExpectedResults1()
         {
             #region Arrange
 
@@ -428,7 +427,45 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             Assert.AreEqual(1111, result);
             #endregion Assert		
         }
-        
+
+        /// <summary>
+        /// Tests that sold returns expected results.
+        /// </summary>
+        [TestMethod]
+        public void TestSoldReturnsExpectedResults2()
+        {
+            #region Arrange
+
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+            transactions[1].IsActive = false;
+            transactions[2].Quantity = 100;
+            transactions[3].Quantity = 1000;
+            transactions[4].Quantity = 10000;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 4; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 100000;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.Sold;
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1101, result);
+            #endregion Assert
+        }
 
         #endregion Sold Tests
 

@@ -4,6 +4,7 @@ using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Tests.Core.Extensions;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
@@ -23,7 +24,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestCreateWithoutParameterReturnsItemViewModel()
         {
-            FakeUsers(2);
+            ControllerRecordFakes.FakeUsers(Users, 2);
             FakeItemTypes(1);
             Users[1].LoginID = "UserName";
             ItemTypes[0].IsActive = true;
@@ -44,7 +45,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true); //Set the Is role Admin to true
             FakeUnits(5);
-            FakeUsers(2);
+            ControllerRecordFakes.FakeUsers(Users, 2);
             FakeItemTypes(1);
             Users[1].LoginID = "UserName";
             Users[1].Units.Add(Units[1]);
@@ -77,7 +78,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false); //Set the Is role Admin to false
             FakeUnits(5);
-            FakeUsers(2);
+            ControllerRecordFakes.FakeUsers(Users, 2);
             FakeItemTypes(1);
             Users[1].LoginID = "UserName";
             Users[1].Units.Add(Units[1]);
@@ -458,8 +459,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             //Fakes
             FakeExtendedProperties(4);
             FakeTags(2);
-            FakeItems(1);
-            FakeUsers(2);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 2);
             FakeQuestionSets(1);
             FakeUnits(2);
             FakeItemTypes(3);

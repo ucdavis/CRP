@@ -37,9 +37,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false); //Not Admin
-            FakeItems(3);
+            ControllerRecordFakes.FakeItems(Items, 3);
             FakeItemTypes(2);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[2]; //Different User is editor
@@ -63,9 +63,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true); // Admin
-            FakeItems(3);
+            ControllerRecordFakes.FakeItems(Items, 3);
             FakeItemTypes(2);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[2]; //Different User is editor
@@ -99,9 +99,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false); // Not Admin
             FakeUnits(5);
-            FakeItems(3);
+            ControllerRecordFakes.FakeItems(Items, 3);
             FakeItemTypes(2);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1];
@@ -141,9 +141,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true); // Admin
             FakeUnits(7);
-            FakeItems(3);
+            ControllerRecordFakes.FakeItems(Items, 3);
             FakeItemTypes(2);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1];
@@ -180,9 +180,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestEditGetToEnsureOnlyActiveItemTypesAreDisplayed()
         {
             #region Arrange
-            FakeItems(3);
+            ControllerRecordFakes.FakeItems(Items, 3);
             FakeItemTypes(5);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1];
@@ -227,9 +227,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestEditWithOneParameterReturnViewWhenIdFound()
         {
-            FakeItems(3);
+            ControllerRecordFakes.FakeItems(Items, 3);
             FakeItemTypes(2);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1];
@@ -284,12 +284,12 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestEditRedirectsToListWhenUserDoesNotHaveEditorRights()
         {
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             foreach (var user in Users)
             {
                 Assert.AreNotEqual("UserName", user.LoginID);
             }
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Items[0].AddEditor(new Editor(Items[0], Users[0]));
             Items[0].AddEditor(new Editor(Items[0], Users[1]));
             Items[0].AddEditor(new Editor(Items[0], Users[2]));
@@ -321,9 +321,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
 
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Items[0].AddEditor(new Editor(Items[0], Users[0]));
             Items[0].AddEditor(new Editor(Items[0], Users[1]));
             Items[0].AddEditor(new Editor(Items[0], Users[2]));
@@ -361,9 +361,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
 
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Items[0].AddEditor(new Editor(Items[0], Users[0]));
             //Items[0].AddEditor(new Editor(Items[0], Users[1])); //Not an editor
             Items[0].AddEditor(new Editor(Items[0], Users[2]));
@@ -401,9 +401,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
 
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Items[0].AddEditor(new Editor(Items[0], Users[0]));
             Items[0].AddEditor(new Editor(Items[0], Users[1]));
             Items[0].AddEditor(new Editor(Items[0], Users[2]));
@@ -446,9 +446,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
 
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Items[0].AddEditor(new Editor(Items[0], Users[0]));
             Items[0].AddEditor(new Editor(Items[0], Users[1]));
             Items[0].AddEditor(new Editor(Items[0], Users[2]));

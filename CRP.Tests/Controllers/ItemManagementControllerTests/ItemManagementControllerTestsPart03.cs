@@ -2,6 +2,7 @@
 using System.Linq;
 using CRP.Controllers;
 using CRP.Core.Domain;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
@@ -36,8 +37,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestListReturnsView()
         {
-            FakeItems(2);
-            FakeUsers(2);
+            ControllerRecordFakes.FakeItems(Items, 2);
+            ControllerRecordFakes.FakeUsers(Users, 2);
             FakeEditors(1);
             Users[1].LoginID = "UserName";
             Editors[0].User = Users[1];

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
@@ -25,7 +26,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestSaveTemplateDoesNotSaveIfTextIsNull()
         {
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.SaveTemplate(1, null)
                 .AssertResultIs<JsonNetResult>();
@@ -36,7 +37,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestSaveTemplateDoesNotSaveIfTextIsEmpty()
         {
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.SaveTemplate(1, string.Empty)
                 .AssertResultIs<JsonNetResult>();
@@ -46,8 +47,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestSaveTemplateDoesNotSaveIfTextIsSpacesOnly()
         {
-            FakeItems(1);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1];
@@ -64,8 +65,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestSaveTemplateDoesNotSaveIfTextIsSpacesOnlyAndItemIsInvalid()
         {
-            FakeItems(1);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1];
@@ -83,10 +84,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestSaveTemplateDoesNotSaveIfTextIsValidAndItemIsInvalid()
         {
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             Items[0].Name = " "; //Also invalid
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1];
@@ -101,8 +102,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestSaveTemplateSavesWithValidData()
         {
-            FakeItems(1);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1];
@@ -125,8 +126,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestSaveTemplateDoesNotSaveIfUserIsNotAnEditor()
         {
             #region Arrange
-            FakeItems(1);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[2]; //Current user is not an editor.
@@ -154,8 +155,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true); // Admin
-            FakeItems(1);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[2]; //Current user is not an editor.

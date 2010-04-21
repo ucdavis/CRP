@@ -423,9 +423,15 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
             if (transaction == null)
             {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
                 return this.RedirectToAction(a => a.List());
             }
-            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            if (transaction.Item == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction(a => a.List());
+            }
+            if(!Access.HasItemAccess(CurrentUser, transaction.Item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List());
@@ -457,7 +463,7 @@ namespace CRP.Controllers
             }
             else
             {
-                Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "transaction");  
+                Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");  
             }                                  
             return this.RedirectToAction(a => a.Details(transaction.Item.Id));
         }

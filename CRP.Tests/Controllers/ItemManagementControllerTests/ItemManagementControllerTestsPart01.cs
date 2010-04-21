@@ -125,7 +125,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(11, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(12, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -425,6 +425,30 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreEqual(0, allAttributes.Count());
             #endregion Assert
         }
+
+
+        /// <summary>
+        /// Tests the controller method toggle transaction is active contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodToggleTransactionIsActiveContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("ToggleTransactionIsActive");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert		
+        }
+
         #endregion Controller Method Tests
 
         #endregion Reflection Tests

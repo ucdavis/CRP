@@ -43,6 +43,11 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         protected IRepository<ItemTypeQuestionSet> ItemTypeQuestionSetRepository { get; set; }
         protected List<ItemReport> ItemReports { get; set; }
         protected IRepository<ItemReport> ItemReportRepository { get; set; }
+        protected List<Transaction> Transactions { get; set; }
+        protected IRepository<Transaction> TransactionRepository { get; set; }
+        protected List<PaymentLog> PaymentLogs { get; set; }
+        protected IRepository<PaymentLog> PaymentLogRepository { get; set; }
+
         protected Type _controllerClass = typeof(ItemManagementController);
 
         #region Init
@@ -89,6 +94,14 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemReports = new List<ItemReport>();
             ItemReportRepository = FakeRepository<ItemReport>();
             Controller.Repository.Expect(a => a.OfType<ItemReport>()).Return(ItemReportRepository).Repeat.Any();
+
+            Transactions = new List<Transaction>();
+            TransactionRepository = FakeRepository<Transaction>();
+            Controller.Repository.Expect(a => a.OfType<Transaction>()).Return(TransactionRepository).Repeat.Any();
+
+            PaymentLogs = new List<PaymentLog>();
+            PaymentLogRepository = FakeRepository<PaymentLog>();
+            Controller.Repository.Expect(a => a.OfType<PaymentLog>()).Return(PaymentLogRepository).Repeat.Any();
         }
 
 
@@ -123,8 +136,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             //Fakes
             FakeExtendedProperties(4);
             FakeTags(2);
-            FakeItems(1);
-            FakeUsers(2);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 2);
             FakeQuestionSets(1);
             FakeUnits(2);
             FakeItemTypes(3);
@@ -159,15 +172,15 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         /// Fakes the items.
         /// </summary>
         /// <param name="count">The count.</param>
-        private void FakeItems(int count)
-        {
-            var offSet = Items.Count;
-            for (int i = 0; i < count; i++)
-            {
-                Items.Add(CreateValidEntities.Item(i + 1 + offSet));
-                Items[i + offSet].SetIdTo(i + 1 + offSet);
-            }
-        }
+        //private void FakeItems(int count)
+        //{
+        //    var offSet = Items.Count;
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        Items.Add(CreateValidEntities.Item(i + 1 + offSet));
+        //        Items[i + offSet].SetIdTo(i + 1 + offSet);
+        //    }
+        //}
 
         private void FakeItemReports(int count)
         {
@@ -179,15 +192,15 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             }
         }
 
-        private void FakeUsers(int count)
-        {
-            var offSet = Users.Count;
-            for (int i = 0; i < count; i++)
-            {
-                Users.Add(CreateValidEntities.User(i + 1 + offSet));
-                Users[i + offSet].SetIdTo(i + 1 + offSet);
-            }
-        }
+        //private void FakeUsers(int count)
+        //{
+        //    var offSet = Users.Count;
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        Users.Add(CreateValidEntities.User(i + 1 + offSet));
+        //        Users[i + offSet].SetIdTo(i + 1 + offSet);
+        //    }
+        //}
 
         private void FakeEditors(int count)
         {
@@ -489,8 +502,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         /// </summary>
         private void ArrangeItemsAndOwners()
         {
-            FakeItems(6);
-            FakeUsers(2);
+            ControllerRecordFakes.FakeItems(Items, 6);
+            ControllerRecordFakes.FakeUsers(Users, 2);
             FakeEditors(2);
             Users[0].LoginID = "OtherGuy";
             Users[1].LoginID = "UserName";

@@ -379,5 +379,20 @@ namespace CRP.Tests.Core.Helpers
                 entity[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
+
+        /// <summary>
+        /// Fakes the payment logs.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        public static void FakePaymentLogs(List<PaymentLog> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.PaymentLog(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
     }
 }

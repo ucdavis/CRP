@@ -3,6 +3,7 @@ using CRP.Controllers;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Tests.Core.Extensions;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
@@ -35,8 +36,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestAddEditorRedirectsToListIfIdNotFound()
         {
-            FakeItems(1);
-            FakeUsers(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
             Controller.AddEditor(1, 1)
@@ -48,8 +49,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestAddEditorRedirectsToListUserIfIdNotFound()
         {
-            FakeItems(1);
-            FakeUsers(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             UserRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             Controller.AddEditor(1, 1)
@@ -63,9 +64,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;
             FakeEditors(2);
             Editors[1].Owner = true;
@@ -89,9 +90,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;
             FakeEditors(2);
             Editors[1].Owner = true;
@@ -117,9 +118,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             //Users[1].LoginID = Controller.CurrentUser.Identity.Name;
             Users[1].LoginID = "NotFound";
             FakeEditors(2);
@@ -148,9 +149,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Arrange
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;
             FakeEditors(2);
             Editors[1].Owner = true;

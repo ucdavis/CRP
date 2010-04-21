@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CRP.Controllers;
 using CRP.Controllers.ViewModels;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
@@ -24,7 +25,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestDetailsReturnsUserItemDetailViewModelWhenIdFoundAndAdmin()
         {
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             FakeItemReports(1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             ItemReportRepository.Expect(a => a.Queryable).Return(ItemReports.AsQueryable()).Repeat.Any();
@@ -39,9 +40,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             FakeItemReports(1);
-            FakeUsers(3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
             FakeEditors(1);
             Editors[0].User = Users[1]; //User is editor
@@ -70,7 +71,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
-            FakeItems(1);
+            ControllerRecordFakes.FakeItems(Items, 1);
             FakeItemReports(1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             ItemReportRepository.Expect(a => a.Queryable).Return(ItemReports.AsQueryable()).Repeat.Any();
