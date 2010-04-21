@@ -6,6 +6,7 @@
 <head runat="server">
     <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/quicksandstylesheet.css" rel="stylesheet" type="text/css" />
     
     <%--//TODO: Remove (if you want) in place of custom style sheets--%>
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css" rel="Stylesheet" type="text/css" media="screen" />
@@ -26,9 +27,19 @@
     
     <asp:ContentPlaceHolder ID="HeaderContent" runat="server">
     </asp:ContentPlaceHolder>
+
 </head>
 
 <body>
+<div id="brand_bar">
+<div id="brand_bar_content">
+<img class="brand_bar_caes_img" src="../../Images/caes-logo.jpg" /><h1 class="brand_bar_caes_h1">The College of Agricultural and Environmental Sciences</h1>
+<span class="clear"/>
+<p class="search_box"><input type="text" value="Search" maxlength="20" /></p>
+</div>
+</div>
+
+
     <div class="page">
 
         <div id="header">
@@ -41,13 +52,17 @@
             <div id="logindisplay">
                 <% Html.RenderPartial("~/Views/Shared/LogOnUserControl.ascx"); %>
             </div> 
+            <div>
+                <h3><span style="color:Blue;" ><%= Html.Encode(TempData["Message"]) %></span></h3>
+            </div>
             
-            <div id="menucontainer">
+            <!-- <div id="menucontainer">
             
                 <ul id="menu">              
                     <li><%= Html.ActionLink("Home", "Index", "Home")%></li>
                     <li><%= Html.ActionLink("About", "About", "Home")%></li>
                 </ul>
+                -->
             
             </div>
         </div>
