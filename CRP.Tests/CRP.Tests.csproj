@@ -105,7 +105,6 @@
     <Compile Include="ContinuousIntegrationDeploymentHack.cs" />
     <Compile Include="Controllers\AccountControllerTests.cs" />
     <Compile Include="Controllers\ApplicationManagementControllerTests.cs" />
-    <Compile Include="Controllers\CheckControllerTests.cs" />
     <Compile Include="Controllers\CouponControllerTests.cs" />
     <Compile Include="Controllers\DisplayProfileControllerTests.cs" />
     <Compile Include="Controllers\ExtendedPropertyControllerTests.cs" />
@@ -123,7 +122,6 @@
     <Compile Include="Core\Helpers\AttributeAndFieldValidation.cs" />
     <Compile Include="Core\Helpers\CreateValidEntities.cs" />
     <Compile Include="Core\Helpers\NameAndType.cs" />
-    <Compile Include="Repositories\CheckRepositoryTests.cs" />
     <Compile Include="Repositories\CouponRepositoryTests.cs" />
     <Compile Include="Repositories\DisplayProfileRepositoryTests.cs" />
     <Compile Include="Repositories\EditorRepositoryTests.cs" />

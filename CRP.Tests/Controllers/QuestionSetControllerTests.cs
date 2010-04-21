@@ -82,7 +82,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestEditWithParametersMapping()
         {
-            "~/QuestionSet/Edit/5".ShouldMapTo<QuestionSetController>(a => a.Edit(new QuestionSet()), true);
+            "~/QuestionSet/Edit/5".ShouldMapTo<QuestionSetController>(a => a.Edit(5,new QuestionSet()), true);
         }
 
         /// <summary>
