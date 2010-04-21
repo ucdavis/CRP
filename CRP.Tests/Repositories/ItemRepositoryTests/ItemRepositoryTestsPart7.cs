@@ -1029,9 +1029,6 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
         #endregion QuestionSets Collection Tests
 
-        //TODO: Test that remove Editor from item cascades to editors.
-
-        //TODO: Other tests
 
     }
 }

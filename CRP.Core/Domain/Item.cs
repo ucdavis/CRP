@@ -96,6 +96,7 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual ICollection<Transaction> Transactions { get; set; }
         [NotNull]
+        [Size(Max=1)]
         public virtual ICollection<Template> Templates { get; set; }
         [NotNull]
         public virtual ICollection<ItemReport> Reports { get; set; }

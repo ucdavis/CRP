@@ -111,7 +111,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             expectedFields.Add(new NameAndType("Available", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("CostPerItem", "System.Decimal", new List<string>
             {
-                 "[Newtonsoft.Json.JsonPropertyAttribute()]"
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0, Message = \"must be zero or more\")]"
             }));
             expectedFields.Add(new NameAndType("Coupons", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Coupon]", new List<string>
             {
@@ -122,8 +122,8 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             expectedFields.Add(new NameAndType("Editors", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Editor]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
-            })); 
-            expectedFields.Add(new NameAndType("Expiration", "System.DateTime", new List<string>()));
+            }));
+            expectedFields.Add(new NameAndType("Expiration", "System.Nullable`1[System.DateTime]", new List<string>()));
             expectedFields.Add(new NameAndType("ExtendedPropertyAnswers", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ExtendedPropertyAnswer]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
@@ -134,6 +134,10 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
                  "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
             expectedFields.Add(new NameAndType("Image", "System.Byte[]", new List<string>()));
+            expectedFields.Add(new NameAndType("ItemTags", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"One or more tags is not valid\")]"
+            }));
             expectedFields.Add(new NameAndType("ItemType", "CRP.Core.Domain.ItemType", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
@@ -149,24 +153,39 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             expectedFields.Add(new NameAndType("Private", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Quantity", "System.Int32", new List<string>
             {
-                 "[Newtonsoft.Json.JsonPropertyAttribute()]"
+                 "[NHibernate.Validator.Constraints.MinAttribute((Int64)0)]"
             }));
             expectedFields.Add(new NameAndType("QuantityName", "System.String", new List<string>
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
             }));
-            expectedFields.Add(new NameAndType("QuestionSets", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ItemQuestionSets]", new List<string>
+            expectedFields.Add(new NameAndType("QuestionSets", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ItemQuestionSet]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
-            })); 
+            }));
+            expectedFields.Add(new NameAndType("Reports", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ItemReport]", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
             expectedFields.Add(new NameAndType("RestrictedKey", "System.String", new List<string>
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)10)]"
             }));
+            expectedFields.Add(new NameAndType("Sold", "System.Int32", new List<string>()));
             expectedFields.Add(new NameAndType("Tags", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Tag]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
-            })); 
+            }));           
+            expectedFields.Add(new NameAndType("Template", "CRP.Core.Domain.Template", new List<string>()));
+            expectedFields.Add(new NameAndType("Templates", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Template]", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]",
+                "[NHibernate.Validator.Constraints.SizeAttribute(Max = 1)]"
+            }));
+            expectedFields.Add(new NameAndType("Transactions", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Transaction]", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
             expectedFields.Add(new NameAndType("Unit", "CRP.Core.Domain.Unit", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"

@@ -24,11 +24,11 @@ namespace CRP.Tests.Core.Helpers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(propertyInfos.Count(), expectedFields.Count);
+            Assert.AreEqual(expectedFields.Count, propertyInfos.Count());
             for (int i = 0; i < propertyInfos.Count(); i++)
             {
-                Assert.AreEqual(propertyInfos[i].Name, expectedFields[i].Name);
-                Assert.AreEqual(propertyInfos[i].PropertyType.ToString(), expectedFields[i].Property);
+                Assert.AreEqual(expectedFields[i].Name, propertyInfos[i].Name);
+                Assert.AreEqual(expectedFields[i].Property, propertyInfos[i].PropertyType.ToString(), "For Field: " + propertyInfos[i].Name);
                 var foundAttributes = CustomAttributeData.GetCustomAttributes(propertyInfos[i])
                     .AsQueryable().OrderBy(a => a.ToString()).ToList();
                 Assert.AreEqual(expectedFields[i].Attributes.Count, foundAttributes.Count(), "For Field: " + propertyInfos[i].Name);

@@ -139,6 +139,7 @@
     <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart5.cs" />
     <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart6.cs" />
     <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart7.cs" />
+    <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart8.cs" />
     <Compile Include="Repositories\ItemTypeQuestionSetRepositoryTests.cs" />
     <Compile Include="Repositories\ItemTypeRepositoryTests.cs" />
     <Compile Include="Repositories\OpenIdUserRepositoryTests.cs" />
