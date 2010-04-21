@@ -133,6 +133,70 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
 
         #endregion Check Tests
 
+        #region IsActive Tests
+
+        /// <summary>
+        /// Tests the IsActive is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsActiveIsFalseSaves()
+        {
+            #region Arrange
+
+            var transaction = GetValid(9);
+            transaction.IsActive = false;
+
+            #endregion Arrange
+
+            #region Act
+
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsFalse(transaction.IsActive);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the IsActive is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsActiveIsTrueSaves()
+        {
+            #region Arrange
+
+            var transaction = GetValid(9);
+            transaction.IsActive = true;
+
+            #endregion Arrange
+
+            #region Act
+
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsTrue(transaction.IsActive);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+
+            #endregion Assert
+        }
+
+        #endregion IsActive Tests
+
         #region Amount Tests
 
         #region Invalid Tests

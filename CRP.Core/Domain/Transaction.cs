@@ -28,6 +28,7 @@ namespace CRP.Core.Domain
             Check = false;
             Amount = 0.0m;
             Donation = false;
+            IsActive = true;
 
             PaymentLogs = new List<PaymentLog>();
             TransactionAnswers = new List<TransactionAnswer>();
@@ -44,6 +45,7 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual Item Item { get; set; }
         public virtual DateTime TransactionDate { get; set; }
+        public virtual bool IsActive { get; set; }
         public virtual bool Credit { get; set; }
         public virtual bool Check { get; set; }
         //public virtual bool Paid { get; set; }

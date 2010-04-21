@@ -148,6 +148,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                  "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Item", "CRP.Core.Domain.Item", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"

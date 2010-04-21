@@ -10,6 +10,7 @@
 
     <many-to-one name="Item" class="CRP.Core.Domain.Item, CRP.Core" column="ItemId" fetch="join" not-null="true" />
     <property name="TransactionDate" column="TransactionDate" />
+    <property name="IsActive" column="IsActive"/>
     <property name="Credit" column="Credit" />
     <property name="Check" column="[Check]" />
     <!--<property name="Paid" column="Paid" />-->
