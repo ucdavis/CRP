@@ -45,6 +45,10 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         protected IRepository<ItemQuestionSet> ItemQuestionSetRepository { get; set; }
         protected List<TransactionAnswer> TransactionAnswers { get; set; }
         protected IRepository<TransactionAnswer> TransactionAnswerRepository { get; set; }
+        protected List<Editor> Editors { get; set; }
+        protected IRepository<Editor> EditorRepository { get; set; }
+
+   
 
         
         #region Init
@@ -79,8 +83,12 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
 
             TransactionAnswers = new List<TransactionAnswer>();
             TransactionAnswerRepository = FakeRepository<TransactionAnswer>();
-            Controller.Repository.Expect(a => a.OfType<TransactionAnswer>()).Return(TransactionAnswerRepository).Repeat.Any();        
-
+            Controller.Repository.Expect(a => a.OfType<TransactionAnswer>()).Return(TransactionAnswerRepository).Repeat.Any();
+            
+            Editors = new List<Editor>();
+            EditorRepository = FakeRepository<Editor>();
+            Controller.Repository.Expect(a => a.OfType<Editor>()).Return(EditorRepository).Repeat.Any();
+        
             ItemQuestionSetRepository = FakeRepository<ItemQuestionSet>();
             Controller.Repository.Expect(a => a.OfType<ItemQuestionSet>()).Return(ItemQuestionSetRepository).Repeat.Any();
 
@@ -116,6 +124,13 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             ControllerRecordFakes.FakeTransactionAnswers(TransactionAnswers, 3);
             ControllerRecordFakes.FakeItems(Items, 3);
             ControllerRecordFakes.FakeQuestionSets(QuestionSets, 5);
+            ControllerRecordFakes.FakeUsers(Users, 3);
+            ControllerRecordFakes.FakeEditors(Editors, 2);
+            Editors[0].User = Users[0];
+            Editors[1].User = Users[1]; //Current user, but don't add to the item here.
+            Items[1].AddEditor(Editors[0]);
+
+            Users[1].LoginID = "UserName";
             Items[1].AddTransactionQuestionSet(QuestionSets[0]);
             Items[1].AddTransactionQuestionSet(QuestionSets[1]);
             Items[1].AddQuantityQuestionSet(QuestionSets[1]);
@@ -144,6 +159,11 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Users[1].Units.Add(Units[3]);
             Users[1].Units.Add(Units[4]);
             Users[1].LoginID = "UserName";
+
+            ControllerRecordFakes.FakeEditors(Editors, 2);
+            Editors[0].User = Users[0];
+            Editors[1].User = Users[1]; //Current user, but don't add to the item here.
+            Items[1].AddEditor(Editors[0]);
 
             ControllerRecordFakes.FakeQuestionSets(QuestionSets, 10);
             QuestionSets[0].UserReusable = true;

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
@@ -338,6 +339,77 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             #endregion Assert
         }
+
+
+        [TestMethod]
+        public void TestLinkToItemSavesWithValidData()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForLinkToTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, true, false)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[1]));
+            Assert.AreEqual("Question Set has been created successfully.", Controller.Message);
+            #endregion Assert		
+        }
+        [TestMethod]
+        public void TestLinkToItemDoesNotSaveIfNotAdminAndNotEditor()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForLinkToTests();
+
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, true, false)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+            Assert.AreEqual(NotificationMessages.STR_NoEditorRights, Controller.Message);
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestLinkToItemSavesIfNotAdminButEditor()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForLinkToTests();
+            Items[1].AddEditor(Editors[1]);
+
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, true, false)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[1]));
+            Assert.AreEqual("Question Set has been created successfully.", Controller.Message);
+            #endregion Assert	
+        }
         #endregion LinkToItem Post Tests
 
         #region UnlinkFromItem Post Tests
@@ -428,6 +500,92 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ModelState.AssertErrorsAre("Someone has already entered a response to this question set and it cannot be deleted.");            
             #endregion Assert		
         }
+
+
+        [TestMethod]
+        public void TestDescriptionUnlinkFromItemDoesNotSaveIfNotAdminOrEditor()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                          .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                          .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForUnlinkFromTests();
+
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+
+            Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
+
+            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.UnlinkFromItem(2)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
+            ItemQuestionSetRepository.AssertWasNotCalled(a => a.Remove(Arg<ItemQuestionSet>.Is.Anything));
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestDescriptionUnlinkFromItemSavesIfNotAdminButEditor()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                          .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                          .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForUnlinkFromTests();
+
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+
+            Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
+            Items[1].AddEditor(Editors[1]);
+            var copyOfItemQuestionSet = Items[1].QuestionSets.ElementAt((0));
+
+            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.UnlinkFromItem(2)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question Set has been removed successfully.", Controller.Message);
+            ItemQuestionSetRepository.AssertWasCalled(a => a.Remove(copyOfItemQuestionSet));
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestUnlinkFromItemRemovesItemIfNotYetAnswered()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                          .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                          .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForUnlinkFromTests();
+            Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
+            //TransactionAnswers[1].QuestionSet = QuestionSets[0]; //Commented out so it doesn't have an answer
+            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.UnlinkFromItem(2)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question Set has been removed successfully.", Controller.Message);
+            ItemQuestionSetRepository.AssertWasCalled(a => a.Remove(Arg<ItemQuestionSet>.Is.Anything));
+            #endregion Assert		
+        }
+
         #endregion UnlinkFromItem Post Tests
     }
 }
