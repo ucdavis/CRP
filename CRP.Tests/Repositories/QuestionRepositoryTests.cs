@@ -33,8 +33,8 @@ namespace CRP.Tests.Repositories
         protected override Question GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.Question(counter);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
-            var questionType = Repository.OfType<QuestionType>().GetById(1);
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
+            var questionType = Repository.OfType<QuestionType>().GetByID(1);
             rtValue.QuestionType = questionType;
 
             return rtValue;
@@ -753,7 +753,7 @@ namespace CRP.Tests.Repositories
             QuestionRepository.DbContext.BeginTransaction();
             QuestionRepository.EnsurePersistent(question);
             QuestionRepository.DbContext.CommitTransaction();
-            Assert.AreEqual("Name2", Repository.OfType<QuestionOption>().GetById(2).Name);
+            Assert.AreEqual("Name2", Repository.OfType<QuestionOption>().GetByID(2).Name);
             #endregion Arrange
 
             #region Act
@@ -765,7 +765,7 @@ namespace CRP.Tests.Repositories
 
             #region Assert
             
-            Assert.AreEqual("Updated", Repository.OfType<QuestionOption>().GetById(2).Name);
+            Assert.AreEqual("Updated", Repository.OfType<QuestionOption>().GetByID(2).Name);
             Assert.IsFalse(question.IsTransient());
             Assert.IsTrue(question.IsValid());
             #endregion Assert
@@ -1368,7 +1368,7 @@ namespace CRP.Tests.Repositories
         private void SetOptions(bool hasOptions)
         {
             Repository.OfType<QuestionType>().DbContext.BeginTransaction();
-            var questionType = Repository.OfType<QuestionType>().GetById(1);
+            var questionType = Repository.OfType<QuestionType>().GetByID(1);
             questionType.HasOptions = hasOptions;
             Repository.OfType<QuestionType>().EnsurePersistent(questionType);
             Repository.OfType<QuestionType>().DbContext.CommitTransaction();

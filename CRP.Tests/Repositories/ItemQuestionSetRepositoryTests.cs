@@ -31,8 +31,8 @@ namespace CRP.Tests.Repositories
         protected override ItemQuestionSet GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.ItemQuestionSet(counter);
-            rtValue.Item = Repository.OfType<Item>().GetById(1);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+            rtValue.Item = Repository.OfType<Item>().GetByID(1);
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
             if (counter != null && counter == 3)
             {
                 rtValue.Required = true;

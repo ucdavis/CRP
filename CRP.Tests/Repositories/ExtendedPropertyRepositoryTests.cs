@@ -31,8 +31,8 @@ namespace CRP.Tests.Repositories
         protected override ExtendedProperty GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.ExtendedProperty(counter);
-            rtValue.ItemType = Repository.OfType<ItemType>().GetById(1);
-            rtValue.QuestionType = Repository.OfType<QuestionType>().GetById(1);
+            rtValue.ItemType = Repository.OfType<ItemType>().GetByID(1);
+            rtValue.QuestionType = Repository.OfType<QuestionType>().GetByID(1);
             return rtValue;
         }
 

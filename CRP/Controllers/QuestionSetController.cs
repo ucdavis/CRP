@@ -173,10 +173,10 @@ namespace CRP.Controllers
             var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
 
             if (itemId.HasValue) {
-                viewModel.Item = Repository.OfType<Item>().GetById(itemId.Value); 
+                viewModel.Item = Repository.OfType<Item>().GetByID(itemId.Value); 
             }
             if (itemTypeId.HasValue) {
-                viewModel.ItemType = Repository.OfType<ItemType>().GetById(itemTypeId.Value);
+                viewModel.ItemType = Repository.OfType<ItemType>().GetByID(itemTypeId.Value);
             }
 
             if (CurrentUser.IsInRole(RoleNames.Admin))
@@ -237,7 +237,7 @@ namespace CRP.Controllers
                 if (itemId.HasValue)
                 {
                     // has an item to automatically associate to
-                    var item = Repository.OfType<Item>().GetById(itemId.Value);
+                    var item = Repository.OfType<Item>().GetByID(itemId.Value);
                     
                     if (transaction.Value)
                     {
@@ -259,7 +259,7 @@ namespace CRP.Controllers
                 }
                 else if (itemTypeId.HasValue)
                 {
-                    var itemType = Repository.OfType<ItemType>().GetById(itemTypeId.Value);
+                    var itemType = Repository.OfType<ItemType>().GetByID(itemTypeId.Value);
 
                     if (transaction.Value)
                     {
@@ -311,7 +311,7 @@ namespace CRP.Controllers
 
             if (itemId.HasValue)
             {
-                viewModel.Item = Repository.OfType<Item>().GetById(itemId.Value);
+                viewModel.Item = Repository.OfType<Item>().GetByID(itemId.Value);
             }
 
             return View(viewModel);    

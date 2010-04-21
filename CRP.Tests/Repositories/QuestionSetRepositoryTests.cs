@@ -148,7 +148,7 @@ namespace CRP.Tests.Repositories
                 SetupDataToTestCascadeDelete(questionSetToDelete);
 
                 Repository.OfType<Item>().DbContext.BeginTransaction();
-                var item = Repository.OfType<Item>().GetById(1);
+                var item = Repository.OfType<Item>().GetByID(1);
                 item.AddTransactionQuestionSet(questionSetToDelete);
                 Repository.OfType<Item>().DbContext.CommitTransaction();
 
@@ -1661,7 +1661,7 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
             Assert.AreEqual(2, Repository.OfType<QuestionType>().GetAll().Count(), "Setup Data Error in test");
 
             Repository.OfType<Question>().DbContext.BeginTransaction();
-            var questionToAddQuestionOption = Repository.OfType<Question>().GetById(1);
+            var questionToAddQuestionOption = Repository.OfType<Question>().GetByID(1);
             questionToAddQuestionOption.QuestionType.HasOptions = true;
             questionToAddQuestionOption.AddOption(CreateValidEntities.QuestionOption(10));
             questionToAddQuestionOption.AddOption(CreateValidEntities.QuestionOption(11));
@@ -1676,9 +1676,9 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
             Repository.OfType<QuestionSet>().DbContext.BeginTransaction();
             var questions = new Question[2];
             questions[0] = CreateValidEntities.Question(10);
-            questions[0].QuestionType = Repository.OfType<QuestionType>().GetById(1); //This should not be deleted
+            questions[0].QuestionType = Repository.OfType<QuestionType>().GetByID(1); //This should not be deleted
             questions[1] = CreateValidEntities.Question(11);
-            questions[1].QuestionType = Repository.OfType<QuestionType>().GetById(1); //This should not be deleted
+            questions[1].QuestionType = Repository.OfType<QuestionType>().GetByID(1); //This should not be deleted
 
             questions[0].AddOption(CreateValidEntities.QuestionOption(20));
             questions[0].AddOption(CreateValidEntities.QuestionOption(21));

@@ -34,7 +34,7 @@ namespace CRP.Tests.Repositories
         protected override ItemReportColumn GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.ItemReportColumn(counter);
-            rtValue.ItemReport = Repository.OfType<ItemReport>().GetById(1);
+            rtValue.ItemReport = Repository.OfType<ItemReport>().GetByID(1);
             return rtValue;
         }
 

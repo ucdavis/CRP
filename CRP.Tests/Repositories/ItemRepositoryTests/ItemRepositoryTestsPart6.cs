@@ -458,7 +458,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
             var item = GetValid(null);
             item.Tags = new List<Tag>();
-            item.AddTag(Repository.OfType<Tag>().GetById(1));
+            item.AddTag(Repository.OfType<Tag>().GetByID(1));
             #endregion Arrange
 
             #region Act
@@ -520,7 +520,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
             var item = GetValid(null);
             item.Tags = new List<Tag>();
-            item.AddTag(Repository.OfType<Tag>().GetById(1));
+            item.AddTag(Repository.OfType<Tag>().GetByID(1));
 
             ItemRepository.DbContext.BeginTransaction();
             ItemRepository.EnsurePersistent(item);
@@ -532,7 +532,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             #endregion Arrange
 
             #region Act
-            item.RemoveTag(Repository.OfType<Tag>().GetById(1));
+            item.RemoveTag(Repository.OfType<Tag>().GetByID(1));
             ItemRepository.DbContext.BeginTransaction();
             ItemRepository.EnsurePersistent(item);
             ItemRepository.DbContext.CommitTransaction();
@@ -570,7 +570,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             #endregion Arrange
 
             #region Act
-            item.RemoveTag(Repository.OfType<Tag>().GetById(1));
+            item.RemoveTag(Repository.OfType<Tag>().GetByID(1));
             ItemRepository.DbContext.BeginTransaction();
             ItemRepository.EnsurePersistent(item);
             ItemRepository.DbContext.CommitTransaction();
@@ -600,7 +600,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
             var item = GetValid(null);
             item.Tags = new List<Tag>();
-            item.AddTag(Repository.OfType<Tag>().GetById(1));
+            item.AddTag(Repository.OfType<Tag>().GetByID(1));
 
             ItemRepository.DbContext.BeginTransaction();
             ItemRepository.EnsurePersistent(item);

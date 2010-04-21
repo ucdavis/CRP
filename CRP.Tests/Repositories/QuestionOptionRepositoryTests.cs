@@ -30,7 +30,7 @@ namespace CRP.Tests.Repositories
         protected override QuestionOption GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.QuestionOption(counter);
-            rtValue.Question = Repository.OfType<Question>().GetById(1);
+            rtValue.Question = Repository.OfType<Question>().GetByID(1);
 
             return rtValue;
         }

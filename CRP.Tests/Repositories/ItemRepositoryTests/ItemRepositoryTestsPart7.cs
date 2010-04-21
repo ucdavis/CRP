@@ -591,7 +591,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             #region Arrange
             LoadUsers(1);
             var editor = CreateValidEntities.Editor(1);
-            editor.User = Repository.OfType<User>().GetById(1);
+            editor.User = Repository.OfType<User>().GetByID(1);
             var item = GetValid(9);
             item.Editors = new List<Editor>();
             item.AddEditor(editor);
@@ -624,7 +624,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 editors.Add(CreateValidEntities.Editor(i + 1));
-                editors[i].User = Repository.OfType<User>().GetById(1);
+                editors[i].User = Repository.OfType<User>().GetByID(1);
                 editors[i].Item = null;
             }
 
@@ -667,7 +667,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 editors.Add(CreateValidEntities.Editor(i + 1));
-                editors[i].User = Repository.OfType<User>().GetById(1);
+                editors[i].User = Repository.OfType<User>().GetByID(1);
                 editors[i].Item = null;
             }
 
@@ -718,7 +718,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 editors.Add(CreateValidEntities.Editor(i + 1));
-                editors[i].User = Repository.OfType<User>().GetById(1);
+                editors[i].User = Repository.OfType<User>().GetByID(1);
                 editors[i].Item = null;
             }
 

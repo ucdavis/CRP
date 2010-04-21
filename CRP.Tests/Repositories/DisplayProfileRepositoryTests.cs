@@ -34,7 +34,7 @@ namespace CRP.Tests.Repositories
         protected override DisplayProfile GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.DisplayProfile(counter);
-            rtValue.Unit = Repository.OfType<Unit>().GetById(1);
+            rtValue.Unit = Repository.OfType<Unit>().GetByID(1);
             return rtValue;
         }
 
@@ -546,8 +546,8 @@ namespace CRP.Tests.Repositories
 
                 Repository.OfType<DisplayProfile>().DbContext.BeginTransaction();
                 displayProfileRecord = CreateValidEntities.DisplayProfile(1);
-                displayProfileRecord.Unit = Repository.OfType<Unit>().GetById(1);
-                displayProfileRecord.School = SchoolRepository.GetById("1");
+                displayProfileRecord.Unit = Repository.OfType<Unit>().GetByID(1);
+                displayProfileRecord.School = SchoolRepository.GetByID("1");
                 Repository.OfType<DisplayProfile>().EnsurePersistent(displayProfileRecord);
                 Repository.OfType<DisplayProfile>().DbContext.CommitTransaction();
             }

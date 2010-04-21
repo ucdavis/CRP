@@ -180,13 +180,13 @@ namespace CRP.Tests.Core
             if(typeof(IdT) == typeof(int))
             {
                 Assert.IsTrue(EntriesAdded >= 2, "There are not enough entries to complete this test.");
-                var foundEntity = Repository.OfType<T>().GetById(2);
+                var foundEntity = Repository.OfType<T>().GetByID(2);
                 FoundEntityComparison(foundEntity, 2);
             }
             else
             {
                 Assert.IsTrue(EntriesAdded >= 2, "There are not enough entries to complete this test.");
-                var foundEntity = _stringRepository.GetById("2");
+                var foundEntity = _stringRepository.GetByID("2");
                 FoundEntityComparison(foundEntity, 2);
             }
         }
@@ -394,8 +394,8 @@ namespace CRP.Tests.Core
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = CreateValidEntities.Item(i + 1);
-                validEntity.Unit = Repository.OfType<Unit>().GetById(1);
-                validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
+                validEntity.Unit = Repository.OfType<Unit>().GetByID(1);
+                validEntity.ItemType = Repository.OfType<ItemType>().GetByID(1);
                 Repository.OfType<Item>().EnsurePersistent(validEntity);
             }
         }
@@ -411,8 +411,8 @@ namespace CRP.Tests.Core
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = CreateValidEntities.ExtendedProperty(i + 1);
-                validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
-                validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
+                validEntity.ItemType = Repository.OfType<ItemType>().GetByID(1);
+                validEntity.QuestionType = Repository.OfType<QuestionType>().GetByID(1);
                 Repository.OfType<ExtendedProperty>().EnsurePersistent(validEntity);
             }
         }
@@ -428,8 +428,8 @@ namespace CRP.Tests.Core
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = CreateValidEntities.ItemReport(i + 1);
-                validEntity.Item = Repository.OfType<Item>().GetById(1);
-                validEntity.User = Repository.OfType<User>().GetById(1);
+                validEntity.Item = Repository.OfType<Item>().GetByID(1);
+                validEntity.User = Repository.OfType<User>().GetByID(1);
                 Repository.OfType<ItemReport>().EnsurePersistent(validEntity);
             }
         }
@@ -497,7 +497,7 @@ namespace CRP.Tests.Core
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = CreateValidEntities.Transaction(i + 1);
-                validEntity.Item = Repository.OfType<Item>().GetById(1);
+                validEntity.Item = Repository.OfType<Item>().GetByID(1);
                 Repository.OfType<Transaction>().EnsurePersistent(validEntity);
             }
         }
@@ -513,8 +513,8 @@ namespace CRP.Tests.Core
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = CreateValidEntities.Question(i+1);
-                validEntity.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
-                validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
+                validEntity.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
+                validEntity.QuestionType = Repository.OfType<QuestionType>().GetByID(1);
                 Repository.OfType<Question>().EnsurePersistent(validEntity);
             }
         }

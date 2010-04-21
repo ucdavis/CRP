@@ -31,8 +31,8 @@ namespace CRP.Tests.Repositories
         protected override ExtendedPropertyAnswer GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.ExtendedPropertyAnswer(counter);
-            rtValue.ExtendedProperty = Repository.OfType<ExtendedProperty>().GetById(1);
-            rtValue.Item = Repository.OfType<Item>().GetById(1);
+            rtValue.ExtendedProperty = Repository.OfType<ExtendedProperty>().GetByID(1);
+            rtValue.Item = Repository.OfType<Item>().GetByID(1);
             return rtValue;
         }
 
@@ -105,8 +105,8 @@ namespace CRP.Tests.Repositories
         //    for (int i = 0; i < entriesToAdd; i++)
         //    {
         //        var validEntity = CreateValidEntities.ExtendedProperty(entriesToAdd);
-        //        validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
-        //        validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
+        //        validEntity.ItemType = Repository.OfType<ItemType>().GetByID(1);
+        //        validEntity.QuestionType = Repository.OfType<QuestionType>().GetByID(1);
         //        Repository.OfType<ExtendedProperty>().EnsurePersistent(validEntity);
         //    }
         //}

@@ -33,9 +33,9 @@ namespace CRP.Tests.Repositories
         protected override TransactionAnswer GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.TransactionAnswer(counter);
-            rtValue.Transaction = Repository.OfType<Transaction>().GetById(1);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
-            rtValue.Question = Repository.OfType<Question>().GetById(1);
+            rtValue.Transaction = Repository.OfType<Transaction>().GetByID(1);
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
+            rtValue.Question = Repository.OfType<Question>().GetByID(1);
 
             return rtValue;
         }

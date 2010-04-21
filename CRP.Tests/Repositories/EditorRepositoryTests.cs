@@ -33,13 +33,13 @@ namespace CRP.Tests.Repositories
         protected override Editor GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.Editor(counter);
-            rtValue.Item = Repository.OfType<Item>().GetById(1);
+            rtValue.Item = Repository.OfType<Item>().GetByID(1);
             var notNullCounter = 0;
             if(counter != null)
             {
                 notNullCounter = (int)counter;
             }
-            rtValue.User = Repository.OfType<User>().GetById(notNullCounter);
+            rtValue.User = Repository.OfType<User>().GetByID(notNullCounter);
             if(counter!=null && counter == 3)
             {
                 rtValue.Owner = true;

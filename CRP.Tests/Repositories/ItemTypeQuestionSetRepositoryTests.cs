@@ -29,8 +29,8 @@ namespace CRP.Tests.Repositories
         protected override ItemTypeQuestionSet GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.ItemTypeQuestionSet(counter);
-            rtValue.ItemType = Repository.OfType<ItemType>().GetById(1);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+            rtValue.ItemType = Repository.OfType<ItemType>().GetByID(1);
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
             if (counter != null && counter == 3)
             {
                 rtValue.QuantityLevel = true;
@@ -328,8 +328,8 @@ namespace CRP.Tests.Repositories
             try
             {
                 itemTypeQuestionSetRecord = CreateValidEntities.ItemTypeQuestionSet(null);
-                itemTypeQuestionSetRecord.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
-                itemTypeQuestionSetRecord.ItemType = Repository.OfType<ItemType>().GetById(1);
+                itemTypeQuestionSetRecord.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
+                itemTypeQuestionSetRecord.ItemType = Repository.OfType<ItemType>().GetByID(1);
                 itemTypeQuestionSetRecord.QuantityLevel = true;
                 itemTypeQuestionSetRecord.TransactionLevel = true;
 
@@ -359,8 +359,8 @@ namespace CRP.Tests.Repositories
             try
             {
                 itemTypeQuestionSetRecord = CreateValidEntities.ItemTypeQuestionSet(null);
-                itemTypeQuestionSetRecord.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
-                itemTypeQuestionSetRecord.ItemType = Repository.OfType<ItemType>().GetById(1);
+                itemTypeQuestionSetRecord.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
+                itemTypeQuestionSetRecord.ItemType = Repository.OfType<ItemType>().GetByID(1);
                 itemTypeQuestionSetRecord.QuantityLevel = false;
                 itemTypeQuestionSetRecord.TransactionLevel = false;
 
