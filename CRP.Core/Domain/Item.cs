@@ -139,6 +139,21 @@ namespace CRP.Core.Domain
             }
         }
 
+        /// <summary>
+        /// The only thing that is really new here is that there is a check to see if there is any more quantity
+        /// </summary>
+        public virtual bool IsAvailableForReg { 
+            get
+            {
+                if (Sold > Quantity || DateTime.Now > Expiration || !Available)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
         public virtual void AddTag(Tag tag)
         {
             Tags.Add(tag);

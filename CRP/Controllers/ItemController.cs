@@ -57,6 +57,11 @@ namespace CRP.Controllers
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
             
+            if (!item.IsAvailableForReg)
+            {
+                Message = "This item is unavailable for registration.";
+            }
+
             return View(viewModel);
         }
 
