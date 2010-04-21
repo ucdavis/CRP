@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UCDArch.Core.PersistanceSupport;
+using UCDArch.Data.NHibernate;
 using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
@@ -11,8 +14,13 @@ namespace CRP.Tests.Repositories
     [TestClass]
     public class ItemTypeQuestionSetRepositoryTests : AbstractRepositoryTests<ItemTypeQuestionSet, int>
     {
+        protected IRepository<ItemTypeQuestionSet> ItemTypeQuestionSetRepository { get; set; }
+        
         #region Init and Overrides
-
+        public ItemTypeQuestionSetRepositoryTests()
+        {
+            ItemTypeQuestionSetRepository = new Repository<ItemTypeQuestionSet>();
+        }
         /// <summary>
         /// Gets the valid entity of type T
         /// </summary>
@@ -119,8 +127,195 @@ namespace CRP.Tests.Repositories
 
         #endregion CRUD Tests
 
+        #region ItemType Tests
 
-        #region Validaion Tests
+        #region Invalid Tests
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestItemTypeWithNullValuesDoesNotSave()
+        {
+            ItemTypeQuestionSet itemTypeQuestionSet = null;
+            try
+            {
+                #region Arrange
+                itemTypeQuestionSet = GetValid(9);
+                itemTypeQuestionSet.ItemType = null;
+                #endregion Arrange
+
+                #region Act
+                ItemTypeQuestionSetRepository.DbContext.BeginTransaction();
+                ItemTypeQuestionSetRepository.EnsurePersistent(itemTypeQuestionSet);
+                ItemTypeQuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(itemTypeQuestionSet);
+                var results = itemTypeQuestionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("ItemType: may not be empty");
+                Assert.IsTrue(itemTypeQuestionSet.IsTransient());
+                Assert.IsFalse(itemTypeQuestionSet.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.PropertyValueException))]
+        public void TestWhenItemTypeIsNewDoesNotSave()
+        {
+            ItemTypeQuestionSet itemTypeQuestionSet = null;
+            try
+            {
+                #region Arrange
+                itemTypeQuestionSet = GetValid(9);
+                itemTypeQuestionSet.ItemType = new ItemType();
+                #endregion Arrange
+
+                #region Act
+                ItemTypeQuestionSetRepository.DbContext.BeginTransaction();
+                ItemTypeQuestionSetRepository.EnsurePersistent(itemTypeQuestionSet);
+                ItemTypeQuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(itemTypeQuestionSet);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("not-null property references a null or transient valueCRP.Core.Domain.ItemTypeQuestionSet.ItemType", ex.Message);
+                #endregion Assert
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestItemTypeWithValidDataSaves()
+        {
+            #region Arrange
+            LoadItemTypes(3);
+            var itemTypeQuestionSet = GetValid(9);
+            itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(3);
+            #endregion Arrange
+
+            #region Act
+            ItemTypeQuestionSetRepository.DbContext.BeginTransaction();
+            ItemTypeQuestionSetRepository.EnsurePersistent(itemTypeQuestionSet);
+            ItemTypeQuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(itemTypeQuestionSet.IsTransient());
+            Assert.IsTrue(itemTypeQuestionSet.IsValid());
+            #endregion Assert	
+        }
+        #endregion Valid Tests
+        #endregion ItemType Tests
+
+        #region QuestionSet Tests
+
+        #region Invalid Tests
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestQuestionSetWithNullValuesDoesNotSave()
+        {
+            ItemTypeQuestionSet itemTypeQuestionSet = null;
+            try
+            {
+                #region Arrange
+                itemTypeQuestionSet = GetValid(9);
+                itemTypeQuestionSet.QuestionSet = null;
+                #endregion Arrange
+
+                #region Act
+                ItemTypeQuestionSetRepository.DbContext.BeginTransaction();
+                ItemTypeQuestionSetRepository.EnsurePersistent(itemTypeQuestionSet);
+                ItemTypeQuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(itemTypeQuestionSet);
+                var results = itemTypeQuestionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("QuestionSet: may not be empty");
+                Assert.IsTrue(itemTypeQuestionSet.IsTransient());
+                Assert.IsFalse(itemTypeQuestionSet.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestWhenQuestionSetIsNewDoesNotSave()
+        {
+            ItemTypeQuestionSet itemTypeQuestionSet = null;
+            try
+            {
+                Assert.AreEqual(1, Repository.OfType<QuestionSet>().GetAll().Count);
+                #region Arrange
+                itemTypeQuestionSet = GetValid(9);
+                itemTypeQuestionSet.QuestionSet = new QuestionSet();
+                #endregion Arrange
+
+                #region Act
+                ItemTypeQuestionSetRepository.DbContext.BeginTransaction();
+                ItemTypeQuestionSetRepository.EnsurePersistent(itemTypeQuestionSet);
+                ItemTypeQuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(itemTypeQuestionSet);
+                var results = itemTypeQuestionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre(
+                    "Name: may not be null or empty",
+                    "CollegeReusableSchool: Must have school if college reusable",
+                    "Reusability: Only one reusable flag may be set to true");
+                Assert.IsTrue(itemTypeQuestionSet.IsTransient());
+                Assert.IsFalse(itemTypeQuestionSet.IsValid());
+                #endregion Assert
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestQuestionSetWithValidDataSaves()
+        {
+            #region Arrange
+            LoadQuestionSets(3);
+            var itemTypeQuestionSet = GetValid(9);
+            itemTypeQuestionSet.QuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(3);
+            #endregion Arrange
+
+            #region Act
+            ItemTypeQuestionSetRepository.DbContext.BeginTransaction();
+            ItemTypeQuestionSetRepository.EnsurePersistent(itemTypeQuestionSet);
+            ItemTypeQuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(itemTypeQuestionSet.IsTransient());
+            Assert.IsTrue(itemTypeQuestionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #endregion QuestionSet Tests
+
+        #region TransactionLevelQuantityLevel Tests
+
+        #region InValid Tests Tests
 
         /// <summary>
         /// Tests the item type question set where quantity level and transaction level are both true does not save.
@@ -183,8 +378,101 @@ namespace CRP.Tests.Repositories
                 throw;
             }
         }
-        #endregion Validaion Tests
+        #endregion Invalid Tests
 
-        //TODO: Other tests
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestTransactionLevelIsTrueAndQuantityLevelIsFalseSaves()
+        {
+            #region Arrange
+            LoadQuestionSets(3);
+            var itemTypeQuestionSet = GetValid(9);
+            itemTypeQuestionSet.TransactionLevel = true;
+            itemTypeQuestionSet.QuantityLevel = false;
+            #endregion Arrange
+
+            #region Act
+            ItemTypeQuestionSetRepository.DbContext.BeginTransaction();
+            ItemTypeQuestionSetRepository.EnsurePersistent(itemTypeQuestionSet);
+            ItemTypeQuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(itemTypeQuestionSet.IsTransient());
+            Assert.IsTrue(itemTypeQuestionSet.IsValid());
+            #endregion Assert	
+        }
+
+        [TestMethod]
+        public void TestTransactionLevelIsFalseAndQuantityLevelIsTrueSaves()
+        {
+            #region Arrange
+            LoadQuestionSets(3);
+            var itemTypeQuestionSet = GetValid(9);
+            itemTypeQuestionSet.TransactionLevel = false;
+            itemTypeQuestionSet.QuantityLevel = true;
+            #endregion Arrange
+
+            #region Act
+            ItemTypeQuestionSetRepository.DbContext.BeginTransaction();
+            ItemTypeQuestionSetRepository.EnsurePersistent(itemTypeQuestionSet);
+            ItemTypeQuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(itemTypeQuestionSet.IsTransient());
+            Assert.IsTrue(itemTypeQuestionSet.IsValid());
+            #endregion Assert
+        }
+        
+        #endregion Valid Tests
+
+
+        #endregion TransactionLevelQuantityLevel Tests
+
+        #region Reflection of Database.
+
+        /// <summary>
+        /// Tests all fields in the database have been tested.
+        /// If this fails and no other tests, it means that a field has been added which has not been tested above.
+        /// </summary>
+        [TestMethod]
+        public void TestAllFieldsInTheDatabaseHaveBeenTested()
+        {
+            #region Arrange
+
+            var expectedFields = new List<NameAndType>();
+
+            expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
+            {
+                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("ItemType", "CRP.Core.Domain.ItemType", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("QuantityLevel", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("QuestionSet", "CRP.Core.Domain.QuestionSet", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]",
+                "[NHibernate.Validator.Constraints.ValidAttribute()]"
+            }));
+
+            expectedFields.Add(new NameAndType("TransactionLevel", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("TransactionLevelQuantityLevel", "System.Boolean", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"TransactionLevel must be different from QuantityLevel\")]"
+            }));
+
+            
+
+            #endregion Arrange
+
+            AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(ItemTypeQuestionSet));
+
+        }
+        #endregion reflection
     }
 }

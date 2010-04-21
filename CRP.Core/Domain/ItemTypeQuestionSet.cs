@@ -50,6 +50,7 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual ItemType ItemType { get; set; }
         [NotNull]
+        [Valid]
         public virtual QuestionSet QuestionSet { get; set; }
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
