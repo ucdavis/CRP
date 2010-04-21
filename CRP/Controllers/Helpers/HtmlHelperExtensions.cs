@@ -54,7 +54,9 @@ namespace CRP.Helpers
         ///     <ul></ul>
         ///     <ol></ol>
         ///     <li></li>
+        ///     <h1></h1>
         ///     &nbsp;
+        ///     <address></address>
         /// </remarks>
         /// <param name="helper"></param>
         /// <param name="text"></param>
@@ -69,23 +71,38 @@ namespace CRP.Helpers
 
             // replace the escaped characters with the correct strings to allow formatting
 
-            // <p>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"p"), @"<p>");
-            // </p>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"/p"), @"</p>");
+            //// <p>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"p"), @"<p>");
+            //// </p>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"/p"), @"</p>");
 
-            // <strong>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"strong"), @"<strong>");
-            // </strong>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"/strong"), @"</strong>");
+            //// <strong>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"strong"), @"<strong>");
+            //// </strong>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"/strong"), @"</strong>");
 
-            // <em>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"em"), @"<em>");
-            // </em>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"/em"), @"<em>");
+            //// <em>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"em"), @"<em>");
+            //// </em>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"/em"), @"<em>");
+
+            ReplaceTagContents(formattedEncodedText, "p");
+            ReplaceTagContents(formattedEncodedText, "strong");
+            ReplaceTagContents(formattedEncodedText, "em");
+            ReplaceTagContents(formattedEncodedText, "ul");
+            ReplaceTagContents(formattedEncodedText, "ol");
+            ReplaceTagContents(formattedEncodedText, "li");
+            ReplaceTagContents(formattedEncodedText, "address");
+            ReplaceTagContents(formattedEncodedText, "h1");
+            ReplaceTagContents(formattedEncodedText, "h2");
+            ReplaceTagContents(formattedEncodedText, "h3");
+            ReplaceTagContents(formattedEncodedText, "h4");
+            ReplaceTagContents(formattedEncodedText, "h5");
+            ReplaceTagContents(formattedEncodedText, "h6");
 
             // <span style="text-decoration:underline;">
-            string underline = @"&lt;span style=&quot;text-decoration: underline;&quot;&gt;";
+            //string underline = @"&lt;span style=&quot;text-decoration: underline;&quot;&gt;";
+            string underline = string.Format(htmlTag, @"span style=&quot;text-decoration: underline;&quot;");
             string underlineReplacement = @"<span style=""text-decoration:underline;"">";
             formattedEncodedText.Replace(underline, underlineReplacement);
 
@@ -107,24 +124,37 @@ namespace CRP.Helpers
 
             formattedEncodedText = new StringBuilder(temp);
 
-            // <ul>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"ul"), @"<ul>");
-            // </ul>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"/ul"), @"</ul>");
+            //// <ul>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"ul"), @"<ul>");
+            //// </ul>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"/ul"), @"</ul>");
 
-            // <ol>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"ol"), @"<ol>");
-            // </ol>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"/ol"), @"</ol>");
+            //// <ol>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"ol"), @"<ol>");
+            //// </ol>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"/ol"), @"</ol>");
 
-            // <li>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"li"), @"<li>");
-            // </li>
-            formattedEncodedText.Replace(string.Format(htmlTag, @"/li"), @"</li>");
+            //// <li>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"li"), @"<li>");
+            //// </li>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"/li"), @"</li>");
 
-            formattedEncodedText.Replace(@"&amp;nbsp;", @"&nbsp;");
+            //formattedEncodedText.Replace(@"&amp;nbsp;", @"&nbsp;");
+
+            //// <address>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"/address"), @"</address>");
+            //// </address>
+            //formattedEncodedText.Replace(string.Format(htmlTag, @"/address"), @"</address>");
 
             return formattedEncodedText.ToString();
+        }
+
+        public static void ReplaceTagContents(StringBuilder formattedText, string tag)
+        {
+            // opening tag
+            formattedText.Replace(string.Format(htmlTag, tag), @"<"+tag+">");
+            // closing tag
+            formattedText.Replace(string.Format(htmlTag, @"/" + tag), @"</"+tag+">");
         }
     }
 }
