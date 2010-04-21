@@ -427,6 +427,14 @@ namespace CRP.Controllers
             if (item == null || transaction == quantity)
             {
                 // redirect no item to link to
+                if(item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemType");
+                }
+                else
+                {
+                    Message = "Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.";
+                }
                 return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
             }
 
@@ -450,21 +458,44 @@ namespace CRP.Controllers
         ///     Item Type has been created
         /// PostCondition:
         ///     Item type has question set associated with it
-        /// </remarks>
-        /// <param name="id"></param>
-        /// <param name="itemTypeId"></param>
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="itemTypeId">The item type id.</param>
+        /// <param name="transaction">if set to <c>true</c> [transaction].</param>
+        /// <param name="quantity">if set to <c>true</c> [quantity].</param>
         /// <returns></returns>
         [AcceptPost]
         [AdminOnly]
         public ActionResult LinkToItemType(int id, int itemTypeId, bool transaction, bool quantity)
         {
-            // get teh question set
+            // get the question set
             var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
             var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
 
             if (questionSet == null || itemType == null || transaction == quantity)
             {
+                if(questionSet == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "QuestionSet");
+                }
+                else if (itemType == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemType");
+                }
+                else
+                {
+                    Message = "Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.";
+                }
                 return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
+            }
+
+            foreach (var itemTypeQuestionSet in itemType.QuestionSets)
+            {
+                if(itemTypeQuestionSet.QuestionSet == questionSet)
+                {
+                    ModelState.AddModelError("Question Set", "QuestionSet \"" + questionSet.Name.Trim() + "\" is already added to the ItemType.");
+                    Message = "QuestionSet was already added";
+                }
             }
 
             // add the questionset
