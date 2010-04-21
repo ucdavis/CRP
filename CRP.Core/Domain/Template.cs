@@ -1,4 +1,6 @@
-﻿using UCDArch.Core.DomainModel;
+﻿using NHibernate.Validator.Constraints;
+using UCDArch.Core.DomainModel;
+using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
@@ -21,7 +23,9 @@ namespace CRP.Core.Domain
             Default = false;
         }
 
+        [Required]
         public virtual string Text { get; set; }
+        [NotNull]
         public virtual Item Item { get; set; }
         public virtual bool Default { get; set; }
     }

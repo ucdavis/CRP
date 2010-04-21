@@ -201,6 +201,21 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// POST: /ItemManagement/RemoveEditor
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Removes an editor's permission from the item
+        /// PreCondition:
+        ///     Editor is associated with the item
+        ///     Item is valid
+        /// PostCondition:
+        ///     Item does not contain specified editor
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="editorId"></param>
+        /// <returns></returns>
         [AcceptPost]
         public ActionResult RemoveEditor(int id, int editorId)
         {
@@ -232,6 +247,22 @@ namespace CRP.Controllers
             return this.RedirectToAction(a => a.Edit(id));
         }
 
+        /// <summary>
+        /// POST: /ItemManagement/AddEditor
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Add an editor's permission to the item
+        /// PreCondition:
+        ///     Editor is not associated with the item
+        ///     Item is valid
+        ///     User is valid
+        /// PostCondition:
+        ///     Item has editor added with specified user
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [AcceptPost]
         public ActionResult AddEditor(int id, int? userId)
         {
@@ -265,13 +296,28 @@ namespace CRP.Controllers
             return this.RedirectToAction(a => a.Edit(id));
         }
 
+        /// <summary>
+        /// POST: /ItemManagement/SaveTemplate
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Saves the template
+        /// PreCondition:
+        ///     Item is valid
+        ///     String is not empty
+        /// PostCondition:
+        ///     Item's template is updated
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
         [AcceptPost]
         [ValidateInput(false)]
         public JsonNetResult SaveTemplate(int id, string text)
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
             
-            if (item == null)
+            if (item == null || string.IsNullOrEmpty(text))
             {
                 return new JsonNetResult(false);
             }
