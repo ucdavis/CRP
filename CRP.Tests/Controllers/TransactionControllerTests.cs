@@ -1,7 +1,10 @@
-﻿using CRP.Controllers;
+﻿using System.Collections.Generic;
+using System.Configuration;
+using CRP.Controllers;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
@@ -18,8 +21,17 @@ namespace CRP.Tests.Controllers
     {
         protected IRepositoryWithTypedId<OpenIdUser, string> OpenIdUserRepository { get; set; }
         public INotificationProvider NotificationProvider { get; set; }
-        #region Init
+        protected List<Transaction> Transactions { get; set; }
+        protected IRepository<Transaction> TransactionRepository { get; set; }
 
+        
+        #region Init
+        public TransactionControllerTests()
+        {
+            Transactions = new List<Transaction>();
+            TransactionRepository = FakeRepository<Transaction>();
+            Controller.Repository.Expect(a => a.OfType<Transaction>()).Return(TransactionRepository).Repeat.Any();
+        }
         /// <summary>
         /// Registers the routes.
         /// </summary>
@@ -70,5 +82,71 @@ namespace CRP.Tests.Controllers
         }
 
         #endregion Route Tests
+
+        #region Total Tests
+
+
+        /// <summary>
+        /// Tests the total to string format.
+        /// Used for the MD5 hash for touchNet.
+        /// </summary>
+        [TestMethod]
+        public void TestTotalToStringFormat()
+        {
+            #region Arrange
+            FakeTransactions(1);
+            Transactions[0].Amount = 123456789.12m;
+            #endregion Arrange
+
+            #region Act
+            var result = Transactions[0].Total.ToString();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("123456789.12", result);
+            #endregion Assert		
+        }
+
+
+        [TestMethod]
+        public void TestMd5Calculation()
+        {
+            #region Arrange
+            FakeTransactions(1);
+            Transactions[0].Amount = 12.35m;
+            string postingKey = "FB8E61EF5F63028C";
+            string transationId = "A234";            
+            #endregion Arrange
+
+            #region Act
+            var result = TransactionController.CalculateValidationString(
+                postingKey, 
+                transationId,
+                Transactions[0].Total.ToString());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("hAGcy7esDK7joiFIPJQKRA==", result);
+            #endregion Assert		
+        }
+
+        #endregion Total Tests
+
+        /// <summary>
+        /// Fakes the Transactions.
+        /// Author: Sylvestre, Jason
+        /// Create: 2010/03/17
+        /// </summary>
+        /// <param name="count">The number of Transactions to add.</param>
+        private void FakeTransactions(int count)
+        {
+            var offSet = Transactions.Count;
+            for (int i = 0; i < count; i++)
+            {
+            Transactions.Add(CreateValidEntities.Transaction(i + 1 + offSet));
+            Transactions[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+        
     }
 }

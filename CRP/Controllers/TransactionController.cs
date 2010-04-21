@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -270,7 +271,7 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
 
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
-            string postingString = "FB8E61EF5F63028C"; //TODO: Replace with WebConfig Value
+            string postingString = ConfigurationManager.AppSettings["TouchNetPostingKey"]; 
             var validationKey = CalculateValidationString(postingString, transaction.Id.ToString(), transaction.Total.ToString());
             var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey);
             return View(viewModel);
@@ -282,7 +283,7 @@ namespace CRP.Controllers
         /// <param name="EXT_TRANS_ID">The TransactionId</param>
         /// <param name="AMT">The AMT.</param>
         /// <returns></returns>
-        private string CalculateValidationString(string PostingKey, string EXT_TRANS_ID, string AMT)
+        public static string CalculateValidationString(string PostingKey, string EXT_TRANS_ID, string AMT)
         {
             MD5 hash = MD5.Create();
             byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(PostingKey + EXT_TRANS_ID + AMT));
