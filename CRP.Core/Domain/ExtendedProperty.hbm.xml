@@ -3,7 +3,7 @@
     assembly="CRP.Core" namespace="CRP.Core.Domain">
   <class
     name="ExtendedProperty"
-    table="ExtendedPropertys" >
+    table="ExtendedProperties" >
     <id name="Id" column="id">
       <generator class="identity" />
     </id>
