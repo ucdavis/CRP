@@ -248,7 +248,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreEqual("Transaction was unable to update.", Controller.Message);
 
             //FYI, the following messages do not appear on the UI
-            Controller.ModelState.AssertErrorsAre("");
+            Controller.ModelState.AssertErrorsAre("TransactionAnswers: may not be empty");
 
             #endregion Assert
         }
