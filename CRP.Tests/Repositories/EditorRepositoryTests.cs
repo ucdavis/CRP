@@ -1,16 +1,29 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UCDArch.Core.PersistanceSupport;
+using UCDArch.Data.NHibernate;
 
 namespace CRP.Tests.Repositories
 {
     [TestClass]
     public class EditorRepositoryTests : AbstractRepositoryTests<Editor, int>
     {
-        #region Init and Overrides
+        protected List<Editor> Editors { get; set; }
+        protected IRepository<Editor> EditorRepository { get; set; }
 
+        
+
+        #region Init and Overrides
+        public EditorRepositoryTests()
+        {
+            Editors = new List<Editor>();
+            EditorRepository = new Repository<Editor>();
+        }
         /// <summary>
         /// Gets the valid entity of type T
         /// </summary>
@@ -100,6 +113,207 @@ namespace CRP.Tests.Repositories
 
         #endregion Init and Overrides
 
-        //TODO: Other tests
+        #region Item Tests
+
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.PropertyValueException))]
+        public void TestEditorWhenItemIsNewDoesNotSave()
+        {
+            Editor editor = null;
+            try
+            {
+                #region Arrange
+                editor = GetValid(9);
+                editor.Item = new Item();
+                #endregion Arrange
+
+                #region Act
+                EditorRepository.DbContext.BeginTransaction();
+                EditorRepository.EnsurePersistent(editor);
+                EditorRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(editor);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("not-null property references a null or transient valueCRP.Core.Domain.Editor.Item", ex.Message);
+                #endregion Assert
+
+                throw;
+            }	
+        }
+        
+        #endregion Invalid Tests
+
+        #region Valid Test
+
+        [TestMethod]
+        public void TestEditorWithValidItemSaves()
+        {
+            #region Arrange
+            LoadItems(3);
+            var editor   = GetValid(9);
+            editor.Item = Repository.OfType<Item>().GetNullableByID(3);
+            #endregion Arrange
+
+            #region Act
+            EditorRepository.DbContext.BeginTransaction();
+            EditorRepository.EnsurePersistent(editor);
+            EditorRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(editor.IsTransient());
+            Assert.IsTrue(editor.IsValid());
+            #endregion Assert				
+        }
+        #endregion Valid Test
+        #endregion Item Tests
+
+        #region User Tests
+
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.PropertyValueException))]
+        public void TestEditorWhenUserIsNewDoesNotSave()
+        {
+            Editor editor = null;
+            try
+            {
+                #region Arrange
+                editor = GetValid(9);
+                editor.User = new User();
+                #endregion Arrange
+
+                #region Act
+                EditorRepository.DbContext.BeginTransaction();
+                EditorRepository.EnsurePersistent(editor);
+                EditorRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(editor);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("not-null property references a null or transient valueCRP.Core.Domain.Editor.User", ex.Message);
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+
+        #region Valid Test
+
+        [TestMethod]
+        public void TestEditorWithValidUserSaves()
+        {
+            #region Arrange
+            LoadUsers(3);
+            var editor = GetValid(9);
+            editor.User = Repository.OfType<User>().GetNullableByID(3);
+            #endregion Arrange
+
+            #region Act
+            EditorRepository.DbContext.BeginTransaction();
+            EditorRepository.EnsurePersistent(editor);
+            EditorRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(editor.IsTransient());
+            Assert.IsTrue(editor.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Test
+        #endregion User Tests
+
+        #region Owner Tests
+
+        /// <summary>
+        /// Tests the Owner when true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOwnerWhenTrueSaves()
+        {
+            #region Arrange
+            var editor = GetValid(9);
+            editor.Owner = true;
+            #endregion Arrange
+
+            #region Act
+            EditorRepository.DbContext.BeginTransaction();
+            EditorRepository.EnsurePersistent(editor);
+            EditorRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(editor.IsTransient());
+            Assert.IsTrue(editor.IsValid());
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the Owner when false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestOwnerWhenFalseSaves()
+        {
+            #region Arrange
+            var editor = GetValid(9);
+            editor.Owner = false;
+            #endregion Arrange
+
+            #region Act
+            EditorRepository.DbContext.BeginTransaction();
+            EditorRepository.EnsurePersistent(editor);
+            EditorRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(editor.IsTransient());
+            Assert.IsTrue(editor.IsValid());
+            #endregion Assert
+        }
+        #endregion Owner Tests
+
+        #region Reflection of Database.
+
+        /// <summary>
+        /// Tests all fields in the database have been tested.
+        /// If this fails and no other tests, it means that a field has been added which has not been tested above.
+        /// </summary>
+        [TestMethod]
+        public void TestAllFieldsInTheDatabaseHaveBeenTested()
+        {
+            #region Arrange
+
+            var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
+            {
+                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("Item", "CRP.Core.Domain.Item", new List<string>()));
+            expectedFields.Add(new NameAndType("Owner", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("User", "CRP.Core.Domain.User", new List<string>()));
+
+            #endregion Arrange
+
+            AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Editor));
+
+        }
+
+
+
+        #endregion Reflection of Database.
     }
 }
