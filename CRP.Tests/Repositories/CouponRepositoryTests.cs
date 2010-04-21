@@ -1605,7 +1605,7 @@ namespace CRP.Tests.Repositories
             }));
             expectedFields.Add(new NameAndType("DiscountAmount", "System.Decimal", new List<string>
             {
-                "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0.01, Message = \"must be more than $0.00\", Max = 922337203685477)]"
+                "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0.01, Max = 922337203685477, Message = \"must be more than $0.00\")]"
             }));
             expectedFields.Add(new NameAndType("DiscountAmountCostPerItem", "System.Boolean", new List<string>
             {
