@@ -79,7 +79,10 @@ namespace CRP.Controllers
                 return Redirect(resultUrl);
             }
 
-            return this.RedirectToAction(a => a.LogOn(returnUrl, null));
+            //return this.RedirectToAction(a => a.LogOn(returnUrl, null));
+
+            // not authorized?
+            return View();
         }
 
         #region Open Id authentication section

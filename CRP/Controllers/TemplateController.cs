@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Web.Mvc;
+using CRP.Controllers.Filter;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using MvcContrib.Attributes;
@@ -8,6 +9,7 @@ using UCDArch.Web.Helpers;
 
 namespace CRP.Controllers
 {
+    [AdminOnly]
     public class TemplateController : SuperController
     {
         //
