@@ -129,6 +129,10 @@
     <value>Contact Information</value>
     <comment>The name of the required question set</comment>
   </data>
+  <data name="Tab_Checks" xml:space="preserve">
+    <value>Checks</value>
+    <comment>Tab id used in /ItemManagement/Details/</comment>
+  </data>
   <data name="Tab_Coupons" xml:space="preserve">
     <value>Coupons</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>
@@ -145,9 +149,17 @@
     <value>Questions</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>
   </data>
+  <data name="Tab_Reports" xml:space="preserve">
+    <value>Reports</value>
+    <comment>Tab id used in /ItemManagement/Details/</comment>
+  </data>
   <data name="Tab_Templates" xml:space="preserve">
     <value>Templates</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>
+  </data>
+  <data name="Tab_Transactions" xml:space="preserve">
+    <value>Transactions</value>
+    <comment>Tab id used in /ItemManagement/Details/</comment>
   </data>
   <data name="View_PageHeader" xml:space="preserve">
     <value>~/Views/Shared/PageHeader.ascx</value>

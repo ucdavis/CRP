@@ -19,9 +19,10 @@
     <property name="Quantity" column="Quantity" />
     <many-to-one name="ParentTransaction" class="CRP.Core.Domain.Transaction, CRP.Core" column="TransactionId" fetch="join" />
     
-    <bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" >
+    <bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" fetch="select" >
       <key column="TransactionId" />
-      <many-to-many column="CheckId" class="CRP.Core.Domain.Check, CRP.Core" />
+      <!--<many-to-many column="CheckId" class="CRP.Core.Domain.Check, CRP.Core" />-->
+      <one-to-many class="CRP.Core.Domain.Check, CRP.Core"/>
     </bag>
 
     <bag name="TransactionAnswers" table="TransactionAnswers" cascade="save-update">

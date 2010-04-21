@@ -53,6 +53,7 @@
             .Render(); %>
 
     <p>
+        <%= Url.EditItemUrl(Model.ItemId, StaticValues.Tab_Questions) %>
         <a href="<%= ReturnUrlGenerator.EditItemUrl(Model.ItemId, StaticValues.Tab_Questions) %>">Back to Item</a>
     </p>
 

@@ -147,6 +147,7 @@
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
+    <Compile Include="Controllers\CheckController.cs" />
     <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\DisplayProfileController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
     <Compile Include="Controllers\Helpers\CustomGridBuilder.cs" />
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
+    <Compile Include="Controllers\Helpers\InvoiceNumberGenerator.cs" />
     <Compile Include="Controllers\Helpers\ReturnUrlGenerator.cs" />
     <Compile Include="Controllers\Helpers\RoleNames.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="Controllers\ViewModels\ItemDetailViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\LinkCheckViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
     <Compile Include="Default.aspx.cs">
@@ -548,8 +551,10 @@
       <LastGenOutput>QuestionTypeText.Designer.cs</LastGenOutput>
     </Content>
     <Content Include="Images\logo.gif" />
+    <Content Include="Views\Check\LinkToTransaction.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />
     <Content Include="Views\ItemManagement\Details.aspx" />
+    <Content Include="Views\Shared\CheckView.ascx" />
     <Content Include="Views\Shared\PageHeader.ascx" />
     <Content Include="Views\Shared\QuestionForm.ascx" />
   </ItemGroup>
@@ -573,7 +578,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49989</DevelopmentServerPort>
+          <DevelopmentServerPort>57116</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

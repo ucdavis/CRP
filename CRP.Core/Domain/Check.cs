@@ -13,11 +13,12 @@ namespace CRP.Core.Domain
             SetDefaults();
         }
 
-        public Check(string payee, int checkNumber, decimal amount)
+        public Check(string payee, int checkNumber, decimal amount, Transaction transaction)
         {
             Payee = payee;
             CheckNumber = checkNumber;
             Amount = amount;
+            Transaction = transaction;
 
             SetDefaults();
         }
@@ -25,8 +26,6 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             DateReceived = DateTime.Now;
-
-            Transactions = new List<Transaction>();
         }
 
         [Required]
@@ -36,6 +35,8 @@ namespace CRP.Core.Domain
         public virtual Decimal Amount { get; set; }
         public virtual DateTime DateReceived { get; set; }
 
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual Transaction Transaction { get; set; }
+
+        //public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

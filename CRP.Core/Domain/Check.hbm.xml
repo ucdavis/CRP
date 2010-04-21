@@ -13,10 +13,7 @@
     <property name="Amount" column="Amount" not-null="true" />
     <property name="DateReceived" column="DateReceived" not-null="true" />
 
-    <bag name="Transactions" table="ChecksXTransactions" cascade="all-delete-orphan" fetch="join">
-      <key column="CheckId" />
-      <many-to-many column="TransactionId" class="CRP.Core.Domain.Transaction, CRP.Core" />
-    </bag>
+    <many-to-one name="Transaction" class="CRP.Core.Domain.Transaction, CRP.Core" column="TransactionId" fetch="join" />
     
   </class>
 </hibernate-mapping>

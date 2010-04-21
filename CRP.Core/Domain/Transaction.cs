@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 
@@ -60,6 +61,7 @@ namespace CRP.Core.Domain
 
         public virtual void AddCheck(Check check)
         {
+            check.Transaction = this;
             Checks.Add(check);
         }
 
@@ -88,6 +90,38 @@ namespace CRP.Core.Domain
             transaction.Check = Check;
             transaction.Credit = Credit;
             ChildTransactions.Add(transaction);
+        }
+
+        /// <summary>
+        /// Only donations
+        /// </summary>
+        public virtual decimal DonationTotal { 
+            get
+            {
+                return ChildTransactions.Where(a => a.Donation).Sum(a => a.Amount);
+            } 
+        }
+
+        /// <summary>
+        /// All non donation values
+        /// </summary>
+        public virtual decimal AmountTotal
+        {
+            get
+            {
+                return Amount + ChildTransactions.Where(a => !a.Donation).Sum(a => a.Amount);
+            }
+        }
+
+        /// <summary>
+        /// Donation and Non-Donation values.
+        /// </summary>
+        public virtual decimal Total
+        {
+            get
+            {
+                return DonationTotal + AmountTotal;
+            }
         }
     }
 }

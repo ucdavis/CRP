@@ -24,6 +24,7 @@
                         {
                             col.Add(a =>
                                         {%>
+                                            <%= Html.ActionLink<ItemManagementController>(b => b.Details(a.Id), "Details") %> | 
                                             <%= Html.ActionLink<ItemManagementController>(b => b.Edit(a.Id), "Edit") %>
                                         <%});
                             col.Add(a => a.Name);

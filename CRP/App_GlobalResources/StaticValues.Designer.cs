@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checks.
+        /// </summary>
+        internal static string Tab_Checks {
+            get {
+                return ResourceManager.GetString("Tab_Checks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Coupons.
         /// </summary>
         internal static string Tab_Coupons {
@@ -124,11 +133,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reports.
+        /// </summary>
+        internal static string Tab_Reports {
+            get {
+                return ResourceManager.GetString("Tab_Reports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Templates.
         /// </summary>
         internal static string Tab_Templates {
             get {
                 return ResourceManager.GetString("Tab_Templates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transactions.
+        /// </summary>
+        internal static string Tab_Transactions {
+            get {
+                return ResourceManager.GetString("Tab_Transactions", resourceCulture);
             }
         }
         
