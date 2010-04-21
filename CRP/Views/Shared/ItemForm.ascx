@@ -42,7 +42,7 @@
             </li>
             <li>
                 <label for="Item.CheckPaymentInstructions">Check Payment Instructions:</label><br />
-                <%= Html.TextArea("Item.CheckPaymentInstructions", Model.Item == null || Model.Item.CheckPaymentInstructions == null ? "<h1>Thank you for your purchase!</h1> <h2>Please mail your payment to:</h2> <address>College of Agricultural and Environmental Sciences<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 94534<br /></address>": Model.Item.CheckPaymentInstructions )%>
+                <%= Html.TextArea("Item.CheckPaymentInstructions", Model.Item == null || Model.Item.CheckPaymentInstructions == null ? Html.HtmlEncode("<h1>Thank you for your purchase!</h1> <h2>Please mail your payment to:</h2> <address>College of Agricultural and Environmental Sciences<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 94534<br /></address>") : Html.HtmlEncode(Model.Item.CheckPaymentInstructions))%>
                 <%= Html.ValidationMessage("Item.CheckPaymentInstructions", "*")%> 
             </li>
             <li>

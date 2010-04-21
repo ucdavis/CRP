@@ -55,7 +55,7 @@
     <% } else { %>
     
         <p>        
-           <%=Model.Transaction.Item.CheckPaymentInstructions %>
+           <%=Html.HtmlEncode(Model.Transaction.Item.CheckPaymentInstructions)%>
         </p>
     
     <% } %>
