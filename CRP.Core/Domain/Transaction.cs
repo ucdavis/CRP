@@ -96,7 +96,6 @@ namespace CRP.Core.Domain
 
         public virtual void AddChildTransaction(Transaction transaction)
         {
-            //TODO: Review, should this set dontaion to true?
             transaction.ParentTransaction = this;
             transaction.Check = Check;
             transaction.Credit = Credit;

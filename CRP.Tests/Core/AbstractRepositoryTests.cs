@@ -8,6 +8,8 @@ using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
 using UCDArch.Testing;
 
+
+
 namespace CRP.Tests.Core
 {
  
@@ -25,6 +27,7 @@ namespace CRP.Tests.Core
 
         protected AbstractRepositoryTests()
         {
+            //HibernatingRhinos.NHibernate.Profiler.Appender.NHibernateProfiler.Initialize();
             if (typeof(IdT) == typeof(int))
             {
                 _intRepository = new Repository<T>();
