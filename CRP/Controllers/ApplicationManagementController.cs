@@ -140,8 +140,17 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// 
+        /// POST: /ApplicationManagement/CreateQuestionSet
         /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Create a question set that is system reusable 
+        /// PreCondition:
+        ///     Question set with the same name that is system reusable does not exist.
+        /// PostCondition:
+        ///     Question set is created with one or more questions
+        ///     Questions if type needs options has one or more options
+        /// </remarks>
         /// <param name="questionSet"></param>
         /// <param name="questions"></param>
         /// <returns></returns>
