@@ -427,12 +427,13 @@ namespace CRP.Controllers
         public ActionResult PaymentResult(PaymentResultParameters touchNetValues)
         {
             #region debug1
-
+            #if DEBUG
             // create an email for testing
             var client = new SmtpClient("smtp.ucdavis.edu");
 
             var message = new MailMessage("anlai@ucdavis.edu", "anlai@ucdavis.edu");
-            message.To.Add("jasoncsylvestre@gmail.com");
+            //message.To.Add("jasoncsylvestre@gmail.com");
+            message.To.Add("jSylvestre@ucdavis.edu");
             message.To.Add("owlanjunk@gmail.com");
             message.Subject = "Touchnet Post Results";
             message.IsBodyHtml = true;
@@ -453,6 +454,7 @@ namespace CRP.Controllers
             body.Append("PMT_AMT:" + (touchNetValues.PMT_AMT.HasValue ? touchNetValues.PMT_AMT.Value.ToString() : string.Empty) + "<br/>");
             body.Append("TPG_TRANS_ID:" + touchNetValues.TPG_TRANS_ID + "<br/>");
             body.Append("CARD_TYPE" + touchNetValues.CARD_TYPE);
+            #endif
             #endregion
 
             #region Actual Work
@@ -475,6 +477,27 @@ namespace CRP.Controllers
                     paymentLog.CardType = touchNetValues.CARD_TYPE;
                 }
 
+                if(touchNetValues.posting_key != ConfigurationManager.AppSettings["TouchNetPostingKey"])
+                {
+                    ModelState.AddModelError("PostingKey", "Posting Key Error");
+                    paymentLog.Accepted = false;
+                }
+                if (touchNetValues.UPAY_SITE_ID != ConfigurationManager.AppSettings["TouchNetSiteId"])
+                {
+                    ModelState.AddModelError("SiteId", "TouchNet Site Id Error");
+                    paymentLog.Accepted = false;
+                }
+                if (touchNetValues.TPG_TRANS_ID == "DUMMY_TRANS_ID")
+                {
+                    ModelState.AddModelError("TPG_TRANS_ID", "TouchNet TPG_TRANS_ID Error");
+                    paymentLog.Accepted = false;
+                }
+                if(touchNetValues.PMT_AMT != transaction.AmountTotal)
+                {
+                    ModelState.AddModelError("Amount", "TouchNet Amount does not match local amount");
+                    paymentLog.Accepted = false;
+                }
+
                 transaction.AddPaymentLog(paymentLog);
                 //paymentLog.Transaction = transaction;
 
@@ -492,8 +515,13 @@ namespace CRP.Controllers
                         _notificationProvider.SendConfirmation(transaction, question.Answer);
                     }
                 }
+                else
+                {
+                    //TODO: email or log the errors
+                }
 
                 #region debug2
+                #if DEBUG
                 try
                 {
                     body.Append("Payment log values:<br/>");
@@ -517,16 +545,19 @@ namespace CRP.Controllers
                 {
                     body.Append(ex.Message);
                 }
-
+                #endif
                 #endregion
             }
             #endregion
 
             #region debug3
+            #if DEBUG
             message.Body = body.ToString();
 
             client.Send(message);
+            #endif
             #endregion
+
             return View();
         }
         /*
