@@ -165,6 +165,8 @@ namespace CRP.Tests.Core.Helpers
         public static ItemQuestionSet ItemQuestionSet(int? counter)
         {
             var rtValue = new ItemQuestionSet();
+            rtValue.Item = new Item();
+            rtValue.QuestionSet = new QuestionSet();
             //TODO: Populate values
             
             return rtValue;
@@ -231,6 +233,7 @@ namespace CRP.Tests.Core.Helpers
         public static QuestionSet QuestionSet(int? counter)
         {
             var rtValue = new QuestionSet();
+            rtValue.Name = "Name" + counter.Extra();
             //TODO: Populate values
             
             return rtValue;

@@ -74,11 +74,11 @@ namespace CRP.Tests.Repositories
         /// </summary>
         protected override void LoadData()
         {
-            Repository.OfType<Check>().DbContext.BeginTransaction();
+            Repository.OfType<Item>().DbContext.BeginTransaction();
             LoadUnits(1);
             LoadItemTypes(1);
             LoadRecords(5);
-            Repository.OfType<Check>().DbContext.CommitTransaction();
+            Repository.OfType<Item>().DbContext.CommitTransaction();
         }
 
         #endregion Init and Overrides

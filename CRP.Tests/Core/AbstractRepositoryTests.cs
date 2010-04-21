@@ -283,6 +283,32 @@ namespace CRP.Tests.Core
                 Repository.OfType<QuestionType>().EnsurePersistent(validEntity);
             }
         }
+
+        /// <summary>
+        /// Loads the users.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadUsers(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.User(entriesToAdd);
+                Repository.OfType<User>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
+        /// Loads the question set.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadQuestionSet(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.QuestionSet(entriesToAdd);
+                Repository.OfType<QuestionSet>().EnsurePersistent(validEntity);
+            }
+        }
         
         /// <summary>
         /// Abstract Repository Tests Action

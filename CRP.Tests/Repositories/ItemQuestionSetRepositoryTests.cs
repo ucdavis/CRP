@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
@@ -7,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CRP.Tests.Repositories
 {
     [TestClass]
-    public class EditorRepositoryTests : AbstractRepositoryTests<Editor, int>
+    public class ItemQuestionSetRepositoryTests : AbstractRepositoryTests<ItemQuestionSet, int >
     {
         #region Init and Overrides
 
@@ -16,20 +17,20 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="counter">The counter.</param>
         /// <returns>A valid entity of type T</returns>
-        protected override Editor GetValid(int? counter)
+        protected override ItemQuestionSet GetValid(int? counter)
         {
-            var rtValue = CreateValidEntities.Editor(counter);
+            var rtValue = CreateValidEntities.ItemQuestionSet(counter);
             rtValue.Item = Repository.OfType<Item>().GetById(1);
-            var notNullCounter = 0;
-            if(counter != null)
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+            if (counter != null && counter == 3)
             {
-                notNullCounter = (int)counter;
+                rtValue.Required = true;
             }
-            rtValue.User = Repository.OfType<User>().GetById(notNullCounter);
-            if(counter!=null && counter == 3)
+            else
             {
-                rtValue.Owner = true;
+                rtValue.Required = false;
             }
+
             return rtValue;
         }
 
@@ -38,9 +39,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="numberAtEnd"></param>
         /// <returns></returns>
-        protected override IQueryable<Editor> GetQuery(int numberAtEnd)
+        protected override IQueryable<ItemQuestionSet> GetQuery(int numberAtEnd)
         {
-            return Repository.OfType<Editor>().Queryable.Where(a => a.Owner);
+            return Repository.OfType<ItemQuestionSet>().Queryable.Where(a => a.Required);
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="counter"></param>
-        protected override void FoundEntityComparison(Editor entity, int counter)
+        protected override void FoundEntityComparison(ItemQuestionSet entity, int counter)
         {
             Assert.AreEqual(counter, entity.Id);
         }
@@ -59,44 +60,39 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="action">The action.</param>
-        protected override void UpdateUtility(Editor entity, ARTAction action)
+        protected override void UpdateUtility(ItemQuestionSet entity, ARTAction action)
         {
             const bool updateValue = true;
             switch (action)
             {
                 case ARTAction.Compare:
-                    Assert.AreEqual(updateValue, entity.Owner);
+                    Assert.AreEqual(updateValue, entity.Required);
                     break;
                 case ARTAction.Restore:
-                    entity.Owner = BoolRestoreValue;
+                    entity.Required = BoolRestoreValue;
                     break;
                 case ARTAction.Update:
-                    BoolRestoreValue = entity.Owner;
-                    entity.Owner = updateValue;
+                    BoolRestoreValue = entity.Required;
+                    entity.Required = updateValue;
                     break;
             }
         }
 
         /// <summary>
         /// Loads the data.
-        /// Editor Requires Item.
-        /// Item Requires Unit.
-        /// Item requires ItemType
-        /// Editor requires user
+        /// ItemQuestionSet Requires Item
+        /// ItemQuestionSet Requires QuestionSet
         /// </summary>
         protected override void LoadData()
         {
-            Repository.OfType<Editor>().DbContext.BeginTransaction();
-            LoadUnits(1);
-            LoadItemTypes(1);
+            Repository.OfType<ItemQuestionSet>().DbContext.BeginTransaction();
             LoadItems(1);
-            LoadUsers(5);
-            LoadRecords(5);  //Note: Each of these records has a different user assigned to it if we want to use that for other tests.
-            Repository.OfType<Editor>().DbContext.CommitTransaction();
+            LoadQuestionSet(1);
+            LoadRecords(5);
+            Repository.OfType<ItemQuestionSet>().DbContext.CommitTransaction();
         }
 
         
-
 
         #endregion Init and Overrides
 
