@@ -8,7 +8,6 @@ using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
-using UCDArch.Testing;
 using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
@@ -533,10 +532,52 @@ namespace CRP.Tests.Repositories
                 throw;
             }		
         }
+
+        /// <summary>
+        /// Tests the columns invalid internal data does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestColumnsInvalidInternalDataDoesNotSave()
+        {          
+            ItemReport itemReport = null;
+            try
+            {
+                #region Arrange
+                var itemReportColumn = CreateValidEntities.ItemReportColumn(9);
+                //InvalidData
+                itemReportColumn.Property = true;
+                itemReportColumn.Transaction = true;
+                itemReport = GetValid(9);
+                itemReport.AddReportColumn(itemReportColumn);
+                #endregion Arrange
+
+                #region Act
+                ItemReportRepository.DbContext.BeginTransaction();
+                ItemReportRepository.EnsurePersistent(itemReport);
+                ItemReportRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(itemReport);
+                var results = itemReport.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("ReportColumns: One or more Report Columns is not valid");
+                Assert.IsTrue(itemReport.IsTransient());
+                Assert.IsFalse(itemReport.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
         
         #endregion Invalid Tests
 
         #region Valid Tests
+        /// <summary>
+        /// Tests for mapping problem.
+        /// </summary>
         [TestMethod]
         public void TestForMappingProblem()
         {
@@ -559,6 +600,9 @@ namespace CRP.Tests.Repositories
             #endregion Assert
         }
 
+        /// <summary>
+        /// Tests the columns with new value saves.
+        /// </summary>
         [TestMethod]
         public void TestColumnsWithNewValueSaves()
         {
@@ -589,12 +633,11 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var itemReportColumn = CreateValidEntities.ItemReportColumn(9);
-            var itemReport = GetValid(99);
-            itemReport.AddReportColumn(itemReportColumn);
-           
+            var itemReport = GetValid(99);         
             #endregion Arrange
 
             #region Act
+            itemReport.AddReportColumn(itemReportColumn);
             ItemReportRepository.DbContext.BeginTransaction();
             ItemReportRepository.EnsurePersistent(itemReport);
             ItemReportRepository.DbContext.CommitTransaction();
@@ -733,6 +776,10 @@ namespace CRP.Tests.Repositories
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]",
                  "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("ReportColumns", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"One or more Report Columns is not valid\")]"
             }));
             expectedFields.Add(new NameAndType("SystemReusable", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("User", "CRP.Core.Domain.User", new List<string>

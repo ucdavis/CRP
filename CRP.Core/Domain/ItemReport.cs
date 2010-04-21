@@ -26,6 +26,7 @@ namespace CRP.Core.Domain
         {
             SystemReusable = false;
             Columns = new List<ItemReportColumn>();
+            ReportColumns = false;
         }
 
         [Required]
@@ -50,6 +51,49 @@ namespace CRP.Core.Domain
         {
             Columns.Remove(itemReportColumn);
         }
+
+        /// <summary>
+        /// Determines whether this instance is valid.
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool IsValid()
+        {
+            PopulateComplexLogicFields();
+            return base.IsValid();
+        }
+
+        public override ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
+        {
+            PopulateComplexLogicFields();
+            return base.ValidationResults();
+        }
+
+        /// <summary>
+        /// Populates the complex logic fields.
+        /// We can't just put the [Valid] attribute on the Columns because it doesn't run the overridden isValid method. 
+        /// </summary>
+        private void PopulateComplexLogicFields()
+        {
+            ReportColumns = true;
+            if (Columns != null && Columns.Count > 0)
+            {
+                foreach (var column in Columns)
+                {
+                    if (!column.IsValid())
+                    {
+                        ReportColumns = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        #region Fields ONLY used for complex validation, not in database
+        [AssertTrue(Message = "One or more Report Columns is not valid")]
+        public virtual bool ReportColumns { get; set; }
+        #endregion Fields ONLY used for complex validation, not in database
     }
 
     public class ItemReportColumn : DomainObject
@@ -73,6 +117,7 @@ namespace CRP.Core.Domain
             Quantity = false;
             Transaction = false;
             Property = false;
+            QuantityAndTransactionAndProperty = false;
         }
 
         [Required]
@@ -111,7 +156,7 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "One and only one of these must be selected: Quantity, Transaction, Property")]
-        public virtual bool QuantityAndTransactionAndProperty { get; set; }
+        public virtual bool QuantityAndTransactionAndProperty { get; set; }      
         #endregion Fields ONLY used for complex validation, not in database
     }
 }
