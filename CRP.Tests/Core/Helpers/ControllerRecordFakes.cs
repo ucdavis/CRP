@@ -191,5 +191,15 @@ namespace CRP.Tests.Core.Helpers
                 entity[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
+
+        public static void FakeItemReports(List<ItemReport> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.ItemReport(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
     }
 }

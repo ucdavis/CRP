@@ -1,19 +1,56 @@
-﻿using CRP.Controllers;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Principal;
+using System.Web;
+using System.Web.Mvc;
+using CRP.Controllers;
+using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers;
+using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
+using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MvcContrib.Attributes;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
+using UCDArch.Web.Attributes;
+
 
 namespace CRP.Tests.Controllers
 {
     [TestClass]
     public class ReportControllerTests : ControllerTestBase<ReportController>
     {
+        private readonly Type _controllerClass = typeof(ReportController);
         protected IChartProvider ChartProvider;
-        #region Init
+        protected List<Item> Items { get; set; }
+        protected IRepository<Item> ItemRepository { get; set; }
+        protected List<ItemReport> ItemReports { get; set; }
+        protected IRepository<ItemReport> ItemReportRepository { get; set; }
+        protected List<User> Users { get; set; }
+        protected IRepository<User> UserRepository { get; set; }
 
+        #region Init
+        public ReportControllerTests()
+        {
+            Items = new List<Item>();
+            ItemRepository = FakeRepository<Item>();
+            Controller.Repository.Expect(a => a.OfType<Item>()).Return(ItemRepository).Repeat.Any();
+
+            ItemReports = new List<ItemReport>();
+            ItemReportRepository = FakeRepository<ItemReport>();
+            Controller.Repository.Expect(a => a.OfType<ItemReport>()).Return(ItemReportRepository).Repeat.Any();
+
+            Users = new List<User>();
+            UserRepository = FakeRepository<User>();
+            Controller.Repository.Expect(a => a.OfType<User>()).Return(UserRepository).Repeat.Any();
+        }
         /// <summary>
         /// Registers the routes.
         /// </summary>
@@ -43,8 +80,636 @@ namespace CRP.Tests.Controllers
         {
             "~/Report/ViewReport/5".ShouldMapTo<ReportController>(a => a.ViewReport(5, 12), true);
         }
-        
 
+
+        [TestMethod]
+        public void TestCreateGetMapping()
+        {
+            "~/Report/Create/?itemId=5".ShouldMapTo<ReportController>(a => a.Create(5), true);		
+        }
+        [TestMethod]
+        public void TestCreatePostMapping()
+        {
+            "~/Report/Create/5".ShouldMapTo<ReportController>(a => a.Create(5, "Name", new CreateReportParameter[0]), true);
+        }
+
+        [TestMethod]
+        public void TestViewSystemReportMapping()
+        {
+            "~/Report/ViewSystemReport/5".ShouldMapTo<ReportController>(a => a.ViewSystemReport(null), true);
+        }
+
+        [TestMethod]
+        public void TestGenerateChartMapping()
+        {
+            "~/Report/GenerateChart/5".ShouldMapTo<ReportController>(a => a.GenerateChart(5), true);
+        }
         #endregion Route Tests
+
+        #region ViewReport Tests
+
+        [TestMethod]
+        public void TestViewReportRedirectsToItemManagementListIfItemReportNotFound()
+        {
+            #region Arrange
+            SetUpDataForTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.ViewReport(1, 2)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("ItemReport not found.", Controller.Message);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestViewReportRedirectsToItemManagementListIfItemFound()
+        {
+            #region Arrange
+            SetUpDataForTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.ViewReport(2, 1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestViewReportReturnsReportViewModel()
+        {
+            #region Arrange
+            SetUpDataForTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.ViewReport(2, 2)
+                .AssertViewRendered()
+                .WithViewData<ReportViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.IsNotNull(result);
+
+            #endregion Assert		
+        }
+        #endregion ViewReport Tests
+
+        #region Create Get Tests
+
+        [TestMethod]
+        public void TestCreateGetRedirectsToItemManagementListWhenItemNotFound()
+        {
+            #region Arrange
+            SetUpDataForTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestCreateGetReturnsViewWhenItemFound()
+        {
+            #region Arrange
+            SetUpDataForTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(2)
+                .AssertViewRendered()
+                .WithViewData<CreateReportViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            #endregion Assert
+        }
+        #endregion Create Get Tests
+
+        #region Create Post Tests
+
+        [TestMethod]
+        public void TestCreatePostRedirectsToItemManagementListWhenItemNotFound()
+        {
+            #region Arrange
+            SetUpDataForTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(1, "Name", new CreateReportParameter[0])
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert		
+        }
+
+
+        [TestMethod]
+        public void TestCreatePostWithValidData()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetUpDataForTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(2, "Name", new CreateReportParameter[0])
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            ItemReportRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<ItemReport>.Is.Anything));
+            Assert.AreEqual("Report has been created successfully.", Controller.Message);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestCreatePostWithInvalidDataReturnsView()
+        {
+            #region Arrange
+            //Controller.ControllerContext.HttpContext.Response
+            //    .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+            //    .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            //Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetUpDataForTests();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(2, " ", new CreateReportParameter[0])
+                .AssertViewRendered()
+                .WithViewData<CreateReportViewModel>();
+            #endregion Act
+
+            #region Assert
+            ItemReportRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<ItemReport>.Is.Anything));
+            Assert.AreNotEqual("Report has been created successfully.", Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Name: may not be null or empty");
+            #endregion Assert
+        }
+        #endregion Create Post Tests
+
+        #region Helper Methods
+        private void SetUpDataForTests()
+        {
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            ControllerRecordFakes.FakeItems(Items, 3);
+            ControllerRecordFakes.FakeItemReports(ItemReports, 3);
+            ControllerRecordFakes.FakeUsers(Users, 3);
+            Users[1].LoginID = "UserName";
+
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+
+            ItemReportRepository.Expect(a => a.GetNullableByID(2)).Return(ItemReports[1]).Repeat.Any();
+            ItemReportRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+        }
+
+        #region mocks
+        /// <summary>
+        /// Mock the Identity. Used for getting the current user name
+        /// </summary>
+        public class MockIdentity : IIdentity
+        {
+            public string AuthenticationType
+            {
+                get
+                {
+                    return "MockAuthentication";
+                }
+            }
+
+            public bool IsAuthenticated
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            public string Name
+            {
+                get
+                {
+                    return "UserName";
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Mock the Principal. Used for getting the current user name
+        /// </summary>
+        public class MockPrincipal : IPrincipal
+        {
+            IIdentity _identity;
+            public bool RoleReturnValue { get; set; }
+            public string[] UserRoles { get; set; }
+
+            public MockPrincipal(string[] userRoles)
+            {
+                UserRoles = userRoles;
+            }
+
+            public IIdentity Identity
+            {
+                get { return _identity ?? (_identity = new MockIdentity()); }
+            }
+
+            public bool IsInRole(string role)
+            {
+                if (UserRoles.Contains(role))
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Mock the HTTPContext. Used for getting the current user name
+        /// </summary>
+        public class MockHttpContext : HttpContextBase
+        {
+            private IPrincipal _user;
+            private readonly int _count;
+            public string[] UserRoles { get; set; }
+            public MockHttpContext(int count, string[] userRoles)
+            {
+                _count = count;
+                UserRoles = userRoles;
+            }
+
+            public override IPrincipal User
+            {
+                get { return _user ?? (_user = new MockPrincipal(UserRoles)); }
+                set
+                {
+                    _user = value;
+                }
+            }
+
+            public override HttpRequestBase Request
+            {
+                get
+                {
+                    return new MockHttpRequest(_count);
+                }
+            }
+        }
+
+        public class MockHttpRequest : HttpRequestBase
+        {
+            MockHttpFileCollectionBase Mocked { get; set; }
+
+            public MockHttpRequest(int count)
+            {
+                Mocked = new MockHttpFileCollectionBase(count);
+            }
+            public override HttpFileCollectionBase Files
+            {
+                get
+                {
+                    return Mocked;
+                }
+            }
+        }
+
+        public class MockHttpFileCollectionBase : HttpFileCollectionBase
+        {
+            public int Counter { get; set; }
+
+            public MockHttpFileCollectionBase(int count)
+            {
+                Counter = count;
+                for (int i = 0; i < count; i++)
+                {
+                    BaseAdd("Test" + (i + 1), new byte[] { 4, 5, 6, 7, 8 });
+                }
+
+            }
+
+            public override int Count
+            {
+                get
+                {
+                    return Counter;
+                }
+            }
+            public override HttpPostedFileBase Get(string name)
+            {
+                return new MockHttpPostedFileBase();
+            }
+            public override HttpPostedFileBase this[string name]
+            {
+                get
+                {
+                    return new MockHttpPostedFileBase();
+                }
+            }
+            public override HttpPostedFileBase this[int index]
+            {
+                get
+                {
+                    return new MockHttpPostedFileBase();
+                }
+            }
+        }
+
+        public class MockHttpPostedFileBase : HttpPostedFileBase
+        {
+            public override int ContentLength
+            {
+                get
+                {
+                    return 5;
+                }
+            }
+            public override string FileName
+            {
+                get
+                {
+                    return "Mocked File Name";
+                }
+            }
+            public override Stream InputStream
+            {
+                get
+                {
+                    var memStream = new MemoryStream(new byte[] { 4, 5, 6, 7, 8 });
+                    return memStream;
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion Helper Methods
+
+        #region Reflection Tests
+
+        #region Controller Class Tests
+        /// <summary>
+        /// Tests the controller inherits from super controller.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerInheritsFromSuperController()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.BaseType.Name;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("SuperController", result);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller has only three attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerHasOnlyThreeAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, result.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller has transaction attribute.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerHasTransactionAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<UseTransactionsByDefaultAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "UseTransactionsByDefaultAttribute not found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller has anti forgery token attribute.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerHasAntiForgeryTokenAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<UseAntiForgeryTokenOnPostByDefault>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "UseAntiForgeryTokenOnPostByDefault not found.");
+            #endregion Assert
+        }
+
+        #endregion Controller Class Tests
+
+        #region Controller Method Tests
+
+        /// <summary>
+        /// Tests the controller contains expected number of public methods.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerContainsExpectedNumberOfPublicMethods()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetMethods().Where(a => a.DeclaringType == controllerClass);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(5, result.Count(), "It looks like a method was added or removed from the controller.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method viewReport  contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodViewReportContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("ViewReport");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<UserOnlyAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the controller method create  contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodCreateContainsExpectedAttributes1()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<UserOnlyAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method create contains expected attributes2.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodCreateContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method create contains expected attributes3.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodCreateContainsExpectedAttributes3()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<UserOnlyAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the controller method ViewSystemReport contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodViewSystemReportContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("ViewSystemReport");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminOnlyAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminOnlyAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method GenerateChart contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodGenerateChartContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("GenerateChart");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminOnlyAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AdminOnlyAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+
+        #endregion Controller Method Tests
+
+        #endregion Reflection Tests
     }
 }
