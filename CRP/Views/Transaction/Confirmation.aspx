@@ -34,9 +34,11 @@
             <form method="post" action="<%= Model.PaymentGatewayUrl %>">
                 <%= Html.Hidden(StaticValues.Upay_TransactionId, Model.Transaction.Id) %>
                 <%= Html.Hidden(StaticValues.Upay_Amount, Model.Transaction.Total) %>
-                <%= Html.Hidden(StaticValues.Upay_SiteId, 0) %>
+                <%= Html.Hidden(StaticValues.Upay_SiteId, Model.SiteId) %>
                 <%= Html.Hidden(StaticValues.Upay_ValidationKey, Model.ValidationKey) %>
-                
+                <%= Html.Hidden(StaticValues.Upay_SuccessLink, Model.SuccessLink) %>
+                <%= Html.Hidden(StaticValues.Upay_CancelLink, Model.CancelLink ) %>
+                <%= Html.Hidden(StaticValues.Upay_ErrorLink, Model.ErrorLink) %>
                 <%= Html.SubmitButton("Submit", "Make Payment") %>
             </form>
         </p>

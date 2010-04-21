@@ -38,6 +38,7 @@
                 var addImg = $("img#addCheck");
 
                 cloned.find("input").val("");
+                cloned.find("textarea").val("");
                 cloned.find("input.accepted-field").val(true);
 
                 //fieldset.after(cloned);
@@ -164,7 +165,7 @@
             </td>
             <td style="width:60%">
                 <% for (var i = 0; i < Model.PaymentLogs.Count(); i++ ) { %> 
-                    <fieldset class="check">
+                    <fieldset class="check <%= Model.PaymentLogs.ElementAt(i).Accepted ? string.Empty:"deactivated" %>">
                         <legend>Check <span class="checkIndex"><%= Html.Encode(i + 1) %></span></legend>
                         <% Html.RenderPartial(StaticValues.Partial_CheckView, Model.PaymentLogs.ToList()[i]); %>
                     </fieldset>

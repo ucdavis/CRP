@@ -288,9 +288,21 @@
     <value>AMT</value>
     <comment>Upay parameter, amount of money you wish to charge</comment>
   </data>
+  <data name="Upay_CancelLink" xml:space="preserve">
+    <value>CANCEL_LINK</value>
+    <comment>CANCEL_LINK</comment>
+  </data>
+  <data name="Upay_ErrorLink" xml:space="preserve">
+    <value>ERROR_LINK</value>
+    <comment>ERROR_LINK</comment>
+  </data>
   <data name="Upay_SiteId" xml:space="preserve">
     <value>UPAY_SITE_ID</value>
     <comment>Upay parameter, site id for payment on Upay site</comment>
+  </data>
+  <data name="Upay_SuccessLink" xml:space="preserve">
+    <value>SUCCESS_LINK</value>
+    <comment>SUCCESS_LINK</comment>
   </data>
   <data name="Upay_TransactionId" xml:space="preserve">
     <value>EXT_TRANS_ID</value>

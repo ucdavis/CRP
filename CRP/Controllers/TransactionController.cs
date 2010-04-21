@@ -273,7 +273,7 @@ namespace CRP.Controllers
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
             string postingString = ConfigurationManager.AppSettings["TouchNetPostingKey"]; 
             var validationKey = CalculateValidationString(postingString, transaction.Id.ToString(), transaction.Total.ToString());
-            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey);
+            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url);
             return View(viewModel);
         }
         /// <summary>
@@ -289,7 +289,20 @@ namespace CRP.Controllers
             byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(PostingKey + EXT_TRANS_ID + AMT));
             return Convert.ToBase64String(data);
         }
+        public ActionResult PaymentSuccess(string UPAY_SITE_ID, string EXT_TRANS_ID)
+        {
+            throw new NotImplementedException();
+        }
+        public ActionResult PaymentCancel(string UPAY_SITE_ID, string EXT_TRANS_ID)
+        {
+            throw new NotImplementedException();
+        }
 
+        public ActionResult PaymentError(string UPAY_SITE_ID, string EXT_TRANS_ID)
+        {
+            throw new NotImplementedException();
+        }
+        
         /// <summary>
         /// POST: /Transaction/PaymentResult/
         /// </summary>
