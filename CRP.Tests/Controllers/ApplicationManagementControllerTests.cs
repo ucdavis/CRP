@@ -112,7 +112,7 @@ namespace CRP.Tests.Controllers
         public void TestEditItemTypeWithParametersMapping()
         {
             "~/ApplicationManagement/EditItemType/".ShouldMapTo<ApplicationManagementController>
-                (a => a.EditItemType(new ItemType()), true);
+                (a => a.EditItemType(5, new ItemType()), true);
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace CRP.Tests.Controllers
 
             var itemTypeToUpdate = ItemTypes[1];
             itemTypeToUpdate.Name = "SomeNewName";
-            var result = Controller.EditItemType(itemTypeToUpdate)
+            var result = Controller.EditItemType(2, itemTypeToUpdate)
                 .AssertViewRendered()
                 .WithViewData<ItemType>();
             Assert.AreSame(itemTypeToUpdate, result);
@@ -367,7 +367,7 @@ namespace CRP.Tests.Controllers
 
             var itemTypeToUpdate = ItemTypes[1];
             itemTypeToUpdate.Name = ItemTypes[0].Name;
-            var result = Controller.EditItemType(itemTypeToUpdate)
+            var result = Controller.EditItemType(2, itemTypeToUpdate)
                 .AssertViewRendered()
                 .WithViewData<ItemType>();
             Assert.AreSame(itemTypeToUpdate, result);
@@ -399,7 +399,7 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual(0, itemTypeToUpdateWithSameId.ExtendedProperties.Count);
             Assert.AreEqual(0, itemTypeToUpdateWithSameId.QuestionSets.Count);
 
-            var result = Controller.EditItemType(itemTypeToUpdateWithSameId)
+            var result = Controller.EditItemType(2, itemTypeToUpdateWithSameId)
                 .AssertViewRendered()
                 .WithViewData<ItemType>();
 
@@ -422,7 +422,7 @@ namespace CRP.Tests.Controllers
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any(); //So It Is Not Found
 
-            var result = Controller.EditItemType(ItemTypes[1])
+            var result = Controller.EditItemType(2, ItemTypes[1])
                 .AssertViewRendered()
                 .WithViewData<ItemType>();
 
