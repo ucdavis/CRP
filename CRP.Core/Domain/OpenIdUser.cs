@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
+using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
@@ -31,12 +32,13 @@ namespace CRP.Core.Domain
         public virtual string PhoneNumber { get; set; }
         [NotNull]
         public virtual ICollection<Transaction> Transactions { get; set; }
-
+        [Required]
         public virtual string UserId { 
             set
             {
                 Id = value;       
             }
+            get { return Id; }
         }
     }
 }
