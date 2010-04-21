@@ -158,6 +158,18 @@ namespace CRP.Core.Domain
         }
 
         /// <summary>
+        /// Gets the sold and paid quantity.
+        /// </summary>
+        /// <value>The sold and paid quantity.</value>
+        public virtual int SoldAndPaidQuantity
+        {
+            get
+            {
+                return Transactions.Where(a => a.IsActive && a.Paid).Sum(a => a.Quantity);
+            }
+        }
+
+        /// <summary>
         /// The only thing that is really new here is that there is a check to see if there is any more quantity
         /// </summary>
         public virtual bool IsAvailableForReg { 

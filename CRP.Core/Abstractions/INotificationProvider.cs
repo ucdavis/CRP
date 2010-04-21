@@ -1,4 +1,5 @@
 using System.Net.Mail;
+using System.Text;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
@@ -10,10 +11,17 @@ namespace CRP.Core.Abstractions
     public interface INotificationProvider
     {
         void SendConfirmation(IRepository repository, Transaction transaction, string emailAddress);
+        void SendLowQuantityWarning(IRepository repository, Item item);
     }
 
     public class NotificationProvider : INotificationProvider
     {
+        /// <summary>
+        /// Sends the confirmation.
+        /// </summary>
+        /// <param name="repository">The repository.</param>
+        /// <param name="transaction">The transaction.</param>
+        /// <param name="emailAddress">The email address.</param>
         public void SendConfirmation(IRepository repository, Transaction transaction, string emailAddress)
         {
             Check.Require(transaction != null, "Transaction is required.");
@@ -99,6 +107,34 @@ Your Transaction number is: {TransactionNumber}
 
 
             MailMessage message = new MailMessage("automatedemail@caes.ucdavis.edu", emailAddress,
+                                                  subject,
+                                                  body);
+            message.IsBodyHtml = true;
+            SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
+            client.Send(message);
+        }
+
+        /// <summary>
+        /// Sends the low quantity warning.
+        /// </summary>
+        /// <param name="repository">The repository.</param>
+        /// <param name="item">The item.</param>
+        public void SendLowQuantityWarning(IRepository repository, Item item)
+        {
+            Check.Require(item != null);
+            var email = item.Editors.Where(a => a.Owner).First().User.Email;
+            Check.Require(!string.IsNullOrEmpty(email));
+
+            var subject = string.Format("On-line Registrations. Quantity Low Warning for {0}'s {1}", item.Name, item.QuantityName);
+            var bodyBuilder = new StringBuilder(string.Format("Quantity low for {0}<br/><br/>", item.Name));
+            bodyBuilder.AppendFormat("Total Quantity           : {0}<br/>", item.Quantity);
+            bodyBuilder.AppendFormat("Total Sold               : {0}<br/>", item.Sold);
+            bodyBuilder.AppendFormat("Total Sold and Paid for  : {0}<br/>", item.SoldAndPaidQuantity);
+            bodyBuilder.      Append("====================================<br/>");
+            bodyBuilder.AppendFormat("Quantity Remaining       : {0}<br/>", item.Quantity - item.Sold);
+            var body = bodyBuilder.ToString();
+
+            MailMessage message = new MailMessage("automatedemail@caes.ucdavis.edu", email,
                                                   subject,
                                                   body);
             message.IsBodyHtml = true;

@@ -267,6 +267,15 @@ namespace CRP.Controllers
                 // create the new transaction
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
 
+                //Re get it to make sure collections are updated
+                var updatedItem = Repository.OfType<Item>().GetNullableByID(transaction.Item.Id);
+                if (updatedItem != null)
+                {
+                    if (updatedItem.Quantity - updatedItem.Sold <= 10)
+                    {
+                        _notificationProvider.SendLowQuantityWarning(Repository, updatedItem);
+                    }
+                }            
                 // redirect to confirmation and let the user decide payment or not
                 return this.RedirectToAction(a => a.Confirmation(transaction.Id));
             }
