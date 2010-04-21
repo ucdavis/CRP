@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
@@ -16,6 +17,17 @@ namespace CRP.Controllers
     [UserOnly]
     public class PaymentController : SuperController
     {
+        private readonly INotificationProvider _notificationProvider;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentController"/> class.
+        /// </summary>
+        /// <param name="notificationProvider">The notification provider.</param>
+        public PaymentController(INotificationProvider notificationProvider)
+        {
+            _notificationProvider = notificationProvider;
+        }
+
         /// <summary>
         /// GET: /Payment/LinkToTransaction/{id}
         /// </summary>
@@ -125,6 +137,16 @@ namespace CRP.Controllers
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
                 Message = "Checks associated with transaction.";
+                if(transaction.Paid)
+                {
+                    // attempt to get the contact information question set and retrieve email address
+                    var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+                    if (question != null)
+                    {
+                        // send an email to the user
+                        _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
+                    }
+                }
                 return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
             }            
 

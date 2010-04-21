@@ -114,7 +114,7 @@
             var remaining = (total + donationTotal) - sum;
 
             if (remaining < 0) {
-                $("div#message").html("Amount paid is more than transaction total, remaining value will be applied to a donation.");
+                $("div#message").html("Amount paid is more than transaction total, correct amount or go back and add the donation amount first.");
                 $("span#remainingTotal").css("color", "red");
             }
             else {
