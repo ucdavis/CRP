@@ -3,25 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Web.Util;
-using CRP.Controllers;
-using CRP.Controllers.Filter;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MvcContrib.Attributes;
-using UCDArch.Testing;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using CRP.Controllers;
+using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
-using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MvcContrib.Attributes;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
@@ -410,7 +403,7 @@ namespace CRP.Tests.Controllers
 
 
         [TestMethod]
-        public void TestMD5()
+        public void TestMd5()
         {
             #region Arrange
             const string postingKey = "FB8E61EF5F63028C";
@@ -683,9 +676,9 @@ namespace CRP.Tests.Controllers
             IIdentity _identity;
             public bool RoleReturnValue { get; set; }
 
-            public MockPrincipal(bool roleReturnvalue)
+            public MockPrincipal(bool roleReturnValue)
             {
-                RoleReturnValue = roleReturnvalue;
+                RoleReturnValue = roleReturnValue;
             }
 
             public IIdentity Identity
@@ -708,7 +701,7 @@ namespace CRP.Tests.Controllers
         }
 
         /// <summary>
-        /// Mock the HttpContext. Used for getting the current user name
+        /// Mock the HTTPContext. Used for getting the current user name
         /// </summary>
         public class MockHttpContext : HttpContextBase
         {

@@ -15,13 +15,6 @@ namespace CRP.Controllers
     [Authorize]
     public class QuestionController : SuperController
     {
-        //
-        // GET: /Question/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
 
         /// <summary>
         /// GET: /Question/Create/{questionSetId}

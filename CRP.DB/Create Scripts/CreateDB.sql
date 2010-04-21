@@ -217,6 +217,7 @@ CREATE TABLE [dbo].[Items](
 	[RestrictedKey] [varchar](10) NULL,
 	[MapLink] [varchar](max) NULL,
 	[LinkLink] [varchar](max) NULL,
+	[CheckPaymentInstructions] [varchar](max) NULL,
  CONSTRAINT [PK_Items] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
