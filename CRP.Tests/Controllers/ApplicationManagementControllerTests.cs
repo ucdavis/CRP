@@ -303,6 +303,36 @@ namespace CRP.Tests.Controllers
             Assert.AreSame(itemTypeToAdd, result.ItemType);
         }
 
+
+        [TestMethod]
+        public void TestCreateItemTypeWithNullExtendedPropertiesSaves()
+        {
+            #region Arrange
+            FakeQuestionTypes(3);
+            QuestionTypes[0].ExtendedProperty = true;
+            QuestionTypes[1].ExtendedProperty = false;
+            QuestionTypes[2].ExtendedProperty = true;
+            QuestionTypeRepository.Expect(a => a.Queryable).Return(QuestionTypes.AsQueryable()).Repeat.Any();
+            FakeItemTypes(3);
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            var itemTypeToAdd = CreateValidEntities.ItemType(10);
+            #endregion Arrange
+
+            #region Act
+            Controller.CreateItemType(itemTypeToAdd, null)
+                .AssertActionRedirect()
+                .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
+            #endregion Act
+
+            #region Assert
+            ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(itemTypeToAdd));
+            Assert.AreEqual("Item Type has been created successfully.", Controller.Message);
+            Assert.IsTrue(Controller.ModelState.IsValid);
+
+            Assert.AreEqual(0, itemTypeToAdd.ExtendedProperties.Count);
+            #endregion Assert		
+        }
+
         #endregion CreateItemType Tests (Task 596)
 
         #region EditItemType Tests

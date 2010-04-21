@@ -77,12 +77,14 @@ namespace CRP.Controllers
             //}
 
             //Validation is done in the domain
-            foreach (var ep in extendedProperties)
+            if (extendedProperties != null)
             {
-                ep.ItemType = itemType;
-                itemType.AddExtendedProperty(ep);        
+                foreach (var ep in extendedProperties)
+                {
+                    ep.ItemType = itemType;
+                    itemType.AddExtendedProperty(ep);
+                }
             }
-
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
 
             // make sure the item type doesn't already exist with the same name
