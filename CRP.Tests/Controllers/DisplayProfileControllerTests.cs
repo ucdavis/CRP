@@ -198,6 +198,8 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithValidDataSaves1()
         {
+            FakeDisplayProfiles(3);
+            DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
             //Mock two files
             Controller.ControllerContext.HttpContext = new MockHttpContext(2);
             var newDisplayProfile = CreateValidEntities.DisplayProfile(1);
@@ -263,6 +265,8 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithInvalidDataDoesNotSave1()
         {
+            FakeDisplayProfiles(3);
+            DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
             FakeUnits(1);
             FakeSchools(1);
             UnitRepository.Expect(a => a.GetAll()).Return(Units).Repeat.Any();
@@ -325,6 +329,8 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithInvalidDataDoesNotSave3()
         {
+            FakeDisplayProfiles(3);
+            DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
             FakeUnits(1);
             FakeSchools(1);
             UnitRepository.Expect(a => a.GetAll()).Return(Units).Repeat.Any();
