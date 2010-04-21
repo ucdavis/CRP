@@ -26,14 +26,8 @@ namespace CRP.Core.Domain
 
         public override bool IsValid()
         {
-            var flag = true;
-            
-            if (TransactionLevel == QuantityLevel)
-            {
-                flag = false;
-            }
-
-            return base.IsValid() && flag;
+            TransactionLevelQuantityLevel = TransactionLevel != QuantityLevel;
+            return base.IsValid();
         }
 
         [NotNull]
@@ -42,5 +36,9 @@ namespace CRP.Core.Domain
         public virtual QuestionSet QuestionSet { get; set; }
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
+
+        [AssertTrue(Message = "TransactionLevel must be different from QuantityLevel")]
+        public virtual bool TransactionLevelQuantityLevel { get; set; }
+        
     }
 }
