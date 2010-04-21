@@ -229,6 +229,7 @@
     <Content Include="Views\ItemManagement\List.aspx" />
     <Content Include="Views\QuestionSet\Create.aspx" />
     <Content Include="Views\QuestionSet\Edit.aspx" />
+    <Content Include="Views\QuestionSet\LinkToItem.aspx" />
     <Content Include="Views\QuestionSet\LinkToItemType.aspx" />
     <Content Include="Views\QuestionSet\List.aspx" />
     <Content Include="Views\Question\Create.aspx" />

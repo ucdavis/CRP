@@ -9,12 +9,19 @@
         <fieldset>
             <legend>Fields</legend>
             
+            <% if (Model.Item == null) {%>
             <p>
                 <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
                         .Selected(Model.Item != null ? Model.Item.ItemType.Id : 0) 
                         .Label("Item Type:")
                     %>
             </p>
+            <%} else {%>
+                <p>
+                    <label for="ItemType">Item Type:</label>
+                    <%= Html.Encode(Model.Item.ItemType.Name) %>
+                </p>
+            <% } %>
             
             <p>
                 <label for="Item.Name">Name:</label>

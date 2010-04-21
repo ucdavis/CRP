@@ -26,6 +26,7 @@
             <li><a href="#tabs-1">Item Details</a></li>
             <li><a href="#tabs-2">Editors</a></li>
             <li><a href="#tabs-3">Questions</a></li>
+            <li><a href="#tabs-4">Confirmation Template</a></li>
         </ul>
     
         <div id="tabs-1">
@@ -76,12 +77,20 @@
             <fieldset>
                 <legend>Transaction</legend>
                 
+                <p>
+                    <%= Html.ActionLink<QuestionSetController>(a => a.LinkToItem(Model.Item.Id, true, false), "Add Question Set") %>
+                </p>
+                
                 <% Html.Grid(Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
                        .Transactional()
                        .Name("TransactionLevelQuestionSets")
                        .PrefixUrlParameters(false)
                        .Columns(col =>
                                     {
+                                        col.Add(a =>
+                                                    {%>
+                                                        <%= Html.ActionLink<QuestionSetController>(b => b.UnlinkFromItem(a.Id), "Delete") %>
+                                                    <%});
                                         col.Add(a => a.QuestionSet.Name);
                                         col.Add(a => a.Required);
                                         col.Add(a => a.QuestionSet.Questions.Count()).Title("# of Questions");
@@ -94,12 +103,20 @@
             <fieldset>
                 <legend>Quantity</legend>
                 
+                <p>
+                    <%= Html.ActionLink<QuestionSetController>(a => a.LinkToItem(Model.Item.Id, false, true), "Add Question Set") %>
+                </p>
+                
                 <% Html.Grid(Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
                        .Transactional()
                        .Name("QuantityLevelQuestionSets")
                        .PrefixUrlParameters(false)
                        .Columns(col =>
                                     {
+                                        col.Add(a =>
+                                                    {%>
+                                                        <%= Html.ActionLink<QuestionSetController>(b => b.UnlinkFromItem(a.Id), "Delete") %>
+                                                    <%});
                                         col.Add(a => a.QuestionSet.Name);
                                         col.Add(a => a.Required);
                                         col.Add(a => a.QuestionSet.Questions.Count()).Title("# of Questions");
@@ -108,6 +125,8 @@
                         %>
                 
             </fieldset>
+        </div>
+        <div id="tabs-4">
         </div>
     
     </div>

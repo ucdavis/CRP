@@ -72,7 +72,7 @@ namespace CRP.Controllers
             }
 
             // Check to make sure the question set hasn't been used yet
-            if (questionSet.Items.Count > 0)
+            if ((questionSet.SystemReusable || questionSet.CollegeReusable || questionSet.UserReusable) && questionSet.Items.Count > 0)
             {
                 Message = "Question cannot be added to the question set becuase it is already being used by an item.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));

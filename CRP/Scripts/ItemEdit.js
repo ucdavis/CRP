@@ -38,6 +38,9 @@
 
     $("img#tagAddButton").click(function(event) {
         var input = $("<input>").attr("id", "tags").attr("name", "tags").val($("input#tagInput").val());
+        input.attr("type", "text");
+        input.css("cursor", "pointer");
+        input.click(function(event) { $(this).remove(); });
         $("div#tagContainer").append(input);
 
         // blank the input

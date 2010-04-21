@@ -208,10 +208,6 @@ namespace CRP.Controllers
                         item.AddQuantityQuestionSet(questionSet);
                     }
 
-                    //item.AddQuestionSet(questionSet);
-                    //TODO: fix the add questionset thing
-
-
                     using (var ts = new TransactionScope())
                     {
                         Repository.OfType<Item>().EnsurePersistent(item);
@@ -224,8 +220,15 @@ namespace CRP.Controllers
                 else if (itemTypeId.HasValue)
                 {
                     var itemType = Repository.OfType<ItemType>().GetById(itemTypeId.Value);
-                    //itemType.AddQuestionSet(questionSet);
-                    //TODO: fix the add questionset thing
+
+                    if (transaction.Value)
+                    {
+                        itemType.AddTransactionQuestionSet(questionSet);
+                    }
+                    else
+                    {
+                        itemType.AddQuantityQuestionSet(questionSet);
+                    }
 
                     using (var ts = new TransactionScope())
                     {
@@ -322,12 +325,20 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
             }
 
+            // add the questionset
+            if (transaction)
+            {
+                itemType.AddTransactionQuestionSet(questionSet);
+            }
+            else if (quantity)
+            {
+                itemType.AddQuantityQuestionSet(questionSet);
+            }
+
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
 
             if (ModelState.IsValid)
             {
-                //itemType.AddQuestionSet(questionSet);
-                //TODO: specify what type of question set we are adding here
                 Repository.OfType<ItemType>().EnsurePersistent(itemType);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question Set");
             }
@@ -337,6 +348,97 @@ namespace CRP.Controllers
             }
 
             return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
+        }
+
+        [Authorize(Roles="User")]
+        public ActionResult LinkToItem(int itemId, bool transaction, bool quantity)
+        {
+            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+
+            if (item == null || transaction == quantity)
+            {
+                // redirect no item to link to
+                return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
+            }
+
+            var viewModel = QuestionSetLinkViewModel.Create(Repository, CurrentUser.Identity.Name);
+            viewModel.ItemId = itemId;
+            viewModel.Transaction = transaction;
+            viewModel.Quantity = quantity;
+
+            return View(viewModel);
+        }
+
+        [AcceptPost]
+        [Authorize(Roles="User")]
+        public ActionResult LinkToItem(int id, int itemId, bool transaction, bool quantity)
+        {
+            // get teh question set
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+
+            if (questionSet == null || item == null || transaction == quantity)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+
+            // add the questionset
+            if (transaction)
+            {
+                item.AddTransactionQuestionSet(questionSet);
+            }
+            else if (quantity)
+            {
+                item.AddQuantityQuestionSet(questionSet);
+            }
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<Item>().EnsurePersistent(item);
+                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question Set");
+            }
+            else
+            {
+                return LinkToItem(itemId, transaction, quantity);
+            }
+
+            return this.RedirectToAction<ItemManagementController>(a => a.Edit(itemId));
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">Item Question Set Id</param>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        [AcceptPost]
+        [Authorize(Roles="User")]
+        public ActionResult UnlinkFromItem(int id)
+        {
+            var itemQuestionSet = Repository.OfType<ItemQuestionSet>().GetNullableByID(id);
+            var itemId = itemQuestionSet.Item.Id;
+            
+            if (itemQuestionSet == null)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemQuestionSet.ValidationResults());
+
+            if(ModelState.IsValid)
+            {
+                Repository.OfType<ItemQuestionSet>().Remove(itemQuestionSet);
+                Message = NotificationMessages.STR_ObjectRemoved.Replace(NotificationMessages.ObjectType, "Question Set");
+            }
+            else
+            {
+                Message = "Unable to remove question set.";
+            }
+
+            return this.RedirectToAction<ItemManagementController>(a => a.Edit(itemId));
         }
     }
 }

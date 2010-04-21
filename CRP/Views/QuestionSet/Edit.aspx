@@ -21,7 +21,7 @@
         Model.ItemType != null ?
             Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(Model.ItemType.Id), "Back to Item Type") : (
                 Model.Item != null ? 
-                    Html.Encode("//TODO: Add a link back to the item") : 
+                    Html.ActionLink<ItemManagementController>(a => a.Edit(Model.Item.Id), "Back to Item") : 
                     Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List")
         ) %>
             

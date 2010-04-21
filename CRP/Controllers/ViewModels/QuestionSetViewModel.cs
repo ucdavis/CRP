@@ -51,6 +51,7 @@ namespace CRP.Controllers.ViewModels
 
         public IQueryable<QuestionSet> QuestionSets { get; set;}
         public int ItemTypeId { get; set; }
+        public int ItemId { get; set; }
         public bool Transaction { get; set; }
         public bool Quantity { get; set; }
     }

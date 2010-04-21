@@ -21,12 +21,12 @@
       <one-to-many class="CRP.Core.Domain.Question, CRP.Core" />
     </bag>
 
-    <bag name="Items" table="ItemQuestionSets" cascade="all-delete-orphan" inverse="true" fetch="join" >
+    <bag name="Items" table="ItemQuestionSets" cascade="all-delete-orphan" inverse="true" >
       <key column="QuestionSetId" />
       <one-to-many class="CRP.Core.Domain.ItemQuestionSet, CRP.Core"/>
     </bag>
 
-    <bag name="ItemTypes" table="ItemTypesXQuestionSets" cascade="all-delete-orphan">
+    <bag name="ItemTypes" table="ItemTypeQuestionSets" cascade="all-delete-orphan">
       <key column="QuestionSetId" />
       <many-to-many column="ItemTypeId" class="CRP.Core.Domain.ItemType, CRP.Core" />
     </bag>
