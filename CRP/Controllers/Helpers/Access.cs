@@ -36,7 +36,7 @@ namespace CRP.Controllers.Helpers
                 // college reusable only school admin in the college can modify these
                 var schools = user.Units.Select(a => a.School).ToList();
 
-                if (currentUser.IsInRole(RoleNames.SchoolAdmin) 
+                if ((currentUser.IsInRole(RoleNames.SchoolAdmin) || currentUser.IsInRole(RoleNames.Admin))
                         && schools.Contains(questionSet.School))
                 {
                     return true;

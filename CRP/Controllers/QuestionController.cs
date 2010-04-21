@@ -92,23 +92,23 @@ namespace CRP.Controllers
                 }
             }
 
-            //// add the validators
-            //if (validators != null)
-            //{
-            //    foreach(string s in validators)
-            //    {
-            //        int id;
-            //        if (int.TryParse(s, out id))
-            //        {
-            //            var validator = Repository.OfType<Validator>().GetNullableByID(id);
+            // add the validators
+            if (validators != null)
+            {
+                foreach (string s in validators)
+                {
+                    int id;
+                    if (int.TryParse(s, out id))
+                    {
+                        var validator = Repository.OfType<Validator>().GetNullableByID(id);
 
-            //            if (validator != null)
-            //            {
-            //                question.Validators.Add(validator);
-            //            }
-            //        }
-            //    }
-            //}
+                        if (validator != null)
+                        {
+                            question.Validators.Add(validator);
+                        }
+                    }
+                }
+            }
 
             // add the question
             questionSet.AddQuestion(question);

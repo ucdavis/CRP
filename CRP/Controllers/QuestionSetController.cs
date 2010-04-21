@@ -91,6 +91,7 @@ namespace CRP.Controllers
             var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
             if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
+                Message = "You do not have access to the requested Question Set.";
                 return this.RedirectToAction(a => a.List());
             }
 
