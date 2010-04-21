@@ -10,13 +10,14 @@
     <fieldset id='<%= Html.Encode(qs.Id) %>'>
         <legend><%= Html.Encode(qs.QuestionSet.Name) %></legend>
         
+        <ul>
         <% foreach (var q in qs.QuestionSet.Questions) {
                 var answer = Model.Answers.Where(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id).FirstOrDefault();
                %>
         
             <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty)); %>
         
-        <% } %>
+        <% } %></ul>
         
     </fieldset>
 <% } %>
@@ -36,7 +37,7 @@
 
                 <fieldset>
                 <legend><%= Html.Encode(qs.QuestionSet.Name)%> <span class="quantityIndex"><%= Html.Encode(i + 1) %></span> </legend>
-                
+                <ul>
                 <% foreach (var q in qs.QuestionSet.Questions) {
                     var answer = Model.Answers.Where(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i).FirstOrDefault();
                    %>
@@ -44,7 +45,7 @@
                     <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty)); %>
                 
                 <% } %>
-                
+            </ul>    
             </fieldset>
 
         <% } %> <!-- End of foreach loop -->

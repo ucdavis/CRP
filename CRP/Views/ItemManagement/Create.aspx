@@ -33,7 +33,7 @@
     <% Html.RenderPartial(StaticValues.Partial_ItemForm); %>
     <% } %>
 
-    <div>
+    <div align=right>
         <%=Html.ActionLink<ItemManagementController>(a => a.List(), "Back to List") %>
     </div>
 

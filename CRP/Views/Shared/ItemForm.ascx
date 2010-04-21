@@ -8,88 +8,90 @@
         <%= Html.AntiForgeryToken() %>
         <fieldset>
             <legend>Fields</legend>
-            
+            <ul>
+            <li><label for="ItemType">Item Type:</label><br />
             <% if (Model.Item == null) {%>
-            <p>
+            
                 <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
                         .Selected(Model.Item != null ? Model.Item.ItemType.Id : 0) 
-                        .Label("Item Type:")
+                        
                     %>
-            </p>
-            <%} else {%>
-                <p>
-                    <label for="ItemType">Item Type:</label>
-                    <%= Html.Encode(Model.Item.ItemType.Name) %>
-                </p>
-            <% } %>
             
-            <p>
-                <label for="Item.Name">Name:</label>
+            <%} else {%>
+                
+                    
+                    <%= Html.Encode(Model.Item.ItemType.Name) %>
+                
+            <% } %>
+            </li>
+            
+            <li>
+                <label for="Item.Name">Name:</label><br />
                 <%= Html.TextBox("Item.Name") %>
                 <%= Html.ValidationMessage("Item.Name", "*")%>
-            </p>
-            <p>
+            </li>
+            <li>
+            <label for="Item.Unit">Unit:</label><br />
                 <%= this.Select("Item.Unit").Options(Model.CurrentUser.Units, x=>x.Id, x=>x.FullName)
-                        .Selected(Model.Item != null ? Model.Item.Unit.Id : 0)
-                        .Label("Unit:")%>
-            </p>
-            <p>
-                <label for="Item.Description">Description:</label>
+                        .Selected(Model.Item != null ? Model.Item.Unit.Id : 0)%>
+            </li>
+            <li>
+                <label for="Item.Description">Description:</label><br />
                 <%= Html.TextArea("Item.Description")%>
                 <%= Html.ValidationMessage("Item.Description", "*")%> 
-            </p>
-            <p>
-                <label for="Item.CostPerItem">CostPerItem:</label>
+            </li>
+            <li>
+                <label for="Item.CostPerItem">CostPerItem:</label><br />
                 <%= Html.TextBox("Item.CostPerItem", Model.Item != null ? string.Format("{0:0.00}", Model.Item.CostPerItem) : string.Empty)  %>
                 <%= Html.ValidationMessage("Item.CostPerItem", "*")%>
-            </p>
-            <p>
-                <label for="Item.Quantity">Quantity:</label>
+            </li>
+            <li>
+                <label for="Item.Quantity">Quantity:</label><br />
                 <%= Html.TextBox("Item.Quantity") %>
                 <%= Html.ValidationMessage("Item.Quantity", "*")%>
-            </p>
-            <p>
-                <label for="Item.QuantityName">Quantity Name:</label>
+            </li>
+            <li>
+                <label for="Item.QuantityName">Quantity Name:</label><br />
                 <%= Html.TextBox("Item.QuantityName") %>
                 <%= Html.ValidationMessage("Item.QuantityName", "*") %>
-            </p>
-            <p>
-                <label for="Item.Expiration">Expiration:</label>
+            </li>
+            <li>
+                <label for="Item.Expiration">Expiration:</label> <br />
                 <%= Html.TextBox("Item.Expiration", Model.Item != null && Model.Item.Expiration.HasValue ? Model.Item.Expiration.Value.ToString("d") : string.Empty)%>
                 <%= Html.ValidationMessage("Item.Expiration", "*")%>
-            </p>
-            <p>
-                <label for="Item.Link">Link:</label>
+            </li>
+            <li>
+                <label for="Item.Link">Link:</label><br />
                 <%= Html.TextBox("Item.Link")%>
                 <%= Html.ValidationMessage("Item.Link", "*")%>
-            </p>
-            <p>
-                <label for="Item.MapLink">Map Link:</label>
+            </li>
+            <li>
+                <label for="Item.MapLink">Map Link:</label><br  />
                 <%= Html.TextBox("MapLink") %>
                 <%= Html.ValidationMessage("MapLink", "*") %>
-            </p>
-            <p>
-                <label for="Item.Available">Availabe to public:</label>
+            </li>
+            <li><table><tbody><tr><td>
+            <!-- NEEDS BALLOON-->
+                <label for="Item.Available">Availabe to public:</label></td><td>
                 <%= Html.CheckBox("Item.Available") %>
-                <%= Html.ValidationMessage("Item.Available", "*") %>
-            </p>
-            
-            <p>
-                <label for="Item.Private">Private Conference:</label>
+                <%= Html.ValidationMessage("Item.Available", "*") %></td></tr>
+                <tr><td>
+                <!-- NEEDS BALLOON-->
+                <label for="Item.Private">Private Conference:</label></td><td>
                 <%= Html.CheckBox("Item.Private") %>
                 <%= Html.ValidationMessage("Item.Private", "*") %>
-            </p>            
-            
-            <p>
-                <label for="Item.RestrictedKey">Restricted Password:</label>
+            </td></tr></tbody></table></li>
+            <li>
+                <label for="Item.RestrictedKey">Restricted Password:</label><br />
                 <%= Html.TextBox("Item.RestrictedKey") %>
                 <%= Html.ValidationMessage("Item.RestrictedKey", "*") %>
-            </p>
+            </li>
 
         </fieldset>
         
         <fieldset>
             <legend>Extended Properties</legend>
+            <ul>
             
             <div id="ExtendedProperties">
             
@@ -100,7 +102,7 @@
                             var ep = Model.Item.ItemType.ExtendedProperties.ToArray()[i];
                             var ans = Model.Item.ExtendedPropertyAnswers.Where(a => a.ExtendedProperty == ep).FirstOrDefault();
                     %>
-                                    <p>
+                                    <li>
                                         <label for="extendedProperty"><%=Html.Encode(ep.Name)%></label>
                                         <input type="text" id='<%=Html.Encode("ExtendedProperties[" + i + "]_value")%>' 
                                                 name='<%=Html.Encode("ExtendedProperties[" + i + "].value")%>' 
@@ -110,29 +112,35 @@
                                                 name='<%=Html.Encode("ExtendedProperties[" + i + "].propertyId")%>' 
                                                 value='<%= Html.Encode(ep.Id) %>'
                                                 />
-                                    </p>
+                                    </li>
                                     <%
                         }
                     }%>
             
             </div>
-            
+        </ul>    
         </fieldset>
         
         <fieldset>
             <legend>Upload Picture</legend>
+            <!-- NEEDS BALLOON-->
             
-            <p>
-                <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item != null ? Model.Item.Id : -1}) %>' />
-            </p>
+            <ul>
+            <li>
+                <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item != null ? Model.Item.Id : -1}) %>' /> <br />
             
             <input type="file" id="file" name="file" />
+            </li></ul>
         </fieldset>
         
         <fieldset>
             <legend>Tags</legend>
-            
+            <ul>
+            <!-- NEEDS BALLOON-->
+            <li>
             <input type="text" id="tagInput" />  <img id="tagAddButton" src="../../Images/plus.png" style="height:24px; width: 24px" />
+            </li>
+            <li>
             <div id="tagContainer">
             
                 <% if (Model.Item != null)
@@ -144,9 +152,8 @@
                    } %>
             
             </div>
-            
+            </li>
+        </ul>    
         </fieldset>
-        
-        <p>
-            <input type="submit" value="Save" />
-        </p>
+            <input type="submit" value="Save" class="save_btn"/>
+            <input type="submit" value="Clear" class="clear_btn"/>

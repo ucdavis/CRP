@@ -21,6 +21,7 @@ a img {border:none;}
 .search_box {float:right;}
 .clear {clear:left;}
 .page {max-width:1000px;}
+.watermark {color:#797971;} /* search bar */
 
 /* remove */
 #title {display:none;}
@@ -37,3 +38,34 @@ h1, h1 a {color:#32322d;}
 #brand_bar {background-color:#0d548a;}
 body {color:#1c1f22; background-color:#f8f8f8;}
 h3, h1 {color:#1c1f22;}
+
+/* from layout */
+fieldset ul {margin-left:200px;}
+fieldset ul li {list-style-type:none; margin-bottom:0.25em;}
+fieldset ul li label {margin-bottom:0em;}
+.save_btn {margin-left:250px; background-color:#0D548A; padding:.25em 1em; color:#fff; -moz-border-radius: 10px; 
+-webkit-border-radius: 10px; border:1px solid #000; font-weight:bold; letter-spacing:3px; margin-top:1em; font-size:1.2em; display:inline;}
+.save_btn:hover {background-color:Green;}
+.clear_btn {margin-left:250px; background-color:#F8F8F8; padding:.25em 1em; color:#000; -moz-border-radius: 10px; 
+-webkit-border-radius: 10px; border:1px solid #000; font-weight:bold; letter-spacing:3px; margin-top:1em; font-size:1.2em; display:inline;}
+.clear_btn:hover {background-color:#EB1C1C;}
+
+
+
+/* jQuery override */
+.ui-widget-header {background-color:#84BDD9; border:1px solid #94B5C3; background-image:none;}
+.t-widget {font-family:inherit;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.validation-summary-errors {float:right; position:fixed; top:300px; background-color:#000000; border-bottom:1px #e6e6e6 solid;}

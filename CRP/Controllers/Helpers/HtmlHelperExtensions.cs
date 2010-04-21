@@ -22,7 +22,7 @@ namespace CRP.Helpers
             var captchaControl = new Recaptcha.RecaptchaControl
             {
                 ID = "recaptcha",
-                Theme = "red",
+                Theme = "clean",
                 PublicKey = ConfigurationManager.AppSettings["RecaptchaPublicKey"],
                 PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"]
             };

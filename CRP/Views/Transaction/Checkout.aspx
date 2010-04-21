@@ -17,11 +17,12 @@
     <% using (Html.BeginForm("Checkout", "Transaction", FormMethod.Post, new {@id = "CheckoutForm"})) { %>
     
     <%= Html.AntiForgeryToken() %>
-       
+    <!-- t-widget t-grid -->   
     <div id="Items" class="t-widget t-grid">
         <table cellspacing="0">
             <thead>
                 <tr>
+                <!-- t-header -->
                     <td class="t-header">Qty.</td>
                     <td class="t-header">Item</td>
                     <td class="t-header">Price per <%= !String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName) %></td>

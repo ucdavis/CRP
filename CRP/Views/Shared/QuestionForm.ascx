@@ -2,11 +2,12 @@
 <%@ Import Namespace="CRP.Controllers.ViewModels"%>
 <%@ Import Namespace="CRP.Core.Resources"%>
 
-    <p>
+    <li>
     
         <%= Html.Encode(Model.Question.Name) %>
         <%= Html.Hidden(".QuestionId", Model.Question.Id, new { @class = StaticValues.Class_indexedControl })%>
         <%= Html.Hidden(".QuestionSetId", Model.Question.QuestionSet.Id, new { @class = StaticValues.Class_indexedControl })%>
+        <br />
     
         <!-- Render the controls now -->
         <% switch(Model.Question.QuestionType.Name) { %>
@@ -51,5 +52,5 @@
                 <%= Html.TextBox(".Answer", Model.Answer, new { @class = "dateForm indexedControl" + Model.Question.ValidationClasses })%>
             <% break; %>
         <% }; %>
-        
-    </p>
+    <span class="val_img">&nbsp</span>    
+    </li>
