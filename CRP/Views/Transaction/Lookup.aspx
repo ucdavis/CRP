@@ -11,6 +11,7 @@
 
     <% using (Html.BeginForm("Lookup", "Transaction", FormMethod.Post)) { %>
         <%= Html.AntiForgeryToken() %>
+        <ul>
         <li>
             Order Number:
             <%= Html.TextBox("orderNumber", Model.TransactionNumber)%>
@@ -22,14 +23,16 @@
         <li>
             <%= Html.SubmitButton("Submit", "Lookup Order") %>
         </li>
+        </ul>
     <% } %>
     
+    <ul>
     <li>If you logged in using an openid account (such as google or yahoo accounts) please login to view your order history.
         <%= Html.ActionLink<AccountController>(a => a.OpenIdAccount(), "Here") %>
     </li>
-
+    </ul>
     <% if (Model.Transaction != null) { %>
-    
+        <ul>
         <li>
             Amount of Order:
             <%= Html.Encode(Model.Transaction.Total.ToString("C")) %>
@@ -41,10 +44,11 @@
         <li>
             Paid by:
             <%= Html.Encode(Model.Transaction.Credit ? "Credit Card" : "Check") %>
-        </li>
+        </li>        
         <%if (Model.ShowCreditCardReSubmit) {%>
             <%= Html.ActionLink<TransactionController>(a => a.Confirmation(Model.Transaction.Id), "Resubmit Credit Card Payment") %>
         <%} %>
+        </ul>
     <% } %>
 
 </asp:Content>
