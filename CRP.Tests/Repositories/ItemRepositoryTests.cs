@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
@@ -86,5 +87,36 @@ namespace CRP.Tests.Repositories
         //TODO: Test that remove Editor from item cascades to editors.
 
         //TODO: Other tests
+
+
+
+        #region Reflection of Database.
+
+        /// <summary>
+        /// Tests all fields in the database have been tested.
+        /// If this fails and no other tests, it means that a field has been added which has not been tested above.
+        /// </summary>
+        [TestMethod, Ignore]
+        public void TestAllFieldsInTheDatabaseHaveBeenTested()
+        {
+            #region Arrange
+
+            var expectedFields = new List<NameAndType>();
+
+
+           
+            expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
+            {
+                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+            }));
+            
+
+            #endregion Arrange
+
+            AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Item));
+
+        }
+        #endregion reflection
     }
 }

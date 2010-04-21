@@ -8,6 +8,7 @@ using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
+using UCDArch.Testing;
 using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
@@ -581,6 +582,126 @@ namespace CRP.Tests.Repositories
 
         #endregion Columns Tests
 
+        #region Add and Remove Methods
+
+        [TestMethod]
+        public void TestAddColumnPopulateValuesCorrectly()
+        {
+            #region Arrange
+            var itemReportColumn = CreateValidEntities.ItemReportColumn(9);
+            var itemReport = GetValid(99);
+            itemReport.AddReportColumn(itemReportColumn);
+           
+            #endregion Arrange
+
+            #region Act
+            ItemReportRepository.DbContext.BeginTransaction();
+            ItemReportRepository.EnsurePersistent(itemReport);
+            ItemReportRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(itemReport.IsTransient());
+            Assert.IsFalse(itemReportColumn.IsTransient());
+            Assert.IsTrue(itemReport.IsValid());
+            Assert.AreSame(itemReport.Columns.ToList()[0], itemReportColumn);
+            Assert.AreEqual(1, itemReport.Columns.ToList()[0].Order);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestRemoveColumnCascadesToItemReportColumn()
+        {
+            #region Arrange
+            Assert.AreEqual(0, Repository.OfType<ItemReportColumn>().GetAll().Count);
+            
+            //Create 5 report columns to attach to two different ItemReports
+            var itemReportColumns = new List<ItemReportColumn>();
+            var itemReports = new List<ItemReport>();
+            for (int i = 0; i < 5; i++)
+            {
+                itemReportColumns.Add(CreateValidEntities.ItemReportColumn(i + 1));
+            }
+            itemReports.Add(GetValid(90));
+            itemReports.Add(GetValid(91));
+
+            itemReports[0].AddReportColumn(itemReportColumns[0]);
+            itemReports[1].AddReportColumn(itemReportColumns[1]);
+            itemReports[1].AddReportColumn(itemReportColumns[2]);
+            itemReports[0].AddReportColumn(itemReportColumns[3]);
+            itemReports[0].AddReportColumn(itemReportColumns[4]);
+            Assert.AreEqual(0, Repository.OfType<ItemReportColumn>().GetAll().Count);
+
+            ItemReportRepository.DbContext.BeginTransaction();
+            ItemReportRepository.EnsurePersistent(itemReports[0]);
+            ItemReportRepository.EnsurePersistent(itemReports[1]);
+            ItemReportRepository.DbContext.CommitTransaction();
+
+            Assert.AreEqual(5, Repository.OfType<ItemReportColumn>().GetAll().Count);
+            //Ok, we have got to this point and 5 ItemReportColumns have been persisted to the database.
+            #endregion Arrange
+
+            #region Act            
+            ItemReportRepository.DbContext.BeginTransaction();
+            itemReports[1].RemoveReportColumn(itemReports[1].Columns.ToList()[0]);
+            ItemReportRepository.EnsurePersistent(itemReports[1]);
+            ItemReportRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(4, Repository.OfType<ItemReportColumn>().GetAll().Count);
+            Assert.AreEqual(1, itemReports[1].Columns.Count);
+            #endregion Assert		
+        }       
+        #endregion Add and Remove Methods
+
+        #region CRUD Cascade Test
+        [TestMethod]
+        public void TestRemoveItemReportCascadesToItemReportColumns()
+        {
+            #region Arrange
+            Assert.AreEqual(0, Repository.OfType<ItemReportColumn>().GetAll().Count);
+
+            //Create 5 report columns to attach to two different ItemReports
+            var itemReportColumns = new List<ItemReportColumn>();
+            var itemReports = new List<ItemReport>();
+            for (int i = 0; i < 5; i++)
+            {
+                itemReportColumns.Add(CreateValidEntities.ItemReportColumn(i + 1));
+            }
+            itemReports.Add(GetValid(90));
+            itemReports.Add(GetValid(91));
+
+            itemReports[0].AddReportColumn(itemReportColumns[0]);
+            itemReports[1].AddReportColumn(itemReportColumns[1]);
+            itemReports[1].AddReportColumn(itemReportColumns[2]);
+            itemReports[0].AddReportColumn(itemReportColumns[3]);
+            itemReports[0].AddReportColumn(itemReportColumns[4]);
+            Assert.AreEqual(0, Repository.OfType<ItemReportColumn>().GetAll().Count);
+
+            ItemReportRepository.DbContext.BeginTransaction();
+            ItemReportRepository.EnsurePersistent(itemReports[0]);
+            ItemReportRepository.EnsurePersistent(itemReports[1]);
+            ItemReportRepository.DbContext.CommitTransaction();
+
+            Assert.AreEqual(5, Repository.OfType<ItemReportColumn>().GetAll().Count);
+            //Ok, we have got to this point and 5 ItemReportColumns have been persisted to the database.
+            #endregion Arrange
+
+            #region Act
+            ItemReportRepository.DbContext.BeginTransaction();
+            ItemReportRepository.Remove(itemReports[1]);
+            ItemReportRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, Repository.OfType<ItemReportColumn>().GetAll().Count);
+            #endregion Assert
+        } 
+        #endregion CRUD Cascade Test
+
         #region Reflection of Database.
 
         /// <summary>
@@ -598,7 +719,8 @@ namespace CRP.Tests.Repositories
             expectedFields.Add(new NameAndType("Columns", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ItemReportColumn]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
-            })); expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
+            })); 
+            expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                  "[System.Xml.Serialization.XmlIgnoreAttribute()]"

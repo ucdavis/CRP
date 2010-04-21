@@ -46,7 +46,7 @@ namespace CRP.Core.Domain
             Columns.Add(itemReportColumn);
         }
 
-        public virtual void RemoveReportColum(ItemReportColumn itemReportColumn)
+        public virtual void RemoveReportColumn(ItemReportColumn itemReportColumn)
         {
             Columns.Remove(itemReportColumn);
         }
