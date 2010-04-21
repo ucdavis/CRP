@@ -35,7 +35,8 @@ namespace CRP
 
             xVal.ActiveRuleProviders.Providers.Add(new ValidatorRulesProvider());
 
-            RegisterRoutes(RouteTable.Routes);
+            //Register the routes for this site
+            new RouteConfigurator().RegisterRoutes();
 
             ModelBinders.Binders.DefaultBinder = new UCDArchModelBinder();
 
