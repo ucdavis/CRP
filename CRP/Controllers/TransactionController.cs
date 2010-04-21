@@ -123,12 +123,6 @@ namespace CRP.Controllers
                 transaction.Check = true;
                 transaction.Credit = false;
             }
-            //else
-            //{
-                //JCS Moved this validation to Transaction.cs
-                //ModelState.AddModelError("Payment Type", "Payment type was not selected.");
-            //}
-
             
             // deal with the amount
             var amount = item.CostPerItem*quantity; // get the initial amount
@@ -153,19 +147,18 @@ namespace CRP.Controllers
             transaction.Amount = amount - discount;
             transaction.Quantity = quantity;
 
-
             // deal with the transaction answers
-            foreach(var qa in transactionAnswers)
+            foreach (var qa in transactionAnswers)
             {
                 var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
 
                 // if question is null just drop it
                 if (question != null)
                 {
-                    
+
                     var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
-                         ? qa.Answer
-                         : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
+                                     ? qa.Answer
+                                     : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
 
                     // validate each of the validators
                     foreach (var validator in question.Validators)
@@ -182,27 +175,27 @@ namespace CRP.Controllers
                 }
                 //TODO: consider writing this to a log or something
             }
-
+            
             // deal with quantity level answers
-            for (var i = 0; i < quantity; i++ )
+            for (var i = 0; i < quantity; i++)
             {
                 // generate the unique id for each quantity
                 var quantityId = Guid.NewGuid();
 
-                foreach(var qa in quantityAnswers.Where(a => a.QuantityIndex == i))
+                foreach (var qa in quantityAnswers.Where(a => a.QuantityIndex == i))
                 {
                     var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
                     // if question is null just drop it
                     if (question != null)
                     {
                         var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
-                             ? qa.Answer
-                             : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty) ;
+                                         ? qa.Answer
+                                         : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
 
                         var fieldName = question.Name + " for attendee " + (i + 1);
-                        
+
                         // validate each of the validators
-                        foreach(var validator in question.Validators)
+                        foreach (var validator in question.Validators)
                         {
                             string message;
                             if (!Validate(validator, answer, fieldName, out message))
@@ -211,11 +204,13 @@ namespace CRP.Controllers
                             }
                         }
 
-                        var qanswer = new QuantityAnswer(transaction, question.QuestionSet, question, answer,quantityId);
+                        var qanswer = new QuantityAnswer(transaction, question.QuestionSet, question, answer,
+                                                         quantityId);
                         transaction.AddQuantityAnswer(qanswer);
                     }
                 }
             }
+            
 
             // deal with donation
             if (donation.HasValue && donation.Value > 0.0m)
@@ -439,16 +434,17 @@ namespace CRP.Controllers
 
                 if (question != null)
                 {
-                    if (question.QuestionType.Name == QuestionTypeText.STR_CheckboxList && qap.CblAnswer != null) answer = string.Join(",", qap.CblAnswer);
+                    if (question.QuestionType.Name == QuestionTypeText.STR_CheckboxList && qap.CblAnswer != null)
+                        answer = string.Join(",", qap.CblAnswer);
                 }
 
                 var a = new ItemTransactionAnswer()
-                {
-                    Answer = answer,
-                    QuestionId = qap.QuestionId,
-                    QuestionSetId = qap.QuestionSetId,
-                    Transaction = true
-                };
+                            {
+                                Answer = answer,
+                                QuestionId = qap.QuestionId,
+                                QuestionSetId = qap.QuestionSetId,
+                                Transaction = true
+                            };
 
                 answers.Add(a);
             }
@@ -460,17 +456,18 @@ namespace CRP.Controllers
 
                 if (question != null)
                 {
-                    if (question.QuestionType.Name == QuestionTypeText.STR_CheckboxList && qap.CblAnswer != null) answer = string.Join(",", qap.CblAnswer);
+                    if (question.QuestionType.Name == QuestionTypeText.STR_CheckboxList && qap.CblAnswer != null)
+                        answer = string.Join(",", qap.CblAnswer);
                 }
 
                 var a = new ItemTransactionAnswer()
-                {
-                    Answer = answer,
-                    QuestionId = qap.QuestionId,
-                    QuestionSetId = qap.QuestionSetId,
-                    QuantityIndex = qap.QuantityIndex,
-                    Transaction = false
-                };
+                            {
+                                Answer = answer,
+                                QuestionId = qap.QuestionId,
+                                QuestionSetId = qap.QuestionSetId,
+                                QuantityIndex = qap.QuantityIndex,
+                                Transaction = false
+                            };
 
                 answers.Add(a);
             }

@@ -205,8 +205,6 @@
                     }
                 });
             });
-
-
             // initialize the question names
             InitializeQuestions();
         });
@@ -244,13 +242,13 @@
             var $container = $($("div.QuantityContainer")[0]);
             
             $container.after($container.clone());
-            RenameControls($("div.QuantityContainer"), "quantityAnswers", "p");
+            RenameControls($("div.QuantityContainer"), "quantityAnswers", "li");
             addQuantityIndex($("div.QuantityContainer"));
         }
 
         function InitializeQuestions() {
-            RenameControls($("div#TransactionContainer"), "transactionAnswers", "p");
-            RenameControls($("div.QuantityContainer"), "quantityAnswers", "p");
+            RenameControls($("div#TransactionContainer"), "transactionAnswers", "li");
+            RenameControls($("div.QuantityContainer"), "quantityAnswers", "li");
             addQuantityIndex($("div.QuantityContainer"));
         }
 
