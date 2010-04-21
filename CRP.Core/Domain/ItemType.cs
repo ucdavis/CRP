@@ -25,6 +25,7 @@ namespace CRP.Core.Domain
 
             ExtendedProperties = new List<ExtendedProperty>();
             QuestionSets = new List<ItemTypeQuestionSet>();
+            Items = new List<Item>();
         }
 
         [Required]
@@ -32,8 +33,11 @@ namespace CRP.Core.Domain
         public virtual string Name { get; set; }
         public virtual bool IsActive { get; set; }
 
+        [NotNull]
         public virtual ICollection<ExtendedProperty> ExtendedProperties { get; set; }
+        [NotNull]
         public virtual ICollection<ItemTypeQuestionSet> QuestionSets { get; set; }
+        [NotNull]
         public virtual ICollection<Item> Items { get; set; }
 
         public virtual void AddExtendedProperty(ExtendedProperty extendedProperty)
