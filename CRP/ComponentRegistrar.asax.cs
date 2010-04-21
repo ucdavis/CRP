@@ -1,5 +1,5 @@
-using System.Web.UI;
 using Castle.Windsor;
+using UCDArch.Core.CommonValidator;
 using UCDArch.Core.NHibernateValidator.CommonValidatorAdapter;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
