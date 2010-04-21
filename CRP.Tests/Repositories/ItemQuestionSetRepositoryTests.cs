@@ -522,7 +522,7 @@ namespace CRP.Tests.Repositories
                 ItemQuestionSetRepository.DbContext.CommitTransaction();
                 #endregion Act
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 #region Assert
                 Assert.IsNotNull(itemQuestionSet);

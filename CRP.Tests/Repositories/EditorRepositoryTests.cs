@@ -166,7 +166,7 @@ namespace CRP.Tests.Repositories
                 EditorRepository.DbContext.CommitTransaction();
                 #endregion Act
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 #region Assert
                 Assert.IsNotNull(editor);
@@ -259,7 +259,7 @@ namespace CRP.Tests.Repositories
                 EditorRepository.DbContext.CommitTransaction();
                 #endregion Act
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 #region Assert
                 Assert.IsNotNull(editor);

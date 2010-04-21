@@ -100,16 +100,16 @@ namespace CRP.Tests.Repositories
             Repository.OfType<ExtendedPropertyAnswer>().DbContext.CommitTransaction();
         }
 
-        private void LoadExtendedProperty(int entriesToAdd)
-        {
-            for (int i = 0; i < entriesToAdd; i++)
-            {
-                var validEntity = CreateValidEntities.ExtendedProperty(entriesToAdd);
-                validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
-                validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
-                Repository.OfType<ExtendedProperty>().EnsurePersistent(validEntity);
-            }
-        }
+        //private void LoadExtendedProperty(int entriesToAdd)
+        //{
+        //    for (int i = 0; i < entriesToAdd; i++)
+        //    {
+        //        var validEntity = CreateValidEntities.ExtendedProperty(entriesToAdd);
+        //        validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
+        //        validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
+        //        Repository.OfType<ExtendedProperty>().EnsurePersistent(validEntity);
+        //    }
+        //}
 
         #endregion Init and Overrides
 

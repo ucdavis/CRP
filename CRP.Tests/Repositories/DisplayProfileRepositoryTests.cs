@@ -683,15 +683,15 @@ namespace CRP.Tests.Repositories
 
         #region HelperMethods
 
-        private void LoadSchools(int entriesToAdd)
-        {
-            for (int i = 0; i < entriesToAdd; i++)
-            {
-                var validEntity = CreateValidEntities.School(i + 1);
+        //private void LoadSchools(int entriesToAdd)
+        //{
+        //    for (int i = 0; i < entriesToAdd; i++)
+        //    {
+        //        var validEntity = CreateValidEntities.School(i + 1);
                 
-                SchoolRepository.EnsurePersistent(validEntity);
-            }
-        }
+        //        SchoolRepository.EnsurePersistent(validEntity);
+        //    }
+        //}
 
         #endregion HelperMethods
     }
