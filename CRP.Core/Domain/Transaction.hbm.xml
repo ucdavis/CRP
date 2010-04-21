@@ -12,7 +12,7 @@
     <property name="TransactionDate" column="TransactionDate" />
     <property name="PaymentConfirmation" column="PaymentConfirmation" />
     <property name="Credit" column="Credit" />
-    <property name="Check" column="Check" />
+    <property name="Check" column="[Check]" />
     <property name="Paid" column="Paid" />
     <property name="Amount" column="Amount" />
     <property name="Donation" column="Donation" />
