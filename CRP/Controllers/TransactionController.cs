@@ -291,16 +291,22 @@ namespace CRP.Controllers
         }
         public ActionResult PaymentSuccess(string UPAY_SITE_ID, string EXT_TRANS_ID)
         {
-            throw new NotImplementedException();
+            //TODO: Replace these methods ?
+            Message = "Payment Successfully processed";
+            return this.RedirectToAction<HomeController>(a => a.Index());
         }
         public ActionResult PaymentCancel(string UPAY_SITE_ID, string EXT_TRANS_ID)
         {
-            throw new NotImplementedException();
+            //TODO: Replace these methods ?
+            Message = "Payment Canceled";
+            return this.RedirectToAction<HomeController>(a => a.Index());
         }
 
         public ActionResult PaymentError(string UPAY_SITE_ID, string EXT_TRANS_ID)
         {
-            throw new NotImplementedException();
+            //TODO: Replace these methods ?
+            Message = "Payment Error";
+            return this.RedirectToAction<HomeController>(a => a.Index());
         }
 
         [AnyoneWithRole]
