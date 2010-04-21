@@ -55,6 +55,7 @@
     <% } else { %>
     
         <p>        
+           <%= Html.HtmlEncode("Payment Amount: " + Model.Transaction.Total.ToString("C")) %>
            <%=Html.HtmlEncode(Model.Transaction.Item.CheckPaymentInstructions)%>
         </p>
     

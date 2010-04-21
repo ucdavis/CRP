@@ -165,6 +165,11 @@ namespace CRP.Controllers
                 {
                     discount = coup.UseCoupon(null, quantity);
                 }
+                //Well, if we passed and found a coupon
+                if(discount == 0)
+                {
+                    ModelState.AddModelError("Coupon", "Coupon could not be used.");
+                }
             }
             transaction.Amount = amount - discount;
             transaction.Quantity = quantity;
