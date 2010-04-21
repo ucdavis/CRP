@@ -349,6 +349,48 @@ namespace CRP.Tests.Controllers
         #endregion Create Tests
 
         #region Edit Tests
+
+        /// <summary>
+        /// Tests the edit with one parameter and id not found redirects to list.
+        /// </summary>
+        [TestMethod]
+        public void TestEditWithOneParameterAndIdNotFoundRedirectsToList()
+        {
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            Controller.Edit(1)
+                .AssertActionRedirect()
+                .ToAction<DisplayProfileController>(a => a.List());
+        }
+
+        /// <summary>
+        /// Tests the edit with one parameter and id found returns view.
+        /// </summary>
+        [TestMethod]
+        public void TestEditWithOneParameterAndIdFoundReturnsView()
+        {
+            FakeDisplayProfiles(1);
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            var result = Controller.Edit(1)
+                .AssertViewRendered()
+                .WithViewData<DisplayProfile>();
+            Assert.IsNotNull(result);
+            Assert.AreSame(DisplayProfiles[0], result);
+        }
+
+        /// <summary>
+        /// Tests the edit when id not found.
+        /// </summary>
+        [TestMethod]
+        public void TestEditWhenIdNotFound()
+        {
+            //Fix in controller, see suggested commented out code
+            FakeDisplayProfiles(1);
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            Controller.Edit(1, DisplayProfiles[0])
+                .AssertActionRedirect()
+                .ToAction<DisplayProfileController>(a => a.List());
+        }
+
         //TODO: Edit Tests
         
 

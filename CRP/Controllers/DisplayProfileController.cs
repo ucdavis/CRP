@@ -127,6 +127,12 @@ namespace CRP.Controllers
             // get the original item out
             var destProfile = Repository.OfType<DisplayProfile>().GetNullableByID(id);
 
+            //TODO: Suggest fix for when a passed Id is not found.
+            //if(destProfile == null)
+            //{
+            //    return this.RedirectToAction(a => a.List());
+            //}
+
             // copy the display profile properties
             destProfile = Copiers.CopyDisplayProfile(displayProfile, destProfile);
 
