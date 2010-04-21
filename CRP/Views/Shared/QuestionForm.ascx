@@ -17,6 +17,7 @@
                     string value = string.Empty;
                     if (Model.Question.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation
                         && Model.Question.QuestionSet.SystemReusable && Model.Question.QuestionSet.User == null
+                        && Model.OpenIDUser != null
                        )
                     {
                         if (Model.Question.Name == StaticValues.Question_FirstName)

@@ -31,7 +31,10 @@ namespace CRP.Controllers
 
         public ActionResult LogOn(string returnUrl, bool? casLogon)
         {
-            TempData["URL"] = returnUrl;
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                TempData["URL"] = returnUrl;
+            }
 
             if (casLogon.HasValue && casLogon.Value)
             {
