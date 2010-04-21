@@ -35,7 +35,6 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual QuestionSet QuestionSet { get; set; }
         public virtual int Order { get; set; }
-        public virtual bool Required { get; set; }
 
         public virtual ICollection<QuestionOption> Options { get; set; }
         public virtual ICollection<Validator> Validators { get; set; }

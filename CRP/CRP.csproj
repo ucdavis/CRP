@@ -556,6 +556,7 @@
     <Content Include="Images\yahoo.gif" />
     <Content Include="Images\red_close.jpg" />
     <Content Include="Scripts\jquery.CaesMutioptionControl.js" />
+    <Content Include="Scripts\jquery.PhoneValidator.js" />
     <Content Include="Scripts\jquery.watermark.min.js" />
     <Content Include="Scripts\openid-jquery.js" />
     <Content Include="Scripts\RenameForArray.js" />

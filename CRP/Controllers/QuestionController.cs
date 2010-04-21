@@ -63,7 +63,7 @@ namespace CRP.Controllers
         /// <param name="options"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions)
+        public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions, string[] validators)
         {
             var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(questionSetId);
             if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
@@ -91,6 +91,24 @@ namespace CRP.Controllers
                     }
                 }
             }
+
+            //// add the validators
+            //if (validators != null)
+            //{
+            //    foreach(string s in validators)
+            //    {
+            //        int id;
+            //        if (int.TryParse(s, out id))
+            //        {
+            //            var validator = Repository.OfType<Validator>().GetNullableByID(id);
+
+            //            if (validator != null)
+            //            {
+            //                question.Validators.Add(validator);
+            //            }
+            //        }
+            //    }
+            //}
 
             // add the question
             questionSet.AddQuestion(question);

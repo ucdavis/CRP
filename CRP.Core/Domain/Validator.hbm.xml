@@ -3,7 +3,7 @@
     assembly="CRP.Core" namespace="CRP.Core.Domain">
   <class
     name="Validator"
-    table="Validators" mutable="false" >
+    table="Validators" mutable="false">
     <id name="Id" column="id">
       <generator class="identity" />
     </id>

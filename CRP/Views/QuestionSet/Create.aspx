@@ -85,7 +85,7 @@
         <% } else if (Model.Item != null) { %> 
             <%= Html.EditItemUrl(Model.Item.Id, StaticValues.Tab_Questions) %>
         <% } else { %> 
-            Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List")
+            <%= Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List") %>
         <% }%>
     </div>
 

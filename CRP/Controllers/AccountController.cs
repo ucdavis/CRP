@@ -1,3 +1,4 @@
+using System;
 using System.Web.Mvc;
 using System.Web.Security;
 using CRP.Authentication;
@@ -55,11 +56,14 @@ namespace CRP.Controllers
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
-            
+
+            // build a return url
+            var returnUrl = String.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Action("Index", "Home"));
+
             // figure out if the user is cas? or openid
             if (!Request.IsOpenId())
             {
-                return Redirect("https://cas.ucdavis.edu/cas/logout");
+                return Redirect("https://cas.ucdavis.edu/cas/logout?service=" + returnUrl);
             }
 
             return this.RedirectToAction<HomeController>(a => a.Index());

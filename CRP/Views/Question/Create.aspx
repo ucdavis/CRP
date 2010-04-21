@@ -34,8 +34,10 @@
             </p>
             
             <p>
-                <label for="Required">Required:</label>
-                <%= Html.CheckBox("Required") %>
+                <label for="Validators">Validators:</label>
+                
+                <%= this.CheckBoxList("Validators").Options(Model.Validators, x=>x.Id, x=>x.Name) %>
+                
             </p>
             
             <p>

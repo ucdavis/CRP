@@ -253,13 +253,16 @@ namespace CRP.Controllers
         [BypassAntiForgeryToken]
         public ActionResult PaymentResult(int? EXT_TRANS_ID, string PMT_STATUS, string NAME_ON_ACT, decimal? PMT_AMT, string TPG_TRANS_ID, string CARD_TYPE)
         {
+            // validate to make sure a transaction value was received
             if (EXT_TRANS_ID.HasValue)
             {
                 var transaction = Repository.OfType<Transaction>().GetNullableByID(EXT_TRANS_ID.Value);
 
+                // create a payment log
                 var paymentLog = new PaymentLog(transaction.Total);
                 paymentLog.Credit = true;
 
+                // on success, save the valid information
                 if (PMT_STATUS == "success")
                 {
                     paymentLog.Name = NAME_ON_ACT;
