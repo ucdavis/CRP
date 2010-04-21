@@ -17,8 +17,6 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("input.date").datepicker();
-
             var fieldsets = $("fieldset.check");
             $.each(fieldsets, function(index, item) {
                 var controls = $(item).find("input");
@@ -37,14 +35,18 @@
             $("img#addCheck").click(function(event) {
                 var fieldset = $($("fieldset.check")[0]);
                 var cloned = fieldset.clone();
+                var addImg = $("img#addCheck");
 
                 cloned.find("input").val("");
                 cloned.find("input.accepted-field").val(true);
 
-                fieldset.after(cloned);
-                RenameControls();
+                //fieldset.after(cloned);
+                addImg.before(cloned);
+                RenameControls();           // rename the controls to match the indexes
 
-                cloned.find("input.date").datepicker();
+                var picker = cloned.find("input.date");
+                picker.removeClass("hasDatepicker");        // for some reason it wasn't working without removing the class
+                picker.datepicker();
             });
 
             $("input.amount").blur(function(event) { RecalculateTotal(); });
@@ -62,6 +64,8 @@
                     $fieldset.find("input.accepted-field").val(false);
                 }
             });
+
+            $("input.date").datepicker();
         });
 
         function RenameControls() {
