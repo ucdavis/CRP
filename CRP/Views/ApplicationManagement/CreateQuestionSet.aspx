@@ -72,7 +72,7 @@
     
     <div id="QuestionTypeHasOptions" style="display:none;"><%= String.Join(",", Model.QuestionTypes.Where(a => a.HasOptions).Select(a => a.Id.ToString()).ToArray()) %></div>
 
-    <%= Html.ClientSideValidation<QuestionSet>("") %>
+    <%= Html.ClientSideValidation<QuestionSet>("QuestionSet") %>
 
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
@@ -92,10 +92,30 @@
         <fieldset>
             <legend>Questions</legend>
             
-            <div id="Questions"></div>
+            <div id="Questions">
+                <!-- Add in the existing questions -->
+                <% for (var i = 0; i < Model.QuestionSet.Questions.Count; i++ )
+                       { %> 
+                        <div class="Question" index='<%= Html.Encode(i) %>'>
+                            <label>Property Name:</label>
+                            <%= Html.TextBox("Questions[" + i.ToString() + "].Name") %>
+                            <%= this.Select("Questions[" + i.ToString() + "].QuestionType").Options(Model.QuestionTypes, x=>x.Id, x=>x.Name).FirstOption("Select a Question Type").Label("Question Type: ") %>                        
+                            
+                            <!-- Add in the existing options if any -->
+                            <div class="Options" style='<%= Model.QuestionSet.Questions.ToList()[i].Question.QuestionType.HasOptions ? "block" : "none" %>'>
+                                <% for(var j = 0; j < Model.QuestionSet.Questions.ToList()[i].Question.Options.Count; j++ )
+                                   { %>
+        
+                                    <%= Html.TextBox("questions[" + i.ToString() + "].Options[" + j.ToString() + "].Name") %>
+        
+                                <% } %>
+                                <img id="addOption" src="../../Images/plus.png" style="width:24px; height:24px;" />        
+                            </div>
+                        </div>
+                <% } %>
+            </div>
             
             <img id="addQuestions" src="../../Images/plus.png" style="width:24px; height:24px" />
-            
         </fieldset>
 
             <span id="QuestionTypeBase" style="display:none;">

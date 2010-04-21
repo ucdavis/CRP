@@ -36,5 +36,12 @@ namespace CRP.Core.Domain
         public virtual User User { get; set; }
 
         public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
+
+        public virtual void AddQuestion(Question question)
+        {
+            var q = new QuestionSetQuestion() {Order = Questions.Count + 1, Question = question, QuestionSet = this};
+
+            Questions.Add(q);
+        }
     }
 }

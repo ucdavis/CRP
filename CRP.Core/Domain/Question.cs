@@ -19,7 +19,7 @@ namespace CRP.Core.Domain
 
             SetDefaults();
         }
-        
+
         private void SetDefaults()
         {
             CollegeReusable = false;
@@ -53,5 +53,26 @@ namespace CRP.Core.Domain
         {
             Options.Remove(questionOption);
         }
+
+        public override bool IsValid()
+        {
+            var valid = true;
+
+            // validate that the options are valid
+            if (QuestionType != null && QuestionType.HasOptions)
+            {
+                foreach(var o in Options)
+                {
+                    if (string.IsNullOrEmpty(o.Name))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+
+            return base.IsValid() && valid;
+        }
+
     }
 }
