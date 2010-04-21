@@ -1075,12 +1075,22 @@ namespace CRP.Tests.Controllers
         #region AddEditor Tests
 
         [TestMethod]
-        public void TestAddEditorRedirectsToListIfUserIdParameterIsNull()
+        public void TestAddEditorRedirectsToEditorTabIfUserIdParameterIsNull()
         {
-            Controller.AddEditor(1, null)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+            #region Arrange
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.AddEditor(1, null)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+            Assert.AreEqual("#Editors", result.Url);
+            Assert.AreEqual(NotificationMessages.STR_SelectUserFirst, Controller.Message);
+            #endregion Assert
         }
 
         [TestMethod]
@@ -1196,6 +1206,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestAddEditorWithUserAlreadyLinkedThroughEditorDoesNotSave()
         {
+            #region Arrange
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
             FakeItems(1);
@@ -1211,16 +1222,21 @@ namespace CRP.Tests.Controllers
             UserRepository.Expect(a => a.GetNullableByID(2)).Return(Users[1]).Repeat.Any();
 
             Assert.AreEqual(1, Items[0].Editors.Count);
+            #endregion Arrange
 
-            Controller.AddEditor(1, 2)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+            #region Act
+            var result = Controller.AddEditor(1, 2)
+                .AssertHttpRedirect();
+            #endregion Act
 
+            #region Assert
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Items[0]));
+            Assert.AreEqual("#Editors", result.Url);
             Assert.AreEqual(1, Items[0].Editors.Count);
-            Assert.AreEqual("Editor already attached to that item.", Controller.Message);
+            Assert.AreEqual(NotificationMessages.STR_EditorAlreadyExists, Controller.Message);
+            #endregion Assert
         }
-        
+
 
         #endregion AddEditor Tests
 
