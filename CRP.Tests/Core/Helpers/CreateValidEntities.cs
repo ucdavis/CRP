@@ -55,6 +55,7 @@ namespace CRP.Tests.Core.Helpers
         public static Check Check(int? counter)
         {
             var rtValue = new Check();
+            rtValue.Payee = "Payee" + counter.Extra();
             //TODO: Populate values
             
             return rtValue;
@@ -68,6 +69,10 @@ namespace CRP.Tests.Core.Helpers
         public static Coupon Coupon(int? counter)
         {
             var rtValue = new Coupon();
+            rtValue.Email = "email@test.edu" + counter.Extra();
+            rtValue.UserId = "UserId" + counter.Extra();
+            rtValue.Code = "Code";
+            rtValue.Item = new Item();
             //TODO: Populate values
             
             return rtValue;
@@ -133,6 +138,9 @@ namespace CRP.Tests.Core.Helpers
         public static Item Item(int? counter)
         {
             var rtValue = new Item();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.ItemType = new ItemType();
+            rtValue.Unit = new Unit();
             //TODO: Populate values
             
             return rtValue;
@@ -159,6 +167,7 @@ namespace CRP.Tests.Core.Helpers
         public static ItemType ItemType(int? counter)
         {
             var rtValue = new ItemType();
+            rtValue.Name = "Name" + counter.Extra();
             //TODO: Populate values
             
             return rtValue;

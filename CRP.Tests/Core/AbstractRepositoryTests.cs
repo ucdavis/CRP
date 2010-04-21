@@ -168,15 +168,10 @@ namespace CRP.Tests.Core
             }
         }
 
-
-        /// <summary>
-        /// Determines whether this instance [can update entity].
-        /// </summary>
-        [TestMethod]
-        public void CanUpdateEntity()
+        public void CanUpdateEntity(bool doesItAllowUpdate)
         {
             //Get an entity to update
-            var foundEntity = Repository.OfType<T>().GetAll().ToList()[2];           
+            var foundEntity = Repository.OfType<T>().GetAll()[2];
 
             //Update and commit entity
             Repository.OfType<T>().DbContext.BeginTransaction();
@@ -184,17 +179,37 @@ namespace CRP.Tests.Core
             Repository.OfType<T>().EnsurePersistent(foundEntity);
             Repository.OfType<T>().DbContext.CommitTransaction();
 
-            //Compare entity
-            var compareEntity = Repository.OfType<T>().GetAll().ToList()[2];
-            UpdateUtility(compareEntity, ARTAction.Compare);
+            NHibernateSessionManager.Instance.GetSession().Evict(foundEntity);
 
-            /* //TODO: Review. I think because this is mocked, we can't "re-get" from the database the value before it was changed
-            //Restore entity, do not commit, then get entity to make sure it isn't restored.
-            Repository.OfType<T>().DbContext.BeginTransaction();
-            UpdateUtility(compareEntity, ARTAction.Restore);
-            var checkNotUpdatedEntity = Repository.OfType<T>().GetAll().ToList()[2];
-            UpdateUtility(checkNotUpdatedEntity, ARTAction.Compare);
-            */ 
+            if (doesItAllowUpdate)
+            {
+                //Compare entity
+                var compareEntity = Repository.OfType<T>().GetAll()[2];
+                UpdateUtility(compareEntity, ARTAction.Compare);
+
+                //Restore entity, do not commit, then get entity to make sure it isn't restored.            
+                UpdateUtility(compareEntity, ARTAction.Restore);
+                NHibernateSessionManager.Instance.GetSession().Evict(compareEntity);
+                    //For testing at least, this is required to clear the changes from memory.
+                var checkNotUpdatedEntity = Repository.OfType<T>().GetAll()[2];
+                UpdateUtility(checkNotUpdatedEntity, ARTAction.Compare);
+            }
+            else
+            {
+                //Compare entity
+                var compareEntity = Repository.OfType<T>().GetAll()[2];
+                UpdateUtility(compareEntity, ARTAction.CompareNotUpdated);            
+            }
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can update entity].
+        /// Defaults to true unless overridden
+        /// </summary>
+        [TestMethod]
+        public virtual void CanUpdateEntity()
+        {
+            CanUpdateEntity(true);            
         }
 
 
@@ -225,7 +240,8 @@ namespace CRP.Tests.Core
         {
             Compare = 1,
             Update,
-            Restore
+            Restore,
+            CompareNotUpdated
         }
     }
 }

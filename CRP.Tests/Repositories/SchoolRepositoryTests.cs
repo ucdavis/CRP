@@ -50,6 +50,9 @@ namespace CRP.Tests.Repositories
                     RestoreValue = entity.LongDescription;
                     entity.LongDescription = updateValue;
                     break;
+                case ARTAction.CompareNotUpdated:
+                    Assert.AreEqual(RestoreValue, entity.LongDescription);
+                    break;
             }
         }
         /// <summary>
@@ -73,6 +76,20 @@ namespace CRP.Tests.Repositories
         }
 
         #endregion Init and Overrides
+
+        #region CRUD Tests
+
+        /// <summary>
+        /// Determines whether this instance [can update entity].
+        /// Defaults to true unless overridden
+        /// </summary>
+        [TestMethod]
+        public override void CanUpdateEntity()
+        {
+            CanUpdateEntity(false); //Mutable is false for this table
+        }
+
+        #endregion CRUD Tests
 
         //TODO: Other Tests
     }

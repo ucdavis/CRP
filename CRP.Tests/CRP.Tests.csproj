@@ -107,10 +107,13 @@
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
     <Compile Include="Core\Extensions\RouteTestingExtensions.cs" />
     <Compile Include="Core\Helpers\CreateValidEntities.cs" />
+    <Compile Include="Repositories\CheckRepositoryTests.cs" />
+    <Compile Include="Repositories\CouponRepositoryTests.cs" />
     <Compile Include="Repositories\SchoolRepositoryTests.cs" />
     <Compile Include="Repositories\UnitRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Repositories\UserRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AuthoringTests.txt" />
