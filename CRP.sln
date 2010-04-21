@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP", "CRP\CRP.csproj", "{176A7FB7-9299-4CD0-9962-931C697BB023}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Tests", "CRP.Tests\CRP.Tests.csproj", "{CAED0EA2-2F95-4548-9477-4508D48F6BD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Core", "CRP.Core\CRP.Core.csproj", "{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://1x:8080/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CRP.Core\\CRP.Core.csproj
+		SccProjectName1 = CRP.Core
+		SccLocalPath1 = CRP.Core
+		SccProjectUniqueName2 = CRP.Tests\\CRP.Tests.csproj
+		SccProjectName2 = CRP.Tests
+		SccLocalPath2 = CRP.Tests
+		SccProjectUniqueName3 = CRP\\CRP.csproj
+		SccProjectName3 = CRP
+		SccLocalPath3 = CRP
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{176A7FB7-9299-4CD0-9962-931C697BB023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{176A7FB7-9299-4CD0-9962-931C697BB023}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{176A7FB7-9299-4CD0-9962-931C697BB023}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{176A7FB7-9299-4CD0-9962-931C697BB023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
