@@ -28,7 +28,7 @@ namespace CRP.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return this.RedirectToAction(a => a.List());
         }
 
         /// <summary>
