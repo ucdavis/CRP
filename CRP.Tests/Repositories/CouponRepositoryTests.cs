@@ -638,7 +638,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var coupon = GetValid(9);
-            coupon.Unlimited = false;
+            coupon.Unlimited = true;
             coupon.Email = null;
             #endregion Arrange
 
@@ -662,7 +662,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var coupon = GetValid(9);
-            coupon.Unlimited = false;
+            coupon.Unlimited = true;
             coupon.Email = string.Empty;
             #endregion Arrange
 
@@ -686,7 +686,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var coupon = GetValid(9);
-            coupon.Unlimited = false;
+            coupon.Unlimited = true;
             coupon.Email = " ";
             #endregion Arrange
 
@@ -1222,7 +1222,7 @@ namespace CRP.Tests.Repositories
                 #region Arrange
                 coupon = GetValid(9);
                 coupon.Email = null;
-                coupon.Unlimited = true;
+                coupon.Unlimited = false;
                 #endregion Arrange
 
                 #region Act
@@ -1236,7 +1236,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(coupon);
                 var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnlimitedAndEmail: An unlimited coupon requires an email");
+                results.AssertErrorsAre("UnlimitedAndEmail: When not unlimited a coupon requires an email");
                 Assert.IsTrue(coupon.IsTransient());
                 Assert.IsFalse(coupon.IsValid());
                 #endregion Assert
@@ -1258,7 +1258,7 @@ namespace CRP.Tests.Repositories
                 #region Arrange
                 coupon = GetValid(9);
                 coupon.Email = string.Empty;
-                coupon.Unlimited = true;
+                coupon.Unlimited = false;
                 #endregion Arrange
 
                 #region Act
@@ -1272,7 +1272,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(coupon);
                 var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnlimitedAndEmail: An unlimited coupon requires an email");
+                results.AssertErrorsAre("UnlimitedAndEmail: When not unlimited a coupon requires an email");
                 Assert.IsTrue(coupon.IsTransient());
                 Assert.IsFalse(coupon.IsValid());
                 #endregion Assert
@@ -1294,7 +1294,7 @@ namespace CRP.Tests.Repositories
                 #region Arrange
                 coupon = GetValid(9);
                 coupon.Email = " ";
-                coupon.Unlimited = true;
+                coupon.Unlimited = false;
                 #endregion Arrange
 
                 #region Act
@@ -1308,7 +1308,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(coupon);
                 var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnlimitedAndEmail: An unlimited coupon requires an email");
+                results.AssertErrorsAre("UnlimitedAndEmail: When not unlimited a coupon requires an email");
                 Assert.IsTrue(coupon.IsTransient());
                 Assert.IsFalse(coupon.IsValid());
                 #endregion Assert
@@ -1328,7 +1328,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var coupon = GetValid(9);
-            coupon.Unlimited = false;
+            coupon.Unlimited = true;
             coupon.Email = null;
             #endregion Arrange
 
@@ -1352,7 +1352,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var coupon = GetValid(9);
-            coupon.Unlimited = false;
+            coupon.Unlimited = true;
             coupon.Email = string.Empty;
             #endregion Arrange
 
@@ -1376,7 +1376,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var coupon = GetValid(9);
-            coupon.Unlimited = false;
+            coupon.Unlimited = true;
             coupon.Email = " ";
             #endregion Arrange
 
@@ -1400,7 +1400,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var coupon = GetValid(9);
-            coupon.Unlimited = true;
+            coupon.Unlimited = false;
             coupon.Email = "SomeEmail@test.edu";
             #endregion Arrange
 
@@ -1646,7 +1646,7 @@ namespace CRP.Tests.Repositories
             expectedFields.Add(new NameAndType("Unlimited", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("UnlimitedAndEmail", "System.Boolean", new List<string>
             {
-                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"An unlimited coupon requires an email\")]"
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"When not unlimited a coupon requires an email\")]"
             }));
             expectedFields.Add(new NameAndType("Used", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("UserId", "System.String", new List<string>

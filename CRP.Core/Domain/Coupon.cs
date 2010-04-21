@@ -142,7 +142,7 @@ namespace CRP.Core.Domain
         private void PopulateComplexLogicFields()
         {
             UnlimitedAndEmail = true;
-            if (Unlimited && string.IsNullOrEmpty(Email != null ? Email.Trim() : string.Empty))
+            if (!Unlimited && string.IsNullOrEmpty(Email != null ? Email.Trim() : string.Empty))
             {
                 UnlimitedAndEmail = false;
             }
@@ -155,7 +155,7 @@ namespace CRP.Core.Domain
         }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "An unlimited coupon requires an email")]
+        [AssertTrue(Message = "When not unlimited a coupon requires an email")]
         private bool UnlimitedAndEmail { get; set; }
 
         [AssertTrue(Message = "The discount amount must not be greater than the cost per item.")]
