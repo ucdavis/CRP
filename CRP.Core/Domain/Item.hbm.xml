@@ -62,7 +62,7 @@
       <one-to-many class="CRP.Core.Domain.Transaction, CRP.Core"/>
     </bag>
     
-    <bag name="Reports" table="ItemReports" cascade="all-delete-orphan" inverse="true" >
+    <bag name="Reports" table="ItemReports" cascade="none" inverse="true" >
       <key column="ItemId" />
       <one-to-many class="CRP.Core.Domain.ItemReport, CRP.Core"/>
     </bag>
