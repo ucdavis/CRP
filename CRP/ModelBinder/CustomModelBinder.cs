@@ -361,7 +361,7 @@ namespace CRP.ModelBinder
             object entityRepository = GenericRepositoryFactory.CreateEntityRepositoryFor(collectionEntityType, idType);
 
             return entityRepository.GetType()
-                .InvokeMember("GetById", BindingFlags.InvokeMethod, null, entityRepository, new[] { typedId });
+                .InvokeMember("GetByID", BindingFlags.InvokeMethod, null, entityRepository, new[] { typedId });
         }
 
         private readonly Type collectionType;
