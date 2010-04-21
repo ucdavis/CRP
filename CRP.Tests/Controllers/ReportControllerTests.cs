@@ -225,7 +225,7 @@ namespace CRP.Tests.Controllers
         }
 
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestCreatePostWithValidData()
         {
             #region Arrange
@@ -247,7 +247,7 @@ namespace CRP.Tests.Controllers
             #endregion Assert		
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestCreatePostWithInvalidDataReturnsView()
         {
             #region Arrange
