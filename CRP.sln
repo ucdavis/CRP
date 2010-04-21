@@ -55,9 +55,11 @@ Project("{4F174C21-8C12-11D0-8340-0000F80270F8}") = "CRP.DB", "CRP.DB\CRP.DB.dbp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.CardSimulator", "CRP.CardSimulator\CRP.CardSimulator.csproj", "{12D7804E-D1C5-4F85-87B9-AE898F43116A}"
 EndProject
+Project("{2CFEAB61-6A3B-4EB8-B523-560B4BEEF521}") = "CRP.Deploy", "CRP.Deploy\CRP.Deploy.wdproj", "{1BA8D426-2727-4133-B98F-1D583A913C72}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://1x:8080/
 		SccLocalPath0 = .
@@ -76,28 +78,46 @@ Global
 		SccProjectUniqueName5 = CRP.CardSimulator\\CRP.CardSimulator.csproj
 		SccProjectName5 = CRP.CardSimulator
 		SccLocalPath5 = CRP.CardSimulator
+		SccProjectUniqueName6 = CRP.Deploy\\CRP.Deploy.wdproj
+		SccProjectName6 = CRP.Deploy
+		SccLocalPath6 = CRP.Deploy
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{176A7FB7-9299-4CD0-9962-931C697BB023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{176A7FB7-9299-4CD0-9962-931C697BB023}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{176A7FB7-9299-4CD0-9962-931C697BB023}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{176A7FB7-9299-4CD0-9962-931C697BB023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{176A7FB7-9299-4CD0-9962-931C697BB023}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{176A7FB7-9299-4CD0-9962-931C697BB023}.Test|Any CPU.Build.0 = Test|Any CPU
 		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Test|Any CPU.Build.0 = Test|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.Build.0 = Test|Any CPU
 		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Test|Any CPU.Build.0 = Test|Any CPU
+		{1BA8D426-2727-4133-B98F-1D583A913C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BA8D426-2727-4133-B98F-1D583A913C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BA8D426-2727-4133-B98F-1D583A913C72}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{1BA8D426-2727-4133-B98F-1D583A913C72}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
