@@ -50,8 +50,10 @@
             <% } %>
         </p>
         <% } %>
-        
-        <p><%= Model.Item.Description%></p>
+               
+        <p>
+            <%= Html.HtmlEncode(Model.Item.Description) %>
+        </p>
         
         <p>
             <strong>Link:</strong>

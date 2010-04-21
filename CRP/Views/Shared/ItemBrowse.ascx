@@ -26,7 +26,7 @@
                         <% Html.RenderPartial(StaticValues.Partial_TagView, item.Tags); %>
                         
                         <p>
-                            <%= item.Description %>
+                            <%= item.Description.Length > 1000 ? Html.HtmlEncode(item.Description.Substring(0, 1000)) : Html.HtmlEncode(item.Description) %>
                         </p>
                     
                     </a>
