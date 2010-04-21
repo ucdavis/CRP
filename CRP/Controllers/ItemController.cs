@@ -19,24 +19,6 @@ namespace CRP.Controllers
             _searchTermProvider = searchTermProvider;
         }
 
-        //
-        // GET: /Item/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-
-        /// <summary>
-        /// GET: /Item/List/
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult List()
-        {
-            var viewModel = BrowseItemsViewModel.Create(Repository);
-            return View(viewModel);
-        }
 
         /// <summary>
         /// GET /Item/Details/{id}
@@ -52,7 +34,8 @@ namespace CRP.Controllers
 
             if (item == null || !item.Available)
             {
-                return this.RedirectToAction(a => a.List());
+                Message = "Item not found.";
+                return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
@@ -91,16 +74,6 @@ namespace CRP.Controllers
             {
                 return File(new byte[0], "image/jpg");
             }
-        }
-
-        /// <summary>
-        /// GET: /Item/Search/{SearchTerm}
-        /// </summary>
-        /// <param name="searchTerm"></param>
-        /// <returns></returns>
-        public ActionResult Search(string searchTerm)
-        {
-            return View(_searchTermProvider.GetByTerm(searchTerm));
         }
     }
 }

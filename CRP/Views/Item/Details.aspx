@@ -69,7 +69,7 @@
         
     </fieldset>
     <p>
-        <%= Html.ActionLink<ItemController>(a => a.List(), "Back to List") %>
+        <%= Html.ActionLink<HomeController>(a => a.Index(), "Back to List") %>
     </p>
 
 </asp:Content>

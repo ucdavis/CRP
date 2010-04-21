@@ -12,7 +12,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <%= Html.ActionLink<ItemController>(a => a.List(), "View All") %>
+    <%= Html.ActionLink<HomeController>(a => a.Index(), "View All") %>
 
     <% Html.RenderPartial(StaticValues.Partial_ItemBrowse, Model.Items); %>
 

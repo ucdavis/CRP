@@ -525,7 +525,6 @@
     <Content Include="Views\Shared\ItemForm.ascx" />
     <Content Include="Views\ItemManagement\List.aspx" />
     <Content Include="Views\Shared\ItemBrowse.ascx" />
-    <Content Include="Views\Item\List.aspx" />
     <Content Include="Views\QuestionSet\Create.aspx" />
     <Content Include="Views\QuestionSet\Edit.aspx" />
     <Content Include="Views\QuestionSet\LinkToItem.aspx" />

@@ -21,7 +21,7 @@ namespace CRP.Controllers
         {
             var viewModel = SearchViewModel.Create(Repository);
 
-            if (!string.IsNullOrEmpty(searchTerm)) viewModel.Items = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false);
+            if (!string.IsNullOrEmpty(searchTerm)) viewModel.Items = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false && a.Available);
 
             return View(viewModel);
         }

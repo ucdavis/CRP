@@ -48,7 +48,7 @@ namespace CRP.Controllers
 
             if (item == null)
             {
-                return this.RedirectToAction<ItemController>(a => a.List());
+                return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
@@ -106,7 +106,7 @@ namespace CRP.Controllers
             // invalid item, or not available for registration
             if (item == null || !item.IsAvailableForReg)
             {
-                return this.RedirectToAction<ItemController>(a => a.List());
+                return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
             if (!captchaValid)

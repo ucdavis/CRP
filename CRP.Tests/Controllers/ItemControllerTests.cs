@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
@@ -14,6 +15,7 @@ using MvcContrib.TestHelper;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
+using UCDArch.Web.Attributes;
 
 
 namespace CRP.Tests.Controllers
@@ -34,7 +36,8 @@ namespace CRP.Tests.Controllers
         protected IRepository<DisplayProfile> DisplayProfileRepository { get; set; }
         protected List<Unit> Units { get; set; }
         protected List<School> Schools { get; set; }
-        protected ISearchTermProvider SearchProvider { get; set; } 
+        protected ISearchTermProvider SearchProvider { get; set; }
+        private readonly Type _controllerClass = typeof(ItemController);
 
         protected IPrincipal Principal = new MockPrincipal();
 
@@ -84,24 +87,6 @@ namespace CRP.Tests.Controllers
         #region Route Tests
 
         /// <summary>
-        /// Tests the index mapping.
-        /// </summary>
-        [TestMethod]
-        public void TestIndexMapping()
-        {
-            "~/Item/Index".ShouldMapTo<ItemController>(a => a.Index());    
-        }
-
-        /// <summary>
-        /// Tests the list mapping.
-        /// </summary>
-        [TestMethod]
-        public void TestListMapping()
-        {
-            "~/Item/List".ShouldMapTo<ItemController>(a => a.List());
-        }
-
-        /// <summary>
         /// Tests the details mapping.
         /// </summary>
         [TestMethod]
@@ -118,40 +103,23 @@ namespace CRP.Tests.Controllers
         {
             "~/Item/GetImage/5".ShouldMapTo<ItemController>(a => a.GetImage(5));
         }
+
+
         #endregion Route Tests
 
-        #region Misc Tests
-
-        [TestMethod]
-        public void TestIndexReturnsView()
-        {
-            Controller.Index()
-                .AssertViewRendered();
-        }
-
-        [TestMethod]
-        public void TestListReturnsBrowseItemsViewModel()
-        {
-            FakeItems(1);
-            FakeTags(1);
-            ItemRepository.Expect(a => a.Queryable).Return(Items.AsQueryable()).Repeat.Any();
-            TagRepository.Expect(a => a.Queryable).Return(Tags.AsQueryable()).Repeat.Any();
-            Controller.List()
-                .AssertViewRendered()
-                .WithViewData<BrowseItemsViewModel>();
-        }
-
-        #endregion Misc Tests
 
         #region Details Tests
 
+        /// <summary>
+        /// Tests the index of the details when id not found redirects to home.
+        /// </summary>
         [TestMethod]
-        public void TestDetailsWhenIdNotFoundRedirectsToList()
+        public void TestDetailsWhenIdNotFoundRedirectsToHomeIndex()
         {
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
             Controller.Details(2)
                 .AssertActionRedirect()
-                .ToAction<ItemController>(a => a.List());
+                .ToAction<HomeController>(a => a.Index());
         }
 
         [TestMethod]
@@ -246,6 +214,153 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("image/jpg", result.ContentType);
         }
         #endregion GetImage Tests
+
+        #region Reflection Tests
+
+        #region Controller Class Tests
+        /// <summary>
+        /// Tests the controller inherits from super controller.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerInheritsFromSuperController()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.BaseType.Name;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("SuperController", result);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller has only two attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerHasOnlyTwoAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, result.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller has transaction attribute.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerHasTransactionAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<UseTransactionsByDefaultAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "UseTransactionsByDefaultAttribute not found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller has anti forgery token attribute.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerHasAntiForgeryTokenAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<UseAntiForgeryTokenOnPostByDefault>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "UseAntiForgeryTokenOnPostByDefault not found.");
+            #endregion Assert
+        }
+
+        #endregion Controller Class Tests
+
+        #region Controller Method Tests
+
+        /// <summary>
+        /// Tests the controller contains expected number of public methods.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerContainsExpectedNumberOfPublicMethods()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetMethods().Where(a => a.DeclaringType == controllerClass);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, result.Count(), "It looks like a method was added or removed from the controller.");
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the controller method details contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodDetailsContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("Details");
+            #endregion Arrange
+
+            #region Act
+            var result = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, result.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method get image contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodGetImageContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("GetImage");
+            #endregion Arrange
+
+            #region Act
+            var result = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, result.Count());
+            #endregion Assert
+        }
+
+        #endregion Controller Method Tests
+
+        #endregion Reflection Tests
 
         #region Helper Methods
         /// <summary>
