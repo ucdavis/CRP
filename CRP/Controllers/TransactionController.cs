@@ -459,7 +459,7 @@ namespace CRP.Controllers
             body.Append("CARD_TYPE" + CARD_TYPE);
             #endregion
 
-
+            #region Actual Work
             // validate to make sure a transaction value was received
             if (EXT_TRANS_ID.HasValue)
             {
@@ -508,12 +508,6 @@ namespace CRP.Controllers
                     body.Append("Card Type: " + paymentLog.CardType + "<br/>");
                     body.Append("ModelState: " + ModelState.IsValid);
 
-                    body.Append("<br/><br/>===== modelstate errors===<br/>");
-                    foreach (var k in ModelState.Keys)
-                    {
-                        body.Append(k + ":" + ModelState[k].Value + "<br/>");
-                    }
-
                     body.Append("<br/><br/>===== modelstate errors text===<br/>");
                     foreach (var result in ModelState.Values)
                     {
@@ -530,6 +524,8 @@ namespace CRP.Controllers
 
                 #endregion
             }
+            #endregion
+
             #region debug3
             message.Body = body.ToString();
 
