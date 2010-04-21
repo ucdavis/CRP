@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CRP.Core.Helpers;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
@@ -86,5 +87,31 @@ namespace CRP.Core.Domain
         public virtual bool Transaction { get; set; }
         public virtual bool Property { get; set; }
         public virtual QuestionSet QuestionSet { get; set; }
+
+        public override bool IsValid()
+        {
+            PopulateComplexLogicFields();
+            return base.IsValid();
+        }
+
+        public override ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
+        {
+            PopulateComplexLogicFields();
+            return base.ValidationResults();
+        }
+
+        private void PopulateComplexLogicFields()
+        {
+            QuantityAndTransactionAndProperty = true;
+            if(Quantity.ToInt() + Transaction.ToInt() + Property.ToInt() != 1)
+            {
+                QuantityAndTransactionAndProperty = false;
+            }
+        }
+
+        #region Fields ONLY used for complex validation, not in database
+        [AssertTrue(Message = "One and only one of these must be selected: Quantity, Transaction, Property")]
+        public virtual bool QuantityAndTransactionAndProperty { get; set; }
+        #endregion Fields ONLY used for complex validation, not in database
     }
 }

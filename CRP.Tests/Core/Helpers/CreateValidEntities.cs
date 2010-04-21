@@ -371,6 +371,7 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Name = "Name" + counter.Extra();
             rtValue.Format = "Format" + counter.Extra();
             rtValue.ItemReport = new ItemReport();
+            rtValue.Transaction = true;
 
             return rtValue;
         }

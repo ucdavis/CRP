@@ -88,6 +88,7 @@
     <Compile Include="Domain\Template.cs" />
     <Compile Include="Domain\Transaction.cs" />
     <Compile Include="Domain\TransactionAnswer.cs" />
+    <Compile Include="Helpers\BooleanExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\NotificationMessages.Designer.cs">
       <AutoGen>True</AutoGen>
