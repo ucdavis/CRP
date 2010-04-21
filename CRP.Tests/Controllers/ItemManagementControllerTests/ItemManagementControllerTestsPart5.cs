@@ -86,6 +86,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreNotSame(Users[1], result.Item.Editors.ElementAt(0).User);
             #endregion Assert		
         }
+        //TODO: Write test to verify that when editing, the list of units includes the one with the item (see view model)
 
 
         /// <summary>
