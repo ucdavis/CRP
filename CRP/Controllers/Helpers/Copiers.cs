@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using Check = UCDArch.Core.Utils.Check;
@@ -61,26 +62,29 @@ namespace CRP.Controllers.Helpers
             {
                 foreach (var s in tags)
                 {
-                    // check to see if it's already associated with the item
-                    var tag = item.Tags.FirstOrDefault(a => a.Name == s);
-                    var existingTag = existingTags.FirstOrDefault(a => a.Name == s);
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        // check to see if it's already associated with the item
+                        var tag = item.Tags.FirstOrDefault(a => a.Name == s);
+                        var existingTag = existingTags.FirstOrDefault(a => a.Name == s);
 
-                    if (existingTag == null) // no tag with that text exists, create a new one and insert
-                    {
-                        item.AddTag(new Tag(s));
-                    }
-                    else if (existingTag != null && tag == null) // tag exists but isn't associated with the item
-                    {
-                        item.AddTag(existingTag);
+                        if (existingTag == null) // no tag with that text exists, create a new one and insert
+                        {
+                            item.AddTag(new Tag(s));
+                        }
+                        else if (existingTag != null && tag == null) // tag exists but isn't associated with the item
+                        {
+                            item.AddTag(existingTag);
+                        }
                     }
                 }
 
                 // remove the tags that are no longer part of it
-                var removeTags = item.Tags.Where(a => !tags.Contains(a.Name));
+                var removeTags = item.Tags.Where(a => !tags.Contains(a.Name)).ToList(); //Can't use the IEnumerable otherwise it doesn't remove them all.
 
                 for (int i = 0; i < removeTags.Count(); i++)
                 {
-                    item.Tags.Remove(removeTags.ToArray()[i]);
+                    item.Tags.Remove(removeTags[i]);
                 }
             }
 
