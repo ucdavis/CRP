@@ -106,13 +106,21 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
         public void TestAllFieldsInTheDatabaseHaveBeenTested()
         {
             #region Arrange
-
+            List<AttributeList> attributeList;
             var expectedFields = new List<NameAndType>();
             expectedFields.Add(new NameAndType("Available", "System.Boolean", new List<string>()));
-            expectedFields.Add(new NameAndType("CostPerItem", "System.Decimal", new List<string>
+            attributeList = new List<AttributeList>();
+            attributeList.Add(new AttributeList("[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(", new List<string>
             {
-                 "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0, Message = \"must be zero or more\")]"
+                "Min = 0",
+                "Message = \"must be zero or more\"",
+                "Max = 922337203685477"                                                           
             }));
+            expectedFields.Add(new NameAndType("CostPerItem", "System.Decimal", new List<AttributeList>(attributeList)));
+            //expectedFields.Add(new NameAndType("CostPerItem", "System.Decimal", new List<string>
+            //{
+            //     "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0, Message = \"must be zero or more\")]"
+            //}));
             expectedFields.Add(new NameAndType("Coupons", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Coupon]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"

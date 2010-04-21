@@ -74,6 +74,35 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             }
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestCostPerItemValueOfBiggerThanMoneyDoesNotSave()
+        {
+            Item item = null;
+            try
+            {
+                #region Arrange
+                item = GetValid(9);
+                item.CostPerItem = 922337203685478;
+                #endregion Arrange
+
+                #region Act
+                ItemRepository.DbContext.BeginTransaction();
+                ItemRepository.EnsurePersistent(item);
+                ItemRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(item);
+                Assert.AreEqual(922337203685478, item.CostPerItem);
+                var results = item.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("CostPerItem: must be zero or more");
+                Assert.IsTrue(item.IsTransient());
+                Assert.IsFalse(item.IsValid());
+                throw;
+            }
+        }
         #endregion Invalid Tests
 
         #region Valid Tests
