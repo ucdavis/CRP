@@ -65,9 +65,11 @@ begin
 	
 	declare @qsid int 
 	declare @tbId int 
+	declare @ddId int	-- drop down id
 	
 	set @qsid = (select Max(id) from QuestionSets where [Name] = 'Contact Information')
 	set @tbId = (select max(id) from QuestionTypes where [name] = 'Text Box')
+	set @ddId = (select max(id) from QuestionTypes where [name] = 'Drop Down')
 	
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
 	VALUES ('First Name', @tbId, @qsid, 1, 1)
@@ -85,7 +87,7 @@ begin
 	VALUES ('City', @tbId, @qsid, 5, 1)	
 	
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
-	VALUES ('State', @tbId, @qsid, 6, 1)		
+	VALUES ('State', @ddId, @qsid, 6, 1)		
 	
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
 	VALUES ('Zip Code', @tbId, @qsid, 7, 1)		
@@ -97,6 +99,64 @@ begin
 	VALUES ('Email Address', @tbId, @qsid, 5, 1)		
 end
 go
+
+	-- get the state drop down question and insert the options
+	declare @stateId int
+	
+	set @stateId = (select max(id) from Questions where [name] = 'State' and QuestionSetId = @qsid)
+
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('AL', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('AK', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('AZ', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('AR', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('CA', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('CO', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('CT', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('DE', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('FL', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('GA', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('HI', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('ID', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('IL', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('IN', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('IA', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('KS', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('KY', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('LA', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('ME', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('MD', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('MA', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('MI', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('MN', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('MS', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('MO', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('MT', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('NE', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('NV', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('NH', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('NJ', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('NM', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('NY', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('NC', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('ND', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('OH', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('OK', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('OR', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('PA', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('RI', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('SC', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('SD', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('TN', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('TX', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('UT', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('VT', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('VA', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('WA', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('WV', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('WI', @stateId)
+	INSERT INTO QuestionOptions (Name, QuestionId) Values('WY', @stateId)
+
+
 
 -- //////////////////////////////////////////////////////////////////////////////////////
 -- Insert the default item report
