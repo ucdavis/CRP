@@ -403,10 +403,12 @@ namespace CRP.Tests.Controllers
                 .AssertViewRendered()
                 .WithViewData<ItemType>();
 
-            ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<ItemType>.Is.Anything));
+            ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(ItemTypes[1]));
 
-            Assert.AreEqual(1, result.ExtendedProperties.Count);
-            Assert.AreEqual(1, result.QuestionSets.Count);
+            //Assert.AreEqual(1, result.ExtendedProperties.Count);
+            //Assert.AreEqual(1, result.QuestionSets.Count);
+            Assert.AreEqual(1, ItemTypes[1].QuestionSets.Count);
+            Assert.AreEqual(1, ItemTypes[1].QuestionSets.Count);
 
             //TODO: Get Arguments to check what was saved?
         }
@@ -422,9 +424,9 @@ namespace CRP.Tests.Controllers
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any(); //So It Is Not Found
 
-            var result = Controller.EditItemType(2, ItemTypes[1])
-                .AssertViewRendered()
-                .WithViewData<ItemType>();
+            Controller.EditItemType(2, ItemTypes[1])
+                .AssertActionRedirect()
+                .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
 
             ItemTypeRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<ItemType>.Is.Anything));
 
