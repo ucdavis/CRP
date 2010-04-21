@@ -135,6 +135,7 @@
     <Compile Include="Controllers\DisplayProfileController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
     <Compile Include="Controllers\Helpers\Access.cs" />
+    <Compile Include="Controllers\Helpers\Copiers.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
     <Compile Include="Controllers\Helpers\CustomGridBuilder.cs" />
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
@@ -211,6 +212,7 @@
     <Content Include="Global.asax" />
     <Content Include="Images\minus.png" />
     <Content Include="Images\plus.png" />
+    <Content Include="Scripts\ItemEdit.js" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Views\Account\LogOn.aspx" />
     <Content Include="Views\DisplayProfile\Create.aspx" />

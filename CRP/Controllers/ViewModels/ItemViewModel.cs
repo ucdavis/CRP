@@ -12,11 +12,15 @@ namespace CRP.Controllers.ViewModels
         {
             Check.Require(repository != null, "Repository is required.");
 
-            var viewModel = new ItemViewModel(){ItemTypes = repository.OfType<ItemType>().Queryable.Where(a => a.IsActive).ToList()};
+            var viewModel = new ItemViewModel(){
+                ItemTypes = repository.OfType<ItemType>().Queryable.Where(a => a.IsActive).ToList(),
+                Users = repository.OfType<User>().Queryable
+            };
 
             return viewModel;
         }
 
+        public IQueryable<User> Users { get; set; }
         public IEnumerable<ItemType> ItemTypes { get; set; }
         public Item Item { get; set; }
     }

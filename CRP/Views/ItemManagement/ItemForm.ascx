@@ -1,15 +1,10 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Controllers.ViewModels.ItemViewModel>" %>
 <%@ Import Namespace="CRP.Core.Domain"%>
 
-
-    <h2>Create</h2>
-
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
     <%= Html.ClientSideValidation<Item>("Item") %>
 
-    <% using (Html.BeginForm("Create", "ItemManagement", FormMethod.Post, new {@enctype="multipart/form-data"})) {%>
-    
         <%= Html.AntiForgeryToken() %>
         <fieldset>
             <legend>Fields</legend>
@@ -29,11 +24,11 @@
             <p>
                 <label for="Item.Description">Description:</label>
                 <%= Html.TextArea("Item.Description")%>
-                <%= Html.ValidationMessage("Item.Description", "*")%>
+                <%= Html.ValidationMessage("Item.Description", "*")%> 
             </p>
             <p>
                 <label for="Item.CostPerItem">CostPerItem:</label>
-                <%= Html.TextBox("Item.CostPerItem")%>
+                <%= Html.TextBox("Item.CostPerItem", Model.Item != null ? Model.Item.CostPerItem.ToString("C") : string.Empty)  %>
                 <%= Html.ValidationMessage("Item.CostPerItem", "*")%>
             </p>
             <p>
@@ -43,7 +38,7 @@
             </p>
             <p>
                 <label for="Item.Expiration">Expiration:</label>
-                <%= Html.TextBox("Item.Expiration")%>
+                <%= Html.TextBox("Item.Expiration", Model.Item != null && Model.Item.Expiration.HasValue ? Model.Item.Expiration.Value.ToString("d") : string.Empty)%>
                 <%= Html.ValidationMessage("Item.Expiration", "*")%>
             </p>
             <p>
@@ -52,6 +47,11 @@
                 <%= Html.ValidationMessage("Item.Link", "*")%>
             </p>
 
+            <p>
+                <label for="Item.Available">Availabe to public:</label>
+                <%= Html.CheckBox("Item.Available") %>
+                <%= Html.ValidationMessage("Item.Available", "*") %>
+            </p>
 
         </fieldset>
         
@@ -74,7 +74,9 @@
                                                 value='<%=Html.Encode(ans != null ? ans.Answer : string.Empty)%>'
                                                 />
                                         <input type="hidden" id='<%=Html.Encode("ExtendedProperties[" + i + "]_propertyId")%>' 
-                                                name='<%=Html.Encode("ExtendedProperties[" + i + "].propertyId")%>' />
+                                                name='<%=Html.Encode("ExtendedProperties[" + i + "].propertyId")%>' 
+                                                value='<%= Html.Encode(ep.Id) %>'
+                                                />
                                     </p>
                                     <%
                         }
@@ -104,7 +106,7 @@
                    {
                        foreach (var tag in Model.Item.Tags)
                        { %>
-                    <input type="text" id="Tags" value='<%= tag.Name %>' />
+                    <input type="text" id="tags" name="tags" style="cursor:pointer" value='<%= tag.Name %>' />
                 <% }
                    } %>
             
@@ -112,7 +114,6 @@
             
         </fieldset>
         
-            <p>
-                <input type="submit" value="Create" />
-            </p>
-    <% } %>
+        <p>
+            <input type="submit" value="Save" />
+        </p>

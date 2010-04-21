@@ -54,6 +54,10 @@
                 // blank the input
                 $("input#tagInput").val();
             });
+
+            $("input#tags").click(function(event) {
+                $(this).remove();
+            });
         });
     </script>
 
@@ -63,7 +67,10 @@
 
     <h2>Create</h2>
 
+    <% using (Html.BeginForm("Create", "ItemManagement", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+       {%>
     <% Html.RenderPartial("ItemForm"); %>
+    <% } %>
 
     <div>
         <%=Html.ActionLink<ItemManagementController>(a => a.List(), "Back to List") %>

@@ -23,10 +23,13 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
+            Available = false;
+
             Tags = new List<Tag>();
             ExtendedPropertyAnswers = new List<ExtendedPropertyAnswer>();
             Coupons = new List<Coupon>();
             Editors = new List<Editor>();
+            QuestionSets = new List<ItemQuestionSet>();
 
             DateCreated = DateTime.Now;
         }
@@ -46,6 +49,7 @@ namespace CRP.Core.Domain
         public virtual Unit Unit { get; set; }
 
         public virtual DateTime DateCreated { get; set; }
+        public virtual bool Available { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<ExtendedPropertyAnswer> ExtendedPropertyAnswers { get; set; }
@@ -97,15 +101,22 @@ namespace CRP.Core.Domain
             Editors.Remove(editor);
         }
 
-        public virtual void AddQuestionSet(QuestionSet questionSet)
+        public virtual void AddTransactionQuestionSet(QuestionSet questionSet)
         {
             var itemQuestionSet = new ItemQuestionSet(this, questionSet, QuestionSets.Count);
+            itemQuestionSet.TransactionLevel = true;
             QuestionSets.Add(itemQuestionSet);
+        }
+
+        public virtual void AddQuantityQuestionSet(QuestionSet questionSet)
+        {
+            var itemQuestionSet = new ItemQuestionSet(this, questionSet, QuestionSets.Count);
+            itemQuestionSet.QuantityLevel = true;
+            QuestionSets.Add(itemQuestionSet);            
         }
 
         public virtual void RemoveQuestionSet(ItemQuestionSet itemQuestionSet)
         {
-            //TODO: Review this
             QuestionSets.Remove(itemQuestionSet);
         }
     }

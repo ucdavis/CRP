@@ -5,67 +5,119 @@
 	Edit
 </asp:Content>
 
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <script type="text/javascript">
+        var getExtendedPropertyUrl = '<%= Url.Action("GetExtendedProperties", "ItemManagement") %>';
+
+        $(function() { $("#tabs").tabs(); });
+    </script>
+
+    <script src="../../Scripts/ItemEdit.js" type="text/javascript"></script>
+    
+</asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Edit</h2>
 
-    <% Html.RenderPartial("ItemForm"); %>
+    <div id="tabs">
+    
+        <ul>
+            <li><a href="#tabs-1">Item Details</a></li>
+            <li><a href="#tabs-2">Editors</a></li>
+            <li><a href="#tabs-3">Questions</a></li>
+        </ul>
+    
+        <div id="tabs-1">
+        
+            <% using (Html.BeginForm("Edit", "ItemManagement", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+               {%>
+
+            <%
+             Html.RenderPartial("ItemForm");%>
+
+            <% }%>
+        
+        </div>
+        <div id="tabs-2">
+        
+            <% using(Html.BeginForm("AddEditor", "ItemManagement", FormMethod.Post)){%>
+                <%= Html.AntiForgeryToken() %>
+                <%= Html.Hidden("id") %>
+                Add User: <%= this.Select("userId").Options(Model.Users.OrderBy(a => a.LastName), x=>x.Id, x=>x.SortableName).FirstOption("--Select a User--") %>
+                <input type="submit" value="Add User" />
+            <%} %>
+            <% Html.Grid(Model.Item.Editors)
+                   .Transactional()
+                   .Name("Editors")
+                   .PrefixUrlParameters(false)
+                   .Columns(col =>
+                                {
+                                    col.Add(a =>
+                                                {%>
+                                                
+                                                    <% using (Html.BeginForm("RemoveEditor", "ItemManagement", FormMethod.Post, new {id="RemoveForm"})) {%>
+                                                        
+                                                        <%= Html.AntiForgeryToken() %>
+                                                        <%= Html.Hidden("id") %>
+                                                        <%= Html.Hidden("editorId", a.Id) %>
+                                                    
+                                                        <a href="javascript:;" class="FormSubmit">Delete</a>
+                                                    
+                                                    <%} %>
+                                                
+                                                <%});
+                                    col.Add(a => a.User.FullName);
+                                    col.Add(a => a.Owner);
+                                })
+                   .Render(); %>
+        </div>
+        <div id="tabs-3">
+            <fieldset>
+                <legend>Transaction</legend>
+                
+                <% Html.Grid(Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
+                       .Transactional()
+                       .Name("TransactionLevelQuestionSets")
+                       .PrefixUrlParameters(false)
+                       .Columns(col =>
+                                    {
+                                        col.Add(a => a.QuestionSet.Name);
+                                        col.Add(a => a.Required);
+                                        col.Add(a => a.QuestionSet.Questions.Count()).Title("# of Questions");
+                                    })
+                       .Render();
+                        %>
+                
+            </fieldset>
+            
+            <fieldset>
+                <legend>Quantity</legend>
+                
+                <% Html.Grid(Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
+                       .Transactional()
+                       .Name("QuantityLevelQuestionSets")
+                       .PrefixUrlParameters(false)
+                       .Columns(col =>
+                                    {
+                                        col.Add(a => a.QuestionSet.Name);
+                                        col.Add(a => a.Required);
+                                        col.Add(a => a.QuestionSet.Questions.Count()).Title("# of Questions");
+                                    })
+                       .Render();
+                        %>
+                
+            </fieldset>
+        </div>
+    
+    </div>
+
 
     
-
     <div>
         <%=Html.ActionLink<ItemManagementController>(a => a.List(), "Back to List") %>
     </div>
 
 </asp:Content>
 
-<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("input#Item_Expiration").datepicker();
 
-            $("select#Item_ItemType").change(function(event) {
-                var url = '<%= Url.Action("GetExtendedProperties", "ItemManagement") %>';
-
-                $.getJSON(url + '/' + $(this).val(), {},
-                    function(result) {
-
-                        var length = result.length;
-
-                        if (length > 0) {
-                            $.each(result, function(index, item) {
-
-                                var name = item.Name.replace(/ /g, "");
-
-                                // create the label
-                                var label = $("<label>").attr("for", "item." + name).html(item.Name);
-                                var textBox = $("<input>").attr("id", "ExtendedProperties[" + index + "]_value")
-                                                          .attr("name", "ExtendedProperties[" + index + "].value")
-                                                          .attr("type", "text");
-                                // create hidden field to store the extended property id
-                                var hidden = $("<input>").attr("type", "hidden")
-                                                         .attr("id", "ExtendedProperties[" + index + "]_propertyId")
-                                                         .attr("name", "ExtendedProperties[" + index + "].propertyId")
-                                                         .val(item.Id);
-
-                                if (item.QuestionType.Name == "Date") {
-                                    textBox.datepicker();
-                                }
-
-                                var p = $("<p>").append(label).append(textBox).append(hidden);
-                                $("div#ExtendedProperties").append(p);
-                            });
-                        }
-                    });
-            });
-
-            $("img#tagAddButton").click(function(event) {
-                var input = $("<input>").attr("id", "tags").attr("name", "tags").val($("input#tagInput").val());
-                $("div#tagContainer").append(input);
-
-                // blank the input
-                $("input#tagInput").val();
-            });
-        });
-    </script>
-</asp:Content>

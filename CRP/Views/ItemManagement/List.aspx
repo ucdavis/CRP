@@ -22,14 +22,15 @@
                                             <%= Html.ActionLink<ItemManagementController>(b => b.Edit(a.Id), "Edit") %>
                                         <%});
                             col.Add(a => a.Name);
-                            col.Add(a => a.CostPerItem);
+                            col.Add(a => a.CostPerItem).Format("{0:C}");
                             col.Add(a => a.Quantity);
                             col.Add(a =>
                                         {%>
                                             <%= Html.Encode(a.Transactions.Sum(b => b.Quantity)) %>
                                         <%}).Title("# Sold");
-                            col.Add(a => a.Expiration);
+                            col.Add(a => a.Expiration).Format("{0:d}");
                             col.Add(a => a.DateCreated);
+                            col.Add(a => a.Available);
                         })
             .Sortable()
             .Pageable()

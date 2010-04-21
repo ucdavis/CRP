@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using CRP.App_GlobalResources;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
@@ -24,6 +25,10 @@ namespace CRP.Controllers
             return View();
         }
 
+        /// <summary>
+        /// GET: /ItemManagement/List
+        /// </summary>
+        /// <returns></returns>
         public ActionResult List()
         {
             // list items that the user has editor rights to
@@ -37,6 +42,10 @@ namespace CRP.Controllers
             return View(query);
         }
 
+        /// <summary>
+        /// GET: /ItemManagement/Create
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Create()
         {
             var viewModel = ItemViewModel.Create(Repository);
@@ -59,7 +68,7 @@ namespace CRP.Controllers
         /// <param name="item"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult Create(Item item, ExtendedPropertyParameter[] ExtendedProperties, string[] Tags)
+        public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags)
         {
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
@@ -69,33 +78,9 @@ namespace CRP.Controllers
                 item.Image = reader.ReadBytes(file.ContentLength);
             }
 
-            // get the extended properties
-            foreach(var exp in ExtendedProperties)
-            {
-                if (!string.IsNullOrEmpty(exp.value))
-                {
-                    // get the extended property object
-                    var extendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(exp.propertyId);
-
-                    var answer = new ExtendedPropertyAnswer(exp.value, item, extendedProperty);
-                    item.AddExtendedPropertyAnswer(answer);
-                }
-            }
-
-            // go through and deal with the tags
-            var tags = Repository.OfType<Tag>().GetAll();
-
-            foreach(var s in Tags)
-            {
-                var tag = tags.FirstOrDefault(a => a.Name == s);
-                if (tag == null)
-                {
-                    // create a new one
-                    tag = new Tag(s);
-                }
-                
-                item.AddTag(tag);
-            }
+            // process the extended properties and tags
+            //item = PopulateObject.Item(Repository, item, extendedProperties, tags);
+            item = Copiers.PopulateItem(Repository, item, extendedProperties, tags);
 
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
@@ -106,6 +91,12 @@ namespace CRP.Controllers
 
             // set the unit
             item.Unit = user.Units.FirstOrDefault();
+
+            // add the default question sets
+            foreach(var qs in item.ItemType.QuestionSets)
+            {
+                item.AddTransactionQuestionSet(qs);
+            }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
 
@@ -123,6 +114,11 @@ namespace CRP.Controllers
             }
         }
 
+        /// <summary>
+        /// GET: /ItemManagement/GetExtendedProperties/{id}
+        /// </summary>
+        /// <param name="id">Id of the item type</param>
+        /// <returns></returns>
         public JsonNetResult GetExtendedProperties(int id)
         {
             var itemType = Repository.OfType<ItemType>().GetNullableByID(id);
@@ -135,6 +131,11 @@ namespace CRP.Controllers
             return new JsonNetResult(itemType.ExtendedProperties);
         }
 
+        /// <summary>
+        /// GET: /ItemManagement/Edit/{id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Edit(int id)
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
@@ -154,17 +155,107 @@ namespace CRP.Controllers
         /// </summary>
         /// <remarks>
         /// Description:
+        ///     Updates an existing item
         /// PreCondition:
+        ///     Item already exists
+        ///     User has editor rights
         /// PostCondition:
+        ///     Item is updated
         /// </remarks>
         /// <param name="item"></param>
         /// <param name="extendedProperties"></param>
         /// <param name="tags"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult Edit([Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags)
+        public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags)
         {
-            throw new NotImplementedException();
+            // get the file and add it into the item
+            if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
+            {
+                var file = Request.Files[0];
+                var reader = new BinaryReader(file.InputStream);
+                item.Image = reader.ReadBytes(file.ContentLength);
+            }
+
+            var destItem = Repository.OfType<Item>().GetNullableByID(id);
+
+            destItem = Copiers.CopyItem(Repository, item, destItem, extendedProperties, tags);//PopulateObject.Item(Repository, item, extendedProperties, tags);
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destItem.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<Item>().EnsurePersistent(destItem);
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item");
+            }
+
+            var viewModel = ItemViewModel.Create(Repository);
+            viewModel.Item = destItem;
+            return View(viewModel);
+        }
+
+        [AcceptPost]
+        public ActionResult RemoveEditor(int id, int editorId)
+        {
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var editor = Repository.OfType<Editor>().GetNullableByID(editorId);
+
+            if (item == null || editor == null)
+            {
+                return this.RedirectToAction(a => a.List());
+            }
+
+            if (editor.Owner)
+            {
+                Message = "Can not remove owner from item.";
+            }
+            else
+            {
+                item.RemoveEditor(editor);
+
+                MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+
+                if (ModelState.IsValid)
+                {
+                    Repository.OfType<Item>().EnsurePersistent(item);
+                    Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Editor");
+                }
+            }
+
+            return this.RedirectToAction(a => a.Edit(id));
+        }
+
+        [AcceptPost]
+        public ActionResult AddEditor(int id, int? userId)
+        {
+            if (!userId.HasValue)
+            {
+                return this.RedirectToAction(a => a.List());
+            }
+
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var user = Repository.OfType<User>().GetNullableByID(userId.Value);
+            
+            if (item == null || user == null)
+            {
+                return this.RedirectToAction(a => a.List());
+            }
+
+            item.AddEditor(new Editor(item, user));
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<Item>().EnsurePersistent(item);
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Editor");
+            }
+            else
+            {
+                Message = "Unable to add editor.";
+            }
+
+            return this.RedirectToAction(a => a.Edit(id));
         }
     }
 

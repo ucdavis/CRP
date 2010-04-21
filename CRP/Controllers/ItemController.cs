@@ -23,7 +23,14 @@ namespace CRP.Controllers
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
 
-            return File(item.Image, "image/jpg");
+            if (item.Image != null)
+            {
+                return File(item.Image, "image/jpg");
+            }
+            else
+            {
+                return File(new byte[0], "image/jpg");
+            }
         }
 
     }

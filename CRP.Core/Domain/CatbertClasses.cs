@@ -40,6 +40,14 @@ namespace CRP.Core.Domain
             }
         }
 
+        public virtual string SortableName
+        {
+            get
+            {
+                return LastName + ", " + FirstName;
+            }
+        }
+
         public virtual ICollection<Unit> Units { get; set; }
     }
 }
