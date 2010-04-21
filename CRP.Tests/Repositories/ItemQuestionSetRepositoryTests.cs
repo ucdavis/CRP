@@ -96,6 +96,19 @@ namespace CRP.Tests.Repositories
 
         #endregion Init and Overrides
 
+        #region CRUD Tests
+
+        /// <summary>
+        /// Determines whether this instance [can delete entity].
+        /// </summary>
+        public override void CanDeleteEntity()
+        {
+            //TODO: Review when this entity can be deleted.  
+            //base.CanDeleteEntity();
+        }
+
+        #endregion CRUD Tests
+
         //TODO: Other tests
     }
 }
