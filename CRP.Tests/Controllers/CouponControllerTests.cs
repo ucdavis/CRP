@@ -242,7 +242,7 @@ namespace CRP.Tests.Controllers
             var result = Controller.Validate(2, "FAKECCODES")
                 .AssertResultIs<JsonNetResult>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("{ message = Invalid code. }", result.Data.ToString());
+            Assert.AreEqual("{ discountAmount = 0, maxQuantity = 0, message = Invalid code. }", result.Data.ToString());
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace CRP.Tests.Controllers
             var result = Controller.Validate(2, "NOTFOUND")
                 .AssertResultIs<JsonNetResult>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("{ message = Invalid code. }", result.Data.ToString());
+            Assert.AreEqual("{ discountAmount = 0, maxQuantity = 0, message = Invalid code. }", result.Data.ToString());
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace CRP.Tests.Controllers
             var result = Controller.Validate(2, "FAKECCODE1")
                 .AssertResultIs<JsonNetResult>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("{ message = Invalid code. }", result.Data.ToString());
+            Assert.AreEqual("{ discountAmount = 0, maxQuantity = 0, message = Invalid code. }", result.Data.ToString());
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace CRP.Tests.Controllers
             var result = Controller.Validate(2, "FAKECCODE2")
                 .AssertResultIs<JsonNetResult>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("{ message = Invalid code. }", result.Data.ToString());
+            Assert.AreEqual("{ discountAmount = 0, maxQuantity = 0, message = Invalid code. }", result.Data.ToString());
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace CRP.Tests.Controllers
             var result = Controller.Validate(2, "FAKECCODE2")
                 .AssertResultIs<JsonNetResult>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("{ message = Coupon has already been redeemed. }", result.Data.ToString());
+            Assert.AreEqual("{ discountAmount = 0, maxQuantity = 0, message = Coupon has already been redeemed. }", result.Data.ToString());
         }
 
         /// <summary>
