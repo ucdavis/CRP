@@ -1596,17 +1596,33 @@ namespace CRP.Tests.Repositories
         public void TestAllFieldsInTheDatabaseHaveBeenTested()
         {
             #region Arrange
-
+            List<AttributeList> attributeList;
             var expectedFields = new List<NameAndType>();
-            expectedFields.Add(new NameAndType("Code", "System.String", new List<string>
+            attributeList = new List<AttributeList>();
+            attributeList.Add(new AttributeList("[NHibernate.Validator.Constraints.LengthAttribute(", new List<string>
             {
-                "[NHibernate.Validator.Constraints.LengthAttribute(Min = 10, Max = 10)]",
-                "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+                "Min = 10",
+                "Max = 10"                                                          
             }));
-            expectedFields.Add(new NameAndType("DiscountAmount", "System.Decimal", new List<string>
+            attributeList.Add(new AttributeList("[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute(", new List<string>()));
+            expectedFields.Add(new NameAndType("Code", "System.String", new List<AttributeList>(attributeList)));
+            //expectedFields.Add(new NameAndType("Code", "System.String", new List<string>
+            //{
+            //    "[NHibernate.Validator.Constraints.LengthAttribute(Min = 10, Max = 10)]",
+            //    "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            //}));
+            attributeList = new List<AttributeList>();
+            attributeList.Add(new AttributeList("[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(", new List<string>
             {
-                "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0.01, Max = 922337203685477, Message = \"must be more than $0.00\")]"
+                "Min = 0.01",
+                "Message = \"must be more than $0.00\"",
+                "Max = 922337203685477"                                                           
             }));
+            expectedFields.Add(new NameAndType("DiscountAmount", "System.Decimal", new List<AttributeList>(attributeList)));
+            //expectedFields.Add(new NameAndType("DiscountAmount", "System.Decimal", new List<string>
+            //{
+            //    "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0.01, Max = 922337203685477, Message = \"must be more than $0.00\")]"
+            //}));
             expectedFields.Add(new NameAndType("DiscountAmountCostPerItem", "System.Boolean", new List<string>
             {
                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"The discount amount must not be greater than the cost per item.\")]"

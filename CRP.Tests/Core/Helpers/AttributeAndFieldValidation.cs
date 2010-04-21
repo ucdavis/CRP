@@ -31,18 +31,82 @@ namespace CRP.Tests.Core.Helpers
             {
                 Assert.AreEqual(expectedFields[i].Name, propertyInfos[i].Name);
                 Assert.AreEqual(expectedFields[i].Property, propertyInfos[i].PropertyType.ToString(), "For Field: " + propertyInfos[i].Name);
-                var foundAttributes = CustomAttributeData.GetCustomAttributes(propertyInfos[i])
-                    .AsQueryable().OrderBy(a => a.ToString()).ToList();
-                Assert.AreEqual(expectedFields[i].Attributes.Count, foundAttributes.Count(), "For Field: " + propertyInfos[i].Name);
-                if (foundAttributes.Count() > 0)
-                {                    
-                    for (int j = 0; j < foundAttributes.Count(); j++)
+                if(expectedFields[i].Attributes != null)
+                {
+                    CompareOldWay(expectedFields[i], propertyInfos[i]);
+                }
+                else
+                {
+                    CompareNewWay(expectedFields[i], propertyInfos[i]);
+                }
+                
+                //var foundAttributes = CustomAttributeData.GetCustomAttributes(propertyInfos[i])
+                //    .AsQueryable().OrderBy(a => a.ToString()).ToList();
+                //Assert.AreEqual(expectedFields[i].Attributes.Count, foundAttributes.Count(), "For Field: " + propertyInfos[i].Name);
+                //if (foundAttributes.Count() > 0)
+                //{                    
+                //    for (int j = 0; j < foundAttributes.Count(); j++)
+                //    {
+                //        Assert.AreEqual(expectedFields[i].Attributes[j], foundAttributes[j].ToString(), "For Field: " + propertyInfos[i].Name);
+                //    }
+                //}
+            } 
+            #endregion Assert
+        }
+
+        private static void CompareNewWay(NameAndType expectedField, PropertyInfo propertyInfo)
+        {
+            var foundAttributes = CustomAttributeData.GetCustomAttributes(propertyInfo)
+                .AsQueryable().OrderBy(a => a.ToString()).ToList();
+            Assert.AreEqual(expectedField.ParameterAttributes.Count, foundAttributes.Count(), "For Field: " + propertyInfo.Name);
+            if (foundAttributes.Count() > 0)
+            {
+                for (int j = 0; j < foundAttributes.Count(); j++)
+                {
+                    //Assert.AreEqual(expectedField.Attributes[j], foundAttributes[j].ToString(), "For Field: " + propertyInfo.Name);
+                    Assert.IsTrue(
+                        foundAttributes[j].ToString().StartsWith(
+                            expectedField.ParameterAttributes[j].AttributeNameStartsWith));
+                    var namedParameters = foundAttributes[j].NamedArguments.ToList();
+                    Assert.AreEqual(expectedField.ParameterAttributes[j].NamedParameters.Count, namedParameters.Count,
+                                    "For Field: " + propertyInfo.Name + " For Attribute: " + foundAttributes[j]);
+                    if (namedParameters.Count > 0)
                     {
-                        Assert.AreEqual(expectedFields[i].Attributes[j], foundAttributes[j].ToString(), "For Field: " + propertyInfos[i].Name);
+                        var namedParametersAsStrings = new List<string>();
+                        foreach (var namedParameter in namedParameters)
+                        {
+                            namedParametersAsStrings.Add(namedParameter.ToString());
+                        }
+                        foreach (var expectedParameter in expectedField.ParameterAttributes[j].NamedParameters)
+                        {
+                            Assert.IsTrue(namedParametersAsStrings.Contains(expectedParameter), "For Field: " + propertyInfo.Name + " For Attribute: " + foundAttributes[j] + "Expected Parameter: " + expectedParameter + " Found: " + namedParametersAsStrings.ParseList());
+                        }
                     }
                 }
             }
-            #endregion Assert
+        }
+
+        private static void CompareOldWay(NameAndType expectedField, PropertyInfo propertyInfo)
+        {
+            var foundAttributes = CustomAttributeData.GetCustomAttributes(propertyInfo)
+                .AsQueryable().OrderBy(a => a.ToString()).ToList();
+            Assert.AreEqual(expectedField.Attributes.Count, foundAttributes.Count(), "For Field: " + propertyInfo.Name);
+            if (foundAttributes.Count() > 0)
+            {
+                for (int j = 0; j < foundAttributes.Count(); j++)
+                {
+                    Assert.AreEqual(expectedField.Attributes[j], foundAttributes[j].ToString(), "For Field: " + propertyInfo.Name);
+                }
+            }
+        }
+        private static string ParseList(this IEnumerable<string> source)
+        {
+            var rtValue = "";
+            foreach (var s in source)
+            {
+                rtValue = rtValue + "\n" + s;
+            }
+            return rtValue;
         }
     }
 }
