@@ -454,24 +454,25 @@ namespace CRP.Controllers
                     message.Body = body.ToString();
 
                     body.Append("<br/>Function parameters================<br/>");
-                    body.Append("acct_addr: " + touchNetValues.acct_addr);
-                    body.Append("acct_addr2: " + touchNetValues.acct_addr2);
-                    body.Append("acct_city: " + touchNetValues.acct_city);
-                    body.Append("acct_state: " + touchNetValues.acct_state);
-                    body.Append("acct_zip: " + touchNetValues.acct_zip);
-                    body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK);
-                    body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE);
-                    body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK);
-                    body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID);
-                    body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT);
-                    body.Append("PMT_AMT: " + touchNetValues.PMT_AMT);
-                    body.Append("pmt_date: " + touchNetValues.pmt_date);
-                    body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS);
-                    body.Append("Submit: " + touchNetValues.Submit);
-                    body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK);
-                    body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id);
-                    body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID);
-                    body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID);
+                    body.Append("acct_addr: " + touchNetValues.acct_addr + "<br/>");
+                    body.Append("acct_addr2: " + touchNetValues.acct_addr2 + "<br/>");
+                    body.Append("acct_city: " + touchNetValues.acct_city + "<br/>");
+                    body.Append("acct_state: " + touchNetValues.acct_state + "<br/>");
+                    body.Append("acct_zip: " + touchNetValues.acct_zip + "<br/>");
+                    body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK + "<br/>");
+                    body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE + "<br/>");
+                    body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK + "<br/>");
+                    body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID + "<br/>");
+                    body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT + "<br/>");
+                    body.Append("PMT_AMT: " + touchNetValues.PMT_AMT + "<br/>");
+                    body.Append("pmt_date: " + touchNetValues.pmt_date + "<br/>");
+                    body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS + "<br/>");
+                    body.Append("Submit: " + touchNetValues.Submit + "<br/>");
+                    body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK + "<br/>");
+                    body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id + "<br/>");
+                    body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID + "<br/>");
+                    body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID + "<br/>");
+
                     message.Body = body.ToString();
                     client.Send(message);
                     #endregion Email Error Results
@@ -575,28 +576,28 @@ namespace CRP.Controllers
                     message.Body = body.ToString();
 
                     body.Append("<br/>Function parameters================<br/>");
-                    body.Append("acct_addr: " + touchNetValues.acct_addr);
-                    body.Append("acct_addr2: " + touchNetValues.acct_addr2);
-                    body.Append("acct_city: " + touchNetValues.acct_city);
-                    body.Append("acct_state: " + touchNetValues.acct_state);
-                    body.Append("acct_zip: " + touchNetValues.acct_zip);
-                    body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK);
-                    body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE);
-                    body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK);
-                    body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID);
-                    body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT);
-                    body.Append("PMT_AMT: " + touchNetValues.PMT_AMT);
-                    body.Append("pmt_date: " + touchNetValues.pmt_date);
-                    body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS);
-                    body.Append("Submit: " + touchNetValues.Submit);
-                    body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK);
-                    body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id);
-                    body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID);
-                    body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID);
+                    body.Append("acct_addr: " + touchNetValues.acct_addr + "<br/>");
+                    body.Append("acct_addr2: " + touchNetValues.acct_addr2 + "<br/>");
+                    body.Append("acct_city: " + touchNetValues.acct_city + "<br/>");
+                    body.Append("acct_state: " + touchNetValues.acct_state + "<br/>");
+                    body.Append("acct_zip: " + touchNetValues.acct_zip + "<br/>");
+                    body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK + "<br/>");
+                    body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE + "<br/>");
+                    body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK + "<br/>");
+                    body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID + "<br/>");
+                    body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT + "<br/>");
+                    body.Append("PMT_AMT: " + touchNetValues.PMT_AMT + "<br/>");
+                    body.Append("pmt_date: " + touchNetValues.pmt_date + "<br/>");
+                    body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS + "<br/>");
+                    body.Append("Submit: " + touchNetValues.Submit + "<br/>");
+                    body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK + "<br/>");
+                    body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id + "<br/>");
+                    body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID + "<br/>");
+                    body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID + "<br/>");
 
                     try
                     {
-                        body.Append("Payment log values:<br/>");
+                        body.Append("<br/><br/>Payment log values:<br/>");
                         body.Append("Name:" + paymentLog.Name + "<br/>");
                         body.Append("Amount:" + paymentLog.Amount + "<br/>");
                         body.Append("Accepted:" + paymentLog.Accepted + "<br/>");
