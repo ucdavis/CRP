@@ -381,10 +381,10 @@ namespace CRP.Tests.Repositories
         #region CRUD Test
 
         /// <summary>
-        /// Tests the delete quantity answer does not cascade to question.
+        /// Tests the delete question option does not cascade to question.
         /// </summary>
         [TestMethod]
-        public void TestDeleteQuantityAnswerDoesNotCascadeToQuestion()
+        public void TestDeleteQuestionOptionDoesNotCascadeToQuestion()
         {
             #region Arrange
             Repository.OfType<Question>().DbContext.BeginTransaction();

@@ -246,6 +246,19 @@ namespace CRP.Tests.Core
         }
 
         /// <summary>
+        /// Loads the validators.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadValidators(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.Validator(i + 1);
+                Repository.OfType<Validator>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
         /// Loads the items.
         /// Requires Unit
         /// Requires ItemType

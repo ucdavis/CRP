@@ -180,6 +180,7 @@ namespace CRP.Tests.Repositories
 
             Repository.OfType<Question>().DbContext.BeginTransaction();
             var questionToAddQuestionOption = Repository.OfType<Question>().GetById(1);
+            questionToAddQuestionOption.QuestionType.HasOptions = true;
             questionToAddQuestionOption.AddOption(CreateValidEntities.QuestionOption(10));
             questionToAddQuestionOption.AddOption(CreateValidEntities.QuestionOption(11));
             questionToAddQuestionOption.Name = "Updated";

@@ -25,6 +25,9 @@ namespace CRP.Core.Domain
         {
             Options = new List<QuestionOption>();
             Validators = new List<Validator>();
+            OptionsNames = false;
+            OptionsRequired = false;
+            OptionsNotAllowed = false;
         }
 
         [Required]
@@ -35,14 +38,18 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual QuestionSet QuestionSet { get; set; }
         public virtual int Order { get; set; }
-
+        [NotNull]
         public virtual ICollection<QuestionOption> Options { get; set; }
+        [NotNull]
         public virtual ICollection<Validator> Validators { get; set; }
 
         public virtual void AddOption(QuestionOption questionOption)
         {
-            questionOption.Question = this;
-            Options.Add(questionOption);
+            if (QuestionType != null && QuestionType.HasOptions)
+            {
+                questionOption.Question = this;
+                Options.Add(questionOption);
+            }
         }
 
         public virtual void RemoveOptions(QuestionOption questionOption)
@@ -57,25 +64,71 @@ namespace CRP.Core.Domain
             }  
         }
 
+        /// <summary>
+        /// Determines whether this instance is valid.
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </returns>
         public override bool IsValid()
         {
-            var valid = true;
+            PopulateComplexLogicFields();
+            return base.IsValid();
+        }
 
-            // validate that the options are valid
+        public override ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
+        {
+            PopulateComplexLogicFields();
+            return base.ValidationResults();
+        }
+
+        /// <summary>
+        /// Populates the complex logic fields.
+        /// </summary>
+        private void PopulateComplexLogicFields()
+        {
+            OptionsNames = true;
+            OptionsRequired = true;
+            OptionsNotAllowed = true;
+
             if (QuestionType != null && QuestionType.HasOptions)
             {
-                foreach(var o in Options)
+                if(Options !=null && Options.Count > 0)
                 {
-                    if (string.IsNullOrEmpty(o.Name))
+                    foreach (var o in Options)
                     {
-                        valid = false;
-                        break;
+                        if (o.Name == null || string.IsNullOrEmpty(o.Name.Trim()))
+                        {
+                            OptionsNames = false;
+                            break;
+                        }
                     }
+                }
+                else
+                {
+                    OptionsRequired = false; //Fail it, they are required
+                }
+            }
+            else
+            {
+                if (Options != null && Options.Count > 0)
+                {
+                    OptionsNotAllowed = false; //Fail it, they are not allowed
                 }
             }
 
-            return base.IsValid() && valid;
         }
+
+        #region Fields ONLY used for complex validation, not in database
+        [AssertTrue(Message = "One or more options is invalid")]
+        public virtual bool OptionsNames { get; set; }
+
+        [AssertTrue(Message = "Options are required")]
+        public virtual bool OptionsRequired { get; set; }
+
+        [AssertTrue(Message = "Options not allowed")]
+        public virtual bool OptionsNotAllowed { get; set; }
+        #endregion Fields ONLY used for complex validation, not in database
 
     }
 }
