@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Util;
 using CRP.Controllers;
+using CRP.Controllers.Filter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.Attributes;
 using UCDArch.Testing;
@@ -31,6 +33,13 @@ namespace CRP.Tests.Controllers
     [TestClass]
     public class PaymentControllerTests : ControllerTestBase<PaymentController>
     {
+        protected readonly IPrincipal Principal = new MockPrincipal(false);
+        protected List<User> Users { get; set; }
+        protected IRepository<User> UserRepository { get; set; }
+        protected List<Item> Items { get; set; }
+        protected IRepository<Item> ItemRepository { get; set; }
+        protected List<Editor> Editors { get; set; }
+        protected IRepository<Editor> EditorRepository { get; set; }
         protected IRepository<Transaction> TransactionRepository { get; set; }
         protected IRepository<PaymentLog> PaymentLogRepository { get; set; }
         protected List<Transaction> Transactions { get; set; }
@@ -44,6 +53,12 @@ namespace CRP.Tests.Controllers
         {
             Transactions = new List<Transaction>();
             TransactionRepository = FakeRepository<Transaction>();
+            Items = new List<Item>();
+            ItemRepository = FakeRepository<Item>();
+            Users = new List<User>();
+            UserRepository = FakeRepository<User>();
+            Editors = new List<Editor>();
+            EditorRepository = FakeRepository<Editor>();
             PaymentLogRepository = FakeRepository<PaymentLog>();
             Controller.Repository.Expect(a => a.OfType<Transaction>()).Return(TransactionRepository).Repeat.Any();
             Controller.Repository.Expect(a => a.OfType<PaymentLog>()).Return(PaymentLogRepository).Repeat.Any();
@@ -112,9 +127,10 @@ namespace CRP.Tests.Controllers
         /// Tests the link to transaction returns view when transaction id found.
         /// </summary>
         [TestMethod]
-        public void TestLinkToTransactionReturnsViewWhenTransactionIdFound()
+        public void TestLinkToTransactionReturnsViewWhenTransactionIdFoundAndUserIsAdmin()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             FakeTransactions(3);
             TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
             #endregion Arrange
@@ -132,6 +148,41 @@ namespace CRP.Tests.Controllers
             #endregion Assert		
         }
 
+        /// <summary>
+        /// Tests the link to transaction returns view when transaction id found and user is editor.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionReturnsViewWhenTransactionIdFoundAndUserIsEditor()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
+            FakeTransactions(3);
+            FakeItems(1);
+            FakeUsers(2);
+            FakeEditors(2);
+            Users[0].LoginID = "OtherGuy";
+            Users[1].LoginID = "UserName";
+            Editors[0].User = Users[0];
+            Editors[1].User = Users[1];
+            Items[0].AddEditor(Editors[0]);
+            Items[0].AddEditor(Editors[1]);
+            Transactions[1].Item = Items[0];
+            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LinkToTransaction(2)
+                .AssertViewRendered()
+                .WithViewData<LinkPaymentViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreSame(Transactions[1], result.Transaction);
+            Assert.AreEqual(0, result.PaymentLogs.Count());
+            #endregion Assert
+        }
+
 
         /// <summary>
         /// Tests the test link to transaction returns view with existing payment logs when transaction id found.
@@ -140,6 +191,7 @@ namespace CRP.Tests.Controllers
         public void TestTestLinkToTransactionReturnsViewWithExistingPaymentLogsWhenTransactionIdFound()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             FakeTransactions(3);
             TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
             var paymentLogs = new List<PaymentLog>();
@@ -202,6 +254,7 @@ namespace CRP.Tests.Controllers
         public void TestLinkToTransactionPostWhereNoChecksSaves()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);            
             FakeTransactions(3);
             TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
@@ -227,6 +280,7 @@ namespace CRP.Tests.Controllers
         public void TestLinkToTransactionWithTwoNewChecksSaves()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             FakeTransactions(3);
             TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
@@ -257,6 +311,7 @@ namespace CRP.Tests.Controllers
         public void TestLinkToTransactionPostWithInvalidDataRollsBack1()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             var dbContext = MockRepository.GenerateMock<IDbContext>();
             TransactionRepository.Expect(a => a.DbContext).Return(dbContext).Repeat.Any();
@@ -290,6 +345,7 @@ namespace CRP.Tests.Controllers
         public void TestLinkToTransactionPostWithInvalidDataRollsBack2()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             var dbContext = MockRepository.GenerateMock<IDbContext>();
             TransactionRepository.Expect(a => a.DbContext).Return(dbContext).Repeat.Any();
@@ -324,6 +380,7 @@ namespace CRP.Tests.Controllers
         public void TestLinkToTransactionPostWhereInvalidButNotAcceptedCheckSaves()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             FakeTransactions(3);
             Transactions[1].Amount = 20;
@@ -410,7 +467,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(3, result.Count());
             #endregion Assert
         }
 
@@ -449,6 +506,25 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsTrue(result.Count() > 0, "UseAntiForgeryTokenOnPostByDefault not found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller has user only attribute.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerHasUserOnlyAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<UserOnlyAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "UserOnlyAttribute not found.");
             #endregion Assert
         }
         #endregion Controller Class Tests
@@ -536,6 +612,225 @@ namespace CRP.Tests.Controllers
                 Transactions[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
+
+        private void FakeItems(int count)
+        {
+            var offSet = Items.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Items.Add(CreateValidEntities.Item(i + 1 + offSet));
+                Items[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        private void FakeUsers(int count)
+        {
+            var offSet = Users.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Users.Add(CreateValidEntities.User(i + 1 + offSet));
+                Users[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        private void FakeEditors(int count)
+        {
+            var offSet = Editors.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Editors.Add(CreateValidEntities.Editor(i + 1 + offSet));
+                Editors[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        #region mocks
+        /// <summary>
+        /// Mock the Identity. Used for getting the current user name
+        /// </summary>
+        public class MockIdentity : IIdentity
+        {
+            public string AuthenticationType
+            {
+                get
+                {
+                    return "MockAuthentication";
+                }
+            }
+
+            public bool IsAuthenticated
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            public string Name
+            {
+                get
+                {
+                    return "UserName";
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Mock the Principal. Used for getting the current user name
+        /// </summary>
+        public class MockPrincipal : IPrincipal
+        {
+            IIdentity _identity;
+            public bool RoleReturnValue { get; set; }
+
+            public MockPrincipal(bool roleReturnvalue)
+            {
+                RoleReturnValue = roleReturnvalue;
+            }
+
+            public IIdentity Identity
+            {
+                get
+                {
+                    if (_identity == null)
+                    {
+                        _identity = new MockIdentity();
+                    }
+                    return _identity;
+                }
+            }
+
+            public bool IsInRole(string role)
+            {
+                //return false;
+                return RoleReturnValue;
+            }
+        }
+
+        /// <summary>
+        /// Mock the HttpContext. Used for getting the current user name
+        /// </summary>
+        public class MockHttpContext : HttpContextBase
+        {
+            private IPrincipal _user;
+            private int _count;
+            public bool RoleReturnValue { get; set; }
+            public MockHttpContext(int count, bool roleReturnValue)
+            {
+                _count = count;
+                RoleReturnValue = roleReturnValue;
+            }
+
+            public override IPrincipal User
+            {
+                get
+                {
+                    if (_user == null)
+                    {
+                        _user = new MockPrincipal(RoleReturnValue);
+                    }
+                    return _user;
+                }
+                set
+                {
+                    _user = value;
+                }
+            }
+
+            public override HttpRequestBase Request
+            {
+                get
+                {
+                    return new MockHttpRequest(_count);
+                }
+            }
+        }
+
+        public class MockHttpRequest : HttpRequestBase
+        {
+            MockHttpFileCollectionBase Mocked { get; set; }
+
+            public MockHttpRequest(int count)
+            {
+                Mocked = new MockHttpFileCollectionBase(count);
+            }
+            public override HttpFileCollectionBase Files
+            {
+                get
+                {
+                    return Mocked;
+                }
+            }
+        }
+
+        public class MockHttpFileCollectionBase : HttpFileCollectionBase
+        {
+            public int Counter { get; set; }
+
+            public MockHttpFileCollectionBase(int count)
+            {
+                Counter = count;
+                for (int i = 0; i < count; i++)
+                {
+                    BaseAdd("Test" + (i + 1), new byte[] { 4, 5, 6, 7, 8 });
+                }
+
+            }
+
+            public override int Count
+            {
+                get
+                {
+                    return Counter;
+                }
+            }
+            public override HttpPostedFileBase Get(string name)
+            {
+                return new MockHttpPostedFileBase();
+            }
+            public override HttpPostedFileBase this[string name]
+            {
+                get
+                {
+                    return new MockHttpPostedFileBase();
+                }
+            }
+            public override HttpPostedFileBase this[int index]
+            {
+                get
+                {
+                    return new MockHttpPostedFileBase();
+                }
+            }
+        }
+
+        public class MockHttpPostedFileBase : HttpPostedFileBase
+        {
+            public override int ContentLength
+            {
+                get
+                {
+                    return 5;
+                }
+            }
+            public override string FileName
+            {
+                get
+                {
+                    return "Mocked File Name";
+                }
+            }
+            public override Stream InputStream
+            {
+                get
+                {
+                    var memStream = new MemoryStream(new byte[] { 4, 5, 6, 7, 8 });
+                    return memStream;
+                }
+            }
+        }
+
+        #endregion
 
         #endregion Helper Methods
     }

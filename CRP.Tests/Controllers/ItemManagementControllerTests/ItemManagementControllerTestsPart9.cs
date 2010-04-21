@@ -21,8 +21,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         }
 
         [TestMethod]
-        public void TestDetailsReturnsUserItemDetailViewModelWhenIdFound()
+        public void TestDetailsReturnsUserItemDetailViewModelWhenIdFoundAndAdmin()
         {
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             FakeItems(1);
             FakeItemReports(1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
@@ -31,6 +32,59 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
                 .AssertViewRendered()
                 .WithViewData<UserItemDetailViewModel>();
 
+        }
+
+        [TestMethod]
+        public void TestDetailsReturnsUserItemDetailViewModelWhenIdFoundAndUserIsAnEditor()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
+            FakeItems(1);
+            FakeItemReports(1);
+            FakeUsers(3);
+            Users[1].LoginID = "UserName";
+            FakeEditors(1);
+            Editors[0].User = Users[1]; //User is editor
+            Items[0].AddEditor(Editors[0]);
+
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemReportRepository.Expect(a => a.Queryable).Return(ItemReports.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Details(1)
+                .AssertViewRendered()
+                .WithViewData<UserItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the details redirect to list if not an editor or admin.
+        /// </summary>
+        [TestMethod]
+        public void TestDetailsRedirectToListIfNotAnEditorOrAdmin()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
+            FakeItems(1);
+            FakeItemReports(1);
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemReportRepository.Expect(a => a.Queryable).Return(ItemReports.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Details(1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
+            #endregion Assert		
         }
         #endregion Details Tests
     }
