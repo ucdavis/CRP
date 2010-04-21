@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
 using MvcContrib.Attributes;
@@ -59,6 +60,20 @@ namespace CRP.CardSimulator.Controllers
                                 };
 
             return View(viewModel);
+        }
+
+        /// <summary>
+        /// Calculates the validation string.
+        /// </summary>
+        /// <param name="PostingKey">The posting key.</param>
+        /// <param name="EXT_TRANS_ID">The Transaction Id passed</param>
+        /// <param name="AMT">The AMT.</param>
+        /// <returns>Base64String</returns>
+        private string CalculateValidationString(string PostingKey, string EXT_TRANS_ID, string AMT)
+        {
+            MD5 hash = MD5.Create();
+            byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(PostingKey + EXT_TRANS_ID + AMT));
+            return Convert.ToBase64String(data);
         }
 
         [AcceptPost]
