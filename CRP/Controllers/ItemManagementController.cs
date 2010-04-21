@@ -249,6 +249,14 @@ namespace CRP.Controllers
             {
                 return this.RedirectToAction(a => a.List());
             }
+            //Only allow an editor to be removed if the current user is in the editors -JCS
+            if (item.Editors == null || !item.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
+            {
+                //Don't Have editor rights
+                //TODO: Use new resource?
+                Message = "You do not have editor rights to that item.";
+                return this.RedirectToAction(a => a.List());
+            }
 
             if (editor.Owner)
             {

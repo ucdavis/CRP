@@ -83,6 +83,8 @@ namespace CRP.Tests.Repositories
 
         #endregion Init and Overrides
 
+        //TODO: Test that remove Editor from item cascades to editors.
+
         //TODO: Other tests
     }
 }
