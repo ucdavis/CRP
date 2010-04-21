@@ -158,8 +158,14 @@ namespace CRP.Controllers
                 {
                     // get the answer
                     var answer = transactionAnswers.Where(a => a.QuestionId == emailQ.Id).FirstOrDefault();
-
-                    discount = coup.UseCoupon(answer.Answer, quantity);
+                    if (answer != null)
+                    {
+                        discount = coup.UseCoupon(answer.Answer, quantity);
+                    }
+                    else
+                    {
+                        discount = coup.UseCoupon(null, quantity);
+                    }
                 }
                 else
                 {

@@ -35,10 +35,22 @@ namespace CRP.Core.Domain
         public virtual string Code { get; set; }
         [NotNull]
         public virtual Item Item { get; set; }
+        /// <summary>
+        /// The coupon can be used for an unlimited number of transactions
+        /// </summary>
         public virtual bool Unlimited { get; set; }
+        /// <summary>
+        /// If not null, the date when the coupon has expired
+        /// </summary>
         public virtual DateTime? Expiration { get; set; }
+        /// <summary>
+        /// If specified, the coupon can only be used for transactions with a matching contact info's email
+        /// </summary>
         [Length(100)]
         public virtual string Email { get; set; }
+        /// <summary>
+        /// If the coupon has been used at least once
+        /// </summary>
         public virtual bool Used { get; set; }
         [RangeDouble(Min = 0.01, Max = 922337203685477.00, Message = "must be more than $0.00")]
         public virtual decimal DiscountAmount { get; set; }
@@ -54,6 +66,9 @@ namespace CRP.Core.Domain
         /// </summary>
         public virtual int? MaxQuantity { get; set; }
 
+        /// <summary>
+        /// If the coupon has not been deactivated
+        /// </summary>
         public virtual bool IsActive { get; set; }
 
         public virtual decimal UseCoupon(string email, int quantity)
@@ -92,7 +107,7 @@ namespace CRP.Core.Domain
             // has an email restriction
             if (!string.IsNullOrEmpty(Email) && !ignoreEmail)
             {
-                if (Email.ToLower() == email.ToLower())
+                if (!string.IsNullOrEmpty(email) && Email.ToLower() == email.ToLower())
                 {
                     return CalculateDiscount(quantity);
                 }

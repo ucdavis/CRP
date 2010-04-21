@@ -47,6 +47,7 @@ namespace CRP.Tests.Controllers
         protected IRepository<Question> QuestionRepository { get; set; }
         protected List<Coupon> Coupons { get; set; }
         protected IRepository<Coupon> CouponRepository { get; set; }
+        protected QuestionAnswerParameter[] TransactionAnswerParameters { get; set; }
 
         #region Init
         public TransactionControllerTests()
@@ -82,6 +83,8 @@ namespace CRP.Tests.Controllers
             OpenIdUsers = new List<OpenIdUser>();
             //OpenIdUserRepository = FakeRepository<OpenIdUser>();
             //Controller.Repository.Expect(a => a.OfType<OpenIdUser>()).Return(OpenIdUserRepository).Repeat.Any();
+
+            TransactionAnswerParameters = new QuestionAnswerParameter[1];
         }
         /// <summary>
         /// Registers the routes.
@@ -364,7 +367,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, null, null, true)
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
             #endregion Act
@@ -387,7 +390,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, null, null, true)
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
             #endregion Act
@@ -410,7 +413,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, null, null, true)
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
             #endregion Act
@@ -433,7 +436,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, null, null, true)
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -454,7 +457,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, null, null, false)
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, false)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -477,7 +480,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 1, 25.01m, "Check", string.Empty, string.Empty, null, null, true)
+            Controller.Checkout(2, 1, 25.01m, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -504,7 +507,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 1, null, StaticValues.CreditCard, string.Empty, string.Empty, null, null, true)
+            Controller.Checkout(2, 1, null, StaticValues.CreditCard, string.Empty, string.Empty, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -522,7 +525,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 1, null, string.Empty, string.Empty, string.Empty, null, null, true)
+            Controller.Checkout(2, 1, null, string.Empty, string.Empty, string.Empty, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -535,23 +538,19 @@ namespace CRP.Tests.Controllers
         }
 
         #region Coupon Tests
+        /// <summary>
+        /// Tests the checkout with valid data and coupon saves.
+        /// </summary>
         [TestMethod]
         public void TestCheckoutWithValidDataAndCouponSaves()
         {
             #region Arrange
             SetupDataForCheckoutTests();
             Items[1].CostPerItem = 20m;
-            Coupons[1].Item = Items[1];
-            Coupons[1].Code = "COUPON";
-            Coupons[1].IsActive = true;
-            Coupons[1].DiscountAmount = 5.01m;
-            Coupons[1].Unlimited = true;
-            Coupons[1].MaxQuantity = 2;
-            Coupons[1].Email = string.Empty;
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", null, null, true)
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -563,7 +562,300 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual(49.98m, args.Amount);
             #endregion Assert
         }
-        
+
+
+        /// <summary>
+        /// Tests the coupon is not active so not used.
+        /// </summary>
+        [TestMethod]
+        public void TestCouponIsNotActiveSoNotUsed()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].IsActive = false;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(60.00m, args.Amount);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the coupon is not found so not used.
+        /// </summary>
+        [TestMethod]
+        public void TestCouponIsNotFoundSoNotUsed()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Code = "COUPONNot";
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(60.00m, args.Amount);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the coupon is for A different item so not used.
+        /// </summary>
+        [TestMethod]
+        public void TestCouponIsForADifferentItemSoNotUsed()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Item = Items[2];
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(60.00m, args.Amount);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout with valid data and coupon with email saves.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutWithValidDataAndCouponWithEmailSaves()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Email = "bob@TEST.com";
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(49.98m, args.Amount);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout with valid data and coupon with different email does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutWithValidDataAndCouponWithDifferentEmailDoesNotSave()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Email = "NotFound@TEST.com";
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Coupon could not be used.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout used coupon does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutUsedCouponDoesNotSave()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Unlimited = false; //Not unlimited
+            Coupons[1].Used = true; //And used
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Coupon could not be used.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout expired coupon does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutExpiredCouponDoesNotSave()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Expiration = DateTime.Now;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Coupon could not be used.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout not expired coupon saves.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutNotExpiredCouponSaves()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Expiration = DateTime.Now.AddDays(1);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(49.98m, args.Amount);
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the checkout with no email coupon does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutWithNoEmailCouponDoesNotSave()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Email = "bob@test.com";
+            TransactionAnswerParameters[0].QuestionId = 99;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Coupon could not be used.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout with no email saves if coupon has not email.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutWithNoEmailSavesIfCouponHasNotEmail()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Email = string.Empty;
+            TransactionAnswerParameters[0].QuestionId = 99;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(49.98m, args.Amount);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout coupon used flag saves.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutCouponUsedFlagSaves()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 20m;
+            Coupons[1].Email = "bob@TEST.com";
+            Coupons[1].Unlimited = false;
+            Coupons[1].Used = false;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(49.98m, args.Amount);
+            Assert.IsTrue(Coupons[1].Used);
+            #endregion Assert
+        }
+
+
+
+
         #endregion Coupon Tests
 
 
@@ -1092,6 +1384,16 @@ namespace CRP.Tests.Controllers
             ControllerRecordFakes.FakeUnits(Units, 1);
             ControllerRecordFakes.FakeDisplayProfile(DisplayProfiles, 3);
             ControllerRecordFakes.FakeCoupons(Coupons, 3);
+
+            Coupons[1].Item = Items[1];
+            Coupons[1].Code = "COUPON";
+            Coupons[1].IsActive = true;
+            Coupons[1].DiscountAmount = 5.01m;
+            Coupons[1].Unlimited = true;
+            Coupons[1].Used = true; //And used
+            Coupons[1].MaxQuantity = 2;
+            Coupons[1].Email = string.Empty;
+
             Items[1].Unit = Units[0];
             DisplayProfiles[1].Unit = Units[0];
 
@@ -1140,6 +1442,8 @@ namespace CRP.Tests.Controllers
             SystemTime.Now = () => fakeDate;
             SetupDataForTests();
             SetupDataForPopulateItemTransactionAnswer();
+            SetupDataForTransactionAnswerParameters();
+
             ControllerRecordFakes.FakeTransactions(Transactions, 5);
             foreach (var transaction in Transactions)
             {
@@ -1152,6 +1456,16 @@ namespace CRP.Tests.Controllers
             Items[1].Expiration = fakeDate.AddDays(5);
 
             return fakeDate;
+        }
+
+        /// <summary>
+        /// Setups the data for transaction answer parameters.
+        /// </summary>
+        private void SetupDataForTransactionAnswerParameters()
+        {
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "bob@test.com";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
         }
 
         private void LoadContactInfoQuestions()
