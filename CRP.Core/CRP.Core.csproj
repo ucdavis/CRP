@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Domain\Check.cs" />
     <Compile Include="Domain\Coupon.cs" />
+    <Compile Include="Domain\DisplayProfile.cs" />
     <Compile Include="Domain\ExtendedProperty.cs" />
     <Compile Include="Domain\ExtendedPropertyAnswer.cs" />
     <Compile Include="Domain\Item.cs" />
@@ -126,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\Coupon.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\DisplayProfile.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
