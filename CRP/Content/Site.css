@@ -77,7 +77,7 @@ fieldset ul li label {margin-bottom:0em;}
 
 
 
-.validation-summary-errors {float:right; position:fixed; top:300px; border-bottom:1px #e6e6e6 solid; font-weight:bold;}
+.validation-summary-errors { border-bottom:1px #e6e6e6 solid; font-weight:bold;}
 
 /* Link to transaction */
 #TransactionDetails ul, .check ul {margin:0; padding:0;}
