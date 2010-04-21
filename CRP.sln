@@ -54,6 +54,9 @@ EndProject
 Project("{4F174C21-8C12-11D0-8340-0000F80270F8}") = "CRP.DB", "CRP.DB\CRP.DB.dbp", "{56839976-E154-430C-BAC7-881DC42BF754}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.CardSimulator", "CRP.CardSimulator\CRP.CardSimulator.csproj", "{12D7804E-D1C5-4F85-87B9-AE898F43116A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{176A7FB7-9299-4CD0-9962-931C697BB023} = {176A7FB7-9299-4CD0-9962-931C697BB023}
+	EndProjectSection
 EndProject
 Project("{2CFEAB61-6A3B-4EB8-B523-560B4BEEF521}") = "CRP.Deploy", "CRP.Deploy\CRP.Deploy.wdproj", "{1BA8D426-2727-4133-B98F-1D583A913C72}"
 EndProject
