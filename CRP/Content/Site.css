@@ -22,6 +22,8 @@ a img {border:none;}
 .clear {clear:left;}
 .page {max-width:1000px;}
 .watermark {color:#797971;} /* search bar */
+#logindisplay .top_head_empty {float:left; padding:0;}
+#logindisplay .top_head_empty li {padding:0;}
 
 /* remove */
 #title {display:none;}
@@ -75,4 +77,8 @@ fieldset ul li label {margin-bottom:0em;}
 
 
 
-.validation-summary-errors {float:right; position:fixed; top:300px; background-color:#000000; border-bottom:1px #e6e6e6 solid;}
+.validation-summary-errors {float:right; position:fixed; top:300px; border-bottom:1px #e6e6e6 solid;}
+
+/* Link to transaction */
+#TransactionDetails ul, .check ul {margin:0; padding:0;}
+#TransactionDetails ul li, .check ul li {list-style-type:none;}

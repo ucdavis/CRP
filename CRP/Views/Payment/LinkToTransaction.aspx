@@ -11,7 +11,7 @@
     <style type="text/css">
         .deactivated
         {
-            background-color:Red;
+            border:2px solid #ff0000;
         }
     </style>
 
@@ -32,10 +32,10 @@
                 });
             });
 
-            $("img#addCheck").click(function(event) {
+            $("span#addCheck").click(function(event) {
                 var fieldset = $($("fieldset.check")[0]);
                 var cloned = fieldset.clone();
-                var addImg = $("img#addCheck");
+                var addImg = $("span#addCheck");
 
                 cloned.find("input").val("");
                 cloned.find("textarea").val("");
@@ -148,23 +148,25 @@
         <tr>
             <td style="width:40%">
                 <div id="TransactionDetails">
-                    <p>
+                <ul>
+                    <li>
                         Transaction Number: <%= Html.Encode(Model.Transaction.TransactionNumber) %>
-                    </p>
-                    <p>
+                    </li
+                    <li>
                         Transaction Date:
                         <%= Html.Encode(Model.Transaction.TransactionDate) %>
-                    </p>    
-                    <p>
+                    </li>    
+                    <li>
                         Amount:
                         <%= Html.Encode(Model.Transaction.AmountTotal.ToString("C"))%>
                         <%= Html.Hidden("TotalAmount", Model.Transaction.AmountTotal) %>
-                    </p>
-                    <p>
+                    </li>
+                    <li>
                         Donation Amount:
                         <%= Html.Encode(Model.Transaction.DonationTotal.ToString("C")) %>
                         <%= Html.Hidden("DonationAmount", Model.Transaction.DonationTotal) %>
-                    </p>
+                    </li>
+                    </ul>
                 </div>
             </td>
             <td style="width:60%">
@@ -180,7 +182,8 @@
                     <% Html.RenderPartial(StaticValues.Partial_CheckView, new PaymentLog(){Accepted = true}); %>
                 </fieldset>
                 
-                <img id="addCheck" src="../../Images/plus.png" style="width:24px; height:24px" />
+                <!-- needs a help balloon -->
+                <span id="addCheck">Add Check<img src="../../Images/plus.png" style="width:24px; height:24px" /></span>
             </td>
         </tr>
         <tr>

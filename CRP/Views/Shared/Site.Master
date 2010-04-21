@@ -72,6 +72,7 @@
             </div>
               
             <div id="logindisplay">
+                <ul class="top_head_empty"><li></li></ul>
                 <ul>
                 <li><%= Html.ActionLink<HomeController>(a => a.AdminHome(), "Admin Tools") %></li>
                 <li><%= Html.ActionLink<TransactionController>(a => a.Lookup(), "Lookup Order") %></li>

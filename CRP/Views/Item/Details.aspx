@@ -23,7 +23,7 @@
             <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item.Id}) %>' />
         </span>
         
-        <p>
+        <ul><li>
             <strong>CostPerItem:</strong>
             <%= Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))%>
         </p>
