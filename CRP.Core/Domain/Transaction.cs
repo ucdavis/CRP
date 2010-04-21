@@ -195,11 +195,16 @@ namespace CRP.Core.Domain
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="Transaction"/> is paid.
+        /// Modified so if they paid more, we still say it is paid - JCS
+        /// </summary>
+        /// <value><c>true</c> if paid; otherwise, <c>false</c>.</value>
         public virtual bool Paid
         {
             get
             {
-                return TotalPaid == Total;
+                return TotalPaid >= Total;
             }
         }
 
