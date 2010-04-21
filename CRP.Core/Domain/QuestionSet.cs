@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
 
@@ -69,7 +70,30 @@ namespace CRP.Core.Domain
             }
 
             return base.IsValid() && flag;
+
+            //TODO: Review using the commented out code.
+            //CollegeReusableSchool = true;
+            //Reusability = true;
+            //if (CollegeReusable)
+            //{
+            //    if (School == null)
+            //    {
+            //        CollegeReusableSchool = false;
+            //    }
+            //}
+            //// should really only be reusable at one level
+            //if (SystemReusable && CollegeReusable || SystemReusable && UserReusable || CollegeReusable && UserReusable)
+            //{
+            //    Reusability = false;
+            //}
+
+            //return base.IsValid();
         }
+
+        //[AssertTrue(Message = "Must have school if college reusable")]
+        //public virtual bool CollegeReusableSchool{ get; set;}
+        //[AssertTrue(Message = "Only one reusable flag may be set to true")]
+        //public virtual bool Reusability { get; set; }
 
     }
 }

@@ -142,7 +142,7 @@
     <EmbeddedResource Include="Domain\Editor.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Domain\ItenTypeQuestionSet.hbm.xml" />
+    <EmbeddedResource Include="Domain\ItemTypeQuestionSet.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\Template.hbm.xml" />
