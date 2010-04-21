@@ -10,9 +10,11 @@
     <fieldset id='<%= Html.Encode(qs.Id) %>'>
         <legend><%= Html.Encode(qs.QuestionSet.Name) %></legend>
         
-        <% foreach (var q in qs.QuestionSet.Questions) {%>
+        <% foreach (var q in qs.QuestionSet.Questions) {
+                var answer = Model.Answers.Where(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id).FirstOrDefault();
+               %>
         
-            <% Html.RenderPartial("~/Views/Shared/QuestionForm.ascx", new ItemQuestionViewModel(q, Model.OpenIDUser)); %>
+            <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty)); %>
         
         <% } %>
         
@@ -28,18 +30,23 @@
 </p>
 
 <div class="QuantityContainer">
-    <% foreach(var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order)) { %> 
+    <% for (var i = 0; i < Model.Quantity; i++ ) { %>
+        <% foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
+           { %> 
 
-            <fieldset>
-            <legend><%= Html.Encode(qs.QuestionSet.Name) %> <span class="quantityIndex">1</span> </legend>
-            
-            <% foreach (var q in qs.QuestionSet.Questions) {%>
-            
-                <% Html.RenderPartial("~/Views/Shared/QuestionForm.ascx", new ItemQuestionViewModel(q, Model.OpenIDUser)); %>
-            
-            <% } %>
-            
-        </fieldset>
+                <fieldset>
+                <legend><%= Html.Encode(qs.QuestionSet.Name)%> <span class="quantityIndex"><%= Html.Encode(i + 1) %></span> </legend>
+                
+                <% foreach (var q in qs.QuestionSet.Questions) {
+                    var answer = Model.Answers.Where(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i).FirstOrDefault();
+                   %>
+                
+                    <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty)); %>
+                
+                <% } %>
+                
+            </fieldset>
 
-    <% } %>
+        <% } %> <!-- End of foreach loop -->
+    <% } %> <!-- End of for loop -->
 </div>

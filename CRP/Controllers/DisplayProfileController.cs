@@ -1,6 +1,7 @@
 using System.IO;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
+using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -34,7 +35,7 @@ namespace CRP.Controllers
         /// GET: /ApplicationManagement/ListDisplayProfiles
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles="Admin")]
+        [RolesFilter.AdminOnlyAttribute]
         public ActionResult List()
         {
             return View(Repository.OfType<DisplayProfile>().Queryable);
@@ -44,7 +45,7 @@ namespace CRP.Controllers
         /// GET: /ApplicationManagement/CreateDisplayProfile
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "Admin")]
+        [RolesFilter.AdminOnlyAttribute]
         public ActionResult Create()
         {
             return View(DisplayProfileViewModel.Create(Repository, _schoolRepository));

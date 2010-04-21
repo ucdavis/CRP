@@ -7,7 +7,7 @@
 </asp:Content>
 
 <asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
-    <% Html.RenderPartial(StaticValues.View_PageHeader, Model.DisplayProfile ?? new DisplayProfile()); %>
+    <% Html.RenderPartial(StaticValues.Partial_PageHeader, Model.DisplayProfile ?? new DisplayProfile()); %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -30,7 +30,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><%= Html.TextBox("quantity", 1, new {@style = "width:20px;", @class="quantityAmount"}) %></td>
+                    <td><%= Html.TextBox("quantity", Model.Quantity, new {@style = "width:20px;", @class="quantityAmount"}) %></td>
                     <td><%= Html.Encode(Model.Item.Name) %></td>
                     <td>$ <span class="perItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
                     <td>$ <span class="totalItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
@@ -66,8 +66,8 @@
                 <tr>
                     <td colspan="4">
                         <label for="paymentType">Payment Method: </label>
-                        <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.CreditCard %>" /><label for="credit">Credit Card</label>
-                        <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.Check %>" /><label for="check">Check</label>
+                        <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.CreditCard %>" "<%= Model.CreditPayment ? "checked" : string.Empty %>" /><label for="credit">Credit Card</label>
+                        <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.Check %>" "<%= Model.CheckPayment ? "checked" : string.Empty %>" /><label for="check">Check</label>
                     </td>
                 </tr>
                 <% if (!String.IsNullOrEmpty(Model.Item.RestrictedKey)) { %>
@@ -88,7 +88,11 @@
         </p>
     </div>
     
-    <% Html.RenderPartial("~/Views/Shared/TransactionForm.ascx", new ItemTransactionViewModel(Model.Item, Model.OpenIdUser)); %>
+    <% Html.RenderPartial(StaticValues.Partial_TransactionForm, new ItemTransactionViewModel(Model.Item, Model.OpenIdUser, Model.Quantity, Model.Answers)); %>
+
+    <p>
+        <%= Html.GenerateCaptcha() %>
+    </p>
 
     <p>
         <input type="submit" value="Submit" />
@@ -118,7 +122,7 @@
     
         $(document).ready(function() {
             // do some client side validation on the dynamic fields
-            $("form#CheckoutForm").validate();
+            //$("form#CheckoutForm").validate();
 
             $("input.dateForm").datepicker();
 
@@ -206,7 +210,7 @@
 
             // calculate the totals
             var itemTotal = quantity * costPerItem;          
-            var discountTotal;//= quantity * discountAmountPerItem;
+            var discountTotal = 0;
             if (maxQuantity == -1 || maxQuantity > quantity)
             {
                 discountTotal = quantity * discountAmountPerItem;

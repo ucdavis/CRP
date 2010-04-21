@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstractions\IPaymentProvider.cs" />
+    <Compile Include="Abstractions\IQuestionAnswer.cs" />
     <Compile Include="Abstractions\ISearchTermProvider.cs" />
     <Compile Include="Abstractions\SystemTime.cs" />
     <Compile Include="Domain\CatbertClasses.cs" />

@@ -1,4 +1,5 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IQueryable<CRP.Core.Domain.Item>>" %>
+<%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
    
@@ -22,7 +23,7 @@
                         
                         <h3><%= Html.Encode(item.Expiration.HasValue ? item.Expiration.Value.ToString("d") : string.Empty) %></h3>                    
                         
-                        <% Html.RenderPartial("~/Views/Shared/TagView.ascx", item.Tags); %>
+                        <% Html.RenderPartial(StaticValues.Partial_TagView, item.Tags); %>
                         
                         <p>
                             <%= item.Description %>

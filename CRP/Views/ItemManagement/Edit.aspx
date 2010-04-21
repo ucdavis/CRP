@@ -8,7 +8,7 @@
 
 <asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
 
-    <% Html.RenderPartial(StaticValues.View_PageHeader, new DisplayProfile()); %>
+    <% Html.RenderPartial(StaticValues.Partial_PageHeader, new DisplayProfile()); %>
 
 </asp:Content>
 
@@ -45,7 +45,7 @@
                {%>
 
             <%
-                Html.RenderPartial("~/Views/Shared/ItemForm.ascx");%>
+                Html.RenderPartial(StaticValues.Partial_ItemForm);%>
 
             <% }%>
         

@@ -1,10 +1,11 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using CRP.Core.Abstractions;
+using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
-    public class TransactionAnswer : DomainObject
+    public class TransactionAnswer : DomainObject, IQuestionAnswer
     {
         public TransactionAnswer()
         {

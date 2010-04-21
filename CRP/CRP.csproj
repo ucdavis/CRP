@@ -85,6 +85,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\NHibernate.ByteCode.Spring.dll</HintPath>
     </Reference>
+    <Reference Include="Recaptcha, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Recaptcha.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core">
@@ -144,7 +148,9 @@
     <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\DisplayProfileController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
+    <Compile Include="Controllers\Filter\Recaptcha.cs" />
     <Compile Include="Controllers\Filter\RequireOpenId.cs" />
+    <Compile Include="Controllers\Filter\RolesFilter.cs" />
     <Compile Include="Controllers\Helpers\Access.cs" />
     <Compile Include="Controllers\Helpers\Copiers.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />

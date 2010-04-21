@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
+using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -15,7 +16,7 @@ using MvcContrib;
 
 namespace CRP.Controllers
 {
-    [Authorize(Roles="User")]
+    [RolesFilter.UserOnlyAttribute]
     public class ItemManagementController : SuperController
     {
         //

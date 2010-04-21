@@ -8,14 +8,14 @@
 </asp:Content>
 
 <asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
-    <% Html.RenderPartial(StaticValues.View_PageHeader, new DisplayProfile()); %>
+    <% Html.RenderPartial(StaticValues.Partial_PageHeader, new DisplayProfile()); %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <% Html.RenderPartial("~/Views/Shared/TagView.ascx", Model.Tags); %>
+    <% Html.RenderPartial(StaticValues.Partial_TagView, Model.Tags); %>
 
-    <% Html.RenderPartial("~/Views/Shared/ItemBrowse.ascx", Model.Items); %>
+    <% Html.RenderPartial(StaticValues.Partial_ItemBrowse, Model.Items); %>
 
 </asp:Content>
 

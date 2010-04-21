@@ -1,11 +1,12 @@
 ﻿using System;
+using CRP.Core.Abstractions;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
-    public class QuantityAnswer : DomainObject
+    public class QuantityAnswer : DomainObject, IQuestionAnswer
     {
         public QuantityAnswer()
         {

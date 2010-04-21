@@ -6,7 +6,7 @@
 </asp:Content>
 
 <asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
-    <% Html.RenderPartial(StaticValues.View_PageHeader, new DisplayProfile()); %>
+    <% Html.RenderPartial(StaticValues.Partial_PageHeader, new DisplayProfile()); %>
 </asp:Content>
 
 <asp:Content ID="errorContent" ContentPlaceHolderID="MainContent" runat="server">

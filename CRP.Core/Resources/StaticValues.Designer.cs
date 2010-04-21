@@ -97,6 +97,78 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/CheckView.ascx.
+        /// </summary>
+        public static string Partial_CheckView {
+            get {
+                return ResourceManager.GetString("Partial_CheckView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/ItemBrowse.ascx.
+        /// </summary>
+        public static string Partial_ItemBrowse {
+            get {
+                return ResourceManager.GetString("Partial_ItemBrowse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/ItemForm.ascx.
+        /// </summary>
+        public static string Partial_ItemForm {
+            get {
+                return ResourceManager.GetString("Partial_ItemForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/LogOnUserControl.ascx.
+        /// </summary>
+        public static string Partial_LogOnUserControl {
+            get {
+                return ResourceManager.GetString("Partial_LogOnUserControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/PageHeader.ascx.
+        /// </summary>
+        public static string Partial_PageHeader {
+            get {
+                return ResourceManager.GetString("Partial_PageHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/QuestionForm.ascx.
+        /// </summary>
+        public static string Partial_QuestionForm {
+            get {
+                return ResourceManager.GetString("Partial_QuestionForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/TagView.ascx.
+        /// </summary>
+        public static string Partial_TagView {
+            get {
+                return ResourceManager.GetString("Partial_TagView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/TransactionForm.ascx.
+        /// </summary>
+        public static string Partial_TransactionForm {
+            get {
+                return ResourceManager.GetString("Partial_TransactionForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address Line 2.
         /// </summary>
         public static string Question_AddressLine2 {

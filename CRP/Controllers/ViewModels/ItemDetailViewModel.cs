@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
@@ -11,6 +12,11 @@ namespace CRP.Controllers.ViewModels
         public Item Item { get; set; }
         public DisplayProfile DisplayProfile { get; set; }
         public OpenIdUser OpenIdUser { get; set; }
+        public Transaction Transaction { get; set; }
+        public int Quantity { get; set; }
+        public IEnumerable<ItemTransactionAnswer> Answers { get; set; }
+        public bool CreditPayment { get; set; }
+        public bool CheckPayment { get; set; }
 
         public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser)
         {
@@ -65,25 +71,44 @@ namespace CRP.Controllers.ViewModels
 
     public class ItemTransactionViewModel
     {
-        public ItemTransactionViewModel(Item item, OpenIdUser openIDUser)
+        public ItemTransactionViewModel(Item item, OpenIdUser openIDUser, int quantity, IEnumerable<ItemTransactionAnswer> answers)
         {
             Item  = item;
             OpenIDUser = openIDUser;
+            Quantity = quantity;
+            Answers = answers;
         }
 
         public Item Item{ get; set; }
         public OpenIdUser OpenIDUser { get; set; }
+        public int Quantity { get; set; }
+        public IEnumerable<ItemTransactionAnswer> Answers { get; set; }
     }
 
     public class ItemQuestionViewModel
     {
-        public ItemQuestionViewModel(Question question, OpenIdUser openIDUser)
+        public ItemQuestionViewModel(Question question, OpenIdUser openIDUser, string answer)
         {
             Question = question;
             OpenIDUser = openIDUser;
+            Answer = answer;
         }
 
         public Question Question { get; set; }
         public OpenIdUser OpenIDUser { get; set; }
+        public string Answer { get; set; }
+    }
+
+    public class ItemTransactionAnswer
+    {
+        public int QuestionId { get; set; }
+        public int QuestionSetId { get; set; }
+        public int QuantityIndex { get; set; }
+        public string Answer { get; set; }
+
+        /// <summary>
+        /// If true, transaction, else quantity answer
+        /// </summary>
+        public bool Transaction{ get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib;
@@ -12,7 +13,7 @@ using CRP.Core.Resources;
 
 namespace CRP.Controllers
 {
-    [Authorize(Roles="Admin")]
+    [RolesFilter.AdminOnlyAttribute]
     public class ExtendedPropertyController : SuperController
     {
         //

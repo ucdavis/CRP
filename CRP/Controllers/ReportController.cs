@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
+using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -21,7 +22,7 @@ namespace CRP.Controllers
         /// <param name="id"></param>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [Authorize(Roles="User")]
+        [RolesFilter.UserOnlyAttribute]
         public ActionResult ViewReport(int id, int itemId)
         {
             var itemReport = Repository.OfType<ItemReport>().GetNullableByID(id);
@@ -36,7 +37,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [Authorize(Roles="User")]
+        [RolesFilter.UserOnlyAttribute]
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
@@ -71,7 +72,7 @@ namespace CRP.Controllers
         /// <param name="createReportParameters"></param>
         /// <returns></returns>
         [AcceptPost]
-        [Authorize(Roles="User")]
+        [RolesFilter.UserOnlyAttribute]
         public ActionResult Create(int itemId, string name, CreateReportParameter[] createReportParameters)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);

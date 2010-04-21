@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
+using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -29,7 +30,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [Authorize(Roles="User")]
+        [RolesFilter.UserOnlyAttribute]
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);

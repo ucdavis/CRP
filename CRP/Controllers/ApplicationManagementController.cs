@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Web.Mvc;
+using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
@@ -11,7 +12,7 @@ using MvcContrib;
 
 namespace CRP.Controllers
 {
-    [Authorize(Roles="Admin")]
+    [RolesFilter.AdminOnlyAttribute]
     public class ApplicationManagementController : SuperController
     {
         //

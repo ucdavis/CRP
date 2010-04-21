@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
-using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
@@ -40,6 +41,8 @@ namespace CRP.Controllers
             }
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
+            viewModel.Quantity = 1;
+            viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
             return View(viewModel);
         }
 
@@ -67,8 +70,9 @@ namespace CRP.Controllers
         /// <param name="transactionAnswers"></param>
         /// <param name="quantityAnswers"></param>
         /// <returns></returns>
+        [RecaptchaFilter.CaptchaValidatorAttribute]
         [AcceptPost]
-        public ActionResult Checkout(int id, int quantity, decimal? donation, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
+        public ActionResult Checkout(int id, int quantity, decimal? donation, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
         {
             #region DB Queries
             // get the item
@@ -88,6 +92,11 @@ namespace CRP.Controllers
             if (item == null || !item.IsAvailableForReg)
             {
                 return this.RedirectToAction<ItemController>(a => a.List());
+            }
+
+            if (!captchaValid)
+            {
+                ModelState.AddModelError("Captcha", "Captcha values are not valid.");
             }
 
             var transaction = new Transaction(item);
@@ -135,21 +144,27 @@ namespace CRP.Controllers
             foreach(var qa in transactionAnswers)
             {
                 var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
+
                 // if question is null just drop it
                 if (question != null)
                 {
+                    
+                    var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
+                         ? qa.Answer
+                         : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
+
                     // validate each of the validators
                     foreach (var validator in question.Validators)
                     {
                         string message;
-                        if (!Validate(validator, qa.Answer, question.Name, out message))
+                        if (!Validate(validator, answer, question.Name, out message))
                         {
                             ModelState.AddModelError("Transaction Question", message);
                         }
                     }
 
-                    var answer = new TransactionAnswer(transaction, question.QuestionSet, question, qa.Answer);
-                    transaction.AddTransactionAnswer(answer);
+                    var qanswer = new TransactionAnswer(transaction, question.QuestionSet, question, answer);
+                    transaction.AddTransactionAnswer(qanswer);
                 }
                 //TODO: consider writing this to a log or something
             }
@@ -166,21 +181,24 @@ namespace CRP.Controllers
                     // if question is null just drop it
                     if (question != null)
                     {
+                        var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
+                             ? qa.Answer
+                             : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty) ;
+
                         var fieldName = question.Name + " for attendee " + (i + 1);
                         
                         // validate each of the validators
                         foreach(var validator in question.Validators)
                         {
                             string message;
-                            if (!Validate(validator, qa.Answer, fieldName, out message))
+                            if (!Validate(validator, answer, fieldName, out message))
                             {
                                 ModelState.AddModelError("Quantity Question", message);
                             }
                         }
 
-                        var answer = new QuantityAnswer(transaction, question.QuestionSet, question, qa.Answer,
-                                                        quantityId);
-                        transaction.AddQuantityAnswer(answer);
+                        var qanswer = new QuantityAnswer(transaction, question.QuestionSet, question, answer,quantityId);
+                        transaction.AddQuantityAnswer(qanswer);
                     }
                 }
             }
@@ -219,7 +237,10 @@ namespace CRP.Controllers
             }
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
-            //TODO: add the transaction to the viewmodel so the answers will be populated
+            viewModel.Quantity = quantity;
+            viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
+            viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);
+            viewModel.CheckPayment = (paymentType == StaticValues.Check);
             return View(viewModel);
         }
 
@@ -317,6 +338,125 @@ namespace CRP.Controllers
             message = string.Format(validator.ErrorMessage, fieldName);
             return false;
         }
+
+        private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(OpenIdUser openIdUser, ICollection<ItemQuestionSet> questionSets)
+        {
+            var answers = new List<ItemTransactionAnswer>();
+
+            // if anything is null, just return no answers
+            if (openIdUser == null || questionSets == null) return answers;
+
+            // find the contact information question set
+            var questionSet = questionSets.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).Select(a => a.QuestionSet).FirstOrDefault();
+
+            // if it exists, fill in the questions
+            if (questionSet != null)
+            {
+                foreach(var question in questionSet.Questions)
+                {
+                    var ans = string.Empty;
+
+                    if (question.Name == StaticValues.Question_FirstName)
+                    {
+                        ans = openIdUser.FirstName;
+                    }
+                    else if (question.Name == StaticValues.Question_LastName)
+                    {
+                        ans = openIdUser.LastName;
+                    }
+                    else if (question.Name == StaticValues.Question_StreetAddress)
+                    {
+                        ans = openIdUser.StreetAddress;
+                    }
+                    else if (question.Name == StaticValues.Question_AddressLine2)
+                    {
+                        ans = openIdUser.Address2;
+                    }
+                    else if (question.Name == StaticValues.Question_City)
+                    {
+                        ans = openIdUser.City;
+                    }
+                    else if (question.Name == StaticValues.Question_State)
+                    {
+                        ans = openIdUser.State;
+                    }
+                    else if (question.Name == StaticValues.Question_Zip)
+                    {
+                        ans = openIdUser.Zip;
+                    }
+                    else if (question.Name == StaticValues.Question_PhoneNumber)
+                    {
+                        ans = openIdUser.PhoneNumber;
+                    }
+                    else if (question.Name == StaticValues.Question_Email)
+                    {
+                        ans = openIdUser.Email;
+                    }
+
+                    // create the answer object
+                    var answer = new ItemTransactionAnswer()
+                    {
+                        Answer = ans,
+                        QuestionId = question.Id,
+                        QuestionSetId = question.QuestionSet.Id,
+                        Transaction = true
+                    };
+
+                    answers.Add(answer);
+                }
+            }
+
+            return answers;
+        }
+        private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
+        {
+            var answers = new List<ItemTransactionAnswer>();
+
+            foreach (var qap in transactionAnswers)
+            {
+                var question = Repository.OfType<Question>().GetNullableByID(qap.QuestionId);
+                var answer = qap.Answer;
+
+                if (question != null)
+                {
+                    if (question.QuestionType.Name == QuestionTypeText.STR_CheckboxList && qap.CblAnswer != null) answer = string.Join(",", qap.CblAnswer);
+                }
+
+                var a = new ItemTransactionAnswer()
+                {
+                    Answer = answer,
+                    QuestionId = qap.QuestionId,
+                    QuestionSetId = qap.QuestionSetId,
+                    Transaction = true
+                };
+
+                answers.Add(a);
+            }
+
+            foreach (var qap in quantityAnswers)
+            {
+                var question = Repository.OfType<Question>().GetNullableByID(qap.QuestionId);
+                var answer = qap.Answer;
+
+                if (question != null)
+                {
+                    if (question.QuestionType.Name == QuestionTypeText.STR_CheckboxList && qap.CblAnswer != null) answer = string.Join(",", qap.CblAnswer);
+                }
+
+                var a = new ItemTransactionAnswer()
+                {
+                    Answer = answer,
+                    QuestionId = qap.QuestionId,
+                    QuestionSetId = qap.QuestionSetId,
+                    QuantityIndex = qap.QuantityIndex,
+                    Transaction = false
+                };
+
+                answers.Add(a);
+            }
+
+            return answers;
+        }
     }
 
     public class QuestionAnswerParameter
@@ -325,5 +465,7 @@ namespace CRP.Controllers
         public int QuestionSetId { get; set; }
         public int QuantityIndex { get; set; }
         public string Answer { get; set; }
+
+        public string[] CblAnswer { get; set; }
     }
 }

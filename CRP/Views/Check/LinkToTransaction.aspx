@@ -120,7 +120,7 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
-    <% Html.RenderPartial(StaticValues.View_PageHeader, new DisplayProfile()); %>
+    <% Html.RenderPartial(StaticValues.Partial_PageHeader, new DisplayProfile()); %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -162,7 +162,7 @@
                 <% for (var i = 0; i < Model.PaymentLogs.Count(); i++ ) { %> 
                     <fieldset class="check">
                         <legend>Check <span class="checkIndex"><%= Html.Encode(i + 1) %></span></legend>
-                        <% Html.RenderPartial("~/Views/Shared/CheckView.ascx", Model.PaymentLogs.ToList()[i]); %>
+                        <% Html.RenderPartial(StaticValues.Partial_CheckView, Model.PaymentLogs.ToList()[i]); %>
                     </fieldset>
                 <% } %>
             

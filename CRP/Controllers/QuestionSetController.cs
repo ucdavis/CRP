@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
+using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -357,7 +358,7 @@ namespace CRP.Controllers
         /// <param name="itemTypeId"></param>
         /// <returns></returns>
         [AcceptPost]
-        [Authorize(Roles="Admin")]
+        [RolesFilter.AdminOnlyAttribute]
         public ActionResult LinkToItemType(int id, int itemTypeId, bool transaction, bool quantity)
         {
             // get teh question set
@@ -394,7 +395,7 @@ namespace CRP.Controllers
             return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
         }
 
-        [Authorize(Roles="User")]
+        [RolesFilter.UserOnlyAttribute]
         public ActionResult LinkToItem(int itemId, bool transaction, bool quantity)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
@@ -434,7 +435,7 @@ namespace CRP.Controllers
         /// <param name="quantity"></param>
         /// <returns></returns>
         [AcceptPost]
-        [Authorize(Roles="User")]
+        [RolesFilter.UserOnlyAttribute]
         public ActionResult LinkToItem(int id, int itemId, bool transaction, bool quantity)
         {
             // get teh question set
@@ -494,7 +495,7 @@ namespace CRP.Controllers
         /// <param name="itemId"></param>
         /// <returns></returns>
         [AcceptPost]
-        [Authorize(Roles="User")]
+        [RolesFilter.UserOnlyAttribute]
         public ActionResult UnlinkFromItem(int id)
         {
             var itemQuestionSet = Repository.OfType<ItemQuestionSet>().GetNullableByID(id);

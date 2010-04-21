@@ -10,7 +10,7 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
-    <% Html.RenderPartial(StaticValues.View_PageHeader, Model.DisplayProfile ?? new DisplayProfile()); %>
+    <% Html.RenderPartial(StaticValues.Partial_PageHeader, Model.DisplayProfile ?? new DisplayProfile()); %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -25,7 +25,7 @@
         </p>
         <p>
             <label>Amount: </label>
-            <%= Html.Encode(Model.Transaction.AmountTotal) %>
+            <%= Html.Encode(string.Format("{0:C}", Model.Transaction.AmountTotal))%>
         </p>
         
         <p>
