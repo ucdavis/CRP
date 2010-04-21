@@ -192,6 +192,14 @@ namespace CRP.Controllers
         public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             var destItem = Repository.OfType<Item>().GetNullableByID(id);
+            //TODO: Review the validation below that the current user has editor rights
+            if(destItem == null || destItem.Editors == null || !destItem.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
+            {
+                //Don't Have editor rights
+                //TODO: Use new resource?
+                Message = "You do not have editor rights to that item.";
+                return this.RedirectToAction(a => a.List());
+            }
 
             destItem = Copiers.CopyItem(Repository, item, destItem, extendedProperties, tags, mapLink);//PopulateObject.Item(Repository, item, extendedProperties, tags);
 
