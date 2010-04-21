@@ -476,8 +476,8 @@ namespace CRP.Tests.Repositories
         [TestMethod]
         public void TestSchoolMasterWhenTrueSaves()
         {
-            LoadSchools(1);
             #region Arrange
+            LoadSchools(1);
             var displayProfile = GetValid(9);
             displayProfile.School = SchoolRepository.GetNullableByID("1");
             displayProfile.Unit = null;
@@ -503,8 +503,8 @@ namespace CRP.Tests.Repositories
         [TestMethod]
         public void TestSchoolMasterWhenFalseSaves()
         {
-            LoadSchools(1);
             #region Arrange
+            LoadSchools(1);
             var displayProfile = GetValid(9);
             displayProfile.School = SchoolRepository.GetNullableByID("1");
             displayProfile.Unit = null;
@@ -525,9 +525,10 @@ namespace CRP.Tests.Repositories
         #endregion SchoolMaster Tests
 
 
-        //TODO: Other tests
 
-        #region Validation Moved from the controller Tests
+        //TODO: Other tests
+         
+        #region Validation Moved from the controller Tests (SchoolAndUnit and SchoolOrUnit)
 
         /// <summary>
         /// Tests the both school and unit populated will not save.
@@ -593,6 +594,44 @@ namespace CRP.Tests.Repositories
 
         #endregion Validation Moved from the controller Tests
 
+        #region SchoolMasterAndSchool Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestSchoolMasterAndSchoolWhenInvalidWillNotSave()
+        {
+            DisplayProfile displayProfile = null;
+            try
+            {
+                #region Arrange
+                displayProfile = GetValid(9);
+                displayProfile.School = null;
+                displayProfile.Unit = Repository.OfType<Unit>().GetNullableByID(1);
+                displayProfile.SchoolMaster = true;
+                #endregion Arrange
+
+                #region Act
+                DisplayProfileRepository.DbContext.BeginTransaction();
+                DisplayProfileRepository.EnsurePersistent(displayProfile);
+                DisplayProfileRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(displayProfile);
+                var results = displayProfile.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("SchoolMasterAndSchool: SchoolMaster may only be true when School is selected.");
+                Assert.IsTrue(displayProfile.IsTransient());
+                Assert.IsFalse(displayProfile.IsValid());
+                #endregion Assert
+
+                throw;
+            }	
+        }
+        
+        #endregion SchoolMasterAndSchool Tests
+
         #region Reflection of Database.
 
         /// <summary>
@@ -617,7 +656,20 @@ namespace CRP.Tests.Repositories
             }));
             expectedFields.Add(new NameAndType("School", "CRP.Core.Domain.School", new List<string>()));
             expectedFields.Add(new NameAndType("SchoolMaster", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("SchoolMasterAndSchool", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"SchoolMaster may only be true when School is selected.\")]"
+            }));
             expectedFields.Add(new NameAndType("Unit", "CRP.Core.Domain.Unit", new List<string>()));
+            expectedFields.Add(new NameAndType("UnitAndSchool", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Unit and School cannot be selected together.\")]"
+            }));
+            expectedFields.Add(new NameAndType("UnitOrSchool", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"A Unit or School must be specified.\")]"
+            }));
+    
             #endregion Arrange
 
             AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(DisplayProfile));
