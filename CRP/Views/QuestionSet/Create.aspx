@@ -33,7 +33,7 @@
             </p>
             
             <!-- Hide or display the transaction/quantity selector when already adding it to an item type -->
-            <% if (!Model.Transaction && !Model.Quantity ) { %> 
+            <% if ((!Model.Transaction && !Model.Quantity) && (Model.Item != null && Model.ItemType != null) ) { %> 
                 <p>
                     <label for="Transaction">Transaction Level:</label>
                     <%= Html.CheckBox("transaction") %>
