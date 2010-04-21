@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="Template"
+    table="Templates" >
+    <id name="Id" column="id">
+      <generator class="identity" />
+    </id>
+
+    <many-to-one name="Item" class="CRP.Core.Domain.Item, CRP.Core" column="ItemId" />
+    <property name="Text" column="Text" />
+    <property name="Default" column="[Default]" />
+
+  </class>
+</hibernate-mapping>

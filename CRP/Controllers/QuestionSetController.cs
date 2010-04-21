@@ -369,6 +369,26 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// POST: /QuestionSet/LinkToItem/
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Adds a question set to an item
+        /// Assumption:
+        ///     Item exists
+        ///     User is an editor for that item
+        ///     User has the "User" role
+        /// PreCondition:
+        ///     Item exists with no transactions against it
+        /// PostCondition:
+        ///     Question set is assigned to the item
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="itemId"></param>
+        /// <param name="transaction"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
         [AcceptPost]
         [Authorize(Roles="User")]
         public ActionResult LinkToItem(int id, int itemId, bool transaction, bool quantity)
@@ -409,8 +429,22 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// 
+        /// POST: /QuestionSet/UnlinkFromItem
         /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Removes a question set to an item
+        /// Assumption:
+        ///     Item exists
+        ///     Question set exists
+        ///     ItemQuestionSet object exists
+        ///     User is an editor for that item
+        ///     User has the "User" role
+        /// PreCondition:
+        ///     Item exists with no transactions against it
+        /// PostCondition:
+        ///     Question set is removed from the item
+        /// </remarks>
         /// <param name="id">Item Question Set Id</param>
         /// <param name="itemId"></param>
         /// <returns></returns>

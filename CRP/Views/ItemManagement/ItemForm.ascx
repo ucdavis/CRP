@@ -35,7 +35,7 @@
             </p>
             <p>
                 <label for="Item.CostPerItem">CostPerItem:</label>
-                <%= Html.TextBox("Item.CostPerItem", Model.Item != null ? Model.Item.CostPerItem.ToString("C") : string.Empty)  %>
+                <%= Html.TextBox("Item.CostPerItem", Model.Item != null ? string.Format("{0:0.00}", Model.Item.CostPerItem) : string.Empty)  %>
                 <%= Html.ValidationMessage("Item.CostPerItem", "*")%>
             </p>
             <p>
@@ -59,6 +59,12 @@
                 <%= Html.CheckBox("Item.Available") %>
                 <%= Html.ValidationMessage("Item.Available", "*") %>
             </p>
+            
+            <p>
+                <label for="Item.Private">Private Conference:</label>
+                <%= Html.CheckBox("Item.Private") %>
+                <%= Html.ValidationMessage("Item.Private", "*") %>
+            </p>            
 
         </fieldset>
         

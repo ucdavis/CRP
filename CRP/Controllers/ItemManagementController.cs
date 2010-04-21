@@ -264,6 +264,31 @@ namespace CRP.Controllers
 
             return this.RedirectToAction(a => a.Edit(id));
         }
+
+        [AcceptPost]
+        [ValidateInput(false)]
+        public JsonNetResult SaveTemplate(int id, string text)
+        {
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+            
+            if (item == null)
+            {
+                return new JsonNetResult(false);
+            }
+
+            var template = new Template(text);
+            item.Template = template;
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<Item>().EnsurePersistent(item);
+                return new JsonNetResult(true);
+            }
+
+            return new JsonNetResult(false);
+        }
     }
 
     public class ExtendedPropertyParameter

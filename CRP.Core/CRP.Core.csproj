@@ -82,6 +82,7 @@
     <Compile Include="Domain\QuestionSet.cs" />
     <Compile Include="Domain\QuestionType.cs" />
     <Compile Include="Domain\Tag.cs" />
+    <Compile Include="Domain\Template.cs" />
     <Compile Include="Domain\Transaction.cs" />
     <Compile Include="Domain\TransactionAnswer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\ItenTypeQuestionSet.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\Template.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

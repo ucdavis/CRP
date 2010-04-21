@@ -8,12 +8,14 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <script type="text/javascript">
         var getExtendedPropertyUrl = '<%= Url.Action("GetExtendedProperties", "ItemManagement") %>';
-
+        var saveTemplateUrl = '<%= Url.Action("SaveTemplate", "ItemManagement") %>';
+        var id = '<%= Html.Encode(Model.Item.Id) %>';
+        
         $(function() { $("#tabs").tabs(); });
     </script>
 
     <script src="../../Scripts/ItemEdit.js" type="text/javascript"></script>
-    
+    <script src="../../Scripts/tiny_mce/jquery.tinymce.js" type="text/javascript"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -89,7 +91,11 @@
                                     {
                                         col.Add(a =>
                                                     {%>
-                                                        <%= Html.ActionLink<QuestionSetController>(b => b.UnlinkFromItem(a.Id), "Delete") %>
+                                                        <% using(Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(a.Id))) {%>
+                                                            <%= Html.AntiForgeryToken() %>
+                                                            <a href="javascript:;" class="FormSubmit">Delete</a>
+                                                        
+                                                        <%} %>
                                                     <%});
                                         col.Add(a => a.QuestionSet.Name);
                                         col.Add(a => a.Required);
@@ -127,6 +133,11 @@
             </fieldset>
         </div>
         <div id="tabs-4">
+        
+            <p>
+                <%= Html.TextArea("BodyText", Model.Item.Template != null ? Model.Item.Template.Text : string.Empty) %>
+            </p>
+        
         </div>
     
     </div>

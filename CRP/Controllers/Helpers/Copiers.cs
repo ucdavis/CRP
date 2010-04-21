@@ -21,6 +21,7 @@ namespace CRP.Controllers.Helpers
             dest.Expiration = src.Expiration;
             dest.Link = src.Link;
             dest.Available = src.Available;
+            dest.Private = src.Private;
 
             PopulateItem(repository, dest, extendedProperties, tags);
 

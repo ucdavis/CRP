@@ -21,6 +21,12 @@
 
     <property name="DateCreated" column="DateCreated" />
     <property name="Available" column="Available" />
+    <property name="Private" column="Private" />
+
+    <bag name="Templates" table="Templates" cascade="all-delete-orphan" inverse="true" >
+      <key column="ItemId" />
+      <one-to-many class="CRP.Core.Domain.Template, CRP.Core"/>
+    </bag>
     
     <bag name="Tags" table="ItemsXTags" cascade="save-update" >
       <key column="ItemId" />

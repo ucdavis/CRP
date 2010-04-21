@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
@@ -24,12 +25,14 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             Available = false;
+            Private = false;
 
             Tags = new List<Tag>();
             ExtendedPropertyAnswers = new List<ExtendedPropertyAnswer>();
             Coupons = new List<Coupon>();
             Editors = new List<Editor>();
             QuestionSets = new List<ItemQuestionSet>();
+            Templates = new List<Template>();
 
             DateCreated = DateTime.Now;
         }
@@ -37,19 +40,23 @@ namespace CRP.Core.Domain
         [Required]
         [Length(100)]
         public virtual string Name { get; set; }
+
         public virtual string Description { get; set; }
         public virtual decimal CostPerItem { get; set; }
         public virtual int Quantity { get; set; }
         public virtual DateTime? Expiration { get; set; }
         public virtual byte[] Image { get; set; }
         public virtual string Link { get; set; }
+
         [NotNull]
         public virtual ItemType ItemType { get; set; }
+
         [NotNull]
         public virtual Unit Unit { get; set; }
 
         public virtual DateTime DateCreated { get; set; }
         public virtual bool Available { get; set; }
+        public virtual bool Private { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<ExtendedPropertyAnswer> ExtendedPropertyAnswers { get; set; }
@@ -57,6 +64,38 @@ namespace CRP.Core.Domain
         public virtual ICollection<Editor> Editors { get; set; }
         public virtual ICollection<ItemQuestionSet> QuestionSets { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<Template> Templates { get; set; }
+
+        public virtual Template Template
+        {
+            get
+            {
+                if (Templates != null && Templates.Count > 0)
+                {
+                    return Templates.FirstOrDefault();
+                }
+
+                return null;
+            }
+            set
+            {
+                if (Templates != null && Templates.Count > 0)
+                {
+                    var temp = Templates.FirstOrDefault();
+                    temp.Text = value.Text;
+                }
+                else
+                {
+                    if (Templates == null)
+                    {
+                        Templates = new List<Template>();
+                    }
+
+                    value.Item = this;
+                    Templates.Add(value);
+                }
+            }
+        }
 
         public virtual void AddTag(Tag tag)
         {
