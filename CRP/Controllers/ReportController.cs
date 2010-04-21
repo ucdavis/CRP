@@ -51,6 +51,25 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// POST: /Report/Create/
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Create a report that is used specifically with one report.
+        /// PreCondition:
+        ///     Item is created, valid and has one or more question sets available
+        ///     createReportParameters parameter has at least one item
+        ///     name is not null or empty
+        /// PostCondition:
+        ///     Item Report is created
+        ///     Each createReportParameters is created into an ItemReportColumn object
+        ///     Item Report is added to an Item
+        /// </remarks>
+        /// <param name="itemId"></param>
+        /// <param name="name"></param>
+        /// <param name="createReportParameters"></param>
+        /// <returns></returns>
         [AcceptPost]
         [Authorize(Roles="User")]
         public ActionResult Create(int itemId, string name, CreateReportParameter[] createReportParameters)
@@ -68,19 +87,18 @@ namespace CRP.Controllers
 
             foreach(var crp in createReportParameters)
             {
-                if (crp.Selected)
-                {
-                    var question = Repository.OfType<Question>().GetNullableByID(crp.QuestionId);
+                var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(crp.QuestionSetId);
+                var question = Repository.OfType<Question>().GetNullableByID(crp.QuestionId);
 
-                    ItemReportColumn itemReportColumn = crp.Property ? new ItemReportColumn(crp.PropertyName, report) 
-                        : new ItemReportColumn(question.Name, report);
+                ItemReportColumn itemReportColumn = crp.Property ? new ItemReportColumn(crp.PropertyName, report) 
+                    : new ItemReportColumn(question.Name, report);
 
-                    itemReportColumn.Transaction = crp.Transaction;
-                    itemReportColumn.Quantity = crp.Quantity;
-                    itemReportColumn.Property = crp.Property;
+                itemReportColumn.Transaction = crp.Transaction;
+                itemReportColumn.Quantity = crp.Quantity;
+                itemReportColumn.Property = crp.Property;
+                itemReportColumn.QuestionSet = questionSet;
 
-                    report.AddReportColumn(itemReportColumn);
-                }
+                report.AddReportColumn(itemReportColumn);
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, report.ValidationResults());
@@ -95,6 +113,7 @@ namespace CRP.Controllers
             }
             
             var viewModel = CreateReportViewModel.Create(Repository, item);
+            viewModel.ItemReport = report;
             return View(viewModel);
         }
     }
@@ -112,7 +131,7 @@ namespace CRP.Controllers
         public bool Quantity { get; set; }
         public bool Property { get; set; }
         public int QuestionId { get; set; }
-        public bool Selected { get; set; }
         public string PropertyName { get; set; }
+        public int QuestionSetId { get; set; }
     }
 }

@@ -121,6 +121,10 @@
     <value>Check</value>
     <comment>Used in /Transaction/Checkout/</comment>
   </data>
+  <data name="Class_indexedControl" xml:space="preserve">
+    <value>indexedControl</value>
+    <comment>CSS Class used to find controls that need to be indexed for an array</comment>
+  </data>
   <data name="CreditCard" xml:space="preserve">
     <value>CreditCard</value>
     <comment>Used in /Transaction/Checkout/</comment>

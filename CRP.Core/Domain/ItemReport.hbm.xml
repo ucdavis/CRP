@@ -35,6 +35,7 @@
     <property name="Quantity" column="Quantity" />
     <property name="Transaction" column="[Transaction]" />
     <property name="Property" column="Property" />
+    <many-to-one name="QuestionSet" column="QuestionSetId" class="CRP.Core.Domain.QuestionSet, CRP.Core" cascade="none" fetch="join" />
   </class>
 
 </hibernate-mapping>

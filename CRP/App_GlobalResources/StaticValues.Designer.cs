@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to indexedControl.
+        /// </summary>
+        internal static string Class_indexedControl {
+            get {
+                return ResourceManager.GetString("Class_indexedControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CreditCard.
         /// </summary>
         internal static string CreditCard {

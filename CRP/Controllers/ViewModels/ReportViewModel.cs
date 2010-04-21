@@ -133,7 +133,7 @@ namespace CRP.Controllers.ViewModels
 
             if (itemReportColumn.Transaction)
             {
-                var transactionAnswer = transaction.TransactionAnswers.Where(a => a.Question.Name == itemReportColumn.Name).FirstOrDefault();
+                var transactionAnswer = transaction.TransactionAnswers.Where(a => a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
 
                 if (transactionAnswer != null)
                 {
@@ -142,7 +142,7 @@ namespace CRP.Controllers.ViewModels
             }
             else if (itemReportColumn.Quantity)
             {
-                var quantityAnswer = transaction.QuantityAnswers.Where(a => a.QuantityId == quantityId.Value && a.Question.Name == itemReportColumn.Name).FirstOrDefault();
+                var quantityAnswer = transaction.QuantityAnswers.Where(a => a.QuantityId == quantityId.Value && a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
 
                 if (quantityAnswer != null)
                 {
@@ -211,8 +211,7 @@ namespace CRP.Controllers.ViewModels
             }
             else if (field == StaticValues.Report_Checks_TransactionId)
             {
-                //TODO: UPdate to the easier to view transaction id
-                result = check.Transaction.Id.ToString();
+                result = check.Transaction.TransactionNumber;
             }
 
             return result;
@@ -224,6 +223,7 @@ namespace CRP.Controllers.ViewModels
     public class CreateReportViewModel
     {
         public Item Item { get; set; }
+        public ItemReport ItemReport { get; set; }
 
         public static CreateReportViewModel Create(IRepository repository, Item item)
         {
