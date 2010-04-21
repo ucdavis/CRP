@@ -245,6 +245,8 @@ namespace CRP.Tests.Core
 
         /// <summary>
         /// Loads the items.
+        /// Requires Unit
+        /// Requires ItemType
         /// </summary>
         /// <param name="entriesToAdd">The entries to add.</param>
         protected void LoadItems(int entriesToAdd)
@@ -312,6 +314,7 @@ namespace CRP.Tests.Core
 
         /// <summary>
         /// Loads the transactions.
+        /// Requires Item
         /// </summary>
         /// <param name="entriesToAdd">The entries to add.</param>
         protected void LoadTransactions(int entriesToAdd)

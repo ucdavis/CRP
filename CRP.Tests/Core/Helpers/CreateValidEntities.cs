@@ -227,6 +227,8 @@ namespace CRP.Tests.Core.Helpers
         public static QuestionOption QuestionOption(int? counter)
         {
             var rtValue = new QuestionOption();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Question = new Question();
             //TODO: Populate values
             
             return rtValue;
@@ -268,6 +270,7 @@ namespace CRP.Tests.Core.Helpers
         public static Tag Tag(int? counter)
         {
             var rtValue = new Tag();
+            rtValue.Name = "Name" + counter.Extra();
             //TODO: Populate values
             
             return rtValue;
@@ -296,6 +299,10 @@ namespace CRP.Tests.Core.Helpers
         public static TransactionAnswer TransactionAnswer(int? counter)
         {
             var rtValue = new TransactionAnswer();
+            rtValue.Answer = "Answer" + counter.Extra();
+            rtValue.Transaction = new Transaction();
+            rtValue.QuestionSet = new QuestionSet();
+            rtValue.Question = new Question();
             //TODO: Populate values
             
             return rtValue;
