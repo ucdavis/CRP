@@ -12,7 +12,7 @@ using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
-    public class CheckController : SuperController
+    public class PaymentController : SuperController
     {
         /// <summary>
         /// GET: /Check/LinkToTransaction/{id}
@@ -24,7 +24,7 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
             if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List());
 
-            var viewModel = LinkCheckViewModel.Create(Repository, transaction);
+            var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
             viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
 
             return View(viewModel);
@@ -88,7 +88,7 @@ namespace CRP.Controllers
                 return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
             }
 
-            var viewModel = LinkCheckViewModel.Create(Repository, transaction);
+            var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
             viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
 
             return View(viewModel);

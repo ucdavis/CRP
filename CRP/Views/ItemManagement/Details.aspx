@@ -60,7 +60,7 @@
                                     col.Add(a =>
                                                 {%>
                                                 
-                                                    <%= Html.ActionLink<CheckController>(b => b.LinkToTransaction(a.Id), "Select") %>
+                                                    <%= Html.ActionLink<PaymentController>(b => b.LinkToTransaction(a.Id), "Select") %>
                                                 
                                                 <%});
                                     col.Add(a => a.TransactionNumber).Title(

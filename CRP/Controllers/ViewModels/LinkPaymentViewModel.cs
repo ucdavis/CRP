@@ -5,16 +5,16 @@ using Check=UCDArch.Core.Utils.Check;
 
 namespace CRP.Controllers.ViewModels
 {
-    public class LinkCheckViewModel
+    public class LinkPaymentViewModel
     {
         public Transaction Transaction { get; set; }
         public IEnumerable<PaymentLog> PaymentLogs { get; set; }
 
-        public static LinkCheckViewModel Create(IRepository repository, Transaction transaction)
+        public static LinkPaymentViewModel Create(IRepository repository, Transaction transaction)
         {
             Check.Require(repository != null, "Repository is required.");
 
-            var viewModel = new LinkCheckViewModel() {Transaction = transaction};
+            var viewModel = new LinkPaymentViewModel() {Transaction = transaction};
 
             return viewModel;
         }

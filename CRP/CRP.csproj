@@ -159,7 +159,7 @@
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
-    <Compile Include="Controllers\CheckController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\DisplayProfileController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
@@ -194,7 +194,7 @@
     <Compile Include="Controllers\ViewModels\ItemDetailViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
-    <Compile Include="Controllers\ViewModels\LinkCheckViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\LinkPaymentViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LookupViewModel.cs" />
     <Compile Include="Controllers\ViewModels\PaymentConfirmationViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
