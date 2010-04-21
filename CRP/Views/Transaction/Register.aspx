@@ -25,7 +25,7 @@
     <% Html.RenderPartial("~/Views/Shared/TransactionForm.ascx", Model.Item); %>
 
     <p>
-        <input type="submit" />
+        <input type="submit" value="Submit" />
     </p>
 
     <% } %>
@@ -46,14 +46,22 @@
                     var existingContainers = $("div.QuantityContainer");
                     quantity = parseInt(quantity);
 
-                    //debugger;
-
                     // deal with the situation where we have too many of the containers
                     if (existingContainers.length > quantity) {
                     }
                     // deal with the situation where we don't have enough containers
                     else if (existingContainers.length < quantity) {
-                        GenerateQuantityQuestionSet();
+                        var counter = existingContainers.length;
+                        do {
+                            GenerateQuantityQuestionSet();
+                            counter++;
+                        } while (counter < quantity);
+
+                        // get the containers again, and rename the header in them
+                        var $container = $("div.QuantityContainer");
+                        $.each($container, function(index, item) {
+                            $(item).find("span.quantityIndex").html(index + 1);
+                        });
                     }
                     // we have an equal amount of containers to quantity
                     else {
@@ -69,12 +77,6 @@
             
             $container.after($container.clone());
             RenameControls($("div.QuantityContainer"), true);
-
-            // get the containers again
-            $container = $($("div.QuantityContainer")[0]);
-            $.each($container, function(index, item) {
-                $(item).find("span.quantityIndex").html(index);
-            });
         }
 
         function InitializeQuestions() {
@@ -112,6 +114,7 @@
                     // check for the quantity index id
                     if (isQuantity) {
                         // quantity index doesn't exist, create it
+                        // search for input ending with "_QuantityIndex"
                         if ($(item).find("input[id$='_QuantityIndex']").length == 0) {
                             //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
                             $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex").attr("name", cName + ".QuantityIndex").val(cIndex));
