@@ -63,7 +63,7 @@
                    %>
         </div>
         <div id="<%= Html.Encode(StaticValues.Tab_Checks) %>">
-            <% Html.Grid(Model.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null)) 
+            <% Html.Grid(Model.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null  && a.IsActive)) 
                    .Transactional()
                    .Name("Checks")
                    .Columns(col =>

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,13 +12,12 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
-using MvcContrib.Attributes;
 using CRP.Core.Resources;
+using MvcContrib;
+using MvcContrib.Attributes;
 using UCDArch.Core.PersistanceSupport;
-using UCDArch.Core.Utils;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Controller;
-using MvcContrib;
 using UCDArch.Web.Helpers;
 using UCDArch.Web.Validator;
 
@@ -592,6 +589,11 @@ namespace CRP.Controllers
                     paymentLog.Accepted = true;
                     paymentLog.GatewayTransactionId = touchNetValues.TPG_TRANS_ID;
                     paymentLog.CardType = touchNetValues.CARD_TYPE;
+                    if (!transaction.IsActive)
+                    {
+                        //Possibly we could email someone here to say it has been re-activated
+                        transaction.IsActive = true;
+                    }
                 }
 
                 paymentLog.TnBillingAddress1 = touchNetValues.acct_addr;
