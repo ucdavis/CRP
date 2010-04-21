@@ -2,6 +2,7 @@
 using System.Web.Routing;
 using Castle.Windsor;
 using CRP.Controllers;
+using CRP.ModelBinder;
 using Microsoft.Practices.ServiceLocation;
 using MvcContrib.Castle;
 using UCDArch.Web.IoC;
@@ -38,7 +39,7 @@ namespace CRP
             //Register the routes for this site
             new RouteConfigurator().RegisterRoutes();
 
-            ModelBinders.Binders.DefaultBinder = new UCDArchModelBinder();
+            ModelBinders.Binders.DefaultBinder = new CustomModelBinder(); //new UCDArchModelBinder();
 
             InitializeServiceLocator();
         }
