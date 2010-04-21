@@ -104,21 +104,24 @@ namespace CRP.Controllers
         /// <param name="couponCode"></param>
         /// <returns></returns>
         public JsonNetResult Validate(int itemId, string couponCode)
-        {
+        {            
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            var coupon = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == couponCode && a.Item == item).FirstOrDefault();
+            var coupon = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == couponCode && a.Item == item && a.IsActive).FirstOrDefault();
 
             if (item == null || coupon == null)
             {
                 return new JsonNetResult("Invalid code.");
             }
 
-            if (coupon.Item != item || !coupon.IsActive)
-            {
-                return new JsonNetResult("Invalid code.");
-            }
+            //This check is all done with the query and null checks above now.            
+            //if (coupon.Item != item || !coupon.IsActive)
+            //{
+            //    return new JsonNetResult("Invalid code.");
+            //}
 
-            if (coupon.Used)
+            //TODO: This needs to work with Coupons that are unlimited.
+            //if (coupon.Used && !coupon.Unlimited) //Suggestion to fix failing test
+            if (coupon.Used)            
             {
                 return new JsonNetResult("Coupon has already been redeemed.");
             }
@@ -143,15 +146,17 @@ namespace CRP.Controllers
         [AcceptPost]
         [Authorize(Roles = "User")]
         public ActionResult Deactivate(int couponId)
-        {
+        {            
             var coupon = Repository.OfType<Coupon>().GetNullableByID(couponId);
 
             if (coupon == null)
             {
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
-            
-            if (!coupon.IsActive || coupon.Used)
+
+            //TODO: This needs to work with Coupons that are unlimited.
+            //if (!coupon.IsActive || (coupon.Used && !coupon.Unlimited)) //Suggested fix
+            if (!coupon.IsActive || coupon.Used) 
             {
                 //return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
                 return Redirect(Url.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));

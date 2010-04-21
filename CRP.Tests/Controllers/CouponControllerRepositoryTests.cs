@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +13,9 @@ using MvcContrib.TestHelper;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
+using System.Linq.Expressions;
+using System.Linq;
+using UCDArch.Web.ActionResults;
 
 
 namespace CRP.Tests.Controllers
@@ -23,15 +27,21 @@ namespace CRP.Tests.Controllers
         protected IRepository<Item> ItemRepository { get; set; }
         protected readonly IPrincipal Principal = new MockPrincipal();
         protected IRepository<Coupon> CouponRepository { get; set; }
+        protected List<Coupon> Coupons { get; set; }
+
+
 
         #region Init
 
         public CouponControllerRepositoryTests()
         {
             Controller.ControllerContext.HttpContext.User = Principal;
+
             Items = new List<Item>();
             ItemRepository = FakeRepository<Item>();
             Controller.Repository.Expect(a => a.OfType<Item>()).Return(ItemRepository).Repeat.Any();
+
+            Coupons = new List<Coupon>();
             CouponRepository = FakeRepository<Coupon>();
             Controller.Repository.Expect(a => a.OfType<Coupon>()).Return(CouponRepository).Repeat.Any();
         }
@@ -209,6 +219,301 @@ namespace CRP.Tests.Controllers
 
         #endregion Create Tests
 
+        #region Validate Tests
+
+        /// <summary>
+        /// Tests the validate when item id not found returns json result with error message.
+        /// </summary>
+        [TestMethod]
+        public void TestValidateWhenItemIdNotFoundReturnsJsonResultWithErrorMessage()
+        {
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODES";
+            }
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+
+            var result = Controller.Validate(2, "FAKECCODES")
+                .AssertResultIs<JsonNetResult>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Invalid code.", result.Data.ToString());
+        }
+
+        /// <summary>
+        /// Tests the validate when coupon code not found returns json result with error message.
+        /// </summary>
+        [TestMethod]
+        public void TestValidateWhenCouponCodeNotFoundReturnsJsonResultWithErrorMessage()
+        {
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODES";
+            }
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+
+            var result = Controller.Validate(2, "NOTFOUND")
+                .AssertResultIs<JsonNetResult>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Invalid code.", result.Data.ToString());
+        }
+
+        /// <summary>
+        /// Tests the validate when item and coupon code do not match returns json result with error message.
+        /// </summary>
+        [TestMethod]
+        public void TestValidateWhenItemAndCouponCodeDoNotMatchReturnsJsonResultWithErrorMessage()
+        {
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE"+ (i+1);
+            }
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+
+            var result = Controller.Validate(2, "FAKECCODE1")
+                .AssertResultIs<JsonNetResult>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Invalid code.", result.Data.ToString());
+        }
+
+        /// <summary>
+        /// Tests the validate when item and coupon code do match but coupon is not active returns json result with error message.
+        /// </summary>
+        [TestMethod]
+        public void TestValidateWhenItemAndCouponCodeDoMatchButCouponIsNotActiveReturnsJsonResultWithErrorMessage()
+        {
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);                
+            }
+            Coupons[1].IsActive = false;
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Invalid code.", result.Data.ToString());
+        }
+
+        /// <summary>
+        /// Tests the validate when item and coupon code do match but coupon is used returns json result with error message.
+        /// </summary>
+        [TestMethod]
+        public void TestValidateWhenItemAndCouponCodeDoMatchButCouponIsUsedReturnsJsonResultWithErrorMessage()
+        {
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].IsActive = true;
+            Coupons[1].Used = true;
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Coupon has already been redeemed.", result.Data.ToString());
+        }
+
+        /// <summary>
+        /// Tests the validate with valid data returns coupon discount amount.
+        /// </summary>
+        [TestMethod]
+        public void TestValidateWithValidDataReturnsCouponDiscountAmount()
+        {
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].DiscountAmount = 10.77m;
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("10.77", result.Data.ToString());
+        }
+
+        /// <summary>
+        /// Tests the validate with unlimited coupon that has been used returns coupon discount amount.
+        /// </summary>
+        [TestMethod]
+        public void TestValidateWithUnlimitedCouponThatHasBeenUsedReturnsCouponDiscountAmount()
+        {
+            //Fix in controller. See suggested commented out code
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].DiscountAmount = 10.77m;
+            Coupons[1].Used = true;
+            Coupons[1].Unlimited = true;
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("10.77", result.Data.ToString(), "Controller should check unlimited coupons.");
+        }
+
+        #endregion Validate Tests
+
+        #region Deactivate Tests
+
+        /// <summary>
+        /// Tests the deactivate when coupon id not found does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeactivateWhenCouponIdNotFoundDoesNotSave()
+        {
+            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            Controller.Deactivate(1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests the deactivate when is not active does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeactivateWhenIsNotActiveDoesNotSave()
+        {
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/1").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeCoupons(1);
+            Coupons[0].IsActive = false;
+            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            var result = Controller.Deactivate(1)
+                .AssertHttpRedirect();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/1#Coupons", result.Url);
+            CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests the deactivate when is used does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeactivateWhenIsUsedDoesNotSave()
+        {
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/1").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeCoupons(1);
+            Coupons[0].Used = true;
+            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            var result = Controller.Deactivate(1)
+                .AssertHttpRedirect();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/1#Coupons", result.Url);
+            CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests the deactivate when is used and unlimited does save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeactivateWhenIsUsedAndUnlimitedDoesSave()
+        {
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/1").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeCoupons(1);
+            Coupons[0].Used = true;
+            Coupons[0].Unlimited = true;
+            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            var result = Controller.Deactivate(1)
+                .AssertHttpRedirect();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/1#Coupons", result.Url);
+            Assert.AreEqual("Coupon has been deactivated.", Controller.Message, "Controller should check unlimited.");
+            CouponRepository.AssertWasCalled(a => a.EnsurePersistent(Coupons[0]));
+            Assert.IsFalse(Coupons[0].IsActive);            
+        }
+
+        /// <summary>
+        /// Tests the deactivate when valid data does save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeactivateWhenValidDataDoesSave()
+        {
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/1").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeCoupons(1);            
+            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            var result = Controller.Deactivate(1)
+                .AssertHttpRedirect();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/1#Coupons", result.Url);
+            Assert.AreEqual("Coupon has been deactivated.", Controller.Message);
+            CouponRepository.AssertWasCalled(a => a.EnsurePersistent(Coupons[0]));
+            Assert.IsFalse(Coupons[0].IsActive);
+        }
+
+        /// <summary>
+        /// Tests the deactivate when invalid data does not save.
+        /// This probably can't happen
+        /// </summary>
+        [TestMethod]
+        public void TestDeactivateWhenInvalidDataDoesNotSave()
+        {
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/1").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            FakeCoupons(1);
+            Coupons[0].Code = " "; //Invalid.
+            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            var result = Controller.Deactivate(1)
+                .AssertHttpRedirect();
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/1#Coupons", result.Url);
+            Assert.AreEqual("Coupon was unable to update.", Controller.Message);
+            CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
+            Controller.ModelState.AssertErrorsAre("Code: may not be null or empty");
+        }
+
+        #endregion Deactivate Tests
+
         #region Helper Methods
 
         /// <summary>
@@ -222,6 +527,22 @@ namespace CRP.Tests.Controllers
             {
                 Items.Add(CreateValidEntities.Item(i + 1 + offSet));
                 Items[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        /// <summary>
+        /// Fakes the coupons.
+        /// </summary>
+        /// <param name="count">The count.</param>
+        private void FakeCoupons(int count)
+        {
+            var offSet = Coupons.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Coupons.Add(CreateValidEntities.Coupon(i + 1 + offSet));
+                Coupons[i + offSet].SetIdTo(i + 1 + offSet);
+                Coupons[i + offSet].IsActive = true;
+                Coupons[i + offSet].Used = false;
             }
         }
 
