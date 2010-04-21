@@ -1,16 +1,14 @@
-using System;
 using System.Linq;
 using System.Web.Mvc;
-//using CRP.App_GlobalResources;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
-using MvcContrib.Attributes;
 using CRP.Core.Resources;
+using MvcContrib;
+using MvcContrib.Attributes;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Controller;
-using MvcContrib;
 using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
@@ -79,11 +77,6 @@ namespace CRP.Controllers
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, coupon.ValidationResults());
 
-            //Moved validation to the domain JCS2010/01/26
-            //if (coupon.DiscountAmount <= 0.00m)
-            //{
-            //    ModelState.AddModelError("Discount Amount", "Discount amount must be more than $0.00");
-            //}
 
             if (ModelState.IsValid)
             {
@@ -103,7 +96,8 @@ namespace CRP.Controllers
         /// 
         /// Validate the coupon code to make sure it can still be used.
         /// </summary>
-        /// <param name="couponCode"></param>
+        /// <param name="itemId">The item id.</param>
+        /// <param name="couponCode">The coupon code.</param>
         /// <returns></returns>
         public JsonNetResult Validate(int itemId, string couponCode)
         {            

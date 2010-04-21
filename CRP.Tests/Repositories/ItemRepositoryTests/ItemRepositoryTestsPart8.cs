@@ -724,5 +724,134 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
 
         #endregion IsAvailableForReg Tests
+
+        #region ItemCoupons Tests
+
+        /// <summary>
+        /// Tests the item coupons prevents coupon with discount amount greater than cost per item from saving.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestItemCouponsPreventsCouponWithDiscountAmountGreaterThanCostPerItemFromSaving()
+        {
+            Item item = null;
+            try
+            {
+                #region Arrange
+                item = GetValid(null);
+                item.CostPerItem = 9.99m;
+                var coupon = CreateValidEntities.Coupon(3);
+                coupon.DiscountAmount = 10.00m;
+                item.AddCoupon(CreateValidEntities.Coupon(1));
+                item.AddCoupon(coupon);
+                item.AddCoupon(CreateValidEntities.Coupon(2));
+                #endregion Arrange
+
+                #region Act
+                ItemRepository.DbContext.BeginTransaction();
+                ItemRepository.EnsurePersistent(item);
+                ItemRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(item);
+                var results = item.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("ItemCoupons: One or more active coupons has a discount amount greater than the cost per item");
+                Assert.IsTrue(item.IsTransient());
+                Assert.IsFalse(item.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the item coupons with valid active coupons saves.
+        /// </summary>
+        [TestMethod]
+        public void TestItemCouponsWithValidActiveCouponsSaves()
+        {
+            #region Arrange
+            var item = GetValid(null);
+            item.CostPerItem = 9.99m;
+            var coupon = CreateValidEntities.Coupon(3);
+            coupon.DiscountAmount = 10.00m;
+            coupon.IsActive = false;
+            item.AddCoupon(CreateValidEntities.Coupon(1));
+            item.AddCoupon(coupon);
+            item.AddCoupon(CreateValidEntities.Coupon(2));
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+   
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the item coupons with valid data saves.
+        /// </summary>
+        [TestMethod]
+        public void TestItemCouponsWithValidDataSaves1()
+        {
+            #region Arrange
+            var item = GetValid(null);
+            item.CostPerItem = 9.99m;
+            var coupon = CreateValidEntities.Coupon(3);
+            coupon.DiscountAmount = 1m;
+            item.AddCoupon(CreateValidEntities.Coupon(1));
+            item.AddCoupon(coupon);
+            item.AddCoupon(CreateValidEntities.Coupon(2));
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the item coupons with valid data saves.
+        /// </summary>
+        [TestMethod]
+        public void TestItemCouponsWithValidDataSaves2()
+        {
+            #region Arrange
+            var item = GetValid(null);
+            item.CostPerItem = 9.99m;
+            var coupon = CreateValidEntities.Coupon(3);
+            coupon.DiscountAmount = 1m;
+            item.AddCoupon(CreateValidEntities.Coupon(1));
+            item.AddCoupon(coupon);
+            item.AddCoupon(CreateValidEntities.Coupon(2));
+            item.Coupons.ElementAt(0).IsActive = false;
+            item.Coupons.ElementAt(1).IsActive = false;
+            item.Coupons.ElementAt(2).IsActive = false;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        #endregion ItemCoupons Tests
     }
 }

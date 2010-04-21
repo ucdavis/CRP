@@ -37,6 +37,7 @@ namespace CRP.Tests.Repositories
         {
             var rtValue = CreateValidEntities.Coupon(counter);
             rtValue.Item = Repository.OfType<Item>().GetById(1);
+            rtValue.Item.CostPerItem = 10000.00m;
             return rtValue;
         }
 
@@ -400,6 +401,7 @@ namespace CRP.Tests.Repositories
                 #region Arrange
                 coupon = GetValid(9);
                 coupon.Item = new Item();
+                coupon.Item.CostPerItem = 10000.00m;
                 #endregion Arrange
 
                 #region Act
@@ -434,6 +436,7 @@ namespace CRP.Tests.Repositories
             LoadItems(3);
             var coupon = GetValid(9);
             coupon.Item = Repository.OfType<Item>().GetNullableByID(3);
+            coupon.Item.CostPerItem = coupon.DiscountAmount + 1;
             #endregion Arrange
 
             #region Act
@@ -862,6 +865,43 @@ namespace CRP.Tests.Repositories
             }
         }
 
+        /// <summary>
+        /// Tests the discount amount really big not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestDiscountAmountReallyBigNotSave()
+        {
+            Coupon coupon = null;
+            try
+            {
+                #region Arrange
+                coupon = GetValid(9);
+                coupon.DiscountAmount = decimal.MaxValue;
+                #endregion Arrange
+
+                #region Act
+                CouponRepository.DbContext.BeginTransaction();
+                CouponRepository.EnsurePersistent(coupon);
+                CouponRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(coupon);
+                var results = coupon.ValidationResults().AsMessageList();
+                results.AssertErrorsAre(
+                    "DiscountAmount: must be more than 0.00", 
+                    "DiscountAmountCostPerItem: The discount amount must not be greater than the cost per item.");
+                Assert.IsTrue(coupon.IsTransient());
+                Assert.IsFalse(coupon.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
+
         #endregion Invalid Tests
 
         #region Valid Tests
@@ -898,6 +938,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             var coupon = GetValid(9);
             coupon.DiscountAmount = 999999999.99m;
+            coupon.Item.CostPerItem = coupon.DiscountAmount + 0.01m;
             #endregion Arrange
 
             #region Act
@@ -1458,6 +1499,93 @@ namespace CRP.Tests.Repositories
         }
         #endregion MaxQuantity Tests
 
+        #region DiscountAmountCostPerItem Tests
+        /// <summary>
+        /// Tests the discount amount cost per item is invalid does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestDiscountAmountCostPerItemIsInvalidDoesNotSave()
+        {
+            Coupon coupon = null;
+            try
+            {
+                #region Arrange
+                coupon = GetValid(9);
+                coupon.DiscountAmount = 10;
+                coupon.Item.CostPerItem = 9.99m;
+                #endregion Arrange
+
+                #region Act
+                CouponRepository.DbContext.BeginTransaction();
+                CouponRepository.EnsurePersistent(coupon);
+                CouponRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(coupon);
+                var results = coupon.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("DiscountAmountCostPerItem: The discount amount must not be greater than the cost per item.");
+                Assert.IsTrue(coupon.IsTransient());
+                Assert.IsFalse(coupon.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Tests the discount amount cost per item when equal saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDiscountAmountCostPerItemWhenEqualSaves()
+        {
+            #region Arrange
+            var coupon = GetValid(9);
+            coupon.DiscountAmount = 9.99m;
+            coupon.Item.CostPerItem = 9.99m;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(coupon);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(coupon.IsTransient());
+            Assert.IsTrue(coupon.IsValid());
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the discount amount cost per item when coupon less saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDiscountAmountCostPerItemWhenCouponLessSaves()
+        {
+            #region Arrange
+            var coupon = GetValid(9);
+            coupon.DiscountAmount = 9.98m;
+            coupon.Item.CostPerItem = 9.99m;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(coupon);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(coupon.IsTransient());
+            Assert.IsTrue(coupon.IsValid());
+            #endregion Assert
+        }
+        #endregion DiscountAmountCostPerItem Tests
+
         #region Reflection of Database.
 
         /// <summary>
@@ -1477,7 +1605,11 @@ namespace CRP.Tests.Repositories
             }));
             expectedFields.Add(new NameAndType("DiscountAmount", "System.Decimal", new List<string>
             {
-                "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0.01, Message = \"must be more than $0.00\")]"
+                "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0.01, Message = \"must be more than $0.00\", Max = 922337203685477)]"
+            }));
+            expectedFields.Add(new NameAndType("DiscountAmountCostPerItem", "System.Boolean", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"The discount amount must not be greater than the cost per item.\")]"
             }));
             expectedFields.Add(new NameAndType("Email", "System.String", new List<string>
             {

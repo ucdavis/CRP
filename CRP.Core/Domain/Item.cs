@@ -38,6 +38,7 @@ namespace CRP.Core.Domain
             Reports = new List<ItemReport>();
 
             DateCreated = SystemTime.Now();
+            ItemCoupons = false;
         }
 
         [Required]
@@ -258,11 +259,26 @@ namespace CRP.Core.Domain
                     }
                 }
             }
+            ItemCoupons = true;
+            if(Coupons != null && Coupons.Count > 0)
+            {
+                foreach (Coupon coupon in Coupons)
+                {
+                    if(coupon.IsActive && coupon.DiscountAmount > CostPerItem)
+                    {
+                        ItemCoupons = false;
+                        break;
+                    }
+                }
+            }
         }
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "One or more tags is not valid")]
         private bool ItemTags { get; set; }
+
+        [AssertTrue(Message = "One or more active coupons has a discount amount greater than the cost per item")]
+        private bool ItemCoupons { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

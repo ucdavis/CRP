@@ -152,6 +152,7 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Name = "Name" + counter.Extra();
             rtValue.ItemType = new ItemType();
             rtValue.Unit = new Unit();
+            rtValue.CostPerItem = 20.00m;
             
             return rtValue;
         }

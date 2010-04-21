@@ -135,6 +135,10 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             }));
             expectedFields.Add(new NameAndType("Image", "System.Byte[]", new List<string>()));
             expectedFields.Add(new NameAndType("IsAvailableForReg", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("ItemCoupons", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"One or more active coupons has a discount amount greater than the cost per item\")]"
+            }));
             expectedFields.Add(new NameAndType("ItemTags", "System.Boolean", new List<string>
             {
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"One or more tags is not valid\")]"

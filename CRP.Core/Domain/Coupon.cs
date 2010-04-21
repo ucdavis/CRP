@@ -26,6 +26,8 @@ namespace CRP.Core.Domain
             Unlimited = false;
             Used = false;
             IsActive = true;
+            DiscountAmountCostPerItem = false;
+            UnlimitedAndEmail = false;
         }
 
         [Required]
@@ -38,7 +40,7 @@ namespace CRP.Core.Domain
         [Length(100)]
         public virtual string Email { get; set; }
         public virtual bool Used { get; set; }
-        [RangeDouble(Min = 0.01, Message = "must be more than $0.00")]
+        [RangeDouble(Min = 0.01, Max = 922337203685477.00, Message = "must be more than $0.00")]
         public virtual decimal DiscountAmount { get; set; }
         /// <summary>
         /// User login id of the user creating the coupon
@@ -144,11 +146,20 @@ namespace CRP.Core.Domain
             {
                 UnlimitedAndEmail = false;
             }
+
+            DiscountAmountCostPerItem = true;
+            if(Item != null && Item.CostPerItem < DiscountAmount)
+            {
+                DiscountAmountCostPerItem = false;
+            }
         }
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "An unlimited coupon requires an email")]
         private bool UnlimitedAndEmail { get; set; }
+
+        [AssertTrue(Message = "The discount amount must not be greater than the cost per item.")]
+        private bool DiscountAmountCostPerItem { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }
