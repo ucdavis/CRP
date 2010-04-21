@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 using CRP.Controllers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -116,13 +118,9 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestLinkToTransactionWhenIdFoundSaves()
         {
+            Controller.ControllerContext.HttpContext.Response.Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Details/1").Repeat.Any();
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
-            //Controller.Url.RequestContext.HttpContext.Request.Expect(a => a.Url).Return(new Uri("http://sample.com")).
-            //                Repeat.Any();
-            //Controller.Url.Expect(a => a.RouteUrl(new { controller = "ItemManagement", action = "Details", id = 1 })).
-            //    Return("~/ItemManagement/Details/1").Repeat.Any();
-
-            
 
             var checks = new Check[2];
             checks[0] = CreateValidEntities.Check(1);
@@ -133,13 +131,130 @@ namespace CRP.Tests.Controllers
             FakeTransactions(2);
             Transactions[0].Item = CreateValidEntities.Item(1);
             Transactions[0].Item.SetIdTo(1);    
+
+            Assert.AreEqual(0, Transactions[0].ChildTransactions.Count);
+
             TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(Transactions[0]).Repeat.Any();
 
             var result = Controller.LinkToTransaction(1, checks)
                 .AssertHttpRedirect();
-            Assert.AreEqual("#Checks", result.Url);
+            Assert.AreEqual("http://sample.com/ItemManagement/Details/1#Checks", result.Url);
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[0]));
+            Assert.AreEqual("Checks associated with transaction.", Controller.Message);
+            Assert.AreEqual(2, Transactions[0].Checks.Count);
+            Assert.AreEqual(1, Transactions[0].ChildTransactions.Count);
+            Assert.AreEqual((decimal)19.49, Transactions[0].ChildTransactions.ToList()[0].Amount);
         }
-        
+
+        /// <summary>
+        /// Tests the link to transaction with invalid transaction returns view.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionWithInvalidTransactionReturnsView()
+        {
+            Controller.ControllerContext.HttpContext.Response.Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Details/1").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            var checks = new Check[2];
+            checks[0] = CreateValidEntities.Check(1);
+            checks[1] = CreateValidEntities.Check(2);
+            checks[0].Amount = (decimal)10.00;
+            checks[1].Amount = (decimal)9.49;
+
+            FakeTransactions(2);
+            Transactions[0].Item = CreateValidEntities.Item(1);
+            Transactions[0].Item.SetIdTo(1);
+            Transactions[0].PaymentConfirmation = "x".RepeatTimes(101);
+
+            Assert.AreEqual(0, Transactions[0].ChildTransactions.Count);
+
+            TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(Transactions[0]).Repeat.Any();
+
+            Controller.LinkToTransaction(1, checks)
+                .AssertViewRendered()
+                .WithViewData<LinkCheckViewModel>();
+     
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.AreNotEqual("Checks associated with transaction.", Controller.Message);
+            Controller.ModelState.AssertErrorsAre("PaymentConfirmation: length must be between 0 and 100");
+        }
+
+        /// <summary>
+        /// Tests the link to transaction paid is false when the check total is greater than the amount total.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionPaidIsFalseWhenTheCheckTotalIsGreaterThanTheAmountTotal()
+        {
+            Controller.ControllerContext.HttpContext.Response.Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Details/1").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            var checks = new Check[2];
+            checks[0] = CreateValidEntities.Check(1);
+            checks[1] = CreateValidEntities.Check(2);
+            checks[0].Amount = (decimal)10.00;
+            checks[1].Amount = (decimal)9.49;
+
+            FakeTransactions(2);
+            Transactions[0].Item = CreateValidEntities.Item(1);
+            Transactions[0].Item.SetIdTo(1);
+            Transactions[0].Amount = 30m;
+            Transactions[0].Paid = false;
+
+            Assert.AreEqual(0, Transactions[0].ChildTransactions.Count);
+
+            TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(Transactions[0]).Repeat.Any();
+
+            var result = Controller.LinkToTransaction(1, checks)
+                .AssertHttpRedirect();
+            Assert.AreEqual("http://sample.com/ItemManagement/Details/1#Checks", result.Url);
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[0]));
+            Assert.AreEqual("Checks associated with transaction.", Controller.Message);
+            Assert.AreEqual(2, Transactions[0].Checks.Count);
+            Assert.AreEqual(0, Transactions[0].ChildTransactions.Count);
+            Assert.IsFalse(Transactions[0].Paid);
+        }
+
+        /// <summary>
+        /// Tests the link to transaction paid is true when the check total is less than the amount total.
+        /// the difference between the checks and the amount is used to create a donation (They have given us 
+        /// more that what was requested)
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionPaidIsTrueWhenTheCheckTotalIsLessThanTheAmountTotal()
+        {
+            Controller.ControllerContext.HttpContext.Response.Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Details/1").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
+            var checks = new Check[2];
+            checks[0] = CreateValidEntities.Check(1);
+            checks[1] = CreateValidEntities.Check(2);
+            checks[0].Amount = (decimal)10.00;
+            checks[1].Amount = (decimal)9.49;
+
+            FakeTransactions(2);
+            Transactions[0].Item = CreateValidEntities.Item(1);
+            Transactions[0].Item.SetIdTo(1);
+            Transactions[0].Amount = 15m;
+            Transactions[0].Paid = false;
+
+            Assert.AreEqual(0, Transactions[0].ChildTransactions.Count);
+
+            TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(Transactions[0]).Repeat.Any();
+
+            var result = Controller.LinkToTransaction(1, checks)
+                .AssertHttpRedirect();
+            Assert.AreEqual("http://sample.com/ItemManagement/Details/1#Checks", result.Url);
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[0]));
+            Assert.AreEqual("Checks associated with transaction.", Controller.Message);
+            Assert.AreEqual(2, Transactions[0].Checks.Count);
+            Assert.AreEqual(1, Transactions[0].ChildTransactions.Count);
+            Assert.AreEqual((decimal)4.49, Transactions[0].ChildTransactions.ToList()[0].Amount);
+            Assert.IsTrue(Transactions[0].ChildTransactions.ToList()[0].Donation);
+            Assert.IsTrue(Transactions[0].Paid);
+        }
 
         #endregion LinkToTransaction Tests
 
