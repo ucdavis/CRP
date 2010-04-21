@@ -46,7 +46,7 @@ namespace CRP.Tests.Controllers
         [TestMethod, Ignore]
         public void TestLogOnMapping()
         {
-            "~/Account/LogOn/Test".ShouldMapTo<AccountController>(a => a.LogOn(null), true);
+            "~/Account/LogOn/Test".ShouldMapTo<AccountController>(a => a.LogOn(null, null), true);
         }
 
 

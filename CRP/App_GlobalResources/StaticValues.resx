@@ -129,6 +129,10 @@
     <value>CreditCard</value>
     <comment>Used in /Transaction/Checkout/</comment>
   </data>
+  <data name="OpenId" xml:space="preserve">
+    <value>OpenId</value>
+    <comment>signifier if the user is an openid user or not</comment>
+  </data>
   <data name="QuestionSet_ContactInformation" xml:space="preserve">
     <value>Contact Information</value>
     <comment>The name of the required question set</comment>

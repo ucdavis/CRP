@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OpenId.
+        /// </summary>
+        internal static string OpenId {
+            get {
+                return ResourceManager.GetString("OpenId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact Information.
         /// </summary>
         internal static string QuestionSet_ContactInformation {

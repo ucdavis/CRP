@@ -159,6 +159,7 @@
     <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\DisplayProfileController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
+    <Compile Include="Controllers\Filter\RequireOpenId.cs" />
     <Compile Include="Controllers\Helpers\Access.cs" />
     <Compile Include="Controllers\Helpers\Copiers.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
