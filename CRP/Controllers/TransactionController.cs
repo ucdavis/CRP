@@ -379,15 +379,15 @@ namespace CRP.Controllers
             var viewModel = EditTransactionViewModel.Create(Repository);
             viewModel.TransactionValue = transactionDest;
             viewModel.ContactName =
-                transaction.TransactionAnswers.Where(
+                transactionDest.TransactionAnswers.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
-            viewModel.ContactName = viewModel.ContactName + " " + transaction.TransactionAnswers.Where(
+            viewModel.ContactName = viewModel.ContactName + " " + transactionDest.TransactionAnswers.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
-            viewModel.ContactEmail = transaction.TransactionAnswers.Where(
+            viewModel.ContactEmail = transactionDest.TransactionAnswers.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;

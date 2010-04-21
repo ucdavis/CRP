@@ -479,7 +479,7 @@ namespace CRP.Tests.Repositories
         [TestMethod]
         [ExpectedException(typeof(ApplicationException))]
         public void TestAmountWithMinimumValueDoesNotSave()
-        {
+        { 
             Transaction transaction = null;
             try
             {
@@ -498,7 +498,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(transaction);
                 var results = transaction.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Amount: must be zero or more");
+                results.AssertErrorsAre("RegularAmount: Amount must be zero or more.");
                 Assert.IsTrue(transaction.IsTransient());
                 Assert.IsFalse(transaction.IsValid());
                 throw;
@@ -529,7 +529,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(transaction);
                 var results = transaction.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Amount: must be zero or more");
+                results.AssertErrorsAre("RegularAmount: Amount must be zero or more.");
                 Assert.IsTrue(transaction.IsTransient());
                 Assert.IsFalse(transaction.IsValid());
                 throw;
@@ -629,7 +629,7 @@ namespace CRP.Tests.Repositories
 
             var transaction = GetValid(9);
             transaction.Donation = true;
-
+            transaction.Amount = 1m;
             #endregion Arrange
 
             #region Act
@@ -2323,6 +2323,45 @@ namespace CRP.Tests.Repositories
         }
 
         #endregion PaymentType Tests
+
+        #region CorrectionAmount Tests
+        [TestMethod]
+        public void TestCorrectionAmountSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 1m;
+            var donationTransaction = new Transaction(transaction.Item);
+            donationTransaction.Donation = true;
+            donationTransaction.Amount = 10.00m;
+            var donationTransaction2 = new Transaction(transaction.Item);
+            donationTransaction2.Donation = true;
+            donationTransaction2.Amount = 15.00m;
+            transaction.AddChildTransaction(donationTransaction);
+            transaction.AddChildTransaction(donationTransaction2);
+
+            var correction = new Transaction(transaction.Item);
+            correction.Donation = false;
+            correction.Amount = -15.00m;
+            correction.CreatedBy = "Test";
+            transaction.AddChildTransaction(correction);
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, TransactionRepository.GetAll().Where(a => a.ParentTransaction == transaction).Count());
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            Assert.AreEqual(-15m, transaction.CorrectionTotal);
+            Assert.AreEqual(11m, transaction.Total);
+            #endregion Assert
+        }
+        #endregion v
 
         #region Reflection of Database
 

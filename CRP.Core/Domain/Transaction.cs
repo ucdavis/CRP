@@ -36,6 +36,7 @@ namespace CRP.Core.Domain
             ChildTransactions = new List<Transaction>();
             RegularAmount = false;
             CorrectionAmount = false;
+            CorrectionTotalAmount = false;
 
             PaymentType = false;
         }
@@ -223,7 +224,7 @@ namespace CRP.Core.Domain
 
             //We only allow amount to be negative for corrections (CreatedBy is Populated)
             RegularAmount = true;
-            if(Amount < 0 && CreatedBy != null && Donation)
+            if(Amount < 0 && (CreatedBy == null || Donation))
             {
                 RegularAmount = false;
             }
@@ -231,6 +232,12 @@ namespace CRP.Core.Domain
             if(Amount >= 0 && CreatedBy != null && !Donation)
             {
                 CorrectionAmount = false;
+            }
+
+            CorrectionTotalAmount = true;
+            if(ChildTransactions != null && DonationTotal + CorrectionTotal <0)
+            {
+                CorrectionTotalAmount = false;
             }
         }
 
@@ -243,6 +250,9 @@ namespace CRP.Core.Domain
 
         [AssertTrue(Message = "Amount must be less than zero.")]
         private bool CorrectionAmount { get; set; }
+
+        [AssertTrue(Message = "The total of all correction amounts must not exceed the donation amounts")]
+        private bool CorrectionTotalAmount { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
 
     }
