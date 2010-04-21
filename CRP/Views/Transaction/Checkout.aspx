@@ -13,33 +13,64 @@
     
     <% using (Html.BeginForm()) { %>
     
-    <h2><%= Html.Encode(Model.Item.Name) %></h2>
-    
     <%= Html.AntiForgeryToken() %>
-    
-    <div id="priceContainer">
-        <p>
-        #
-        <%= !String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName) %>:
-                
-        <%= Html.TextBox("quantity", 1, new {@style = "width:20px;"}) %>
-        
-        x
-        <%= Html.Encode(Model.Item.CostPerItem.ToString("C")) %>
-        </p>
+       
+    <div id="Items" class="t-widget t-grid">
+        <table cellspacing="0">
+            <thead>
+                <tr>
+                    <td class="t-header">Qty.</td>
+                    <td class="t-header">Item</td>
+                    <td class="t-header">Price per <%= !String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName) %></td>
+                    <td class="t-header">Total Price</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><%= Html.TextBox("quantity", 1, new {@style = "width:20px;", @class="quantityAmount"}) %></td>
+                    <td><%= Html.Encode(Model.Item.Name) %></td>
+                    <td>$ <span class="perItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
+                    <td>$ <span class="totalItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
+                </tr>
+                <tr>
+                    <td colspan="4">&nbsp</td>
+                </tr>
+                <tr style="background-color: #D5D5D5">
+                    <td></td>
+                    <td>Donation</td>
+                    <td></td>
+                    <td>$ <%= Html.TextBox("donation", string.Empty, new {@style="width:40px;", @class="donationAmount"}) %></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label for="Coupon">Coupon Code:</label>
+                        <%= Html.TextBox("Coupon") %>
+                    </td>
+                    <td>$ <span class="discounterPerItemAmount">0.00</span></td>
+                    <td>$ <span class="discountAmount">0.00</span></td>
+                </tr>
+                <tr style="background-color: #D5D5D5">
+                    <td></td>
+                    <td colspan="2" style="text-align:right;">Total Amount: </td>
+                    <td>$ <span class="totalAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
+                </tr>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <label for="paymentType">Payment Method: </label>
+                        <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.CreditCard %>" /><label for="credit">Credit Card</label>
+                        <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.Check %>" /><label for="check">Check</label>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-    
-    <div id="donationContainer">
-        <p>
-        <label for="donation">Would you like to make a donation?</label>
-        $ <%= Html.TextBox("donation", string.Empty, new {@style="width:40px;"}) %>
-        </p>
-    </div>
-    
+          
     <div id="paymentTypeContainer">
         <p>
-        <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.CreditCard %>" /><label for="credit">Credit Card</label>
-        <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.Check %>" /><label for="check">Check</label>
+        
         </p>
     </div>
     
@@ -54,6 +85,16 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+
+    <script type="text/javascript">
+        var class_quantityAmount = "quantityAmount";
+        var class_perItemAmount = "perItemAmount";
+        var class_totalItemAmount = "totalItemAmount";
+        var class_donationAmount = "donationAmount";
+        var class_discounterPerItemAmount = "discounterPerItemAmount";
+        var class_discountAmount = "discountAmount";
+        var class_totalAmount = "totalAmount";
+    </script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -76,8 +117,6 @@
 
                             counter--;
                         } while (counter >= quantity);
-
-
                     }
                     // deal with the situation where we don't have enough containers
                     else if (existingContainers.length < quantity) {
@@ -92,14 +131,47 @@
                             $(item).find("span.quantityIndex").html(index + 1);
                         });
                     }
-                    // we have an equal amount of containers to quantity
-                    else {
-                    }
                 }
+
+                CalculateTotal();
             });
 
+            // update the total when a donation is entered
+            $("input." + class_donationAmount).blur(function(event) {
+                if (isNaN($(this).val())) {
+                    alert("Please enter a valid number.");
+                    return;
+                }
+
+                CalculateTotal();
+            });
+
+            // update the coupon values and validate the coupon
+            $("input#Coupon").blur(function(event) { });
+
+
+            // initialize the question names
             InitializeQuestions();
         });
+
+        function CalculateTotal() {
+            // get the item price, quantity and discount per item prices
+            var costPerItem = parseFloat($("span." + class_perItemAmount).html());
+            var quantity = parseInt($("input." + class_quantityAmount).val());
+            var discountAmountPerItem = parseFloat($("span." + class_discounterPerItemAmount).html());
+
+            var donationAmount = parseFloat($("input." + class_donationAmount).val());
+
+            // calculate the totals
+            var itemTotal = quantity * costPerItem;
+            var discountTotal = quantity * discountAmountPerItem;
+            var total = itemTotal - discountTotal + donationAmount;
+
+            // update the prices
+            $("span." + class_totalItemAmount).html(itemTotal.toFixed(2));
+            $("span." + class_discountAmount).html(discountTotal.toFixed(2));
+            $("span." + class_totalAmount).html(total.toFixed(2));
+        }
 
         function GenerateQuantityQuestionSet() {
             var $container = $($("div.QuantityContainer")[0]);
