@@ -9,7 +9,7 @@
     </id>
 
     <property name="Name" column="Name" />
-    <many-to-one name="Question" class="CRP.Core.Domain.Question, CRP.Core" column="QuestionId" cascade="none" />
+    <many-to-one name="Question" class="CRP.Core.Domain.Question, CRP.Core" column="QuestionId" cascade="none" fetch="join" not-null="true" />
 
   </class>
 </hibernate-mapping>

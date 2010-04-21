@@ -1,4 +1,5 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.Collections.Generic;
+using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
 
@@ -6,10 +7,27 @@ namespace CRP.Core.Domain
 {
     public class Tag : DomainObject
     {
-        [NotNull]
-        public virtual Item Item { get; set; }
+        public Tag()
+        {
+            SetDefaults();
+        }
+
+        public Tag(string name)
+        {
+            Name = name;
+
+            SetDefaults();
+        }
+
+        private void SetDefaults()
+        {
+            Items = new List<Item>();
+        }
+
         [Required]
         [Length(50)]
         public virtual string Name { get; set; }
+
+        public virtual IEnumerable<Item> Items { get; set; }
     }
 }

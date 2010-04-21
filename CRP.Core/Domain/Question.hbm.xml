@@ -9,12 +9,12 @@
     </id>
 
     <property name="Name" column="Name" />
-    <many-to-one name="QuestionType" class="CRP.Core.Domain.QuestionType, CRP.Core" column="QuestionTypeId" cascade="none" />
+    <many-to-one name="QuestionType" class="CRP.Core.Domain.QuestionType, CRP.Core" column="QuestionTypeId" cascade="none" not-null="true" fetch="join" />
     <property name="CollegeReusable" column="CollegeReusable" />
     <property name="SystemReusable" column="SystemReusable" />
     <property name="UserReusable" column="UserReusable" />
 
-    <bag name="Options" table="QuestionOptions" cascade="all-delete-orphan">
+    <bag name="Options" table="QuestionOptions" cascade="all-delete-orphan" fetch="join">
       <key column="QuestionId" />
       <one-to-many class="MAAPS2.Core.Domain.Question, MAAPS2.Core" />
     </bag>

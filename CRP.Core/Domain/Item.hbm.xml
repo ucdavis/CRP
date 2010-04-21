@@ -15,14 +15,14 @@
     <property name="Image" column="Image" />
     <property name="Link" column="Link" />
 
-    <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" />
-
-    <bag name="Tags" table="Tags" cascade="all-delete-orphan">
+    <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" fetch="join" />
+    
+    <bag name="Tags" table="ItemXTags" cascade="all-delete-orphan" fetch="join">
       <key column="ItemId" />
-      <one-to-many class="CRP.Core.Domain.Tag, CRP.Core" />
+      <many-to-many column="TagId" class="CRP.Core.Domain.Tag, CRP.Core" />
     </bag>
 
-    <bag name="ExtendedPropertyAnswers" table="ExtendedPropertyAnswers" cascade="all-delete-orphan">
+    <bag name="ExtendedPropertyAnswers" table="ExtendedPropertyAnswers" cascade="all-delete-orphan" inverse="true" fetch="join">
       <key column="ItemId" />
       <one-to-many class="CRP.Core.Domain.ExtendedPropertyAnswer, CRP.Core"/>
     </bag>

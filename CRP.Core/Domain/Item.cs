@@ -29,8 +29,10 @@ namespace CRP.Core.Domain
         public virtual DateTime? Expiration { get; set; }
         public virtual byte[] Image { get; set; }
         public virtual string Link { get; set; }
+        [NotNull]
         public virtual ItemType ItemType { get; set; }
         //TOOD: Map the deparment class
+        //[NotNull]
         //public virtual Department Deptartment { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
@@ -38,14 +40,23 @@ namespace CRP.Core.Domain
 
         public virtual void AddTag(Tag tag)
         {
-            tag.Item = this;
             Tags.Add(tag);
+        }
+
+        public virtual void RemoveTag(Tag tag)
+        {
+            Tags.Remove(tag);
         }
 
         public virtual void AddExtendedPropertyAnswer(ExtendedPropertyAnswer extendedPropertyAnswer)
         {
             extendedPropertyAnswer.Item = this;
             ExtendedPropertyAnswers.Add(extendedPropertyAnswer);
+        }
+
+        public virtual void RemoveExtendedPropertyAnswer(ExtendedPropertyAnswer extendedPropertyAnswer)
+        {
+            ExtendedPropertyAnswers.Remove(extendedPropertyAnswer);
         }
     }
 }

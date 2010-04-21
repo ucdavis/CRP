@@ -32,11 +32,14 @@ namespace CRP.Core.Domain
         [Required]
         [Length(200)]
         public virtual string Name { get; set; }
+        [NotNull]
         public QuestionType QuestionType { get; set; }
         public virtual bool CollegeReusable { get; set; }
         public virtual bool SystemReusable { get; set; }
         public virtual bool UserReusable { get; set; }
-        public virtual int UserId { get; set; }
+        //TODO: Map the user to the user class
+        //[NotNull]
+        //public virtual User User { get; set; }
 
         public virtual ICollection<QuestionOption> Options { get; set; }
 
@@ -44,6 +47,11 @@ namespace CRP.Core.Domain
         {
             questionOption.Question = this;
             Options.Add(questionOption);
+        }
+
+        public virtual void RemoveOptions(QuestionOption questionOption)
+        {
+            Options.Remove(questionOption);
         }
     }
 }

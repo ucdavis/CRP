@@ -9,8 +9,8 @@
     </id>
 
     <property name="Answer" column="Answer" />
-    <many-to-one name="Item" class="CRP.Core.Domain.Item, CRP.Core" column="ItemId" cascade="none" />
-    <many-to-one name="ExtendedProperty" class="CRP.Core.Domain.ExtendedProperty, CRP.Core" column="ExtendedPropertyId" cascade="none" />
+    <many-to-one name="Item" class="CRP.Core.Domain.Item, CRP.Core" column="ItemId" cascade="none" not-null="false" />
+    <many-to-one name="ExtendedProperty" class="CRP.Core.Domain.ExtendedProperty, CRP.Core" column="ExtendedPropertyId" cascade="none" not-null="true" />
     
   </class>
 </hibernate-mapping>

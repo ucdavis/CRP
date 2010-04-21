@@ -8,10 +8,10 @@
       <generator class="identity" />
     </id>
 
-    <property name="Payee" column="Payee" />
-    <property name="CheckNumber" column="CheckNumber" />
-    <property name="Amount" column="Amount" />
-    <property name="DateReceived" column="DateReceived" />
+    <property name="Payee" column="Payee" not-null="true" />
+    <property name="CheckNumber" column="CheckNumber" not-null="true" />
+    <property name="Amount" column="Amount" not-null="true" />
+    <property name="DateReceived" column="DateReceived" not-null="true" />
 
   </class>
 </hibernate-mapping>
