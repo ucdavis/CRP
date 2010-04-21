@@ -20,6 +20,8 @@ namespace CRP.Controllers
             return View();
         }
 
+        #region Item Types
+
         /// <summary>
         /// GET: /ApplicationManagement/ListItemTypes
         /// </summary>
@@ -107,5 +109,7 @@ namespace CRP.Controllers
                 return View(viewModel);
             }
         }
+
+        #endregion
     }
 }
