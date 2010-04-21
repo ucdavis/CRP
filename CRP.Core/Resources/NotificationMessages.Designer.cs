@@ -160,6 +160,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet..
+        /// </summary>
+        public static string STR_TransactionQuantitySame {
+            get {
+                return ResourceManager.GetString("STR_TransactionQuantitySame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {ObjectType} was unable to update..
         /// </summary>
         public static string STR_UnableToUpdate {

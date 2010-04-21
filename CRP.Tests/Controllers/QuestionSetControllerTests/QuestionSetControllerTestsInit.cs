@@ -101,6 +101,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         private void SetupDataForLinkToTests()
         {
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            ControllerRecordFakes.FakeItems(Items, 3);
             ControllerRecordFakes.FakeItemTypes(ItemTypes, 3);
             ControllerRecordFakes.FakeUsers(Users, 3);
             ControllerRecordFakes.FakeUnits(Units, 5);
@@ -136,6 +137,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
             QuestionSetRepository.Expect(a => a.Queryable).Return(QuestionSets.AsQueryable()).Repeat.Any();
             QuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(QuestionSets[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
         }
         /// <summary>
         /// Setups the data for create tests.

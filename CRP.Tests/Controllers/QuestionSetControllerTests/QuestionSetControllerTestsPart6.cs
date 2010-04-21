@@ -1,10 +1,6 @@
-﻿using System.Linq;
-using CRP.Controllers;
+﻿using CRP.Controllers;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
-using CRP.Core.Domain;
-using CRP.Tests.Core.Extensions;
-using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;

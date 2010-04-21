@@ -152,6 +152,10 @@
   <data name="STR_SelectUserFirst" xml:space="preserve">
     <value>Select a user first.</value>
   </data>
+  <data name="STR_TransactionQuantitySame" xml:space="preserve">
+    <value>Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.</value>
+    <comment>When a QuestionSet is being linked to an Item or an Item type, it must be set to a transaction or a quantity.</comment>
+  </data>
   <data name="STR_UnableToUpdate" xml:space="preserve">
     <value>{ObjectType} was unable to update.</value>
   </data>

@@ -16,10 +16,10 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         #region Edit Get Tests
 
         /// <summary>
-        /// Tests the edit get when question setid not found redirects to list.
+        /// Tests the edit get when question set id not found redirects to list.
         /// </summary>
         [TestMethod]
-        public void TestEditGetWhenQuestionSetidNotFoundRedirectsToList()
+        public void TestEditGetWhenQuestionSetIdNotFoundRedirectsToList()
         {
             #region Arrange
             ControllerRecordFakes.FakeQuestionSets(QuestionSets, 3);

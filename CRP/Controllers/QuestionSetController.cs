@@ -433,7 +433,7 @@ namespace CRP.Controllers
                 }
                 else
                 {
-                    Message = "Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.";
+                    Message = NotificationMessages.STR_TransactionQuantitySame;
                 }
                 return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
             }
@@ -484,7 +484,7 @@ namespace CRP.Controllers
                 }
                 else
                 {
-                    Message = "Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.";
+                    Message = NotificationMessages.STR_TransactionQuantitySame;
                 }
                 return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
             }
@@ -527,6 +527,13 @@ namespace CRP.Controllers
             return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
         }
 
+        /// <summary>
+        /// Get: /QuestionSet/LinkToItem
+        /// </summary>
+        /// <param name="itemId">The item id.</param>
+        /// <param name="transaction">if set to <c>true</c> [transaction].</param>
+        /// <param name="quantity">if set to <c>true</c> [quantity].</param>
+        /// <returns></returns>
         [UserOnly]
         public ActionResult LinkToItem(int itemId, bool transaction, bool quantity)
         {
@@ -535,7 +542,15 @@ namespace CRP.Controllers
             if (item == null || transaction == quantity)
             {
                 // redirect no item to link to
-                return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
+                if (item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                else
+                {
+                    Message = NotificationMessages.STR_TransactionQuantitySame;
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
 
             var viewModel = QuestionSetLinkViewModel.Create(Repository, CurrentUser.Identity.Name);
@@ -576,9 +591,21 @@ namespace CRP.Controllers
 
             if (questionSet == null || item == null || transaction == quantity)
             {
+                if (questionSet == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "QuestionSet");
+                }
+                else if (item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                else
+                {
+                    Message = NotificationMessages.STR_TransactionQuantitySame;
+                }
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
-
+            
             // add the questionset
             if (transaction)
             {
@@ -601,7 +628,18 @@ namespace CRP.Controllers
             }
             else
             {
-                Message = "An error with the item prevents this from saving.";
+                if(item.QuestionSets.Where(a => a.QuestionSet == questionSet).Where(b => b.TransactionLevel).Count() > 1)
+                {
+                    Message = "That question set is already linked to the transaction question sets";
+                }
+                else if (item.QuestionSets.Where(a => a.QuestionSet == questionSet).Where(b => b.QuantityLevel).Count() > 1)
+                {
+                    Message = "That question set is already linked to the quantity question sets";
+                }
+                else
+                {
+                    Message = "An error with the item prevents this from saving.";
+                }                
                 return LinkToItem(itemId, transaction, quantity);
             }
 

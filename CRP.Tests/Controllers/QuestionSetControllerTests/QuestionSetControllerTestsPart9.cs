@@ -1,0 +1,346 @@
+﻿using System.Linq;
+using System.Web.Mvc;
+using CRP.Controllers;
+using CRP.Controllers.ViewModels;
+using CRP.Core.Domain;
+using CRP.Core.Resources;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MvcContrib.TestHelper;
+using Rhino.Mocks;
+
+namespace CRP.Tests.Controllers.QuestionSetControllerTests
+{
+    public partial class QuestionSetControllerTests
+    {
+        #region LinkToItem Get Tests
+
+        /// <summary>
+        /// Tests the link to item get redirects to list when item not found.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemGetRedirectsToListWhenItemNotFound()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(1, true, false)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the link to item get redirects to list when transaction and quantity are both true.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemGetRedirectsToListWhenTransactionAndQuantityAreBothTrue()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, true, true)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the link to item get redirects to list when transaction and quantity are both false.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemGetRedirectsToListWhenTransactionAndQuantityAreBothFalse()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, false, false)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.", Controller.Message);
+            #endregion Assert
+        }
+        /// <summary>
+        /// Tests the link to item get returns view when valid data.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemGetReturnsViewWhenValidData1()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LinkToItem(2, true, false)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetLinkViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Transaction);
+            Assert.IsFalse(result.Quantity);
+            Assert.AreEqual(5, result.QuestionSets.Count());
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[0]));
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[2]));
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[3]));
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[5]));
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[6]));
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the link to item get returns view when valid data.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemGetReturnsViewWhenValidData2()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LinkToItem(2, false, true)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetLinkViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.Transaction);
+            Assert.IsTrue(result.Quantity);
+            Assert.AreEqual(5, result.QuestionSets.Count());
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[0]));
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[2]));
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[3]));
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[5]));
+            Assert.IsTrue(result.QuestionSets.Contains(QuestionSets[6]));
+            #endregion Assert
+        }
+        #endregion LinkToItem Get Tests
+        
+        #region LinkToItem Post Tests
+
+        /// <summary>
+        /// Tests the link to item post redirects to list if question set not found.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemPostRedirectsToListIfQuestionSetNotFound()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(1, 2, true, false)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("QuestionSet not found.", Controller.Message);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the link to item post redirects to list if item not found.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemPostRedirectsToListIfItemNotFound()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 1, true, false)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the link to item post redirects to list if both transaction and quantity are true.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemPostRedirectsToListIfBothTransactionAndQuantityAreTrue()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, true, true)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.", Controller.Message);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the link to item post redirects to list if both transaction and quantity are false.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemPostRedirectsToListIfBothTransactionAndQuantityAreFalse()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, false, false)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Unable to determine if this is to be linked to a Transaction or a Quantity QuestionSet.", Controller.Message);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the link to item post returns view if same question set is added to A transaction level.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemPostReturnsViewIfSameQuestionSetIsAddedToATransactionLevel()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForLinkToTests();
+            Controller.LinkToItem(2, 2, true, false)
+                .AssertHttpRedirect();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, true, false)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetLinkViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("That question set is already linked to the transaction question sets", Controller.Message);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the link to item post returns view if same question set is added to A quantity level.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemPostReturnsViewIfSameQuestionSetIsAddedToAQuantityLevel()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForLinkToTests();
+            Controller.LinkToItem(2, 2, false, true)
+                .AssertHttpRedirect();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, false, true)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetLinkViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("That question set is already linked to the quantity question sets", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the link to item post saves if same question set is added to A quantity level that is in A transaction level.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemPostSavesIfSameQuestionSetIsAddedToAQuantityLevelThatIsInATransactionLevel()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForLinkToTests();
+            Controller.LinkToItem(2, 2, true, false)
+                .AssertHttpRedirect();
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, false, true)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question Set"), Controller.Message);
+            ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[1]));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the link to item post returns view if item has an error.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToItemPostReturnsViewIfItemHasAnError()
+        {
+            #region Arrange
+            SetupDataForLinkToTests();
+            Items[1].Name = null;
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToItem(2, 2, true, false)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetLinkViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("An error with the item prevents this from saving.", Controller.Message);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+            #endregion Assert
+        }
+        #endregion LinkToItem Post Tests
+
+
+        #region UnlinkFromItem Post Tests
+        //TODO: UnlinkFromItem tests
+        #endregion UnlinkFromItem Post Tests
+    }
+}
