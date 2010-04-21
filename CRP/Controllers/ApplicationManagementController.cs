@@ -127,19 +127,29 @@ namespace CRP.Controllers
         /// PostCondition:
         ///     The item is updated
         /// </remarks>
+        /// <param name="id"></param>
         /// <param name="itemType"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult EditItemType([Bind(Exclude="Id")]ItemType itemType)
+        public ActionResult EditItemType(int id, [Bind(Exclude="Id")]ItemType itemType)
         {
+            var it = Repository.OfType<ItemType>().GetNullableByID(id);
+            if (it == null)
+            {
+                return this.RedirectToAction(a => a.ListItemTypes());
+            }
+
+            it.Name = itemType.Name;
+            it.IsActive = itemType.IsActive;
+
             //TODO: Review. I think this needs to pass in the id, get it, 
             //copy over the fields which are edited, then check and persist that.
             //As the name should not be duplicate, that check would need to be added.
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, it.ValidationResults());
 
             if (ModelState.IsValid)
             {
-                Repository.OfType<ItemType>().EnsurePersistent(itemType);
+                Repository.OfType<ItemType>().EnsurePersistent(it);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item Type");
                 return View(itemType);
             }
