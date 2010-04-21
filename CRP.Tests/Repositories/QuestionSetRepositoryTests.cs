@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
@@ -216,6 +217,80 @@ namespace CRP.Tests.Repositories
             #endregion Setup QuestionSet with linked Questions
         }
 
-        
+
+        [TestMethod]
+        public void TestItemTypesMappingProblem()
+        {
+            LoadItemTypes(1);
+            var itemTypeQuestionSet = CreateValidEntities.ItemTypeQuestionSet(1);
+            var validEntity = GetValid(null);
+            validEntity.ItemTypes = new List<ItemTypeQuestionSet>();
+            validEntity.ItemTypes.Add(itemTypeQuestionSet);
+            itemTypeQuestionSet.QuestionSet = validEntity;
+            itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+
+            Repository.OfType<QuestionSet>().DbContext.BeginTransaction();
+            Repository.OfType<QuestionSet>().EnsurePersistent(validEntity);
+            Assert.IsFalse(validEntity.IsTransient());
+            Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
+
+
+            /*
+             * This was the mapping file that was wrong (class file):
+    <bag name="ItemTypes" table="ItemTypeQuestionSets" cascade="all-delete-orphan" inverse="true">
+      <key column="QuestionSetId" />
+      <many-to-many column="ItemTypeId" class="CRP.Core.Domain.ItemType, CRP.Core" />
+    </bag>
+             
+             */
+
+            /* before the mapping fix, this generated the following exception:
+Test method CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem threw exception:  NHibernate.PropertyAccessException: Exception occurred getter of CRP.Core.Domain.ItemType.ExtendedProperties --->  System.Reflection.TargetException: Object does not match target type..
+at System.Reflection.RuntimeMethodInfo.CheckConsistency(Object target)
+at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+at System.Reflection.RuntimePropertyInfo.GetValue(Object obj, BindingFlags invokeAttr, Binder binder, Object[] index, CultureInfo culture)
+at System.Reflection.RuntimePropertyInfo.GetValue(Object obj, Object[] index)
+at NHibernate.Properties.BasicPropertyAccessor.BasicGetter.Get(Object target)
+--- End of inner exception stack trace ---
+at NHibernate.Properties.BasicPropertyAccessor.BasicGetter.Get(Object target)
+at NHibernate.Tuple.Entity.AbstractEntityTuplizer.GetPropertyValue(Object entity, Int32 i)
+at NHibernate.Persister.Entity.AbstractEntityPersister.GetPropertyValue(Object obj, Int32 i, EntityMode entityMode)
+at NHibernate.Engine.Cascade.CascadeOn(IEntityPersister persister, Object parent, Object anything)
+at NHibernate.Event.Default.AbstractSaveEventListener.CascadeBeforeSave(IEventSource source, IEntityPersister persister, Object entity, Object anything)
+at NHibernate.Event.Default.AbstractSaveEventListener.PerformSaveOrReplicate(Object entity, EntityKey key, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.AbstractSaveEventListener.PerformSave(Object entity, Object id, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.AbstractSaveEventListener.SaveWithGeneratedId(Object entity, String entityName, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.SaveWithGeneratedOrRequestedId(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.EntityIsTransient(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.PerformSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.OnSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Impl.SessionImpl.FireSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Impl.SessionImpl.SaveOrUpdate(String entityName, Object obj)
+at NHibernate.Engine.CascadingAction.SaveUpdateCascadingAction.Cascade(IEventSource session, Object child, String entityName, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeToOne(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeAssociation(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeProperty(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeCollectionElements(Object child, CollectionType collectionType, CascadeStyle style, IType elemType, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeCollection(Object child, CascadeStyle style, Object anything, CollectionType type)
+at NHibernate.Engine.Cascade.CascadeAssociation(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeProperty(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeOn(IEntityPersister persister, Object parent, Object anything)
+at NHibernate.Event.Default.AbstractSaveEventListener.CascadeAfterSave(IEventSource source, IEntityPersister persister, Object entity, Object anything)
+at NHibernate.Event.Default.AbstractSaveEventListener.PerformSaveOrReplicate(Object entity, EntityKey key, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.AbstractSaveEventListener.PerformSave(Object entity, Object id, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.AbstractSaveEventListener.SaveWithGeneratedId(Object entity, String entityName, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.SaveWithGeneratedOrRequestedId(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.EntityIsTransient(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.PerformSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.OnSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Impl.SessionImpl.FireSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Impl.SessionImpl.SaveOrUpdate(Object obj)
+at UCDArch.Data.NHibernate.RepositoryWithTypedId`2.EnsurePersistent(T entity, Boolean forceSave)
+at UCDArch.Data.NHibernate.RepositoryWithTypedId`2.EnsurePersistent(T entity)
+at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem() in QuestionSetRepositoryTests.cs: line 233
+             */
+        }
+
     }
 }

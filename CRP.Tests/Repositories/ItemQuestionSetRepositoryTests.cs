@@ -98,24 +98,6 @@ namespace CRP.Tests.Repositories
 
         #region CRUD Tests
 
-        /// <summary>
-        /// Determines whether this instance [can delete entity].
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(NHibernate.ObjectDeletedException))]
-        public override void CanDeleteEntity()
-        {
-            try
-            {
-                base.CanDeleteEntity();
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual("deleted object would be re-saved by cascade (remove deleted object from associations)[CRP.Core.Domain.QuestionSet#1]", ex.Message);
-                throw;
-            }
-
-        }
 
         #endregion CRUD Tests
 
