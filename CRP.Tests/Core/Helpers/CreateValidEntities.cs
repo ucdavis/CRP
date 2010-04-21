@@ -172,6 +172,7 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new ItemQuestionSet();
             rtValue.Item = new Item();
             rtValue.QuestionSet = new QuestionSet();
+            rtValue.QuantityLevel = true;
             //TODO: Populate values
             
             return rtValue;

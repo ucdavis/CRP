@@ -516,7 +516,7 @@ namespace CRP.Controllers
                 if (ciQuestionSet.Name == StaticValues.QuestionSet_ContactInformation && ciQuestionSet.SystemReusable)
                 {
                     ModelState.AddModelError("Question Set",
-                                             "This is a sytem default question set and cannot be modified.");
+                                             "This is a system default question set and cannot be modified.");
                 }
             }
 
