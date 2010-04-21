@@ -79,6 +79,10 @@ namespace CRP.Controllers
             {
                 displayProfile.SchoolMaster = true;
             }
+            //if(displayProfile.Unit != null)
+            //{
+            //    //TODO: Do test to make sure a duplicate is not being created. (need for edit too)
+            //}
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, displayProfile.ValidationResults());
 

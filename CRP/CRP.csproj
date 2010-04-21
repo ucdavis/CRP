@@ -590,7 +590,7 @@
     <Content Include="Views\Account\ManageUsers.aspx" />
     <Content Include="Views\Account\OpenIdAccount.aspx" />
     <Content Include="Views\Account\OpenIdLogon.aspx" />
-    <Content Include="Views\Check\LinkToTransaction.aspx" />
+    <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />
     <Content Include="Views\Home\AdminHome.aspx" />
     <Content Include="Views\ItemManagement\Details.aspx" />
