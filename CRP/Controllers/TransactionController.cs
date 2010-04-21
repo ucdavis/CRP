@@ -474,6 +474,46 @@ namespace CRP.Controllers
 
             return answers;
         }
+
+
+        public ActionResult Lookup()
+        {
+            return View(LookupViewModel.Create(Repository));
+        }
+
+        [AcceptPost]
+        public ActionResult Lookup(string orderNumber, string email)
+        {
+            var transaction = Repository.OfType<Transaction>().Queryable.Where(a => a.TransactionNumber == orderNumber).FirstOrDefault();
+
+            var viewModel = LookupViewModel.Create(Repository);
+            if (transaction != null)
+            {
+                var answer = transaction.TransactionAnswers.Where(
+                                a =>
+                                a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                                a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+
+                if (answer != null && answer.Answer == email)
+                {
+                    viewModel.TransactionNumber = orderNumber;
+                    viewModel.Email = email;
+                    viewModel.Transaction = transaction;
+                }
+            }
+
+            else
+            {
+                viewModel.TransactionNumber = orderNumber;
+                viewModel.Email = email;
+
+                Message = "Unable to locate order, please check your information and try again.";
+            }
+
+            return View(viewModel);
+        }
+
+
     }
 
     public class QuestionAnswerParameter

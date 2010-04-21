@@ -184,6 +184,7 @@
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LinkCheckViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\LookupViewModel.cs" />
     <Compile Include="Controllers\ViewModels\PaymentConfirmationViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
@@ -589,6 +590,7 @@
     <Content Include="Views\Shared\PageHeader.ascx" />
     <Content Include="Views\Shared\QuestionForm.ascx" />
     <Content Include="Views\Transaction\Confirmation.aspx" />
+    <Content Include="Views\Transaction\Lookup.aspx" />
     <Content Include="Views\Transaction\PaymentResult.aspx" />
   </ItemGroup>
   <ItemGroup>
