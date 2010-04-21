@@ -230,6 +230,7 @@ namespace CRP.Tests.Controllers
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             FakeTransactions(3);
             TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            Transactions[1].Amount = 20.00m;
             var payments = new PaymentLog[2];
             payments[0] = CreateValidEntities.PaymentLog(1);
             payments[1] = CreateValidEntities.PaymentLog(2);
