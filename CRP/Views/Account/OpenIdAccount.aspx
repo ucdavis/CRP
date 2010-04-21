@@ -91,7 +91,7 @@
                                                             b.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                                                             b.Question.Name == StaticValues.Question_Email).FirstOrDefault();
                                                      %>
-                                              
+                                                    <%= Html.AntiForgeryToken() %>
                                                     <%= Html.Hidden("orderNumber", a.TransactionNumber) %>
                                                     <%= Html.Hidden("email", answer != null ? answer.Answer : string.Empty ) %>
                                                     <%= Html.SubmitButton("Submit", "View") %>
