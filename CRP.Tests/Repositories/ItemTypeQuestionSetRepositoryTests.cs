@@ -4,6 +4,7 @@ using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
 {
@@ -97,6 +98,9 @@ namespace CRP.Tests.Repositories
 
         #region CRUD Tests
 
+        /// <summary>
+        /// Determines whether this instance [can delete entity].
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(NHibernate.ObjectDeletedException))]
         public override void CanDeleteEntity()
@@ -114,6 +118,72 @@ namespace CRP.Tests.Repositories
         }
 
         #endregion CRUD Tests
+
+
+        #region Validaion Tests
+
+        /// <summary>
+        /// Tests the item type question set where quantity level and transaction level are both true does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestItemTypeQuestionSetWhereQuantityLevelAndTransactionLevelAreBothTrueDoesNotSave()
+        {
+            ItemTypeQuestionSet itemTypeQuestionSetRecord = null;
+            try
+            {
+                itemTypeQuestionSetRecord = CreateValidEntities.ItemTypeQuestionSet(null);
+                itemTypeQuestionSetRecord.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+                itemTypeQuestionSetRecord.ItemType = Repository.OfType<ItemType>().GetById(1);
+                itemTypeQuestionSetRecord.QuantityLevel = true;
+                itemTypeQuestionSetRecord.TransactionLevel = true;
+
+
+                Repository.OfType<ItemTypeQuestionSet>().EnsurePersistent(itemTypeQuestionSetRecord);
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(itemTypeQuestionSetRecord);
+                var results = itemTypeQuestionSetRecord.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("TransactionLevelQuantityLevel: TransactionLevel must be different from QuantityLevel");
+                Assert.IsTrue(itemTypeQuestionSetRecord.IsTransient());
+                Assert.IsFalse(itemTypeQuestionSetRecord.IsValid());
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the item type question set where quantity level and transaction level are both false does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestItemTypeQuestionSetWhereQuantityLevelAndTransactionLevelAreBothFalseDoesNotSave()
+        {
+            ItemTypeQuestionSet itemTypeQuestionSetRecord = null;
+            try
+            {
+                itemTypeQuestionSetRecord = CreateValidEntities.ItemTypeQuestionSet(null);
+                itemTypeQuestionSetRecord.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+                itemTypeQuestionSetRecord.ItemType = Repository.OfType<ItemType>().GetById(1);
+                itemTypeQuestionSetRecord.QuantityLevel = false;
+                itemTypeQuestionSetRecord.TransactionLevel = false;
+
+
+                Repository.OfType<ItemTypeQuestionSet>().EnsurePersistent(itemTypeQuestionSetRecord);
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(itemTypeQuestionSetRecord);
+                var results = itemTypeQuestionSetRecord.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("TransactionLevelQuantityLevel: TransactionLevel must be different from QuantityLevel");
+                Assert.IsTrue(itemTypeQuestionSetRecord.IsTransient());
+                Assert.IsFalse(itemTypeQuestionSetRecord.IsValid());
+
+                throw;
+            }
+        }
+        #endregion Validaion Tests
 
         //TODO: Other tests
     }
