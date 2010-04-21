@@ -9,8 +9,12 @@
     </id>
 
     <property name="Name" column="Name" />
-    <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" not-null="true" fetch="join" />
+    <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" fetch="join" />
+    <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join" />
     <property name="Logo" column="Logo" />
+
+    <property name="SiteMaster" column="SiteMaster" />
+    <property name="SchoolMaster" column="SchoolMaster" />
     
   </class>
 </hibernate-mapping>

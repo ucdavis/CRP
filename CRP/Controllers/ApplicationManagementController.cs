@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
@@ -146,6 +147,10 @@ namespace CRP.Controllers
                 return View(itemType);
             }
         }
+
+        #endregion
+
+        #region Display Profiles
 
         #endregion
     }

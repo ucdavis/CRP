@@ -11,6 +11,7 @@ using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 using UCDArch.Web.Attributes;
 using MvcContrib;
+using Check = UCDArch.Core.Utils.Check;
 
 namespace CRP.Controllers
 {
@@ -31,8 +32,32 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult List()
         {
-            //TODO: Add some filters based on roles
-            return View(Repository.OfType<QuestionSet>().Queryable);
+            IQueryable query;
+            var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
+            Check.Require(user != null, "User is required.");
+            var schools = user.Units.Select(a => a.School).ToList();
+
+            if (CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                query = from a in Repository.OfType<QuestionSet>().Queryable
+                        where a.SystemReusable || (a.UserReusable && a.User == user)
+                            || (a.CollegeReusable && schools.Contains(a.School))
+                        select a;
+            }
+            else if (CurrentUser.IsInRole(RoleNames.SchoolAdmin))
+            {
+                query = from a in Repository.OfType<QuestionSet>().Queryable
+                        where (a.UserReusable && a.User == user) || (a.CollegeReusable && schools.Contains(a.School))
+                        select a;
+            }
+            else
+            {
+                query = from a in Repository.OfType<QuestionSet>().Queryable
+                        where (a.UserReusable && a.User == user)
+                        select a;
+            }
+
+            return View(query);
         }
 
         public ActionResult Details(int id)

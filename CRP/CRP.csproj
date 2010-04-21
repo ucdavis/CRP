@@ -132,6 +132,7 @@
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
+    <Compile Include="Controllers\DisplayProfileController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
     <Compile Include="Controllers\Helpers\Access.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
+    <Compile Include="Controllers\ViewModels\DisplayProfileViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ExtendedPropertyViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
@@ -208,9 +210,12 @@
     <Content Include="Images\plus.png" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Views\Account\LogOn.aspx" />
+    <Content Include="Views\DisplayProfile\Create.aspx" />
     <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
+    <Content Include="Views\DisplayProfile\Edit.aspx" />
     <Content Include="Views\ApplicationManagement\EditItemType.aspx" />
     <Content Include="Views\ApplicationManagement\Index.aspx" />
+    <Content Include="Views\DisplayProfile\List.aspx" />
     <Content Include="Views\ApplicationManagement\ListItemTypes.aspx" />
     <Content Include="Views\ExtendedProperty\Create.aspx" />
     <Content Include="Views\QuestionSet\Create.aspx" />
