@@ -428,7 +428,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [AcceptPost]
         [BypassAntiForgeryToken]
-        public ActionResult PaymentResult(int? EXT_TRANS_ID, string PMT_STATUS, string NAME_ON_ACT, decimal? PMT_AMT, string TPG_TRANS_ID, string CARD_TYPE)
+        public ActionResult PaymentResult(int? EXT_TRANS_ID, string PMT_STATUS, string NAME_ON_ACCT, decimal? PMT_AMT, string TPG_TRANS_ID, string CARD_TYPE)
         {
             #region debug1
 
@@ -453,7 +453,7 @@ namespace CRP.Controllers
             body.Append("<br/>Function parameters================<br/>");
             body.Append("EXT_TRANS_ID:" + (EXT_TRANS_ID.HasValue ? EXT_TRANS_ID.Value.ToString() : string.Empty) + "<br/>");
             body.Append("PMT_STATUS:" + PMT_STATUS + "<br/>");
-            body.Append("NAME_ON_ACT:" + NAME_ON_ACT + "<br/>");
+            body.Append("NAME_ON_ACT:" + NAME_ON_ACCT + "<br/>");
             body.Append("PMT_AMT:" + (PMT_AMT.HasValue ? PMT_AMT.Value.ToString() : string.Empty) + "<br/>");
             body.Append("TPG_TRANS_ID:" + TPG_TRANS_ID + "<br/>");
             body.Append("CARD_TYPE" + CARD_TYPE);
@@ -472,15 +472,15 @@ namespace CRP.Controllers
                 // on success, save the valid information
                 if (PMT_STATUS == "success")
                 {
-                    paymentLog.Name = NAME_ON_ACT;
+                    paymentLog.Name = NAME_ON_ACCT;
                     paymentLog.Amount = PMT_AMT.Value;
                     paymentLog.Accepted = true;
                     paymentLog.GatewayTransactionId = TPG_TRANS_ID;
                     paymentLog.CardType = CARD_TYPE;
                 }
 
-                //transaction.AddPaymentLog(paymentLog);
-                paymentLog.Transaction = transaction;
+                transaction.AddPaymentLog(paymentLog);
+                //paymentLog.Transaction = transaction;
 
                 paymentLog.TransferValidationMessagesTo(ModelState);
 
