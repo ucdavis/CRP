@@ -1,22 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using CRP.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
-using CRP.Controllers.ViewModels;
-using CRP.Core.Domain;
-using CRP.Tests.Core.Extensions;
-using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.Attributes;
 using MvcContrib.TestHelper;
-using Rhino.Mocks;
-using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
 using UCDArch.Web.Attributes;
 
@@ -175,14 +164,12 @@ namespace CRP.Tests.Controllers
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Edit");
             #endregion Arrange
 
-            #region Act
-            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<UserOnlyAttribute>();
+            #region Act      
             var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "UserOnlyAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count());
+            Assert.AreEqual(0, allAttributes.Count());
             #endregion Assert
         }
 
@@ -205,6 +192,26 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
             Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestControllerMethodEditContainsExpectedAttributes3()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Edit");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<ValidateInputAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "ValidateInputAttribute not found");
+            Assert.IsFalse(expectedAttribute.ElementAt(0).EnableValidation, "ValidateInputAttribute Param should be false");
+            Assert.AreEqual(2, allAttributes.Count());
             #endregion Assert
         }
         #endregion Controller Method Tests
