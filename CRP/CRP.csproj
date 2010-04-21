@@ -529,11 +529,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\openid.css" />
+    <Content Include="Content\Site_old.css" />
     <Content Include="Images\aol.gif" />
     <Content Include="Images\blogger.ico" />
+    <Content Include="Images\caes-logo.jpg" />
+    <Content Include="Images\caes_logo.png" />
+    <Content Include="Images\caes_logo_blue.jpg" />
     <Content Include="Images\claimid.ico" />
     <Content Include="Images\facebook.gif" />
     <Content Include="Images\flickr.ico" />
+    <Content Include="Images\fonts\Quicksand License.txt" />
+    <Content Include="Content\quicksandstylesheet.css" />
     <Content Include="Images\google.gif" />
     <Content Include="Images\livejournal.ico" />
     <Content Include="Images\logo.gif" />
@@ -560,6 +566,22 @@
     <Content Include="Views\Shared\CheckView.ascx" />
     <Content Include="Views\Shared\PageHeader.ascx" />
     <Content Include="Views\Shared\QuestionForm.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\fonts\Quicksand_Bold.eot" />
+    <None Include="Images\fonts\Quicksand_Bold.ttf" />
+    <None Include="Images\fonts\Quicksand_Bold_Oblique.eot" />
+    <None Include="Images\fonts\Quicksand_Bold_Oblique.ttf" />
+    <None Include="Images\fonts\Quicksand_Book.eot" />
+    <None Include="Images\fonts\Quicksand_Book.ttf" />
+    <None Include="Images\fonts\Quicksand_Book_Oblique.eot" />
+    <None Include="Images\fonts\Quicksand_Book_Oblique.ttf" />
+    <None Include="Images\fonts\Quicksand_Dash.eot" />
+    <None Include="Images\fonts\Quicksand_Dash.ttf" />
+    <None Include="Images\fonts\Quicksand_Light.eot" />
+    <None Include="Images\fonts\Quicksand_Light.ttf" />
+    <None Include="Images\fonts\Quicksand_Light_Oblique.eot" />
+    <None Include="Images\fonts\Quicksand_Light_Oblique.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
