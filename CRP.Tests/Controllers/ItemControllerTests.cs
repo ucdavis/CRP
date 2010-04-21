@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.ViewModels;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
@@ -33,6 +34,7 @@ namespace CRP.Tests.Controllers
         protected IRepository<DisplayProfile> DisplayProfileRepository { get; set; }
         protected List<Unit> Units { get; set; }
         protected List<School> Schools { get; set; }
+        protected ISearchTermProvider SearchProvider { get; set; } 
 
         protected IPrincipal Principal = new MockPrincipal();
 
@@ -73,7 +75,8 @@ namespace CRP.Tests.Controllers
         protected override void SetupController()
         {
             OpenIdUserRepository = MockRepository.GenerateStub<IRepositoryWithTypedId<OpenIdUser, string>>();
-            Controller = new TestControllerBuilder().CreateController<ItemController>(OpenIdUserRepository);
+            SearchProvider = MockRepository.GenerateStub<ISearchTermProvider>();
+            Controller = new TestControllerBuilder().CreateController<ItemController>(OpenIdUserRepository, SearchProvider);
         }
 
         #endregion Init

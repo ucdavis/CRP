@@ -52,8 +52,6 @@ namespace CRP.Core.Domain
         public virtual string TransactionNumber { get; set; }
         public virtual OpenIdUser OpenIDUser { get; set; }
 
-        public virtual string PaymentConfirmation { get; set; }
-
         /// <summary>
         /// uPay reference number
         /// </summary>

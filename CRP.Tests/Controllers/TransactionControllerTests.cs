@@ -1,4 +1,5 @@
 ﻿using CRP.Controllers;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,6 +17,7 @@ namespace CRP.Tests.Controllers
     public class TransactionControllerTests : ControllerTestBase<TransactionController>
     {
         protected IRepositoryWithTypedId<OpenIdUser, string> OpenIdUserRepository { get; set; }
+        public IPaymentProvider PaymentProvider { get; set; }
         #region Init
 
         /// <summary>
@@ -32,7 +34,8 @@ namespace CRP.Tests.Controllers
         protected override void SetupController()
         {
             OpenIdUserRepository = MockRepository.GenerateStub<IRepositoryWithTypedId<OpenIdUser, string>>();
-            Controller = new TestControllerBuilder().CreateController<TransactionController>(OpenIdUserRepository);
+            PaymentProvider = MockRepository.GenerateStub<IPaymentProvider>();
+            Controller = new TestControllerBuilder().CreateController<TransactionController>(OpenIdUserRepository, PaymentProvider);
         }
 
         #endregion Init

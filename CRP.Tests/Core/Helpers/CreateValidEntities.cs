@@ -290,7 +290,6 @@ namespace CRP.Tests.Core.Helpers
         public static Transaction Transaction(int? counter)
         {
             var rtValue = new Transaction();
-            rtValue.PaymentConfirmation = "PaymentConfirmation" + counter.Extra();
             rtValue.Item = new Item();
             //TODO: Populate values
             

@@ -99,7 +99,7 @@ namespace CRP.Tests.Controllers
                 .AssertViewRendered()
                 .WithViewData<LinkCheckViewModel>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("PaymentConfirmation1", result.Transaction.PaymentConfirmation);
+            Assert.AreEqual("TransactionNumber1", result.Transaction.TransactionNumber);
         }
 
         /// <summary>
@@ -163,9 +163,9 @@ namespace CRP.Tests.Controllers
             checks[1].Amount = (decimal)9.49;
 
             FakeTransactions(2);
-            Transactions[0].Item = CreateValidEntities.Item(1);
-            Transactions[0].Item.SetIdTo(1);
-            Transactions[0].PaymentConfirmation = "x".RepeatTimes(101);
+            Transactions[0].Item = null;//CreateValidEntities.Item(1);
+            //Transactions[0].Item.SetIdTo(1);
+            
 
             Assert.AreEqual(0, Transactions[0].ChildTransactions.Count);
 
@@ -177,7 +177,7 @@ namespace CRP.Tests.Controllers
      
             TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
             Assert.AreNotEqual("Checks associated with transaction.", Controller.Message);
-            Controller.ModelState.AssertErrorsAre("PaymentConfirmation: length must be between 0 and 100");
+            Controller.ModelState.AssertErrorsAre("Item: may not be empty");
         }
 
         /// <summary>

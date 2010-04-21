@@ -20,7 +20,14 @@ namespace CRP.Tests.Repositories
         {
             var rtValue = CreateValidEntities.Transaction(counter);
             rtValue.Item = Repository.OfType<Item>().GetById(1);
-
+            if (counter != null && counter == 3)
+            {
+                rtValue.Check = true;
+            }
+            else
+            {
+                rtValue.Check = false;
+            }
             return rtValue;
         }
 
@@ -31,7 +38,7 @@ namespace CRP.Tests.Repositories
         /// <returns></returns>
         protected override IQueryable<Transaction> GetQuery(int numberAtEnd)
         {
-            return Repository.OfType<Transaction>().Queryable.Where(a => a.PaymentConfirmation.EndsWith(numberAtEnd.ToString()));
+            return Repository.OfType<Transaction>().Queryable.Where(a => a.Check);
         }
 
         /// <summary>
@@ -42,7 +49,7 @@ namespace CRP.Tests.Repositories
         /// <param name="counter"></param>
         protected override void FoundEntityComparison(Transaction entity, int counter)
         {
-            Assert.AreEqual("PaymentConfirmation" + counter, entity.PaymentConfirmation);
+            Assert.AreEqual(counter, entity.Id);
         }
 
         /// <summary>
@@ -52,18 +59,18 @@ namespace CRP.Tests.Repositories
         /// <param name="action">The action.</param>
         protected override void UpdateUtility(Transaction entity, ARTAction action)
         {
-            const string updateValue = "Updated";
+            const bool updateValue = true;
             switch (action)
             {
                 case ARTAction.Compare:
-                    Assert.AreEqual(updateValue, entity.PaymentConfirmation);
+                    Assert.AreEqual(updateValue, entity.Check);
                     break;
                 case ARTAction.Restore:
-                    entity.PaymentConfirmation = RestoreValue;
+                    entity.Check = BoolRestoreValue;
                     break;
                 case ARTAction.Update:
-                    RestoreValue = entity.PaymentConfirmation;
-                    entity.PaymentConfirmation = updateValue;
+                    BoolRestoreValue = entity.Check;
+                    entity.Check = updateValue;
                     break;
             }
         }
@@ -86,5 +93,6 @@ namespace CRP.Tests.Repositories
         #endregion Init and Overrides
 
         //TODO: Other tests
+        //TODO: Look at mapping file to see database calculated fields
     }
 }
