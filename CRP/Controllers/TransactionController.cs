@@ -48,6 +48,7 @@ namespace CRP.Controllers
 
             if (item == null)
             {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
@@ -338,21 +339,21 @@ namespace CRP.Controllers
         /// <summary>
         /// Calculates the validation string.
         /// </summary>
-        /// <param name="PostingKey">The posting key.</param>
-        /// <param name="EXT_TRANS_ID">The TransactionId</param>
-        /// <param name="AMT">The AMT.</param>
+        /// <param name="postingKey">The posting key.</param>
+        /// <param name="extTransID">The TransactionId</param>
+        /// <param name="amt">The AMT.</param>
         /// <returns></returns>
-        public static string CalculateValidationString(string PostingKey, string EXT_TRANS_ID, string AMT)
+        public static string CalculateValidationString(string postingKey, string extTransID, string amt)
         {
             MD5 hash = MD5.Create();
-            byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(PostingKey + EXT_TRANS_ID + AMT));
+            byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(postingKey + extTransID + amt));
             return Convert.ToBase64String(data);
         }
 
         // ReSharper disable InconsistentNaming
 
         /// <summary>
-        /// The payment was succesfully set to touch net.
+        /// The payment was successfully set to touch net.
         /// </summary>
         /// <param name="UPAY_SITE_ID">The touch net U Pay Site id.</param>
         /// <param name="EXT_TRANS_ID">The transaction Id.</param>
@@ -793,47 +794,20 @@ namespace CRP.Controllers
             // if it exists, fill in the questions
             if (questionSet != null)
             {
-                foreach(var question in questionSet.Questions)
+                var questionAnswer = new Dictionary<string, string>();
+                questionAnswer.Add(StaticValues.Question_FirstName, openIdUser.FirstName);
+                questionAnswer.Add(StaticValues.Question_LastName, openIdUser.LastName);
+                questionAnswer.Add(StaticValues.Question_StreetAddress, openIdUser.StreetAddress);
+                questionAnswer.Add(StaticValues.Question_AddressLine2, openIdUser.Address2);
+                questionAnswer.Add(StaticValues.Question_City, openIdUser.City);
+                questionAnswer.Add(StaticValues.Question_State, openIdUser.State);
+                questionAnswer.Add(StaticValues.Question_Zip, openIdUser.Zip);
+                questionAnswer.Add(StaticValues.Question_PhoneNumber, openIdUser.PhoneNumber);
+                questionAnswer.Add(StaticValues.Question_Email, openIdUser.Email);   
+                foreach (var question in questionSet.Questions)
                 {
-                    var ans = string.Empty;
-
-                    if (question.Name == StaticValues.Question_FirstName)
-                    {
-                        ans = openIdUser.FirstName;
-                    }
-                    else if (question.Name == StaticValues.Question_LastName)
-                    {
-                        ans = openIdUser.LastName;
-                    }
-                    else if (question.Name == StaticValues.Question_StreetAddress)
-                    {
-                        ans = openIdUser.StreetAddress;
-                    }
-                    else if (question.Name == StaticValues.Question_AddressLine2)
-                    {
-                        ans = openIdUser.Address2;
-                    }
-                    else if (question.Name == StaticValues.Question_City)
-                    {
-                        ans = openIdUser.City;
-                    }
-                    else if (question.Name == StaticValues.Question_State)
-                    {
-                        ans = openIdUser.State;
-                    }
-                    else if (question.Name == StaticValues.Question_Zip)
-                    {
-                        ans = openIdUser.Zip;
-                    }
-                    else if (question.Name == StaticValues.Question_PhoneNumber)
-                    {
-                        ans = openIdUser.PhoneNumber;
-                    }
-                    else if (question.Name == StaticValues.Question_Email)
-                    {
-                        ans = openIdUser.Email;
-                    }
-
+                    //If it doesn't find the question, it will thow an exception. (a good thing.)
+                    var ans = questionAnswer[question.Name];
                     // create the answer object
                     var answer = new ItemTransactionAnswer()
                     {
@@ -845,6 +819,61 @@ namespace CRP.Controllers
 
                     answers.Add(answer);
                 }
+
+                #region old way answers were assigned
+                //foreach(var question in questionSet.Questions)
+                //{
+                //    var ans = string.Empty;
+          
+                //    if (question.Name == StaticValues.Question_FirstName)
+                //    {
+                //        ans = openIdUser.FirstName;
+                //    }
+                //    else if (question.Name == StaticValues.Question_LastName)
+                //    {
+                //        ans = openIdUser.LastName;
+                //    }
+                //    else if (question.Name == StaticValues.Question_StreetAddress)
+                //    {
+                //        ans = openIdUser.StreetAddress;
+                //    }
+                //    else if (question.Name == StaticValues.Question_AddressLine2)
+                //    {
+                //        ans = openIdUser.Address2;
+                //    }
+                //    else if (question.Name == StaticValues.Question_City)
+                //    {
+                //        ans = openIdUser.City;
+                //    }
+                //    else if (question.Name == StaticValues.Question_State)
+                //    {
+                //        ans = openIdUser.State;
+                //    }
+                //    else if (question.Name == StaticValues.Question_Zip)
+                //    {
+                //        ans = openIdUser.Zip;
+                //    }
+                //    else if (question.Name == StaticValues.Question_PhoneNumber)
+                //    {
+                //        ans = openIdUser.PhoneNumber;
+                //    }
+                //    else if (question.Name == StaticValues.Question_Email)
+                //    {
+                //        ans = openIdUser.Email;
+                //    }
+
+                //    // create the answer object
+                //    var answer = new ItemTransactionAnswer()
+                //    {
+                //        Answer = ans,
+                //        QuestionId = question.Id,
+                //        QuestionSetId = question.QuestionSet.Id,
+                //        Transaction = true
+                //    };
+
+                //    answers.Add(answer);
+                //}
+                #endregion old way answers were assigned
             }
 
             return answers;

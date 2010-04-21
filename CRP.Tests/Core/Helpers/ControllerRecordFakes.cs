@@ -251,5 +251,35 @@ namespace CRP.Tests.Core.Helpers
                 entity[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
+
+        /// <summary>
+        /// Fakes the display profile.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        public static void FakeDisplayProfile(List<DisplayProfile> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.DisplayProfile(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        /// <summary>
+        /// Fakes the open id users.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        public static void FakeOpenIdUsers(List<OpenIdUser> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.OpenIdUser(i + 1 + offSet));
+                entity[i + offSet].SetIdTo((i + 1 + offSet).ToString());
+            }
+        }
     }
 }
