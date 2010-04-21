@@ -9,7 +9,7 @@ namespace CRP.Controllers.ViewModels
     public class SearchViewModel
     {
         public string ApiKey { get; set; }
-        public ICollection<Item> Items { get; set; }
+        public IEnumerable<Item> Items { get; set; }
 
         public static SearchViewModel Create(IRepository repository)
         {
@@ -17,6 +17,7 @@ namespace CRP.Controllers.ViewModels
 
             var viewModel = new SearchViewModel()
                                 {
+                                    Items = new List<Item>(),
                                     ApiKey = ConfigurationManager.AppSettings["BingApiKey"]
                                 };
 

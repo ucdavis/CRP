@@ -4,6 +4,7 @@ using UCDArch.Core.CommonValidator;
 using UCDArch.Core.NHibernateValidator.CommonValidatorAdapter;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
+using CRP.Models;
 
 namespace CRP
 {
@@ -17,7 +18,7 @@ namespace CRP
                                    typeof(IValidator), typeof(Validator));
             container.AddComponent("dbContext", typeof(IDbContext), typeof(DbContext));
 
-            container.AddComponent("searchProvider", typeof (ISearchTermProvider), typeof (DevSearchTermProvider));
+            container.AddComponent("searchProvider", typeof (ISearchTermProvider), typeof (SearchTermProvider));
             container.AddComponent("notificationProvider", typeof(INotificationProvider), typeof(NotificationProvider));
             container.AddComponent("chartProvider", typeof(IChartProvider), typeof(ChartProvider));
         }

@@ -67,4 +67,9 @@
       <one-to-many class="CRP.Core.Domain.ItemReport, CRP.Core"/>
     </bag>
   </class>
+
+    <sql-query name="ItemsSearch">
+        <return class="Item" />
+        exec dbo.usp_ItemsSearch :query
+    </sql-query>
 </hibernate-mapping>

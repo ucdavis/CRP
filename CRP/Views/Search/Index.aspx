@@ -11,6 +11,8 @@
     <p>
         <span id="suggestion"></span>
     </p>
+    
+    <% Html.RenderPartial(CRP.Core.Resources.StaticValues.Partial_ItemBrowse, Model.Items.AsQueryable()); %>
 
 </asp:Content>
 
@@ -32,7 +34,7 @@
 
             if (spellSuggestions != undefined && spellSuggestions.Total != 0) {
                 var firstSuggestion = spellSuggestions.Results[0].Value;
-                $("#suggestion").text("Did you mean: " + firstSuggestion + " ?");
+                $("#suggestion").html("Did you mean: " + firstSuggestion + " ?");
             }            
 
         }
