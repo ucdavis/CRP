@@ -11,14 +11,14 @@ namespace CRP.Controllers.ViewModels
         public IEnumerable<QuestionType> QuestionTypes { get; set; }
         public ItemType ItemType { get; set; }
 
-        public static ItemTypeViewModel Create(IRepository respository)
+        public static ItemTypeViewModel Create(IRepository repository)
         {
-            Check.Require(respository != null, "Respository required.");
+            Check.Require(repository != null, "Repository required.");
 
             var viewModel = new ItemTypeViewModel
                                 {
                                     QuestionTypes =
-                                        respository.OfType<QuestionType>().Queryable.Where(a => a.ExtendedProperty).
+                                        repository.OfType<QuestionType>().Queryable.Where(a => a.ExtendedProperty).
                                         ToList()
                                 };
 
