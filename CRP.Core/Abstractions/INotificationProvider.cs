@@ -41,7 +41,7 @@ namespace CRP.Core.Abstractions
             //TotalPaid
             //Quantity
             //QuantityName
-            //TransactionNumber (Touchnet Reference)
+            
 
             var firstName = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer ??
                             string.Empty;
@@ -54,9 +54,25 @@ namespace CRP.Core.Abstractions
             {
                 quantityName = transaction.Item.QuantityName ?? string.Empty;
             }
-
-            var touchNetId =
-                transaction.PaymentLogs.Where(a => a.Accepted && a.Credit).FirstOrDefault().GatewayTransactionId ?? "";
+         
+            var paymentLog = transaction.PaymentLogs.Where(a => a.Accepted).FirstOrDefault();
+            var paymentMethod = string.Empty;
+            if(paymentLog != null)
+            {
+                if(paymentLog.Check)
+                {
+                    paymentMethod = "Check";
+                }
+                if (paymentLog.Credit)
+                {
+                    paymentMethod = "Credit Card";
+                }
+            }
+            var donationThanks = string.Empty;
+            if (transaction.DonationTotal > 0)
+            {
+                donationThanks = string.Format("Thank you for your donation of {0}.", transaction.DonationTotal.ToString("C"));
+            }
 
             body = body.Replace("{FirstName}", firstName);
             body = body.Replace("{LastName}", lastName);
@@ -64,7 +80,16 @@ namespace CRP.Core.Abstractions
             body = body.Replace("{Quantity}", quantity);
             body = body.Replace("{QuantityName}", quantityName);
             body = body.Replace("{TransactionNumber}", transaction.TransactionNumber);
-            body = body.Replace("{TouchNetConfirmationNumber}", touchNetId);
+            body = body.Replace("{PaymentMethod}", paymentMethod);
+            body = body.Replace("{DonationThanks}", donationThanks);
+            /*
+Thank you {FirstName} {LastName} for your payment of {TotalPaid}.
+{DonationThanks}
+Your payment by {PaymentMethod} has been accepted.
+You have purchased {Quantity} {QuantityName}.
+Your Transaction number is: {TransactionNumber}
+             */
+
 
 
             //MailMessage message = new MailMessage("automatedemail@caes.ucdavis.edu", emailAddress,

@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Core.Domain.Template>" %>
+<%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -54,6 +55,8 @@
     
         <%= Html.AntiForgeryToken() %>
         <%= Html.Hidden("id", Model.Id) %>
+        
+        <% Html.RenderPartial(StaticValues.View_TemplateInstructions);%>
         
         <%= Html.TextArea("Text", Model.Text) %>
         

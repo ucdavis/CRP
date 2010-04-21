@@ -316,4 +316,8 @@
     <value>~/Views/Shared/PageHeader.ascx</value>
     <comment>The path to the page header view</comment>
   </data>
+  <data name="View_TemplateInstructions" xml:space="preserve">
+    <value>~/Views/Shared/TemplateInstructions.ascx</value>
+    <comment>The path the the template instructions</comment>
+  </data>
 </root>

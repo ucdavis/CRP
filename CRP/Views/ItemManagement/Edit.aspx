@@ -152,7 +152,7 @@
             </fieldset>
         </div>
         <div id="<%= StaticValues.Tab_Templates %>">
-        
+            <% Html.RenderPartial(StaticValues.View_TemplateInstructions);%>
             <p>
                 <%= Html.TextArea("BodyText", Model.Item.Template != null ? Model.Item.Template.Text : string.Empty) %>
             </p>
