@@ -271,6 +271,38 @@ namespace CRP.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests the create item type with duplicate extended property name does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateItemTypeWithDuplicateExtendedPropertyNameDoesNotSave()
+        {
+            FakeQuestionTypes(3);
+            QuestionTypes[0].ExtendedProperty = true;
+            QuestionTypes[1].ExtendedProperty = false;
+            QuestionTypes[2].ExtendedProperty = true;
+            QuestionTypeRepository.Expect(a => a.Queryable).Return(QuestionTypes.AsQueryable()).Repeat.Any();
+
+            FakeItemTypes(3);
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            var itemTypeToAdd = CreateValidEntities.ItemType(10);
+            var extendedProperties = new ExtendedProperty[3];
+            extendedProperties[0] = CreateValidEntities.ExtendedProperty(1);
+            extendedProperties[1] = CreateValidEntities.ExtendedProperty(2);            
+            extendedProperties[2] = CreateValidEntities.ExtendedProperty(3);
+            extendedProperties[2].Name = extendedProperties[0].Name; //duplicate
+            var result = Controller.CreateItemType(itemTypeToAdd, extendedProperties)
+                .AssertViewRendered()
+                .WithViewData<ItemTypeViewModel>();
+
+            ItemTypeRepository.AssertWasNotCalled(a => a.EnsurePersistent(itemTypeToAdd));
+            Assert.AreNotEqual("Item Type has been created successfully.", Controller.Message);
+            Assert.IsFalse(Controller.ModelState.IsValid);
+            Controller.ModelState.AssertErrorsAre("Duplicate names not allowed. Extended property \"" + extendedProperties[2].Name + "\" already exists.");
+            Assert.AreEqual(3, itemTypeToAdd.ExtendedProperties.ToList().Count);
+            Assert.AreSame(itemTypeToAdd, result.ItemType);
+        }
+
+        /// <summary>
         /// Tests the create item type with invalid item type name does not save.
         /// </summary>
         [TestMethod]

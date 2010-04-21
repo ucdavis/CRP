@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
@@ -75,6 +76,21 @@ namespace CRP.Controllers
             //        ModelState.AddModelError("ExtendedProperty", "At least one extended property is not valid.");
             //    }
             //}
+            if (extendedProperties != null)
+            {
+                var duplicateCheck = new List<string>();
+                foreach (var list in extendedProperties)
+                {
+                    if (duplicateCheck.Contains(list.Name))
+                    {
+                        ModelState.AddModelError("ExtendedProperty",
+                                                 "Duplicate names not allowed. Extended property \"" + list.Name +
+                                                 "\" already exists.");
+                        break;
+                    }
+                    duplicateCheck.Add(list.Name);
+                }
+            }
 
             //Validation is done in the domain
             if (extendedProperties != null)
