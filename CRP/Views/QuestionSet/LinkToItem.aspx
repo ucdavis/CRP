@@ -25,7 +25,7 @@
     <%= Html.Hidden("quantity", Model.Quantity) %>
 
     <p>
-        <%= Html.ActionLink<QuestionSetController>(a => a.Create(Model.ItemId, null), "Create New Question Set")%>
+        <%= Html.ActionLink<QuestionSetController>(a => a.Create(Model.ItemId, null, Model.Transaction, Model.Quantity), "Create New Question Set")%>
     </p>
 
     <% Html.Grid(Model.QuestionSets)

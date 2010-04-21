@@ -141,7 +141,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithParametersMapping1()
         {
-            "~/QuestionSet/Create".ShouldMapTo<QuestionSetController>(a => a.Create(null, null), true);
+            "~/QuestionSet/Create".ShouldMapTo<QuestionSetController>(a => a.Create(null, null, null, null), true);
         }
 
         /// <summary>
@@ -870,7 +870,7 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("This is a system default question set and cannot be modified", Controller.Message);
             Controller.ModelState.AssertErrorsAre("This is a system default question set and cannot be modified");
             #endregion Assert		
-        }
+        } 
 
         #endregion Edit Post Tests
 

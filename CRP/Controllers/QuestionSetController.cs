@@ -182,7 +182,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="itemId">The id for an item, if it is to be automatically associated with an item</param>
         /// <returns></returns>
-        public ActionResult Create(int? itemId, int? itemTypeId)
+        public ActionResult Create(int? itemId, int? itemTypeId, bool? transaction, bool? quantity)
         {
             var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
 
@@ -192,6 +192,15 @@ namespace CRP.Controllers
             if (itemTypeId.HasValue) {
                 viewModel.ItemType = Repository.OfType<ItemType>().GetByID(itemTypeId.Value);
             }
+            if(transaction.HasValue)
+            {
+                viewModel.Transaction = (bool)transaction;
+            }
+            if(quantity.HasValue)
+            {
+                viewModel.Quantity = (bool)quantity;
+            }
+
 
             if (CurrentUser.IsInRole(RoleNames.Admin))
             {

@@ -40,6 +40,8 @@ namespace CRP.Controllers.ViewModels
         public bool IsAdmin { get; set; }
         public bool IsSchoolAdmin { get; set; }
         public bool IsUser { get; set; }
+        public bool Transaction { get; set; }
+        public bool Quantity { get; set; }
     }
 
     public class QuestionSetLinkViewModel
