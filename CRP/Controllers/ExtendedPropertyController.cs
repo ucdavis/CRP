@@ -79,6 +79,22 @@ namespace CRP.Controllers
             return this.RedirectToAction<HomeController>(a => a.Index());
         }
 
+        /// <summary>
+        /// POST: /ExtendedProperty/Delete/{id}
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Delete the extended property
+        /// Assumption:
+        ///     No item exists with this item type
+        /// PreCondition:
+        ///     Item Type exists
+        ///     Extended type exists and is associated with above mentioned item type
+        /// PostCondition:
+        ///     Extended property is deleted
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [AcceptPost]
         public ActionResult Delete(int id)
         {
