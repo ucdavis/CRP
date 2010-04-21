@@ -24,7 +24,7 @@ namespace CRP.Core.Domain
             SystemReusable = false;
             UserReusable = false;
 
-            Questions = new List<QuestionSetQuestion>();
+            Questions = new List<Question>();
         }
             
         [Required]
@@ -35,13 +35,31 @@ namespace CRP.Core.Domain
         public virtual School School { get; set; }
         public virtual User User { get; set; }
 
-        public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
+        //public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
+
 
         public virtual void AddQuestion(Question question)
         {
-            var q = new QuestionSetQuestion() {Order = Questions.Count + 1, Question = question, QuestionSet = this};
+            question.QuestionSet = this;
+            question.Order = Questions.Count + 1;
 
-            Questions.Add(q);
+            Questions.Add(question);
+        }
+
+        public override bool IsValid()
+        {
+            var flag = true;
+
+            if (CollegeReusable)
+            {
+                if (School == null)
+                {
+                    flag = false;
+                }
+            }
+
+            return base.IsValid() && flag;
         }
     }
 }

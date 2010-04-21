@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
@@ -30,5 +32,14 @@ namespace CRP.Core.Domain
         public virtual string EmployeeID { get; set; }
         public virtual string SID { get; set; }
         public virtual Guid UserKey { get; set; }
+
+        public virtual string FullName { 
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
+
+        public virtual ICollection<Unit> Units { get; set; }
     }
 }

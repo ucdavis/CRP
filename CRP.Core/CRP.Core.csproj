@@ -75,7 +75,6 @@
     <Compile Include="Domain\Question.cs" />
     <Compile Include="Domain\QuestionOption.cs" />
     <Compile Include="Domain\QuestionSet.cs" />
-    <Compile Include="Domain\QuestionSetQuestion.cs" />
     <Compile Include="Domain\QuestionType.cs" />
     <Compile Include="Domain\Tag.cs" />
     <Compile Include="Domain\Transaction.cs" />
@@ -114,9 +113,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\QuestionSet.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Domain\QuestionSetQuestion.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\TransactionAnswer.hbm.xml" />

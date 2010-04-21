@@ -6,6 +6,15 @@ namespace CRP.Core.Domain
 {
     public class QuestionOption : DomainObject
     {
+        public QuestionOption()
+        {
+        }
+
+        public QuestionOption(string name)
+        {
+            Name = name;
+        }
+
         [Required]
         [Length(200)]
         public virtual string Name { get; set; }

@@ -11,12 +11,17 @@ namespace CRP.Controllers.ViewModels
         {
             Check.Require(repository != null, "Repository is required.");
 
-            var viewModel = new QuestionSetViewModel() {QuestionTypes = repository.OfType<QuestionType>().GetAll()};
+            var viewModel = new QuestionSetViewModel() {
+                QuestionTypes = repository.OfType<QuestionType>().GetAll(),
+                Schools = repository.OfType<School>().GetAll()
+            };
 
             return viewModel;
         }
 
         public IEnumerable<QuestionType> QuestionTypes { get; set; }
+        public IEnumerable<School> Schools { get; set; }
         public QuestionSet QuestionSet { get; set; }
+        public Item Item { get; set; }
     }
 }

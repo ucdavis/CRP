@@ -22,9 +22,9 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
-            CollegeReusable = false;
-            SystemReusable = false;
-            UserReusable = false;
+            //CollegeReusable = false;
+            //SystemReusable = false;
+            //UserReusable = false;
 
             Options = new List<QuestionOption>();
         }
@@ -34,12 +34,20 @@ namespace CRP.Core.Domain
         public virtual string Name { get; set; }
         [NotNull]
         public virtual QuestionType QuestionType { get; set; }
-        public virtual bool CollegeReusable { get; set; }
-        public virtual bool SystemReusable { get; set; }
-        public virtual bool UserReusable { get; set; }
+        [NotNull]
+        public virtual QuestionSet QuestionSet { get; set; }
 
-        public virtual School School { get; set; }
-        public virtual User User { get; set; }
+        public virtual int Order { get; set; }
+        
+        // ====== Probably not going to use these fields ============ //
+        //TODO: Check back for usage
+        //public virtual bool CollegeReusable { get; set; }
+        //public virtual bool SystemReusable { get; set; }
+        //public virtual bool UserReusable { get; set; }
+
+        //public virtual School School { get; set; }
+        //public virtual User User { get; set; }
+        // ========================================================= //
 
         public virtual ICollection<QuestionOption> Options { get; set; }
 

@@ -10,12 +10,14 @@
 
     <property name="Name" column="Name" />
     <many-to-one name="QuestionType" class="CRP.Core.Domain.QuestionType, CRP.Core" column="QuestionTypeId" cascade="none" not-null="true" fetch="join" />
-    <property name="CollegeReusable" column="CollegeReusable" />
+    <!--<property name="CollegeReusable" column="CollegeReusable" />
     <property name="SystemReusable" column="SystemReusable" />
     <property name="UserReusable" column="UserReusable" />
     <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join" />
-    <many-to-one name="User" class="CRP.Core.Domain.User, CRP.Core" column="UserId" cascade="none" fetch="join" />
-
+    <many-to-one name="User" class="CRP.Core.Domain.User, CRP.Core" column="UserId" cascade="none" fetch="join" />-->
+    <many-to-one name="QuestionSet" class="CRP.Core.Domain.QuestionSet, CRP.core" column="QuestionSetId" cascade="none" fetch="join" />
+    <property name="Order" column="[Order]" />
+    
     <bag name="Options" table="QuestionOptions" cascade="all-delete-orphan" fetch="join">
       <key column="QuestionId" />
       <one-to-many class="CRP.Core.Domain.QuestionOption, MAAPS2.Core" />

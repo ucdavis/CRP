@@ -86,14 +86,15 @@ namespace CRP.Core.Domain
             Editors.Remove(editor);
         }
 
-        public virtual void AddQuestionSet(ItemQuestionSet itemQuestionSet)
+        public virtual void AddQuestionSet(QuestionSet questionSet)
         {
-            itemQuestionSet.Item = this;
+            var itemQuestionSet = new ItemQuestionSet(this, questionSet, QuestionSets.Count);
             QuestionSets.Add(itemQuestionSet);
         }
 
         public virtual void RemoveQuestionSet(ItemQuestionSet itemQuestionSet)
         {
+            //TODO: Review this
             QuestionSets.Remove(itemQuestionSet);
         }
     }
