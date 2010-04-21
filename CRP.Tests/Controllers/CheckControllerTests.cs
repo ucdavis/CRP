@@ -99,7 +99,7 @@ namespace CRP.Tests.Controllers
                 .AssertViewRendered()
                 .WithViewData<LinkCheckViewModel>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("TransactionNumber1", result.Transaction.TransactionNumber);
+            Assert.AreEqual(1, result.Transaction.Id);
         }
 
         /// <summary>
