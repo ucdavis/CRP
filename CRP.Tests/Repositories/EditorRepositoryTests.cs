@@ -7,6 +7,7 @@ using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
+using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
 {
@@ -146,6 +147,38 @@ namespace CRP.Tests.Repositories
                 throw;
             }	
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestEditorWhenItemIsNullDoesNotSave()
+        {
+            Editor editor = null;
+            try
+            {
+                #region Arrange
+                editor = GetValid(9);
+                editor.Item = null;
+                #endregion Arrange
+
+                #region Act
+                EditorRepository.DbContext.BeginTransaction();
+                EditorRepository.EnsurePersistent(editor);
+                EditorRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(editor);
+                var results = editor.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Item: may not be empty");
+                Assert.IsTrue(editor.IsTransient());
+                Assert.IsFalse(editor.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
         
         #endregion Invalid Tests
 
@@ -208,6 +241,38 @@ namespace CRP.Tests.Repositories
             }
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestEditorWhenUserIsNullDoesNotSave()
+        {
+            Editor editor = null;
+            try
+            {
+                #region Arrange
+                editor = GetValid(9);
+                editor.User = null;
+                #endregion Arrange
+
+                #region Act
+                EditorRepository.DbContext.BeginTransaction();
+                EditorRepository.EnsurePersistent(editor);
+                EditorRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(editor);
+                var results = editor.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("User: may not be empty");
+                Assert.IsTrue(editor.IsTransient());
+                Assert.IsFalse(editor.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
+
         #endregion Invalid Tests
 
         #region Valid Test
@@ -232,6 +297,7 @@ namespace CRP.Tests.Repositories
             Assert.IsTrue(editor.IsValid());
             #endregion Assert
         }
+
         #endregion Valid Test
         #endregion User Tests
 
@@ -302,9 +368,15 @@ namespace CRP.Tests.Repositories
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                  "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
-            expectedFields.Add(new NameAndType("Item", "CRP.Core.Domain.Item", new List<string>()));
+            expectedFields.Add(new NameAndType("Item", "CRP.Core.Domain.Item", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
             expectedFields.Add(new NameAndType("Owner", "System.Boolean", new List<string>()));
-            expectedFields.Add(new NameAndType("User", "CRP.Core.Domain.User", new List<string>()));
+            expectedFields.Add(new NameAndType("User", "CRP.Core.Domain.User", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
 
             #endregion Arrange
 

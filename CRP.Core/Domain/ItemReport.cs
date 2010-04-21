@@ -36,7 +36,7 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual User User { get; set; }
         public virtual bool SystemReusable { get; set; }
-
+        [NotNull]
         public virtual ICollection<ItemReportColumn> Columns { get; set; }      
 
         public virtual void AddReportColumn(ItemReportColumn itemReportColumn)
