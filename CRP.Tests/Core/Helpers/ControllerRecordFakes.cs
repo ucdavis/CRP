@@ -192,12 +192,32 @@ namespace CRP.Tests.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Fakes the item reports.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
         public static void FakeItemReports(List<ItemReport> entity, int count)
         {
             var offSet = entity.Count;
             for (int i = 0; i < count; i++)
             {
                 entity.Add(CreateValidEntities.ItemReport(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        /// <summary>
+        /// Fakes the transactions.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        public static void FakeTransactions(List<Transaction> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.Transaction(i + 1 + offSet));
                 entity[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }

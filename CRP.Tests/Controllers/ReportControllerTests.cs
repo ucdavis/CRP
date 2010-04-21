@@ -37,6 +37,11 @@ namespace CRP.Tests.Controllers
         protected IRepository<User> UserRepository { get; set; }
         protected IRepository<QuestionSet> QuestionSetRepository { get; set; }
         protected IRepository<Question> QuestionRepository { get; set; }
+        protected List<Unit> Units { get; set; }
+        protected IRepository<Unit> UnitRepository { get; set; }
+        protected List<Transaction> Transactions { get; set; }
+        protected IRepository<Transaction> TransactionRepository { get; set; }
+
 
         #region Init
         public ReportControllerTests()
@@ -53,6 +58,14 @@ namespace CRP.Tests.Controllers
             UserRepository = FakeRepository<User>();
             Controller.Repository.Expect(a => a.OfType<User>()).Return(UserRepository).Repeat.Any();
 
+            Units = new List<Unit>();
+            UnitRepository = FakeRepository<Unit>();
+            Controller.Repository.Expect(a => a.OfType<Unit>()).Return(UnitRepository).Repeat.Any();
+        
+            Transactions = new List<Transaction>();
+            TransactionRepository = FakeRepository<Transaction>();
+            Controller.Repository.Expect(a => a.OfType<Transaction>()).Return(TransactionRepository).Repeat.Any();
+        
             QuestionSetRepository = FakeRepository<QuestionSet>();
             Controller.Repository.Expect(a => a.OfType<QuestionSet>()).Return(QuestionSetRepository).Repeat.Any();
             QuestionRepository = FakeRepository<Question>();
@@ -293,13 +306,131 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             ItemReportRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<ItemReport>.Is.Anything));
-            Assert.AreNotEqual("Report has been created successfully.", Controller.Message);
+            Assert.AreEqual("Errors with report found.", Controller.Message);
             Controller.ModelState.AssertErrorsAre("Name: may not be null or empty");
             #endregion Assert
         }
+
+
+        /// <summary>
+        /// Tests the create post without any create report parameters returns view with message.
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostWithoutAnyCreateReportParametersReturnsViewWithMessage()
+        {
+            #region Arrange
+            SetUpDataForTests();
+            var reportParameters = new CreateReportParameter[0];
+            //reportParameters[0] = new CreateReportParameter
+            //{
+            //    Property = true,
+            //    Quantity = false,
+            //    Transaction = false,
+            //    QuestionId = 0,
+            //    QuestionSetId = 0,
+            //    PropertyName = "Paid"
+            //};
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(2, " ", reportParameters)
+                .AssertViewRendered()
+                .WithViewData<CreateReportViewModel>();
+            #endregion Act
+
+            #region Assert
+            ItemReportRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<ItemReport>.Is.Anything));
+            Assert.AreEqual("Report Columns not Selected", Controller.Message);
+            #endregion Assert		
+        }
+
         #endregion Create Post Tests
 
+        #region ViewSystemReports Tests
+
+        /// <summary>
+        /// Tests the view system report with id zero returns department usage report.
+        /// </summary>
+        [TestMethod]
+        public void TestViewSystemReportWithIdZeroReturnsDepartmentUsageReport()
+        {
+            #region Arrange
+            SetupDataForViewSystemReports();
+            ItemRepository.Expect(a => a.GetAll()).Return(Items).Repeat.Once();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.ViewSystemReport(0)
+                .AssertViewRendered()
+                .WithViewData<SystemReportViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.SystemReportData.Count());
+            Assert.AreEqual(3, result.SystemReportData.ElementAt(0).Value);
+            Assert.AreEqual(2, result.SystemReportData.ElementAt(1).Value);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the view system report with id one returns department money YTD report.
+        /// </summary>
+        [TestMethod]
+        public void TestViewSystemReportWithIdOneReturnsDepartmentMoneyYtdReport()
+        {
+            #region Arrange
+            SetupDataForViewSystemReports();
+            TransactionRepository.Expect(a => a.GetAll()).Return(Transactions).Repeat.Once();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.ViewSystemReport(1)
+                .AssertViewRendered()
+                .WithViewData<SystemReportViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.SystemReportData.Count());
+            #endregion Assert
+        }
+
+
+        #endregion ViewSystemReports Tests
+
         #region Helper Methods
+        /// <summary>
+        /// Setups the data for view system reports.
+        /// </summary>
+        private void SetupDataForViewSystemReports()
+        {
+            ControllerRecordFakes.FakeItems(Items, 5);
+            ControllerRecordFakes.FakeUnits(Units, 2);
+            ControllerRecordFakes.FakeTransactions(Transactions, 7);
+            foreach (var item in Items) //To test grouping
+            {
+                if(item.Id % 2 == 0)
+                {
+                    item.Unit = Units[0];
+                }
+                else
+                {
+                    item.Unit = Units[1];
+                }
+            }
+            foreach (var transaction in Transactions) //To test grouping
+            {
+                if(transaction.Id %2 == 0)
+                {
+                    transaction.Item = Items[0];
+                }
+                else
+                {
+                    transaction.Item = Items[1];
+                }
+            }
+        }
         private void SetUpDataForTests()
         {
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
