@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
 
@@ -43,9 +44,10 @@ namespace CRP.Controllers.ViewModels
                             select x.School).ToList();
 
             var query = from x in repository.OfType<QuestionSet>().Queryable
-                        where x.SystemReusable
+                        where (x.SystemReusable
                             || colleges.Contains(x.School)
-                            || x.UserReusable && x.User.LoginID == loginId
+                            || x.UserReusable && x.User.LoginID == loginId)
+                            && x.Name != StaticValues.QuestionSet_ContactInformation
                         select x;
 
             var viewModel = new QuestionSetLinkViewModel() { QuestionSets = query };

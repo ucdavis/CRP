@@ -382,6 +382,9 @@ namespace CRP.Controllers
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
 
+            // check if it's a contact information question set
+            if (questionSet.Name == StaticValues.QuestionSet_ContactInformation) ModelState.AddModelError("Question Set Name", "A duplicate Contact Information question set cannot be added.");
+
             if (ModelState.IsValid)
             {
                 Repository.OfType<ItemType>().EnsurePersistent(itemType);
@@ -458,6 +461,9 @@ namespace CRP.Controllers
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+
+            // check if it's a contact information question set
+            if (questionSet.Name == StaticValues.QuestionSet_ContactInformation) ModelState.AddModelError("Question Set Name", "A duplicate Contact Information question set cannot be added.");
 
             if (ModelState.IsValid)
             {
