@@ -84,7 +84,7 @@ namespace CRP.Core.Domain
         public virtual decimal? ValidateCoupon(string email, int quantity, bool ignoreEmail)
         {
             // coupon has been used but isn't unlimied, is inactive or has passed expiration
-            if ((Used && !Unlimited) || (!IsActive) || (Expiration.HasValue && Expiration.Value > DateTime.Now))
+            if ((Used && !Unlimited) || (!IsActive) || (Expiration.HasValue && Expiration.Value < DateTime.Now))
             {
                 return null;
             }

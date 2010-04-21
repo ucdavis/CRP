@@ -342,7 +342,6 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestValidateWithValidDataReturnsCouponDiscountAmount()
         {
-            //TODO: Review maxQuantity
             FakeCoupons(3);
             FakeItems(3);
             for (int i = 0; i < 3; i++)
@@ -385,6 +384,45 @@ namespace CRP.Tests.Controllers
             Assert.IsNotNull(result);
             Assert.AreEqual("{ discountAmount = 10.77, maxQuantity = -1 }", result.Data.ToString(), "Controller should check unlimited coupons.");
         }
+
+
+        /// <summary>
+        /// Tests the validate calculates discount amount with max quantity.
+        /// </summary>
+        [TestMethod]
+        public void TestValidateCalculatesDiscountAmountWithMaxQuantity()
+        {
+            #region Arrange
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].DiscountAmount = 5.00m;
+            Coupons[1].Used = false;
+            Coupons[1].Unlimited = true;
+            Coupons[1].MaxQuantity = 3;
+
+            Items[1].Quantity = 2;
+            Items[1].CostPerItem = 9.00m; 
+
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("{ discountAmount = 5.00, maxQuantity = 3 }", result.Data.ToString());
+            #endregion Assert		
+        }
+
 
         #endregion Validate Tests
 
