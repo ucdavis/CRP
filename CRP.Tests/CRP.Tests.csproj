@@ -105,6 +105,7 @@
     <Compile Include="ContinuousIntegrationDeploymentHack.cs" />
     <Compile Include="Controllers\AccountControllerTests.cs" />
     <Compile Include="Controllers\ApplicationManagementControllerTests.cs" />
+    <Compile Include="Controllers\CheckControllerTests.cs" />
     <Compile Include="Controllers\DisplayProfileControllerTests.cs" />
     <Compile Include="Controllers\ExtendedPropertyControllerTests.cs" />
     <Compile Include="Controllers\ItemControllerTests.cs" />
