@@ -12,14 +12,14 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2><%= Html.Encode(Model.Item.Name)%></h2>
+    <h1><%= Html.Encode(Model.Item.Name)%></h1>
 
     <% Html.RenderPartial(StaticValues.Partial_TagView, Model.Item.Tags); %>
 
-    <fieldset>
-        <legend>Details</legend>
+    <fieldset class="details">
+        <!-- <legend>Details</legend> -->
         
-        <span style="float:right;">
+        <span class="itemdetailsimg">
             <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item.Id}) %>' />
         </span>
         

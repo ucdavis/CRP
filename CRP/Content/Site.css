@@ -3,8 +3,8 @@ body, h3, h1 {margin:0; padding:0;}
 #brand_bar_content, .page, #main {max-width:1000px; margin:0 auto;}
 .page {text-align:right;}
 #main {margin-top:-1em;}
-td a img {float:left; margin-right:1em; width:200px;}
-td {padding:2.5em 0;}
+.itembrowsetable td a img {float:left; margin-right:1em; width:200px;}
+.itembrowsetable td {padding:2.5em 0;}
 .item_details legend{display:none;}
 .item_details {border:none; padding:0; margin:0;}
 .item_details img {padding:0 0 1em 1em;}
@@ -49,7 +49,7 @@ fieldset ul li label {margin-bottom:0em;}
 .clear_btn {margin-left:250px; background-color:#F8F8F8; padding:.25em 1em; color:#000; -moz-border-radius: 10px; 
 -webkit-border-radius: 10px; border:1px solid #000; font-weight:bold; letter-spacing:3px; margin-top:1em; font-size:1.2em; display:inline;}
 .clear_btn:hover {background-color:#EB1C1C;}
-
+.details {border:none; padding:0; margin:0;}
 
 
 /* jQuery override */
@@ -59,9 +59,13 @@ fieldset ul li label {margin-bottom:0em;}
 .ui-state-default a {color:#2A2829 !important;}
 .ui-state-default:hover {background-color: #FFFFFF !important;}
 .ui-tabs-selected {background-color:#FFFFFF !important;}
+.ui-widget-content {border:1px solid #2A2829;}
+.t-header, t-grid-header {background-color: #e8f7f8 !important; background-image:none !important;}
+.t-footer {background-color:#e8f7f8 !important;}
 
 
-
+/* details view */
+.itemdetailsimg img{float:right; margin:0 0 1m 1em; width:auto; height:200px;}
 
 
 

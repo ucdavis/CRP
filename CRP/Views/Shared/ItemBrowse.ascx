@@ -3,7 +3,7 @@
 <%@ Import Namespace="CRP.Controllers"%>
 
    
-    <table>
+    <table class="itembrowsetable">
     
         <thead>
 
