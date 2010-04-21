@@ -1,3 +1,4 @@
+<%@ Import Namespace="CRP.Controllers"%>
 <%@ Import Namespace="Telerik.Web.Mvc.UI"%>
 <%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 
@@ -32,8 +33,14 @@
 
 <body>
 <div id="brand_bar">
-<div id="brand_bar_content">
-<img class="brand_bar_caes_img" src="<%= Url.Content("~/Images/caes-logo.jpg") %>" /><h1 class="brand_bar_caes_h1">The College of Agricultural and Environmental Sciences</h1>
+<div id="brand_bar_content">                    
+
+<asp:ContentPlaceHolder ID="PageHeader" runat="server">
+    <a href="<%= Url.Action("Index", "Home") %>">
+    <img class="brand_bar_caes_img" src="<%= Url.Content("~/Images/caes-logo.jpg") %>" alt="The College of Agricultural and Environmental Sciences" />
+    </a>
+</asp:ContentPlaceHolder>
+
 <span class="clear"/>
 <p id="search_box" class="search_box"><input type="text" value="Search" maxlength="20" /></p>
 </div>
@@ -45,12 +52,14 @@
         <div id="header">
             <div id="title">
                 
-                    <asp:ContentPlaceHolder ID="PageHeader" runat="server">
-                </asp:ContentPlaceHolder>
+
             </div>
               
             <div id="logindisplay">
-                <% Html.RenderPartial("~/Views/Shared/LogOnUserControl.ascx"); %>
+                <ul>
+                <li><%= Html.ActionLink<HomeController>(a => a.AdminHome(), "Admin Tools") %></li>
+                <li><% Html.RenderPartial("~/Views/Shared/LogOnUserControl.ascx"); %></li>
+                </ul>
             </div> 
             <div>
                 <h3><span style="color:Blue;" ><%= Html.Encode(TempData["Message"]) %></span></h3>

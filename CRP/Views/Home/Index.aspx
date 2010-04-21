@@ -7,9 +7,9 @@
     Home Page
 </asp:Content>
 
-<asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
+<%--<asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
     <% Html.RenderPartial(StaticValues.View_PageHeader, new DisplayProfile()); %>
-</asp:Content>
+</asp:Content>--%>
 
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
     
@@ -30,7 +30,7 @@
         <li><%= Html.ActionLink("Application Management", "Index", "ApplicationManagement") %></li>
     </ul>--%>
     
-    <%= Html.ActionLink<HomeController>(a => a.AdminHome(), "Admin Tools") %>
+    
     
     
     <% Html.RenderPartial("~/Views/Shared/TagView.ascx", Model.Tags); %>
