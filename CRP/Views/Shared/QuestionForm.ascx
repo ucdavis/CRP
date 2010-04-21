@@ -43,7 +43,7 @@
                 <% } %>
             <% break; %>
             <% case "Drop Down" : %>
-                <%= this.Select(".Answer").Options(Model.Question.Options, x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses)
+                <%= this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses)
                         .Selected(Model.Answer ?? string.Empty)
                         .FirstOption("--Select--") %>
             <% break; %>
