@@ -11,7 +11,7 @@
 
     <p>You are not authorized to view this page.</p>
     
-    <p><%= Html.ActionLink<HomeController>(a => a.AdminHome(), "Administrative Tools") %></p>
+    <p><%= Html.ActionLink<HomeController>(a => a.Index(), "Back Home") %></p>
 
 </asp:Content>
 
