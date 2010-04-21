@@ -43,6 +43,10 @@ namespace CRP.Tests.Controllers
         protected IRepository<QuestionSet> QuestionSetRepository { get; set; }
         protected List<QuestionType> QuestionTypes { get; set; }
         protected IRepository<QuestionType> QuestionTypeRepository { get; set; }
+        protected List<Item> Items { get; set; }
+        protected IRepository<Item> ItemRepository { get; set; }
+        protected List<ItemType> ItemTypes { get; set; }
+        protected IRepository<ItemType> ItemTypeRepository { get; set; }
 
         #region Init
         /// <summary>
@@ -66,6 +70,14 @@ namespace CRP.Tests.Controllers
             UserRepository = FakeRepository<User>();
             Controller.Repository.Expect(a => a.OfType<User>()).Return(UserRepository).Repeat.Any();
 
+            ItemTypes = new List<ItemType>();
+            ItemTypeRepository = FakeRepository<ItemType>();
+            Controller.Repository.Expect(a => a.OfType<ItemType>()).Return(ItemTypeRepository).Repeat.Any();
+
+            Items = new List<Item>();
+            ItemRepository = FakeRepository<Item>();
+            Controller.Repository.Expect(a => a.OfType<Item>()).Return(ItemRepository).Repeat.Any();
+       
             Schools = new List<School>();
         }
         //Controller.ControllerContext.HttpContext = new MockHttpContext(1, new [] {RoleNames.Admin});
@@ -998,6 +1010,9 @@ namespace CRP.Tests.Controllers
             #endregion Assert
         }
 
+        /// <summary>
+        /// Tests the create get only sets certain values when parameters are passed.
+        /// </summary>
         [TestMethod]
         public void TestCreateGetOnlySetsCertainValuesWhenParametersArePassed()
         {
@@ -1021,6 +1036,205 @@ namespace CRP.Tests.Controllers
             #endregion Assert		
         }
 
+        /// <summary>
+        /// Tests the create get redirects to list if passed item id is not null and is not found.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetRedirectsToListIfPassedItemIdIsNotNullAndIsNotFound()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(1, null, null, null)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the create get redirects to list if passed item type id is not null and is not found.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetRedirectsToListIfPassedItemTypeIdIsNotNullAndIsNotFound()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(null, 1, null, null)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("ItemType not found.", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the create get sets item if item id is passed and found.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetSetsItemIfItemIdIsPassedAndFound()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(2, null, null, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreSame(Items[1], result.Item);
+            Assert.IsNull(result.ItemType);
+            Assert.IsFalse(result.Transaction);
+            Assert.IsFalse(result.Quantity);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the create get sets item type if item type id is passed and found.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetSetsItemTypeIfItemTypeIdIsPassedAndFound()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, 2, null, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreSame(ItemTypes[1], result.ItemType);
+            Assert.IsNull(result.Item);
+            Assert.IsFalse(result.Transaction);
+            Assert.IsFalse(result.Quantity);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the create get sets transaction value if passed.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetSetsTransactionValueIfPassed1()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, null, true, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsNull(result.ItemType);
+            Assert.IsNull(result.Item);
+            Assert.IsTrue(result.Transaction);
+            Assert.IsFalse(result.Quantity);
+            #endregion Assert	
+        }
+        /// <summary>
+        /// Tests the create get sets transaction value if passed.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetSetsTransactionValueIfPassed2()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, null, false, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsNull(result.ItemType);
+            Assert.IsNull(result.Item);
+            Assert.IsFalse(result.Transaction);
+            Assert.IsFalse(result.Quantity);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the create get sets quantity value if passed.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetSetsQuantityValueIfPassed1()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, null, null, true)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsNull(result.ItemType);
+            Assert.IsNull(result.Item);
+            Assert.IsFalse(result.Transaction);
+            Assert.IsTrue(result.Quantity);
+            #endregion Assert
+        }
+        /// <summary>
+        /// Tests the create get sets quantity value if passed.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateGetSetsQuantityValueIfPassed2()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForCreateTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(null, null, null, false)
+                .AssertViewRendered()
+                .WithViewData<QuestionSetViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.IsNull(result.ItemType);
+            Assert.IsNull(result.Item);
+            Assert.IsFalse(result.Transaction);
+            Assert.IsFalse(result.Quantity);
+            #endregion Assert
+        }
         #endregion Create Get Tests
 
         #region Reflection Tests
@@ -1503,6 +1717,8 @@ namespace CRP.Tests.Controllers
             ControllerRecordFakes.FakeUsers(Users, 3);
             ControllerRecordFakes.FakeUnits(Units, 5);
             ControllerRecordFakes.FakeSchools(Schools, 5);
+            ControllerRecordFakes.FakeItems(Items, 3);
+            ControllerRecordFakes.FakeItemTypes(ItemTypes, 3);
 
             for (int i = 0; i < 5; i++)
             {
@@ -1516,6 +1732,8 @@ namespace CRP.Tests.Controllers
 
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             QuestionTypeRepository.Expect(a => a.GetAll()).Return(QuestionTypes).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
         }
 
         /// <summary>
