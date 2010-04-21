@@ -268,12 +268,13 @@ namespace CRP.Controllers
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
 
                 //Re get it to make sure collections are updated
+                //Note, *this* transaction will not been commited until after we leave, so we need to add it in
                 var updatedItem = Repository.OfType<Item>().GetNullableByID(transaction.Item.Id);
                 if (updatedItem != null)
                 {
-                    if (updatedItem.Quantity - updatedItem.Sold <= 10)
+                    if (updatedItem.Quantity - (updatedItem.Sold + transaction.Quantity) <= 10)
                     {
-                        _notificationProvider.SendLowQuantityWarning(Repository, updatedItem);
+                        _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transaction);
                     }
                 }            
                 // redirect to confirmation and let the user decide payment or not

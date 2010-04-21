@@ -11,7 +11,7 @@ namespace CRP.Core.Abstractions
     public interface INotificationProvider
     {
         void SendConfirmation(IRepository repository, Transaction transaction, string emailAddress);
-        void SendLowQuantityWarning(IRepository repository, Item item);
+        void SendLowQuantityWarning(IRepository repository, Item item, Transaction transaction);
     }
 
     public class NotificationProvider : INotificationProvider
@@ -119,19 +119,51 @@ Your Transaction number is: {TransactionNumber}
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="item">The item.</param>
-        public void SendLowQuantityWarning(IRepository repository, Item item)
+        /// <param name="transaction">The transaction.</param>
+        public void SendLowQuantityWarning(IRepository repository, Item item, Transaction transaction)
         {
             Check.Require(item != null);
+            Check.Require(transaction != null);
             var email = item.Editors.Where(a => a.Owner).First().User.Email;
             Check.Require(!string.IsNullOrEmpty(email));
 
-            var subject = string.Format("On-line Registrations. Quantity Low Warning for {0}'s {1}", item.Name, item.QuantityName);
-            var bodyBuilder = new StringBuilder(string.Format("Quantity low for {0}<br/><br/>", item.Name));
-            bodyBuilder.AppendFormat("Total Quantity           : {0}<br/>", item.Quantity);
-            bodyBuilder.AppendFormat("Total Sold               : {0}<br/>", item.Sold);
-            bodyBuilder.AppendFormat("Total Sold and Paid for  : {0}<br/>", item.SoldAndPaidQuantity);
-            bodyBuilder.      Append("====================================<br/>");
-            bodyBuilder.AppendFormat("Quantity Remaining       : {0}<br/>", item.Quantity - item.Sold);
+            var subject = string.Format("On-line Registrations. Quantity Low Warning for \"{0}'s\" {1}", item.Name, item.QuantityName);
+            var bodyBuilder = new StringBuilder(string.Format("Quantity low for \"{0}\"<br/><br/>", item.Name));
+            bodyBuilder.Append("<head>");
+            bodyBuilder.Append("<style type=\"text/css\">");
+            bodyBuilder.Append("tbody {color:green;height:50px}");
+            bodyBuilder.Append("tfoot {color:red}");
+            bodyBuilder.Append("</style>");
+            bodyBuilder.Append("</head>");
+            bodyBuilder.Append("<body>");
+            bodyBuilder.Append("<table border=\"1\"  width=\"20%\">");
+            bodyBuilder.Append("<tfoot>");
+            bodyBuilder.Append("<tr>");
+            bodyBuilder.Append("<td>Quantity Remaining:</td>");
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.Quantity - (item.Sold + transaction.Quantity));
+            bodyBuilder.Append("</tr>");
+            bodyBuilder.Append("</tfoot>");
+            bodyBuilder.Append("<tbody>");
+            bodyBuilder.Append("<tr>");
+            bodyBuilder.Append("<td>Total Quantity:</td>");
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.Quantity);
+            bodyBuilder.Append("</tr>");
+
+            bodyBuilder.Append("<tr>");
+            bodyBuilder.Append("<td>Total Sold:</td>");
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.Sold + transaction.Quantity);
+            bodyBuilder.Append("</tr>");
+
+            bodyBuilder.Append("<tr>");
+            bodyBuilder.Append("<td>Total Sold and Paid for:</td>");
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.SoldAndPaidQuantity);
+            bodyBuilder.Append("</tr>");
+
+            bodyBuilder.Append("</tbody>");
+            bodyBuilder.Append("</table>");
+            bodyBuilder.Append("</body>");
+
+
             var body = bodyBuilder.ToString();
 
             MailMessage message = new MailMessage("automatedemail@caes.ucdavis.edu", email,

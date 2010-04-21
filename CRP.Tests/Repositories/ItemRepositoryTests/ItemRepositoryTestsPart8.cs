@@ -469,6 +469,126 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
         #endregion Sold Tests
 
+        #region SoldAndPaidQuantity Tests
+
+        /// <summary>
+        /// Tests the sold and paid quantity returns expected results1.
+        /// </summary>
+        [TestMethod]
+        public void TestSoldAndPaidQuantityReturnsExpectedResults1()
+        {
+            #region Arrange
+
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+            transactions[2].Quantity = 100;
+            transactions[3].Quantity = 1000;
+            transactions[4].Quantity = 10000;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 4; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 100000;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.SoldAndPaidQuantity;
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1111, result);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the sold and paid quantity returns expected results2.
+        /// </summary>
+        [TestMethod]
+        public void TestSoldAndPaidQuantityReturnsExpectedResults2()
+        {
+            #region Arrange
+
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+            transactions[1].IsActive = false;
+            transactions[2].Quantity = 100;
+            transactions[3].Quantity = 1000;
+            transactions[4].Quantity = 10000;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 4; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 100000;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.SoldAndPaidQuantity;
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1101, result);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the sold and paid quantity returns expected results3.
+        /// </summary>
+        [TestMethod]
+        public void TestSoldAndPaidQuantityReturnsExpectedResults3()
+        {
+            #region Arrange
+
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+            transactions[1].Amount = 200000; //This one is not paid.
+            transactions[2].Quantity = 100;
+            transactions[3].Quantity = 1000;
+            transactions[4].Quantity = 10000;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 4; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 100000;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.SoldAndPaidQuantity;
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1101, result);
+            #endregion Assert
+        }
+
+        #endregion SoldAndPaid Tests
+
         #region ItemTags Tests
 
         /// <summary>
