@@ -129,6 +129,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_GlobalResources\QuestionTypeText.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionTypeText.resx</DependentUpon>
+    </Compile>
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
@@ -486,7 +491,9 @@
     <Content Include="Views\QuestionSet\List.aspx" />
     <Content Include="Views\Question\Create.aspx" />
     <Content Include="Views\Shared\TagView.ascx" />
+    <Content Include="Views\Shared\TransactionForm.ascx" />
     <Content Include="Views\Tag\Index.aspx" />
+    <Content Include="Views\Transaction\Register.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.3.2.js" />
@@ -515,6 +522,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>NotificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="App_GlobalResources\QuestionTypeText.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionTypeText.Designer.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

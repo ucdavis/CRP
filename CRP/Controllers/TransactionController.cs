@@ -1,9 +1,12 @@
 using System;
 using System.Web.Mvc;
+using CRP.Core.Domain;
+using UCDArch.Web.Controller;
+using MvcContrib;
 
 namespace CRP.Controllers
 {
-    public class TransactionController : Controller
+    public class TransactionController : SuperController
     {
         //
         // GET: /Transaction/
@@ -20,7 +23,14 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Register(int id)
         {
-            throw new NotImplementedException();
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+
+            if (item == null)
+            {
+                return this.RedirectToAction<ItemController>(a => a.List());
+            }
+
+            return View(item);
         }
     }
 }
