@@ -336,58 +336,73 @@ namespace CRP.Controllers
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
             return View(viewModel);
         }
+
+        /// <summary>
+        /// POST: /Transaction/Edit/{id}
+        /// </summary>
+        /// <param name="id">id of the original parent transaction</param>
+        /// <param name="transaction">the new correction transaction</param>
+        /// <returns></returns>
         [AcceptPost]
         [AnyoneWithRole]
-        public ActionResult Edit(Transaction transaction)
+        public ActionResult Edit(int id, [Bind(Exclude="Id")]Transaction transaction)
         {
-            var transactionDest = Repository.OfType<Transaction>().GetNullableByID(transaction.Id);
-            if (transactionDest == null)
+            // load the original transaction
+            var origTransaction = Repository.OfType<Transaction>().GetNullableByID(id);
+            if (origTransaction == null)
             {
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
-            if (transactionDest.Item == null || !Access.HasItemAccess(CurrentUser, transactionDest.Item))
+            if (origTransaction.Item == null || !Access.HasItemAccess(CurrentUser, origTransaction.Item))
             {
-                if (transactionDest.Item == null)
+                if (origTransaction.Item == null)
                 {
                     return this.RedirectToAction<ItemManagementController>(a => a.List());
                 }
-                return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionDest.Item.Id));
+                return this.RedirectToAction<ItemManagementController>(a => a.Details(origTransaction.Item.Id));
             }
 
-            var correctionTransaction = new Transaction(transactionDest.Item);
+            // create the new transaction
+            var correctionTransaction = new Transaction(origTransaction.Item);
+            correctionTransaction.ParentTransaction = origTransaction;
             correctionTransaction.Amount = transaction.Amount;
             correctionTransaction.CorrectionReason = transaction.CorrectionReason;
-            if(correctionTransaction.Amount > 0)
-            {
-                correctionTransaction.Donation = true;
-            }
-            else
-            {
-                correctionTransaction.Donation = false;
-            }
+            correctionTransaction.Donation = true;
+            //if(correctionTransaction.Amount > 0)
+            //{
+            //    correctionTransaction.Donation = true;
+            //}
+            //else
+            //{
+            //    correctionTransaction.Donation = false;
+            //}
             correctionTransaction.CreatedBy = CurrentUser.Identity.Name;
 
-            transactionDest.AddChildTransaction(correctionTransaction);
+            //origTransaction.AddChildTransaction(correctionTransaction);
 
-            transactionDest.TransferValidationMessagesTo(ModelState);
+            //origTransaction.TransferValidationMessagesTo(ModelState);
+
+            // validate the correction transaction
+            correctionTransaction.TransferValidationMessagesTo(ModelState);
+
             if(ModelState.IsValid)
             {
-                Repository.OfType<Transaction>().EnsurePersistent(transactionDest);
-                return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionDest.Item.Id));
+                Repository.OfType<Transaction>().EnsurePersistent(correctionTransaction);
+                return this.RedirectToAction<ItemManagementController>(a => a.Details(origTransaction.Item.Id));
             }
 
             var viewModel = EditTransactionViewModel.Create(Repository);
-            viewModel.TransactionValue = transactionDest;
+            viewModel.TransactionValue = origTransaction;
             viewModel.ContactName =
-                transactionDest.TransactionAnswers.Where(
+                origTransaction.TransactionAnswers.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
-            viewModel.ContactName = viewModel.ContactName + " " + transactionDest.TransactionAnswers.Where(
+            viewModel.ContactName = viewModel.ContactName + " " + origTransaction.TransactionAnswers.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
-            viewModel.ContactEmail = transactionDest.TransactionAnswers.Where(
+            viewModel.ContactEmail = origTransaction.TransactionAnswers.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
