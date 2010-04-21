@@ -1378,6 +1378,86 @@ namespace CRP.Tests.Repositories
 
         #endregion UnlimitedAndEmail Tests
 
+        #region MaxQuantity Tests
+
+        [TestMethod]
+        public void TestMaxQuantityWithNullValueSaves()
+        {
+            #region Arrange
+            var coupon = GetValid(9);
+            coupon.MaxQuantity = null;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(coupon);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(coupon.IsTransient());
+            Assert.IsTrue(coupon.IsValid());
+            #endregion Assert	
+        }
+        [TestMethod]
+        public void TestMaxQuantityWithZeroValueSaves()
+        {
+            #region Arrange
+            var coupon = GetValid(9);
+            coupon.MaxQuantity = 0;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(coupon);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(coupon.IsTransient());
+            Assert.IsTrue(coupon.IsValid());
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestMaxQuantityWithOneValueSaves()
+        {
+            #region Arrange
+            var coupon = GetValid(9);
+            coupon.MaxQuantity = 1;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(coupon);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(coupon.IsTransient());
+            Assert.IsTrue(coupon.IsValid());
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestMaxQuantityWithLargeValueSaves()
+        {
+            #region Arrange
+            var coupon = GetValid(9);
+            coupon.MaxQuantity = 999999999;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(coupon);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(coupon.IsTransient());
+            Assert.IsTrue(coupon.IsValid());
+            #endregion Assert
+        }
+        #endregion MaxQuantity Tests
+
         #region Reflection of Database.
 
         /// <summary>
@@ -1414,6 +1494,7 @@ namespace CRP.Tests.Repositories
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("MaxQuantity", "System.Nullable`1[System.Int32]", new List<string>()));
             expectedFields.Add(new NameAndType("Unlimited", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("UnlimitedAndEmail", "System.Boolean", new List<string>
             {
