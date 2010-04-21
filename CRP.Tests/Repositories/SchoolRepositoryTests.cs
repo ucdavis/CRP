@@ -85,15 +85,15 @@ namespace CRP.Tests.Repositories
             SchoolRepository.DbContext.CommitTransaction();
         }
 
-        protected override void LoadRecords(int entriesToAdd)
-        {
-            EntriesAdded += entriesToAdd;
-            for (int i = 0; i < entriesToAdd; i++)
-            {
-                var validEntity = GetValid(i + 1);
-                SchoolRepository.EnsurePersistent(validEntity);
-            }
-        }
+        //protected override void LoadRecords(int entriesToAdd)
+        //{
+        //    EntriesAdded += entriesToAdd;
+        //    for (int i = 0; i < entriesToAdd; i++)
+        //    {
+        //        var validEntity = GetValid(i + 1);
+        //        SchoolRepository.EnsurePersistent(validEntity);
+        //    }
+        //}
 
         #endregion Init and Overrides
 
@@ -109,20 +109,20 @@ namespace CRP.Tests.Repositories
             CanUpdateEntity(false); //Mutable is false for this table
         }
 
-        public override void CanGetEntityUsingGetByIdWhereIdIsInt()
-        {
-            //Don't Run Test
-        }
+        //public override void CanGetEntityUsingGetByIdWhereIdIsInt()
+        //{
+        //    //Don't Run Test
+        //}
 
-        public override void CanGetEntityUsingGetByNullableWithValidIdWhereIdIsInt()
-        {
-            //Don't run Test
-        }
+        //public override void CanGetEntityUsingGetByNullableWithValidIdWhereIdIsInt()
+        //{
+        //    //Don't run Test
+        //}
 
-        public override void CanGetNullValueUsingGetByNullableWithInvalidIdWhereIdIsInt()
-        {
-            //Don't run this test
-        }
+        //public override void CanGetNullValueUsingGetByNullableWithInvalidIdWhereIdIsInt()
+        //{
+        //    //Don't run this test
+        //}
 
         #endregion CRUD Tests
 

@@ -18,8 +18,22 @@ namespace CRP.Tests.Core
         protected int EntriesAdded;
         protected string RestoreValue;
         protected bool BoolRestoreValue;
+        private readonly IRepository<T> _intRepository;
+        private readonly IRepositoryWithTypedId<T, string> _stringRepository;
         
         #region Init
+
+        protected AbstractRepositoryTests()
+        {
+            if (typeof(IdT) == typeof(int))
+            {
+                _intRepository = new Repository<T>();
+            }
+            if(typeof(IdT) == typeof(string))
+            {
+                _stringRepository = new RepositoryWithTypedId<T,string>();
+            }
+        }
 
         /// <summary>
         /// Gets the valid entity of type T
@@ -60,7 +74,14 @@ namespace CRP.Tests.Core
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = GetValid(i + 1);
-                Repository.OfType<T>().EnsurePersistent(validEntity);
+                if (typeof (IdT) == typeof (int))
+                {
+                    _intRepository.EnsurePersistent(validEntity);
+                }
+                else
+                {
+                    _stringRepository.EnsurePersistent(validEntity);
+                }
             }
         }
 
@@ -75,7 +96,14 @@ namespace CRP.Tests.Core
         public void CanSaveValidEntity()
         {
             var validEntity = GetValid(null);
-            Repository.OfType<T>().EnsurePersistent(validEntity);
+            if (typeof(IdT) == typeof(int))
+            {
+                _intRepository.EnsurePersistent(validEntity);
+            }
+            else
+            {
+                _stringRepository.EnsurePersistent(validEntity);
+            }
 
             Assert.AreEqual(false, validEntity.IsTransient());
         }
@@ -88,10 +116,21 @@ namespace CRP.Tests.Core
         public void CanCommitValidEntity()
         {
             var validEntity = GetValid(null);
-            Repository.OfType<T>().DbContext.BeginTransaction();
-            Repository.OfType<T>().EnsurePersistent(validEntity);
-            Assert.IsFalse(validEntity.IsTransient());
-            Repository.OfType<T>().DbContext.CommitTransaction();
+            if (typeof(IdT) == typeof(int))
+            {
+                _intRepository.DbContext.BeginTransaction();
+                _intRepository.EnsurePersistent(validEntity);
+                Assert.IsFalse(validEntity.IsTransient());
+                _intRepository.DbContext.CommitTransaction();
+            }
+            else
+            {
+                _stringRepository.DbContext.BeginTransaction();
+                _stringRepository.EnsurePersistent(validEntity);
+                Assert.IsFalse(validEntity.IsTransient());
+                _stringRepository.DbContext.CommitTransaction();
+            }
+            
         }
 
 
@@ -101,7 +140,15 @@ namespace CRP.Tests.Core
         [TestMethod]
         public void CanGetAllEntities()
         {
-            var foundEntities = Repository.OfType<T>().GetAll().ToList();
+            List<T> foundEntities;
+            if (typeof(IdT) == typeof(int))
+            {
+                foundEntities = _intRepository.GetAll().ToList();
+            }
+            else
+            {
+                foundEntities = _stringRepository.GetAll().ToList(); 
+            }
             Assert.AreEqual(EntriesAdded, foundEntities.Count, "GetAll() returned a different number of records");
             for (int i = 0; i < EntriesAdded; i++)
             {
@@ -125,12 +172,18 @@ namespace CRP.Tests.Core
         /// Determines whether this instance [can get entity using get by id where id is int].
         /// </summary>
         [TestMethod]
-        public virtual void CanGetEntityUsingGetByIdWhereIdIsInt()
+        public virtual void CanGetEntityUsingGetById()
         {
             if(typeof(IdT) == typeof(int))
             {
                 Assert.IsTrue(EntriesAdded >= 2, "There are not enough entries to complete this test.");
                 var foundEntity = Repository.OfType<T>().GetById(2);
+                FoundEntityComparison(foundEntity, 2);
+            }
+            else
+            {
+                Assert.IsTrue(EntriesAdded >= 2, "There are not enough entries to complete this test.");
+                var foundEntity = _stringRepository.GetById("2");
                 FoundEntityComparison(foundEntity, 2);
             }
         }
@@ -140,12 +193,18 @@ namespace CRP.Tests.Core
         /// Determines whether this instance [can get entity using get by nullable with valid id where id is int].
         /// </summary>
         [TestMethod]
-        public virtual void CanGetEntityUsingGetByNullableWithValidIdWhereIdIsInt()
+        public virtual void CanGetEntityUsingGetByNullableWithValidId()
         {
             if (typeof(IdT) == typeof(int))
             {
                 Assert.IsTrue(EntriesAdded >= 2, "There are not enough entries to complete this test.");
-                var foundEntity = Repository.OfType<T>().GetNullableByID(2);
+                var foundEntity = _intRepository.GetNullableByID(2);
+                FoundEntityComparison(foundEntity, 2);
+            }
+            else
+            {
+                Assert.IsTrue(EntriesAdded >= 2, "There are not enough entries to complete this test.");
+                var foundEntity = _stringRepository.GetNullableByID("2");
                 FoundEntityComparison(foundEntity, 2);
             }
         }
@@ -154,11 +213,16 @@ namespace CRP.Tests.Core
         /// Determines whether this instance [can get null value using get by nullable with invalid id where id is int].
         /// </summary>
         [TestMethod]
-        public virtual void CanGetNullValueUsingGetByNullableWithInvalidIdWhereIdIsInt()
+        public virtual void CanGetNullValueUsingGetByNullableWithInvalidId()
         {
             if (typeof(IdT) == typeof(int))
             {
-                var foundEntity = Repository.OfType<T>().GetNullableByID(EntriesAdded+1);
+                var foundEntity = _intRepository.GetNullableByID(EntriesAdded+1);
+                Assert.IsNull(foundEntity);
+            }
+            else
+            {
+                var foundEntity = _stringRepository.GetNullableByID((EntriesAdded + 1).ToString());
                 Assert.IsNull(foundEntity);
             }
         }
@@ -166,33 +230,76 @@ namespace CRP.Tests.Core
         public void CanUpdateEntity(bool doesItAllowUpdate)
         {
             //Get an entity to update
-            var foundEntity = Repository.OfType<T>().GetAll()[2];
+            T foundEntity;
+            if (typeof(IdT) == typeof(int))
+            {
+                foundEntity = _intRepository.GetAll()[2];
+            }
+            else
+            {
+                foundEntity = _stringRepository.GetAll()[2];
+            }
+            
 
             //Update and commit entity
-            Repository.OfType<T>().DbContext.BeginTransaction();
-            UpdateUtility(foundEntity, ARTAction.Update);
-            Repository.OfType<T>().EnsurePersistent(foundEntity);
-            Repository.OfType<T>().DbContext.CommitTransaction();
+            if (typeof(IdT) == typeof(int))
+            {
+                _intRepository.DbContext.BeginTransaction();
+                UpdateUtility(foundEntity, ARTAction.Update);
+                _intRepository.EnsurePersistent(foundEntity);
+                _intRepository.DbContext.CommitTransaction();
+            }
+            else
+            {
+                _stringRepository.DbContext.BeginTransaction();
+                UpdateUtility(foundEntity, ARTAction.Update);
+                _stringRepository.EnsurePersistent(foundEntity);
+                _stringRepository.DbContext.CommitTransaction();
+            }
 
             NHibernateSessionManager.Instance.GetSession().Evict(foundEntity);
 
             if (doesItAllowUpdate)
             {
                 //Compare entity
-                var compareEntity = Repository.OfType<T>().GetAll()[2];
+                T compareEntity;
+                if (typeof(IdT) == typeof(int))
+                {
+                    compareEntity = _intRepository.GetAll()[2];
+                }
+                else
+                {
+                    compareEntity = _stringRepository.GetAll()[2];
+                }
                 UpdateUtility(compareEntity, ARTAction.Compare);
 
                 //Restore entity, do not commit, then get entity to make sure it isn't restored.            
                 UpdateUtility(compareEntity, ARTAction.Restore);
                 NHibernateSessionManager.Instance.GetSession().Evict(compareEntity);
                     //For testing at least, this is required to clear the changes from memory.
-                var checkNotUpdatedEntity = Repository.OfType<T>().GetAll()[2];
+                T checkNotUpdatedEntity;
+                if (typeof(IdT) == typeof(int))
+                {
+                    checkNotUpdatedEntity = _intRepository.GetAll()[2];
+                }
+                else
+                {
+                    checkNotUpdatedEntity = _stringRepository.GetAll()[2];
+                }
                 UpdateUtility(checkNotUpdatedEntity, ARTAction.Compare);
             }
             else
             {
                 //Compare entity
-                var compareEntity = Repository.OfType<T>().GetAll()[2];
+                T compareEntity;
+                if (typeof(IdT) == typeof(int))
+                {
+                    compareEntity = _intRepository.GetAll()[2];
+                }
+                else
+                {
+                    compareEntity = _stringRepository.GetAll()[2];
+                }
                 UpdateUtility(compareEntity, ARTAction.CompareNotUpdated);            
             }
         }
@@ -214,17 +321,31 @@ namespace CRP.Tests.Core
         [TestMethod]
         public virtual void CanDeleteEntity()
         {
-            var count = Repository.OfType<T>().GetAll().ToList().Count();
-            var foundEntity = Repository.OfType<T>().GetAll().ToList()[2];
-
-            //Update and commit entity
-            Repository.OfType<T>().DbContext.BeginTransaction();
-            Repository.OfType<T>().Remove(foundEntity);
-            Repository.OfType<T>().DbContext.CommitTransaction();
-            Assert.AreEqual(count - 1, Repository.OfType<T>().GetAll().ToList().Count());
+            
             if (typeof(IdT) == typeof(int))
             {
+                var count = _intRepository.GetAll().ToList().Count();
+                var foundEntity = _intRepository.GetAll().ToList()[2];
+
+                //Update and commit entity
+                _intRepository.DbContext.BeginTransaction();
+                _intRepository.Remove(foundEntity);
+                _intRepository.DbContext.CommitTransaction();
+                Assert.AreEqual(count - 1, _intRepository.GetAll().ToList().Count());
                 foundEntity = Repository.OfType<T>().GetNullableByID(3);
+                Assert.IsNull(foundEntity);
+            }
+            else
+            {
+                var count = _stringRepository.GetAll().ToList().Count();
+                var foundEntity = _stringRepository.GetAll().ToList()[2];
+
+                //Update and commit entity
+                _stringRepository.DbContext.BeginTransaction();
+                _stringRepository.Remove(foundEntity);
+                _stringRepository.DbContext.CommitTransaction();
+                Assert.AreEqual(count - 1, _stringRepository.GetAll().ToList().Count());
+                foundEntity = _stringRepository.GetNullableByID("3");
                 Assert.IsNull(foundEntity);
             }
         }

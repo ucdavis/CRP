@@ -33,8 +33,13 @@ namespace CRP.Tests.Repositories
         /// <param name="counter">The counter.</param>
         /// <returns>A valid entity of type T</returns>
         protected override OpenIdUser GetValid(int? counter)
-        {
-            return CreateValidEntities.OpenIdUser(counter);
+        {            
+            var rtValue = CreateValidEntities.OpenIdUser(counter);
+            if (counter != null)
+            {
+                rtValue.UserId = (counter).ToString();
+            }            
+            return rtValue;
         }
 
         /// <summary>
@@ -95,16 +100,16 @@ namespace CRP.Tests.Repositories
         /// Loads the records for CRUD Tests.
         /// </summary>
         /// <param name="entriesToAdd"></param>
-        protected override void LoadRecords(int entriesToAdd)
-        {
-            EntriesAdded += entriesToAdd;
-            for (int i = 0; i < entriesToAdd; i++)
-            {
-                var validEntity = GetValid(i + 1);
-                validEntity.UserId = (i + 1).ToString();
-                OpenIdUserRepository.EnsurePersistent(validEntity);
-            }
-        }
+        //protected override void LoadRecords(int entriesToAdd)
+        //{
+        //    EntriesAdded += entriesToAdd;
+        //    for (int i = 0; i < entriesToAdd; i++)
+        //    {
+        //        var validEntity = GetValid(i + 1);
+        //        validEntity.UserId = (i + 1).ToString();
+        //        OpenIdUserRepository.EnsurePersistent(validEntity);
+        //    }
+        //}
 
         #endregion Init and Overrides
 
