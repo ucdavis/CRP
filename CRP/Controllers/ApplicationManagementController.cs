@@ -142,7 +142,7 @@ namespace CRP.Controllers
             it.Name = itemType.Name;
             it.IsActive = itemType.IsActive;
 
-            //TODO: Review. I think this needs to pass in the id, get it, 
+            //Done: Review. I think this needs to pass in the id, get it, 
             //copy over the fields which are edited, then check and persist that.
             //As the name should not be duplicate, that check would need to be added.
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, it.ValidationResults());
@@ -156,11 +156,11 @@ namespace CRP.Controllers
             {
                 Repository.OfType<ItemType>().EnsurePersistent(it);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item Type");
-                return View(itemType);
+                return View(it); //Display the updated itemType, not the passed itemType
             }
             else
             {
-                return View(itemType);
+                return View(it); //Display the updated itemType, not the passed itemType
             }
         }
 

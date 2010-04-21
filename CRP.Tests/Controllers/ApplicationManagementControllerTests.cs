@@ -404,13 +404,13 @@ namespace CRP.Tests.Controllers
                 .WithViewData<ItemType>();
 
             ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(ItemTypes[1]));
+            Assert.AreEqual("Item Type has been saved successfully.", Controller.Message);
 
-            //Assert.AreEqual(1, result.ExtendedProperties.Count);
-            //Assert.AreEqual(1, result.QuestionSets.Count);
+
+            Assert.AreEqual(1, result.ExtendedProperties.Count);
+            Assert.AreEqual(1, result.QuestionSets.Count);
             Assert.AreEqual(1, ItemTypes[1].QuestionSets.Count);
             Assert.AreEqual(1, ItemTypes[1].QuestionSets.Count);
-
-            //TODO: Get Arguments to check what was saved?
         }
 
         /// <summary>
