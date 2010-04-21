@@ -10,10 +10,12 @@ namespace CRP.Controllers.ViewModels
     {
         public Item Item { get; set; }
         public DisplayProfile DisplayProfile { get; set; }
+        public OpenIdUser OpenIdUser { get; set; }
 
-        public static ItemDetailViewModel Create(IRepository repository, Item item)
+        public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser)
         {
             Check.Require(repository != null, "Repository is required.");
+            Check.Require(openIdRepository != null, "Repository is required.");
 
             var viewModel = new ItemDetailViewModel() {Item = item};
 
@@ -26,6 +28,11 @@ namespace CRP.Controllers.ViewModels
             {
                 // get the college profile
                 viewModel.DisplayProfile = repository.OfType<DisplayProfile>().Queryable.Where(a => a.School == unit.School && a.SchoolMaster).FirstOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(openIdUser))
+            {
+                viewModel.OpenIdUser = openIdRepository.GetNullableByID(openIdUser);
             }
 
             return viewModel;
@@ -54,5 +61,29 @@ namespace CRP.Controllers.ViewModels
 
             return viewModel;
         }
+    }
+
+    public class ItemTransactionViewModel
+    {
+        public ItemTransactionViewModel(Item item, OpenIdUser openIDUser)
+        {
+            Item  = item;
+            OpenIDUser = openIDUser;
+        }
+
+        public Item Item{ get; set; }
+        public OpenIdUser OpenIDUser { get; set; }
+    }
+
+    public class ItemQuestionViewModel
+    {
+        public ItemQuestionViewModel(Question question, OpenIdUser openIDUser)
+        {
+            Question = question;
+            OpenIDUser = openIDUser;
+        }
+
+        public Question Question { get; set; }
+        public OpenIdUser OpenIDUser { get; set; }
     }
 }

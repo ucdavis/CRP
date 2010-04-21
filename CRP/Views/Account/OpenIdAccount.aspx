@@ -12,7 +12,7 @@
     <%= Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.") %>
 
     <% using (Html.BeginForm()) {%>
-
+<%= Html.AntiForgeryToken() %>
         <fieldset>
             <legend>Fields</legend>
             <p>

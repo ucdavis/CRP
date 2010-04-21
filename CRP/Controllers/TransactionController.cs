@@ -5,6 +5,7 @@ using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Validator;
@@ -13,6 +14,13 @@ namespace CRP.Controllers
 {
     public class TransactionController : SuperController
     {
+        private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
+
+        public TransactionController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository)
+        {
+            _openIdUserRepository = openIdUserRepository;
+        }
+
         //
         // GET: /Transaction/
 
@@ -35,7 +43,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemController>(a => a.List());
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, item);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
             return View(viewModel);
         }
 
@@ -165,7 +173,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemController>(a => a.Details(item.Id));
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, item);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
             //TODO: add the transaction to the viewmodel so the answers will be populated
             return View(viewModel);
         }

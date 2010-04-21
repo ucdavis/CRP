@@ -137,6 +137,42 @@
     <value>Contact Information</value>
     <comment>The name of the required question set</comment>
   </data>
+  <data name="Question_AddressLine2" xml:space="preserve">
+    <value>Address Line 2</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
+  <data name="Question_City" xml:space="preserve">
+    <value>City</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
+  <data name="Question_Email" xml:space="preserve">
+    <value>Email Address</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
+  <data name="Question_FirstName" xml:space="preserve">
+    <value>First Name</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
+  <data name="Question_LastName" xml:space="preserve">
+    <value>Last Name</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
+  <data name="Question_PhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
+  <data name="Question_State" xml:space="preserve">
+    <value>State</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
+  <data name="Question_StreetAddress" xml:space="preserve">
+    <value>Street Address</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
+  <data name="Question_Zip" xml:space="preserve">
+    <value>Zip Code</value>
+    <comment>Question name for default question set Contact Information</comment>
+  </data>
   <data name="Report_AmountTotal" xml:space="preserve">
     <value>AmountTotal</value>
     <comment>Report View Model static value column name</comment>

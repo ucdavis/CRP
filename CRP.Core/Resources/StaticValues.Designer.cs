@@ -97,6 +97,87 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address Line 2.
+        /// </summary>
+        public static string Question_AddressLine2 {
+            get {
+                return ResourceManager.GetString("Question_AddressLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to City.
+        /// </summary>
+        public static string Question_City {
+            get {
+                return ResourceManager.GetString("Question_City", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email Address.
+        /// </summary>
+        public static string Question_Email {
+            get {
+                return ResourceManager.GetString("Question_Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Name.
+        /// </summary>
+        public static string Question_FirstName {
+            get {
+                return ResourceManager.GetString("Question_FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Name.
+        /// </summary>
+        public static string Question_LastName {
+            get {
+                return ResourceManager.GetString("Question_LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone Number.
+        /// </summary>
+        public static string Question_PhoneNumber {
+            get {
+                return ResourceManager.GetString("Question_PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State.
+        /// </summary>
+        public static string Question_State {
+            get {
+                return ResourceManager.GetString("Question_State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Street Address.
+        /// </summary>
+        public static string Question_StreetAddress {
+            get {
+                return ResourceManager.GetString("Question_StreetAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zip Code.
+        /// </summary>
+        public static string Question_Zip {
+            get {
+                return ResourceManager.GetString("Question_Zip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact Information.
         /// </summary>
         public static string QuestionSet_ContactInformation {

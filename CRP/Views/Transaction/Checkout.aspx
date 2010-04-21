@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ItemDetailViewModel>" %>
+<%@ Import Namespace="CRP.Controllers.ViewModels"%>
 
 <%@ Import Namespace="CRP.Core.Resources" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -74,7 +75,7 @@
         </p>
     </div>
     
-    <% Html.RenderPartial("~/Views/Shared/TransactionForm.ascx", Model.Item); %>
+    <% Html.RenderPartial("~/Views/Shared/TransactionForm.ascx", new ItemTransactionViewModel(Model.Item, Model.OpenIdUser)); %>
 
     <p>
         <input type="submit" value="Submit" />
@@ -224,54 +225,6 @@
                 });
             });
         }
-
-//        function RenameControls($container, isQuantity) {
-//            var name;
-//            if (isQuantity) {name = "quantityAnswers"; } else {name = "transactionAnswers"; }
-
-//            var masterIndex = 0;
-//        
-//            // go through each container passed
-//            $.each($container, function(cIndex, cItem) {
-//                // get the paragraph tags that each contain a question
-//                var p = $(cItem).find("p");
-
-//                // iterate through the paragraphs
-//                $.each(p, function(index, item) {
-//                    // construct the new name
-//                    var cName = name + "[" + masterIndex + "]";
-
-//                    // get the actual controls
-//                    //var tControls = $.merge($(item).find("input"), $(item).find("select"));
-
-//                    var tControls = $(item).find(".QA");
-
-//                    // iterate through each control inside each paragraph
-//                    $.each(tControls, function(index2, item2) {
-//                        // pull the last part of the name out
-//                        var charIndex = ($(item2).attr("id")).indexOf("_");
-//                        var nameEnd = ($(item2).attr("id")).substring(charIndex + 1);
-
-//                        $(item2).attr("id", cName + "_" + nameEnd);
-//                        $(item2).attr("name", cName + "." + nameEnd);
-//                    });
-
-//                    // check for the quantity index id
-//                    if (isQuantity) {
-//                        // quantity index doesn't exist, create it
-//                        // search for input ending with "_QuantityIndex"
-//                        if ($(item).find("input[id$='_QuantityIndex']").length == 0) {
-//                            //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
-//                            $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex").attr("name", cName + ".QuantityIndex").addClass("QA").val(cIndex));
-//                        }
-//                        else {
-//                            $(item).find("input[id$='_QuantityIndex']").val(cIndex);
-//                        }
-//                    }
-//                    masterIndex++;
-//                }); // end of paragraph     
-//            });                    // end of container
-//        }
     </script>
 
 </asp:Content>

@@ -1,6 +1,7 @@
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Controller;
 using MvcContrib;
 
@@ -8,6 +9,13 @@ namespace CRP.Controllers
 {
     public class ItemController : SuperController
     {
+        private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
+
+        public ItemController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository)
+        {
+            _openIdUserRepository = openIdUserRepository;
+        }
+
         //
         // GET: /Item/
 
@@ -44,7 +52,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, item);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
             
             return View(viewModel);
         }
