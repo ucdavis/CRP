@@ -3,11 +3,10 @@ using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace CRP.Tests.Repositories
 {
     [TestClass]
-    public class ExtendedPropertyRepositoryTests : AbstractRepositoryTests<ExtendedProperty, int>
+    public class ItemRepositoryTests : AbstractRepositoryTests<Item, int>
     {
         #region Init and Overrides
 
@@ -16,11 +15,11 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="counter">The counter.</param>
         /// <returns>A valid entity of type T</returns>
-        protected override ExtendedProperty GetValid(int? counter)
+        protected override Item GetValid(int? counter)
         {
-            var rtValue = CreateValidEntities.ExtendedProperty(counter);
+            var rtValue = CreateValidEntities.Item(counter);
+            rtValue.Unit = Repository.OfType<Unit>().GetById(1);
             rtValue.ItemType = Repository.OfType<ItemType>().GetById(1);
-            rtValue.QuestionType = Repository.OfType<QuestionType>().GetById(1);
             return rtValue;
         }
 
@@ -29,9 +28,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="numberAtEnd"></param>
         /// <returns></returns>
-        protected override IQueryable<ExtendedProperty> GetQuery(int numberAtEnd)
+        protected override IQueryable<Item> GetQuery(int numberAtEnd)
         {
-            return Repository.OfType<ExtendedProperty>().Queryable.Where(a => a.Name.EndsWith(numberAtEnd.ToString()));
+            return Repository.OfType<Item>().Queryable.Where(a => a.Name.EndsWith(numberAtEnd.ToString()));
         }
 
         /// <summary>
@@ -40,7 +39,7 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="counter"></param>
-        protected override void FoundEntityComparison(ExtendedProperty entity, int counter)
+        protected override void FoundEntityComparison(Item entity, int counter)
         {
             Assert.AreEqual("Name" + counter, entity.Name);
         }
@@ -50,7 +49,7 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="action">The action.</param>
-        protected override void UpdateUtility(ExtendedProperty entity, ARTAction action)
+        protected override void UpdateUtility(Item entity, ARTAction action)
         {
             const string updateValue = "Updated";
             switch (action)
@@ -70,19 +69,20 @@ namespace CRP.Tests.Repositories
 
         /// <summary>
         /// Loads the data.
-        /// ExtendedProperty Requires ItemType
-        /// ExtendedProperty Requires QuestionType
+        /// Item Requires Unit
+        /// Item Requires ItemType
         /// </summary>
         protected override void LoadData()
         {
-            Repository.OfType<ExtendedProperty>().DbContext.BeginTransaction();
+            Repository.OfType<Check>().DbContext.BeginTransaction();
+            LoadUnits(1);
             LoadItemTypes(1);
-            LoadQuestionTypes(1);
             LoadRecords(5);
-            Repository.OfType<ExtendedProperty>().DbContext.CommitTransaction();
+            Repository.OfType<Check>().DbContext.CommitTransaction();
         }
 
-
         #endregion Init and Overrides
+
+        //TODO: Other tests
     }
 }

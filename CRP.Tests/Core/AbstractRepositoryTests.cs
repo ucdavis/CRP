@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CRP.Core.Domain;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.DomainModel;
 using UCDArch.Data.NHibernate;
@@ -226,6 +228,65 @@ namespace CRP.Tests.Core
 
         #endregion CRUD Tests
 
+        #region Utilities
+
+        /// <summary>
+        /// Loads the units.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadUnits(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.Unit(entriesToAdd);
+                Repository.OfType<Unit>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
+        /// Loads the items.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadItems(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.Item(entriesToAdd);
+                validEntity.Unit = Repository.OfType<Unit>().GetById(1);
+                validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
+                Repository.OfType<Item>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
+        /// Loads the item types.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadItemTypes(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.ItemType(entriesToAdd);
+                Repository.OfType<ItemType>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
+        /// Loads the question types.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadQuestionTypes(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.QuestionType(entriesToAdd);
+                Repository.OfType<QuestionType>().EnsurePersistent(validEntity);
+            }
+        }
+        
+        /// <summary>
+        /// Abstract Repository Tests Action
+        /// </summary>
         public enum ARTAction
         {
             Compare = 1,
@@ -233,5 +294,6 @@ namespace CRP.Tests.Core
             Restore,
             CompareNotUpdated
         }
+        #endregion Utilities
     }
 }

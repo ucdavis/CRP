@@ -104,38 +104,6 @@ namespace CRP.Tests.Repositories
             }
         }
 
-        private void LoadItemTypes(int entriesToAdd)
-        {
-            for (int i = 0; i < entriesToAdd; i++)
-            {
-                var validEntity = CreateValidEntities.ItemType(entriesToAdd);
-                Repository.OfType<ItemType>().EnsurePersistent(validEntity);
-            }
-        }
-
-        private void LoadUnits(int entriesToAdd)
-        {
-            for (int i = 0; i < entriesToAdd; i++)
-            {
-                var validEntity = CreateValidEntities.Unit(entriesToAdd);
-                Repository.OfType<Unit>().EnsurePersistent(validEntity);
-            }
-        }
-
-        /// <summary>
-        /// Loads the items.
-        /// </summary>
-        /// <param name="entriesToAdd">The entries to add.</param>
-        private void LoadItems(int entriesToAdd)
-        {
-            for (int i = 0; i < entriesToAdd; i++)
-            {
-                var validEntity = CreateValidEntities.Item(entriesToAdd);
-                validEntity.Unit = Repository.OfType<Unit>().GetById(1);
-                validEntity.ItemType = Repository.OfType<ItemType>().GetById(1);
-                Repository.OfType<Item>().EnsurePersistent(validEntity);
-            }
-        }
 
         #endregion Init and Overrides
 

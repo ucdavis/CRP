@@ -113,6 +113,7 @@
     <Compile Include="Repositories\EditorRepositoryTests.cs" />
     <Compile Include="Repositories\ExtendedPropertyAnswerRepositoryTests.cs" />
     <Compile Include="Repositories\ExtendedPropertyRepositoryTests.cs" />
+    <Compile Include="Repositories\ItemRepositoryTests.cs" />
     <Compile Include="Repositories\SchoolRepositoryTests.cs" />
     <Compile Include="Repositories\UnitRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

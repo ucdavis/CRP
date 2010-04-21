@@ -79,15 +79,6 @@ namespace CRP.Tests.Repositories
             Repository.OfType<DisplayProfile>().DbContext.CommitTransaction();
         }
 
-        private void LoadUnits(int entriesToAdd)
-        {
-            for (int i = 0; i < entriesToAdd; i++)
-            {
-                var validEntity = CreateValidEntities.Unit(entriesToAdd);
-                Repository.OfType<Unit>().EnsurePersistent(validEntity);
-            }
-        }
-
         #endregion Init and Overrides
 
         //TODO: Other tests
