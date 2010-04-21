@@ -11,38 +11,40 @@
 
     <% using (Html.BeginForm("Lookup", "Transaction", FormMethod.Post)) { %>
         <%= Html.AntiForgeryToken() %>
-        <p>
+        <li>
             Order Number:
             <%= Html.TextBox("orderNumber", Model.TransactionNumber)%>
-        </p>
-        <p>
+        </li>
+        <li>
             Email:
             <%= Html.TextBox("email", Model.Email) %>
-        </p>
-        <p>
+        </li>
+        <li>
             <%= Html.SubmitButton("Submit", "Lookup Order") %>
-        </p>
+        </li>
     <% } %>
     
-    <p>If you logged in using an openid account (such as google or yahoo accounts) please login to view your order history.
+    <li>If you logged in using an openid account (such as google or yahoo accounts) please login to view your order history.
         <%= Html.ActionLink<AccountController>(a => a.OpenIdAccount(), "Here") %>
-    </p>
+    </li>
 
     <% if (Model.Transaction != null) { %>
     
-        <p>
+        <li>
             Amount of Order:
             <%= Html.Encode(Model.Transaction.Total.ToString("C")) %>
-        </p>
-        <p>
+        </li>
+        <li>
             Amount Paid:
             <%= Html.Encode(Model.Transaction.TotalPaid.ToString("C")) %>
-        </p>
-        <p>
+        </li>
+        <li>
             Paid by:
             <%= Html.Encode(Model.Transaction.Credit ? "Credit Card" : "Check") %>
-        </p>
-    
+        </li>
+        <%if (Model.ShowCreditCardReSubmit) {%>
+            <%= Html.ActionLink<TransactionController>(a => a.Confirmation(Model.Transaction.Id), "Resubmit Credit Card Payment") %>
+        <%} %>
     <% } %>
 
 </asp:Content>

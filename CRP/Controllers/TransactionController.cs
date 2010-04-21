@@ -951,6 +951,16 @@ namespace CRP.Controllers
                     viewModel.Email = email;
                     viewModel.Transaction = transaction;
                 }
+                if (transaction.Credit && transaction.Check == false)
+                {
+                    if (!transaction.Paid)
+                    {
+                        if (transaction.PaymentLogs.Where(a => a.TnStatus == "C" || a.TnStatus == "E").Any())
+                        {
+                            viewModel.ShowCreditCardReSubmit = true;
+                        }
+                    }
+                }
             }
 
             else
