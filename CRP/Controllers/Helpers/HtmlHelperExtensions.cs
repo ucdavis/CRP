@@ -99,6 +99,8 @@ namespace CRP.Helpers
             ReplaceTagContents(formattedEncodedText, "h4");
             ReplaceTagContents(formattedEncodedText, "h5");
             ReplaceTagContents(formattedEncodedText, "h6");
+            ReplaceSingleTagContents(formattedEncodedText, "br");
+
 
             // <span style="text-decoration:underline;">
             //string underline = @"&lt;span style=&quot;text-decoration: underline;&quot;&gt;";
@@ -155,6 +157,11 @@ namespace CRP.Helpers
             formattedText.Replace(string.Format(htmlTag, tag), @"<"+tag+">");
             // closing tag
             formattedText.Replace(string.Format(htmlTag, @"/" + tag), @"</"+tag+">");
+        }
+        public static void ReplaceSingleTagContents(StringBuilder formattedText, string tag)
+        {
+            // opening tag
+            formattedText.Replace(string.Format(htmlTag, tag + @" /"), @"<" + tag + @" />");
         }
     }
 }
