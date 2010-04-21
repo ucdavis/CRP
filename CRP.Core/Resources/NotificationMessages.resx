@@ -129,6 +129,9 @@
   <data name="STR_EditorAlreadyExists" xml:space="preserve">
     <value>Editor already attached to that item.</value>
   </data>
+  <data name="STR_EditorCanNotBeRemoved" xml:space="preserve">
+    <value>Can not remove owner from item.</value>
+  </data>
   <data name="STR_NoEditorRights" xml:space="preserve">
     <value>You do not have editor rights to that item.</value>
     <comment>For screen message</comment>

@@ -97,6 +97,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can not remove owner from item..
+        /// </summary>
+        public static string STR_EditorCanNotBeRemoved {
+            get {
+                return ResourceManager.GetString("STR_EditorCanNotBeRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have editor rights to that item..
         /// </summary>
         public static string STR_NoEditorRights {

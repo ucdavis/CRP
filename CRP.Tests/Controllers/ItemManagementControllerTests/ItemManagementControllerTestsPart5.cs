@@ -16,7 +16,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         
 
         #region Edit Tests
-
+        #region Edit Get
         /// <summary>
         /// Tests the edit with one parameter redirects to list when id not found.
         /// </summary>
@@ -55,6 +55,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Act/Assert
         }
 
+        /// <summary>
+        /// Tests the edit get returns view if admin even if not an editor.
+        /// </summary>
         [TestMethod]
         public void TestEditGetReturnsViewIfAdminEvenIfNotAnEditor()
         {
@@ -86,9 +89,138 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreNotSame(Users[1], result.Item.Editors.ElementAt(0).User);
             #endregion Assert		
         }
-        //TODO: Write test to verify that when editing, the list of units includes the one with the item (see view model)
+
+        /// <summary>
+        /// Tests to ensure the list of units displayed includes the unit assigned to the item.
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetToEnsureTheListOfUnitsDisplayedIncludesTheUnitAssignedToTheItem()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false); // Not Admin
+            FakeUnits(5);
+            FakeItems(3);
+            FakeItemTypes(2);
+            FakeUsers(3);
+            Users[1].LoginID = "UserName";
+            FakeEditors(1);
+            Editors[0].User = Users[1];
+            Items[1].AddEditor(Editors[0]);
+
+            Items[1].Unit = Units[1];
+            Users[1].Units.Add(Units[3]);
+            Users[1].Units.Add(Units[4]);
+            
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(2)
+                .AssertViewRendered()
+                .WithViewData<ItemViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(Users[1], result.CurrentUser);
+            Assert.AreEqual(3, result.Units.Count());
+            Assert.IsTrue(result.Units.Contains(Units[1]));
+            Assert.IsTrue(result.Units.Contains(Units[3]));
+            Assert.IsTrue(result.Units.Contains(Units[4]));
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests to ensure the list of units is complete when the user is admin.
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetToEnsureTheListOfUnitsIsCompleteWhenTheUserIsAdmin()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true); // Admin
+            FakeUnits(7);
+            FakeItems(3);
+            FakeItemTypes(2);
+            FakeUsers(3);
+            Users[1].LoginID = "UserName";
+            FakeEditors(1);
+            Editors[0].User = Users[1];
+            Items[1].AddEditor(Editors[0]);
+
+            Items[1].Unit = Units[1];
+            Users[1].Units.Add(Units[3]);
+            Users[1].Units.Add(Units[4]);
+
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            UnitRepository.Expect(a => a.GetAll()).Return(Units).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(2)
+                .AssertViewRendered()
+                .WithViewData<ItemViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(Users[1], result.CurrentUser);
+            Assert.AreEqual(7, result.Units.Count());
+            #endregion Assert		
+        }
 
 
+        /// <summary>
+        /// Tests the edit get to ensure only active item types are displayed.
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetToEnsureOnlyActiveItemTypesAreDisplayed()
+        {
+            #region Arrange
+            FakeItems(3);
+            FakeItemTypes(5);
+            FakeUsers(3);
+            Users[1].LoginID = "UserName";
+            FakeEditors(1);
+            Editors[0].User = Users[1];
+            Items[1].AddEditor(Editors[0]);
+            foreach (var itemType in ItemTypes)
+            {
+                itemType.IsActive = true;
+            }
+            ItemTypes[1].IsActive = false;
+            ItemTypes[3].IsActive = false;
+
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(2)
+                .AssertViewRendered()
+                .WithViewData<ItemViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.ItemTypes.Count());
+            foreach (var itemType in ItemTypes)
+            {
+                if(itemType.IsActive)
+                {
+                    Assert.IsTrue(result.ItemTypes.Contains(itemType));
+                }
+                else
+                {
+                    Assert.IsFalse(result.ItemTypes.Contains(itemType));
+                }
+            }
+            #endregion Assert		
+        }
         /// <summary>
         /// Tests the edit with one parameter return view when id found.
         /// </summary>
@@ -117,11 +249,15 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreEqual(2, result.ItemTypes.Count());
             Assert.AreEqual(Items[1], result.Item);
         }
+        #endregion Edit Get
+        
+        #region Edit Post
+        
 
         /// <summary>
         /// Tests the edit when id not found does not save.
         /// </summary>
-        [TestMethod, Ignore] //Need to re write test because a null Item now throws a precondition exception
+        [TestMethod]
         public void TestEditWhenIdNotFoundDoesNotSave()
         {
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
@@ -190,6 +326,46 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             FakeItems(1);
             Items[0].AddEditor(new Editor(Items[0], Users[0]));
             Items[0].AddEditor(new Editor(Items[0], Users[1]));
+            Items[0].AddEditor(new Editor(Items[0], Users[2]));
+
+            FakeItemTypes(1);
+            FakeTags(2);
+            TagRepository.Expect(a => a.GetAll()).Return(Tags).Repeat.Any();
+
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+
+            var epp = new ExtendedPropertyParameter[2];
+            epp[0] = new ExtendedPropertyParameter();
+            epp[1] = new ExtendedPropertyParameter();
+            epp[0].propertyId = 1;
+            epp[0].value = "Answer1";
+            epp[1].propertyId = 3;
+            epp[1].value = "Answer3";
+
+            Controller.Edit(1, Items[0], epp, new[] { Tags[0].Name }, null)
+                .AssertViewRendered()
+                .WithViewData<ItemViewModel>();
+            Assert.AreEqual("Item has been saved successfully.", Controller.Message);
+            ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
+        }
+
+        /// <summary>
+        /// Tests the edit post where user is admin but not editor saves.
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostWhereUserIsAdminButNotEditorSaves()
+        {
+            //Mock one file
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
+
+            Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
+            FakeUsers(3);
+            Users[1].LoginID = Controller.CurrentUser.Identity.Name;
+            FakeItems(1);
+            Items[0].AddEditor(new Editor(Items[0], Users[0]));
+            //Items[0].AddEditor(new Editor(Items[0], Users[1])); //Not an editor
             Items[0].AddEditor(new Editor(Items[0], Users[2]));
 
             FakeItemTypes(1);
@@ -346,7 +522,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.IsTrue(Items[0].LinkLink.StartsWith("http://maps.google.com/maps?f=q&source=embed"));
         }
 
-
+        #endregion Edit Post
         #endregion Edit Tests
     }
 }

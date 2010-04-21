@@ -199,7 +199,7 @@ namespace CRP.Controllers
             var destinationItem = Repository.OfType<Item>().GetNullableByID(id);
             
             // check rights to edit
-            if(!Access.HasItemAccess(CurrentUser, destinationItem))
+            if(destinationItem == null || !Access.HasItemAccess(CurrentUser, destinationItem))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
@@ -265,7 +265,7 @@ namespace CRP.Controllers
 
             if (editor.Owner)
             {
-                Message = "Can not remove owner from item.";
+                Message = NotificationMessages.STR_EditorCanNotBeRemoved; //"Can not remove owner from item.";
             }
             else
             {
@@ -382,7 +382,7 @@ namespace CRP.Controllers
             item.Template = template;
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, template.ValidationResults()); //TODO: Review this extra call
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, template.ValidationResults());
 
             if (ModelState.IsValid)
             {

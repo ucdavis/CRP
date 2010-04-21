@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Principal;
 using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
@@ -18,9 +17,10 @@ namespace CRP.Controllers.Helpers
         /// <returns></returns>
         public static bool HasQuestionSetAccess(IRepository repository, IPrincipal currentUser, QuestionSet questionSet)
         {
-            var user = repository.OfType<User>().Queryable.Where(a => a.LoginID == currentUser.Identity.Name).FirstOrDefault();
-
             Check.Require(repository != null, "Repository is required.");
+
+            var user = repository.OfType<User>().Queryable.Where(a => a.LoginID == currentUser.Identity.Name).FirstOrDefault();
+            
             Check.Require(user != null, "User is required.");
 
             if (questionSet.SystemReusable)
