@@ -63,7 +63,7 @@ namespace CRP.Controllers
         /// <param name="options"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions, string[] validators)
+        public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions)//, string[] validators)
         {
             var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(questionSetId);
             if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
@@ -80,7 +80,7 @@ namespace CRP.Controllers
             }
 
             // process the options
-            if (question.QuestionType.HasOptions && questionOptions != null)
+            if (question.QuestionType != null && question.QuestionType.HasOptions && questionOptions != null)
             {
                 foreach (string s in questionOptions)
                 {
@@ -92,23 +92,23 @@ namespace CRP.Controllers
                 }
             }
 
-            // add the validators
-            if (validators != null)
-            {
-                foreach (string s in validators)
-                {
-                    int id;
-                    if (int.TryParse(s, out id))
-                    {
-                        var validator = Repository.OfType<Validator>().GetNullableByID(id);
+            //// add the validators
+            //if (validators != null)
+            //{
+            //    foreach (string s in validators)
+            //    {
+            //        int id;
+            //        if (int.TryParse(s, out id))
+            //        {
+            //            var validator = Repository.OfType<Validator>().GetNullableByID(id);
 
-                        if (validator != null)
-                        {
-                            question.Validators.Add(validator);
-                        }
-                    }
-                }
-            }
+            //            if (validator != null)
+            //            {
+            //                question.Validators.Add(validator);
+            //            }
+            //        }
+            //    }
+            //}
 
             // add the question
             questionSet.AddQuestion(question);

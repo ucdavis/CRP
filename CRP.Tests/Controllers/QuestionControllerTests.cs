@@ -59,7 +59,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateMappingIgnoreParameters2()
         {
-            "~/Question/Create/5".ShouldMapTo<QuestionController>(a => a.Create(5, new Question(),new string[1], new string[1]), true);
+            "~/Question/Create/5".ShouldMapTo<QuestionController>(a => a.Create(5, new Question(), new string[1]), true);
         }
 
         /// <summary>
