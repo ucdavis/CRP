@@ -13,7 +13,7 @@
     <p>
         <%--<%= Html.DetailItemUrl(Model.ItemId, StaticValues.Tab_Reports) %>--%>
         
-        <%= Url.DetailItemUrl(Model.ItemId, StaticValues.Tab_Reports) %>
+        <%= Url.DetailItemLink(Model.ItemId, StaticValues.Tab_Reports) %>
         
         
     </p>

@@ -48,12 +48,22 @@ namespace CRP.Controllers.Helpers
 
         public static string DetailItemUrl(this UrlHelper url, int itemId, string tabName)
         {
+            return url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) + "#" + tabName;
+        }
+
+        public static string DetailItemLink(this UrlHelper url, int itemId, string tabName)
+        {
             var returnUrl = url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) + "#" + tabName;
 
             return string.Format(link, returnUrl);
         }
 
         public static string EditItemUrl(this UrlHelper url, int itemId, string tabName)
+        {
+            return url.RouteUrl(new { controller = "ItemManagement", action = "Edit", id = itemId }) + "#" + tabName;
+        }
+
+        public static string EditItemLink(this UrlHelper url, int itemId, string tabName)
         {
             var returnUrl = url.RouteUrl(new { controller = "ItemManagement", action = "Edit", id = itemId }) + "#" + tabName;
 

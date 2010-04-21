@@ -53,7 +53,7 @@
             .Render(); %>
 
     <p>       
-        <%= Url.EditItemUrl(Model.ItemId, StaticValues.Tab_Questions) %>
+        <%= Url.EditItemLink(Model.ItemId, StaticValues.Tab_Questions) %>
     </p>
 
 
