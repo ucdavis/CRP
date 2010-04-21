@@ -61,6 +61,12 @@ namespace CRP.Controllers
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
 
+            //TODO: Review if this is what you want to happpen, or if it is possible.
+            if(item == null)
+            {
+                return File(new byte[0], "image/jpg");
+            }
+
             if (item.Image != null)
             {
                 return File(item.Image, "image/jpg");
