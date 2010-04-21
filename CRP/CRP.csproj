@@ -166,7 +166,6 @@
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
-    <Compile Include="Controllers\Helpers\PaymentResultParameters.cs" />
     <Compile Include="Controllers\Helpers\StringExtension.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\CouponController.cs" />

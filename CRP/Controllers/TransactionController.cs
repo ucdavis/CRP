@@ -12,6 +12,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using MvcContrib;
 using MvcContrib.Attributes;
@@ -532,11 +533,6 @@ namespace CRP.Controllers
         [BypassAntiForgeryToken]
         public ActionResult PaymentResult(PaymentResultParameters touchNetValues)
         {
-            var client = new SmtpClient("smtp.ucdavis.edu"); //Need for errors/debugging
-            MailMessage message = null;
-            var body = new StringBuilder("TouchNet Results<br/><br/>");
-            body.Append(DateTime.Now.ToString() + "<br/>");
-
             #region Actual Work
             // validate to make sure a transaction value was received
             if (touchNetValues.EXT_TRANS_ID.HasValue)
@@ -546,42 +542,7 @@ namespace CRP.Controllers
                 if(transaction == null)
                 {
                     #region Email Error Results
-                    message = new MailMessage("automatedemail@caes.ucdavis.edu", ConfigurationManager.AppSettings["EmailForErrors"]);
-                    message.Subject = "TouchNet Post Results -- Transaction not found";
-                    message.IsBodyHtml = true;
-
-                    foreach (var k in Request.Params.AllKeys)
-                    {
-                        if (k.ToLower() != "posting_key")
-                        {
-                            body.Append(k + ":" + Request.Params[k]);
-                            body.Append("<br/>");
-                        }
-                    }
-                    message.Body = body.ToString();
-
-                    body.Append("<br/>Function parameters================<br/>");
-                    body.Append("acct_addr: " + touchNetValues.acct_addr + "<br/>");
-                    body.Append("acct_addr2: " + touchNetValues.acct_addr2 + "<br/>");
-                    body.Append("acct_city: " + touchNetValues.acct_city + "<br/>");
-                    body.Append("acct_state: " + touchNetValues.acct_state + "<br/>");
-                    body.Append("acct_zip: " + touchNetValues.acct_zip + "<br/>");
-                    body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK + "<br/>");
-                    body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE + "<br/>");
-                    body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK + "<br/>");
-                    body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID + "<br/>");
-                    body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT + "<br/>");
-                    body.Append("PMT_AMT: " + touchNetValues.PMT_AMT + "<br/>");
-                    body.Append("pmt_date: " + touchNetValues.pmt_date + "<br/>");
-                    body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS + "<br/>");
-                    body.Append("Submit: " + touchNetValues.Submit + "<br/>");
-                    body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK + "<br/>");
-                    body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id + "<br/>");
-                    body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID + "<br/>");
-                    body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID + "<br/>");
-
-                    message.Body = body.ToString();
-                    client.Send(message);
+                    _notificationProvider.SendPaymentResultErrors(ConfigurationManager.AppSettings["EmailForErrors"], touchNetValues, Request.Params, null, PaymentResultType.TransactionNotFound);
                     #endregion Email Error Results
 
                     return View();
@@ -674,81 +635,13 @@ namespace CRP.Controllers
                     }
                     if(transaction.TotalPaid > transaction.Total)
                     {
-                        message = new MailMessage("automatedemail@caes.ucdavis.edu", ConfigurationManager.AppSettings["EmailForErrors"]);
-                        message.Subject = "TouchNet Post Results -- Has Overpaid";
-                        message.IsBodyHtml = true;
-
-                        foreach (var k in Request.Params.AllKeys)
-                        {
-                            if (k.ToLower() != "posting_key")
-                            {
-                                body.Append(k + ":" + Request.Params[k]);
-                                body.Append("<br/>");
-                            }
-                        }
-                        message.Body = body.ToString();
-
-                        body.Append("<br/>Function parameters================<br/>");
-                        body.Append("acct_addr: " + touchNetValues.acct_addr + "<br/>");
-                        body.Append("acct_addr2: " + touchNetValues.acct_addr2 + "<br/>");
-                        body.Append("acct_city: " + touchNetValues.acct_city + "<br/>");
-                        body.Append("acct_state: " + touchNetValues.acct_state + "<br/>");
-                        body.Append("acct_zip: " + touchNetValues.acct_zip + "<br/>");
-                        body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK + "<br/>");
-                        body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE + "<br/>");
-                        body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK + "<br/>");
-                        body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID + "<br/>");
-                        body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT + "<br/>");
-                        body.Append("PMT_AMT: " + touchNetValues.PMT_AMT + "<br/>");
-                        body.Append("pmt_date: " + touchNetValues.pmt_date + "<br/>");
-                        body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS + "<br/>");
-                        body.Append("Submit: " + touchNetValues.Submit + "<br/>");
-                        body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK + "<br/>");
-                        body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id + "<br/>");
-                        body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID + "<br/>");
-                        body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID + "<br/>");
-
-                        message.Body = body.ToString();
-                        client.Send(message);
+                        _notificationProvider.SendPaymentResultErrors(ConfigurationManager.AppSettings["EmailForErrors"], touchNetValues, Request.Params, null, PaymentResultType.OverPaid);         
                     }
                 }
                 else
                 {
-                    #region InValid PaymentLog -- Email Results
-                    message = new MailMessage("automatedemail@caes.ucdavis.edu", ConfigurationManager.AppSettings["EmailForErrors"]);
-                    message.Subject = "Touchnet Post Results -- PaymentLog is Not Valid";
-                    message.IsBodyHtml = true;
-
-                    foreach (var k in Request.Params.AllKeys)
-                    {
-                        if (k.ToLower() != "posting_key")
-                        {
-                            body.Append(k + ":" + Request.Params[k]);
-                            body.Append("<br/>");
-                        }
-                    }
-                    message.Body = body.ToString();
-
-                    body.Append("<br/>Function parameters================<br/>");
-                    body.Append("acct_addr: " + touchNetValues.acct_addr + "<br/>");
-                    body.Append("acct_addr2: " + touchNetValues.acct_addr2 + "<br/>");
-                    body.Append("acct_city: " + touchNetValues.acct_city + "<br/>");
-                    body.Append("acct_state: " + touchNetValues.acct_state + "<br/>");
-                    body.Append("acct_zip: " + touchNetValues.acct_zip + "<br/>");
-                    body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK + "<br/>");
-                    body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE + "<br/>");
-                    body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK + "<br/>");
-                    body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID + "<br/>");
-                    body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT + "<br/>");
-                    body.Append("PMT_AMT: " + touchNetValues.PMT_AMT + "<br/>");
-                    body.Append("pmt_date: " + touchNetValues.pmt_date + "<br/>");
-                    body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS + "<br/>");
-                    body.Append("Submit: " + touchNetValues.Submit + "<br/>");
-                    body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK + "<br/>");
-                    body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id + "<br/>");
-                    body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID + "<br/>");
-                    body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID + "<br/>");
-
+                    #region InValid PaymentLog -- Email Results                   
+                    var body = new StringBuilder();
                     try
                     {
                         body.Append("<br/><br/>Payment log values:<br/>");
@@ -772,9 +665,7 @@ namespace CRP.Controllers
                     {
                         body.Append(ex.Message);
                     }
-                    message.Body = body.ToString();
-
-                    client.Send(message);
+                    _notificationProvider.SendPaymentResultErrors(ConfigurationManager.AppSettings["EmailForErrors"], touchNetValues, Request.Params, body.ToString(), PaymentResultType.InValidPaymentLog);
                     #endregion InValid PaymentLog -- Email Results
                 }
             }

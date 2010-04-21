@@ -1,6 +1,6 @@
 ﻿using CRP.Controllers;
-using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

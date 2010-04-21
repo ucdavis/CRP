@@ -1,5 +1,5 @@
 ﻿
-namespace CRP.Controllers.Helpers
+namespace CRP.Core.Helpers
 {
     public class PaymentResultParameters
     {
