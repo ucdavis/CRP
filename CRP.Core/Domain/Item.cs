@@ -141,7 +141,7 @@ namespace CRP.Core.Domain
         public virtual int Sold { 
             get
             {
-                return Quantity - Transactions.Sum(a => a.Quantity);
+                return Transactions.Sum(a => a.Quantity);
             }
         }
 
