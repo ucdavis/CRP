@@ -12,7 +12,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         /// Tests the paid is true.
         /// </summary>
         [TestMethod]
-        public void TestPaidIsTrue()
+        public void TestPaidIsTrue1()
         {
             #region Arrange
             var transaction = GetValid(9);
@@ -64,10 +64,10 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         }
 
         /// <summary>
-        /// Tests the paid is false1.
+        /// Tests the paid is true2. (Changed how paid flag is determined)
         /// </summary>
         [TestMethod]
-        public void TestPaidIsFalse1()
+        public void TestPaidIsTrue2()
         {
             #region Arrange
             var transaction = GetValid(9);
@@ -114,7 +114,9 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             #endregion Act
 
             #region Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(11101, transaction.Total);
+            Assert.AreEqual(11111, transaction.TotalPaid);
+            Assert.IsTrue(result);
             #endregion Assert
         }
         [TestMethod]
