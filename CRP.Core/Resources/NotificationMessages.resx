@@ -126,6 +126,9 @@
   <data name="STR_Deactivated" xml:space="preserve">
     <value>{ObjectType} has been deactivated.</value>
   </data>
+  <data name="STR_EditorAlreadyExists" xml:space="preserve">
+    <value>Editor already attached to that item.</value>
+  </data>
   <data name="STR_ObjectCreated" xml:space="preserve">
     <value>{ObjectType} has been created successfully.</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="STR_ObjectSaved" xml:space="preserve">
     <value>{ObjectType} has been saved successfully.</value>
+  </data>
+  <data name="STR_SelectUserFirst" xml:space="preserve">
+    <value>Select a user first.</value>
   </data>
   <data name="STR_UnableToUpdate" xml:space="preserve">
     <value>{ObjectType} was unable to update.</value>

@@ -309,7 +309,8 @@ namespace CRP.Controllers
         {
             if (!userId.HasValue)
             {
-                return this.RedirectToAction(a => a.List());
+                Message = NotificationMessages.STR_SelectUserFirst;
+                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
             }
 
             var item = Repository.OfType<Item>().GetNullableByID(id);
@@ -319,6 +320,7 @@ namespace CRP.Controllers
             {
                 return this.RedirectToAction(a => a.List());
             }
+
 
             //if (item.Editors == null || !item.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
             if (!Access.HasItemAccess(CurrentUser, item))
@@ -332,9 +334,9 @@ namespace CRP.Controllers
             //TODO; Review if this is how it should behave if an editor is already attached to the item
             if(item.Editors.Where(a => a.User.LoginID == user.LoginID).Any())
             {
-                //TODO: Use new resource?
-                Message = "Editor already attached to that item.";
-                return this.RedirectToAction(a => a.List());
+                Message = NotificationMessages.STR_EditorAlreadyExists;
+                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+
             }
 
             item.AddEditor(new Editor(item, user));

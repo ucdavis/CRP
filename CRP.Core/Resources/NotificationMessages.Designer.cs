@@ -88,6 +88,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Editor already attached to that item..
+        /// </summary>
+        public static string STR_EditorAlreadyExists {
+            get {
+                return ResourceManager.GetString("STR_EditorAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been created successfully..
         /// </summary>
         public static string STR_ObjectCreated {
@@ -111,6 +120,15 @@ namespace CRP.Core.Resources {
         public static string STR_ObjectSaved {
             get {
                 return ResourceManager.GetString("STR_ObjectSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a user first..
+        /// </summary>
+        public static string STR_SelectUserFirst {
+            get {
+                return ResourceManager.GetString("STR_SelectUserFirst", resourceCulture);
             }
         }
         
