@@ -22,5 +22,5 @@ a img {border:none;}
 
 
 /* fonts */
-body {font: 12px/20px 'QuicksandLight', Arial, sans-serif; }
-h1, h1 a {color:#32322d; font: 30px/38px 'QuicksandBold', Arial, sans-serif; }
+body {font: 12px/20px 'QuicksandBook', Arial, sans-serif; }
+h1, h1 a {color:#32322d; font: 40px/78px 'QuicksandLight', Arial, sans-serif; letter-spacing:5px;}
