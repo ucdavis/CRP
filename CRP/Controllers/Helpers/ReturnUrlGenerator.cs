@@ -27,7 +27,7 @@ namespace CRP.Controllers.Helpers
         {
             var url = Url.RouteUrl(new {controller = "ItemManagement", action = "Edit", id = itemId}) + "#" + tabName;
 
-            var link = string.Format("<a href='{0}>Back to Item</a>", url);
+            var link = string.Format("<a href='{0}'>Back to Item</a>", url);
 
             return link;
         }
@@ -36,7 +36,7 @@ namespace CRP.Controllers.Helpers
         {
             var url = Url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) + "#" + tabName;
 
-            var link = string.Format("<a href='{0}>Back to Item</a>", url);
+            var link = string.Format("<a href='{0}'>Back to Item</a>", url);
             
             return link;
         }

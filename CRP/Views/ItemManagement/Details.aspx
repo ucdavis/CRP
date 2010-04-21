@@ -63,12 +63,11 @@
                                                     <%= Html.ActionLink<CheckController>(b => b.LinkToTransaction(a.Id), "Select") %>
                                                 
                                                 <%});
-                                    col.Add(a => a.TransactionDate.Year.ToString() + a.Id.ToString()).Title(
+                                    col.Add(a => a.TransactionNumber).Title(
                                         "Transaction Number");
                                     col.Add(a => a.Quantity);
                                     col.Add(a => a.Total.ToString("C")).Title("Amount");
                                     col.Add(a => a.Paid);
-                                    col.Add(a => a.Donation);
                                 })
                    .Pageable()
                    .Sortable()

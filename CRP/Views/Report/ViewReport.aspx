@@ -12,6 +12,8 @@
 
     <p>
         <%= Html.DetailItemUrl(Model.ItemId, StaticValues.Tab_Reports) %>
+        
+        
     </p>
 
     <div id="Report" class="t-widget t-grid">

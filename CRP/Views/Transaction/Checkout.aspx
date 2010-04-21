@@ -194,11 +194,35 @@
             
             $container.after($container.clone());
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "p");
+            addQuantityIndex($("div.QuantityContainer"));
         }
 
         function InitializeQuestions() {
             RenameControls($("div#TransactionContainer"), "transactionAnswers", "p");
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "p");
+            addQuantityIndex($("div.QuantityContainer"));
+        }
+
+        function addQuantityIndex($container)
+        {
+            var masterIndex = 0;
+            var cName = "quantityAnswers";
+            
+            $.each($container, function(cIndex, cItem){
+                var p = $(cItem).find("p");
+                
+                $.each(p, function(index, item){               
+                    // quantity index doesn't exist, create it
+                    // search for input ending with "_QuantityIndex"
+                    if ($(item).find("input[id$='_QuantityIndex']").length == 0) {
+                        //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
+                        $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex").attr("name", cName + ".QuantityIndex").addClass("indexedControl").val(cIndex));
+                    }
+                    else {
+                        $(item).find("input[id$='_QuantityIndex']").val(cIndex);
+                    }
+                });
+            });
         }
 
 //        function RenameControls($container, isQuantity) {
