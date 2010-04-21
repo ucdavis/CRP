@@ -41,6 +41,7 @@ namespace CRP.Core.Domain
         public virtual ICollection<ExtendedPropertyAnswer> ExtendedPropertyAnswers { get; set; }
         public virtual ICollection<Coupon> Coupons { get; set; }
         public virtual ICollection<Editor> Editors { get; set; }
+        public virtual ICollection<ItemQuestionSet> QuestionSets { get; set; }
 
         public virtual void AddTag(Tag tag)
         {
@@ -83,6 +84,17 @@ namespace CRP.Core.Domain
         public virtual void RemoveEditor(Editor editor)
         {
             Editors.Remove(editor);
+        }
+
+        public virtual void AddQuestionSet(ItemQuestionSet itemQuestionSet)
+        {
+            itemQuestionSet.Item = this;
+            QuestionSets.Add(itemQuestionSet);
+        }
+
+        public virtual void RemoveQuestionSet(ItemQuestionSet itemQuestionSet)
+        {
+            QuestionSets.Remove(itemQuestionSet);
         }
     }
 }

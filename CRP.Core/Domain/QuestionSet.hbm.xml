@@ -15,7 +15,7 @@
     <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join" />
     <many-to-one name="User" class="CRP.Core.Domain.User, CRP.Core" column="UserId" cascade="none" fetch="join" />
 
-    <bag name="Questions" table="QuestionSetQuestions" fetch="join" cascade="all-delete-orphan">
+    <bag name="Questions" table="QuestionSetQuestions" fetch="join" cascade="all-delete-orphan" order-by="[Order]">
       <key column="QuestionSetId" />
       <one-to-many class="CRP.Core.Domain.QuestionSetQuestion, CRP.Core" />
     </bag>

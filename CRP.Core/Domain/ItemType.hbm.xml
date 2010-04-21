@@ -11,7 +11,7 @@
     <property name="Name" column="Name" />
     <property name="IsActive" column="IsActive" />
 
-    <bag name="ExtendedProperties" table="ExtendedProperties" cascade="all-delete-orphan">
+    <bag name="ExtendedProperties" table="ExtendedProperties" cascade="all-delete-orphan" order-by="[Order]">
       <key column="ItemTypeId" />
       <one-to-many class="CRP.Core.Domain.ExtendedProperty, CRP.Core" />
     </bag>

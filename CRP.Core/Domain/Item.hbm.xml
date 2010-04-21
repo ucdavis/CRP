@@ -29,9 +29,14 @@
       <one-to-many class="CRP.Core.Domain.ExtendedPropertyAnswer, CRP.Core"/>
     </bag>
 
-    <bag name="Coupons" tables="Coupons" cascade="all-delete-orphan" inverse="true" fetch="join">
+    <bag name="Coupons" table="Coupons" cascade="all-delete-orphan" inverse="true" fetch="join">
       <key column="CouponId" />
       <one-to-many class="CRP.Core.Domain.Coupon, CRP.Core" />
+    </bag>
+
+    <bag name="QuestionSets" table="ItemQuestionSets" cascade="all-delete-orphan" inverse="true" fetch="join" order-by="[Order]">
+      <key column="ItemId" />
+      <one-to-many class="CRP.Core.Domain.ItemQuestionSet, CRP.Core"/>
     </bag>
     
   </class>
