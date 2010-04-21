@@ -65,6 +65,14 @@
                         <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.Check %>" /><label for="check">Check</label>
                     </td>
                 </tr>
+                <% if (!String.IsNullOrEmpty(Model.Item.RestrictedKey)) { %>
+                <tr>
+                    <td colspan="4">
+                        <label for="restrictedKey">Passphrase to purchase: </label>
+                        <%= Html.TextBox("restrictedKey") %>
+                    </td>
+                </tr>
+                <% } %>
             </tfoot>
         </table>
     </div>

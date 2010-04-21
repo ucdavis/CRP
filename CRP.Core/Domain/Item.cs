@@ -64,6 +64,11 @@ namespace CRP.Core.Domain
         /// Whether or not this item should be displayed in the searchable list
         /// </summary>
         public virtual bool Private { get; set; }
+        /// <summary>
+        /// Whether or not this item is a restricted item.  Not Null or Empty means restricted.
+        /// </summary>
+        [Length(10)]
+        public virtual string RestrictedKey { get; set; }
 
         /// <summary>
         /// Link used for embedding a map

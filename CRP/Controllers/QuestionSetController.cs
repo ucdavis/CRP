@@ -102,7 +102,10 @@ namespace CRP.Controllers
                 var itemType = questionSet.ItemTypes.FirstOrDefault();
                 var item = questionSet.Items.FirstOrDefault();
 
-                viewModel.ItemType = itemType.ItemType;
+                if (itemType != null)
+                {
+                    viewModel.ItemType = itemType.ItemType;
+                }
 
                 if (item != null)
                 {

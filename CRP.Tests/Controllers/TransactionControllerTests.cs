@@ -62,7 +62,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCheckoutWithParametersMapping()
         {
-            "~/Transaction/Checkout/5".ShouldMapTo<TransactionController>(a => a.Checkout(5,1, null, "test", new QuestionAnswerParameter[1],new QuestionAnswerParameter[1] ), true);
+            "~/Transaction/Checkout/5".ShouldMapTo<TransactionController>(a => a.Checkout(5,1, null, "test", string.Empty , new QuestionAnswerParameter[1],new QuestionAnswerParameter[1] ), true);
         }
 
         #endregion Route Tests

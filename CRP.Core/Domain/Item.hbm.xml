@@ -23,6 +23,7 @@
     <property name="DateCreated" column="DateCreated" />
     <property name="Available" column="Available" />
     <property name="Private" column="Private" />
+    <property name="RestrictedKey" column="RestrictedKey" />
     <property name="MapLink" column="MapLink" />
     <property name="LinkLink" column="LinkLink" />
 

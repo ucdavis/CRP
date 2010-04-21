@@ -24,10 +24,10 @@
         });
 
         function CreateRow(span, button) {
-
             if ($(button).hasClass("selected")) {
                 var tbody = $("div#selectedColumns").find("tbody");
 
+                // this only works against properties with real question id, not property
                 var tr = $("<tr>").addClass("dataRow").attr("id", $(span).find("input#_QuestionId").val());
 
                 var cell1 = $("<td>");
@@ -156,6 +156,7 @@
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Donation Total") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
                 <%= Html.Hidden("_PropertyName", "DonationTotal", new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_QuestionId", "propertyDonationTotal", new {@class = StaticValues.Class_indexedControl}) %>
             </span>
             
             <span>
@@ -163,6 +164,7 @@
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Amount Total") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
                 <%= Html.Hidden("_PropertyName", "AmountTotal", new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_QuestionId", "propertyAmountTotal", new {@class = StaticValues.Class_indexedControl}) %>
             </span>
             
             <span>
@@ -170,6 +172,7 @@
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Total") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
                 <%= Html.Hidden("_PropertyName", "Total", new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_QuestionId", "propertyTotal", new {@class = StaticValues.Class_indexedControl}) %>
             </span>
             
             <span>
@@ -177,6 +180,7 @@
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Payment Type") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
                 <%= Html.Hidden("_PropertyName", "PaymentType", new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_QuestionId", "propertyPaymentType", new {@class = StaticValues.Class_indexedControl}) %>
             </span>
             
             <span>
@@ -184,6 +188,7 @@
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Quantity") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
                 <%= Html.Hidden("_PropertyName", "Quantity", new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_QuestionId", "propertyQuantity", new {@class = StaticValues.Class_indexedControl}) %>
             </span>                                                
             
             <span>
@@ -191,6 +196,7 @@
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Paid") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
                 <%= Html.Hidden("_PropertyName", "Paid", new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_QuestionId", "propertyPaid", new {@class = StaticValues.Class_indexedControl}) %>
             </span>     
             
         </fieldset>

@@ -25,6 +25,7 @@ namespace CRP.Controllers.Helpers
             dest.Available = src.Available;
             dest.Private = src.Private;
             dest.Unit = src.Unit;
+            dest.RestrictedKey = src.RestrictedKey;
 
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 

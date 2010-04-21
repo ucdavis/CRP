@@ -79,6 +79,12 @@
                 <%= Html.CheckBox("Item.Private") %>
                 <%= Html.ValidationMessage("Item.Private", "*") %>
             </p>            
+            
+            <p>
+                <label for="Item.RestrictedKey">Restricted Password:</label>
+                <%= Html.TextBox("Item.RestrictedKey") %>
+                <%= Html.ValidationMessage("Item.RestrictedKey", "*") %>
+            </p>
 
         </fieldset>
         

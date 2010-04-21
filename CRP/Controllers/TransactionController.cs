@@ -72,7 +72,7 @@ namespace CRP.Controllers
         /// <param name="quantityAnswers"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult Checkout(int id, int quantity, decimal? donation, string paymentType, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
+        public ActionResult Checkout(int id, int quantity, decimal? donation, string paymentType, string restrictedKey, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
         {
             // get the item
             var item = Repository.OfType<Item>().GetNullableByID(id);
@@ -153,6 +153,12 @@ namespace CRP.Controllers
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
+
+            // check to see if it's a restricted item
+            if (!string.IsNullOrEmpty(item.RestrictedKey) && item.RestrictedKey != restrictedKey)
+            {
+                ModelState.AddModelError("Restricted Key", "The item is restricted.");
+            }
 
             if (ModelState.IsValid)
             {
