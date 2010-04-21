@@ -32,7 +32,7 @@ namespace CRP.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return this.RedirectToAction(a => a.List());
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace CRP.Controllers
             {
                 ModelState.AddModelError("Name", "Contact Information is reserved for internal system use only.");
             }
-            
+
             if (ModelState.IsValid)
             {
                 if (itemId.HasValue)
@@ -497,6 +497,7 @@ namespace CRP.Controllers
             }
             else
             {
+                Message = "An error with the item prevents this from saving.";
                 return LinkToItem(itemId, transaction, quantity);
             }
 
@@ -530,12 +531,14 @@ namespace CRP.Controllers
         public ActionResult UnlinkFromItem(int id)
         {
             var itemQuestionSet = Repository.OfType<ItemQuestionSet>().GetNullableByID(id);
-            var itemId = itemQuestionSet.Item.Id;
-            
             if (itemQuestionSet == null)
             {
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
+
+            var itemId = itemQuestionSet.Item.Id;
+            
+            
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemQuestionSet.ValidationResults());
 
