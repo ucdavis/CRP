@@ -337,7 +337,97 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestEditItemTypeWithValidDataSaves()
         {
-            //TODO: This test
+            FakeItemTypes(3);
+            
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+
+            var itemTypeToUpdate = ItemTypes[1];
+            itemTypeToUpdate.Name = "SomeNewName";
+            var result = Controller.EditItemType(itemTypeToUpdate)
+                .AssertViewRendered()
+                .WithViewData<ItemType>();
+            Assert.AreSame(itemTypeToUpdate, result);
+            ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(itemTypeToUpdate));
+            Assert.AreEqual("Item Type has been saved successfully.", Controller.Message);
+            Assert.IsTrue(Controller.ModelState.IsValid);
+        }
+
+        /// <summary>
+        /// Tests the edit item type when change name to existing name does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestEditItemTypeWhenChangeNameToExistingNameDoesNotSave()
+        {
+            //In addition to fixing the controller so this tests passes, review if the id should be passed and only the two fields be allowed to be changed.
+            FakeItemTypes(3);
+
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+
+            var itemTypeToUpdate = ItemTypes[1];
+            itemTypeToUpdate.Name = ItemTypes[0].Name;
+            var result = Controller.EditItemType(itemTypeToUpdate)
+                .AssertViewRendered()
+                .WithViewData<ItemType>();
+            Assert.AreSame(itemTypeToUpdate, result);
+            ItemTypeRepository.AssertWasNotCalled(a => a.EnsurePersistent(itemTypeToUpdate));
+            Assert.AreNotEqual("Item Type has been saved successfully.", Controller.Message);
+            Assert.IsFalse(Controller.ModelState.IsValid);
+        }
+
+        /// <summary>
+        /// Tests the edit item type only allows name and is active to be changed.
+        /// </summary>
+        [TestMethod]
+        public void TestEditItemTypeOnlyAllowsNameAndIsActiveToBeChanged()
+        {
+            FakeItemTypes(3);
+            ItemTypes[1].AddExtendedProperty(CreateValidEntities.ExtendedProperty(1));
+            ItemTypes[1].AddQuantityQuestionSet(CreateValidEntities.QuestionSet(1));
+
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+
+            var itemTypeToUpdateWithSameId = CreateValidEntities.ItemType(2);
+            itemTypeToUpdateWithSameId.SetIdTo(ItemTypes[1].Id);
+            itemTypeToUpdateWithSameId.Name = "Updated";
+
+            Assert.AreEqual(1, ItemTypes[1].ExtendedProperties.Count);
+            Assert.AreEqual(1, ItemTypes[1].QuestionSets.Count);
+
+            Assert.AreEqual(0, itemTypeToUpdateWithSameId.ExtendedProperties.Count);
+            Assert.AreEqual(0, itemTypeToUpdateWithSameId.QuestionSets.Count);
+
+            var result = Controller.EditItemType(itemTypeToUpdateWithSameId)
+                .AssertViewRendered()
+                .WithViewData<ItemType>();
+
+            ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<ItemType>.Is.Anything));
+
+            Assert.AreEqual(1, result.ExtendedProperties.Count);
+            Assert.AreEqual(1, result.QuestionSets.Count);
+
+            //TODO: Get Arguments to check what was saved?
+        }
+
+        /// <summary>
+        /// Tests the edit item type where item type does not exist does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestEditItemTypeWhereItemTypeDoesNotExistDoesNotSave()
+        {
+            FakeItemTypes(3);
+
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any(); //So It Is Not Found
+
+            var result = Controller.EditItemType(ItemTypes[1])
+                .AssertViewRendered()
+                .WithViewData<ItemType>();
+
+            ItemTypeRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<ItemType>.Is.Anything));
+
         }
 
         #endregion EditItemType Tests
