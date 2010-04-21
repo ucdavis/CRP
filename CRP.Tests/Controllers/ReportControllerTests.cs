@@ -1,7 +1,9 @@
 ﻿using CRP.Controllers;
+using CRP.Core.Abstractions;
 using CRP.Tests.Core.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
+using Rhino.Mocks;
 using UCDArch.Testing;
 
 namespace CRP.Tests.Controllers
@@ -9,6 +11,7 @@ namespace CRP.Tests.Controllers
     [TestClass]
     public class ReportControllerTests : ControllerTestBase<ReportController>
     {
+        protected IChartProvider ChartProvider;
         #region Init
 
         /// <summary>
@@ -24,7 +27,8 @@ namespace CRP.Tests.Controllers
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<ReportController>();
+            ChartProvider = MockRepository.GenerateStub<IChartProvider>();
+            Controller = new TestControllerBuilder().CreateController<ReportController>(ChartProvider);
         }
 
         #endregion Init
