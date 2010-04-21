@@ -151,6 +151,11 @@ namespace CRP.Controllers
             {
                 ModelState.AddModelError("Question Set", "This is a system default question set and cannot be modified");
             }
+            if (questionSet.Name.ToLower() == "Contact Information".ToLower())
+            {
+                ModelState.AddModelError("Name", "Contact Information is reserved for internal system use only.");
+                Message = "Contact Information is reserved for internal system use only.";
+            }
 
             if (ModelState.IsValid)
             {
@@ -233,6 +238,10 @@ namespace CRP.Controllers
                 {
                     ModelState.AddModelError("Transaction/Quantity", "Transaction and Quantity cannot be the same.");
                 }
+            }
+            if (questionSet.Name.ToLower() == "Contact Information".ToLower())
+            {
+                ModelState.AddModelError("Name", "Contact Information is reserved for internal system use only.");
             }
             
             if (ModelState.IsValid)

@@ -1,18 +1,16 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-//using CRP.App_GlobalResources;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
-using MvcContrib.Attributes;
 using CRP.Core.Resources;
+using MvcContrib;
+using MvcContrib.Attributes;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
-using MvcContrib;
 
 namespace CRP.Controllers
 {
@@ -24,7 +22,7 @@ namespace CRP.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return this.RedirectToAction(a => a.List());
         }
 
         /// <summary>
@@ -36,15 +34,11 @@ namespace CRP.Controllers
             // list items that the user has editor rights to
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
-            var query = from i in Repository.OfType<Item>().Queryable
-                        where i.Editors.Any(a => a.User == user)
-                        select i;
-
+            var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
             // admins can see all
             if (CurrentUser.IsInRole(RoleNames.Admin))
             {
-                query = from i in Repository.OfType<Item>().Queryable
-                        select i;
+                query = Repository.OfType<Item>().Queryable;
             }
 
             return View(query);
@@ -56,7 +50,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Create()
         {
-            var viewModel = ItemViewModel.Create(Repository, CurrentUser);
+            var viewModel = ItemViewModel.Create(Repository, CurrentUser, null);
 
             return View(viewModel);
         }
@@ -73,8 +67,11 @@ namespace CRP.Controllers
         ///     Item is created
         ///     Extended properties are created
         ///     Default question sets are added ("Contact Information" and Item Type defaults)
-        /// </remarks>
-        /// <param name="item"></param>
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="extendedProperties">The extended properties.</param>
+        /// <param name="tags">The tags.</param>
+        /// <param name="mapLink">The map link.</param>
         /// <returns></returns>
         [AcceptPost]
         [ValidateInput(false)]
@@ -136,8 +133,7 @@ namespace CRP.Controllers
             }
             else
             {
-                var viewModel = ItemViewModel.Create(Repository, CurrentUser);
-                viewModel.Item = item;
+                var viewModel = ItemViewModel.Create(Repository, CurrentUser, item);                
                 return View(viewModel);
             }
         }
@@ -172,8 +168,8 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
-            var viewModel = ItemViewModel.Create(Repository, CurrentUser);
-            viewModel.Item = item;
+            var viewModel = ItemViewModel.Create(Repository, CurrentUser, item);
+
 
             return View(viewModel);
         }
@@ -189,46 +185,47 @@ namespace CRP.Controllers
         ///     User has editor rights
         /// PostCondition:
         ///     Item is updated
-        /// </remarks>
-        /// <param name="item"></param>
-        /// <param name="extendedProperties"></param>
-        /// <param name="tags"></param>
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="item">The item.</param>
+        /// <param name="extendedProperties">The extended properties.</param>
+        /// <param name="tags">The tags.</param>
+        /// <param name="mapLink">The map link.</param>
         /// <returns></returns>
         [AcceptPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
-            var destItem = Repository.OfType<Item>().GetNullableByID(id);
+            var destinationItem = Repository.OfType<Item>().GetNullableByID(id);
             
             // check rights to edit
-            if(!Access.HasItemAccess(CurrentUser, destItem))
+            if(!Access.HasItemAccess(CurrentUser, destinationItem))
             {
                 //Don't Have editor rights
-                //TODO: Use new resource?
-                Message = "You do not have editor rights to that item.";
+                Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List());
             }
 
-            destItem = Copiers.CopyItem(Repository, item, destItem, extendedProperties, tags, mapLink);//PopulateObject.Item(Repository, item, extendedProperties, tags);
+            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);//PopulateObject.Item(Repository, item, extendedProperties, tags);
 
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
                 var file = Request.Files[0];
                 var reader = new BinaryReader(file.InputStream);
-                destItem.Image = reader.ReadBytes(file.ContentLength);
+                destinationItem.Image = reader.ReadBytes(file.ContentLength);
             }
 
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destItem.ValidationResults());
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destinationItem.ValidationResults());
 
             if (ModelState.IsValid)
             {
-                Repository.OfType<Item>().EnsurePersistent(destItem);
+                Repository.OfType<Item>().EnsurePersistent(destinationItem);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item");
             }
 
-            var viewModel = ItemViewModel.Create(Repository, CurrentUser);
-            viewModel.Item = destItem;
+            var viewModel = ItemViewModel.Create(Repository, CurrentUser, destinationItem);
+            //viewModel.Item = destinationItem;
             return View(viewModel);
         }
 
@@ -262,8 +259,7 @@ namespace CRP.Controllers
             if (!Access.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
-                //TODO: Use new resource?
-                Message = "You do not have editor rights to that item.";
+                Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List());
             }
 
@@ -326,8 +322,7 @@ namespace CRP.Controllers
             if (!Access.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
-                //TODO: Use new resource?
-                Message = "You do not have editor rights to that item.";
+                Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List());
             }
 
@@ -419,7 +414,9 @@ namespace CRP.Controllers
 
     public class ExtendedPropertyParameter
     {
+        // ReSharper disable InconsistentNaming
         public string value { get; set; }
         public int propertyId { get; set; }
+        // ReSharper restore InconsistentNaming
     }
 }

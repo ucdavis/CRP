@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CRP.Controllers;
 using CRP.Core.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
@@ -13,11 +14,15 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
         #region Index Tests
 
+        /// <summary>
+        /// Tests the index redirects to list.
+        /// </summary>
         [TestMethod]
-        public void TestIndexReturnsView()
+        public void TestIndexRedirectsToList()
         {
             Controller.Index()
-                .AssertViewRendered();
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
         }
 
 
@@ -25,6 +30,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
         #region List Tests
 
+        /// <summary>
+        /// Tests the list returns view.
+        /// </summary>
         [TestMethod]
         public void TestListReturnsView()
         {
@@ -45,6 +53,57 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreEqual("Name2", result.FirstOrDefault().Name);
         }
 
+        /// <summary>
+        /// Tests the list when not admin only returns list of items where current user is an editor.
+        /// </summary>
+        [TestMethod]
+        public void TestListWhenNotAdminOnlyReturnsListOfItemsWhereCurrentUserIsAnEditor()
+        {
+            #region Arrange
+            ArrangeItemsAndOwners();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.List()
+                .AssertViewRendered()
+                .WithViewData<IQueryable<Item>>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count());
+            Assert.IsTrue(result.Contains(Items[1]));
+            Assert.IsTrue(result.Contains(Items[2]));
+            Assert.IsTrue(result.Contains(Items[3]));
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the list when admin returns list of all items.
+        /// </summary>
+        [TestMethod]
+        public void TestListWhenAdminReturnsListOfAllItems()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true); //Set the Is role Admin to true
+            ArrangeItemsAndOwners();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.List()
+                .AssertViewRendered()
+                .WithViewData<IQueryable<Item>>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(6, result.Count());
+            foreach (var item in Items)
+            {
+                Assert.IsTrue(result.Contains(item));
+            }
+            #endregion Assert
+        }
 
         #endregion List Tests
 

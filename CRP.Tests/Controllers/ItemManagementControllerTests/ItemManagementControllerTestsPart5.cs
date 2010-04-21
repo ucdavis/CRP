@@ -30,6 +30,65 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         }
 
         /// <summary>
+        /// Tests the edit get redirect to list when user is not admin and user is not an editor.
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetRedirectToListWhenUserIsNotAdminAndUserIsNotAnEditor()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false); //Not Admin
+            FakeItems(3);
+            FakeItemTypes(2);
+            FakeUsers(3);
+            Users[1].LoginID = "UserName";
+            FakeEditors(1);
+            Editors[0].User = Users[2]; //Different User is editor
+            Items[1].AddEditor(Editors[0]);
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+
+            #endregion Arrange
+
+            #region Act/Assert
+            Controller.Edit(2)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act/Assert
+        }
+
+        [TestMethod]
+        public void TestEditGetReturnsViewIfAdminEvenIfNotAnEditor()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, true); // Admin
+            FakeItems(3);
+            FakeItemTypes(2);
+            FakeUsers(3);
+            Users[1].LoginID = "UserName";
+            FakeEditors(1);
+            Editors[0].User = Users[2]; //Different User is editor
+            Items[1].AddEditor(Editors[0]);
+            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit(2)
+                .AssertViewRendered()
+                .WithViewData<ItemViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(Users[1], result.CurrentUser);
+            Assert.AreEqual(Items[1], result.Item);
+            Assert.AreEqual(1, result.Item.Editors.Count);
+            Assert.AreNotSame(Users[1], result.Item.Editors.ElementAt(0).User);
+            #endregion Assert		
+        }
+
+
+        /// <summary>
         /// Tests the edit with one parameter return view when id found.
         /// </summary>
         [TestMethod]
@@ -122,7 +181,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestEditWhereUserHasEditorRightsSaves()
         {
             //Mock one file
-            Controller.ControllerContext.HttpContext = new MockHttpContext(1);
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
 
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
             FakeUsers(3);
@@ -162,7 +221,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestEditWithInvalidDataDoesNotSave()
         {
             //Mock one file
-            Controller.ControllerContext.HttpContext = new MockHttpContext(1);
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
 
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
             FakeUsers(3);
@@ -207,7 +266,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             const string mapLinkText = "<iframe width=\"425\" height=\"350\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=davis+ca&amp;sll=37.0625,-95.677068&amp;sspn=51.887315,79.013672&amp;ie=UTF8&amp;hq=&amp;hnear=Davis,+Yolo,+California&amp;ll=38.544906,-121.740517&amp;spn=0.00158,0.002411&amp;t=h&amp;z=19&amp;output=embed\"></iframe><br /><small><a href=\"http://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=davis+ca&amp;sll=37.0625,-95.677068&amp;sspn=51.887315,79.013672&amp;ie=UTF8&amp;hq=&amp;hnear=Davis,+Yolo,+California&amp;ll=38.544906,-121.740517&amp;spn=0.00158,0.002411&amp;t=h&amp;z=19\" style=\"color:#0000FF;text-align:left\">View Larger Map</a></small>";
 
             //Mock one file
-            Controller.ControllerContext.HttpContext = new MockHttpContext(1);
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
 
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
             FakeUsers(3);

@@ -22,7 +22,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
     [TestClass]
     public partial class ItemManagementControllerTests : ControllerTestBase<ItemManagementController>
     {
-        protected readonly IPrincipal Principal = new MockPrincipal();
+        protected readonly IPrincipal Principal = new MockPrincipal(false);
         protected List<User> Users { get; set; }
         protected IRepository<User> UserRepository { get; set; }
         protected List<Item> Items { get; set; }
@@ -119,7 +119,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         private void SetupDataForCreateTests()
         {
             //Mock one file
-            Controller.ControllerContext.HttpContext = new MockHttpContext(1);
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
             //Fakes
             FakeExtendedProperties(4);
             FakeTags(2);
@@ -333,6 +333,12 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public class MockPrincipal : IPrincipal
         {
             IIdentity _identity;
+            public bool RoleReturnValue { get; set; }
+
+            public MockPrincipal(bool roleReturnvalue)
+            {
+                RoleReturnValue = roleReturnvalue;
+            }
 
             public IIdentity Identity
             {
@@ -348,7 +354,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             public bool IsInRole(string role)
             {
-                return false;
+                //return false;
+                return RoleReturnValue;
             }
         }
 
@@ -359,9 +366,11 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             private IPrincipal _user;
             private int _count;
-            public MockHttpContext(int count)
+            public bool RoleReturnValue { get; set; }
+            public MockHttpContext(int count, bool roleReturnValue)
             {
                 _count = count;
+                RoleReturnValue = roleReturnValue;
             }
 
             public override IPrincipal User
@@ -370,7 +379,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
                 {
                     if (_user == null)
                     {
-                        _user = new MockPrincipal();
+                        _user = new MockPrincipal(RoleReturnValue);
                     }
                     return _user;
                 }
@@ -475,6 +484,34 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
         #endregion
 
+        /// <summary>
+        /// Arranges the items and owners.
+        /// </summary>
+        private void ArrangeItemsAndOwners()
+        {
+            FakeItems(6);
+            FakeUsers(2);
+            FakeEditors(2);
+            Users[0].LoginID = "OtherGuy";
+            Users[1].LoginID = "UserName";
+            Editors[0].User = Users[0];
+            Editors[1].User = Users[1];
+
+            Items[0].AddEditor(Editors[0]);
+            Items[1].AddEditor(Editors[1]); //This one
+            Items[2].AddEditor(Editors[0]);
+            Items[2].AddEditor(Editors[1]); //This one
+            Items[3].AddEditor(Editors[1]); //And this one
+            Items[3].AddEditor(Editors[0]);
+            Items[4].AddEditor(Editors[0]);
+            Items[5].AddEditor(Editors[0]);
+
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            ItemRepository.Expect(a => a.Queryable).Return(Items.AsQueryable()).Repeat.Any();
+        }
+
         #endregion Helper Methods
+
+
     }
 }

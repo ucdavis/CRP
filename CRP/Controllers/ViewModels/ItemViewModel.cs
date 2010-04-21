@@ -10,7 +10,7 @@ namespace CRP.Controllers.ViewModels
 {
     public class ItemViewModel
     {
-        public static ItemViewModel Create(IRepository repository, IPrincipal principal)
+        public static ItemViewModel Create(IRepository repository, IPrincipal principal, Item item)
         {
             Check.Require(repository != null, "Repository is required.");
 
@@ -26,7 +26,20 @@ namespace CRP.Controllers.ViewModels
             }
             else
             {
-                viewModel.Units = viewModel.CurrentUser.Units;
+                if (item != null && item.Unit != null && viewModel.CurrentUser.Units.Contains(item.Unit) == false)
+                {
+                    var tempUnits = viewModel.CurrentUser.Units.ToList();
+                    tempUnits.Add(item.Unit);
+                    viewModel.Units = tempUnits;
+                }
+                else
+                {
+                    viewModel.Units = viewModel.CurrentUser.Units;
+                }
+            }
+            if(item != null)
+            {
+                viewModel.Item = item;
             }
 
             return viewModel;

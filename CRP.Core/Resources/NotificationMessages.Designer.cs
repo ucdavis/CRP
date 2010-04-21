@@ -97,6 +97,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You do not have editor rights to that item..
+        /// </summary>
+        public static string STR_NoEditorRights {
+            get {
+                return ResourceManager.GetString("STR_NoEditorRights", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been created successfully..
         /// </summary>
         public static string STR_ObjectCreated {
