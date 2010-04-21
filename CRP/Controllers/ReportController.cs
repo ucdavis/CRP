@@ -117,6 +117,26 @@ namespace CRP.Controllers
             viewModel.ItemReport = report;
             return View(viewModel);
         }
+
+        [RolesFilter.AdminOnly]
+        public ActionResult ViewSystemReport(int? reportId)
+        {
+            if (reportId.HasValue)
+            {
+            }
+
+            var viewModel = SystemReportViewModel.Create(Repository);
+            viewModel.Reports = Enum.GetValues(typeof (SystemReport));
+
+            return View(viewModel);
+        }
+
+        public enum SystemReport
+        {
+            DepartmentUsage = 0,
+            DepartmentMoneyYtd,
+            DepartmentItemCount
+        } ;
     }
 
     public class CreateReportParameter

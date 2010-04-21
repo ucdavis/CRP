@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
@@ -73,7 +74,7 @@ namespace CRP.Controllers
         /// <param name="transactionAnswers"></param>
         /// <param name="quantityAnswers"></param>
         /// <returns></returns>
-        [RecaptchaFilter.CaptchaValidatorAttribute]
+        [CaptchaValidatorAttribute]
         [AcceptPost]
         public ActionResult Checkout(int id, int quantity, decimal? donation, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
         {
@@ -103,6 +104,13 @@ namespace CRP.Controllers
             }
 
             var transaction = new Transaction(item);
+
+            // fill the openid user if they are openid validated
+            if (HttpContext.Request.IsOpenId())
+            {
+                // doesn't matter if it's null, just assign what we have
+                transaction.OpenIDUser = _openIdUserRepository.GetNullableByID(CurrentUser.Identity.Name);
+            }
 
             // deal with selected payment type
             if (paymentType == StaticValues.CreditCard)

@@ -184,6 +184,7 @@
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ReportViewModel.cs" />
     <Compile Include="Controllers\ViewModels\SearchViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\SystemReportViewModel.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -575,6 +576,7 @@
     <Content Include="Views\ItemManagement\Details.aspx" />
     <Content Include="Views\Report\Create.aspx" />
     <Content Include="Views\Report\ViewReport.aspx" />
+    <Content Include="Views\Report\ViewSystemReport.aspx" />
     <Content Include="Views\Search\Index.aspx" />
     <Content Include="Views\Shared\CheckView.ascx" />
     <Content Include="Views\Shared\PageHeader.ascx" />
