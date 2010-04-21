@@ -54,15 +54,8 @@
     
     <% } else { %>
     
-        <p>
-            Thank you for your purchase!
-            
-            Please mail your payment to:
-            
-                John Zoidberg
-                150 Mrak Hall
-                One Shields Ave.
-                Davis, CA 94534
+        <p>        
+           <%=Model.Transaction.Item.CheckPaymentInstructions %>
         </p>
     
     <% } %>

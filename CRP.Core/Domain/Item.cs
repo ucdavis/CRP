@@ -89,6 +89,15 @@ namespace CRP.Core.Domain
         /// Link used in the below text for linking to google maps
         /// </summary>
         public virtual string LinkLink { get; set; }
+
+        /// <summary>
+        /// Gets or sets the check payment instructions.
+        /// </summary>
+        /// <value>The check payment instructions.</value>
+        [Required]
+        public virtual string CheckPaymentInstructions { get; set; }
+        
+
         [NotNull]
         public virtual ICollection<Tag> Tags { get; set; }
         [NotNull]

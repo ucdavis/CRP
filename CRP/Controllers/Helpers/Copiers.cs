@@ -18,6 +18,7 @@ namespace CRP.Controllers.Helpers
             // copy the fields from the source
             dest.Name = src.Name;
             dest.Description = src.Description;
+            dest.CheckPaymentInstructions = src.CheckPaymentInstructions;
             dest.CostPerItem = src.CostPerItem;
             dest.Quantity = src.Quantity;
             dest.Expiration = src.Expiration;
