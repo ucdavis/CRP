@@ -39,34 +39,54 @@ namespace CRP.Controllers
             {
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
+            bool checkErrorFound = false;
 
             // go through and process the checks
             foreach (var check in Checks)
             {
                 PaymentLog paymentLog;
+                //check.DisplayCheckInvalidMessage = false;
+                //if (check.Id <= 0 && check.Accepted && (string.IsNullOrEmpty(check.Name) || string.IsNullOrEmpty(check.Name.Trim()) || check.Amount <= 0.0m))
+                //{                    
+                //    check.DisplayCheckInvalidMessage = true;
+                //    checkErrorFound = true;
+                //}
 
-                if (check.Id <= 0 && check.Accepted && (string.IsNullOrEmpty(check.Name) || string.IsNullOrEmpty(check.Name.Trim()) || check.Amount <= 0.0m))
-                {
-                    ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
-                }
-
+                //Invalid ones will be rolled back from the record and not saved.
                 // new check that is considered accepted
-                if (check.Id <= 0 && check.Accepted && !string.IsNullOrEmpty(check.Name) && check.Amount > 0.0m)
+                if (check.Id <= 0 && check.Accepted) // && !string.IsNullOrEmpty(check.Name) && check.Amount > 0.0m)
                 {
-                    paymentLog = Copiers.CopyCheckValues(check, new PaymentLog());
-                    paymentLog.Check = true;
-                    transaction.AddPaymentLog(paymentLog);
+                    //If all these are empty, they probably just don't want it.
+                    if (!string.IsNullOrEmpty(check.Name) || check.Amount != 0 || !string.IsNullOrEmpty(check.Notes))
+                    {
+                        paymentLog = Copiers.CopyCheckValues(check, new PaymentLog());
+                        paymentLog.Check = true;
+                        if (!paymentLog.IsValid())
+                        {
+                            paymentLog.DisplayCheckInvalidMessage = true;
+                            checkErrorFound = true;
+                        }
+                        transaction.AddPaymentLog(paymentLog);
+                    }
                 }
                 // update an existing one
                 else if (check.Id > 0)
                 {
                     var tempCheck = Repository.OfType<PaymentLog>().GetNullableByID(check.Id);
                     paymentLog = Copiers.CopyCheckValues(check, tempCheck);
-                    if (paymentLog.Id > 0 && paymentLog.Accepted && (string.IsNullOrEmpty(paymentLog.Name) || string.IsNullOrEmpty(paymentLog.Name.Trim()) || paymentLog.Amount <= 0.0m))
+                    if (paymentLog.Id > 0 && paymentLog.Accepted)// && (string.IsNullOrEmpty(paymentLog.Name) || string.IsNullOrEmpty(paymentLog.Name.Trim()) || paymentLog.Amount <= 0.0m))
                     {
-                        ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
+                        if (!paymentLog.IsValid())
+                        {
+                            paymentLog.DisplayCheckInvalidMessage = true;
+                            checkErrorFound = true;
+                        }
                     }
                 }
+            }
+            if (checkErrorFound)
+            {
+                ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
             }
 
             //figure out the total of the checks

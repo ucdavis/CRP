@@ -29,6 +29,7 @@ namespace CRP.Core.Domain
             GatewayTransactionIdRequired = false;
             CardTypeRequired = false;
             CheckOrCredit = false;
+            DisplayCheckInvalidMessage = false;
         }
 
         /// <summary>
@@ -145,6 +146,15 @@ namespace CRP.Core.Domain
                 AmountRequired = false;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [display check invalid message].
+        /// This is not is the database, it is used in the view model 
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [display check invalid message]; otherwise, <c>false</c>.
+        /// </value>
+        public virtual bool DisplayCheckInvalidMessage { get; set; }
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "Check number required when credit card not used.")]

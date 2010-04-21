@@ -5,6 +5,9 @@
 <%= Html.Hidden("Id", Model.Id) %>
 <%= Html.Hidden("Accepted", Model.Accepted, new {@class="accepted-field"}) %>
 <ul>
+<% if (Model.DisplayCheckInvalidMessage) {%>
+<li>*There is a problem with this check</li>
+<%} %>
 <li>
     <label for="Name">Payee:</label><br />
     <%= Html.TextBox("Name", Model.Name) %>
