@@ -27,6 +27,8 @@ namespace CRP.Core.Domain
             UserReusable = false;
 
             Questions = new List<Question>();
+            Items = new List<ItemQuestionSet>();
+            ItemTypes = new List<ItemTypeQuestionSet>();
         }
             
         [Required]
@@ -43,8 +45,11 @@ namespace CRP.Core.Domain
         public virtual bool IsActive { get; set; }
 
         //public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
+        [NotNull]
         public virtual ICollection<Question> Questions { get; set; }
+        [NotNull]
         public virtual ICollection<ItemQuestionSet> Items { get; set; }
+        [NotNull]
         public virtual ICollection<ItemTypeQuestionSet> ItemTypes { get; set; }
 
         public virtual void AddQuestion(Question question)
@@ -53,6 +58,40 @@ namespace CRP.Core.Domain
             question.Order = Questions.Count + 1;
 
             Questions.Add(question);
+        }
+
+        public virtual void RemoveQuestion(Question question)
+        {
+            if (Questions.Contains(question))
+            {
+                Questions.Remove(question);
+            }
+        }
+
+        //TODO: Review.
+        public virtual void AddItems(ItemQuestionSet itemQuestionSet)
+        {
+            itemQuestionSet.QuestionSet = this;
+            Items.Add(itemQuestionSet);
+        }
+        public virtual void RemoveItems(ItemQuestionSet itemQuestionSet)
+        {
+            if(Items.Contains(itemQuestionSet))
+            {
+                Items.Remove(itemQuestionSet);
+            }
+        }
+        public virtual void AddItemTypes(ItemTypeQuestionSet itemTypeQuestionSet)
+        {
+            itemTypeQuestionSet.QuestionSet = this;
+            ItemTypes.Add(itemTypeQuestionSet);
+        }
+        public virtual void RemoveItemTypes(ItemTypeQuestionSet itemTypeQuestionSet)
+        {
+            if(ItemTypes.Contains(itemTypeQuestionSet))
+            {
+                ItemTypes.Remove(itemTypeQuestionSet);
+            }
         }
 
         /// <summary>

@@ -401,7 +401,7 @@ namespace CRP.Tests.Core
             {
                 var validEntity = CreateValidEntities.School(i + 1);
                 validEntity.SetIdTo((i + 1).ToString());
-                schoolRepository.EnsurePersistent(validEntity);
+                schoolRepository.EnsurePersistent(validEntity, true);
             }
         }
         

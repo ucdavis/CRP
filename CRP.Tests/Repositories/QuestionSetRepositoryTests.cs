@@ -524,6 +524,1065 @@ namespace CRP.Tests.Repositories
         }
         #endregion UserReusable Tests
 
+        #region School Tests
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestSchoolWithNewValueDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.School = new School();
+                questionSet.CollegeReusable = true;
+                questionSet.UserReusable = false;
+                questionSet.SystemReusable = false;
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: CRP.Core.Domain.School, Entity: CRP.Core.Domain.School", ex.Message);
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestWhenSchoolIsNullSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = false;
+            questionSet.SystemReusable = false;
+            questionSet.UserReusable = true;
+            questionSet.School = null;
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(questionSet.School);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestWhenSchoolIsNotNullSaves()
+        {
+            #region Arrange
+            LoadSchools(1);
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = true;
+            questionSet.SystemReusable = false;
+            questionSet.UserReusable = false;
+            questionSet.School = SchoolRepository.GetNullableByID("1");
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(questionSet.School);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert	
+        }
+        #endregion Valid Tests
+
+        #region CRUD Tests
+
+        [TestMethod]
+        public void TestDeleteQuestionSetDoesNotCascadeToSchool()
+        {
+            #region Arrange
+            SchoolRepository.DbContext.BeginTransaction();
+            LoadSchools(3);
+            SchoolRepository.DbContext.CommitTransaction();
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = true;
+            questionSet.SystemReusable = false;
+            questionSet.UserReusable = false;
+            questionSet.School = SchoolRepository.GetNullableByID("1");
+
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            Assert.AreEqual(3, SchoolRepository.GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.Remove(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, SchoolRepository.GetAll().Count);
+            #endregion Assert		
+        }
+        #endregion CRUD Tests
+        #endregion School Tests
+
+        #region User Tests
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestUserWithNewValueDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.User = new User();
+
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: CRP.Core.Domain.User, Entity: CRP.Core.Domain.User", ex.Message);
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestWhenUserIsNullSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.User = null;
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(questionSet.School);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestWhenUserIsNotNullSaves()
+        {
+            #region Arrange
+            LoadUsers(1);
+            var questionSet = GetValid(9);
+            questionSet.User = Repository.OfType<User>().GetNullableByID(1);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(questionSet.User);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Tests
+
+        #region CRUD Tests
+
+        [TestMethod]
+        public void TestDeleteQuestionSetDoesNotCascadeToUser()
+        {
+            #region Arrange
+            LoadUsers(3);
+            var questionSet = GetValid(9);
+            questionSet.User = Repository.OfType<User>().GetNullableByID(1);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            Assert.AreEqual(3, Repository.OfType<User>().GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.Remove(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, Repository.OfType<User>().GetAll().Count);
+            #endregion Assert
+        }
+        #endregion CRUD Tests
+        #endregion User Tests
+
+        #region IsActive Tests
+
+        /// <summary>
+        /// Tests the IsActive when true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsActiveWhenTrueSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.IsActive = true;
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(questionSet.IsActive);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the IsActive when false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsActiveWhenFalseSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.IsActive = false;
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(questionSet.IsActive);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion IsActive Tests
+
+        #region Questions Collections Tests
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestQuestionsWithNullValueDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.Questions = null;
+
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Questions: may not be empty");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                #endregion Assert
+                throw;
+            }		
+        }
+       
+        #endregion Invalid Tests
+        #region valid Tests
+
+        [TestMethod]
+        public void TestQuestionsWithNewButEmptyListSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.Questions = new List<Question>();
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, questionSet.Questions.Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestQuestionsWithNonEmptyListSaves()
+        {
+            #region Arrange
+            LoadQuestionTypes(1);
+            LoadQuestions(1);
+            var questionSet = GetValid(9);
+            questionSet.AddQuestion(Repository.OfType<Question>().GetNullableByID(1));
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, questionSet.Questions.Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion valid Tests
+        #region CRUD Tests
+
+        [TestMethod]
+        public void TestQuestionCascadesSave()
+        {
+            #region Arrange
+            LoadQuestionTypes(1);
+            var questionSet = GetValid(9);
+            questionSet.AddQuestion(CreateValidEntities.Question(1));
+            questionSet.AddQuestion(CreateValidEntities.Question(2));
+            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            Assert.AreEqual(0, Repository.OfType<Question>().GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, Repository.OfType<Question>().GetAll().Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert	
+        }
+
+
+        [TestMethod]
+        public void TestRemoveQuestionCascadesDelete()
+        {
+            #region Arrange
+            LoadQuestionTypes(1);
+            var questionSet = GetValid(9);
+            questionSet.AddQuestion(CreateValidEntities.Question(1));
+            questionSet.AddQuestion(CreateValidEntities.Question(2));
+            questionSet.AddQuestion(CreateValidEntities.Question(3));
+            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            questionSet.Questions.ElementAt(2).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            Assert.AreEqual(3, Repository.OfType<Question>().GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            questionSet.RemoveQuestion(questionSet.Questions.ElementAt(1));
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, questionSet.Questions.Count);
+            Assert.AreEqual(2, Repository.OfType<Question>().GetAll().Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert		
+        }
+        [TestMethod]
+        public void TestRemoveQuestionSetCascadesDelete()
+        {
+            #region Arrange
+            LoadQuestionTypes(1);
+            var questionSet = GetValid(9);
+            questionSet.AddQuestion(CreateValidEntities.Question(1));
+            questionSet.AddQuestion(CreateValidEntities.Question(2));
+            questionSet.AddQuestion(CreateValidEntities.Question(3));
+            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            questionSet.Questions.ElementAt(2).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            Assert.AreEqual(3, Repository.OfType<Question>().GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.Remove(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, Repository.OfType<Question>().GetAll().Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion CRUD Tests
+        #endregion Questions Collections Tests
+
+        #region Items Collections Tests
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestItemsWithNullValueDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.Items = null;
+
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Items: may not be empty");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                #endregion Assert
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+        #region valid Tests
+
+        [TestMethod]
+        public void TestItemsWithNewButEmptyListSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.Items = new List<ItemQuestionSet>();
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, questionSet.Items.Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestItemsWithNonEmptyListSaves()
+        {
+            #region Arrang
+            LoadItemTypes(1);
+            LoadUnits(1);
+            LoadItems(1);
+            var questionSet = GetValid(9);
+            questionSet.AddItems(CreateValidEntities.ItemQuestionSet(1));
+            questionSet.Items.ElementAt(0).Item = Repository.OfType<Item>().GetNullableByID(1);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, questionSet.Items.Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion valid Tests
+        #region CRUD Tests
+
+        [TestMethod]
+        public void TestItemsCascadesSave()
+        {
+            #region Arrange
+            LoadItemTypes(1);
+            LoadUnits(1);
+            LoadItems(1);
+            var questionSet = GetValid(9);
+            questionSet.AddItems(CreateValidEntities.ItemQuestionSet(1));
+            questionSet.AddItems(CreateValidEntities.ItemQuestionSet(2));
+            foreach (var itemQuestionSet in questionSet.Items)
+            {
+                itemQuestionSet.Item = Repository.OfType<Item>().GetNullableByID(1);
+            }
+            Assert.AreEqual(0, Repository.OfType<ItemQuestionSet>().GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, Repository.OfType<ItemQuestionSet>().GetAll().Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestRemoveItemsDoesNotCascadeDelete()
+        {
+            #region Arrange
+            LoadItemTypes(1);
+            LoadUnits(1);
+            LoadItems(1);
+            var questionSet = GetValid(9);
+            questionSet.AddItems(CreateValidEntities.ItemQuestionSet(1));
+            questionSet.AddItems(CreateValidEntities.ItemQuestionSet(2));
+            questionSet.AddItems(CreateValidEntities.ItemQuestionSet(3));
+            foreach (var itemQuestionSet in questionSet.Items)
+            {
+                itemQuestionSet.Item = Repository.OfType<Item>().GetNullableByID(1);
+            }
+
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+
+            Assert.AreEqual(3, Repository.OfType<ItemQuestionSet>().GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            questionSet.RemoveItems(questionSet.Items.ElementAt(1));
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, questionSet.Items.Count);
+            Assert.AreEqual(3, Repository.OfType<ItemQuestionSet>().GetAll().Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+       
+        #endregion CRUD Tests
+        #endregion Items Collections Tests
+
+        #region ItemTypes Collections Tests
+        #region Invalid Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestItemTypesWithNullValueDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.ItemTypes = null;
+
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("ItemTypes: may not be empty");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                #endregion Assert
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+        #region valid Tests
+
+        [TestMethod]
+        public void TestItemTypesWithNewButEmptyListSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.ItemTypes = new List<ItemTypeQuestionSet>();
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, questionSet.ItemTypes.Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestItemTypesWithNonEmptyListSaves()
+        {
+            #region Arrange
+            LoadItemTypes(1);
+            var questionSet = GetValid(9);
+            questionSet.AddItemTypes(CreateValidEntities.ItemTypeQuestionSet(1));
+            foreach (var itemTypeQuestionSet in questionSet.ItemTypes)
+            {
+                itemTypeQuestionSet.QuestionSet = questionSet;
+                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+            }
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, questionSet.ItemTypes.Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion valid Tests
+        #region CRUD Tests
+
+        [TestMethod]
+        public void TestItemTypesCascadesSave()
+        {
+            #region Arrange
+            LoadItemTypes(1);
+            var questionSet = GetValid(9);
+            questionSet.AddItemTypes(CreateValidEntities.ItemTypeQuestionSet(1));
+            questionSet.AddItemTypes(CreateValidEntities.ItemTypeQuestionSet(2));
+            
+            foreach (var itemTypeQuestionSet in questionSet.ItemTypes)
+            {
+                itemTypeQuestionSet.QuestionSet = questionSet;
+                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+            }
+            Assert.AreEqual(0, Repository.OfType<ItemTypeQuestionSet>().GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, Repository.OfType<ItemTypeQuestionSet>().GetAll().Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestRemoveItemTypesDoesNotCascadeDelete()
+        {
+            #region Arrange
+            LoadItemTypes(1);
+            var questionSet = GetValid(9);
+            questionSet.AddItemTypes(CreateValidEntities.ItemTypeQuestionSet(1));
+            questionSet.AddItemTypes(CreateValidEntities.ItemTypeQuestionSet(2));
+            questionSet.AddItemTypes(CreateValidEntities.ItemTypeQuestionSet(3));
+ 
+            foreach (var itemTypeQuestionSet in questionSet.ItemTypes)
+            {
+                itemTypeQuestionSet.QuestionSet = questionSet;
+                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+            }
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+
+            Assert.AreEqual(3, Repository.OfType<ItemTypeQuestionSet>().GetAll().Count);
+            #endregion Arrange
+
+            #region Act
+            questionSet.RemoveItemTypes(questionSet.ItemTypes.ElementAt(1));
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2, questionSet.ItemTypes.Count);
+            Assert.AreEqual(3, Repository.OfType<ItemTypeQuestionSet>().GetAll().Count);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestItemTypesMappingProblem()
+        {
+            LoadItemTypes(1);
+            var itemTypeQuestionSet = CreateValidEntities.ItemTypeQuestionSet(1);
+            var validEntity = GetValid(null);
+            validEntity.ItemTypes = new List<ItemTypeQuestionSet>();
+            validEntity.ItemTypes.Add(itemTypeQuestionSet);
+            itemTypeQuestionSet.QuestionSet = validEntity;
+            itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+
+            Repository.OfType<QuestionSet>().DbContext.BeginTransaction();
+            Repository.OfType<QuestionSet>().EnsurePersistent(validEntity);
+            Assert.IsFalse(validEntity.IsTransient());
+            Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
+
+
+            #region Description of how this problem happened
+            /*
+             * This was the mapping file that was wrong (class file):
+    <bag name="ItemTypes" table="ItemTypeQuestionSets" cascade="all-delete-orphan" inverse="true">
+      <key column="QuestionSetId" />
+      <many-to-many column="ItemTypeId" class="CRP.Core.Domain.ItemType, CRP.Core" />
+    </bag>
+             
+             */
+
+            /* before the mapping fix, this generated the following exception:
+Test method CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem threw exception:  NHibernate.PropertyAccessException: Exception occurred getter of CRP.Core.Domain.ItemType.ExtendedProperties --->  System.Reflection.TargetException: Object does not match target type..
+at System.Reflection.RuntimeMethodInfo.CheckConsistency(Object target)
+at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+at System.Reflection.RuntimePropertyInfo.GetValue(Object obj, BindingFlags invokeAttr, Binder binder, Object[] index, CultureInfo culture)
+at System.Reflection.RuntimePropertyInfo.GetValue(Object obj, Object[] index)
+at NHibernate.Properties.BasicPropertyAccessor.BasicGetter.Get(Object target)
+--- End of inner exception stack trace ---
+at NHibernate.Properties.BasicPropertyAccessor.BasicGetter.Get(Object target)
+at NHibernate.Tuple.Entity.AbstractEntityTuplizer.GetPropertyValue(Object entity, Int32 i)
+at NHibernate.Persister.Entity.AbstractEntityPersister.GetPropertyValue(Object obj, Int32 i, EntityMode entityMode)
+at NHibernate.Engine.Cascade.CascadeOn(IEntityPersister persister, Object parent, Object anything)
+at NHibernate.Event.Default.AbstractSaveEventListener.CascadeBeforeSave(IEventSource source, IEntityPersister persister, Object entity, Object anything)
+at NHibernate.Event.Default.AbstractSaveEventListener.PerformSaveOrReplicate(Object entity, EntityKey key, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.AbstractSaveEventListener.PerformSave(Object entity, Object id, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.AbstractSaveEventListener.SaveWithGeneratedId(Object entity, String entityName, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.SaveWithGeneratedOrRequestedId(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.EntityIsTransient(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.PerformSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.OnSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Impl.SessionImpl.FireSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Impl.SessionImpl.SaveOrUpdate(String entityName, Object obj)
+at NHibernate.Engine.CascadingAction.SaveUpdateCascadingAction.Cascade(IEventSource session, Object child, String entityName, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeToOne(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeAssociation(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeProperty(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeCollectionElements(Object child, CollectionType collectionType, CascadeStyle style, IType elemType, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeCollection(Object child, CascadeStyle style, Object anything, CollectionType type)
+at NHibernate.Engine.Cascade.CascadeAssociation(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeProperty(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
+at NHibernate.Engine.Cascade.CascadeOn(IEntityPersister persister, Object parent, Object anything)
+at NHibernate.Event.Default.AbstractSaveEventListener.CascadeAfterSave(IEventSource source, IEntityPersister persister, Object entity, Object anything)
+at NHibernate.Event.Default.AbstractSaveEventListener.PerformSaveOrReplicate(Object entity, EntityKey key, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.AbstractSaveEventListener.PerformSave(Object entity, Object id, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.AbstractSaveEventListener.SaveWithGeneratedId(Object entity, String entityName, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.SaveWithGeneratedOrRequestedId(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.EntityIsTransient(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.PerformSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.OnSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Impl.SessionImpl.FireSaveOrUpdate(SaveOrUpdateEvent event)
+at NHibernate.Impl.SessionImpl.SaveOrUpdate(Object obj)
+at UCDArch.Data.NHibernate.RepositoryWithTypedId`2.EnsurePersistent(T entity, Boolean forceSave)
+at UCDArch.Data.NHibernate.RepositoryWithTypedId`2.EnsurePersistent(T entity)
+at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem() in QuestionSetRepositoryTests.cs: line 233
+             */
+            #endregion Description of how this problem happened
+        }
+        #endregion CRUD Tests
+        #endregion Items Collections Tests
+
+        #region CollegeReusableSchool Tests
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestCollegeReusableAndSchoolIsNullDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.CollegeReusable = true;
+                questionSet.SystemReusable = false;
+                questionSet.UserReusable = false;
+                questionSet.School = null;
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("CollegeReusableSchool: Must have school if college reusable");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                #endregion Assert
+                throw;
+            }
+        }
+
+        #endregion CollegeReusableSchool Tests
+
+        #region Reusability Tests
+
+        [TestMethod]
+        public void TestReusabilityWhenAllAreFalseSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = false;
+            questionSet.SystemReusable = false;
+            questionSet.UserReusable = false;
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestReusabilityWhenAllAreTrueDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                LoadSchools(1);
+                questionSet = GetValid(9);
+                questionSet.CollegeReusable = true;
+                questionSet.SystemReusable = true;
+                questionSet.UserReusable = true;
+                questionSet.School = SchoolRepository.GetNullableByID("1");
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Reusability: Only one reusable flag may be set to true");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                #endregion Assert
+                throw;
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestReusabilityWhenTwoAreTrueDoesNotSave1()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                LoadSchools(1);
+                questionSet = GetValid(9);
+                questionSet.CollegeReusable = false;
+                questionSet.SystemReusable = true;
+                questionSet.UserReusable = true;
+                questionSet.School = SchoolRepository.GetNullableByID("1");
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Reusability: Only one reusable flag may be set to true");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                #endregion Assert
+                throw;
+            }
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestReusabilityWhenTwoAreTrueDoesNotSave2()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                LoadSchools(1);
+                questionSet = GetValid(9);
+                questionSet.CollegeReusable = true;
+                questionSet.SystemReusable = false;
+                questionSet.UserReusable = true;
+                questionSet.School = SchoolRepository.GetNullableByID("1");
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Reusability: Only one reusable flag may be set to true");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                #endregion Assert
+                throw;
+            }
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestReusabilityWhenTwoAreTrueDoesNotSave3()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                LoadSchools(1);
+                questionSet = GetValid(9);
+                questionSet.CollegeReusable = true;
+                questionSet.SystemReusable = true;
+                questionSet.UserReusable = false;
+                questionSet.School = SchoolRepository.GetNullableByID("1");
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Reusability: Only one reusable flag may be set to true");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                #endregion Assert
+                throw;
+            }
+        }
+        #endregion Reusability Tests
+
         #region Reflection of Database
 
         /// <summary>
@@ -537,17 +1596,40 @@ namespace CRP.Tests.Repositories
 
             var expectedFields = new List<NameAndType>();
             expectedFields.Add(new NameAndType("CollegeReusable", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("CollegeReusableSchool", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Must have school if college reusable\")]"
+            }));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                  "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("Items", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ItemQuestionSet]", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("ItemTypes", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ItemTypeQuestionSet]", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]", 
                  "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("Questions", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Question]", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("Reusability", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Only one reusable flag may be set to true\")]"
+            }));
+            expectedFields.Add(new NameAndType("School", "CRP.Core.Domain.School", new List<string>()));
             expectedFields.Add(new NameAndType("SystemReusable", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("User", "CRP.Core.Domain.User", new List<string>()));
             expectedFields.Add(new NameAndType("UserReusable", "System.Boolean", new List<string>()));
             #endregion Arrange
 
@@ -619,79 +1701,7 @@ namespace CRP.Tests.Repositories
         }
 
 
-        [TestMethod]
-        public void TestItemTypesMappingProblem()
-        {
-            LoadItemTypes(1);
-            var itemTypeQuestionSet = CreateValidEntities.ItemTypeQuestionSet(1);
-            var validEntity = GetValid(null);
-            validEntity.ItemTypes = new List<ItemTypeQuestionSet>();
-            validEntity.ItemTypes.Add(itemTypeQuestionSet);
-            itemTypeQuestionSet.QuestionSet = validEntity;
-            itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
 
-            Repository.OfType<QuestionSet>().DbContext.BeginTransaction();
-            Repository.OfType<QuestionSet>().EnsurePersistent(validEntity);
-            Assert.IsFalse(validEntity.IsTransient());
-            Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
-
-
-            /*
-             * This was the mapping file that was wrong (class file):
-    <bag name="ItemTypes" table="ItemTypeQuestionSets" cascade="all-delete-orphan" inverse="true">
-      <key column="QuestionSetId" />
-      <many-to-many column="ItemTypeId" class="CRP.Core.Domain.ItemType, CRP.Core" />
-    </bag>
-             
-             */
-
-            /* before the mapping fix, this generated the following exception:
-Test method CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem threw exception:  NHibernate.PropertyAccessException: Exception occurred getter of CRP.Core.Domain.ItemType.ExtendedProperties --->  System.Reflection.TargetException: Object does not match target type..
-at System.Reflection.RuntimeMethodInfo.CheckConsistency(Object target)
-at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
-at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-at System.Reflection.RuntimePropertyInfo.GetValue(Object obj, BindingFlags invokeAttr, Binder binder, Object[] index, CultureInfo culture)
-at System.Reflection.RuntimePropertyInfo.GetValue(Object obj, Object[] index)
-at NHibernate.Properties.BasicPropertyAccessor.BasicGetter.Get(Object target)
---- End of inner exception stack trace ---
-at NHibernate.Properties.BasicPropertyAccessor.BasicGetter.Get(Object target)
-at NHibernate.Tuple.Entity.AbstractEntityTuplizer.GetPropertyValue(Object entity, Int32 i)
-at NHibernate.Persister.Entity.AbstractEntityPersister.GetPropertyValue(Object obj, Int32 i, EntityMode entityMode)
-at NHibernate.Engine.Cascade.CascadeOn(IEntityPersister persister, Object parent, Object anything)
-at NHibernate.Event.Default.AbstractSaveEventListener.CascadeBeforeSave(IEventSource source, IEntityPersister persister, Object entity, Object anything)
-at NHibernate.Event.Default.AbstractSaveEventListener.PerformSaveOrReplicate(Object entity, EntityKey key, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
-at NHibernate.Event.Default.AbstractSaveEventListener.PerformSave(Object entity, Object id, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
-at NHibernate.Event.Default.AbstractSaveEventListener.SaveWithGeneratedId(Object entity, String entityName, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
-at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.SaveWithGeneratedOrRequestedId(SaveOrUpdateEvent event)
-at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.EntityIsTransient(SaveOrUpdateEvent event)
-at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.PerformSaveOrUpdate(SaveOrUpdateEvent event)
-at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.OnSaveOrUpdate(SaveOrUpdateEvent event)
-at NHibernate.Impl.SessionImpl.FireSaveOrUpdate(SaveOrUpdateEvent event)
-at NHibernate.Impl.SessionImpl.SaveOrUpdate(String entityName, Object obj)
-at NHibernate.Engine.CascadingAction.SaveUpdateCascadingAction.Cascade(IEventSource session, Object child, String entityName, Object anything, Boolean isCascadeDeleteEnabled)
-at NHibernate.Engine.Cascade.CascadeToOne(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
-at NHibernate.Engine.Cascade.CascadeAssociation(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
-at NHibernate.Engine.Cascade.CascadeProperty(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
-at NHibernate.Engine.Cascade.CascadeCollectionElements(Object child, CollectionType collectionType, CascadeStyle style, IType elemType, Object anything, Boolean isCascadeDeleteEnabled)
-at NHibernate.Engine.Cascade.CascadeCollection(Object child, CascadeStyle style, Object anything, CollectionType type)
-at NHibernate.Engine.Cascade.CascadeAssociation(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
-at NHibernate.Engine.Cascade.CascadeProperty(Object child, IType type, CascadeStyle style, Object anything, Boolean isCascadeDeleteEnabled)
-at NHibernate.Engine.Cascade.CascadeOn(IEntityPersister persister, Object parent, Object anything)
-at NHibernate.Event.Default.AbstractSaveEventListener.CascadeAfterSave(IEventSource source, IEntityPersister persister, Object entity, Object anything)
-at NHibernate.Event.Default.AbstractSaveEventListener.PerformSaveOrReplicate(Object entity, EntityKey key, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
-at NHibernate.Event.Default.AbstractSaveEventListener.PerformSave(Object entity, Object id, IEntityPersister persister, Boolean useIdentityColumn, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
-at NHibernate.Event.Default.AbstractSaveEventListener.SaveWithGeneratedId(Object entity, String entityName, Object anything, IEventSource source, Boolean requiresImmediateIdAccess)
-at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.SaveWithGeneratedOrRequestedId(SaveOrUpdateEvent event)
-at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.EntityIsTransient(SaveOrUpdateEvent event)
-at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.PerformSaveOrUpdate(SaveOrUpdateEvent event)
-at NHibernate.Event.Default.DefaultSaveOrUpdateEventListener.OnSaveOrUpdate(SaveOrUpdateEvent event)
-at NHibernate.Impl.SessionImpl.FireSaveOrUpdate(SaveOrUpdateEvent event)
-at NHibernate.Impl.SessionImpl.SaveOrUpdate(Object obj)
-at UCDArch.Data.NHibernate.RepositoryWithTypedId`2.EnsurePersistent(T entity, Boolean forceSave)
-at UCDArch.Data.NHibernate.RepositoryWithTypedId`2.EnsurePersistent(T entity)
-at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem() in QuestionSetRepositoryTests.cs: line 233
-             */
-        }
 
     }
 }

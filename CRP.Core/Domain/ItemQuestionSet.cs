@@ -30,7 +30,7 @@ namespace CRP.Core.Domain
         public virtual Item Item { get; set; }
         [NotNull]
         [Valid]
-        public virtual QuestionSet QuestionSet { get; set; }
+        public virtual QuestionSet QuestionSet { get; set; } //TODO: Review if this should use [valid]
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
         public virtual int Order { get; set; }
