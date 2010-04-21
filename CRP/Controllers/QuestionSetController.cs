@@ -148,6 +148,7 @@ namespace CRP.Controllers
             //This check MUST happen before we change the name
             if (existingQs.Name == StaticValues.QuestionSet_ContactInformation && existingQs.SystemReusable)
             {
+                Message = "This is a system default question set and cannot be modified";
                 ModelState.AddModelError("Question Set", "This is a system default question set and cannot be modified");
             }
 
