@@ -13,6 +13,7 @@
     </script>
 
     <script src="../../Scripts/ItemEdit.js" type="text/javascript"></script>
+    <script src="../../Scripts/tiny_mce/jquery.tinymce.js" type="text/javascript"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -21,7 +22,7 @@
 
     <% using (Html.BeginForm("Create", "ItemManagement", FormMethod.Post, new { @enctype = "multipart/form-data" }))
        {%>
-    <% Html.RenderPartial("ItemForm"); %>
+    <% Html.RenderPartial("~/Views/Shared/ItemForm.ascx"); %>
     <% } %>
 
     <div>

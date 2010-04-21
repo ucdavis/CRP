@@ -8,7 +8,7 @@
     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
     
     <%--//TODO: Remove (if you want) in place of custom style sheets--%>
-    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-lightness/jquery-ui.css" rel="Stylesheet" type="text/css" media="screen" />
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css" rel="Stylesheet" type="text/css" media="screen" />
     <%= Html.Telerik().StyleSheetRegistrar()
                      .DefaultGroup(group => group.Add("telerik.common.css")
                                                  .Add("telerik.vista.css")
@@ -37,7 +37,7 @@
             </div>
               
             <div id="logindisplay">
-                <% Html.RenderPartial("LogOnUserControl"); %>
+                <% Html.RenderPartial("~/Views/Shared/LogOnUserControl.ascx"); %>
             </div> 
             
             <div id="menucontainer">

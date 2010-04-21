@@ -2,6 +2,7 @@ using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using UCDArch.Web.Controller;
+using MvcContrib;
 
 namespace CRP.Controllers
 {
@@ -15,10 +16,32 @@ namespace CRP.Controllers
             return View();
         }
 
+
+        /// <summary>
+        /// GET: /Item/List/
+        /// </summary>
+        /// <returns></returns>
         public ActionResult List()
         {
             var viewModel = BrowseItemsViewModel.Create(Repository);
             return View(viewModel);
+        }
+
+        /// <summary>
+        /// GET /Item/Details/{id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Details(int id)
+        {
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+
+            if (item == null)
+            {
+                return this.RedirectToAction(a => a.List());
+            }
+
+            return View(item);
         }
 
         /// <summary>

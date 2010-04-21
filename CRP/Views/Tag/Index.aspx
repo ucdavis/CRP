@@ -2,12 +2,12 @@
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-	List
+	Index
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <% Html.RenderPartial("~/Views/Shared/TagView.ascx", Model.Tags); %>
+    <%= Html.ActionLink<ItemController>(a => a.List(), "View All") %>
 
     <% Html.RenderPartial("~/Views/Shared/ItemBrowse.ascx", Model.Items); %>
 

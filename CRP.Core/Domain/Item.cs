@@ -97,6 +97,13 @@ namespace CRP.Core.Domain
             }
         }
 
+        public virtual int Sold { 
+            get
+            {
+                return Quantity - Transactions.Sum(a => a.Quantity);
+            }
+        }
+
         public virtual void AddTag(Tag tag)
         {
             Tags.Add(tag);

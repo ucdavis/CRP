@@ -10,7 +10,7 @@
 
     <property name="Name" column="Name" />
 
-    <bag name="Items" table="ItemsXTags" cascade="none" fetch="join">
+    <bag name="Items" table="ItemsXTags" cascade="none" >
       <key column="TagId" />
       <many-to-many column="ItemId" class="CRP.Core.Domain.Item, CRP.Core" />
     </bag>

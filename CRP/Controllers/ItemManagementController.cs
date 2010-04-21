@@ -68,6 +68,7 @@ namespace CRP.Controllers
         /// <param name="item"></param>
         /// <returns></returns>
         [AcceptPost]
+        [ValidateInput(false)]
         public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags)
         {
             // get the file and add it into the item
@@ -174,19 +175,20 @@ namespace CRP.Controllers
         /// <param name="tags"></param>
         /// <returns></returns>
         [AcceptPost]
+        [ValidateInput(false)]
         public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags)
         {
+            var destItem = Repository.OfType<Item>().GetNullableByID(id);
+
+            destItem = Copiers.CopyItem(Repository, item, destItem, extendedProperties, tags);//PopulateObject.Item(Repository, item, extendedProperties, tags);
+
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
                 var file = Request.Files[0];
                 var reader = new BinaryReader(file.InputStream);
-                item.Image = reader.ReadBytes(file.ContentLength);
+                destItem.Image = reader.ReadBytes(file.ContentLength);
             }
-
-            var destItem = Repository.OfType<Item>().GetNullableByID(id);
-
-            destItem = Copiers.CopyItem(Repository, item, destItem, extendedProperties, tags);//PopulateObject.Item(Repository, item, extendedProperties, tags);
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destItem.ValidationResults());
 

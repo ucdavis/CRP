@@ -145,6 +145,8 @@
     <Compile Include="Controllers\ItemManagementController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
+    <Compile Include="Controllers\TagController.cs" />
+    <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
     <Compile Include="Controllers\ViewModels\DisplayProfileViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ExtendedPropertyViewModel.cs" />
@@ -213,6 +215,7 @@
     <Content Include="Global.asax" />
     <Content Include="Images\minus.png" />
     <Content Include="Images\plus.png" />
+    <Content Include="Images\register.png" />
     <Content Include="Scripts\ItemEdit.js" />
     <Content Include="Scripts\tiny_mce\jquery.tinymce.js" />
     <Content Include="Scripts\tiny_mce\langs\en.js" />
@@ -469,8 +472,10 @@
     <Content Include="Views\ExtendedProperty\Create.aspx" />
     <Content Include="Views\ItemManagement\Create.aspx" />
     <Content Include="Views\ItemManagement\Edit.aspx" />
-    <Content Include="Views\ItemManagement\ItemForm.ascx" />
+    <Content Include="Views\Item\Details.aspx" />
+    <Content Include="Views\Shared\ItemForm.ascx" />
     <Content Include="Views\ItemManagement\List.aspx" />
+    <Content Include="Views\Shared\ItemBrowse.ascx" />
     <Content Include="Views\Item\List.aspx" />
     <Content Include="Views\QuestionSet\Create.aspx" />
     <Content Include="Views\QuestionSet\Edit.aspx" />
@@ -478,6 +483,8 @@
     <Content Include="Views\QuestionSet\LinkToItemType.aspx" />
     <Content Include="Views\QuestionSet\List.aspx" />
     <Content Include="Views\Question\Create.aspx" />
+    <Content Include="Views\Shared\TagView.ascx" />
+    <Content Include="Views\Tag\Index.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.3.2.js" />
@@ -510,6 +517,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Partials\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />

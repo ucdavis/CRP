@@ -37,7 +37,7 @@
                {%>
 
             <%
-             Html.RenderPartial("ItemForm");%>
+                Html.RenderPartial("~/Views/Shared/ItemForm.ascx");%>
 
             <% }%>
         
