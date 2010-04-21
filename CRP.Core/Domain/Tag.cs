@@ -27,7 +27,7 @@ namespace CRP.Core.Domain
         [Required]
         [Length(50)]
         public virtual string Name { get; set; }
-
+        [NotNull]
         public virtual IEnumerable<Item> Items { get; set; }
     }
 }

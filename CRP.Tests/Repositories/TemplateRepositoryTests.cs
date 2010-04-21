@@ -1,16 +1,28 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
+using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UCDArch.Core.PersistanceSupport;
+using UCDArch.Data.NHibernate;
+using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
 {
     [TestClass]
     public class TemplateRepositoryTests : AbstractRepositoryTests<Template, int>
     {
+        protected IRepository<Template> TemplateRepository { get; set; }
+
         #region Init and Overrides
 
+        public TemplateRepositoryTests()
+        {
+            TemplateRepository = new Repository<Template>();
+        }
         /// <summary>
         /// Gets the valid entity of type T
         /// </summary>
@@ -83,6 +95,346 @@ namespace CRP.Tests.Repositories
 
         #endregion Init and Overrides
 
-        //TODO: Other tests
+        #region Text Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the Text with null value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestTextWithNullValueDoesNotSave()
+        {
+            Template template = null;
+            try
+            {
+                #region Arrange
+                template = GetValid(9);
+                template.Text = null;
+                #endregion Arrange
+
+                #region Act
+                TemplateRepository.DbContext.BeginTransaction();
+                TemplateRepository.EnsurePersistent(template);
+                TemplateRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(template);
+                var results = template.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Text: may not be null or empty");
+                Assert.IsTrue(template.IsTransient());
+                Assert.IsFalse(template.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the Text with empty string does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestTextWithEmptyStringDoesNotSave()
+        {
+            Template template = null;
+            try
+            {
+                #region Arrange
+                template = GetValid(9);
+                template.Text = string.Empty;
+                #endregion Arrange
+
+                #region Act
+                TemplateRepository.DbContext.BeginTransaction();
+                TemplateRepository.EnsurePersistent(template);
+                TemplateRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(template);
+                var results = template.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Text: may not be null or empty");
+                Assert.IsTrue(template.IsTransient());
+                Assert.IsFalse(template.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the Text with spaces only does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestTextWithSpacesOnlyDoesNotSave()
+        {
+            Template template = null;
+            try
+            {
+                #region Arrange
+                template = GetValid(9);
+                template.Text = " ";
+                #endregion Arrange
+
+                #region Act
+                TemplateRepository.DbContext.BeginTransaction();
+                TemplateRepository.EnsurePersistent(template);
+                TemplateRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(template);
+                var results = template.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Text: may not be null or empty");
+                Assert.IsTrue(template.IsTransient());
+                Assert.IsFalse(template.IsValid());
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the Text with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestTextWithOneCharacterSaves()
+        {
+            #region Arrange
+            var template = GetValid(9);
+            template.Text = "x";
+            #endregion Arrange
+
+            #region Act
+            TemplateRepository.DbContext.BeginTransaction();
+            TemplateRepository.EnsurePersistent(template);
+            TemplateRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(template.IsTransient());
+            Assert.IsTrue(template.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the Text with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestTextWithLongValueSaves()
+        {
+            #region Arrange
+            var template = GetValid(9);
+            template.Text = "x".RepeatTimes(999);
+            #endregion Arrange
+
+            #region Act
+            TemplateRepository.DbContext.BeginTransaction();
+            TemplateRepository.EnsurePersistent(template);
+            TemplateRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(999, template.Text.Length);
+            Assert.IsFalse(template.IsTransient());
+            Assert.IsTrue(template.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion Name Tests
+
+        #region Item Tests
+
+        #region Invalid Tests
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestItemWithNullValueDoesNotSave()
+        {
+            Template template = null;
+            try
+            {
+                #region Arrange
+                template = GetValid(9);
+                template.Item = null;
+                #endregion Arrange
+
+                #region Act
+                TemplateRepository.DbContext.BeginTransaction();
+                TemplateRepository.EnsurePersistent(template);
+                TemplateRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(template);
+                var results = template.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Item: may not be empty");
+                Assert.IsTrue(template.IsTransient());
+                Assert.IsFalse(template.IsValid());
+                throw;
+            }
+        }
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.TransientObjectException))]
+        public void TestItemWithNewValueDoesNotSave()
+        {
+            Template template = null;
+            try
+            {
+                #region Arrange
+                template = GetValid(9);
+                template.Item = new Item();
+                #endregion Arrange
+
+                #region Act
+                TemplateRepository.DbContext.BeginTransaction();
+                TemplateRepository.EnsurePersistent(template);
+                TemplateRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception ex)
+            {
+                #region Assert
+                Assert.IsNotNull(template);
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("object references an unsaved transient instance - save the transient instance before flushing. Type: CRP.Core.Domain.Item, Entity: CRP.Core.Domain.Item", ex.Message);
+                #endregion Assert
+
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Test
+        [TestMethod]
+        public void TestItemWithDifferentValueSaves()
+        {
+            #region Arrange
+            LoadItemTypes(1);
+            LoadUnits(1);
+            LoadItems(3);
+            var template = GetValid(9);
+            template.Item = Repository.OfType<Item>().GetNullableByID(3);
+            #endregion Arrange
+
+            #region Act
+            TemplateRepository.DbContext.BeginTransaction();
+            TemplateRepository.EnsurePersistent(template);
+            TemplateRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreSame(Repository.OfType<Item>().GetNullableByID(3), template.Item);
+            Assert.IsFalse(template.IsTransient());
+            Assert.IsTrue(template.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Test
+        #endregion Item Tests
+
+        #region Default Tests
+
+        /// <summary>
+        /// Tests the Default is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDefaultIsFalseSaves()
+        {
+            #region Arrange
+
+            var template = GetValid(9);
+            template.Default = false;
+
+            #endregion Arrange
+
+            #region Act
+
+            TemplateRepository.DbContext.BeginTransaction();
+            TemplateRepository.EnsurePersistent(template);
+            TemplateRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsFalse(template.Default);
+            Assert.IsFalse(template.IsTransient());
+            Assert.IsTrue(template.IsValid());
+
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the Default is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDefaultIsTrueSaves()
+        {
+            #region Arrange
+
+            var template = GetValid(9);
+            template.Default = true;
+
+            #endregion Arrange
+
+            #region Act
+
+            TemplateRepository.DbContext.BeginTransaction();
+            TemplateRepository.EnsurePersistent(template);
+            TemplateRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsTrue(template.Default);
+            Assert.IsFalse(template.IsTransient());
+            Assert.IsTrue(template.IsValid());
+
+            #endregion Assert
+        }
+
+        #endregion Default Tests
+
+
+        #region Reflection of Database
+
+        /// <summary>
+        /// Tests all fields in the database have been tested.
+        /// If this fails and no other tests, it means that a field has been added which has not been tested above.
+        /// </summary>
+        [TestMethod]
+        public void TestAllFieldsInTheDatabaseHaveBeenTested()
+        {
+            #region Arrange
+
+            var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("Default", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
+            {
+                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("Item", "CRP.Core.Domain.Item", new List<string>
+            { 
+                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("Text", "System.String", new List<string>
+            { 
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
+
+            #endregion Arrange
+
+            AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Template));
+
+        }
+
+        #endregion Reflection of Database
     }
 }

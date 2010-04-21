@@ -126,6 +126,6 @@ namespace CRP.Tests.Repositories
 
         #endregion CRUD Tests
 
-        //TODO: Other Tests
+        //Catbert table, no real reason to test
     }
 }
