@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
@@ -44,7 +45,7 @@ namespace CRP.Tests.Repositories
         }
 
         /// <summary>
-        /// A Qury which will return a single record
+        /// A Query which will return a single record
         /// </summary>
         /// <param name="numberAtEnd"></param>
         /// <returns></returns>
@@ -256,5 +257,90 @@ namespace CRP.Tests.Repositories
         #endregion Payee Tests
 
         #endregion Validation Tests
+
+        #region Fields Without Validation Tests
+
+        /// <summary>
+        /// Tests the can save with all values populated.
+        /// </summary>
+        [TestMethod]
+        public void TestCanSaveWithAllValuesPopulated()
+        {
+            #region Arrange
+
+            LoadUnits(1);
+            LoadItemTypes(1);
+            LoadItems(1);
+            Repository.OfType<Transaction>().DbContext.BeginTransaction();
+            var transaction = CreateValidEntities.Transaction(1);
+            transaction.Item = Repository.OfType<Item>().GetNullableByID(1);
+            Repository.OfType<Transaction>().EnsurePersistent(transaction);
+            Repository.OfType<Transaction>().DbContext.CommitTransaction();
+
+            
+
+            var check = CreateValidEntities.Check(1);
+            check.Amount = 20000.01m;
+            check.CheckNumber = 200;
+            check.DateReceived = DateTime.Now;
+            check.Notes = "Some Notes";
+            check.Payee = "Payee";
+            //check.Transaction = transaction;
+            transaction.AddCheck(check);
+            #endregion Arrange
+
+            #region Act
+            CheckRepository.DbContext.BeginTransaction();
+            CheckRepository.EnsurePersistent(check);
+            CheckRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsNotNull(check.Transaction);
+            Assert.AreSame(transaction, check.Transaction);
+
+            #endregion Assert		
+        }
+
+        #endregion Fields Without Validation Tests
+
+        #region Reflection of Database.
+        
+        /// <summary>
+        /// Tests all fields in the database have been tested.
+        /// If this fails and no other tests, it means that a field has been added which has not been tested above.
+        /// </summary>
+        [TestMethod]
+        public void TestAllFieldsInTheDatabaseHaveBeenTested()
+        {
+            #region Arrange
+
+            var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("Amount", "System.Decimal", new List<string>()));
+            expectedFields.Add(new NameAndType("CheckNumber", "System.Int32", new List<string>()));
+            expectedFields.Add(new NameAndType("DateReceived", "System.DateTime", new List<string>()));
+            expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
+                                                                         {
+                                                                             "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                                                                             "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+                                                                         }));
+            expectedFields.Add(new NameAndType("Notes", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("Payee", "System.String", new List<string>
+                                                                             {
+                                                                                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)200)]",
+                                                                                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+                                                                             }));
+            expectedFields.Add(new NameAndType("Transaction", "CRP.Core.Domain.Transaction", new List<string>()));
+
+            #endregion Arrange
+
+            AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Check));
+
+        }
+
+
+
+        #endregion Reflection of Database.
     }
 }
