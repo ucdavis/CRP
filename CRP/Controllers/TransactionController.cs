@@ -364,7 +364,7 @@ namespace CRP.Controllers
             }
             else
             {
-                correctionTransaction.Donation = false;
+                correctionTransaction.Donation = false; 
             }
             correctionTransaction.CreatedBy = CurrentUser.Identity.Name;
 
@@ -374,6 +374,7 @@ namespace CRP.Controllers
             {
                 ModelState.AddModelError("Corrections", "The total of all correction amounts must not exceed the amount already paid.");
             }
+            correctionTransaction.TransferValidationMessagesTo(ModelState);//Validate Child as well as parent(next Line)
             transactionToUpdate.TransferValidationMessagesTo(ModelState);
             if (ModelState.IsValid)
             {

@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CRP.Core.Abstractions;
-using CRP.Core.Domain;
-using CRP.Tests.Core;
+﻿using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
-using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UCDArch.Core.PersistanceSupport;
-using UCDArch.Data.NHibernate;
-using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories.TransactionRepositoryTests
 {
@@ -143,5 +134,108 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
 
         #endregion Valid Tests
         #endregion CorrectionReason Tests
+
+        #region UncorrectedDonationTotal Tests
+        /// <summary>
+        /// Tests the uncorrected donation total with correction returns expected result.
+        /// </summary>
+        [TestMethod]
+        public void TestUncorrectedDonationTotalWithCorrectionReturnsExpectedResult()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var donationTransaction = new Transaction(transaction.Item);
+            donationTransaction.Donation = true;
+            donationTransaction.Amount = 10.00m;
+            var donationTransaction2 = new Transaction(transaction.Item);
+            donationTransaction2.Donation = true;
+            donationTransaction2.Amount = 15.00m;
+            var donationTransaction3 = new Transaction(transaction.Item);
+            donationTransaction3.Donation = false;
+            donationTransaction3.Amount = -6.00m;
+            donationTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(donationTransaction);
+            transaction.AddChildTransaction(donationTransaction2);
+            transaction.AddChildTransaction(donationTransaction3);
+            #endregion Arrange
+
+            #region Act
+            var result = transaction.UncorrectedDonationTotal;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(25, result);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the uncorrected donation total with out correction returns expected result.
+        /// </summary>
+        [TestMethod]
+        public void TestUncorrectedDonationTotalWithOutCorrectionReturnsExpectedResult()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var donationTransaction = new Transaction(transaction.Item);
+            donationTransaction.Donation = true;
+            donationTransaction.Amount = 10.00m;
+            var donationTransaction2 = new Transaction(transaction.Item);
+            donationTransaction2.Donation = true;
+            donationTransaction2.Amount = 15.00m;
+            var donationTransaction3 = new Transaction(transaction.Item);
+            donationTransaction3.Donation = false;
+            donationTransaction3.Amount = 11.00m;
+            donationTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(donationTransaction);
+            transaction.AddChildTransaction(donationTransaction2);
+            transaction.AddChildTransaction(donationTransaction3);
+            #endregion Arrange
+
+            #region Act
+            var result = transaction.UncorrectedDonationTotal;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(25, result);
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the uncorrected donation total with negative donation will sum it.
+        /// </summary>
+        [TestMethod]
+        public void TestUncorrectedDonationTotalWithNegativeDonationWillSumIt()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var donationTransaction = new Transaction(transaction.Item);
+            donationTransaction.Donation = true;
+            donationTransaction.Amount = 10.00m;
+            var donationTransaction2 = new Transaction(transaction.Item);
+            donationTransaction2.Donation = true;
+            donationTransaction2.Amount = 15.00m;
+            var donationTransaction3 = new Transaction(transaction.Item);
+            donationTransaction3.Donation = true;
+            donationTransaction3.Amount = 11.00m; //This one really should never happen
+            donationTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(donationTransaction);
+            transaction.AddChildTransaction(donationTransaction2);
+            transaction.AddChildTransaction(donationTransaction3);
+            #endregion Arrange
+
+            #region Act
+            var result = transaction.UncorrectedDonationTotal;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(36, result);
+            #endregion Assert		
+        }
+
+        #endregion UncorrectedDonationTotal Tests
     }
 }

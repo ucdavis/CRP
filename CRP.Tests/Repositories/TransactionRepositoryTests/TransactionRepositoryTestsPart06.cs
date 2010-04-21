@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UCDArch.Data.NHibernate;
 using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories.TransactionRepositoryTests

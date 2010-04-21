@@ -246,7 +246,7 @@ namespace CRP.Core.Domain
             }
             //We only want corrections to be ale to reduce the donation amount
             CorrectionTotalAmount = true;
-            if(ChildTransactions != null && UncorrectedDonationTotal + CorrectionTotal <0)
+            if(ChildTransactions != null && UncorrectedDonationTotal + CorrectionTotal < 0)
             {
                 CorrectionTotalAmount = false;
             }

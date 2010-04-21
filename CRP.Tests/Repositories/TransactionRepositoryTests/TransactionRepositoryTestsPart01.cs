@@ -122,17 +122,24 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             #region Arrange
 
             var expectedFields = new List<NameAndType>();
-            expectedFields.Add(new NameAndType("Amount", "System.Decimal", new List<string>
-            {
-                 "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0, Message = \"must be zero or more\")]"
-            }));
+            expectedFields.Add(new NameAndType("Amount", "System.Decimal", new List<string>()));
             expectedFields.Add(new NameAndType("AmountTotal", "System.Decimal", new List<string>()));
             expectedFields.Add(new NameAndType("Check", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("ChildTransactions", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Transaction]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("CorrectionAmount", "System.Boolean", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Amount must be less than zero.\")]"
+            }));
             expectedFields.Add(new NameAndType("CorrectionReason", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("CorrectionTotal", "System.Decimal", new List<string>()));
+            expectedFields.Add(new NameAndType("CorrectionTotalAmount", "System.Boolean", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"The total of all correction amounts must not exceed the donation amounts\")]"
+            }));
+            expectedFields.Add(new NameAndType("CreatedBy", "System.String", new List<string>()));
             expectedFields.Add(new NameAndType("Credit", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Donation", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("DonationTotal", "System.Decimal", new List<string>()));
@@ -161,6 +168,10 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("RegularAmount", "System.Boolean", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Amount must be zero or more.\")]"
+            }));
             expectedFields.Add(new NameAndType("Total", "System.Decimal", new List<string>()));
             expectedFields.Add(new NameAndType("TotalPaid", "System.Decimal", new List<string>()));
             expectedFields.Add(new NameAndType("TotalPaidByCheck", "System.Decimal", new List<string>()));
@@ -171,6 +182,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             }));
             expectedFields.Add(new NameAndType("TransactionDate", "System.DateTime", new List<string>()));
             expectedFields.Add(new NameAndType("TransactionNumber", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("UncorrectedDonationTotal", "System.Decimal", new List<string>()));
             #endregion Arrange
 
             AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(Transaction));

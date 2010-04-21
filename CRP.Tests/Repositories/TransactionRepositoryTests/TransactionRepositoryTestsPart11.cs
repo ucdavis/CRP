@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CRP.Core.Abstractions;
+﻿using System.Collections.Generic;
 using CRP.Core.Domain;
-using CRP.Tests.Core;
-using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UCDArch.Core.PersistanceSupport;
-using UCDArch.Data.NHibernate;
-using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories.TransactionRepositoryTests
 {

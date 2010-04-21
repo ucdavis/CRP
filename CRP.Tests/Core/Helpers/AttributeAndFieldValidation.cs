@@ -26,7 +26,7 @@ namespace CRP.Tests.Core.Helpers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(expectedFields.Count, propertyInfos.Count());
+            Assert.AreEqual(expectedFields.Count, propertyInfos.Count(), "Found:" + propertyInfos.ParseList());
             for (int i = 0; i < propertyInfos.Count(); i++)
             {
                 Assert.AreEqual(expectedFields[i].Name, propertyInfos[i].Name);
@@ -100,6 +100,15 @@ namespace CRP.Tests.Core.Helpers
             }
         }
         private static string ParseList(this IEnumerable<string> source)
+        {
+            var rtValue = "";
+            foreach (var s in source)
+            {
+                rtValue = rtValue + "\n" + s;
+            }
+            return rtValue;
+        }
+        private static string ParseList(this PropertyInfo[] source)
         {
             var rtValue = "";
             foreach (var s in source)

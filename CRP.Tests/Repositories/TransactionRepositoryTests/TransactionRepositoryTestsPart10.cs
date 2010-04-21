@@ -38,6 +38,39 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             #endregion Assert
         }
 
+        /// <summary>
+        /// Tests the donation total with correction returns expected result.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationTotalWithCorrectionReturnsExpectedResult()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var donationTransaction = new Transaction(transaction.Item);
+            donationTransaction.Donation = true;
+            donationTransaction.Amount = 10.00m;
+            var donationTransaction2 = new Transaction(transaction.Item);
+            donationTransaction2.Donation = true;
+            donationTransaction2.Amount = 15.00m;
+            var donationTransaction3 = new Transaction(transaction.Item);
+            donationTransaction3.Donation = false;
+            donationTransaction3.Amount = -6.00m;
+            donationTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(donationTransaction);
+            transaction.AddChildTransaction(donationTransaction2);
+            transaction.AddChildTransaction(donationTransaction3);
+            #endregion Arrange
+
+            #region Act
+            var result = transaction.DonationTotal;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(19, result);
+            #endregion Assert
+        }
+
         #endregion DonationTotal Tests
 
         #region AmountTotal Tests
@@ -71,6 +104,39 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
 
             #region Assert
             Assert.AreEqual(14, result);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the amount total returns expected result with corrections.
+        /// Corrections with negative values should be filtered out.
+        /// </summary>
+        [TestMethod]
+        public void TestAmountTotalReturnsExpectedResultWithCorrections()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var donationTransaction = new Transaction(transaction.Item);
+            donationTransaction.Donation = true;
+            donationTransaction.Amount = 10.00m;
+            var donationTransaction2 = new Transaction(transaction.Item);
+            donationTransaction2.Donation = true;
+            donationTransaction2.Amount = 15.00m;
+            var donationTransaction3 = new Transaction(transaction.Item);
+            donationTransaction3.Donation = false;
+            donationTransaction3.Amount = -11.00m;
+            transaction.AddChildTransaction(donationTransaction);
+            transaction.AddChildTransaction(donationTransaction2);
+            transaction.AddChildTransaction(donationTransaction3);
+            #endregion Arrange
+
+            #region Act
+            var result = transaction.AmountTotal;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, result);
             #endregion Assert
         }
 
@@ -109,6 +175,38 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             Assert.AreEqual(39, result);
             #endregion Assert
         }
+        /// <summary>
+        /// Tests the amount total returns expected result.
+        /// </summary>
+        [TestMethod]
+        public void TestTotalReturnsExpectedResult2()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var donationTransaction = new Transaction(transaction.Item);
+            donationTransaction.Donation = true;
+            donationTransaction.Amount = 10.00m;
+            var donationTransaction2 = new Transaction(transaction.Item);
+            donationTransaction2.Donation = true;
+            donationTransaction2.Amount = 15.00m;
+            var donationTransaction3 = new Transaction(transaction.Item);
+            donationTransaction3.Donation = false;
+            donationTransaction3.Amount = -11.00m;
+            donationTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(donationTransaction);
+            transaction.AddChildTransaction(donationTransaction2);
+            transaction.AddChildTransaction(donationTransaction3);
+            #endregion Arrange
+
+            #region Act
+            var result = transaction.Total;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(17, result);
+            #endregion Assert
+        }
 
         #endregion Total Tests
         #region TotalPaid Tests
@@ -130,6 +228,43 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
                 paymentLogs[i].Accepted = false;
             }
             paymentLogs[2].Accepted = true;
+            paymentLogs[4].Accepted = true;
+            transaction.AddPaymentLog(paymentLogs[1]);
+            transaction.AddPaymentLog(paymentLogs[2]);
+            transaction.AddPaymentLog(paymentLogs[4]);
+            #endregion Arrange
+
+            #region Act
+            var result = transaction.TotalPaid;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(8, result);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the amount total returns expected result.
+        /// With a credit card too
+        /// </summary>
+        [TestMethod]
+        public void TestTotalPaidReturnsExpectedResult2()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var paymentLogs = new List<PaymentLog>();
+            for (int i = 0; i < 5; i++)
+            {
+                paymentLogs.Add(CreateValidEntities.PaymentLog(i + 1));
+                paymentLogs[i].Amount = i + 1;
+                paymentLogs[i].Accepted = false;
+            }
+            paymentLogs[2].Accepted = true;
+            paymentLogs[2].Check = false;
+            paymentLogs[2].Credit = true;
+            paymentLogs[2].GatewayTransactionId = "1234567890123456";
+            paymentLogs[2].CardType = "MC";
             paymentLogs[4].Accepted = true;
             transaction.AddPaymentLog(paymentLogs[1]);
             transaction.AddPaymentLog(paymentLogs[2]);

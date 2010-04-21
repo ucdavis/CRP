@@ -114,6 +114,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             #endregion Assert
         }
         #endregion CorrectionAmount Tests
+
         #region CreatedBy Tests
 
         [TestMethod]
