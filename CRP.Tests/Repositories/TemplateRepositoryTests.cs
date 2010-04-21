@@ -251,34 +251,7 @@ namespace CRP.Tests.Repositories
         #region Item Tests
 
         #region Invalid Tests
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void TestItemWithNullValueDoesNotSave()
-        {
-            Template template = null;
-            try
-            {
-                #region Arrange
-                template = GetValid(9);
-                template.Item = null;
-                #endregion Arrange
 
-                #region Act
-                TemplateRepository.DbContext.BeginTransaction();
-                TemplateRepository.EnsurePersistent(template);
-                TemplateRepository.DbContext.CommitTransaction();
-                #endregion Act
-            }
-            catch (Exception)
-            {
-                Assert.IsNotNull(template);
-                var results = template.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Item: may not be empty");
-                Assert.IsTrue(template.IsTransient());
-                Assert.IsFalse(template.IsValid());
-                throw;
-            }
-        }
         [TestMethod]
         [ExpectedException(typeof(NHibernate.TransientObjectException))]
         public void TestItemWithNewValueDoesNotSave()
@@ -311,6 +284,9 @@ namespace CRP.Tests.Repositories
         #endregion Invalid Tests
 
         #region Valid Test
+        /// <summary>
+        /// Tests the item with different value saves.
+        /// </summary>
         [TestMethod]
         public void TestItemWithDifferentValueSaves()
         {
@@ -334,6 +310,7 @@ namespace CRP.Tests.Repositories
             Assert.IsTrue(template.IsValid());
             #endregion Assert
         }
+
         #endregion Valid Test
         #endregion Item Tests
 
@@ -401,6 +378,65 @@ namespace CRP.Tests.Repositories
 
         #endregion Default Tests
 
+        #region ItemAndDefault Tests
+        /// <summary>
+        /// Tests the item with null value and default is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestItemWithNullValueAndDefaultIsTrueSaves()
+        {
+            #region Arrange
+            var template = GetValid(9);
+            template.Item = null;
+            template.Default = true;
+            #endregion Arrange
+
+            #region Act
+            TemplateRepository.DbContext.BeginTransaction();
+            TemplateRepository.EnsurePersistent(template);
+            TemplateRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(template.IsTransient());
+            Assert.IsTrue(template.IsValid());
+            #endregion Assert
+        }
+        /// <summary>
+        /// Tests the item with null value and not default does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestItemWithNullValueAndNotDefaultDoesNotSave()
+        {
+            Template template = null;
+            try
+            {
+                #region Arrange
+                template = GetValid(9);
+                template.Item = null;
+                template.Default = false;
+                #endregion Arrange
+
+                #region Act
+                TemplateRepository.DbContext.BeginTransaction();
+                TemplateRepository.EnsurePersistent(template);
+                TemplateRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(template);
+                var results = template.ValidationResults().AsMessageList();
+                //results.AssertErrorsAre("Item: may not be empty");
+                results.AssertErrorsAre("ItemAndDefault: Item may not be empty when default not selected");
+                Assert.IsTrue(template.IsTransient());
+                Assert.IsFalse(template.IsValid());
+                throw;
+            }
+        }
+
+        #endregion ItemAndDefault Tests
 
         #region Reflection of Database
 
@@ -420,9 +456,10 @@ namespace CRP.Tests.Repositories
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 
                  "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
-            expectedFields.Add(new NameAndType("Item", "CRP.Core.Domain.Item", new List<string>
+            expectedFields.Add(new NameAndType("Item", "CRP.Core.Domain.Item", new List<string>()));
+            expectedFields.Add(new NameAndType("ItemAndDefault", "System.Boolean", new List<string>
             { 
-                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Item may not be empty when default not selected\")]"
             }));
             expectedFields.Add(new NameAndType("Text", "System.String", new List<string>
             { 
