@@ -10,6 +10,7 @@
 
     <property name="Name" column="Name" />
     <property name="Description" column="Description" />
+    <property name="CostPerItem" column="CostPerItem" />
     <property name="Quantity" column="Quantity" />
     <property name="Expiration" column="Expiration" />
     <property name="Image" column="Image" />

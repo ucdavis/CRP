@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UCDArch.Core.DomainModel;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.NHibernateValidator.Extensions;
@@ -24,6 +25,8 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             DateReceived = DateTime.Now;
+
+            Transactions = new List<Transaction>();
         }
 
         [Required]
@@ -32,5 +35,7 @@ namespace CRP.Core.Domain
         public virtual int CheckNumber { get; set; }
         public virtual Decimal Amount { get; set; }
         public virtual DateTime DateReceived { get; set; }
+
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

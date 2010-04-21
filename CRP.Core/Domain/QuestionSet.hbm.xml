@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="QuestionSet"
+    table="QuestionSets" >
+    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+      <generator class="identity" />
+    </id>
+
+    <property name="Name" column="Name" />
+    <property name="CollegeReusable" column="CollegeReusable" />
+    <property name="SystemReusable" column="SystemReusable" />
+    <property name="UserReusable" column="UserReusable" />
+
+    <bag name="Questions" table="QuestionSetQuestions" fetch="join" cascade="all-delete-orphan">
+      <key column="QuestionSetId" />
+      <one-to-many class="CRP.Core.Domain.QuestionSetQuestion, CRP.Core" />
+    </bag>
+    
+  </class>
+</hibernate-mapping>

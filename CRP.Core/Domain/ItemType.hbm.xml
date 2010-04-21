@@ -15,6 +15,11 @@
       <key column="ItemTypeId" />
       <one-to-many class="CRP.Core.Domain.ExtendedProperty, CRP.Core" />
     </bag>
+
+    <bag name="QuestionSets" table="ItemTypesXQuestionSets" cascade="all-delete-orphan">
+      <key column="ItemTypeId" />
+      <many-to-many column="QuestionSetId" class="CRP.Core.Domain.QuestionSet, CRP.Core" />
+    </bag>
     
   </class>
 </hibernate-mapping>

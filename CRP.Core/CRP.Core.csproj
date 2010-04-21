@@ -65,11 +65,17 @@
     <Compile Include="Domain\ExtendedProperty.cs" />
     <Compile Include="Domain\ExtendedPropertyAnswer.cs" />
     <Compile Include="Domain\Item.cs" />
+    <Compile Include="Domain\ItemQuestionSet.cs" />
     <Compile Include="Domain\ItemType.cs" />
+    <Compile Include="Domain\QuantityAnswer.cs" />
     <Compile Include="Domain\Question.cs" />
     <Compile Include="Domain\QuestionOption.cs" />
+    <Compile Include="Domain\QuestionSet.cs" />
+    <Compile Include="Domain\QuestionSetQuestion.cs" />
     <Compile Include="Domain\QuestionType.cs" />
     <Compile Include="Domain\Tag.cs" />
+    <Compile Include="Domain\Transaction.cs" />
+    <Compile Include="Domain\TransactionAnswer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +104,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\ExtendedPropertyAnswer.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\Transaction.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\QuestionSet.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\QuestionSetQuestion.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\TransactionAnswer.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\QuantityAnswer.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\ItemQuestionSet.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
