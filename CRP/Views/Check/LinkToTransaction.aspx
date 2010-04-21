@@ -88,7 +88,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <p>
-    <a href="<%= ReturnUrlGenerator.DetailItemUrl(Model.Transaction.Item.Id, StaticValues.Tab_Checks) %>">Back to Item</a>
+        <%= Html.DetailItemUrl(Model.Transaction.Item.Id, StaticValues.Tab_Checks) %>
     </p>
     
     <% using(Html.BeginForm()){ %>

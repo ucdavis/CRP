@@ -21,7 +21,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Details</h2>
-    
+      
     <div id="tabs">
     
         <ul>
@@ -82,6 +82,10 @@
         
     
     </div>
+
+    <p>
+        <%= Html.ActionLink<ItemManagementController>(a => a.List(), "Back to List") %>
+    </p>
 
 </asp:Content>
 

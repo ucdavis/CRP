@@ -26,7 +26,7 @@
         <% if(Model.ItemType != null) { %>
             <%= Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(Model.ItemType.Id), "Back to Item Type") %>
         <% } else if (Model.Item != null) { %> 
-            <a href="<%= ReturnUrlGenerator.EditItemUrl(Model.Item.Id, StaticValues.Tab_Questions) %>">Back to Item</a>
+            <%= Html.EditItemUrl(Model.Item.Id, StaticValues.Tab_Questions) %>
         <% } else { %> 
             <%=  Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List") %>
         <% }%>

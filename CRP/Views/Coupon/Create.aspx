@@ -49,7 +49,7 @@
         </fieldset>
     <% } %>
     
-    <a href="<%= ReturnUrlGenerator.EditItemUrl(Model.Item.Id, StaticValues.Tab_Coupons) %>">Back to Item</a>
+    <%= Html.EditItemUrl(Model.Item.Id, StaticValues.Tab_Coupons) %>
     
 </asp:Content>
 
