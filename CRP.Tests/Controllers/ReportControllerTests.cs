@@ -35,6 +35,8 @@ namespace CRP.Tests.Controllers
         protected IRepository<ItemReport> ItemReportRepository { get; set; }
         protected List<User> Users { get; set; }
         protected IRepository<User> UserRepository { get; set; }
+        protected IRepository<QuestionSet> QuestionSetRepository { get; set; }
+        protected IRepository<Question> QuestionRepository { get; set; }
 
         #region Init
         public ReportControllerTests()
@@ -50,6 +52,11 @@ namespace CRP.Tests.Controllers
             Users = new List<User>();
             UserRepository = FakeRepository<User>();
             Controller.Repository.Expect(a => a.OfType<User>()).Return(UserRepository).Repeat.Any();
+
+            QuestionSetRepository = FakeRepository<QuestionSet>();
+            Controller.Repository.Expect(a => a.OfType<QuestionSet>()).Return(QuestionSetRepository).Repeat.Any();
+            QuestionRepository = FakeRepository<Question>();
+            Controller.Repository.Expect(a => a.OfType<Question>()).Return(QuestionRepository).Repeat.Any();
         }
         /// <summary>
         /// Registers the routes.
@@ -225,7 +232,7 @@ namespace CRP.Tests.Controllers
         }
 
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void TestCreatePostWithValidData()
         {
             #region Arrange
@@ -234,10 +241,20 @@ namespace CRP.Tests.Controllers
                 .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             SetUpDataForTests();
+            var reportParameters = new CreateReportParameter[1];
+            reportParameters[0] = new CreateReportParameter
+              {
+                  Property = true,
+                  Quantity = false,
+                  Transaction = false,
+                  QuestionId = 0,
+                  QuestionSetId = 0,
+                  PropertyName = "Paid"
+              };
             #endregion Arrange
 
             #region Act
-            Controller.Create(2, "Name", new CreateReportParameter[0])
+            Controller.Create(2, "Name", reportParameters)
                 .AssertHttpRedirect();
             #endregion Act
 
@@ -247,7 +264,7 @@ namespace CRP.Tests.Controllers
             #endregion Assert		
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void TestCreatePostWithInvalidDataReturnsView()
         {
             #region Arrange
@@ -256,10 +273,20 @@ namespace CRP.Tests.Controllers
             //    .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
             //Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             SetUpDataForTests();
+            var reportParameters = new CreateReportParameter[1];
+            reportParameters[0] = new CreateReportParameter
+            {
+                Property = true,
+                Quantity = false,
+                Transaction = false,
+                QuestionId = 0,
+                QuestionSetId = 0,
+                PropertyName = "Paid"
+            };
             #endregion Arrange
 
             #region Act
-            Controller.Create(2, " ", new CreateReportParameter[0])
+            Controller.Create(2, " ", reportParameters)
                 .AssertViewRendered()
                 .WithViewData<CreateReportViewModel>();
             #endregion Act
@@ -288,6 +315,8 @@ namespace CRP.Tests.Controllers
             ItemReportRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
 
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            QuestionRepository.Expect(a => a.GetNullableByID(0)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableByID(0)).Return(null).Repeat.Any();
         }
 
         #region mocks
