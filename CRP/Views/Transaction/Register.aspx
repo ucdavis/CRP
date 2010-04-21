@@ -13,4 +13,11 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+
+    <script type="text/javascript">
+        function GenerateQuantityQuestionSet ()
+        {
+        }
+    </script>
+
 </asp:Content>

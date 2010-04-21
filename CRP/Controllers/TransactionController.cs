@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Web.Mvc;
 using CRP.Core.Domain;
+using UCDArch.Web.ActionResults;
 using UCDArch.Web.Controller;
 using MvcContrib;
 
@@ -31,6 +33,26 @@ namespace CRP.Controllers
             }
 
             return View(item);
+        }
+
+        /// <summary>
+        /// GET: /Transaction/GetQuantityQuestionSets/{id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JsonNetResult GetQuantityQuestionSets(int id)
+        {
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+
+            if (item == null)
+            {
+                return new JsonNetResult(false);
+            }
+
+            // go through and figure out how to deal with the questions
+
+
+            throw new NotImplementedException();
         }
     }
 }
