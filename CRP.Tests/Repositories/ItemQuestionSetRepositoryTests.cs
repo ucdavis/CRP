@@ -235,7 +235,7 @@ namespace CRP.Tests.Repositories
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NHibernate.PropertyValueException))]
+        [ExpectedException(typeof(ApplicationException))]
         public void TestExtendedPropertyWhenQuestionSetIsNewDoesNotSave()
         {
             ItemQuestionSet itemQuestionSet = null;
@@ -252,13 +252,16 @@ namespace CRP.Tests.Repositories
                 ItemQuestionSetRepository.DbContext.CommitTransaction();
                 #endregion Act
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                #region Assert
                 Assert.IsNotNull(itemQuestionSet);
-                Assert.IsNotNull(ex);
-                Assert.AreEqual("not-null property references a null or transient valueCRP.Core.Domain.ItemQuestionSet.QuestionSet", ex.Message);
-                #endregion Assert
+                var results = itemQuestionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre(
+                    "Name: may not be null or empty",
+                    "CollegeReusableSchool: Must have school if college reusable",
+                    "Reusability: Only one reusable flag may be set to true");
+                Assert.IsTrue(itemQuestionSet.IsTransient());
+                Assert.IsFalse(itemQuestionSet.IsValid());
                 throw;
             }
         }
@@ -566,41 +569,6 @@ namespace CRP.Tests.Repositories
 
         #endregion TransactionLevelAndQuantityLevel Tests
 
-        #region QuestionSetExtraCheck Test
-
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void TestQuestionSetExtraCheckInvalidDoesNotSave()
-        {
-            ItemQuestionSet itemQuestionSet = null;
-            try
-            {
-                #region Arrange
-                itemQuestionSet = GetValid(9);
-                itemQuestionSet.QuestionSet = new QuestionSet();
-                #endregion Arrange
-
-                #region Act
-                ItemQuestionSetRepository.DbContext.BeginTransaction();
-                ItemQuestionSetRepository.EnsurePersistent(itemQuestionSet);
-                ItemQuestionSetRepository.DbContext.CommitTransaction();
-                #endregion Act
-            }
-            catch (Exception)
-            {
-                #region Assert
-                Assert.IsNotNull(itemQuestionSet);
-                var results = itemQuestionSet.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuestionSetExtraCheck: QuestionSet has problems");
-                Assert.IsTrue(itemQuestionSet.IsTransient());
-                Assert.IsFalse(itemQuestionSet.IsValid());
-                #endregion Assert
-                throw;
-            }
-        }
-
-        #endregion QuestionSetExtraCheck Test
-
         #region Reflection of Database.
 
         /// <summary>
@@ -627,11 +595,8 @@ namespace CRP.Tests.Repositories
             expectedFields.Add(new NameAndType("QuantityLevel", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("QuestionSet", "CRP.Core.Domain.QuestionSet", new List<string>
             {
-                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
-            }));
-            expectedFields.Add(new NameAndType("QuestionSetExtraCheck", "System.Boolean", new List<string>
-            {
-                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"QuestionSet has problems\")]"
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]",
+                "[NHibernate.Validator.Constraints.ValidAttribute()]"
             }));
             expectedFields.Add(new NameAndType("Required", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("TransactionLevel", "System.Boolean", new List<string>()));

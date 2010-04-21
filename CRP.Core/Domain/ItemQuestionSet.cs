@@ -29,6 +29,7 @@ namespace CRP.Core.Domain
         [NotNull]
         public virtual Item Item { get; set; }
         [NotNull]
+        [Valid]
         public virtual QuestionSet QuestionSet { get; set; }
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
@@ -54,18 +55,11 @@ namespace CRP.Core.Domain
             {
                 TransactionLevelAndQuantityLevel = false;
             }
-            QuestionSetExtraCheck = true;
-            if (QuestionSet != null)
-            {
-                QuestionSetExtraCheck = QuestionSet.IsValid();
-            }
         }
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "TransactionLevel or QuantityLevel must be set but not both.")]
         public virtual bool TransactionLevelAndQuantityLevel { get; set; }
-        [AssertTrue(Message = "QuestionSet has problems")]
-        public virtual bool QuestionSetExtraCheck { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
         
     }
