@@ -7,6 +7,11 @@
 
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
     
+    <h2>Shopper Screens</h2>
+    <ul>
+        <li><%= Html.ActionLink<ItemController>(a => a.List(), "Browse") %></li>
+    </ul>
+    
     <h2>User Screens</h2>
     <ul>
         <li><%= Html.ActionLink<ItemManagementController>(a => a.List(), "Items") %></li>

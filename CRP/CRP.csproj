@@ -145,6 +145,7 @@
     <Compile Include="Controllers\ItemManagementController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
+    <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
     <Compile Include="Controllers\ViewModels\DisplayProfileViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ExtendedPropertyViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
@@ -470,6 +471,7 @@
     <Content Include="Views\ItemManagement\Edit.aspx" />
     <Content Include="Views\ItemManagement\ItemForm.ascx" />
     <Content Include="Views\ItemManagement\List.aspx" />
+    <Content Include="Views\Item\List.aspx" />
     <Content Include="Views\QuestionSet\Create.aspx" />
     <Content Include="Views\QuestionSet\Edit.aspx" />
     <Content Include="Views\QuestionSet\LinkToItem.aspx" />

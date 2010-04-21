@@ -1,4 +1,5 @@
 using System.Web.Mvc;
+using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using UCDArch.Web.Controller;
 
@@ -16,9 +17,18 @@ namespace CRP.Controllers
 
         public ActionResult List()
         {
-            return View();
+            var viewModel = BrowseItemsViewModel.Create(Repository);
+            return View(viewModel);
         }
 
+        /// <summary>
+        /// GET: /Item/GetImage/{id}
+        /// </summary>
+        /// <remarks>
+        /// Returns an image for an item, should have unrestricted access
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult GetImage(int id)
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
