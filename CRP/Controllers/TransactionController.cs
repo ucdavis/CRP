@@ -472,7 +472,7 @@ namespace CRP.Controllers
                     body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id);
                     body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID);
                     body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID);
-
+                    message.Body = body.ToString();
                     client.Send(message);
                     #endregion Email Error Results
 
@@ -534,7 +534,7 @@ namespace CRP.Controllers
                     ModelState.AddModelError("TPG_TRANS_ID", "TouchNet TPG_TRANS_ID Error");
                     paymentLog.Accepted = false;
                 }
-                if (touchNetValues.PMT_AMT != transaction.AmountTotal)
+                if (touchNetValues.PMT_AMT != transaction.Total)
                 {
                     paymentLog.Accepted = false;
                     if (touchNetValues.PMT_AMT != 0 && paymentLog.TnStatus == "S")
@@ -617,6 +617,7 @@ namespace CRP.Controllers
                     {
                         body.Append(ex.Message);
                     }
+                    message.Body = body.ToString();
 
                     client.Send(message);
                     #endregion InValid PaymentLog -- Email Results
