@@ -55,21 +55,35 @@
         </fieldset>
         <fieldset>
             <legend>Extended Properties</legend>
+                       
+            <!-- This is the container for the extended properties -->
+            <div id="ExtendedProperties">
             
-            <%  if (Model.ItemType != null)
-                {
-                    foreach (var prop in Model.ItemType.ExtendedProperties)
-                    {%>
-               
-               <label>Property Name:</label>
-               <input id="ExtendedPropertyName" value='<%= Html.Encode(prop.Name) %>' />
-               <label>Question Type:</label>
-               <%= this.Select("QuestionType").Options(Model.QuestionTypes, x => x.Id, x => x.Name).Selected(prop.QuestionType.Id).Label("Question Type: ")%>               
-               
-            <% }
-                } %>
+                <%  if (Model.ItemType != null)
+                    {
+                        //foreach (var prop in Model.ItemType.ExtendedProperties)
+                        for (var i = 0; i < Model.ItemType.ExtendedProperties.Count; i++ )
+                        {
+                            var prop = Model.ItemType.ExtendedProperties.ElementAt(i);
+                            %>
+                            <div>
+                           <label>Property Name:</label>
+                           <input id='<%= Html.Encode("ExtendedProperties[" + i + "]_Name") %>' name='<%= Html.Encode("ExtendedProperties[" + i + "].Name") %>' value='<%= Html.Encode(prop.Name) %>' />
+                           <span id='<%= Html.Encode("ExtendedProperties[" + i + "]_QuestionType") %>' style="display:block">
+                               <label>Question Type:</label>
+                               <select id='<%= Html.Encode("ExtendedProperties[" + i + "]_QuestionType") %>' name='<%= Html.Encode("ExtendedProperties[" + i + "].QuestionType") %>' >
+                                    <option value="">Select a Question Type</option>
+                                    <% foreach(var o in Model.QuestionTypes) { %>
+                                        <option value='<%= Html.Encode(o.Id) %>'><%= Html.Encode(o.Name) %></option>
+                                    <% } %>
+                               </select>
+                           </span>
+                           </div>
+                           <%--<%= this.Select("QuestionType").Options(Model.QuestionTypes, x => x.Id, x => x.Name).Selected(prop.QuestionType.Id).Label("Question Type: ")%>               --%>
+                    <% }
+                    } %>
             
-            <div id="ExtendedProperties"></div>
+            </div>
             
             <img id="addExtendedProperty" src="../../Images/plus.png" style="width:24px; height:24px" />
         </fieldset>
