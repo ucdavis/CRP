@@ -65,7 +65,7 @@
 
         // Theme options
         theme_advanced_buttons1: "save,print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
+        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo,|,bullist,numlist",
         theme_advanced_buttons3: "",
         theme_advanced_toolbar_location: "top",
         theme_advanced_toolbar_align: "left",

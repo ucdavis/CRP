@@ -46,6 +46,9 @@ namespace CRP.Core.Domain
         public virtual string Description { get; set; }
         [RangeDouble(Min = 0.00, Message = "must be zero or more")]
         public virtual decimal CostPerItem { get; set; }
+        /// <summary>
+        /// # items available for sale
+        /// </summary>
         [Min(0)]
         public virtual int Quantity { get; set; }
         [Length(50)]
@@ -132,6 +135,9 @@ namespace CRP.Core.Domain
             }
         }
 
+        /// <summary>
+        /// # sold
+        /// </summary>
         public virtual int Sold { 
             get
             {

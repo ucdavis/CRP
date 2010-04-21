@@ -61,6 +61,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Low Inventory!.
+        /// </summary>
+        public static string STR_LowInventory {
+            get {
+                return ResourceManager.GetString("STR_LowInventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Items.
         /// </summary>
         public static string STR_QuantityName {

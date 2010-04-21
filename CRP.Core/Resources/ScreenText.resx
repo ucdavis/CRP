@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="STR_LowInventory" xml:space="preserve">
+    <value>Low Inventory!</value>
+    <comment>Low inventory warning on item deatils page.</comment>
+  </data>
   <data name="STR_QuantityName" xml:space="preserve">
     <value>Items</value>
     <comment>The default quantity name</comment>

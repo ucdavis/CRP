@@ -84,8 +84,8 @@ namespace CRP.Controllers
             var coup = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == coupon && a.Item == item && a.IsActive).FirstOrDefault();
             #endregion
 
-            // invalid item
-            if (item == null)
+            // invalid item, or not available for registration
+            if (item == null || !item.IsAvailableForReg)
             {
                 return this.RedirectToAction<ItemController>(a => a.List());
             }
@@ -201,6 +201,12 @@ namespace CRP.Controllers
                 ModelState.AddModelError("Restricted Key", "The item is restricted please enter the passphrase.");
             }
             
+            // do a final check to make sure the inventory is there
+            if (item.Sold + quantity > item.Quantity)
+            {
+                ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
+            }
+
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
 
             if (ModelState.IsValid)
