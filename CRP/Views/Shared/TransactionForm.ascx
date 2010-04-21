@@ -2,6 +2,9 @@
 <%@ Import Namespace="Resources"%>
 
 <h2>Transaction Level</h2>
+
+<div id="TransactionContainer">
+
 <% foreach(var qs in Model.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order)) {%>
     <fieldset id='<%= Html.Encode(qs.Id) %>'>
         <legend><%= Html.Encode(qs.QuestionSet.Name) %></legend>
@@ -14,6 +17,8 @@
         
     </fieldset>
 <% } %>
+
+</div>
 
 
 <h2>Quantity Level</h2>

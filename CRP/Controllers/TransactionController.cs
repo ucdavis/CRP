@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using MvcContrib.Attributes;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Controller;
 using MvcContrib;
@@ -32,7 +34,14 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemController>(a => a.List());
             }
 
-            return View(item);
+            var viewModel = ItemDetailViewModel.Create(Repository, item);
+            return View(viewModel);
+        }
+
+        [AcceptPost]
+        public ActionResult Register(int id, int quantity, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

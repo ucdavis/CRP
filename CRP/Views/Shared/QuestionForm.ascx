@@ -1,4 +1,4 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Core.Domain.Question>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<Question>" %>
 
     <p>
     
@@ -7,33 +7,48 @@
         <!-- Render the controls now -->
         <% switch(Model.QuestionType.Name) { %>
             <% case "Text Box" : %>
-                <input type="text" id='<%= Html.Encode(Model.Id) %>' />
+                <%= Html.Hidden(".QuestionId", Model.Id) %>
+                <%= Html.Hidden(".QuestionSetId", Model.QuestionSet.Id) %>
+                <%= Html.TextBox(".Answer") %>
             <% break; %>
             <% case "Text Area" : %>
-                <textarea  id='<%= Html.Encode(Model.Id) %>'></textarea>
+                <%= Html.Hidden(".QuestionId", Model.Id) %>
+                <%= Html.Hidden(".QuestionSetId", Model.QuestionSet.Id) %>            
+                <%= Html.TextArea(".Answer")%>
             <% break; %>
             <% case "Boolean" : %>
-                <input type="checkbox" id='<%= Html.Encode(Model.Id) %>' />
+                <%= Html.Hidden(".QuestionId", Model.Id) %>
+                <%= Html.Hidden(".QuestionSetId", Model.QuestionSet.Id) %>
+                <%= Html.CheckBox(".Answer")%>
             <% break; %>
-            <% case "Radio Buttons" : %>
-                <% foreach(var o in Model.Options) { %>
-                    <input type="radio"  id='<%= Html.Encode(Model.Id) %>' value='<%= Html.Encode(o.Id) %>' /><%= Html.Encode(o.Name) %>
+            <% case "Radio Buttons" : %>               
+                <%= Html.Hidden(".QuestionId", Model.Id) %>
+                <%= Html.Hidden(".QuestionSetId", Model.QuestionSet.Id) %>
+            
+                <% foreach(var o in Model.Options) { %> 
+                    <%= Html.RadioButton(".Answer", o.Id) %>
+                    <%= Html.Encode(o.Name) %>
                 <% } %>
             <% break; %>
             <% case "Checkbox List" : %>
-                <% foreach(var o in Model.Options) { %>
-                    <input type="checkbox"  id='<%= Html.Encode(Model.Id) %>' value='<%= Html.Encode(o.Name) %>' />
+                <%= Html.Hidden(".QuestionId", Model.Id) %>
+                <%= Html.Hidden(".QuestionSetId", Model.QuestionSet.Id) %>
+                
+                <% foreach(var o in Model.Options) { %> 
+                    <%= Html.CheckBox(".Answer", o.Id) %>
+                    <%= Html.Encode(o.Name) %>
                 <% } %>
             <% break; %>
             <% case "Drop Down" : %>
-                <select  id='<%= Html.Encode(Model.Id) %>'>
-                <% foreach(var o in Model.Options) { %>
-                    <option value='<%= Html.Encode(o.Id) %>'><%= Html.Encode(o.Name) %></option>
-                <% } %>     
-                </select>
+                <%= Html.Hidden(".QuestionId", Model.Id) %>
+                <%= Html.Hidden(".QuestionSetId", Model.QuestionSet.Id) %>
+                <%= this.Select(".Answer").Options(Model.Options, x=>x.Id, x=>x.Name)
+                        .FirstOption("--Select--")%>
             <% break; %>
             <% case "Date" : %>
-                <input type="text" class="dateForm" id='<%= Html.Encode(Model.Id) %>' />
+                    <%= Html.Hidden(".QuestionId", Model.Id) %>
+                <%= Html.Hidden(".QuestionSetId", Model.QuestionSet.Id) %>
+                <%= Html.TextBox(".Answer", null, new {@class = "dateForm"}) %>
             <% break; %>
         <% }; %>
         
