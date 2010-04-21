@@ -29,19 +29,16 @@ namespace CRP.Controllers
             _openIdUserRepository = openIdUserRepository;
         }
 
-        public ActionResult LogOn(string returnUrl, bool? casLogon)
+        public ActionResult LogOn(string returnUrl, bool? openIdLogin)
         {
-            if (!string.IsNullOrEmpty(returnUrl))
+            TempData["URL"] = returnUrl;
+
+            if (openIdLogin.HasValue && openIdLogin.Value)
             {
-                TempData["URL"] = returnUrl;
+                return View();
             }
 
-            if (casLogon.HasValue && casLogon.Value)
-            {
-                return this.RedirectToAction(a => a.CasLogon());
-            }
-
-            return View();
+            return this.RedirectToAction(a => a.CasLogon(returnUrl));
         }
 
         public ActionResult LogOut()
@@ -57,7 +54,7 @@ namespace CRP.Controllers
             return this.RedirectToAction<HomeController>(a => a.Index());
         }
 
-        public ActionResult CasLogon()
+        public ActionResult CasLogon(string returnUrl)
         {
             string resultUrl = CASHelper.Login(); //Do the CAS Login
 
@@ -66,7 +63,7 @@ namespace CRP.Controllers
                 return Redirect(resultUrl);
             }
 
-            return this.RedirectToAction(a => a.LogOn(TempData["URL"].ToString(), null));
+            return this.RedirectToAction(a => a.LogOn(returnUrl, null));
         }
 
         #region Open Id authentication section

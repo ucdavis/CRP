@@ -10,5 +10,5 @@
      <%= Html.ActionLink<AccountController>(a => a.LogOut(), "Logout") %>
      
 <% } else { %>
-    <%= Html.ActionLink<AccountController>(a => a.LogOn(HttpContext.Current.Request.RawUrl, false), "Login") %>
+    <%= Html.ActionLink<AccountController>(a => a.LogOn(HttpContext.Current.Request.RawUrl, true), "Login") %>
 <% } %>
