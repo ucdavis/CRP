@@ -495,6 +495,7 @@ namespace CRP.Controllers
                 {
                     ModelState.AddModelError("Question Set", "QuestionSet \"" + questionSet.Name.Trim() + "\" is already added to the ItemType.");
                     Message = "QuestionSet was already added";
+                    break;
                 }
             }
 

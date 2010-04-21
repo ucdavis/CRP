@@ -24,7 +24,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
     [TestClass]
     public partial class QuestionSetControllerTests : ControllerTestBase<QuestionSetController>
     {
-        protected readonly Type _controllerClass = typeof(QuestionSetController);
+        protected readonly Type ControllerClass = typeof(QuestionSetController);
         protected readonly IPrincipal Principal = new MockPrincipal(new[] { RoleNames.User });
         protected IRepositoryWithTypedId<School, string> SchoolRepository { get; set; }        
         protected List<School> Schools { get; set; }
@@ -135,6 +135,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
             QuestionSetRepository.Expect(a => a.Queryable).Return(QuestionSets.AsQueryable()).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(QuestionSets[1]).Repeat.Any();
         }
         /// <summary>
         /// Setups the data for create tests.

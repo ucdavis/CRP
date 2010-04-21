@@ -19,7 +19,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerInheritsFromSuperController()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             #endregion Arrange
 
             #region Act
@@ -38,7 +38,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerHasOnlyThreeAttributes()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             #endregion Arrange
 
             #region Act
@@ -57,7 +57,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerHasTransactionAttribute()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             #endregion Arrange
 
             #region Act
@@ -76,7 +76,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerHasAntiForgeryTokenAttribute()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             #endregion Arrange
 
             #region Act
@@ -95,7 +95,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerHasAuthorizeAttribute()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             #endregion Arrange
 
             #region Act
@@ -117,7 +117,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerContainsExpectedNumberOfPublicMethods()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             #endregion Arrange
 
             #region Act
@@ -136,7 +136,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodIndexContainsExpectedAttributes()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethod("Index");
             #endregion Arrange
 
@@ -158,7 +158,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodListContainsExpectedAttributes()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethod("List");
             #endregion Arrange
 
@@ -177,7 +177,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodDetailsContainsExpectedAttributes()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethod("Details");
             #endregion Arrange
 
@@ -199,7 +199,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodEditContainsExpectedAttributes1()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Edit");
             #endregion Arrange
 
@@ -220,7 +220,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodEditContainsExpectedAttributes2()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Edit");
             #endregion Arrange
 
@@ -242,7 +242,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodCreateContainsExpectedAttributes1()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
             #endregion Arrange
 
@@ -263,7 +263,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodCreateContainsExpectedAttributes2()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
             #endregion Arrange
 
@@ -285,7 +285,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodCreateContainsExpectedAttributes3()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
             #endregion Arrange
 
@@ -307,7 +307,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodLinkToItemTypeContainsExpectedAttributes1()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "LinkToItemType");
             #endregion Arrange
 
@@ -330,7 +330,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodLinkToItemTypeContainsExpectedAttributes2()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "LinkToItemType");
             #endregion Arrange
 
@@ -351,7 +351,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodLinkToItemTypeContainsExpectedAttributes3()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "LinkToItemType");
             #endregion Arrange
 
@@ -373,7 +373,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodLinkToItemContainsExpectedAttributes1()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "LinkToItem");
             #endregion Arrange
 
@@ -395,7 +395,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodLinkToItemContainsExpectedAttributes2()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "LinkToItem");
             #endregion Arrange
 
@@ -416,7 +416,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodLinkToItemContainsExpectedAttributes3()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "LinkToItem");
             #endregion Arrange
 
@@ -438,7 +438,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodUnlinkFromItemContainsExpectedAttributes1()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethod("UnlinkFromItem");
             #endregion Arrange
 
@@ -460,7 +460,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestControllerMethodUnlinkFromItemContainsExpectedAttributes2()
         {
             #region Arrange
-            var controllerClass = _controllerClass;
+            var controllerClass = ControllerClass;
             var controllerMethod = controllerClass.GetMethod("UnlinkFromItem");
             #endregion Arrange
 
