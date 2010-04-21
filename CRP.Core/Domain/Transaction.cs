@@ -4,7 +4,6 @@ using System.Linq;
 using CRP.Core.Abstractions;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
@@ -37,11 +36,11 @@ namespace CRP.Core.Domain
             RegularAmount = false;
             CorrectionAmount = false;
             CorrectionTotalAmount = false;
-            CorrectionTotalAmountPaid = false;
+            //CorrectionTotalAmountPaid = false;
 
             PaymentType = false;
         }
-
+         
         [NotNull]
         public virtual Item Item { get; set; }
         public virtual DateTime TransactionDate { get; set; }
@@ -249,12 +248,12 @@ namespace CRP.Core.Domain
             {
                 CorrectionTotalAmount = false;
             }
-            //We don't want a "refund" situation.
-            CorrectionTotalAmountPaid = true;
-            if(ChildTransactions != null && TotalPaid < Total)
-            {
-                CorrectionTotalAmountPaid = false;
-            }
+            ////We don't want a "refund" situation.
+            //CorrectionTotalAmountPaid = true;
+            //if(ChildTransactions != null && TotalPaid > Total)
+            //{
+            //    CorrectionTotalAmountPaid = false;
+            //}
         }
 
         #region Fields ONLY used for complex validation, not in database
@@ -270,8 +269,8 @@ namespace CRP.Core.Domain
         [AssertTrue(Message = "The total of all correction amounts must not exceed the donation amounts")]
         private bool CorrectionTotalAmount { get; set; }
 
-        [AssertTrue(Message = "The total of all correction amounts must not exceed the amount already paid")]
-        private bool CorrectionTotalAmountPaid { get; set; }
+        //[AssertTrue(Message = "The total of all correction amounts must not exceed the amount already paid")]
+        //private bool CorrectionTotalAmountPaid { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
 
     }

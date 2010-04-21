@@ -369,7 +369,11 @@ namespace CRP.Controllers
             correctionTransaction.CreatedBy = CurrentUser.Identity.Name;
 
             transactionToUpdate.AddChildTransaction(correctionTransaction);
-
+            //There is a similar check in the payment controller, but with a different message
+            if (transactionToUpdate.TotalPaid > transactionToUpdate.Total)
+            {
+                ModelState.AddModelError("Corrections", "The total of all correction amounts must not exceed the amount already paid.");
+            }
             transactionToUpdate.TransferValidationMessagesTo(ModelState);
             if (ModelState.IsValid)
             {
@@ -377,6 +381,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionToUpdate.Item.Id));
             }
 
+            //TODO: We could replace the line below with a rollback to be more consistent.
             transactionToUpdate.ChildTransactions.Remove(correctionTransaction);
 
             var viewModel = EditTransactionViewModel.Create(Repository);
