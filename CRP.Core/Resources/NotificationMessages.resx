@@ -136,6 +136,10 @@
     <value>You do not have editor rights to that item.</value>
     <comment>For screen message</comment>
   </data>
+  <data name="STR_NotAvailable" xml:space="preserve">
+    <value>{ObjectType} is not available.</value>
+    <comment>An Item has sold, expired, is is not available to the public.</comment>
+  </data>
   <data name="STR_ObjectCreated" xml:space="preserve">
     <value>{ObjectType} has been created successfully.</value>
   </data>

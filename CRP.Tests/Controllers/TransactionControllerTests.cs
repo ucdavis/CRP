@@ -45,6 +45,8 @@ namespace CRP.Tests.Controllers
         protected IRepository<QuestionSet> QuestionSetRepository { get; set; }
         protected List<Question> Questions { get; set; }
         protected IRepository<Question> QuestionRepository { get; set; }
+        protected List<Coupon> Coupons { get; set; }
+        protected IRepository<Coupon> CouponRepository { get; set; }
 
         #region Init
         public TransactionControllerTests()
@@ -72,6 +74,10 @@ namespace CRP.Tests.Controllers
             Questions = new List<Question>();
             QuestionRepository = FakeRepository<Question>();
             Controller.Repository.Expect(a => a.OfType<Question>()).Return(QuestionRepository).Repeat.Any();
+
+            Coupons = new List<Coupon>();
+            CouponRepository = FakeRepository<Coupon>();
+            Controller.Repository.Expect(a => a.OfType<Coupon>()).Return(CouponRepository).Repeat.Any();
         
             OpenIdUsers = new List<OpenIdUser>();
             //OpenIdUserRepository = FakeRepository<OpenIdUser>();
@@ -277,9 +283,76 @@ namespace CRP.Tests.Controllers
             #endregion Assert		
         }
 
+        /// <summary>
+        /// Tests the checkout get will throw exception when populate contact information if A different question name is found.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void TestCheckoutGetWillThrowExceptionWhenPopulateContactInformationIfADifferentQuestionNameIsFound()
+        {
+            #region Arrange
+            SetupDataForTests();
+            SetupDataForPopulateItemTransactionAnswer();
+            Questions[1].Name = "NotValid"; //This is not a contact Information Question. It should not be in the data. 
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2);
+            #endregion Act
+        }
+        
+        /// <summary>
+        /// Tests the checkout get will default quantity to one.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutGetWillDefaultQuantityToOne()
+        {
+            #region Arrange
+            SetupDataForTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Checkout(2)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Quantity);
+            #endregion Assert		
+        }
         
 
         #endregion Checkout Get Tests
+
+        #region Checkout Post Tests
+
+        /// <summary>
+        /// Tests the checkout post redirects to home controller if item not found.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutPostRedirectsToHomeControllerIfItemNotFound()
+        {
+            #region Arrange
+            SetupDataForTests();
+            SetupDataForPopulateItemTransactionAnswer();
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(1, 1, null, "Check", string.Empty, string.Empty, null, null, true)
+                .AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert		
+        }
+
+        //TODO: Checkout Post tests
+        #endregion Checkout Post Tests
 
         #region Total Tests
 
@@ -445,7 +518,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
@@ -466,8 +539,8 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
-            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
@@ -488,8 +561,8 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<CaptchaValidatorAttribute>();
-            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<CaptchaValidatorAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
@@ -766,12 +839,14 @@ namespace CRP.Tests.Controllers
             ControllerRecordFakes.FakeItems(Items, 3);
             ControllerRecordFakes.FakeUnits(Units, 1);
             ControllerRecordFakes.FakeDisplayProfile(DisplayProfiles, 3);
+            ControllerRecordFakes.FakeCoupons(Coupons, 3);
             Items[1].Unit = Units[0];
             DisplayProfiles[1].Unit = Units[0];
 
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
             DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
         }
 
         /// <summary>
@@ -804,6 +879,7 @@ namespace CRP.Tests.Controllers
             OpenIdUsers[1].Zip = "95616";
 
             OpenIdUserRepository.Expect(a => a.GetNullableByID("UserName")).Return(OpenIdUsers[1]).Repeat.Any();
+            QuestionRepository.Expect(a => a.Queryable).Return(Questions.AsQueryable()).Repeat.Any();
         }
 
         private void LoadContactInfoQuestions()

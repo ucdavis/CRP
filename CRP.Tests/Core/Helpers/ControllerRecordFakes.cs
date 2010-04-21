@@ -281,5 +281,20 @@ namespace CRP.Tests.Core.Helpers
                 entity[i + offSet].SetIdTo((i + 1 + offSet).ToString());
             }
         }
+
+        /// <summary>
+        /// Fakes the coupons.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        public static void FakeCoupons(List<Coupon> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.Coupon(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
     }
 }

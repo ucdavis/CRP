@@ -105,8 +105,14 @@ namespace CRP.Controllers
             #endregion
 
             // invalid item, or not available for registration
-            if (item == null || !item.IsAvailableForReg)
+            if (item == null)
             {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+            if (!item.IsAvailableForReg)
+            {
+                Message = NotificationMessages.STR_NotAvailable.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
