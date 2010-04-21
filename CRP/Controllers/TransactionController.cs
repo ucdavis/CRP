@@ -148,6 +148,16 @@ namespace CRP.Controllers
                 // if question is null just drop it
                 if (question != null)
                 {
+                    // check to make sure there is an answer if it's required
+                    if (question.Required)
+                    {
+                        if (string.IsNullOrEmpty(qa.Answer))
+                        {
+                            // add a model error
+                            ModelState.AddModelError("Transaction Question", question.Name + " requires an answer.");
+                        }
+                    }
+
                     var answer = new TransactionAnswer(transaction, question.QuestionSet, question, qa.Answer);
                     transaction.AddTransactionAnswer(answer);
                 }
@@ -166,6 +176,14 @@ namespace CRP.Controllers
                     // if question is null just drop it
                     if (question != null)
                     {
+                        if (question.Required)
+                        {
+                            if (string.IsNullOrEmpty(qa.Answer))
+                            {
+                                ModelState.AddModelError("Quantity Question", question.Name + " for attendee " + (i + 1).ToString() + " requires an answer.");
+                            }
+                        }
+
                         var answer = new QuantityAnswer(transaction, question.QuestionSet, question, qa.Answer,
                                                         quantityId);
                         transaction.AddQuantityAnswer(answer);
@@ -186,7 +204,7 @@ namespace CRP.Controllers
             // check to see if it's a restricted item
             if (!string.IsNullOrEmpty(item.RestrictedKey) && item.RestrictedKey != restrictedKey)
             {
-                ModelState.AddModelError("Restricted Key", "The item is restricted.");
+                ModelState.AddModelError("Restricted Key", "The item is restricted please enter the passphrase.");
             }
             
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
