@@ -165,9 +165,9 @@ namespace CRP.Controllers
             }
             else
             {
-                var viewModel = DisplayProfileViewModel.Create(Repository, _schoolRepository);
-                viewModel.DisplayProfile = displayProfile;
-                return View(viewModel);
+                //var viewModel = DisplayProfileViewModel.Create(Repository, _schoolRepository);
+                //viewModel.DisplayProfile = displayProfile;
+                return View(destProfile);
             }
         }
 
