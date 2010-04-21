@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
@@ -14,8 +15,17 @@ namespace CRP.Tests.Repositories
     [TestClass]
     public class ItemReportColumnRepositoryTests : AbstractRepositoryTests<ItemReportColumn, int>
     {
-        #region Init and Overrides
+        protected IRepository<ItemReport> ItemReportRepository { get; set; }
 
+        
+        #region Init and Overrides
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemReportColumnRepositoryTests"/> class.
+        /// </summary>
+        public ItemReportColumnRepositoryTests()
+        {
+            ItemReportRepository = new Repository<ItemReport>();
+        }
         /// <summary>
         /// Gets the valid entity of type T
         /// </summary>
@@ -29,7 +39,7 @@ namespace CRP.Tests.Repositories
         }
 
         /// <summary>
-        /// A Qury which will return a single record
+        /// A Query which will return a single record
         /// </summary>
         /// <param name="numberAtEnd"></param>
         /// <returns></returns>

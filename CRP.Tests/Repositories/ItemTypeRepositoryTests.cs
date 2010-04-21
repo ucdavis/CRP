@@ -45,7 +45,7 @@ namespace CRP.Tests.Repositories
         }
 
         /// <summary>
-        /// A Qury which will return a single record
+        /// A Query which will return a single record
         /// </summary>
         /// <param name="numberAtEnd"></param>
         /// <returns></returns>
