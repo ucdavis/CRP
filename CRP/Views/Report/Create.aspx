@@ -8,8 +8,8 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
 
-    <script src="../../Scripts/jquery.CaesMutioptionControl.js" type="text/javascript"></script>
-    <script src="../../Scripts/RenameForArray.js" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/jquery.CaesMutioptionControl.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/RenameForArray.js") %>" type="text/javascript"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -92,10 +92,10 @@
                                 <td>
                                     <%= Html.Hidden("_Quantity", irc.Quantity, new { @class = StaticValues.Class_indexedControl })%>
                                     <%= Html.Hidden("_QuestionId", irc.QuestionSet.Questions.Where(a => a.Name == irc.Name).FirstOrDefault().Id, new { @class = StaticValues.Class_indexedControl })%>
-                                    <%= Html.Hidden("_QuestionSetId", irc.QuestionSet.Id, new { @class = StaticValues.Class_indexedControl })%>
+                                    <%= Html.Hidden("_QuestionSetId", irc.QuestionSet != null ? irc.QuestionSet.Id : -1, new { @class = StaticValues.Class_indexedControl })%>
                                 </td>
                                 <td>
-                                    <%= Html.Encode(irc.Name + " (" + irc.QuestionSet.Name + ")")%>
+                                    <%= Html.Encode(irc.Name + " (" + irc.QuestionSet != null ? irc.QuestionSet.Name : string.Empty + ")")%>
                                 </td>
                                 <td>
                                     <%= Html.TextBox("_Format")%>
