@@ -30,7 +30,7 @@
                 var index = $item.parents("div.Question").attr("index");
                 var count = $item.parents("div.Options").children("input").length;
 
-                $item.before($("<input>").attr("id", "questions[" + index + "]_Options[" + count + "]_Name").attr("name", "questions[" + index + "].Options[" + count + "].Name"));
+                $item.before(CreateOptionsInput(index, count));
             });
             $("select").live("change", function(item) {
                 // parse out the information
@@ -44,19 +44,37 @@
 
                 // type needs options
                 if ($.inArray(value, hasOptions) >= 0) {
-                    $item.siblings("div.Options").prepend($("<input>").attr("id", "questions[" + index + "]_Options[0]_Name").attr("name", "questions[" + index + "].Options[0].Name"));
+                    $item.siblings("div.Options").prepend(CreateOptionsInput(index, 0));
                     $item.siblings("div.Options").css("display", "block");
+                }
+                else {
+                    $item.siblings("div.Options").find("input").remove();
+                    $item.siblings("div.Options").css("display", "none");
                 }
             });
         });
 
+        function CreateOptionsInput(index, subindex) {
+            var input = $("<input>");
+            var name = "options[" + index + "][" + subindex + "]";
+
+            input.attr("id", name).attr("name", name);
+
+            return input;
+        }
+
         function AddQuestion() {
 
             var count = $("div#Questions").children().length;
+
+            // make the names for the controls
+            var name = "questionNames[" + count + "]";
+            var type = "questionTypes[" + count + "]";
+            
             var div = $("<div>").addClass("Question").attr("index", count);
             div.append($("<label>").html("Property Name:"));
-            div.append($("<input>").attr("id", "Questions[" + count + "]_Name").attr("name", "Questions[" + count + "].Name"));
-            div.append($("span#QuestionTypeBase").find("select").clone().attr("id", "Questions[" + count + "]_QuestionType").attr("name", "Questions[" + count + "].QuestionType"));
+            div.append($("<input>").attr("id", name).attr("name", name));
+            div.append($("span#QuestionTypeBase").find("select").clone().attr("id", type).attr("name", type));
             
             div.append($("<div>").addClass("Options").css("display", "none").append($("<img>").addClass("addOption").attr("src", "../../Images/plus.png").css("height", "24px").css("width", "24px")));
 
@@ -84,7 +102,7 @@
             <legend>Name</legend>
             <p>
                 <label for="Name">Name:</label>
-                <%= Html.TextBox("QuestionSet.Name") %>
+                <%= Html.TextBox("questionSet.Name")%>
                 <%= Html.ValidationMessage("Name", "*") %>
             </p>
         </fieldset>
@@ -93,7 +111,7 @@
             <legend>Questions</legend>
             
             <div id="Questions">
-                <!-- Add in the existing questions -->
+ <%--               <!-- Add in the existing questions -->
                 <% for (var i = 0; i < Model.QuestionSet.Questions.Count; i++ )
                        { %> 
                         <div class="Question" index='<%= Html.Encode(i) %>'>
@@ -112,7 +130,7 @@
                                 <img id="addOption" src="../../Images/plus.png" style="width:24px; height:24px;" />        
                             </div>
                         </div>
-                <% } %>
+                <% } %>--%>
             </div>
             
             <img id="addQuestions" src="../../Images/plus.png" style="width:24px; height:24px" />

@@ -155,48 +155,51 @@ namespace CRP.Controllers
         /// <param name="questions"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult CreateQuestionSet(QuestionSet questionSet, Question[] questions)
+        public ActionResult CreateQuestionSet(QuestionSet questionSet)//, string[] questionNames, QuestionType[] questionTypes, string[][] options)
         {
-            // make the question set system reusable
-            questionSet.SystemReusable = true;
-            questionSet.User = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
-            // transfer the validation information
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
+            throw new NotImplementedException();
 
-            // validate the questions before adding them
-            foreach(var q in questions)
-            {
-                if (q.IsValid())
-                {
-                    questionSet.AddQuestion(q);
-                }
-                else
-                {
-                    ModelState.AddModelError("Question", "There was a problem with one or more questions.");
-                    break;
-                }
-            }
+            //// make the question set system reusable
+            //questionSet.SystemReusable = true;
+            //questionSet.User = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
-            if (ModelState.IsValid)
-            {
-                // is valid save
-                Repository.OfType<QuestionSet>().EnsurePersistent(questionSet);
-                Message = "Question set was created.";
-                return this.RedirectToAction(a => a.ListQuestionSets());
-            }
-            else
-            {
-                // not valid, go back
-                var viewModel = QuestionSetViewModel.Create(Repository);
-                // push all the questions so that it gets regenerated on the page for the users
-                foreach(var q in questions)
-                {
-                    questionSet.AddQuestion(q);
-                }
-                viewModel.QuestionSet = questionSet;
-                return View(viewModel);
-            }
+            //// transfer the validation information
+            //MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
+
+            //// validate the questions before adding them
+            //foreach(var q in questions)
+            //{
+            //    if (q.IsValid())
+            //    {
+            //        questionSet.AddQuestion(q);
+            //    }
+            //    else
+            //    {
+            //        ModelState.AddModelError("Question", "There was a problem with one or more questions.");
+            //        break;
+            //    }
+            //}
+
+            //if (ModelState.IsValid)
+            //{
+            //    // is valid save
+            //    Repository.OfType<QuestionSet>().EnsurePersistent(questionSet);
+            //    Message = "Question set was created.";
+            //    return this.RedirectToAction(a => a.ListQuestionSets());
+            //}
+            //else
+            //{
+            //    // not valid, go back
+            //    var viewModel = QuestionSetViewModel.Create(Repository);
+            //    // push all the questions so that it gets regenerated on the page for the users
+            //    foreach(var q in questions)
+            //    {
+            //        questionSet.AddQuestion(q);
+            //    }
+            //    viewModel.QuestionSet = questionSet;
+            //    return View(viewModel);
+            //}
         }
         #endregion
     }
