@@ -5,6 +5,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
+using Resources;
 using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Validator;
@@ -96,6 +97,12 @@ namespace CRP.Controllers
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, question.ValidationResults());
 
+            // check to make sure it isn't the system's default contact information set
+            if (questionSet.Name == StaticValues.QuestionSet_ContactInformation && questionSet.SystemReusable)
+            {
+                ModelState.AddModelError("Question Set", "This is a sytem default question set and cannot be modified.");
+            }
+
             // check to make sure there are options if needed
             if (question.QuestionType.HasOptions && question.Options.Count <= 0)
             {
@@ -152,6 +159,14 @@ namespace CRP.Controllers
             if (question.QuestionSet.Items.Count > 0)
             {
                 Message = "Question cannot be deleted from the question set becuase it is already being used by an item.";
+                return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
+            }
+
+            // check to make sure it isn't the system's default contact information set
+            if (question.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && question.QuestionSet.SystemReusable)
+            {
+                //ModelState.AddModelError("Question Set", "This is a sytem default question set and cannot be modified.");
+                Message = "Question cannot be deleted from the question set becuase it is a system default.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
             }
 

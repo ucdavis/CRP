@@ -28,7 +28,7 @@
         <% } else if (Model.Item != null) { %> 
             <a href="<%= ReturnUrlGenerator.EditItemUrl(Model.Item.Id, StaticValues.Tab_Questions) %>">Back to Item</a>
         <% } else { %> 
-            Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List")
+            <%=  Html.ActionLink<QuestionSetController>(a => a.List(), "Back to List") %>
         <% }%>
             
     <fieldset>

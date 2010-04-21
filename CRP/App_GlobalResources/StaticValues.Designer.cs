@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contact Information.
+        /// </summary>
+        internal static string QuestionSet_ContactInformation {
+            get {
+                return ResourceManager.GetString("QuestionSet_ContactInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Coupons.
         /// </summary>
         internal static string Tab_Coupons {

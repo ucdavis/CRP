@@ -64,6 +64,7 @@ namespace CRP.Controllers
         /// PostCondition:
         ///     Item is created
         ///     Extended properties are created
+        ///     Default question sets are added ("Contact Information" and Item Type defaults)
         /// </remarks>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -92,6 +93,17 @@ namespace CRP.Controllers
 
             // set the unit
             item.Unit = user.Units.FirstOrDefault();
+
+            // add the required question set
+            var questionSet =
+                Repository.OfType<QuestionSet>().Queryable.Where(
+                    a => a.Name == StaticValues.QuestionSet_ContactInformation).FirstOrDefault();
+
+            // this should really not be null at any point.
+            if (questionSet != null)
+            {
+                item.AddTransactionQuestionSet(questionSet);
+            }
 
             // add the default question sets
             foreach(var qs in item.ItemType.QuestionSets)

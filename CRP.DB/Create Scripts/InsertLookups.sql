@@ -54,3 +54,45 @@ begin
 	insert into displayprofile([name], sitemaster)
 	values ('University of California, Davis', 1)
 end
+
+-- //////////////////////////////////////////////////////////////////////////////////////
+-- Insert question set for contact information
+-- //////////////////////////////////////////////////////////////////////////////////////
+IF NOT EXISTS ( select * from QuestionSets where Name = 'Contact Information' )
+begin
+	INSERT INTO QuestionSets ([Name], SystemReusable)
+	VALUES ('Contact Information', 1)
+	
+	declare @qsid int 
+	declare @tbId int 
+	
+	set @qsid = (select Max(id) from QuestionSets where [Name] = 'Contact Information')
+	set @tbId = (select max(id) from QuestionTypes where [name] = 'Text Box')
+	
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('First Name', @tbId, @qsid, 1, 1)
+	
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('Last Name', @tbId, @qsid, 2, 1)
+	
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('Street Address', @tbId, @qsid, 3, 1)
+
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('Address Line 2', @tbId, @qsid, 4, 1)	
+	
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('City', @tbId, @qsid, 5, 1)	
+	
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('State', @tbId, @qsid, 6, 1)		
+	
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('Zip Code', @tbId, @qsid, 7, 1)		
+
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('Phone Number', @tbId, @qsid, 8, 1)		
+
+	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
+	VALUES ('Email Address', @tbId, @qsid, 5, 1)		
+end

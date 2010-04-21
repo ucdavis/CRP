@@ -89,7 +89,7 @@ namespace CRP.Controllers
             var viewModel = QuestionSetViewModel.Create(Repository);
             viewModel.QuestionSet = questionSet;
 
-            if (!questionSet.SystemReusable || !questionSet.CollegeReusable || !questionSet.UserReusable)
+            if (!questionSet.SystemReusable && !questionSet.CollegeReusable && !questionSet.UserReusable)
             {
                 // there should only be one item type or item associated with this question set since it's not reusable
                 var itemType = questionSet.ItemTypes.FirstOrDefault();
@@ -113,7 +113,10 @@ namespace CRP.Controllers
         /// Description:
         ///     Edits a question set.
         /// PreCondition:
+        ///     Question set exists
+        ///     Question set is not the system default "Contact Information"
         /// PostCondition:
+        ///     Question set is updated
         /// </remarks>
         /// <param name="questionSet"></param>
         /// <returns></returns>
@@ -127,6 +130,17 @@ namespace CRP.Controllers
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
+
+            // check to make sure it isn't the system's default contact information set
+            var ciQuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(questionSet.Id);
+            if (ciQuestionSet != null)
+            {
+                if (ciQuestionSet.Name == StaticValues.QuestionSet_ContactInformation && ciQuestionSet.SystemReusable)
+                {
+                    ModelState.AddModelError("Question Set",
+                                             "This is a sytem default question set and cannot be modified.");
+                }
+            }
 
             if (ModelState.IsValid)
             {
@@ -483,6 +497,17 @@ namespace CRP.Controllers
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemQuestionSet.ValidationResults());
+
+            // check to make sure it isn't the system's default contact information set
+            var ciQuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(itemQuestionSet.QuestionSet.Id);
+            if (ciQuestionSet != null)
+            {
+                if (ciQuestionSet.Name == StaticValues.QuestionSet_ContactInformation && ciQuestionSet.SystemReusable)
+                {
+                    ModelState.AddModelError("Question Set",
+                                             "This is a sytem default question set and cannot be modified.");
+                }
+            }
 
             if(ModelState.IsValid)
             {

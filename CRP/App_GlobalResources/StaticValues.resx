@@ -125,6 +125,10 @@
     <value>CreditCard</value>
     <comment>Used in /Transaction/Checkout/</comment>
   </data>
+  <data name="QuestionSet_ContactInformation" xml:space="preserve">
+    <value>Contact Information</value>
+    <comment>The name of the required question set</comment>
+  </data>
   <data name="Tab_Coupons" xml:space="preserve">
     <value>Coupons</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>

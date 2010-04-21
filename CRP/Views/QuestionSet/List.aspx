@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<CRP.Core.Domain.QuestionSet>>" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IQueryable<CRP.Core.Domain.QuestionSet>>" %>
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -31,7 +31,7 @@
                                     col.Add(x => x.CollegeReusable);
                                     col.Add(x => x.SystemReusable);
                                     col.Add(x => x.UserReusable);
-                                    col.Add(x => x.User.FullName).Title("User");
+                                    col.Add(x => x.User != null ? x.User.FullName : string.Empty).Title("User");
                                     col.Add(x => x.Questions.Count).Title("# of Questions");
                                 })
                     .Pageable(x=>x.PageSize(20))
