@@ -221,5 +221,20 @@ namespace CRP.Tests.Core.Helpers
                 entity[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
+
+        /// <summary>
+        /// Fakes the tags.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="count">The count.</param>
+        public static void FakeTags(List<Tag> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.Tag(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
     }
 }
