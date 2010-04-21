@@ -43,7 +43,7 @@ namespace CRP.Core.Domain
         //public virtual bool Paid { get; set; }
         public virtual decimal Amount { get; set; }
         public virtual bool Donation { get; set; }
-        public virtual int Quantity { get; set; }
+        public virtual int Quantity { get; set; } //TODO: Write a test to make sure this quantity can't exceed the amount that is available.
         /// <summary>
         /// The parent transaction object, this is only populated for donation fields.
         /// </summary>

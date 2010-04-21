@@ -134,6 +134,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
                  "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
             expectedFields.Add(new NameAndType("Image", "System.Byte[]", new List<string>()));
+            expectedFields.Add(new NameAndType("IsAvailableForReg", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("ItemTags", "System.Boolean", new List<string>
             {
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"One or more tags is not valid\")]"

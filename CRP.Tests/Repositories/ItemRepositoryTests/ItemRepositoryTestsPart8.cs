@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
@@ -423,7 +424,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
             #region Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(98889, result);
+            Assert.AreEqual(1111, result);
             #endregion Assert		
         }
         
@@ -474,5 +475,254 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
 
         #endregion ItemTags Tests
+
+        #region IsAvailableForReg Tests
+        [TestMethod]
+        public void TestIsAvailableForRegWhenSoldGreaterThanQuantityReturnsFalse()
+        {
+            #region Arrange
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 2; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 10;
+            var fakeDate = new DateTime(2010, 02, 01);
+            SystemTime.Now = () => fakeDate;
+            item.Expiration = null;
+            item.Available = true;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.IsAvailableForReg;
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(item.Sold > item.Quantity);
+            Assert.IsFalse(result);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestIsAvailableForRegWhenNotAvailableReturnsFalse()
+        {
+            #region Arrange
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 2; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 20;
+            var fakeDate = new DateTime(2010, 02, 01);
+            SystemTime.Now = () => fakeDate;
+            item.Expiration = new DateTime(2010,02,02);
+            item.Available = false;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.IsAvailableForReg;
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(item.Sold < item.Quantity);
+            Assert.IsFalse(result);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestIsAvailableForRegWhenExpiredReturnsFalse()
+        {
+            #region Arrange
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 2; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 20;
+            var fakeDate = new DateTime(2010, 02, 01);
+            SystemTime.Now = () => fakeDate;
+            item.Expiration = new DateTime(2010, 01, 30);
+            item.Available = true;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.IsAvailableForReg;
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(item.Sold < item.Quantity);
+            Assert.IsFalse(result);
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestIsAvailableForRegWhenAllValuesInvalidReturnsFalse()
+        {
+            #region Arrange
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 2; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 11;
+            var fakeDate = new DateTime(2010, 02, 01);
+            SystemTime.Now = () => fakeDate;
+            item.Expiration = new DateTime(2010, 01, 30);
+            item.Available = false;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.IsAvailableForReg;
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(item.Sold == item.Quantity);
+            Assert.IsFalse(result);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestIsAvailableForRegWhenSoldEqualsQuantityReturnsFalse()
+        {
+            #region Arrange
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 2; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 11;
+            var fakeDate = new DateTime(2010, 02, 01);
+            SystemTime.Now = () => fakeDate;
+            item.Expiration = null;
+            item.Available = true;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.IsAvailableForReg;
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(item.Sold, item.Quantity);
+            Assert.IsFalse(result);
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestIsAvailableForRegWhenSoldLessThanQuantityReturnsTrue1()
+        {
+            #region Arrange
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 2; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 12;
+            var fakeDate = new DateTime(2010, 02, 01);
+            SystemTime.Now = () => fakeDate;
+            item.Expiration = null;
+            item.Available = true;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.IsAvailableForReg;
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(item.Sold < item.Quantity);
+            Assert.IsTrue(result);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestIsAvailableForRegWhenSoldLessThanQuantityReturnsTrue2()
+        {
+            #region Arrange
+            var transactions = new List<Transaction>();
+            for (int i = 0; i < 5; i++)
+            {
+                transactions.Add(CreateValidEntities.Transaction(i + 1));
+            }
+            transactions[0].Quantity = 1;
+            transactions[1].Quantity = 10;
+
+            var item = CreateValidEntities.Item(1);
+            for (int i = 0; i < 2; i++)
+            {
+                item.Transactions.Add(transactions[i]);
+            }
+            item.Quantity = 12;
+            var fakeDate = new DateTime(2010, 02, 01);
+            SystemTime.Now = () => fakeDate;
+            item.Expiration = fakeDate.AddDays(1);
+            item.Available = true;
+
+            #endregion Arrange
+
+            #region Act
+            var result = item.IsAvailableForReg;
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(item.Sold < item.Quantity);
+            Assert.IsTrue(result);
+            #endregion Assert
+        }
+
+
+        #endregion IsAvailableForReg Tests
     }
 }

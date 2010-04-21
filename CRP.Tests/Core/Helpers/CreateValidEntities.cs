@@ -377,6 +377,21 @@ namespace CRP.Tests.Core.Helpers
         }
 
         /// <summary>
+        /// Create a valid entry for tests. 
+        /// Repository tests may need to modify this data to supply real linked data.
+        /// </summary>
+        /// <returns>Valid Check</returns>
+        public static Validator Validator(int? counter)
+        {
+            var rtValue = new Validator();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Class = "Class" + counter.Extra();
+            //TODO: Populate values
+
+            return rtValue;
+        }
+
+        /// <summary>
         /// Create a valid entry for tests.
         /// Repository tests may need to modify this data to supply real linked data.
         /// </summary>

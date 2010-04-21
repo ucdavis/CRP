@@ -151,7 +151,7 @@ namespace CRP.Core.Domain
         public virtual bool IsAvailableForReg { 
             get
             {
-                if (Sold > Quantity || DateTime.Now > Expiration || !Available)
+                if (Sold >= Quantity || SystemTime.Now() > Expiration || !Available)
                 {
                     return false;
                 }
