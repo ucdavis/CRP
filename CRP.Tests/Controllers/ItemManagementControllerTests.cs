@@ -68,7 +68,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithParametersMapping()
         {
-            "~/ItemManagement/Create".ShouldMapTo<ItemManagementController>(a => a.Create(new Item(),new ExtendedPropertyParameter[1],new string[1] ), true);
+            "~/ItemManagement/Create".ShouldMapTo<ItemManagementController>(a => a.Create(new Item(),new ExtendedPropertyParameter[1],new string[1], string.Empty), true);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestEditWithParametersMapping()
         {
-            "~/ItemManagement/Edit/5".ShouldMapTo<ItemManagementController>(a => a.Edit(5, new Item(),new ExtendedPropertyParameter[1],new string[1]), true);
+            "~/ItemManagement/Edit/5".ShouldMapTo<ItemManagementController>(a => a.Edit(5, new Item(),new ExtendedPropertyParameter[1],new string[1], string.Empty), true);
         }
 
         /// <summary>

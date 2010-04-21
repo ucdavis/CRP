@@ -8,7 +8,7 @@ namespace CRP.Controllers.Helpers
 {
     public class Copiers
     {
-        public static Item CopyItem(IRepository repository, Item src, Item dest, ExtendedPropertyParameter[] extendedProperties, string[] tags)
+        public static Item CopyItem(IRepository repository, Item src, Item dest, ExtendedPropertyParameter[] extendedProperties, string[] tags,string mapLink)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(src != null, "Source item is required.");
@@ -25,12 +25,12 @@ namespace CRP.Controllers.Helpers
             dest.Private = src.Private;
             dest.Unit = src.Unit;
 
-            PopulateItem(repository, dest, extendedProperties, tags);
+            PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 
             return dest;
         }
 
-        public static Item PopulateItem(IRepository repository, Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags)
+        public static Item PopulateItem(IRepository repository, Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             if (extendedProperties != null)
             {
@@ -82,6 +82,12 @@ namespace CRP.Controllers.Helpers
                 {
                     item.Tags.Remove(removeTags.ToArray()[i]);
                 }
+            }
+
+            if (!string.IsNullOrEmpty(mapLink))
+            {
+                item.MapLink = GoogleMapHelper.ParseEmbeddedLink(mapLink);
+                item.LinkLink = GoogleMapHelper.ParseLinkLink(mapLink);
             }
 
             return item;

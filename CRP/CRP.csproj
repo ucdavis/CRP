@@ -155,6 +155,7 @@
     <Compile Include="Controllers\Helpers\Copiers.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
     <Compile Include="Controllers\Helpers\CustomGridBuilder.cs" />
+    <Compile Include="Controllers\Helpers\GoogleMapHelper.cs" />
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Controllers\Helpers\InvoiceNumberGenerator.cs" />
     <Compile Include="Controllers\Helpers\ReturnUrlGenerator.cs" />

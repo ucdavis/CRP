@@ -58,7 +58,12 @@
             <%= Html.Encode(Model.Item.Link)%>
         </p>
         
-        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=wickson+hall,+uc+davis&amp;sll=38.541755,-121.750102&amp;sspn=0.004196,0.009645&amp;ie=UTF8&amp;hq=wickson+hall,&amp;hnear=University+of+California&amp;ll=38.54,-121.75&amp;spn=0.020946,0.038418&amp;output=embed"></iframe><br /><small><a href="http://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=wickson+hall,+uc+davis&amp;sll=38.541755,-121.750102&amp;sspn=0.004196,0.009645&amp;ie=UTF8&amp;hq=wickson+hall,&amp;hnear=University+of+California&amp;ll=38.54,-121.75&amp;spn=0.020946,0.038418" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" 
+            marginwidth="0" 
+            src="<%= Model.Item.MapLink %>"></iframe><br />
+        <small>
+            <a href="<%= Model.Item.LinkLink %>" style="color:#0000FF;text-align:left">View Larger Map</a>
+        </small>
         
     </fieldset>
     <p>

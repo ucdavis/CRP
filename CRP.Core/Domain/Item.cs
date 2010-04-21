@@ -65,6 +65,15 @@ namespace CRP.Core.Domain
         /// </summary>
         public virtual bool Private { get; set; }
 
+        /// <summary>
+        /// Link used for embedding a map
+        /// </summary>
+        public virtual string MapLink { get; set; }
+        /// <summary>
+        /// Link used in the below text for linking to google maps
+        /// </summary>
+        public virtual string LinkLink { get; set; }
+
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<ExtendedPropertyAnswer> ExtendedPropertyAnswers { get; set; }
         public virtual ICollection<Coupon> Coupons { get; set; }

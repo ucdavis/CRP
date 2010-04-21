@@ -63,7 +63,11 @@
                 <%= Html.TextBox("Item.Link")%>
                 <%= Html.ValidationMessage("Item.Link", "*")%>
             </p>
-
+            <p>
+                <label for="Item.MapLink">Map Link:</label>
+                <%= Html.TextBox("MapLink") %>
+                <%= Html.ValidationMessage("MapLink", "*") %>
+            </p>
             <p>
                 <label for="Item.Available">Availabe to public:</label>
                 <%= Html.CheckBox("Item.Available") %>

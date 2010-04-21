@@ -71,7 +71,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [AcceptPost]
         [ValidateInput(false)]
-        public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags)
+        public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
@@ -83,7 +83,7 @@ namespace CRP.Controllers
 
             // process the extended properties and tags
             //item = PopulateObject.Item(Repository, item, extendedProperties, tags);
-            item = Copiers.PopulateItem(Repository, item, extendedProperties, tags);
+            item = Copiers.PopulateItem(Repository, item, extendedProperties, tags, mapLink);
 
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
@@ -189,11 +189,11 @@ namespace CRP.Controllers
         /// <returns></returns>
         [AcceptPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags)
+        public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             var destItem = Repository.OfType<Item>().GetNullableByID(id);
 
-            destItem = Copiers.CopyItem(Repository, item, destItem, extendedProperties, tags);//PopulateObject.Item(Repository, item, extendedProperties, tags);
+            destItem = Copiers.CopyItem(Repository, item, destItem, extendedProperties, tags, mapLink);//PopulateObject.Item(Repository, item, extendedProperties, tags);
 
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
