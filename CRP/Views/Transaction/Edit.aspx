@@ -33,7 +33,11 @@
                     <%= Html.Encode(Model.TransactionValue.CorrectionTotal.ToString("C"))%>
                 </li>
                 <li>
-                    Donation Total:
+                    Uncorrected Donation Total:
+                    <%= Html.Encode(Model.TransactionValue.UncorrectedDonationTotal.ToString("C"))%>
+                </li>
+                <li>
+                    Current Donation Total:
                     <%= Html.Encode(Model.TransactionValue.DonationTotal.ToString("C"))%>
                     <!--<%= Html.Hidden("DonationTotal", Model.TransactionValue.DonationTotal)%> -->
                 </li>

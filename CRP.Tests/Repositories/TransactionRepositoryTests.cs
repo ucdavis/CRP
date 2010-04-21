@@ -2361,7 +2361,92 @@ namespace CRP.Tests.Repositories
             Assert.AreEqual(11m, transaction.Total);
             #endregion Assert
         }
-        #endregion v
+        #endregion CorrectionAmount Tests
+
+        #region CreatedBy Tests
+
+        [TestMethod]
+        public void TestCreatedByWithNullValueSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.CreatedBy = null;
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            Assert.IsNull(transaction.CreatedBy);
+            #endregion Assert		
+        }
+        [TestMethod]
+        public void TestCreatedByWithEmptyValueSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.CreatedBy = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            Assert.AreEqual(string.Empty, transaction.CreatedBy);
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestCreatedByWithSpacesOnlySaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.CreatedBy = " ";
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            Assert.AreEqual(" ", transaction.CreatedBy);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCreatedByWithFiftyCharactersSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.CreatedBy = " ";
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            Assert.AreEqual(" ", transaction.CreatedBy);
+            #endregion Assert
+        }
+        #endregion CreatedBy Tests
 
         #region Reflection of Database
 

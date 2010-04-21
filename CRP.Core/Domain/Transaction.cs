@@ -37,6 +37,7 @@ namespace CRP.Core.Domain
             RegularAmount = false;
             CorrectionAmount = false;
             CorrectionTotalAmount = false;
+            CorrectionTotalAmountPaid = false;
 
             PaymentType = false;
         }
@@ -108,10 +109,18 @@ namespace CRP.Core.Domain
         }
 
         /// <summary>
-        /// Only donations
+        /// Only donations (Less corrections)
         /// </summary>
         public virtual decimal DonationTotal 
         { 
+            get
+            {
+                return ChildTransactions.Where(a => a.Donation).Sum(a => a.Amount) + CorrectionTotal;
+            } 
+        }
+
+        public virtual decimal UncorrectedDonationTotal
+        {
             get
             {
                 return ChildTransactions.Where(a => a.Donation).Sum(a => a.Amount);
@@ -125,7 +134,7 @@ namespace CRP.Core.Domain
         {
             get
             {
-                return ChildTransactions.Where(a => !a.Donation).Sum(a => a.Amount);
+                return ChildTransactions.Where(a => !a.Donation && a.CreatedBy != null).Sum(a => a.Amount);
             }
         }
 
@@ -134,10 +143,10 @@ namespace CRP.Core.Domain
         /// </summary>
         public virtual decimal AmountTotal
         {
-            //TODO: JCS - Get all non-negative non donation amounts?
+            //JCS Filter out corrections
             get
             {
-                return Amount + ChildTransactions.Where(a => !a.Donation).Sum(a => a.Amount);
+                return Amount + ChildTransactions.Where(a => !a.Donation && a.Amount > 0).Sum(a => a.Amount);
             }
         }
 
@@ -228,16 +237,23 @@ namespace CRP.Core.Domain
             {
                 RegularAmount = false;
             }
+            //We don't want corrections to have a positive value
             CorrectionAmount = true;
             if(Amount >= 0 && CreatedBy != null && !Donation)
             {
                 CorrectionAmount = false;
             }
-
+            //We only want corrections to be ale to reduce the donation amount
             CorrectionTotalAmount = true;
-            if(ChildTransactions != null && DonationTotal + CorrectionTotal <0)
+            if(ChildTransactions != null && UncorrectedDonationTotal + CorrectionTotal <0)
             {
                 CorrectionTotalAmount = false;
+            }
+            //We don't want a "refund" situation.
+            CorrectionTotalAmountPaid = true;
+            if(ChildTransactions != null && TotalPaid < Total)
+            {
+                CorrectionTotalAmountPaid = false;
             }
         }
 
@@ -253,6 +269,9 @@ namespace CRP.Core.Domain
 
         [AssertTrue(Message = "The total of all correction amounts must not exceed the donation amounts")]
         private bool CorrectionTotalAmount { get; set; }
+
+        [AssertTrue(Message = "The total of all correction amounts must not exceed the amount already paid")]
+        private bool CorrectionTotalAmountPaid { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
 
     }
