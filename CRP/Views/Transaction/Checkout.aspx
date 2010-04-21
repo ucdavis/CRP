@@ -18,15 +18,31 @@
     <%= Html.AntiForgeryToken() %>
     
     <div id="priceContainer">
+        <p>
         #
         <%= !String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName) %>:
-        <%--<input type="text" id="quantity" value="1" style="width: 20px" />--%>
-        
+                
         <%= Html.TextBox("quantity", 1, new {@style = "width:20px;"}) %>
         
         x
         <%= Html.Encode(Model.Item.CostPerItem.ToString("C")) %>
+        </p>
     </div>
+    
+    <div id="donationContainer">
+        <p>
+        <label for="donation">Would you like to make a donation?</label>
+        $ <%= Html.TextBox("donation", string.Empty, new {@style="width:40px;"}) %>
+        </p>
+    </div>
+    
+    <div id="paymentTypeContainer">
+        <p>
+        <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.CreditCard %>" /><label for="credit">Credit Card</label>
+        <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.Check %>" /><label for="check">Check</label>
+        </p>
+    </div>
+    
     <% Html.RenderPartial("~/Views/Shared/TransactionForm.ascx", Model.Item); %>
 
     <p>

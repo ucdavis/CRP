@@ -16,11 +16,27 @@
     <property name="Paid" column="Paid" />
     <property name="Amount" column="Amount" />
     <property name="Donation" column="Donation" />
-
-    <bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" fetch="join">
+    <many-to-one name="ParentTransaction" class="CRP.Core.Domain.Transaction, CRP.Core" column="TransactionId" fetch="join" />
+    
+    <bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" >
       <key column="TransactionId" />
       <many-to-many column="CheckId" class="CRP.Core.Domain.Check, CRP.Core" />
     </bag>
-    
+
+    <bag name="TransactionAnswers" table="TransactionAnswers" cascade="save-update">
+      <key column="TransactionId" />
+      <one-to-many class="CRP.Core.Domain.TransactionAnswer, CRP.Core"/>
+    </bag>
+
+    <bag name="QuantityAnswers" table="QuantityAnswers" cascade="save-update">
+      <key column="TransactionId" />
+      <one-to-many class="CRP.Core.Domain.QuantityAnswer, CRP.Core"/>
+    </bag>
+
+    <bag name="ChildTransactions" table="Transactions" cascade="save-update">
+      <key column="TransactionId" />
+      <one-to-many class="CRP.Core.Domain.Transaction, CRP.Core"/>
+    </bag>
+
   </class>
 </hibernate-mapping>

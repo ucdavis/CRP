@@ -40,11 +40,10 @@ namespace CRP.Core.Domain
         [Required]
         [Length(100)]
         public virtual string Name { get; set; }
-
         public virtual string Description { get; set; }
         public virtual decimal CostPerItem { get; set; }
-        [Max(50)]
         public virtual int Quantity { get; set; }
+        [Length(50)]
         public virtual string QuantityName { get; set; }
         public virtual DateTime? Expiration { get; set; }
         public virtual byte[] Image { get; set; }

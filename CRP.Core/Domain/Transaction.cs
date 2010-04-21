@@ -29,6 +29,9 @@ namespace CRP.Core.Domain
             Donation = false;
 
             Checks = new List<Check>();
+            TransactionAnswers = new List<TransactionAnswer>();
+            QuantityAnswers = new List<QuantityAnswer>();
+            ChildTransactions = new List<Transaction>();
         }
 
         [NotNull]
@@ -45,8 +48,15 @@ namespace CRP.Core.Domain
         public virtual decimal Amount { get; set; }
         public virtual bool Donation { get; set; }
         public virtual int Quantity { get; set; }
+        /// <summary>
+        /// The parent transaction object, this is only populated for donation fields.
+        /// </summary>
+        public virtual Transaction ParentTransaction { get; set; }
 
         public virtual ICollection<Check> Checks { get; set; }
+        public virtual ICollection<TransactionAnswer> TransactionAnswers { get; set; }
+        public virtual ICollection<QuantityAnswer> QuantityAnswers { get; set; }
+        public virtual ICollection<Transaction> ChildTransactions { get; set; }
 
         public virtual void AddCheck(Check check)
         {
@@ -56,6 +66,28 @@ namespace CRP.Core.Domain
         public virtual void RemoveCheck(Check check)
         {
             Checks.Remove(check);
+        }
+
+        public virtual void AddTransactionAnswer(TransactionAnswer transactionAnswer)
+        {
+            transactionAnswer.Transaction = this;
+
+            TransactionAnswers.Add(transactionAnswer);
+        }
+
+        public virtual void AddQuantityAnswer(QuantityAnswer quantityAnswer)
+        {
+            quantityAnswer.Transaction = this;
+
+            QuantityAnswers.Add(quantityAnswer);
+        }
+
+        public virtual void AddChildTransaction(Transaction transaction)
+        {
+            transaction.ParentTransaction = this;
+            transaction.Check = Check;
+            transaction.Credit = Credit;
+            ChildTransactions.Add(transaction);
         }
     }
 }

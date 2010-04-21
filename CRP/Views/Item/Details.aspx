@@ -43,7 +43,7 @@
         <% } %>
         
         <p>
-        <a href='<%= Url.Action("Register", "Transaction", new {id=Model.Item.Id} ) %>'><img src="../../Images/register.png" style="border:0;" /></a>
+        <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>'><img src="../../Images/register.png" style="border:0;" /></a>
         </p>
         
         <p><%= Model.Item.Description%></p>
