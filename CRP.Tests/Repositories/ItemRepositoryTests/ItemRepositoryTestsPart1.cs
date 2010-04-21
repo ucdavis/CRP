@@ -172,6 +172,10 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
             }));
+            expectedFields.Add(new NameAndType("QuantityQuestionSet", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Quantity Question is already added\")]"
+            }));
             expectedFields.Add(new NameAndType("QuestionSets", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ItemQuestionSet]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
@@ -194,6 +198,10 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]",
                 "[NHibernate.Validator.Constraints.SizeAttribute(Max = 1)]"
+            }));
+            expectedFields.Add(new NameAndType("TransactionQuestionSet", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Transaction Question is already added\")]"
             }));
             expectedFields.Add(new NameAndType("Transactions", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Transaction]", new List<string>
             {

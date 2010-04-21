@@ -286,23 +286,27 @@ namespace CRP.Core.Domain
 
             TransactionQuestionSet = true;
             QuantityQuestionSet = true;
-            foreach (var questionSet in QuestionSets)
+            if (QuestionSets != null)
             {
-                ItemQuestionSet set = questionSet;
-                var transactionCount =
-                    QuestionSets.Where(a => a.QuestionSet == set.QuestionSet).Where(a => a.TransactionLevel).Count();
-                var quantityCount = QuestionSets.Where(a => a.QuestionSet == set.QuestionSet).Where(a => a.QuantityLevel).Count();
-                if(transactionCount > 1)
+                foreach (var questionSet in QuestionSets)
                 {
-                    TransactionQuestionSet = false;
-                }
-                if(quantityCount > 1)
-                {
-                    QuantityQuestionSet = false;
-                }
-                if(TransactionQuestionSet == false && QuantityQuestionSet == false)
-                {
-                    break;
+                    ItemQuestionSet set = questionSet;
+                    var transactionCount =
+                        QuestionSets.Where(a => a.QuestionSet == set.QuestionSet).Where(a => a.TransactionLevel).Count();
+                    var quantityCount =
+                        QuestionSets.Where(a => a.QuestionSet == set.QuestionSet).Where(a => a.QuantityLevel).Count();
+                    if (transactionCount > 1)
+                    {
+                        TransactionQuestionSet = false;
+                    }
+                    if (quantityCount > 1)
+                    {
+                        QuantityQuestionSet = false;
+                    }
+                    if (TransactionQuestionSet == false && QuantityQuestionSet == false)
+                    {
+                        break;
+                    }
                 }
             }
         }
