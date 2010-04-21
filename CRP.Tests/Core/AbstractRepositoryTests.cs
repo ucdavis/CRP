@@ -301,12 +301,43 @@ namespace CRP.Tests.Core
         /// Loads the question set.
         /// </summary>
         /// <param name="entriesToAdd">The entries to add.</param>
-        protected void LoadQuestionSet(int entriesToAdd)
+        protected void LoadQuestionSets(int entriesToAdd)
         {
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = CreateValidEntities.QuestionSet(entriesToAdd);
                 Repository.OfType<QuestionSet>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
+        /// Loads the transactions.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadTransactions(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.Transaction(entriesToAdd);
+                validEntity.Item = Repository.OfType<Item>().GetById(1);
+                Repository.OfType<Transaction>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
+        /// Loads the questions.
+        /// Requires QuestionSet
+        /// Requires QuestionType
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadQuestions(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.Question(entriesToAdd);
+                validEntity.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+                validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
+                Repository.OfType<Question>().EnsurePersistent(validEntity);
             }
         }
         

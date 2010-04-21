@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
@@ -8,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CRP.Tests.Repositories
 {
     [TestClass]
-    public class ItemQuestionSetRepositoryTests : AbstractRepositoryTests<ItemQuestionSet, int >
+    public class ItemTypeRepositoryTests : AbstractRepositoryTests<ItemType, int >
     {
         #region Init and Overrides
 
@@ -17,21 +16,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="counter">The counter.</param>
         /// <returns>A valid entity of type T</returns>
-        protected override ItemQuestionSet GetValid(int? counter)
+        protected override ItemType GetValid(int? counter)
         {
-            var rtValue = CreateValidEntities.ItemQuestionSet(counter);
-            rtValue.Item = Repository.OfType<Item>().GetById(1);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
-            if (counter != null && counter == 3)
-            {
-                rtValue.Required = true;
-            }
-            else
-            {
-                rtValue.Required = false;
-            }
-
-            return rtValue;
+            return CreateValidEntities.ItemType(counter);
         }
 
         /// <summary>
@@ -39,9 +26,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="numberAtEnd"></param>
         /// <returns></returns>
-        protected override IQueryable<ItemQuestionSet> GetQuery(int numberAtEnd)
+        protected override IQueryable<ItemType> GetQuery(int numberAtEnd)
         {
-            return Repository.OfType<ItemQuestionSet>().Queryable.Where(a => a.Required);
+            return Repository.OfType<ItemType>().Queryable.Where(a => a.Name.EndsWith(numberAtEnd.ToString()));
         }
 
         /// <summary>
@@ -50,9 +37,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="counter"></param>
-        protected override void FoundEntityComparison(ItemQuestionSet entity, int counter)
+        protected override void FoundEntityComparison(ItemType entity, int counter)
         {
-            Assert.AreEqual(counter, entity.Id);
+            Assert.AreEqual("Name" + counter, entity.Name);
         }
 
         /// <summary>
@@ -60,39 +47,33 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="action">The action.</param>
-        protected override void UpdateUtility(ItemQuestionSet entity, ARTAction action)
+        protected override void UpdateUtility(ItemType entity, ARTAction action)
         {
-            const bool updateValue = true;
+            const string updateValue = "Updated";
             switch (action)
             {
                 case ARTAction.Compare:
-                    Assert.AreEqual(updateValue, entity.Required);
+                    Assert.AreEqual(updateValue, entity.Name);
                     break;
                 case ARTAction.Restore:
-                    entity.Required = BoolRestoreValue;
+                    entity.Name = RestoreValue;
                     break;
                 case ARTAction.Update:
-                    BoolRestoreValue = entity.Required;
-                    entity.Required = updateValue;
+                    RestoreValue = entity.Name;
+                    entity.Name = updateValue;
                     break;
             }
         }
 
         /// <summary>
         /// Loads the data.
-        /// ItemQuestionSet Requires Item
-        /// ItemQuestionSet Requires QuestionSet
         /// </summary>
         protected override void LoadData()
         {
-            Repository.OfType<ItemQuestionSet>().DbContext.BeginTransaction();
-            LoadItems(1);
-            LoadQuestionSets(1);
+            Repository.OfType<ItemType>().DbContext.BeginTransaction();
             LoadRecords(5);
-            Repository.OfType<ItemQuestionSet>().DbContext.CommitTransaction();
+            Repository.OfType<ItemType>().DbContext.CommitTransaction();
         }
-
-        
 
         #endregion Init and Overrides
 

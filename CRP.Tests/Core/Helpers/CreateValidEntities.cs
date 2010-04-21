@@ -194,6 +194,10 @@ namespace CRP.Tests.Core.Helpers
         public static QuantityAnswer QuantityAnswer(int? counter)
         {
             var rtValue = new QuantityAnswer();
+            rtValue.Answer = "Answer" + counter.Extra();
+            rtValue.Transaction = new Transaction();
+            rtValue.QuestionSet = new QuestionSet();
+            rtValue.Question = new Question();
             //TODO: Populate values
             
             return rtValue;
@@ -207,6 +211,9 @@ namespace CRP.Tests.Core.Helpers
         public static Question Question(int? counter)
         {
             var rtValue = new Question();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.QuestionSet = new QuestionSet();
+            rtValue.QuestionType = new QuestionType();
             //TODO: Populate values
             
             return rtValue;
@@ -274,6 +281,8 @@ namespace CRP.Tests.Core.Helpers
         public static Transaction Transaction(int? counter)
         {
             var rtValue = new Transaction();
+            rtValue.PaymentConfirmation = "PaymentConfirmation" + counter.Extra();
+            rtValue.Item = new Item();
             //TODO: Populate values
             
             return rtValue;

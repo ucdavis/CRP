@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CRP.Tests.Repositories
 {
     [TestClass]
-    public class ItemQuestionSetRepositoryTests : AbstractRepositoryTests<ItemQuestionSet, int >
+    public class QuantityAnswerRepositoryTests : AbstractRepositoryTests<QuantityAnswer, int>
     {
         #region Init and Overrides
 
@@ -17,20 +17,12 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="counter">The counter.</param>
         /// <returns>A valid entity of type T</returns>
-        protected override ItemQuestionSet GetValid(int? counter)
+        protected override QuantityAnswer GetValid(int? counter)
         {
-            var rtValue = CreateValidEntities.ItemQuestionSet(counter);
-            rtValue.Item = Repository.OfType<Item>().GetById(1);
+            var rtValue = CreateValidEntities.QuantityAnswer(counter);
+            rtValue.Transaction = Repository.OfType<Transaction>().GetById(1);
             rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
-            if (counter != null && counter == 3)
-            {
-                rtValue.Required = true;
-            }
-            else
-            {
-                rtValue.Required = false;
-            }
-
+            rtValue.Question = Repository.OfType<Question>().GetById(1);
             return rtValue;
         }
 
@@ -39,9 +31,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="numberAtEnd"></param>
         /// <returns></returns>
-        protected override IQueryable<ItemQuestionSet> GetQuery(int numberAtEnd)
+        protected override IQueryable<QuantityAnswer> GetQuery(int numberAtEnd)
         {
-            return Repository.OfType<ItemQuestionSet>().Queryable.Where(a => a.Required);
+            return Repository.OfType<QuantityAnswer>().Queryable.Where(a => a.Answer.EndsWith(numberAtEnd.ToString()));
         }
 
         /// <summary>
@@ -50,9 +42,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="counter"></param>
-        protected override void FoundEntityComparison(ItemQuestionSet entity, int counter)
+        protected override void FoundEntityComparison(QuantityAnswer entity, int counter)
         {
-            Assert.AreEqual(counter, entity.Id);
+            Assert.AreEqual("Answer" + counter, entity.Answer);
         }
 
         /// <summary>
@@ -60,36 +52,46 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="action">The action.</param>
-        protected override void UpdateUtility(ItemQuestionSet entity, ARTAction action)
+        protected override void UpdateUtility(QuantityAnswer entity, ARTAction action)
         {
-            const bool updateValue = true;
+            const string updateValue = "Updated";
             switch (action)
             {
                 case ARTAction.Compare:
-                    Assert.AreEqual(updateValue, entity.Required);
+                    Assert.AreEqual(updateValue, entity.Answer);
                     break;
                 case ARTAction.Restore:
-                    entity.Required = BoolRestoreValue;
+                    entity.Answer = RestoreValue;
                     break;
                 case ARTAction.Update:
-                    BoolRestoreValue = entity.Required;
-                    entity.Required = updateValue;
+                    RestoreValue = entity.Answer;
+                    entity.Answer = updateValue;
                     break;
             }
         }
 
         /// <summary>
         /// Loads the data.
-        /// ItemQuestionSet Requires Item
-        /// ItemQuestionSet Requires QuestionSet
+        /// QuantityAnswer Requires Transaction
+        ///     Transaction Requires Item
+        ///         Item requires Unit and ItemType
+        /// QuantityAnswer Requires QuestionSet
+        /// QuantityAnswer Requires Question
+        ///     Question Requires QuestionSet and QuestionType
         /// </summary>
         protected override void LoadData()
         {
-            Repository.OfType<ItemQuestionSet>().DbContext.BeginTransaction();
+            Repository.OfType<QuantityAnswer>().DbContext.BeginTransaction();
+            LoadUnits(1);
+            LoadItemTypes(1);
             LoadItems(1);
+            LoadTransactions(1);
             LoadQuestionSets(1);
+            LoadQuestionTypes(1);
+            LoadQuestionSets(1);
+            LoadQuestions(1);
             LoadRecords(5);
-            Repository.OfType<ItemQuestionSet>().DbContext.CommitTransaction();
+            Repository.OfType<QuantityAnswer>().DbContext.CommitTransaction();
         }
 
         
