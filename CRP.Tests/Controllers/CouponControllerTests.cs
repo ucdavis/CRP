@@ -455,10 +455,12 @@ namespace CRP.Tests.Controllers
                 .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
                 .Return("http://sample.com/ItemManagement/Edit/1").Repeat.Any();
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
-
+   
             FakeCoupons(1);
             Coupons[0].Used = true;
             Coupons[0].Unlimited = true;
+            FakeItems(1);
+            Items[0].AddCoupon(Coupons[0]);
             CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
@@ -480,7 +482,9 @@ namespace CRP.Tests.Controllers
                 .Return("http://sample.com/ItemManagement/Edit/1").Repeat.Any();
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
-            FakeCoupons(1);            
+            FakeCoupons(1);
+            FakeItems(1);
+            Items[0].AddCoupon(Coupons[0]);
             CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
@@ -505,6 +509,8 @@ namespace CRP.Tests.Controllers
 
             FakeCoupons(1);
             Coupons[0].Code = " "; //Invalid.
+            FakeItems(1);
+            Items[0].AddCoupon(Coupons[0]);
             CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
