@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
@@ -389,6 +390,27 @@ namespace CRP.Tests.Controllers
             Controller.Edit(1, DisplayProfiles[0])
                 .AssertActionRedirect()
                 .ToAction<DisplayProfileController>(a => a.List());
+        }
+
+        /// <summary>
+        /// Tests the edit with valid data saves.
+        /// </summary>
+        [TestMethod]
+        public void TestEditWithValidDataSaves()
+        {
+            //Mock one files
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1);
+            var updateDisplayProfile = CreateValidEntities.DisplayProfile(99);
+            FakeDisplayProfiles(3);
+            DisplayProfileRepository.Expect(a => a.GetNullableByID(2)).Return(DisplayProfiles[1]).Repeat.Any();
+
+            Controller.Edit(2, updateDisplayProfile)
+                .AssertActionRedirect()
+                .ToAction<DisplayProfileController>(a => a.List());
+            DisplayProfileRepository.AssertWasCalled(a => a.EnsurePersistent(DisplayProfiles[1]));
+            Assert.AreEqual("Display Profile has been saved successfully.", Controller.Message);
+            Assert.IsNotNull(DisplayProfiles[1].Logo);
+            Assert.AreEqual(updateDisplayProfile.Name, DisplayProfiles[1].Name);
         }
 
         //TODO: Edit Tests
