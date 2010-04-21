@@ -101,7 +101,7 @@
                                     <% } %>
                                 </td>
                                 <td>
-                                    <%= Html.Encode(irc.Name + " (" + irc.QuestionSet != null ? irc.QuestionSet.Name : string.Empty + ")")%>
+                                    <%= Html.Encode(irc.Name + " (" + (irc.QuestionSet != null ? irc.QuestionSet.Name : string.Empty) + ")")%>
                                 </td>
                                 <td>
                                     <%= Html.TextBox("_Format")%>
