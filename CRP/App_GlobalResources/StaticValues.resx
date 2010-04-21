@@ -129,6 +129,54 @@
     <value>Contact Information</value>
     <comment>The name of the required question set</comment>
   </data>
+  <data name="Report_AmountTotal" xml:space="preserve">
+    <value>AmountTotal</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Checks_Amount" xml:space="preserve">
+    <value>Checks_Amount</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Checks_CheckNumber" xml:space="preserve">
+    <value>Checks_CheckNumber</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Checks_DateReceived" xml:space="preserve">
+    <value>Checks_DateReceived</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Checks_Notes" xml:space="preserve">
+    <value>Checks_Notes</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Checks_Payee" xml:space="preserve">
+    <value>Checks_Payee</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Checks_TransactionId" xml:space="preserve">
+    <value>Checks_TransactionId</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_DonationTotal" xml:space="preserve">
+    <value>DonationTotal</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Paid" xml:space="preserve">
+    <value>Paid</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_PaymentType" xml:space="preserve">
+    <value>PaymentType</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Quantity" xml:space="preserve">
+    <value>Quantity</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_Total" xml:space="preserve">
+    <value>Total</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
   <data name="Tab_Checks" xml:space="preserve">
     <value>Checks</value>
     <comment>Tab id used in /ItemManagement/Details/</comment>

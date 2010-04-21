@@ -37,14 +37,13 @@
                    .PrefixUrlParameters(false)
                    .Columns(col =>
                                 {
-                                    col.Add(a => a.TransactionDate.Year.ToString() + a.Id.ToString()).Title(
+                                    col.Add(a => a.TransactionNumber).Title(
                                         "Transaction Number");
                                     col.Add(a => a.Quantity);
                                     col.Add(a => a.Amount.ToString("C")).Title("Amount");
                                     col.Add(a => a.DonationTotal.ToString("C")).Title("Donation Amount");
                                     col.Add(a => a.Credit ? "Credit Card" : "Check").Title("Payment Type");
                                     col.Add(a => a.Paid);
-                                    col.Add(a => a.Donation);
                                 })
                    .Pageable()
                    .Sortable()
@@ -77,7 +76,12 @@
                    %>
         </div>
         <div id="<%= Html.Encode(StaticValues.Tab_Reports) %>">
-            <% Html.Grid(Model.SystemReports)
+        
+            <p>
+                <%= Html.ActionLink<ReportController>(a => a.Create(Model.Item.Id), "Create") %>
+            </p>
+        
+            <% Html.Grid(Model.Reports)
                    .Transactional()
                    .Name("SystemReports")
                    .Columns(col =>
@@ -89,6 +93,7 @@
                                     col.Add(a => a.Name);
                                     col.Add(a => a.Columns.Count).Title("# of Columns");
                                     col.Add(a => a.User.FullName).Title("Created By");
+                                    col.Add(a => a.SystemReusable).Title("System Report");
                                 })
                    .PrefixUrlParameters(false)
                    .Render(); %>

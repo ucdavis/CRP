@@ -366,7 +366,6 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new ItemReportColumn();
             rtValue.Name = "Name" + counter.Extra();
             rtValue.Format = "Format" + counter.Extra();
-            rtValue.DisplayName = "DisplayName" + counter.Extra();
             rtValue.ItemReport = new ItemReport();
 
             return rtValue;

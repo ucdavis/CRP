@@ -18,6 +18,7 @@
     <property name="Donation" column="Donation" />
     <property name="Quantity" column="Quantity" />
     <many-to-one name="ParentTransaction" class="CRP.Core.Domain.Transaction, CRP.Core" column="TransactionId" fetch="join" />
+    <property name="TransactionNumber" column="TransactionNumber" insert="false" update="false" />
     
     <bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" fetch="select" >
       <key column="TransactionId" />

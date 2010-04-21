@@ -556,9 +556,12 @@
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
     <Content Include="Images\logo.gif" />
+    <Content Include="Scripts\jquery.CaesMutioptionControl.js" />
+    <Content Include="Scripts\RenameForArray.js" />
     <Content Include="Views\Check\LinkToTransaction.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />
     <Content Include="Views\ItemManagement\Details.aspx" />
+    <Content Include="Views\Report\Create.aspx" />
     <Content Include="Views\Report\ViewReport.aspx" />
     <Content Include="Views\Shared\CheckView.ascx" />
     <Content Include="Views\Shared\PageHeader.ascx" />

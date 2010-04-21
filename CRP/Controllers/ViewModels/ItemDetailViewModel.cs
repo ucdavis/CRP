@@ -35,7 +35,7 @@ namespace CRP.Controllers.ViewModels
     public class UserItemDetailViewModel
     {
         public Item Item { get; set; }
-        public IEnumerable<ItemReport> SystemReports { get; set; }
+        public IEnumerable<ItemReport> Reports { get; set; }
 
         public static UserItemDetailViewModel Create(IRepository repository, Item item)
         {
@@ -43,9 +43,14 @@ namespace CRP.Controllers.ViewModels
 
             var viewModel = new UserItemDetailViewModel()
                                 {
-                                    Item = item,
-                                    SystemReports = repository.OfType<ItemReport>().Queryable.Where(a => a.SystemReusable).ToList()
+                                    Item = item//,
+                                    //SystemReports = repository.OfType<ItemReport>().Queryable.Where(a => a.SystemReusable).Union(repository.OfType<ItemReport>().Queryable.Where(b => !b.SystemReusable && b.Item == item).ToList()).ToList()
                                 };
+
+            var systemReports = repository.OfType<ItemReport>().Queryable.Where(a => a.SystemReusable).ToList();
+            var userReports = repository.OfType<ItemReport>().Queryable.Where(b => !b.SystemReusable && b.Item == item).ToList();
+
+            viewModel.Reports = systemReports.Union(userReports);
 
             return viewModel;
         }

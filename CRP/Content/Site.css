@@ -315,3 +315,25 @@ div#title
     font-weight: bold;
     color: #ff0000;
 }
+
+
+
+.selected
+{
+    background-color: #D7F8AC !important;
+    border: 1px solid #149525;
+}
+
+.button
+{
+    border: 1px solid #CBCBCB; 
+    display: block; 
+    margin: 2px; 
+    padding: 10px; 
+    text-align: center; 
+    cursor: pointer;
+}
+.button:hover
+{
+    background-color: #D7F8AC;
+}
