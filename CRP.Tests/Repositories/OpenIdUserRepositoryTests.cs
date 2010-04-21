@@ -1542,35 +1542,6 @@ namespace CRP.Tests.Repositories
         /// <summary>
         /// Tests the setting user id to null does not save.
         /// </summary>
-        //[TestMethod]
-        //[ExpectedException(typeof(NHibernate.Id.IdentifierGenerationException))]
-        //public void TestSettingUserIdToNullDoesNotSave()
-        //{
-        //    OpenIdUser openIdUser = null;
-        //    try
-        //    {
-        //        #region Arrange
-        //        openIdUser = GetValid(9);
-        //        openIdUser.UserId = null;
-        //        #endregion Arrange
-
-        //        #region Act
-        //        OpenIdUserRepository.DbContext.BeginTransaction();
-        //        OpenIdUserRepository.EnsurePersistent(openIdUser);
-        //        OpenIdUserRepository.DbContext.CommitTransaction();
-        //        #endregion Act
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        #region Assert
-        //        Assert.IsNotNull(openIdUser);
-        //        Assert.IsNotNull(ex);
-        //        Assert.AreEqual("ids for this class must be manually assigned before calling save(): CRP.Core.Domain.OpenIdUser", ex.Message);
-        //        #endregion Assert
-
-        //        throw;
-        //    }
-        //}
         [TestMethod]
         [ExpectedException(typeof(ApplicationException))]
         public void TestSettingUserIdToNullDoesNotSave()
@@ -1605,35 +1576,6 @@ namespace CRP.Tests.Repositories
         /// <summary>
         /// Tests the setting user id to empty string does not save.
         /// </summary>
-        //[TestMethod]
-        //[ExpectedException(typeof(NHibernate.Id.IdentifierGenerationException))]
-        //public void TestSettingUserIdToEmptyStringDoesNotSave()
-        //{
-        //    OpenIdUser openIdUser = null;
-        //    try
-        //    {
-        //        #region Arrange
-        //        openIdUser = GetValid(9);
-        //        openIdUser.UserId = string.Empty;
-        //        #endregion Arrange
-
-        //        #region Act
-        //        OpenIdUserRepository.DbContext.BeginTransaction();
-        //        OpenIdUserRepository.EnsurePersistent(openIdUser);
-        //        OpenIdUserRepository.DbContext.CommitTransaction();
-        //        #endregion Act
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        #region Assert
-        //        Assert.IsNotNull(openIdUser);
-        //        Assert.IsNotNull(ex);
-        //        Assert.AreEqual("ids for this class must be manually assigned before calling save(): CRP.Core.Domain.OpenIdUser", ex.Message);
-        //        #endregion Assert
-
-        //        throw;
-        //    }
-        //}
         [TestMethod]
         [ExpectedException(typeof(ApplicationException))]
         public void TestSettingUserIdToEmptyStringDoesNotSave()
@@ -1652,7 +1594,7 @@ namespace CRP.Tests.Repositories
                 OpenIdUserRepository.DbContext.CommitTransaction();
                 #endregion Act
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 #region Assert
                                 Assert.IsNotNull(openIdUser);
@@ -1699,7 +1641,7 @@ namespace CRP.Tests.Repositories
         #endregion InvalidTest
         #endregion UserId Test
 
-        #region Reflection of Database.
+        #region Reflection of Database
 
         /// <summary>
         /// Tests all fields in the database have been tested.

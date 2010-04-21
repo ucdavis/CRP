@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CRP.Core.Domain;
 
 namespace CRP.Tests.Core.Helpers
@@ -13,7 +12,6 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new Unit();
             rtValue.FullName = "FullName" + counter.Extra();
             rtValue.ShortName = "ShortName";
-            //TODO: Other Values
 
             return rtValue;
         }
@@ -28,7 +26,6 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new School();
             rtValue.LongDescription = "LongDescription" + counter.Extra();
             rtValue.ShortDescription = "ShortDescription" + counter.Extra();
-            //TODO: Other Values
 
             return rtValue;
         }
@@ -43,7 +40,6 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new User();
             rtValue.FirstName = "FirstName" + counter.Extra();
             rtValue.Units = new List<Unit>();
-            //TODO: Other Values
 
             return rtValue;
         }
@@ -60,7 +56,10 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new PaymentLog();
             rtValue.Name = "Name" + counter.Extra();
             rtValue.Transaction = new Transaction();
-            //TODO: Populate values
+            rtValue.CheckNumber = 1; //Can be null when Credit is true
+            rtValue.Check = true;
+            rtValue.Credit = !rtValue.Check;
+            rtValue.Amount = 1m;
 
             return rtValue;
         }
@@ -78,7 +77,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Code = "1234567890";
             rtValue.DiscountAmount = 0.01m;
             rtValue.Item = new Item();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -93,7 +91,6 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new DisplayProfile();
             rtValue.Name = "Name" + counter.Extra();
             rtValue.Unit = new Unit();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -109,7 +106,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Owner = false;
             rtValue.User = new User();
             rtValue.Item = new Item();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -125,7 +121,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Name = "Name" + counter.Extra();
             rtValue.ItemType = new ItemType();
             rtValue.QuestionType = new QuestionType();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -141,7 +136,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Answer = "Answer" + counter.Extra();
             rtValue.Item = new Item();
             rtValue.ExtendedProperty = new ExtendedProperty();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -157,8 +151,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Name = "Name" + counter.Extra();
             rtValue.ItemType = new ItemType();
             rtValue.Unit = new Unit();
-            //rtValue.Quantity = 1;
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -174,7 +166,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Item = new Item();
             rtValue.QuestionSet = new QuestionSet();
             rtValue.QuantityLevel = true;
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -188,7 +179,6 @@ namespace CRP.Tests.Core.Helpers
         {
             var rtValue = new ItemType();
             rtValue.Name = "Name" + counter.Extra();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -205,7 +195,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Transaction = new Transaction();
             rtValue.QuestionSet = new QuestionSet();
             rtValue.Question = new Question();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -221,7 +210,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Name = "Name" + counter.Extra();
             rtValue.QuestionSet = new QuestionSet();
             rtValue.QuestionType = new QuestionType();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -236,7 +224,6 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new QuestionOption();
             rtValue.Name = "Name" + counter.Extra();
             rtValue.Question = new Question();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -250,7 +237,6 @@ namespace CRP.Tests.Core.Helpers
         {
             var rtValue = new QuestionSet();
             rtValue.Name = "Name" + counter.Extra();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -264,7 +250,6 @@ namespace CRP.Tests.Core.Helpers
         {
             var rtValue = new QuestionType();
             rtValue.Name = "Name" + counter.Extra();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -278,7 +263,6 @@ namespace CRP.Tests.Core.Helpers
         {
             var rtValue = new Tag();
             rtValue.Name = "Name" + counter.Extra();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -292,7 +276,6 @@ namespace CRP.Tests.Core.Helpers
         {
             var rtValue = new Transaction();
             rtValue.Item = new Item();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -309,7 +292,6 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Transaction = new Transaction();
             rtValue.QuestionSet = new QuestionSet();
             rtValue.Question = new Question();
-            //TODO: Populate values
             
             return rtValue;
         }
@@ -386,7 +368,6 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new Validator();
             rtValue.Name = "Name" + counter.Extra();
             rtValue.Class = "Class" + counter.Extra();
-            //TODO: Populate values
 
             return rtValue;
         }
