@@ -38,6 +38,7 @@ namespace CRP.Core.Domain
 
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<ExtendedPropertyAnswer> ExtendedPropertyAnswers { get; set; }
+        public virtual ICollection<Coupon> Coupons { get; set; }
 
         public virtual void AddTag(Tag tag)
         {
