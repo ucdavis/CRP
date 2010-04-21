@@ -162,6 +162,7 @@
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ReportViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\SearchViewModel.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -554,6 +556,7 @@
     <Content Include="Images\yahoo.gif" />
     <Content Include="Images\red_close.jpg" />
     <Content Include="Scripts\jquery.CaesMutioptionControl.js" />
+    <Content Include="Scripts\jquery.watermark.min.js" />
     <Content Include="Scripts\openid-jquery.js" />
     <Content Include="Scripts\RenameForArray.js" />
     <Content Include="Views\Account\CasLogon.aspx" />
@@ -565,6 +568,7 @@
     <Content Include="Views\ItemManagement\Details.aspx" />
     <Content Include="Views\Report\Create.aspx" />
     <Content Include="Views\Report\ViewReport.aspx" />
+    <Content Include="Views\Search\Index.aspx" />
     <Content Include="Views\Shared\CheckView.ascx" />
     <Content Include="Views\Shared\PageHeader.ascx" />
     <Content Include="Views\Shared\QuestionForm.ascx" />

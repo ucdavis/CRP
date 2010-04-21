@@ -25,7 +25,14 @@
     </script>
     <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.5.5/jquery.validate.min.js"></script>
     <script src="<%= Url.Content("~/Scripts/xVal.jquery.validate.js") %>" type="text/javascript"></script>
-   
+    <script src="<%= Url.Content("~/Scripts/jquery.watermark.min.js") %>" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("input#searchTerm").watermark('Search', { className: 'watermark' });
+        });
+    </script>
+    
     <asp:ContentPlaceHolder ID="HeaderContent" runat="server">
     </asp:ContentPlaceHolder>
 
@@ -42,7 +49,13 @@
 </asp:ContentPlaceHolder>
 
 <span class="clear"/>
-<p id="search_box" class="search_box"><input type="text" value="Search" maxlength="20" /></p>
+<% using (Html.BeginForm("Index", "Search")) { %>
+    <%= Html.AntiForgeryToken() %>
+    <p id="search_box" class="search_box">
+        <%= Html.TextBox("searchTerm", string.Empty, new {@maxlength="20"}) %>
+        <%= Html.SubmitButton("Submit", "Search") %>
+    </p>
+<% } %>
 </div>
 </div>
 
