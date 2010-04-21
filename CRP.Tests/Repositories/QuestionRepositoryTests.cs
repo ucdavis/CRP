@@ -1178,7 +1178,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(question);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("OptionsRequired: Options are required");
+                results.AssertErrorsAre("OptionsRequired: The question type requires at least one option.");
                 Assert.IsTrue(question.IsTransient());
                 Assert.IsFalse(question.IsValid());
                 throw;
@@ -1285,7 +1285,7 @@ namespace CRP.Tests.Repositories
             }));
             expectedFields.Add(new NameAndType("OptionsRequired", "System.Boolean", new List<string>
             {
-                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Options are required\")]"
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"The question type requires at least one option.\")]"
             }));
             expectedFields.Add(new NameAndType("Order", "System.Int32", new List<string>()));
             expectedFields.Add(new NameAndType("QuestionSet", "CRP.Core.Domain.QuestionSet", new List<string>

@@ -121,11 +121,12 @@ namespace CRP.Controllers
                 ModelState.AddModelError("Question Set", "This is a sytem default question set and cannot be modified.");
             }
 
+            //Moved to Questions.cs domain validation
             // check to make sure there are options if needed
-            if (question.QuestionType.HasOptions && question.Options.Count <= 0)
-            {
-                ModelState.AddModelError("Options", "The question type requires at least one option.");
-            }
+            //if (question.QuestionType.HasOptions && question.Options.Count <= 0)
+            //{
+            //    ModelState.AddModelError("Options", "The question type requires at least one option.");
+            //}
 
             if (ModelState.IsValid)
             {

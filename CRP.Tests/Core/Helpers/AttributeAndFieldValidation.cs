@@ -17,7 +17,9 @@ namespace CRP.Tests.Core.Helpers
         {
             #region Act
             // get all public static properties of MyClass type
-            var propertyInfos = entityType.GetProperties();
+
+
+            var propertyInfos = entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             // sort properties by name
             Array.Sort(propertyInfos, (propertyInfo1, propertyInfo2) => propertyInfo1.Name.CompareTo(propertyInfo2.Name));
