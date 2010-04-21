@@ -2284,6 +2284,70 @@ namespace CRP.Tests.Repositories
 
         #endregion CheckAndCredit Tests
 
+        #region DisplayCheckInvalidMessage Tests
+
+        /// <summary>
+        /// Tests the DisplayCheckInvalidMessage is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDisplayCheckInvalidMessageIsFalseSaves()
+        {
+            #region Arrange
+
+            var paymentLog = GetValid(9);
+            paymentLog.DisplayCheckInvalidMessage = false;
+
+            #endregion Arrange
+
+            #region Act
+
+            PaymentLogRepository.DbContext.BeginTransaction();
+            PaymentLogRepository.EnsurePersistent(paymentLog);
+            PaymentLogRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsFalse(paymentLog.DisplayCheckInvalidMessage);
+            Assert.IsFalse(paymentLog.IsTransient());
+            Assert.IsTrue(paymentLog.IsValid());
+
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DisplayCheckInvalidMessage is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDisplayCheckInvalidMessageIsTrueSaves()
+        {
+            #region Arrange
+
+            var paymentLog = GetValid(9);
+            paymentLog.DisplayCheckInvalidMessage = true;
+
+            #endregion Arrange
+
+            #region Act
+
+            PaymentLogRepository.DbContext.BeginTransaction();
+            PaymentLogRepository.EnsurePersistent(paymentLog);
+            PaymentLogRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsTrue(paymentLog.DisplayCheckInvalidMessage);
+            Assert.IsFalse(paymentLog.IsTransient());
+            Assert.IsTrue(paymentLog.IsValid());
+
+            #endregion Assert
+        }
+
+        #endregion DisplayCheckInvalidMessage Tests
+
 
         #region Reflection of Database
 
@@ -2322,7 +2386,8 @@ namespace CRP.Tests.Repositories
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Check or Credit must be selected.\")]"
             }));
             expectedFields.Add(new NameAndType("Credit", "System.Boolean", new List<string>()));
-            expectedFields.Add(new NameAndType("DatePayment", "System.DateTime", new List<string>()));            
+            expectedFields.Add(new NameAndType("DatePayment", "System.DateTime", new List<string>()));
+            expectedFields.Add(new NameAndType("DisplayCheckInvalidMessage", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("GatewayTransactionId", "System.String", new List<string>
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)16)]"
