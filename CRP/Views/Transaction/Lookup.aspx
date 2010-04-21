@@ -48,6 +48,10 @@
         <%if (Model.ShowCreditCardReSubmit) {%>
             <%= Html.ActionLink<TransactionController>(a => a.Confirmation(Model.Transaction.Id), "Resubmit Credit Card Payment") %>
         <%} %>
+        <%if(Model.Transaction.Check){%>
+            <h2>Check Payment Instructions</h2>
+            <%=Html.HtmlEncode(Model.Transaction.Item.CheckPaymentInstructions) %>
+        <%} %>
         </ul>
     <% } %>
 
