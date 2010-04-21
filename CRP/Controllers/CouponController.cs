@@ -101,12 +101,16 @@ namespace CRP.Controllers
         /// <returns></returns>
         public JsonNetResult Validate(int itemId, string couponCode)
         {            
+            if(string.IsNullOrEmpty(couponCode))
+            {
+                return new JsonNetResult(new { discountAmount = 0, maxQuantity = 0, message = "" });
+            }
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
             var coupon = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == couponCode && a.Item == item && a.IsActive).FirstOrDefault();
 
             if (item == null || coupon == null)
             {
-                return new JsonNetResult(new {message = "Invalid code."});
+                return new JsonNetResult(new { discountAmount = 0, maxQuantity = 0, message = "Invalid code." });
             }
 
             var discountAmount = coupon.ValidateCoupon(null, 1, true);
@@ -114,7 +118,7 @@ namespace CRP.Controllers
             //Done: This needs to work with Coupons that are unlimited.
             if (!discountAmount.HasValue) //Suggestion to fix failing test            
             {
-                return new JsonNetResult(new { message = "Coupon has already been redeemed." });
+                return new JsonNetResult(new { discountAmount = 0, maxQuantity = 0, message = "Coupon has already been redeemed." });
             }
 
             return new JsonNetResult(new {discountAmount = discountAmount.Value, maxQuantity = coupon.MaxQuantity.HasValue ? coupon.MaxQuantity.Value : -1});

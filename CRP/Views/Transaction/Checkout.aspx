@@ -183,6 +183,9 @@
                     alert("Please enter a valid number.");
                     return;
                 }
+                if($(this).val() < 0) {
+                    $(this).val(0);
+                }
 
                 CalculateTotal();
             });
@@ -199,19 +202,17 @@
                     var message = result.message;
                 
                     // if the message is undefined, we have a valid coupon
-                    if (message == undefined)
-                    {
-                        var discountAmount = result.discountAmount;
-                        var maxQuantity = result.maxQuantity;
-                        
-                        $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
-                        $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
-                        
-                        $("span#CouponMessage").html("Coupon accepted.");
-                        
-                        CalculateTotal();
-                    }
                     
+                    var discountAmount = result.discountAmount;
+                    var maxQuantity = result.maxQuantity;
+                    
+                    $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
+                    $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
+                    
+                    $("span#CouponMessage").html("Coupon accepted.");
+                    
+                    CalculateTotal();
+                  
                     // display error message
                     $("span#CouponMessage").html(message);
                     
