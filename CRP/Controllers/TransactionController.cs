@@ -10,6 +10,7 @@ using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Controller;
 using MvcContrib;
+using UCDArch.Web.Helpers;
 using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
@@ -17,12 +18,10 @@ namespace CRP.Controllers
     public class TransactionController : SuperController
     {
         private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
-        private readonly IPaymentProvider _paymentProvider;
 
-        public TransactionController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository, IPaymentProvider paymentProvider)
+        public TransactionController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository)
         {
             _openIdUserRepository = openIdUserRepository;
-            _paymentProvider = paymentProvider;
         }
 
         /// <summary>
@@ -182,7 +181,7 @@ namespace CRP.Controllers
             }
 
             // deal with donation
-            if (donation.HasValue)
+            if (donation.HasValue && donation.Value > 0.0m)
             {
                 var donationTransaction = new Transaction(item);
                 donationTransaction.Donation = true;
@@ -247,17 +246,37 @@ namespace CRP.Controllers
         /// <returns></returns>
         [AcceptPost]
         [BypassAntiForgeryToken]
-        public ActionResult PaymentResult(int? EXT_TRANS_ID, string PMT_STATUS, decimal? PMT_AMT, int? TPG_TRANS_ID)
+        public ActionResult PaymentResult(int? EXT_TRANS_ID, string PMT_STATUS, string NAME_ON_ACT, decimal? PMT_AMT, string TPG_TRANS_ID, string CARD_TYPE)
         {
             if (EXT_TRANS_ID.HasValue)
             {
                 var transaction = Repository.OfType<Transaction>().GetNullableByID(EXT_TRANS_ID.Value);
-                if (PMT_STATUS == "success") transaction.Paid = true;
-                transaction.TrackingId = TPG_TRANS_ID;
 
-                Repository.OfType<Transaction>().EnsurePersistent(transaction);
+                var paymentLog = new PaymentLog(transaction.Total);
+                paymentLog.Credit = true;
+
+                if (PMT_STATUS == "success")
+                {
+                    paymentLog.Name = NAME_ON_ACT;
+                    paymentLog.Amount = PMT_AMT.Value;
+                    paymentLog.Accepted = true;
+                    paymentLog.GatewayTransactionId = TPG_TRANS_ID;
+                    paymentLog.CardType = CARD_TYPE;
+                }
+
+                transaction.AddPaymentLog(paymentLog);
+
+                paymentLog.TransferValidationMessagesTo(ModelState);
+
+                if (ModelState.IsValid)
+                {
+                    Repository.OfType<Transaction>().EnsurePersistent(transaction);
+
+                    //TODO: send the shopper an email
+                }
             }
-            return new EmptyResult();
+
+            return View();
         }
     }
 

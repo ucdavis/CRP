@@ -122,5 +122,20 @@ namespace CRP.Controllers.Helpers
 
             return dest;
         }
+
+        public static PaymentLog CopyCheckValues(PaymentLog src, PaymentLog dest)
+        {
+            Check.Require(src != null, "Source payment log is required.");
+            Check.Require(dest != null, "Destination payment log is required.");
+
+            dest.Name = src.Name;
+            dest.CheckNumber = src.CheckNumber;
+            dest.Amount = src.Amount;
+            dest.DatePayment = src.DatePayment;
+            dest.Notes = src.Notes;
+            dest.Accepted = src.Accepted;
+
+            return dest;
+        }
     }
 }

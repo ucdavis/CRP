@@ -25,11 +25,11 @@ namespace CRP.Core.Domain
             TransactionDate = DateTime.Now;
             Credit = false;
             Check = false;
-            Paid = false;
             Amount = 0.0m;
             Donation = false;
 
-            Checks = new List<Check>();
+            //Checks = new List<Check>();
+            PaymentLogs = new List<PaymentLog>();
             TransactionAnswers = new List<TransactionAnswer>();
             QuantityAnswers = new List<QuantityAnswer>();
             ChildTransactions = new List<Transaction>();
@@ -40,7 +40,7 @@ namespace CRP.Core.Domain
         public virtual DateTime TransactionDate { get; set; }
         public virtual bool Credit { get; set; }
         public virtual bool Check { get; set; }
-        public virtual bool Paid { get; set; }
+        //public virtual bool Paid { get; set; }
         public virtual decimal Amount { get; set; }
         public virtual bool Donation { get; set; }
         public virtual int Quantity { get; set; }
@@ -48,33 +48,56 @@ namespace CRP.Core.Domain
         /// The parent transaction object, this is only populated for donation fields.
         /// </summary>
         public virtual Transaction ParentTransaction { get; set; }
-
+        /// <summary>
+        /// Display transaction number
+        /// </summary>
         public virtual string TransactionNumber { get; set; }
         public virtual OpenIdUser OpenIDUser { get; set; }
 
+        //TODO: get rid of this field
+        //public virtual string PaymentConfirmation { get; set; }
+
+        //TODO: get rid of this field
         /// <summary>
         /// uPay reference number
         /// </summary>
-        public virtual int? ReferenceNumber { get; set; }
+        //public virtual int? ReferenceNumber { get; set; }
+        //TODO: get rid of this field
         /// <summary>
         /// uPay tracking id
         /// </summary>
-        public virtual int? TrackingId { get; set; }
+        //public virtual int? TrackingId { get; set; }
 
-        public virtual ICollection<Check> Checks { get; set; }
+        //TODO: get rid of this field
+        //public virtual ICollection<Check> Checks { get; set; }
+        public virtual ICollection<PaymentLog> PaymentLogs { get; set; }
+        
         public virtual ICollection<TransactionAnswer> TransactionAnswers { get; set; }
         public virtual ICollection<QuantityAnswer> QuantityAnswers { get; set; }
         public virtual ICollection<Transaction> ChildTransactions { get; set; }
 
-        public virtual void AddCheck(Check check)
+        ////TODO: get rid of this method
+        //public virtual void AddCheck(Check check)
+        //{
+        //    check.Transaction = this;
+        //    Checks.Add(check);
+        //}
+
+        ////TODO: get rid of this method
+        //public virtual void RemoveCheck(Check check)
+        //{
+        //    Checks.Remove(check);
+        //}
+
+        public virtual void AddPaymentLog(PaymentLog paymentLog)
         {
-            check.Transaction = this;
-            Checks.Add(check);
+            paymentLog.Transaction = this;
+            PaymentLogs.Add(paymentLog);
         }
 
-        public virtual void RemoveCheck(Check check)
+        public virtual void RemovePaymentLog(PaymentLog paymentLog)
         {
-            Checks.Remove(check);
+            PaymentLogs.Remove(paymentLog);
         }
 
         public virtual void AddTransactionAnswer(TransactionAnswer transactionAnswer)
@@ -128,6 +151,47 @@ namespace CRP.Core.Domain
             get
             {
                 return DonationTotal + AmountTotal;
+            }
+        }
+
+        /// <summary>
+        /// Returns the total amount of money paid by the shopper
+        /// </summary>
+        public virtual decimal TotalPaid
+        {
+            get
+            {
+                return PaymentLogs.Where(a => a.Accepted).Sum(a => a.Amount);
+            }
+        }
+
+        /// <summary>
+        /// Returns the total amount of money paid by check
+        /// </summary>
+        public virtual decimal TotalPaidByCheck
+        {
+            get
+            {
+                return PaymentLogs.Where(a => a.Accepted && a.Check).Sum(a => a.Amount);
+            }
+        }
+
+        /// <summary>
+        /// Returns the total amount of money paid by credit card
+        /// </summary>
+        public virtual decimal TotalPaidByCredit
+        {
+            get
+            {
+                return PaymentLogs.Where(a => a.Accepted && a.Credit).Sum(a => a.Amount);
+            }
+        }
+
+        public virtual bool Paid
+        {
+            get
+            {
+                return TotalPaid == Total;
             }
         }
     }

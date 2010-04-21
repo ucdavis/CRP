@@ -18,7 +18,7 @@ namespace CRP.Controllers.ViewModels
 
         public ICollection<string> ColumnNames { get; set; }
         public ICollection<string[]> RowValues { get; set; }
-        public ICollection<CRP.Core.Domain.Check> Checks { get; set; }
+        //public ICollection<CRP.Core.Domain.Check> Checks { get; set; }
         public int ItemId { get; set; }
         public string ReportName { get; set; }
 
@@ -102,7 +102,7 @@ namespace CRP.Controllers.ViewModels
             foreach (var x in item.Transactions.Where(a => a.ParentTransaction == null))
             {
                 // go through all the unqiue quantity ids
-                foreach (var y in x.Checks)
+                foreach (var y in x.PaymentLogs.Where(a => a.Check && a.Accepted))
                 {
                     // this represents one row worth of data
                     var row = new List<string>();
@@ -185,33 +185,33 @@ namespace CRP.Controllers.ViewModels
         /// <param name="check"></param>
         /// <param name="field"></param>
         /// <returns></returns>
-        private static string ExtractCheckValue(CRP.Core.Domain.Check check, string field)
+        private static string ExtractCheckValue(PaymentLog paymentLog, string field)
         {
             var result = string.Empty;
 
             if (field == StaticValues.Report_Checks_Payee)
             {
-                result = check.Payee;
+                result = paymentLog.Name;
             }
             else if (field == StaticValues.Report_Checks_CheckNumber)
             {
-                result = check.CheckNumber.ToString();
+                result = paymentLog.CheckNumber.ToString();
             }
             else if(field == StaticValues.Report_Checks_Amount)
             {
-                result = check.Amount.ToString("C");
+                result = paymentLog.Amount.ToString("C");
             }
             else if(field == StaticValues.Report_Checks_DateReceived)
             {
-                result = check.DateReceived.ToString("d");
+                result = paymentLog.DatePayment.ToString("d");
             }
             else if (field == StaticValues.Report_Checks_Notes)
             {
-                result = check.Notes;
+                result = paymentLog.Notes;
             }
             else if (field == StaticValues.Report_Checks_TransactionId)
             {
-                result = check.Transaction.TransactionNumber;
+                result = paymentLog.Transaction.TransactionNumber;
             }
 
             return result;

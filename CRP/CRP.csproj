@@ -552,6 +552,7 @@
     <Content Include="Images\vidoop.ico" />
     <Content Include="Images\wordpress.ico" />
     <Content Include="Images\yahoo.gif" />
+    <Content Include="Images\red_close.jpg" />
     <Content Include="Scripts\jquery.CaesMutioptionControl.js" />
     <Content Include="Scripts\openid-jquery.js" />
     <Content Include="Scripts\RenameForArray.js" />
@@ -568,6 +569,7 @@
     <Content Include="Views\Shared\PageHeader.ascx" />
     <Content Include="Views\Shared\QuestionForm.ascx" />
     <Content Include="Views\Transaction\Confirmation.aspx" />
+    <Content Include="Views\Transaction\PaymentResult.aspx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\fonts\Quicksand_Bold.eot" />

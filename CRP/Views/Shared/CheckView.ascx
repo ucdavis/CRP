@@ -1,15 +1,17 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<Check>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<PaymentLog>" %>
+
+<img src="<%= Url.Content("~/Images/red_close.jpg") %>" class="deactivate-check" style="height:20px; width:20px;" />
 
 <%= Html.Hidden("Id", Model.Id) %>
-
+<%= Html.Hidden("Accepted", Model.Accepted, new {@class="accepted-field"}) %>
 <p>
-    <label for="Payee">Payee:</label>
-    <%= Html.TextBox("Payee", Model.Payee) %>
-    <%= Html.ValidationMessage("Payee", "*") %>
+    <label for="Name">Payee:</label>
+    <%= Html.TextBox("Name", Model.Name) %>
+    <%= Html.ValidationMessage("Name", "*")%>
 </p>
 <p>
     <label for="CheckNumber">CheckNumber:</label>
-    <%= Html.TextBox("CheckNumber", Model.CheckNumber != 0 ? Model.CheckNumber.ToString() : string.Empty) %>
+    <%= Html.TextBox("CheckNumber", Model.CheckNumber.HasValue ? Model.CheckNumber.Value.ToString() : string.Empty) %>
     <%= Html.ValidationMessage("CheckNumber", "*") %>
 </p>
 <p>
@@ -18,9 +20,9 @@
     <%= Html.ValidationMessage("Amount", "*") %>
 </p>
 <p>
-    <label for="DateReceived">DateReceived:</label>
-    <%= Html.TextBox("DateReceived", String.Format("{0:d}", Model.DateReceived), new {@class="date"}) %>
-    <%= Html.ValidationMessage("DateReceived", "*") %>
+    <label for="DatePayment">Date Payment:</label>
+    <%= Html.TextBox("DatePayment", String.Format("{0:d}", Model.DatePayment), new {@class="date"}) %>
+    <%= Html.ValidationMessage("DatePayment", "*")%>
 </p>
 <p>
     <label for="Notes">Notes:</label>

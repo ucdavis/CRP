@@ -131,35 +131,33 @@ namespace CRP.Controllers
         /// <param name="questionSet"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult Edit(QuestionSet questionSet)
+        public ActionResult Edit(int id, QuestionSet questionSet)
         {
-            // check access
-            if (!Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
-            {
-                return this.RedirectToAction(a => a.List());
-            }
+            var existingQs = Repository.OfType<QuestionSet>().GetNullableByID(id);
 
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
+            // check for valid question set and access
+            if (existingQs == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, existingQs)) return this.RedirectToAction(a => a.List());
+
+            // copy the fields
+            existingQs.Name = questionSet.Name;
+            existingQs.IsActive = questionSet.IsActive;
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, existingQs.ValidationResults());
 
             // check to make sure it isn't the system's default contact information set
-            var ciQuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(questionSet.Id);
-            if (ciQuestionSet != null)
+            if (existingQs.Name == StaticValues.QuestionSet_ContactInformation && existingQs.SystemReusable)
             {
-                if (ciQuestionSet.Name == StaticValues.QuestionSet_ContactInformation && ciQuestionSet.SystemReusable)
-                {
-                    ModelState.AddModelError("Question Set",
-                                             "This is a sytem default question set and cannot be modified.");
-                }
+                ModelState.AddModelError("Question Set", "This is a system default question set and cannot be modified");
             }
 
             if (ModelState.IsValid)
             {
-                Repository.OfType<QuestionSet>().EnsurePersistent(questionSet);
+                Repository.OfType<QuestionSet>().EnsurePersistent(existingQs);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Question Set");
             }
 
             var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
-            viewModel.QuestionSet = questionSet;
+            viewModel.QuestionSet = existingQs;
 
             return View(viewModel);
         }

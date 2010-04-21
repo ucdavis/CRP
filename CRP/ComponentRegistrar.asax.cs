@@ -18,7 +18,6 @@ namespace CRP
             container.AddComponent("dbContext", typeof(IDbContext), typeof(DbContext));
 
             container.AddComponent("searchProvider", typeof (ISearchTermProvider), typeof (DevSearchTermProvider));
-            container.AddComponent("paymentProvider", typeof (IPaymentProvider), typeof (TouchnetPaymentProvider));
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)

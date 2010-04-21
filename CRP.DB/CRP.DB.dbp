@@ -7,6 +7,7 @@ Begin DataProject = "CRP.DB"
    SccAuxPath = "SAK"
    SccProvider = "SAK"
    Begin Folder = "Change Scripts"
+      Script = "WipeDB.sql"
    End
    Begin Folder = "Create Scripts"
       Script = "CreateDB.sql"

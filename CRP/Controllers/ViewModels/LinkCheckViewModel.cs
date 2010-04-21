@@ -8,7 +8,7 @@ namespace CRP.Controllers.ViewModels
     public class LinkCheckViewModel
     {
         public Transaction Transaction { get; set; }
-        public IEnumerable<Core.Domain.Check> Checks { get; set; }
+        public IEnumerable<PaymentLog> PaymentLogs { get; set; }
 
         public static LinkCheckViewModel Create(IRepository repository, Transaction transaction)
         {

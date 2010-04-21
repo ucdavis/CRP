@@ -12,7 +12,7 @@
     <property name="TransactionDate" column="TransactionDate" />
     <property name="Credit" column="Credit" />
     <property name="Check" column="[Check]" />
-    <property name="Paid" column="Paid" />
+    <!--<property name="Paid" column="Paid" />-->
     <property name="Amount" column="Amount" />
     <property name="Donation" column="Donation" />
     <property name="Quantity" column="Quantity" />
@@ -20,13 +20,18 @@
     <property name="TransactionNumber" column="TransactionNumber" insert="false" update="false" />
     <many-to-one name="OpenIDUser" class="CRP.Core.Domain.OpenIdUser, CRP.Core" column="OpenIdUserId" cascade="none" fetch="join" />
 
-    <property name="ReferenceNumber" column="ReferenceNumber" />
-    <property name="TrackingId" column="TrackingId" />
+    <!--<property name="ReferenceNumber" column="ReferenceNumber" />
+    <property name="TrackingId" column="TrackingId" />-->
     
-    <bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" fetch="select" >
+    <!--<bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" fetch="select" >
       <key column="TransactionId" />
-      <!--<many-to-many column="CheckId" class="CRP.Core.Domain.Check, CRP.Core" />-->
+      --><!--<many-to-many column="CheckId" class="CRP.Core.Domain.Check, CRP.Core" />--><!--
       <one-to-many class="CRP.Core.Domain.Check, CRP.Core"/>
+    </bag>-->
+
+    <bag name="PaymentLogs" table="PaymentLogs" cascade="all-delete-orphan" fetch="select" >
+      <key column="TransactionId" />
+      <one-to-many class="CRP.Core.Domain.PaymentLog, CRP.Core"/>
     </bag>
 
     <bag name="TransactionAnswers" table="TransactionAnswers" cascade="save-update">

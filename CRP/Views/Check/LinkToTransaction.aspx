@@ -7,6 +7,14 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+
+    <style type="text/css">
+        .deactivated
+        {
+            background-color:Red;
+        }
+    </style>
+
     <script type="text/javascript">
         $(document).ready(function() {
             $("input.date").datepicker();
@@ -31,7 +39,8 @@
                 var cloned = fieldset.clone();
 
                 cloned.find("input").val("");
-                
+                cloned.find("input.accepted-field").val(true);
+
                 fieldset.after(cloned);
                 RenameControls();
 
@@ -39,6 +48,20 @@
             });
 
             $("input.amount").blur(function(event) { RecalculateTotal(); });
+
+            $("img.deactivate-check").click(function(event) {
+
+                var $fieldset = $(this).parent("fieldset");
+
+                if ($fieldset.hasClass("deactivated")) {
+                    $fieldset.removeClass("deactivated");
+                    $fieldset.find("input.accepted-field").val(true);
+                }
+                else {
+                    $fieldset.addClass("deactivated");
+                    $fieldset.find("input.accepted-field").val(false);
+                }
+            });
         });
 
         function RenameControls() {
@@ -102,6 +125,8 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
+    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
+
     <p>
         <%= Html.DetailItemUrl(Model.Transaction.Item.Id, StaticValues.Tab_Checks) %>
     </p>
@@ -115,7 +140,7 @@
             <td style="width:40%">
                 <div id="TransactionDetails">
                     <p>
-                        Transaction Number: ####-######
+                        Transaction Number: <%= Html.Encode(Model.Transaction.TransactionNumber) %>
                     </p>
                     <p>
                         Transaction Date:
@@ -134,17 +159,17 @@
                 </div>
             </td>
             <td style="width:60%">
-                <% for (var i = 0; i < Model.Transaction.Checks.Count(); i++ ) { %> 
+                <% for (var i = 0; i < Model.PaymentLogs.Count(); i++ ) { %> 
                     <fieldset class="check">
                         <legend>Check <span class="checkIndex"><%= Html.Encode(i + 1) %></span></legend>
-                        <% Html.RenderPartial("~/Views/Shared/CheckView.ascx", Model.Transaction.Checks.ToList()[i]); %>
+                        <% Html.RenderPartial("~/Views/Shared/CheckView.ascx", Model.PaymentLogs.ToList()[i]); %>
                     </fieldset>
                 <% } %>
             
-                <fieldset class="check">
-                    <legend>Check <span class="checkIndex"><%= Html.Encode(Model.Transaction.Checks.Count() + 1) %></span></legend>
-                    <% Html.RenderPartial("~/Views/Shared/CheckView.ascx", new Check()); %>
-                </fieldset>
+<%--                <fieldset class="check">
+                    <legend>Check <span class="checkIndex"><%= Html.Encode(Model.PaymentLogs.Count() + 1)%></span></legend>
+                    <% Html.RenderPartial("~/Views/Shared/CheckView.ascx", new PaymentLog(){Accepted = true}); %>
+                </fieldset>--%>
                 
                 <img id="addCheck" src="../../Images/plus.png" style="width:24px; height:24px" />
             </td>
@@ -153,13 +178,13 @@
             <td colspan="2">
                 Transaction Total: $ <span id="transactionTotal"><%= Html.Encode(string.Format("{0:0.00}",Model.Transaction.Total))%></span>
                 <br />
-                Payment Total: $ <span id="paymentTotal"><%= Html.Encode(string.Format("{0:0.00}", Model.Transaction.Checks.Sum(a => a.Amount))) %></span>
+                Payment Total: $ <span id="paymentTotal"><%= Html.Encode(string.Format("{0:0.00}", Model.PaymentLogs.Sum(a => a.Amount)))%></span>
                 <br />
                 Remaining Balance: $ <span id="remainingTotal">
                     <%= Html.Encode(string.Format("{0:0.00}",
                         Model.Transaction.Total
                         -
-                        Model.Transaction.Checks.Sum(a => a.Amount)                                       
+                        Model.PaymentLogs.Sum(a => a.Amount)                                       
                         )) %>
                 </span>
                 

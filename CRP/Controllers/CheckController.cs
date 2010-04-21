@@ -22,18 +22,16 @@ namespace CRP.Controllers
         public ActionResult LinkToTransaction(int transactionId)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
-            if (transaction == null)
-            {
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
-            }
+            if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List());
 
             var viewModel = LinkCheckViewModel.Create(Repository, transaction);
+            viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
 
             return View(viewModel);
         }
 
         [AcceptPost]
-        public ActionResult LinkToTransaction(int transactionId, Check[] Checks)
+        public ActionResult LinkToTransaction(int transactionId, PaymentLog[] Checks)
         {
             // get the transaction
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
@@ -43,32 +41,42 @@ namespace CRP.Controllers
             }
 
             // go through and process the checks
-            foreach(var check in Checks)
+            foreach (var check in Checks)
             {
-                // new check
-                if (check.Id <= 0)
+                PaymentLog paymentLog;
+
+                if (check.Id <= 0 && check.Accepted && (string.IsNullOrEmpty(check.Name) || check.Amount <= 0.0m))
                 {
-                    transaction.AddCheck(check);
+                    ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
+                }
+
+                // new check that is considered accepted
+                if (check.Id <= 0 && check.Accepted && !string.IsNullOrEmpty(check.Name) && check.Amount > 0.0m)
+                {
+                    paymentLog = Copiers.CopyCheckValues(check, new PaymentLog());
+                    paymentLog.Check = true;
+                    transaction.AddPaymentLog(paymentLog);
+                }
+                // update an existing one
+                else if (check.Id > 0)
+                {
+                    var tempCheck = Repository.OfType<PaymentLog>().GetNullableByID(check.Id);
+                    paymentLog = Copiers.CopyCheckValues(check, tempCheck);
                 }
             }
 
-            // figure out the total of the checks
-            var checkTotal = Checks.Sum(a => a.Amount);
-            var transactionTotal = transaction.Amount + transaction.ChildTransactions.Sum(a => a.Amount);
+            //figure out the total of the checks
+            var checktotal = transaction.PaymentLogs.Where(a => a.Accepted).Sum(a => a.Amount);
+            var transactiontotal = transaction.Total;
 
             // more money is coming in than the transaction total, make a donation for the rest
-            if (checkTotal > transactionTotal)
+            if (checktotal > transactiontotal)
             {
                 var donation = new Transaction(transaction.Item);
                 donation.Donation = true;
-                donation.Amount = checkTotal - transactionTotal;
+                donation.Amount = checktotal - transactiontotal;
 
                 transaction.AddChildTransaction(donation);
-            }
-
-            if (checkTotal >= transactionTotal)
-            {
-                transaction.Paid = true;
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
@@ -77,11 +85,11 @@ namespace CRP.Controllers
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
                 Message = "Checks associated with transaction.";
-                //return Redirect(ReturnUrlGenerator.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
                 return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
             }
 
             var viewModel = LinkCheckViewModel.Create(Repository, transaction);
+            viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
 
             return View(viewModel);
         }

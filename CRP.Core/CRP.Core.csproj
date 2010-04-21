@@ -69,7 +69,6 @@
     <Compile Include="Abstractions\ISearchTermProvider.cs" />
     <Compile Include="Abstractions\SystemTime.cs" />
     <Compile Include="Domain\CatbertClasses.cs" />
-    <Compile Include="Domain\Check.cs" />
     <Compile Include="Domain\Coupon.cs" />
     <Compile Include="Domain\DisplayProfile.cs" />
     <Compile Include="Domain\Editor.cs" />
@@ -81,6 +80,7 @@
     <Compile Include="Domain\ItemType.cs" />
     <Compile Include="Domain\ItemTypeQuestionSet.cs" />
     <Compile Include="Domain\OpenIdUser.cs" />
+    <Compile Include="Domain\PaymentLog.cs" />
     <Compile Include="Domain\QuantityAnswer.cs" />
     <Compile Include="Domain\Question.cs" />
     <Compile Include="Domain\QuestionOption.cs" />
@@ -112,9 +112,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StaticValues.resx</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Domain\Check.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\Item.hbm.xml" />
@@ -194,6 +191,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>StaticValues.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\PaymentLog.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

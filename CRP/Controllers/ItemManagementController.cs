@@ -93,7 +93,7 @@ namespace CRP.Controllers
             item.AddEditor(editor);
 
             // set the unit
-            item.Unit = user.Units.FirstOrDefault();
+            //item.Unit = user.Units.FirstOrDefault();
 
             // add the required question set
             var questionSet =

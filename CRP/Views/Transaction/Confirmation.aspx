@@ -33,7 +33,7 @@
             <!-- This form submits the payment information to uPay for processing -->
             <form method="post" action="<%= Model.PaymentGatewayUrl %>">
                 <%= Html.Hidden(StaticValues.Upay_TransactionId, Model.Transaction.Id) %>
-                <%= Html.Hidden(StaticValues.Upay_Amount, Model.Transaction.AmountTotal) %>
+                <%= Html.Hidden(StaticValues.Upay_Amount, Model.Transaction.Total) %>
                 <%= Html.Hidden(StaticValues.Upay_SiteId, 0) %>
                 
                 <%= Html.SubmitButton("Submit", "Make Payment") %>
