@@ -30,4 +30,13 @@ namespace CRP.Controllers.Filter
             Roles = RoleNames.Admin + "," + RoleNames.User;    //Set the roles prop to a comma delimited string of allowed roles
         }
     }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class UserAdminOnlyAttribute : AuthorizeAttribute
+    {
+        public UserAdminOnlyAttribute()
+        {
+            Roles = RoleNames.ManageAll + "," + RoleNames.SchoolAdmin;    //Set the roles prop to a comma delimited string of allowed roles
+        }
+    }
 }

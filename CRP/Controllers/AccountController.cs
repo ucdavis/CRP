@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Web.Mvc;
 using System.Web.Security;
 using CRP.Authentication;
@@ -184,5 +185,13 @@ namespace CRP.Controllers
             return View(destOpenIdUser);
         }
         #endregion
+
+        [UserAdminOnly]
+        public ActionResult ManageUsers()
+        {
+            //var adminPageUrl = ConfigurationManager.AppSettings["AdminPageUrl"];
+
+            return View();
+        }
     }
 }

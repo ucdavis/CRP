@@ -20,6 +20,7 @@
     <ul>
         <li><%= Html.ActionLink<ApplicationManagementController>(a => a.Index(), "Application Management") %></li>
         <li><%= Html.ActionLink<ReportController>(a => a.ViewSystemReport(null), "System Reports") %></li>
+        <li><%= Html.ActionLink<AccountController>(a => a.ManageUsers(), "Manage Users") %></li>
     </ul>
 
 </asp:Content>
