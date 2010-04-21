@@ -39,6 +39,8 @@ namespace CRP.Core.Domain
 
             DateCreated = SystemTime.Now();
             ItemCoupons = false;
+            TransactionQuestionSet = false;
+            QuantityQuestionSet = false;
         }
 
         [Required]
@@ -206,6 +208,11 @@ namespace CRP.Core.Domain
 
         public virtual void AddTransactionQuestionSet(QuestionSet questionSet)
         {
+            //if(QuestionSets.Where(a => a.QuestionSet == questionSet).Where(a => a.TransactionLevel).Any())
+            //{
+            //    //Already has it
+            //    return;
+            //}
             var itemQuestionSet = new ItemQuestionSet(this, questionSet, QuestionSets.Count);
             itemQuestionSet.TransactionLevel = true;
             QuestionSets.Add(itemQuestionSet);
@@ -213,6 +220,11 @@ namespace CRP.Core.Domain
 
         public virtual void AddQuantityQuestionSet(QuestionSet questionSet)
         {
+            //if (QuestionSets.Where(a => a.QuestionSet == questionSet).Where(a => a.QuantityLevel).Any())
+            //{
+            //    //Already has it
+            //    return;
+            //}
             var itemQuestionSet = new ItemQuestionSet(this, questionSet, QuestionSets.Count);
             itemQuestionSet.QuantityLevel = true;
             QuestionSets.Add(itemQuestionSet);            
@@ -271,6 +283,28 @@ namespace CRP.Core.Domain
                     }
                 }
             }
+
+            TransactionQuestionSet = true;
+            QuantityQuestionSet = true;
+            foreach (var questionSet in QuestionSets)
+            {
+                ItemQuestionSet set = questionSet;
+                var transactionCount =
+                    QuestionSets.Where(a => a.QuestionSet == set.QuestionSet).Where(a => a.TransactionLevel).Count();
+                var quantityCount = QuestionSets.Where(a => a.QuestionSet == set.QuestionSet).Where(a => a.QuantityLevel).Count();
+                if(transactionCount > 1)
+                {
+                    TransactionQuestionSet = false;
+                }
+                if(quantityCount > 1)
+                {
+                    QuantityQuestionSet = false;
+                }
+                if(TransactionQuestionSet == false && QuantityQuestionSet == false)
+                {
+                    break;
+                }
+            }
         }
 
         #region Fields ONLY used for complex validation, not in database
@@ -279,6 +313,11 @@ namespace CRP.Core.Domain
 
         [AssertTrue(Message = "One or more active coupons has a discount amount greater than the cost per item")]
         private bool ItemCoupons { get; set; }
+
+        [AssertTrue(Message = "Transaction Question is already added")]
+        private bool TransactionQuestionSet { get; set; }
+        [AssertTrue(Message = "Quantity Question is already added")]
+        private bool QuantityQuestionSet { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }
