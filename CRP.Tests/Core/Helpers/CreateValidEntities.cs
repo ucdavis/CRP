@@ -55,14 +55,15 @@ namespace CRP.Tests.Core.Helpers
         /// Repository tests may need to modify this data to supply real linked data.
         /// </summary>
         /// <returns>Valid Check</returns>
-        //public static Check Check(int? counter)
-        //{
-        //    var rtValue = new Check();
-        //    rtValue.Payee = "Payee" + counter.Extra();
-        //    //TODO: Populate values
-            
-        //    return rtValue;
-        //}
+        public static PaymentLog PaymentLog(int? counter)
+        {
+            var rtValue = new PaymentLog();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Transaction = new Transaction();
+            //TODO: Populate values
+
+            return rtValue;
+        }
 
         /// <summary>
         /// Create a valid entry for tests. 

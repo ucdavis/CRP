@@ -141,6 +141,7 @@
     <Compile Include="Repositories\ItemTypeQuestionSetRepositoryTests.cs" />
     <Compile Include="Repositories\ItemTypeRepositoryTests.cs" />
     <Compile Include="Repositories\OpenIdUserRepositoryTests.cs" />
+    <Compile Include="Repositories\PaymentLogRepositoryTests.cs" />
     <Compile Include="Repositories\QuantityAnswerRepositoryTests.cs" />
     <Compile Include="Repositories\QuestionOptionRepositoryTests.cs" />
     <Compile Include="Repositories\QuestionRepositoryTests.cs" />
