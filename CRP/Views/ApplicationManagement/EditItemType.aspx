@@ -126,7 +126,7 @@
             
         </fieldset>
     <div>
-        <%=Html.ActionLink("Back to List", "Index") %>
+        <%= Html.ActionLink<ApplicationManagementController>(a => a.ListItemTypes(), "Back to List") %>
     </div>
 
 </asp:Content>
