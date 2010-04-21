@@ -69,6 +69,7 @@
         <%= Html.Hidden("PMT_AMT", Model.Amount)%>
         <%= Html.Hidden("TPG_TRANS_ID", "123456")%>
         <%= Html.Hidden("UPAY_SITE_ID", "0")%>
+        <%= Html.Hidden("VALIDATION_KEY", Model.ValidationKey)%>
         <input type="submit" value="Simulate Successful Payment" />
         
     </form>

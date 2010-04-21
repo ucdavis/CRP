@@ -1130,6 +1130,7 @@ namespace CRP.Tests.Repositories
             var paymentLog = GetValid(9);
             paymentLog.Check = false;
             paymentLog.Credit = true;
+            paymentLog.Accepted = false;
             #endregion Arrange
 
             #region Act
@@ -1206,6 +1207,7 @@ namespace CRP.Tests.Repositories
             var paymentLog = GetValid(9);
             paymentLog.Credit = true;
             paymentLog.Check = false;
+            paymentLog.Accepted = false;
             paymentLog.CheckNumber = 1;
             paymentLog.Amount = 1;
             #endregion Arrange

@@ -35,6 +35,7 @@
                 <%= Html.Hidden(StaticValues.Upay_TransactionId, Model.Transaction.Id) %>
                 <%= Html.Hidden(StaticValues.Upay_Amount, Model.Transaction.Total) %>
                 <%= Html.Hidden(StaticValues.Upay_SiteId, 0) %>
+                <%= Html.Hidden(StaticValues.Upay_ValidationKey, Model.ValidationKey) %>
                 
                 <%= Html.SubmitButton("Submit", "Make Payment") %>
             </form>

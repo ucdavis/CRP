@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
@@ -268,9 +270,23 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
 
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
-
-            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction);
+            string postingString = "FB8E61EF5F63028C"; //TODO: Replace with WebConfig Value
+            var validationKey = CalculateValidationString(postingString, transaction.Id.ToString(), transaction.Total.ToString());
+            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey);
             return View(viewModel);
+        }
+        /// <summary>
+        /// Calculates the validation string.
+        /// </summary>
+        /// <param name="PostingKey">The posting key.</param>
+        /// <param name="EXT_TRANS_ID">The TransactionId</param>
+        /// <param name="AMT">The AMT.</param>
+        /// <returns></returns>
+        private string CalculateValidationString(string PostingKey, string EXT_TRANS_ID, string AMT)
+        {
+            MD5 hash = MD5.Create();
+            byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(PostingKey + EXT_TRANS_ID + AMT));
+            return Convert.ToBase64String(data);
         }
 
         /// <summary>

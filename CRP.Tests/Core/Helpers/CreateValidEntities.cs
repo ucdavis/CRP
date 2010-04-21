@@ -59,6 +59,7 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Transaction = new Transaction();
             rtValue.CheckNumber = 1; //Can be null when Credit is true
             rtValue.Check = true;
+            rtValue.Accepted = true;
             rtValue.Credit = !rtValue.Check;
             rtValue.Amount = 1m;
 

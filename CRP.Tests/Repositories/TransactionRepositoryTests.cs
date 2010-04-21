@@ -1917,6 +1917,7 @@ namespace CRP.Tests.Repositories
             {
                 paymentLogs.Add(CreateValidEntities.PaymentLog(i + 1));
                 paymentLogs[i].Amount = i+1;
+                paymentLogs[i].Accepted = false;
             }
             paymentLogs[2].Accepted = true;
             paymentLogs[4].Accepted = true;

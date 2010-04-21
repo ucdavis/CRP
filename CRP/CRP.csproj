@@ -590,7 +590,6 @@
     <Content Include="Views\Account\ManageUsers.aspx" />
     <Content Include="Views\Account\OpenIdAccount.aspx" />
     <Content Include="Views\Account\OpenIdLogon.aspx" />
-    <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />
     <Content Include="Views\Home\AdminHome.aspx" />
     <Content Include="Views\ItemManagement\Details.aspx" />
@@ -610,6 +609,7 @@
     <Content Include="AppSettingsTest.config" />
     <Content Include="ConnectionStringProd.config" />
     <Content Include="ConnectionStringTest.config" />
+    <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Template\Edit.aspx" />
     <None Include="Images\fonts\Quicksand_Bold.eot" />
     <None Include="Images\fonts\Quicksand_Bold.ttf" />

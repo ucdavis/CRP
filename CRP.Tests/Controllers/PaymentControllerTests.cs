@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web.Util;
 using CRP.Controllers;
@@ -31,6 +32,7 @@ namespace CRP.Tests.Controllers
     public class PaymentControllerTests : ControllerTestBase<PaymentController>
     {
         protected IRepository<Transaction> TransactionRepository { get; set; }
+        protected IRepository<PaymentLog> PaymentLogRepository { get; set; }
         protected List<Transaction> Transactions { get; set; }
         private readonly Type _controllerClass = typeof(PaymentController);
 
@@ -42,7 +44,9 @@ namespace CRP.Tests.Controllers
         {
             Transactions = new List<Transaction>();
             TransactionRepository = FakeRepository<Transaction>();
+            PaymentLogRepository = FakeRepository<PaymentLog>();
             Controller.Repository.Expect(a => a.OfType<Transaction>()).Return(TransactionRepository).Repeat.Any();
+            Controller.Repository.Expect(a => a.OfType<PaymentLog>()).Return(PaymentLogRepository).Repeat.Any();
         }
         /// <summary>
         /// Registers the routes.
@@ -167,8 +171,108 @@ namespace CRP.Tests.Controllers
 
         #region LinkToTransaction AcceptPost Tests
 
+        /// <summary>
+        /// Tests the link to transaction post where id not found redirects to item management controller list.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionPostWhereIdNotFoundRedirectsToItemManagementControllerList()
+        {
+            #region Arrange
+            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            var payments = new PaymentLog[1];
+            payments[0] = CreateValidEntities.PaymentLog(1);
+            #endregion Arrange
+
+            #region Act
+            Controller.LinkToTransaction(2, payments)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the link to transaction post where no checks saves.
+        /// Probably will not happen, but it should still be ok.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionPostWhereNoChecksSaves()
+        {
+            #region Arrange
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);            
+            FakeTransactions(3);
+            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            var payments = new PaymentLog[0];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LinkToTransaction(2, payments)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("#Checks", result.Url);
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[1]));
+            Assert.AreEqual("Checks associated with transaction.", Controller.Message);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the link to transaction with two new checks saves.
+        /// </summary>
+        [TestMethod]
+        public void TestLinkToTransactionWithTwoNewChecksSaves()
+        {
+            #region Arrange
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            FakeTransactions(3);
+            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            var payments = new PaymentLog[2];
+            payments[0] = CreateValidEntities.PaymentLog(1);
+            payments[1] = CreateValidEntities.PaymentLog(2);
+            Assert.AreEqual(0, Transactions[1].PaymentLogs.Count);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.LinkToTransaction(2, payments)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("#Checks", result.Url);
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[1]));
+            Assert.AreEqual("Checks associated with transaction.", Controller.Message);
+            Assert.AreEqual(2, Transactions[1].PaymentLogs.Count);
+            #endregion Assert		
+        }
 
         #endregion LinkToTransaction AcceptPost Tests
+
+
+        [TestMethod]
+        public void TestMD5()
+        {
+            #region Arrange
+            const string postingKey = "FB8E61EF5F63028C";
+            // ReSharper disable InconsistentNaming
+            const string EXT_Trans_Id = "A234";
+            const string AMT = "12.35";
+            // ReSharper restore InconsistentNaming            
+            #endregion Arrange
+
+            #region Act
+            MD5 hash = MD5.Create();
+            byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(postingKey + EXT_Trans_Id + AMT));
+            var result = Convert.ToBase64String(data);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("hAGcy7esDK7joiFIPJQKRA==", result);
+            #endregion Assert		
+        }
 
         #region Reflection Tests
         #region Controller Class Tests
