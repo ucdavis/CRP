@@ -62,7 +62,9 @@ namespace CRP.Controllers
 
             if (itemType != null)
             {
-                extendedProperty.ItemType = itemType;
+                //extendedProperty.ItemType = itemType;
+
+                itemType.AddExtendedProperty(extendedProperty);
 
                 MvcValidationAdapter.TransferValidationMessagesTo(ModelState, extendedProperty.ValidationResults());
 
@@ -77,7 +79,7 @@ namespace CRP.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    Repository.OfType<ExtendedProperty>().EnsurePersistent(extendedProperty);
+                    Repository.OfType<ItemType>().EnsurePersistent(itemType);
                     Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Extended property");
                     return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
                 }
