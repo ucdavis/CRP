@@ -45,10 +45,15 @@
             Paid by:
             <%= Html.Encode(Model.Transaction.Credit ? "Credit Card" : "Check") %>
         </li>        
+        <%if(!Model.Transaction.IsActive) {%>
+        <li>
+            Transaction has been canceled
+        </li>
+        <%} %>
         <%if (Model.ShowCreditCardReSubmit) {%>
             <%= Html.ActionLink<TransactionController>(a => a.Confirmation(Model.Transaction.Id), "Resubmit Credit Card Payment") %>
         <%} %>
-        <%if(Model.Transaction.Check){%>
+        <%if(Model.Transaction.Check && !Model.Transaction.Paid && Model.Transaction.IsActive){%>
             <h2>Check Payment Instructions</h2>
             <%=Html.HtmlEncode(Model.Transaction.Item.CheckPaymentInstructions) %>
         <%} %>

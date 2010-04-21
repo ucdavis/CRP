@@ -972,7 +972,7 @@ namespace CRP.Controllers
                 }
                 if (transaction.Credit && transaction.Check == false)
                 {
-                    if (!transaction.Paid)
+                    if (!transaction.Paid && transaction.IsActive)
                     {
                         if (transaction.PaymentLogs.Where(a => a.TnStatus == "C" || a.TnStatus == "E").Any())
                         {

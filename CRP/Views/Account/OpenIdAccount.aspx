@@ -97,7 +97,8 @@
                                                     <%= Html.SubmitButton("Submit", "View") %>
                                               <% } %>  
                                             <% }); 
-                                col.Add(a => a.TransactionNumber);
+                                col.Add(a => a.TransactionNumber).Title("Transaction");
+                                col.Add(a => a.IsActive);
                                 col.Add(a => a.TransactionDate);
                                 col.Add(a => a.Quantity);
                                 col.Add(a => a.AmountTotal.ToString("C")).Title("Amount");
