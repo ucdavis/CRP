@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CRP.Tests.Repositories
 {
     [TestClass]
-    public class CouponRepositoryTests :AbstractRepositoryTests<Coupon, int>
+    public class EditorRepositoryTests : AbstractRepositoryTests<Editor, int>
     {
         #region Init and Overrides
 
@@ -16,10 +16,20 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="counter">The counter.</param>
         /// <returns>A valid entity of type T</returns>
-        protected override Coupon GetValid(int? counter)
+        protected override Editor GetValid(int? counter)
         {
-            var rtValue = CreateValidEntities.Coupon(counter);
+            var rtValue = CreateValidEntities.Editor(counter);
             rtValue.Item = Repository.OfType<Item>().GetById(1);
+            var notNullCounter = 0;
+            if(counter != null)
+            {
+                notNullCounter = (int)counter;
+            }
+            rtValue.User = Repository.OfType<User>().GetById(notNullCounter);
+            if(counter!=null && counter == 3)
+            {
+                rtValue.Owner = true;
+            }
             return rtValue;
         }
 
@@ -28,9 +38,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="numberAtEnd"></param>
         /// <returns></returns>
-        protected override IQueryable<Coupon> GetQuery(int numberAtEnd)
+        protected override IQueryable<Editor> GetQuery(int numberAtEnd)
         {
-            return Repository.OfType<Coupon>().Queryable.Where(a => a.Email.EndsWith(numberAtEnd.ToString()));
+            return Repository.OfType<Editor>().Queryable.Where(a => a.Owner);
         }
 
         /// <summary>
@@ -39,9 +49,9 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="counter"></param>
-        protected override void FoundEntityComparison(Coupon entity, int counter)
+        protected override void FoundEntityComparison(Editor entity, int counter)
         {
-            Assert.AreEqual("email@test.edu" + counter, entity.Email);
+            Assert.AreEqual(counter, entity.Id);
         }
 
         /// <summary>
@@ -49,38 +59,49 @@ namespace CRP.Tests.Repositories
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="action">The action.</param>
-        protected override void UpdateUtility(Coupon entity, ARTAction action)
+        protected override void UpdateUtility(Editor entity, ARTAction action)
         {
-            const string updateValue = "updated@test.edu";
+            const bool updateValue = true;
             switch (action)
             {
                 case ARTAction.Compare:
-                    Assert.AreEqual(updateValue, entity.Email);
+                    Assert.AreEqual(updateValue, entity.Owner);
                     break;
                 case ARTAction.Restore:
-                    entity.Email = RestoreValue;
+                    entity.Owner = BoolRestoreValue;
                     break;
                 case ARTAction.Update:
-                    RestoreValue = entity.Email;
-                    entity.Email = updateValue;
+                    BoolRestoreValue = entity.Owner;
+                    entity.Owner = updateValue;
                     break;
             }
         }
 
         /// <summary>
         /// Loads the data.
-        /// Coupon Requires Item.
+        /// Editor Requires Item.
         /// Item Requires Unit.
         /// Item requires ItemType
+        /// Editor requires user
         /// </summary>
         protected override void LoadData()
         {
-            Repository.OfType<Coupon>().DbContext.BeginTransaction();
+            Repository.OfType<Editor>().DbContext.BeginTransaction();
             LoadUnits(1);
             LoadItemTypes(1);
             LoadItems(1);
-            LoadRecords(5);
-            Repository.OfType<Coupon>().DbContext.CommitTransaction();
+            LoadUsers(5);
+            LoadRecords(5);  //Note: Each of these records has a different user assigned to it if we want to use that for other tests.
+            Repository.OfType<Editor>().DbContext.CommitTransaction();
+        }
+
+        private void LoadUsers(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.User(entriesToAdd);
+                Repository.OfType<User>().EnsurePersistent(validEntity);
+            }
         }
 
         private void LoadItemTypes(int entriesToAdd)
@@ -115,7 +136,6 @@ namespace CRP.Tests.Repositories
                 Repository.OfType<Item>().EnsurePersistent(validEntity);
             }
         }
-        
 
         #endregion Init and Overrides
 

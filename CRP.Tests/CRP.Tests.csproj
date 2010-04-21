@@ -109,6 +109,9 @@
     <Compile Include="Core\Helpers\CreateValidEntities.cs" />
     <Compile Include="Repositories\CheckRepositoryTests.cs" />
     <Compile Include="Repositories\CouponRepositoryTests.cs" />
+    <Compile Include="Repositories\DisplayProfileRepositoryTests.cs" />
+    <Compile Include="Repositories\EditorRepositoryTests.cs" />
+    <Compile Include="Repositories\ExtendedPropertyRepositoryTests.cs" />
     <Compile Include="Repositories\SchoolRepositoryTests.cs" />
     <Compile Include="Repositories\UnitRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

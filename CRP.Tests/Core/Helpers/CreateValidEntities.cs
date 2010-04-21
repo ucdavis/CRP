@@ -86,6 +86,8 @@ namespace CRP.Tests.Core.Helpers
         public static DisplayProfile DisplayProfile(int? counter)
         {
             var rtValue = new DisplayProfile();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Unit = new Unit();
             //TODO: Populate values
             
             return rtValue;
@@ -99,6 +101,9 @@ namespace CRP.Tests.Core.Helpers
         public static Editor Editor(int? counter)
         {
             var rtValue = new Editor();
+            rtValue.Owner = false;
+            rtValue.User = new User();
+            rtValue.Item = new Item();
             //TODO: Populate values
             
             return rtValue;
@@ -112,6 +117,9 @@ namespace CRP.Tests.Core.Helpers
         public static ExtendedProperty ExtendedProperty(int? counter)
         {
             var rtValue = new ExtendedProperty();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.ItemType = new ItemType();
+            rtValue.QuestionType = new QuestionType();
             //TODO: Populate values
             
             return rtValue;
@@ -233,6 +241,7 @@ namespace CRP.Tests.Core.Helpers
         public static QuestionType QuestionType(int? counter)
         {
             var rtValue = new QuestionType();
+            rtValue.Name = "Name" + counter.Extra();
             //TODO: Populate values
             
             return rtValue;

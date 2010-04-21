@@ -89,6 +89,21 @@ namespace CRP.Tests.Repositories
             CanUpdateEntity(false); //Mutable is false for this table
         }
 
+        public override void CanGetEntityUsingGetByIdWhereIdIsInt()
+        {
+            //Don't Run Test
+        }
+
+        public override void CanGetEntityUsingGetByNullableWithValidIdWhereIdIsInt()
+        {
+            //Don't run Test
+        }
+
+        public override void CanGetNullValueUsingGetByNullableWithInvalidIdWhereIdIsInt()
+        {
+            //Don't run this test
+        }
+
         #endregion CRUD Tests
 
         //TODO: Other Tests

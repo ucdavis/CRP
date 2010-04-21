@@ -1,20 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.DomainModel;
 using UCDArch.Data.NHibernate;
 using UCDArch.Testing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System;
-using CRP.Core.Domain;
-using CRP.Tests.Core.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UCDArch.Core.PersistanceSupport;
-using UCDArch.Data.NHibernate;
-using UCDArch.Testing;
-using UCDArch.Testing.Extensions;
-using System.Linq;
 
 namespace CRP.Tests.Core
 {
@@ -23,6 +12,7 @@ namespace CRP.Tests.Core
     {
         private int _entriesAdded;
         protected string RestoreValue;
+        protected bool BoolRestoreValue;
         
         #region Init
 
@@ -130,7 +120,7 @@ namespace CRP.Tests.Core
         /// Determines whether this instance [can get entity using get by id where id is int].
         /// </summary>
         [TestMethod]
-        public void CanGetEntityUsingGetByIdWhereIdIsInt()
+        public virtual void CanGetEntityUsingGetByIdWhereIdIsInt()
         {
             if(typeof(IdT) == typeof(int))
             {
@@ -145,7 +135,7 @@ namespace CRP.Tests.Core
         /// Determines whether this instance [can get entity using get by nullable with valid id where id is int].
         /// </summary>
         [TestMethod]
-        public void CanGetEntityUsingGetByNullableWithValidIdWhereIdIsInt()
+        public virtual void CanGetEntityUsingGetByNullableWithValidIdWhereIdIsInt()
         {
             if (typeof(IdT) == typeof(int))
             {
@@ -159,7 +149,7 @@ namespace CRP.Tests.Core
         /// Determines whether this instance [can get null value using get by nullable with invalid id where id is int].
         /// </summary>
         [TestMethod]
-        public void CanGetNullValueUsingGetByNullableWithInvalidIdWhereIdIsInt()
+        public virtual void CanGetNullValueUsingGetByNullableWithInvalidIdWhereIdIsInt()
         {
             if (typeof(IdT) == typeof(int))
             {
