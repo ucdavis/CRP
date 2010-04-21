@@ -36,12 +36,6 @@
                    .Name("Transactions")
                    .Columns(col =>
                                 {
-                                    col.Add(a =>
-                                                {%>
-                                                
-                                                    <%= Html.ActionLink<TransactionController>(b => b.Edit(a.Id), "Edit") %>
-                                                
-                                                <%});
                                     col.Add(a => a.TransactionNumber).Title(
                                         "Transaction Number");
                                     col.Add(a => a.Quantity);
@@ -65,6 +59,12 @@
                                                 {%>
                                                 
                                                     <%= Html.ActionLink<PaymentController>(b => b.LinkToTransaction(a.Id), "Select") %>
+                                                
+                                                <%});
+                                    col.Add(a =>
+                                                {%>
+                                                
+                                                    <%= Html.ActionLink<TransactionController>(b => b.Edit(a.Id), "Edit") %>
                                                 
                                                 <%});
                                     col.Add(a => a.TransactionNumber).Title(

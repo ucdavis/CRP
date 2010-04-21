@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -427,36 +428,10 @@ namespace CRP.Controllers
         [BypassAntiForgeryToken]
         public ActionResult PaymentResult(PaymentResultParameters touchNetValues)
         {
-            #region debug1
-            #if DEBUG
-            // create an email for testing
-            var client = new SmtpClient("smtp.ucdavis.edu");
-
-            var message = new MailMessage("anlai@ucdavis.edu", "anlai@ucdavis.edu");
-            //message.To.Add("jasoncsylvestre@gmail.com");
-            message.To.Add("jSylvestre@ucdavis.edu");
-            message.To.Add("owlanjunk@gmail.com");
-            message.Subject = "Touchnet Post Results";
-            message.IsBodyHtml = true;
-
-            var body = new StringBuilder("Touchnet results<br/><br/>");
+            var client = new SmtpClient("smtp.ucdavis.edu"); //Need for errors/debugging
+            MailMessage message = null;
+            var body = new StringBuilder("TouchNet Results<br/><br/>");
             body.Append(DateTime.Now.ToString() + "<br/>");
-
-            foreach (var k in Request.Params.AllKeys)
-            {
-                body.Append(k + ":" + Request.Params[k]);
-                body.Append("<br/>");
-            }
-
-            body.Append("<br/>Function parameters================<br/>");
-            body.Append("EXT_TRANS_ID:" + (touchNetValues.EXT_TRANS_ID.HasValue ? touchNetValues.EXT_TRANS_ID.Value.ToString() : string.Empty) + "<br/>");
-            body.Append("PMT_STATUS:" + touchNetValues.PMT_STATUS + "<br/>");
-            body.Append("NAME_ON_ACT:" + touchNetValues.NAME_ON_ACCT + "<br/>");
-            body.Append("PMT_AMT:" + (touchNetValues.PMT_AMT.HasValue ? touchNetValues.PMT_AMT.Value.ToString() : string.Empty) + "<br/>");
-            body.Append("TPG_TRANS_ID:" + touchNetValues.TPG_TRANS_ID + "<br/>");
-            body.Append("CARD_TYPE" + touchNetValues.CARD_TYPE);
-            #endif
-            #endregion
 
             #region Actual Work
             // validate to make sure a transaction value was received
@@ -464,8 +439,45 @@ namespace CRP.Controllers
             {
                 var transaction = Repository.OfType<Transaction>().GetNullableByID(touchNetValues.EXT_TRANS_ID.Value);
 
-                //TODO: What do we want to do if it isn't found? (Email values?)
-                Check.Require(transaction != null);
+                if(transaction == null)
+                {
+                    #region Email Error Results
+                    message = new MailMessage(ConfigurationManager.AppSettings["EmailForErrors"], ConfigurationManager.AppSettings["EmailForErrors"]);
+                    message.Subject = "TouchNet Post Results -- Transaction not found";
+                    message.IsBodyHtml = true;
+
+                    foreach (var k in Request.Params.AllKeys)
+                    {
+                        body.Append(k + ":" + Request.Params[k]);
+                        body.Append("<br/>");
+                    }
+                    message.Body = body.ToString();
+
+                    body.Append("<br/>Function parameters================<br/>");
+                    body.Append("acct_addr: " + touchNetValues.acct_addr);
+                    body.Append("acct_addr2: " + touchNetValues.acct_addr2);
+                    body.Append("acct_city: " + touchNetValues.acct_city);
+                    body.Append("acct_state: " + touchNetValues.acct_state);
+                    body.Append("acct_zip: " + touchNetValues.acct_zip);
+                    body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK);
+                    body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE);
+                    body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK);
+                    body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID);
+                    body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT);
+                    body.Append("PMT_AMT: " + touchNetValues.PMT_AMT);
+                    body.Append("pmt_date: " + touchNetValues.pmt_date);
+                    body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS);
+                    body.Append("Submit: " + touchNetValues.Submit);
+                    body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK);
+                    body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id);
+                    body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID);
+                    body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID);
+
+                    client.Send(message);
+                    #endregion Email Error Results
+
+                    return View();
+                }
 
                 // create a payment log
                 var paymentLog = new PaymentLog(transaction.Total);
@@ -507,9 +519,6 @@ namespace CRP.Controllers
                         break;
                 }
 
-
-                //TODO: Do we want any of these errors to prevent saving the transaction?
-                //TODO: Do we even want to check if it is invalid?
                 if(touchNetValues.posting_key != ConfigurationManager.AppSettings["TouchNetPostingKey"])
                 {
                     ModelState.AddModelError("PostingKey", "Posting Key Error");
@@ -553,45 +562,66 @@ namespace CRP.Controllers
                 }
                 else
                 {
-                    //TODO: email or log the errors
-                }
+                    #region InValid PaymentLog -- Email Results
+                    message = new MailMessage(ConfigurationManager.AppSettings["EmailForErrors"], ConfigurationManager.AppSettings["EmailForErrors"]);
+                    message.Subject = "Touchnet Post Results -- PaymentLog is Not Valid";
+                    message.IsBodyHtml = true;
 
-                #region debug2
-                #if DEBUG
-                try
-                {
-                    body.Append("Payment log values:<br/>");
-                    body.Append("Name:" + paymentLog.Name + "<br/>");
-                    body.Append("Amount:" + paymentLog.Amount + "<br/>");
-                    body.Append("Accepted:" + paymentLog.Accepted + "<br/>");
-                    body.Append("Gateway transaction id:" + paymentLog.GatewayTransactionId + "<br/>");
-                    body.Append("Card Type: " + paymentLog.CardType + "<br/>");
-                    body.Append("ModelState: " + ModelState.IsValid);
-
-                    body.Append("<br/><br/>===== modelstate errors text===<br/>");
-                    foreach (var result in ModelState.Values)
+                    foreach (var k in Request.Params.AllKeys)
                     {
-                        foreach (var errs in result.Errors)
+                        body.Append(k + ":" + Request.Params[k]);
+                        body.Append("<br/>");
+                    }
+                    message.Body = body.ToString();
+
+                    body.Append("<br/>Function parameters================<br/>");
+                    body.Append("acct_addr: " + touchNetValues.acct_addr);
+                    body.Append("acct_addr2: " + touchNetValues.acct_addr2);
+                    body.Append("acct_city: " + touchNetValues.acct_city);
+                    body.Append("acct_state: " + touchNetValues.acct_state);
+                    body.Append("acct_zip: " + touchNetValues.acct_zip);
+                    body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK);
+                    body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE);
+                    body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK);
+                    body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID);
+                    body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT);
+                    body.Append("PMT_AMT: " + touchNetValues.PMT_AMT);
+                    body.Append("pmt_date: " + touchNetValues.pmt_date);
+                    body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS);
+                    body.Append("Submit: " + touchNetValues.Submit);
+                    body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK);
+                    body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id);
+                    body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID);
+                    body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID);
+
+                    try
+                    {
+                        body.Append("Payment log values:<br/>");
+                        body.Append("Name:" + paymentLog.Name + "<br/>");
+                        body.Append("Amount:" + paymentLog.Amount + "<br/>");
+                        body.Append("Accepted:" + paymentLog.Accepted + "<br/>");
+                        body.Append("Gateway transaction id:" + paymentLog.GatewayTransactionId + "<br/>");
+                        body.Append("Card Type: " + paymentLog.CardType + "<br/>");
+                        body.Append("ModelState: " + ModelState.IsValid);
+
+                        body.Append("<br/><br/>===== modelstate errors text===<br/>");
+                        foreach (var result in ModelState.Values)
                         {
-                            body.Append("Error:" + errs.ErrorMessage + "<br/>");
+                            foreach (var errs in result.Errors)
+                            {
+                                body.Append("Error:" + errs.ErrorMessage + "<br/>");
+                            }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        body.Append(ex.Message);
+                    }
+
+                    client.Send(message);
+                    #endregion InValid PaymentLog -- Email Results
                 }
-                catch (Exception ex)
-                {
-                    body.Append(ex.Message);
-                }
-                #endif
-                #endregion
             }
-            #endregion
-
-            #region debug3
-            #if DEBUG
-            message.Body = body.ToString();
-
-            client.Send(message);
-            #endif
             #endregion
 
             return View();
