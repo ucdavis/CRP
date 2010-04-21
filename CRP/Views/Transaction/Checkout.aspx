@@ -122,7 +122,18 @@
     
         $(document).ready(function() {
             // do some client side validation on the dynamic fields
-            //$("form#CheckoutForm").validate();
+            $("form#CheckoutForm").validate({
+                errorElement:"span",            // set the tag for the item that contains the message
+                errorClass:"failed",            // set the class on that tag of the notification tag
+                success:function(label){        // function to execute on passing
+                    label.addClass("passed");   // add the passed class
+                }
+            });
+
+            // validate the controls on blur
+            $("input").blur(function(){
+                $("form#CheckoutForm").validate().element(this);
+            });
 
             $("input.dateForm").datepicker();
 
