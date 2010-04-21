@@ -61,9 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\CatbertClasses.cs" />
     <Compile Include="Domain\Check.cs" />
     <Compile Include="Domain\Coupon.cs" />
     <Compile Include="Domain\DisplayProfile.cs" />
+    <Compile Include="Domain\Editor.cs" />
     <Compile Include="Domain\ExtendedProperty.cs" />
     <Compile Include="Domain\ExtendedPropertyAnswer.cs" />
     <Compile Include="Domain\Item.cs" />
@@ -130,6 +132,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\DisplayProfile.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\CatbertClasses.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\Editor.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

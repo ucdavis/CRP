@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  
+  <class
+    name="Unit"
+    table="vUnits" mutable="false" >
+    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+      <generator class="identity" />
+    </id>
+
+    <property name="FullName" column="FullName" />
+    <property name="ShortName" column="ShortName" />
+    <property name="PPS_Code" column="PPS_Code" />
+
+    <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolCode" fetch="join" />
+  </class>
+
+
+  <class
+  name="School"
+  table="vSchools" mutable="false" >
+    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+      <generator class="identity" />
+    </id>
+
+    <property name="ShortDescription" column="ShortDescription" />
+    <property name="LongDescription" column="LongDescription" />
+    <property name="Abbreviation" column="Abbreviation" />
+
+  </class>
+
+  <class
+    name="User"
+    table="vUsers" mutable="false" >
+    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+      <generator class="identity" />
+    </id>
+
+    <property name="LoginID" column="LoginID" />
+    <property name="Email" column="Email" />
+    <property name="Phone" column="Phone" />
+    <property name="FirstName" column="FirstName" />
+    <property name="LastName" column="LastName" />
+    <property name="EmployeeID" column="EmployeeID" />
+    <property name="SID" column="SID" />
+    <property name="UserKey" column="UserKey" />
+
+  </class>
+
+</hibernate-mapping>

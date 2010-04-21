@@ -2,15 +2,15 @@
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
     assembly="CRP.Core" namespace="CRP.Core.Domain">
   <class
-    name="DisplayProfile"
-    table="DisplayProfiles" >
+    name="Editor"
+    table="Editors" >
     <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
       <generator class="identity" />
     </id>
 
-    <property name="Name" column="Name" />
-    <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" not-null="true" fetch="join" />
-    <property name="Logo" column="Logo" />
+    <many-to-one name="Item" class="CRP.Core.Domain.Item, CRP.Core" column="ItemId" cascade="none" not-null="true" />
+    <many-to-one name="User" class="CRP.Core.Domain.User, CRP.Core" column="UserId" cascade="none" not-null="true" />
+    <property name="Owner" />
     
   </class>
 </hibernate-mapping>

@@ -19,6 +19,8 @@ namespace CRP.Core.Domain
 
             Tags = new List<Tag>();
             ExtendedPropertyAnswers = new List<ExtendedPropertyAnswer>();
+            Coupons = new List<Coupon>();
+            Editors = new List<Editor>();
         }
 
         [Required]
@@ -32,13 +34,13 @@ namespace CRP.Core.Domain
         public virtual string Link { get; set; }
         [NotNull]
         public virtual ItemType ItemType { get; set; }
-        //TOOD: Map the deparment class
-        //[NotNull]
-        //public virtual Department Deptartment { get; set; }
+        [NotNull]
+        public virtual Unit Unit { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<ExtendedPropertyAnswer> ExtendedPropertyAnswers { get; set; }
         public virtual ICollection<Coupon> Coupons { get; set; }
+        public virtual ICollection<Editor> Editors { get; set; }
 
         public virtual void AddTag(Tag tag)
         {
@@ -59,6 +61,28 @@ namespace CRP.Core.Domain
         public virtual void RemoveExtendedPropertyAnswer(ExtendedPropertyAnswer extendedPropertyAnswer)
         {
             ExtendedPropertyAnswers.Remove(extendedPropertyAnswer);
+        }
+
+        public virtual void AddCoupon(Coupon coupon)
+        {
+            coupon.Item = this;
+            Coupons.Add(coupon);
+        }
+
+        public virtual void RemoveCoupon(Coupon coupon)
+        {
+            Coupons.Remove(coupon);
+        }
+
+        public virtual void AddEditor(Editor editor)
+        {
+            editor.Item = this;
+            Editors.Add(editor);
+        }
+
+        public virtual void RemoveEditor(Editor editor)
+        {
+            Editors.Remove(editor);
         }
     }
 }

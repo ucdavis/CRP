@@ -13,6 +13,8 @@
     <property name="CollegeReusable" column="CollegeReusable" />
     <property name="SystemReusable" column="SystemReusable" />
     <property name="UserReusable" column="UserReusable" />
+    <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join" />
+    <many-to-one name="User" class="CRP.Core.Domain.User, CRP.Core" column="UserId" cascade="none" fetch="join" />
 
     <bag name="Options" table="QuestionOptions" cascade="all-delete-orphan" fetch="join">
       <key column="QuestionId" />

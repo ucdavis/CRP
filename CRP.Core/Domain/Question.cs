@@ -37,9 +37,9 @@ namespace CRP.Core.Domain
         public virtual bool CollegeReusable { get; set; }
         public virtual bool SystemReusable { get; set; }
         public virtual bool UserReusable { get; set; }
-        //TODO: Map the user to the user class
-        //[NotNull]
-        //public virtual User User { get; set; }
+
+        public virtual School School { get; set; }
+        public virtual User User { get; set; }
 
         public virtual ICollection<QuestionOption> Options { get; set; }
 

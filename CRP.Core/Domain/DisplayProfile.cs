@@ -16,9 +16,8 @@ namespace CRP.Core.Domain
 
         [Required]
         public virtual string Name { get; set; }
-        //TODO: Map to the department class
-        //[Required]
-        //public virtual int DepartmentId { get; set; }
+        [Required]
+        public virtual Unit Unit { get; set; }
         public virtual byte[] Logo { get; set; }
     }
 }
