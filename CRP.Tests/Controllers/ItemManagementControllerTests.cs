@@ -45,7 +45,9 @@ namespace CRP.Tests.Controllers
         protected IRepository<Unit> UnitRepository { get; set; }
         protected List<ItemTypeQuestionSet> ItemTypeQuestionSets { get; set; }
         protected IRepository<ItemTypeQuestionSet> ItemTypeQuestionSetRepository { get; set; }
-       
+        protected List<ItemReport> ItemReports { get; set; }
+        protected IRepository<ItemReport> ItemReportRepository { get; set; }
+
         #region Init
         public ItemManagementControllerTests()
         {
@@ -86,7 +88,10 @@ namespace CRP.Tests.Controllers
             ItemTypeQuestionSets = new List<ItemTypeQuestionSet>();
             ItemTypeQuestionSetRepository = FakeRepository<ItemTypeQuestionSet>();
             Controller.Repository.Expect(a => a.OfType<ItemTypeQuestionSet>()).Return(ItemTypeQuestionSetRepository).Repeat.Any();
-        
+
+            ItemReports = new List<ItemReport>();
+            ItemReportRepository = FakeRepository<ItemReport>();
+            Controller.Repository.Expect(a => a.OfType<ItemReport>()).Return(ItemReportRepository).Repeat.Any();
         }
 
         
@@ -1303,6 +1308,31 @@ namespace CRP.Tests.Controllers
  
         #endregion SaveTemplate Tests
 
+        #region Details Tests
+
+        [TestMethod]
+        public void TestDetailsRedirectToListWhenIdNotFound()
+        {
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            Controller.Details(1)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List());
+        }
+        
+        [TestMethod]
+        public void TestDetailsReturnsUserItemDetailViewModelWhenIdFound()
+        {
+            FakeItems(1);
+            FakeItemReports(1);
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemReportRepository.Expect(a => a.Queryable).Return(ItemReports.AsQueryable()).Repeat.Any();
+            Controller.Details(1)
+                .AssertViewRendered()
+                .WithViewData<UserItemDetailViewModel>();
+
+        }
+        #endregion Details Tests
+
         #region Helper Methods
 
         /// <summary>
@@ -1358,6 +1388,16 @@ namespace CRP.Tests.Controllers
             {
                 Items.Add(CreateValidEntities.Item(i + 1 + offSet));
                 Items[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        private void FakeItemReports(int count)
+        {
+            var offSet = ItemReports.Count;
+            for (int i = 0; i < count; i++)
+            {
+                ItemReports.Add(CreateValidEntities.ItemReport(i + 1 + offSet));
+                ItemReports[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
 
