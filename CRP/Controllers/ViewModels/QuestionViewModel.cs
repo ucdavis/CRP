@@ -16,7 +16,11 @@ namespace CRP.Controllers.ViewModels
         {
             Check.Require(repository != null, "Repository is required.");
 
-            var viewModel = new QuestionViewModel() {QuestionTypes = repository.OfType<QuestionType>().GetAll(), Validators = repository.OfType<Validator>().GetAll()};
+            var viewModel = new QuestionViewModel() 
+            {
+                QuestionTypes = repository.OfType<QuestionType>().GetAll(), 
+                Validators = repository.OfType<Validator>().GetAll()
+            };
 
             return viewModel;
         }

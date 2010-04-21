@@ -66,6 +66,7 @@ namespace CRP.Controllers
             }
 
             // Check to make sure the question set hasn't been used yet
+            //If it is reusable, and it has already been used, we can add a question to it.
             if ((questionSet.SystemReusable || questionSet.CollegeReusable || questionSet.UserReusable) && questionSet.Items.Count > 0)
             {
                 Message = "Question cannot be added to the question set because it is already being used by an item.";

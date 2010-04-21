@@ -40,5 +40,75 @@ namespace CRP.Tests.Core.Helpers
                 entity[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
+
+        public static void FakeQuestionTypes(List<QuestionType> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.QuestionType(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        public static void FakeValidators(List<Validator> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.Validator(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        public static void FakeUnits(List<Unit> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.Unit(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        public static void FakeItems(List<Item> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.Item(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        public static void FakeItemQuestionSets(List<ItemQuestionSet> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.ItemQuestionSet(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        public static void FakeEditors(List<Editor> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.Editor(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
+            }
+        }
+
+        public static void FakeSchools(List<School> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.School(i + 1 + offSet));
+                entity[i + offSet].SetIdTo((i + 1 + offSet).ToString());
+            }
+        }
     }
 }
