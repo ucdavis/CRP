@@ -49,6 +49,9 @@
                     <td colspan="2">
                         <label for="Coupon">Coupon Code:</label>
                         <%= Html.TextBox("Coupon") %>
+                        <img src='<%= Url.Content("~/Images/ajax-loader.gif") %>' id="CouponValidateImage" style="display:none;" />
+                        <span id="CouponMessage"></span>
+                        
                     </td>
                     <td>$ <span class="discounterPerItemAmount">0.00</span>
                     
@@ -188,6 +191,9 @@
             $("input#Coupon").blur(function(event) {
                 var url = '<%= Url.Action("Validate", "Coupon") %>';//<%= Html.Encode(Model.Item.Id) %>';
                 var couponCode = $("input#Coupon").val();
+                
+                $("img#CouponValidateImage").show();
+                
                 $.getJSON(url, {itemId: <%= Html.Encode(Model.Item.Id) %>, couponCode: couponCode}, function(result) { 
                 
                     var message = result.message;
@@ -201,8 +207,16 @@
                         $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
                         $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
                         
+                        $("span#CouponMessage").html("Coupon accepted.");
+                        
                         CalculateTotal();
                     }
+                    
+                    // display error message
+                    $("span#CouponMessage").html(message);
+                    
+                    // hide the loading image
+                    $("img#CouponValidateImage").hide();
                 });
             });
             // initialize the question names

@@ -610,6 +610,7 @@
     <Content Include="AppSettingsTest.config" />
     <Content Include="ConnectionStringProd.config" />
     <Content Include="ConnectionStringTest.config" />
+    <Content Include="Images\ajax-loader.gif" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Template\Edit.aspx" />
     <Content Include="Views\Transaction\Edit.aspx" />
@@ -647,7 +648,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54323</DevelopmentServerPort>
+          <DevelopmentServerPort>51453</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
