@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
@@ -421,13 +422,114 @@ namespace CRP.Controllers
         /// Description:
         ///     Deals with the return result from the payment gateway.
         /// </remarks>
-        /// <param name="EXT_TRANS_ID"></param>
-        /// <param name="PMT_STATUS"></param>
-        /// <param name="PMT_AMT"></param>
-        /// <param name="TPG_TRANS_ID"></param>
-        /// <returns></returns>
         [AcceptPost]
         [BypassAntiForgeryToken]
+        public ActionResult PaymentResult(PaymentResultParameters touchNetValues)
+        {
+            #region debug1
+
+            // create an email for testing
+            var client = new SmtpClient("smtp.ucdavis.edu");
+
+            var message = new MailMessage("anlai@ucdavis.edu", "anlai@ucdavis.edu");
+            message.To.Add("jasoncsylvestre@gmail.com");
+            message.To.Add("owlanjunk@gmail.com");
+            message.Subject = "Touchnet Post Results";
+            message.IsBodyHtml = true;
+
+            var body = new StringBuilder("Touchnet results<br/><br/>");
+            body.Append(DateTime.Now.ToString() + "<br/>");
+
+            foreach (var k in Request.Params.AllKeys)
+            {
+                body.Append(k + ":" + Request.Params[k]);
+                body.Append("<br/>");
+            }
+
+            body.Append("<br/>Function parameters================<br/>");
+            body.Append("EXT_TRANS_ID:" + (touchNetValues.EXT_TRANS_ID.HasValue ? touchNetValues.EXT_TRANS_ID.Value.ToString() : string.Empty) + "<br/>");
+            body.Append("PMT_STATUS:" + touchNetValues.PMT_STATUS + "<br/>");
+            body.Append("NAME_ON_ACT:" + touchNetValues.NAME_ON_ACCT + "<br/>");
+            body.Append("PMT_AMT:" + (touchNetValues.PMT_AMT.HasValue ? touchNetValues.PMT_AMT.Value.ToString() : string.Empty) + "<br/>");
+            body.Append("TPG_TRANS_ID:" + touchNetValues.TPG_TRANS_ID + "<br/>");
+            body.Append("CARD_TYPE" + touchNetValues.CARD_TYPE);
+            #endregion
+
+            #region Actual Work
+            // validate to make sure a transaction value was received
+            if (touchNetValues.EXT_TRANS_ID.HasValue)
+            {
+                var transaction = Repository.OfType<Transaction>().GetNullableByID(touchNetValues.EXT_TRANS_ID.Value);
+
+                // create a payment log
+                var paymentLog = new PaymentLog(transaction.Total);
+                paymentLog.Credit = true;
+
+                // on success, save the valid information
+                if (touchNetValues.PMT_STATUS == "success")
+                {
+                    paymentLog.Name = touchNetValues.NAME_ON_ACCT;
+                    paymentLog.Amount = touchNetValues.PMT_AMT.Value;
+                    paymentLog.Accepted = true;
+                    paymentLog.GatewayTransactionId = touchNetValues.TPG_TRANS_ID;
+                    paymentLog.CardType = touchNetValues.CARD_TYPE;
+                }
+
+                transaction.AddPaymentLog(paymentLog);
+                //paymentLog.Transaction = transaction;
+
+                paymentLog.TransferValidationMessagesTo(ModelState);
+
+                if (ModelState.IsValid)
+                {
+                    Repository.OfType<Transaction>().EnsurePersistent(transaction);
+
+                    // attempt to get the contact information question set and retrieve email address
+                    var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+                    if (question != null)
+                    {
+                        // send an email to the user
+                        _notificationProvider.SendConfirmation(transaction, question.Answer);
+                    }
+                }
+
+                #region debug2
+                try
+                {
+                    body.Append("Payment log values:<br/>");
+                    body.Append("Name:" + paymentLog.Name + "<br/>");
+                    body.Append("Amount:" + paymentLog.Amount + "<br/>");
+                    body.Append("Accepted:" + paymentLog.Accepted + "<br/>");
+                    body.Append("Gateway transaction id:" + paymentLog.GatewayTransactionId + "<br/>");
+                    body.Append("Card Type: " + paymentLog.CardType + "<br/>");
+                    body.Append("ModelState: " + ModelState.IsValid);
+
+                    body.Append("<br/><br/>===== modelstate errors text===<br/>");
+                    foreach (var result in ModelState.Values)
+                    {
+                        foreach (var errs in result.Errors)
+                        {
+                            body.Append("Error:" + errs.ErrorMessage + "<br/>");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    body.Append(ex.Message);
+                }
+
+                #endregion
+            }
+            #endregion
+
+            #region debug3
+            message.Body = body.ToString();
+
+            client.Send(message);
+            #endregion
+            return View();
+        }
+        /*
         public ActionResult PaymentResult(int? EXT_TRANS_ID, string PMT_STATUS, string NAME_ON_ACCT, decimal? PMT_AMT, string TPG_TRANS_ID, string CARD_TYPE)
         {
             #region debug1
@@ -533,7 +635,7 @@ namespace CRP.Controllers
             #endregion
             return View();
         }
-
+        */
 
         /// <summary>
         /// Compares an answer against a regular expression
