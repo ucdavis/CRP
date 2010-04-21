@@ -60,9 +60,9 @@ namespace CRP.Core.Domain
         public virtual bool QuantityLevel { get; set; }
 
         [AssertTrue(Message = "TransactionLevel must be different from QuantityLevel")]
-        public virtual bool TransactionLevelQuantityLevel { get; set; }
+        private bool TransactionLevelQuantityLevel { get; set; }
         [AssertTrue(Message = "QuestionSet not valid")]
-        public virtual bool ItemTypeQuestionSetQuestionSet { get; set; }
+        private bool ItemTypeQuestionSetQuestionSet { get; set; }
         
     }
 }

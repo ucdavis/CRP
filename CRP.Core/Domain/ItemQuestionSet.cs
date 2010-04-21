@@ -59,7 +59,7 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "TransactionLevel or QuantityLevel must be set but not both.")]
-        public virtual bool TransactionLevelAndQuantityLevel { get; set; }
+        private bool TransactionLevelAndQuantityLevel { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
         
     }

@@ -148,22 +148,22 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "Check number required when credit card not used.")]
-        public virtual bool CheckNumberRequired { get; set; }
+        private bool CheckNumberRequired { get; set; }
 
         [AssertTrue(Message = "Payee name required.")]
-        public virtual bool NameRequired { get; set; }
+        private bool NameRequired { get; set; }
 
         [AssertTrue(Message = "Amount must be more than 1 cent.")]
-        public virtual bool AmountRequired { get; set; }
+        private bool AmountRequired { get; set; }
 
         [AssertTrue(Message = "Gateway Transaction Id Required.")]
-        public virtual bool GatewayTransactionIdRequired { get; set; }
+        private bool GatewayTransactionIdRequired { get; set; }
 
         [AssertTrue(Message = "Card Type Required.")]
-        public virtual bool CardTypeRequired { get; set; }
+        private bool CardTypeRequired { get; set; }
 
         [AssertTrue(Message = "Check or Credit must be selected.")]
-        public virtual bool CheckOrCredit { get; set; }
+        private bool CheckOrCredit { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

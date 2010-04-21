@@ -262,7 +262,7 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "One or more tags is not valid")]
-        public virtual bool ItemTags { get; set; }
+        private bool ItemTags { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

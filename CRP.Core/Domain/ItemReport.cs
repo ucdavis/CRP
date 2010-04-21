@@ -92,7 +92,7 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "One or more Report Columns is not valid")]
-        public virtual bool ReportColumns { get; set; }
+        private bool ReportColumns { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 
@@ -156,7 +156,7 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "One and only one of these must be selected: Quantity, Transaction, Property")]
-        public virtual bool QuantityAndTransactionAndProperty { get; set; }      
+        private bool QuantityAndTransactionAndProperty { get; set; }      
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

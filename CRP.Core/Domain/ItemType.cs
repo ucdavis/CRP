@@ -123,9 +123,9 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "One or more Extended Properties is not valid")]
-        public virtual bool ItemTypeExtendedProperties { get; set; }
+        private bool ItemTypeExtendedProperties { get; set; }
         [AssertTrue(Message = "One or more Question Sets is not valid")]
-        public virtual bool ItemTypeQuestionSets { get; set; }
+        private bool ItemTypeQuestionSets { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

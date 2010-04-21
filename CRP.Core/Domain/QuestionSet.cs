@@ -90,9 +90,9 @@ namespace CRP.Core.Domain
         }
 
         [AssertTrue(Message = "Must have school if college reusable")]
-        public virtual bool CollegeReusableSchool { get; set; }
+        private bool CollegeReusableSchool { get; set; }
         [AssertTrue(Message = "Only one reusable flag may be set to true")]
-        public virtual bool Reusability { get; set; }
+        private bool Reusability { get; set; }
 
     }
 }

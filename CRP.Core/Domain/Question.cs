@@ -121,13 +121,13 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "One or more options is invalid")]
-        protected virtual bool OptionsNames { get; set; }
+        private bool OptionsNames { get; set; }
 
         [AssertTrue(Message = "The question type requires at least one option.")]
         private bool OptionsRequired { get; set; }
 
         [AssertTrue(Message = "Options not allowed")]
-        protected virtual bool OptionsNotAllowed { get; set; }
+        private bool OptionsNotAllowed { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
 
     }

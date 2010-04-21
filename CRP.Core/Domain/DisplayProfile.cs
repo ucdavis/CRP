@@ -71,12 +71,14 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         
-        [AssertTrue(Message = "Unit and School cannot be selected together.")]        
-        public virtual bool UnitAndSchool { get; set; }
+        [AssertTrue(Message = "Unit and School cannot be selected together.")]
+        private bool UnitAndSchool { get; set; }
+        
         [AssertTrue(Message = "A Unit or School must be specified.")]
-        public virtual bool UnitOrSchool { get; set; }
+        private bool UnitOrSchool { get; set; }
+        
         [AssertTrue(Message = "SchoolMaster may only be true when School is selected.")]
-        public virtual bool SchoolMasterAndSchool { get; set; }
+        private bool SchoolMasterAndSchool { get; set; }
 
         #endregion Fields ONLY used for complex validation, not in database
     }

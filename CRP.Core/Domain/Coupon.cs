@@ -148,7 +148,7 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "An unlimited coupon requires an email")]
-        public virtual bool UnlimitedAndEmail { get; set; }
+        private bool UnlimitedAndEmail { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

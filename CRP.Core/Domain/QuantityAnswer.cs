@@ -75,7 +75,7 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "QuantityId may not be empty.")]
-        public virtual bool QuantityIdNotEmpty { get; set; }
+        private bool QuantityIdNotEmpty { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }
