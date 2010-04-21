@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Core.Domain.OpenIdUser>" %>
+<%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	OpenIdAccount
@@ -60,11 +61,6 @@
                 <%= Html.ValidationMessage("PhoneNumber", "*") %>
             </p>
             <p>
-                <label for="Id">Id:</label>
-                <%= Html.TextBox("Id", Model.Id) %>
-                <%= Html.ValidationMessage("Id", "*") %>
-            </p>
-            <p>
                 <input type="submit" value="Save" />
             </p>
         </fieldset>
@@ -72,8 +68,27 @@
     <% } %>
 
     <div>
-        <%=Html.ActionLink("Back to List", "Index") %>
+        <%= Html.ActionLink<HomeController>(a => a.Index(), "Back Home") %>
     </div>
+    
+    <fieldset>
+        <legend>Transactions</legend>
+        
+        <% Html.Grid(Model.Transactions.Where(a => a.ParentTransaction == null))
+               .Transactional()
+               .PrefixUrlParameters(false)
+               .Name("Transactions")
+               .Columns(col =>
+                            {
+                                col.Add(a => a.TransactionNumber);
+                                col.Add(a => a.TransactionDate);
+                                col.Add(a => a.Quantity);
+                                col.Add(a => a.AmountTotal.ToString("C")).Title("Amount");
+                                col.Add(a => a.DonationTotal.ToString("C")).Title("Donation");
+                                col.Add(a => a.Total.ToString("C")).Title("Total");
+                            })
+               .Render(); %>
+    </fieldset>
 
 </asp:Content>
 

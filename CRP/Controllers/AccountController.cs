@@ -7,6 +7,7 @@ using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
 using DotNetOpenAuth.OpenId;
+using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 using DotNetOpenAuth.OpenId.RelyingParty;
 using DotNetOpenAuth.Messaging;
 using MvcContrib.Attributes;
@@ -15,6 +16,7 @@ using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Authentication;
 using UCDArch.Web.Controller;
 using MvcContrib;
+using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
@@ -84,7 +86,13 @@ namespace CRP.Controllers
                 try
                 {
                     Session[openid_identifier] = openid_identifier;
-                    return openid.CreateRequest(id).RedirectingResponse.AsActionResult();
+
+                    var request = openid.CreateRequest(id);
+
+                    request.AddExtension(new ClaimsRequest{Email = DemandLevel.Require});
+
+                    return request.RedirectingResponse.AsActionResult();
+                    //return openid.CreateRequest(id).RedirectingResponse.AsActionResult();
                 }
                 catch (ProtocolException ex)
                 {
@@ -115,20 +123,51 @@ namespace CRP.Controllers
                 switch (response.Status)
                 {
                     case AuthenticationStatus.Authenticated:
-                        Session["FriendlyIdentifier"] = response.FriendlyIdentifierForDisplay;
+                        //Session["FriendlyIdentifier"] = response.FriendlyIdentifierForDisplay;
 
-                        var authTicket = new FormsAuthenticationTicket(1,
-                                                                       response.ClaimedIdentifier,
-                                                                       DateTime.Now, DateTime.Now.AddMinutes(15), false, StaticValues.OpenId,
-                                                                       FormsAuthentication.FormsCookiePath);
+                        // create the auth ticket
+                        CreateTicket(response.ClaimedIdentifier);
 
-                        string encTicket = FormsAuthentication.Encrypt(authTicket);
+                        // check to see if we need to create an account in the system
+                        var openIdUser = _openIdUserRepository.GetNullableByID(response.ClaimedIdentifier);
 
-                        Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                        // does not exist create a new one
+                        if (openIdUser == null)
+                        {
+                            var claimsResponse = response.GetExtension<ClaimsResponse>();
+                            
+                            openIdUser = new OpenIdUser() {UserId = response.ClaimedIdentifier};
 
+                            if (claimsResponse != null)
+                            {
+                                openIdUser.Email = claimsResponse.Email;
+                            }
+                            else
+                            {
+                                Message = "Please fill in at least an email address.";
+                            }
+
+                            _openIdUserRepository.EnsurePersistent(openIdUser);
+
+                            // redirect to the edit page
+                            return this.RedirectToAction(a => a.OpenIdAccount());
+                        }
+                        // user exists but email was never filled out
+                        else if (string.IsNullOrEmpty(openIdUser.Email))
+                        {
+                            Message = "Please fill in at least an email address.";
+
+                            return this.RedirectToAction(a => a.OpenIdAccount());
+                        }
+
+                        // redirect to the defaults
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
                             return Redirect(returnUrl);
+                        }
+                        else if (TempData["URL"] != null)
+                        {
+                            return Redirect(TempData["URL"].ToString());
                         }
                         else
                         {
@@ -145,6 +184,20 @@ namespace CRP.Controllers
 
             return new EmptyResult();
         }
+
+        private void CreateTicket(string userId)
+        {
+            // create authenication ticket
+            var authTicket = new FormsAuthenticationTicket(1,
+                                                           userId,
+                                                           DateTime.Now, DateTime.Now.AddMinutes(15), false, StaticValues.OpenId,
+                                                           FormsAuthentication.FormsCookiePath);
+
+            string encTicket = FormsAuthentication.Encrypt(authTicket);
+
+            Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+        }
+
         #endregion
 
         #region OpenId
@@ -159,6 +212,31 @@ namespace CRP.Controllers
             }
 
             return View(openIdUser);
+        }
+
+        [RequireOpenId]
+        [AcceptPost]
+        public ActionResult OpenIdAccount(OpenIdUser openIDUser)
+        {
+            var destOpenIdUser = _openIdUserRepository.GetNullableByID(CurrentUser.Identity.Name);
+
+            if (destOpenIdUser == null)
+            {
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+
+            destOpenIdUser = Copiers.CopyOpenIdUser(openIDUser, destOpenIdUser);
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destOpenIdUser.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                _openIdUserRepository.EnsurePersistent(destOpenIdUser);
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
+                                                                       "User information");
+            }
+
+            return View(destOpenIdUser);
         }
         #endregion
     }

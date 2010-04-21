@@ -99,5 +99,23 @@ namespace CRP.Controllers.Helpers
 
             return dest;
         }
+
+        public static OpenIdUser CopyOpenIdUser(OpenIdUser src, OpenIdUser dest)
+        {
+            Check.Require(src != null, "Source open id user is required.");
+            Check.Require(dest != null, "Destination open id user is required.");
+
+            dest.Email = src.Email;
+            dest.FirstName = src.FirstName;
+            dest.LastName = src.LastName;
+            dest.StreetAddress = src.StreetAddress;
+            dest.Address2 = src.Address2;
+            dest.City = src.City;
+            dest.State = src.State;
+            dest.Zip = src.Zip;
+            dest.PhoneNumber = src.PhoneNumber;
+
+            return dest;
+        }
     }
 }
