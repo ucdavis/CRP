@@ -401,8 +401,9 @@ namespace CRP.Controllers
         public ActionResult Details(int id)
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
-            if (item == null)
+            if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
+                Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List());
             }
 

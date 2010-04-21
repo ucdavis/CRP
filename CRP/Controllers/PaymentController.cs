@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -12,6 +13,7 @@ using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
+    [UserOnly]
     public class PaymentController : SuperController
     {
         /// <summary>
@@ -23,6 +25,12 @@ namespace CRP.Controllers
         {
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
             if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List());
+
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
 
             var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
             viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
@@ -37,6 +45,11 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
             if (transaction == null)
             {
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
             bool checkErrorFound = false;
