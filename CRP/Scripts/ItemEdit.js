@@ -58,7 +58,7 @@
     });
 
     $("textarea#BodyText").tinymce({
-        script_url: '../../Scripts/tiny_mce/tiny_mce.js',
+        script_url: scriptUrl,
         // General options
         theme: "advanced",
         plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
@@ -94,7 +94,7 @@
     });
 
     $("textarea#Item_Description").tinymce({
-        script_url: '../../Scripts/tiny_mce/tiny_mce.js',
+        script_url: scriptUrl,
         // General options
         theme: "advanced",
         plugins: "safari,style,save,searchreplace,print,contextmenu,paste",

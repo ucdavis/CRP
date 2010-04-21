@@ -85,7 +85,7 @@
             
             </div>
             
-            <img id="addExtendedProperty" src="../../Images/plus.png" style="width:24px; height:24px" />
+            <img id="addExtendedProperty" src="<%= Url.Content("~/Images/plus.png") %>" style="width:24px; height:24px" />
         </fieldset>
         
             <span id="QuestionTypeBase" style="display:none;">

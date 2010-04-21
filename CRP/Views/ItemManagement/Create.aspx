@@ -18,10 +18,12 @@
 
     <script type="text/javascript">
         var getExtendedPropertyUrl = '<%= Url.Action("GetExtendedProperties", "ItemManagement") %>';
+        var scriptUrl = '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>';
     </script>
 
     <script src='<%= Url.Content("~/Scripts/ItemEdit.js") %>' type="text/javascript"></script>
-    <script src="<%= Url.Content("/Scripts/tiny_mce/jquery.tinymce.js") %>' type="text/javascript"></script>
+    <script src='<%= Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js") %>' type="text/javascript"></script>
+   
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">

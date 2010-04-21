@@ -45,51 +45,7 @@ begin
 	INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
 	VALUES ('Date', 0, 1)
 end
-
--- //////////////////////////////////////////////////////////////////////////////////////
--- Insert the default site master into the display profiles
--- //////////////////////////////////////////////////////////////////////////////////////
---IF NOT EXISTS ( select * From displayprofiles where sitemaster = 1 )
---begin
---	insert into displayprofile([name], sitemaster)
---	values ('University of California, Davis', 1)
---end
-
--- //////////////////////////////////////////////////////////////////////////////////////
--- Insert the default item report
--- //////////////////////////////////////////////////////////////////////////////////////
-IF NOT EXISTS (select * from ItemReports where Name = 'Transaction Summary' )
-begin
-	INSERT INTO ItemReports ([Name], UserId, SystemReusable)
-	VALUES ('Transaction Summary', 2, 1)
-	
-	declare @irId int
-	declare @quesetionSetId int
-	
-	set @quesetionSetId = (select Max(id) from QuestionSets where [Name] = 'Contact Information')	
-	set @irId = (select max(id) from ItemReports where [Name] = 'Transaction Summary')
-	
-	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
-	VALUES (@irId, 1, 'First Name', 0, 1, 0, @quesetionSetId)
-	
-	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
-	VALUES (@irId, 2, 'Last Name', 0, 1, 0, @quesetionSetId)
-	
-	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
-	VALUES (@irId, 3, 'Phone Number', 0, 1, 0, @quesetionSetId)		
-
-	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
-	VALUES (@irId, 4, 'Email Address', 0, 1, 0, @quesetionSetId)	
-	
-	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
-	VALUES (@irId, 5, 'DonationTotal', 0, 0, 1, @quesetionSetId)	
-	
-	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
-	VALUES (@irId, 6, 'AmountTotal', 0, 0, 1, @quesetionSetId)	
-	
-	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
-	VALUES (@irId, 7, 'Total', 0, 0, 1, @quesetionSetId)		
-end
+GO
 
 -- //////////////////////////////////////////////////////////////////////////////////////
 -- Insert the default validators
@@ -245,3 +201,51 @@ begin
 	INSERT INTO QuestionOptions (Name, QuestionId) Values('WY', @stateId)
 	
 	end
+GO
+-- //////////////////////////////////////////////////////////////////////////////////////
+-- Insert the default site master into the display profiles
+-- //////////////////////////////////////////////////////////////////////////////////////
+--IF NOT EXISTS ( select * From displayprofiles where sitemaster = 1 )
+--begin
+--	insert into displayprofile([name], sitemaster)
+--	values ('University of California, Davis', 1)
+--end
+
+-- //////////////////////////////////////////////////////////////////////////////////////
+-- Insert the default item report
+-- Be sure to update the user id if that userid doesn't exist
+-- //////////////////////////////////////////////////////////////////////////////////////
+IF NOT EXISTS (select * from ItemReports where Name = 'Transaction Summary' )
+begin
+	INSERT INTO ItemReports ([Name], UserId, SystemReusable)
+	VALUES ('Transaction Summary', 1, 1)
+	
+	declare @irId int
+	declare @quesetionSetId int
+	
+	set @quesetionSetId = (select Max(id) from QuestionSets where [Name] = 'Contact Information')	
+	set @irId = (select max(id) from ItemReports where [Name] = 'Transaction Summary')
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 1, 'First Name', 0, 1, 0, @quesetionSetId)
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 2, 'Last Name', 0, 1, 0, @quesetionSetId)
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 3, 'Phone Number', 0, 1, 0, @quesetionSetId)		
+
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 4, 'Email Address', 0, 1, 0, @quesetionSetId)	
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 5, 'DonationTotal', 0, 0, 1, @quesetionSetId)	
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 6, 'AmountTotal', 0, 0, 1, @quesetionSetId)	
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 7, 'Total', 0, 0, 1, @quesetionSetId)		
+end
+
+GO

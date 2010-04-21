@@ -208,7 +208,7 @@
     <% } %>
 
     <div>
-        <%= Html.DetailItemUrl(Model.Item.Id, StaticValues.Tab_Reports) %>
+        <%= Url.DetailItemUrl(Model.Item.Id, StaticValues.Tab_Reports) %>
     </div>
 
 </asp:Content>

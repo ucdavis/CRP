@@ -54,7 +54,7 @@
         </fieldset>
     <% } %>
     
-    <%= Html.EditItemUrl(Model.Item.Id, StaticValues.Tab_Coupons) %>
+    <%= Url.EditItemUrl(Model.Item.Id, StaticValues.Tab_Coupons) %>
     
 </asp:Content>
 

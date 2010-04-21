@@ -36,8 +36,8 @@
     <asp:ContentPlaceHolder ID="HeaderContent" runat="server">
     </asp:ContentPlaceHolder>
     
-     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/quicksandstylesheet.css" rel="stylesheet" type="text/css" />
+     <link href="<%= Url.Content("~/Content/Site.css") %>" rel="stylesheet" type="text/css" />
+    <link href="<%= Url.Content("~/Content/quicksandstylesheet.css") %>" rel="stylesheet" type="text/css" />
 
 </head>
 

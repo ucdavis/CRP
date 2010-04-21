@@ -41,11 +41,11 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
-    <link href="../../Content/openid.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/openid-jquery.js" type="text/javascript"></script>
+    <link href="<%= Url.Content("~/Content/openid.css") %>" rel="stylesheet" type="text/css" />   
+    <script src="<%= Url.Content("~/Scripts/openid-jquery.js") %>" type="text/javascript"></script>
 	<script type="text/javascript">
 	    $(document).ready(function() {
-	        openid.init('openid_identifier');
+	        openid.init('openid_identifier', '<%= Url.Content("~/Images/") %>');
 	    });
 	</script>
 </asp:Content>

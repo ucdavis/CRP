@@ -138,7 +138,7 @@
             <ul>
             <!-- NEEDS BALLOON-->
             <li>
-            <input type="text" id="tagInput" />  <img id="tagAddButton" src="../../Images/plus.png" style="height:24px; width: 24px" />
+            <input type="text" id="tagInput" />  <img id="tagAddButton" src="<%= Url.Content("~/Images/plus.png") %>" style="height:24px; width: 24px" />
             </li>
             <li>
             <div id="tagContainer">

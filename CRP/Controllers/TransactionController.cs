@@ -81,6 +81,10 @@ namespace CRP.Controllers
         [AcceptPost]
         public ActionResult Checkout(int id, int quantity, decimal? donation, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
         {
+            // if the arrays are null create new blank ones
+            if (transactionAnswers==null) transactionAnswers = new QuestionAnswerParameter[0];
+            if (quantityAnswers==null) quantityAnswers = new QuestionAnswerParameter[0];
+
             #region DB Queries
             // get the item
             var item = Repository.OfType<Item>().GetNullableByID(id);

@@ -137,7 +137,7 @@
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
     <p>
-        <%= Html.DetailItemUrl(Model.Transaction.Item.Id, StaticValues.Tab_Checks) %>
+        <%= Url.DetailItemUrl(Model.Transaction.Item.Id, StaticValues.Tab_Checks) %>
     </p>
     
     <% using(Html.BeginForm()){ %>

@@ -11,7 +11,9 @@
     <h2><%= Html.Encode(Model.ReportName) %></h2>
 
     <p>
-        <%= Html.DetailItemUrl(Model.ItemId, StaticValues.Tab_Reports) %>
+        <%--<%= Html.DetailItemUrl(Model.ItemId, StaticValues.Tab_Reports) %>--%>
+        
+        <%= Url.DetailItemUrl(Model.ItemId, StaticValues.Tab_Reports) %>
         
         
     </p>
