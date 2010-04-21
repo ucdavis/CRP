@@ -259,7 +259,8 @@ namespace CRP.Controllers
                 }
             }
 
-            return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
+            //return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
+            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
         }
 
         /// <summary>
@@ -308,7 +309,8 @@ namespace CRP.Controllers
                 Message = "Unable to add editor.";
             }
 
-            return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
+            //return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
+            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
         }
 
         /// <summary>

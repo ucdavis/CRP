@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -111,9 +113,17 @@ namespace CRP.Tests.Controllers
         }
 
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void TestLinkToTransactionWhenIdFoundSaves()
         {
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            //Controller.Url.RequestContext.HttpContext.Request.Expect(a => a.Url).Return(new Uri("http://sample.com")).
+            //                Repeat.Any();
+            //Controller.Url.Expect(a => a.RouteUrl(new { controller = "ItemManagement", action = "Details", id = 1 })).
+            //    Return("~/ItemManagement/Details/1").Repeat.Any();
+
+            
+
             var checks = new Check[2];
             checks[0] = CreateValidEntities.Check(1);
             checks[1] = CreateValidEntities.Check(2);
@@ -125,11 +135,9 @@ namespace CRP.Tests.Controllers
             Transactions[0].Item.SetIdTo(1);    
             TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(Transactions[0]).Repeat.Any();
 
-            Controller.LinkToTransaction(1, checks)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.Details(1));
-
-
+            var result = Controller.LinkToTransaction(1, checks)
+                .AssertHttpRedirect();
+            Assert.AreEqual("#Checks", result.Url);
         }
         
 

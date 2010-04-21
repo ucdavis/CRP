@@ -86,7 +86,8 @@ namespace CRP.Controllers
             {
                 Repository.OfType<Coupon>().EnsurePersistent(coupon);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Coupon");
-                return Redirect(ReturnUrlGenerator.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
+                //return Redirect(ReturnUrlGenerator.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
+                return Redirect(Url.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
             }
 
             var viewModel = CouponViewModel.Create(Repository, item);
@@ -151,7 +152,8 @@ namespace CRP.Controllers
             
             if (!coupon.IsActive || coupon.Used)
             {
-                return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
+                //return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
+                return Redirect(Url.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
             }
 
             coupon.IsActive = false;
@@ -169,7 +171,8 @@ namespace CRP.Controllers
             }
 
             // redirect to edit with the anchor to coupon
-            return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
+            //return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
+            return Redirect(Url.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
         }
     }
 }

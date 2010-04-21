@@ -77,7 +77,8 @@ namespace CRP.Controllers
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
                 Message = "Checks associated with transaction.";
-                return Redirect(ReturnUrlGenerator.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
+                //return Redirect(ReturnUrlGenerator.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
+                return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
             }
 
             var viewModel = LinkCheckViewModel.Create(Repository, transaction);

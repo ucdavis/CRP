@@ -8,19 +8,19 @@ namespace CRP.Controllers.Helpers
     {
         private static UrlHelper Url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
 
-        public static string EditItemUrl(int itemId, string tabName)
-        {
-            var returnUrl = Url.RouteUrl(new { controller = "ItemManagement", action = "Edit", id = itemId }) + "#" + tabName;
+        //public static string EditItemUrl(int itemId, string tabName)
+        //{
+        //    var returnUrl = Url.RouteUrl(new { controller = "ItemManagement", action = "Edit", id = itemId }) + "#" + tabName;
 
-            return returnUrl;
-        }
+        //    return returnUrl;
+        //}
 
-        public static string DetailItemUrl(int itemId, string tabName)
-        {
-            var returnUrl = Url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) + "#" + tabName;
+        //public static string DetailItemUrl(int itemId, string tabName)
+        //{
+        //    var returnUrl = Url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) + "#" + tabName;
 
-            return returnUrl;
-        }
+        //    return returnUrl;
+        //}
 
 
         public static string EditItemUrl(this HtmlHelper html, int itemId, string tabName)
@@ -40,6 +40,22 @@ namespace CRP.Controllers.Helpers
             
             return link;
         }
+    }
 
+    public static class ControllerReturnUrlGenerator
+    {
+        public static string DetailItemUrl(this UrlHelper url, int itemId, string tabName)
+        {
+            var returnUrl = url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) + "#" + tabName;
+
+            return returnUrl;
+        }
+
+        public static string EditItemUrl(this UrlHelper url, int itemId, string tabName)
+        {
+            var returnUrl = url.RouteUrl(new { controller = "ItemManagement", action = "Edit", id = itemId }) + "#" + tabName;
+
+            return returnUrl;
+        }
     }
 }

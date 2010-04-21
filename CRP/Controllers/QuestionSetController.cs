@@ -460,7 +460,8 @@ namespace CRP.Controllers
                 return LinkToItem(itemId, transaction, quantity);
             }
 
-            return Redirect(ReturnUrlGenerator.EditItemUrl(itemId, StaticValues.Tab_Questions));
+            //return Redirect(ReturnUrlGenerator.EditItemUrl(itemId, StaticValues.Tab_Questions));
+            return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_Questions));
 
         }
 
@@ -519,7 +520,8 @@ namespace CRP.Controllers
                 Message = "Unable to remove question set.";
             }
 
-            return Redirect(ReturnUrlGenerator.EditItemUrl(itemId, StaticValues.Tab_Questions));
+            //return Redirect(ReturnUrlGenerator.EditItemUrl(itemId, StaticValues.Tab_Questions));
+            return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_Questions));
         }
     }
 }
