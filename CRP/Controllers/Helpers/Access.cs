@@ -85,7 +85,7 @@ namespace CRP.Controllers.Helpers
         public static bool HasItemAccess(IPrincipal currentUser, Item item)
         {
             Check.Require(item != null, "An item is required.");
-            Check.Require(item.Editors != null, "An item must have atleast one editor.");
+            Check.Require(item.Editors != null, "An item must have at least one editor.");
             
             // admin has access to everything
             if (currentUser.IsInRole(RoleNames.Admin)) return true;
