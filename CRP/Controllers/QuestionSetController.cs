@@ -138,7 +138,18 @@ namespace CRP.Controllers
             var existingQs = Repository.OfType<QuestionSet>().GetNullableByID(id);
 
             // check for valid question set and access
-            if (existingQs == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, existingQs)) return this.RedirectToAction(a => a.List());
+            if (existingQs == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, existingQs))
+            {
+                Message = "You do not have access to the requested Question Set.";
+                return this.RedirectToAction(a => a.List());
+            }
+
+            // check to make sure it isn't the system's default contact information set
+            //This check MUST happen before we change the name
+            if (existingQs.Name == StaticValues.QuestionSet_ContactInformation && existingQs.SystemReusable)
+            {
+                ModelState.AddModelError("Question Set", "This is a system default question set and cannot be modified");
+            }
 
             // copy the fields
             existingQs.Name = questionSet.Name;
@@ -146,15 +157,11 @@ namespace CRP.Controllers
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, existingQs.ValidationResults());
 
-            // check to make sure it isn't the system's default contact information set
-            if (existingQs.Name == StaticValues.QuestionSet_ContactInformation && existingQs.SystemReusable)
+            
+            if (questionSet.Name.ToLower() == StaticValues.QuestionSet_ContactInformation.ToLower())
             {
-                ModelState.AddModelError("Question Set", "This is a system default question set and cannot be modified");
-            }
-            if (questionSet.Name.ToLower() == "Contact Information".ToLower())
-            {
-                ModelState.AddModelError("Name", "Contact Information is reserved for internal system use only.");
-                Message = "Contact Information is reserved for internal system use only.";
+                ModelState.AddModelError("Name", StaticValues.QuestionSet_ContactInformation + " is reserved for internal system use only.");
+                Message = StaticValues.QuestionSet_ContactInformation + " is reserved for internal system use only.";
             }
 
             if (ModelState.IsValid)
