@@ -100,7 +100,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithParametersMapping2()
         {
-            "~/QuestionSet/Create".ShouldMapTo<QuestionSetController>(a => a.Create(null, null,new QuestionSet(), true,false ), true);
+            "~/QuestionSet/Create".ShouldMapTo<QuestionSetController>(a => a.Create(null, null,new QuestionSet(), string.Empty, true,false ), true);
         }
 
         /// <summary>

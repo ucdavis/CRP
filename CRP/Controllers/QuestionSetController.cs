@@ -94,7 +94,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
-            var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
+            var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
             viewModel.QuestionSet = questionSet;
 
             if (!questionSet.SystemReusable && !questionSet.CollegeReusable && !questionSet.UserReusable)
@@ -157,7 +157,7 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Question Set");
             }
 
-            var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
+            var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
             viewModel.QuestionSet = existingQs;
 
             return View(viewModel);
@@ -170,7 +170,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Create(int? itemId, int? itemTypeId)
         {
-            var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
+            var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
 
             if (itemId.HasValue) {
                 viewModel.Item = Repository.OfType<Item>().GetByID(itemId.Value); 
@@ -213,10 +213,12 @@ namespace CRP.Controllers
         /// <returns></returns>
         [AcceptPost]
         [HandleTransactionsManually]
-        public ActionResult Create(int? itemId, int? itemTypeId, [Bind(Exclude="Id")]QuestionSet questionSet, bool? transaction, bool? quantity)
+        public ActionResult Create(int? itemId, int? itemTypeId, [Bind(Exclude="Id")]QuestionSet questionSet, string school, bool? transaction, bool? quantity)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
             questionSet.User = user;
+
+            if (questionSet.CollegeReusable) questionSet.School = _schoolRepository.GetNullableByID(school);
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
 
@@ -306,12 +308,25 @@ namespace CRP.Controllers
             }
 
             // return to the view
-            var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
+            var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
             viewModel.QuestionSet = questionSet;
 
             if (itemId.HasValue)
             {
                 viewModel.Item = Repository.OfType<Item>().GetByID(itemId.Value);
+            }
+
+            if (CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                viewModel.IsAdmin = true;
+            }
+            else if (CurrentUser.IsInRole(RoleNames.SchoolAdmin))
+            {
+                viewModel.IsSchoolAdmin = true;
+            }
+            else
+            {
+                viewModel.IsUser = true;
             }
 
             return View(viewModel);    

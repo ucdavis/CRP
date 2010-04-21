@@ -61,6 +61,8 @@
                 <label for="CollegeReusable">CollegeReusable: (This will be restricted to your college)</label>
                 <%= Html.CheckBox("QuestionSet.CollegeReusable")%>
                 <%= Html.ValidationMessage("QuestionSet.CollegeReusable", "*")%>
+                
+                <%= this.Select("school").Options(Model.Schools, x=>x.Id,x=>x.LongDescription) %>
             </p>
             <%} %>            
             <% if (Model.IsAdmin || Model.IsSchoolAdmin) {%>

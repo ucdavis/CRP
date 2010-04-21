@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
+using System.Web.Mvc;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
@@ -9,15 +12,22 @@ namespace CRP.Controllers.ViewModels
 {
     public class QuestionSetViewModel
     {
-        public static QuestionSetViewModel Create(IRepository repository, IRepositoryWithTypedId<School, string> schoolRepository)
+        public static QuestionSetViewModel Create(IRepository repository, IPrincipal principal, IRepositoryWithTypedId<School, string> schoolRepository)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(schoolRepository != null, "School repository is required.");
 
+            var user = repository.OfType<User>().Queryable.Where(a => a.LoginID == principal.Identity.Name).FirstOrDefault();
+
             var viewModel = new QuestionSetViewModel() {
-                QuestionTypes = repository.OfType<QuestionType>().GetAll(),
-                Schools = schoolRepository.GetAll()
+                QuestionTypes = repository.OfType<QuestionType>().GetAll()
+                //Schools = schoolRepository.GetAll()
             };
+
+            if (user != null)
+            {
+                viewModel.Schools = user.Units.Select(a => a.School).Distinct();
+            }
 
             return viewModel;
         }
