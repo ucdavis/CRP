@@ -2,6 +2,7 @@ using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using UCDArch.Web.Controller;
 using CRP.Core.Abstractions;
+using System.Linq;
 
 namespace CRP.Controllers
 {
@@ -20,7 +21,7 @@ namespace CRP.Controllers
         {
             var viewModel = SearchViewModel.Create(Repository);
 
-            if (!string.IsNullOrEmpty(searchTerm)) viewModel.Items = _searchTermProvider.GetByTerm(searchTerm);
+            if (!string.IsNullOrEmpty(searchTerm)) viewModel.Items = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false);
 
             return View(viewModel);
         }
