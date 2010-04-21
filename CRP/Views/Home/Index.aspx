@@ -16,6 +16,7 @@
     <h2>Shopper Screens</h2>
     <ul>
         <li><%= Html.ActionLink<ItemController>(a => a.List(), "Browse") %></li>
+        <li><%= Html.ActionLink<AccountController>(a => a.OpenIdAccount(), "Open Id Account") %></li>
     </ul>
     
     <h2>User Screens</h2>

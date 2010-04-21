@@ -15,8 +15,6 @@ namespace CRP
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
-            
-
             MvcRoute.MappUrl("Tag/{tag}")
                 .WithDefaults(new { controller = "Tag", action = "Index", tag = "" })
                 .AddWithName("Tag", routes);

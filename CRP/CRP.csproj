@@ -587,6 +587,7 @@
     <Content Include="Scripts\openid-jquery.js" />
     <Content Include="Scripts\RenameForArray.js" />
     <Content Include="Views\Account\CasLogon.aspx" />
+    <Content Include="Views\Account\OpenIdAccount.aspx" />
     <Content Include="Views\Account\OpenIdLogon.aspx" />
     <Content Include="Views\Check\LinkToTransaction.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />

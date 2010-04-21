@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
 using DotNetOpenAuth.OpenId;
@@ -143,6 +144,21 @@ namespace CRP.Controllers
             }
 
             return new EmptyResult();
+        }
+        #endregion
+
+        #region OpenId
+        [RequireOpenId]
+        public ActionResult OpenIdAccount()
+        {
+            var openIdUser = _openIdUserRepository.GetNullableByID(CurrentUser.Identity.Name);
+
+            if (openIdUser == null)
+            {
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+
+            return View(openIdUser);
         }
         #endregion
     }

@@ -6,6 +6,11 @@ namespace CRP.Core.Domain
 {
     public class OpenIdUser: DomainObjectWithTypedId<string>
     {
+        public OpenIdUser()
+        {
+            Transactions = new List<Transaction>();
+        }
+
         [Length(255)]
         public virtual string Email { get; set; }
         [Length(255)]
@@ -25,7 +30,7 @@ namespace CRP.Core.Domain
         [Length(20)]
         public virtual string PhoneNumber { get; set; }
 
-        public virtual ICollection<OpenIdUser> OpenIDUsers { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
 
         public virtual string UserId { 
             set

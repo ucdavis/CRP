@@ -19,7 +19,7 @@
     <property name="Zip" column="Zip" />
     <property name="PhoneNumber" column="PhoneNumber" />
 
-    <bag name="OpenIDUsers" table="Transactions" cascade="none" inverse="true">
+    <bag name="Transactions" table="Transactions" cascade="none" inverse="true">
       <key column="OpenIdUserId" />
       <one-to-many class="CRP.Core.Domain.Transaction, CRP.Core"/>
     </bag>
