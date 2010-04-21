@@ -88,6 +88,10 @@ namespace CRP.Controllers
                 Message = "Checks associated with transaction.";
                 return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
             }
+            //JCS Ok we have an invalid object, where we have added paymentLogs, 
+            //if they just go back to the list, the automatic commit will save the changes,
+            //so tring a rollback...
+            Repository.OfType<Transaction>().DbContext.RollbackTransaction();
 
             var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
             viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
