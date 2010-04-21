@@ -17,7 +17,7 @@ namespace CRP.Tests.Controllers
     public class TransactionControllerTests : ControllerTestBase<TransactionController>
     {
         protected IRepositoryWithTypedId<OpenIdUser, string> OpenIdUserRepository { get; set; }
-        //public IPaymentProvider PaymentProvider { get; set; }
+        public INotificationProvider NotificationProvider { get; set; }
         #region Init
 
         /// <summary>
@@ -34,8 +34,8 @@ namespace CRP.Tests.Controllers
         protected override void SetupController()
         {
             OpenIdUserRepository = MockRepository.GenerateStub<IRepositoryWithTypedId<OpenIdUser, string>>();
-            //PaymentProvider = MockRepository.GenerateStub<IPaymentProvider>();
-            Controller = new TestControllerBuilder().CreateController<TransactionController>(OpenIdUserRepository);
+            NotificationProvider = MockRepository.GenerateStub<INotificationProvider>();
+            Controller = new TestControllerBuilder().CreateController<TransactionController>(OpenIdUserRepository, NotificationProvider);
         }
 
         #endregion Init
