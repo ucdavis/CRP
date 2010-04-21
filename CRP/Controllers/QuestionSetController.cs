@@ -186,22 +186,14 @@ namespace CRP.Controllers
         {
             var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
 
-            if (itemId.HasValue) {
-                viewModel.Item = Repository.OfType<Item>().GetByID(itemId.Value); 
-            }
-            if (itemTypeId.HasValue) {
-                viewModel.ItemType = Repository.OfType<ItemType>().GetByID(itemTypeId.Value);
-            }
-            if(transaction.HasValue)
-            {
-                viewModel.Transaction = (bool)transaction;
-            }
-            if(quantity.HasValue)
-            {
-                viewModel.Quantity = (bool)quantity;
-            }
+            // set the item or item type as needed
+            if (itemId.HasValue) viewModel.Item = Repository.OfType<Item>().GetByID(itemId.Value); 
+            if (itemTypeId.HasValue) viewModel.ItemType = Repository.OfType<ItemType>().GetByID(itemTypeId.Value);
 
+            viewModel.Transaction = transaction.HasValue ? transaction.Value : false;
+            viewModel.Quantity = quantity.HasValue ? quantity.Value : false;
 
+            // display reusable options
             if (CurrentUser.IsInRole(RoleNames.Admin))
             {
                 viewModel.IsAdmin = true;

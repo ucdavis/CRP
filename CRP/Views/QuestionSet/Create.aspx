@@ -32,8 +32,8 @@
                 <%= Html.ValidationMessage("QuestionSet.Name", "*") %>
             </p>
             
-            <div style='display:<%= Model.Item == null || Model.ItemType != null ? Html.Encode("Block") : Html.Encode("None") %>'>
-            
+            <!-- Hide or display the transaction/quantity selector when already adding it to an item type -->
+            <% if (!Model.Transaction && !Model.Quantity ) { %> 
                 <p>
                     <label for="Transaction">Transaction Level:</label>
                     <%= Html.CheckBox("transaction") %>
@@ -43,36 +43,38 @@
                     <label for="Quantity">Quantity Level:</label>
                     <%= Html.CheckBox("quantity") %>
                 </p>
+            <% } else { %>
+                <%= Html.Hidden("transaction", Model.Transaction) %>
+                <%= Html.Hidden("quantity", Model.Quantity) %>
+            <% } %>
             
-            </div>
-            
-            <div style='display:<%= Model.Item == null && Model.ItemType == null ? Html.Encode("Block"): Html.Encode("None") %>'>
-            
-            <% if (Model.IsAdmin) {%>
-            <p>
-                
-                <label for="SystemReusable">SystemReusable:</label>
-                <%= Html.CheckBox("QuestionSet.SystemReusable")%>
-                <%= Html.ValidationMessage("QuestionSet.SystemReusable", "*")%>
-            </p>
-            <%} %>            
-            <% if (Model.IsAdmin || Model.IsSchoolAdmin) {%>
-            <p>
-                <label for="CollegeReusable">CollegeReusable: (This will be restricted to your college)</label>
-                <%= Html.CheckBox("QuestionSet.CollegeReusable")%>
-                <%= Html.ValidationMessage("QuestionSet.CollegeReusable", "*")%>
-                
-                <%= this.Select("school").Options(Model.Schools, x=>x.Id,x=>x.LongDescription) %>
-            </p>
-            <%} %>            
-            <% if (Model.IsAdmin || Model.IsSchoolAdmin) {%>
-            <p>
-                <label for="UserReusable">UserReusable:</label>
-                <%= Html.CheckBox("QuestionSet.UserReusable")%>
-                <%= Html.ValidationMessage("QuestionSet.UserReusable", "*")%>
-            </p>
-            <%} %>            
-            </div>
+            <!-- Hide or display reusable selectors when needed -->
+            <% if (Model.Item == null && Model.ItemType == null) { %>
+                <% if (Model.IsAdmin) {%>
+                <p>
+                    
+                    <label for="SystemReusable">SystemReusable:</label>
+                    <%= Html.CheckBox("QuestionSet.SystemReusable")%>
+                    <%= Html.ValidationMessage("QuestionSet.SystemReusable", "*")%>
+                </p>
+                <%} %>            
+                <% if (Model.IsAdmin || Model.IsSchoolAdmin) {%>
+                <p>
+                    <label for="CollegeReusable">CollegeReusable: (This will be restricted to your college)</label>
+                    <%= Html.CheckBox("QuestionSet.CollegeReusable")%>
+                    <%= Html.ValidationMessage("QuestionSet.CollegeReusable", "*")%>
+                    
+                    <%= this.Select("school").Options(Model.Schools, x=>x.Id,x=>x.LongDescription) %>
+                </p>
+                <%} %>            
+                <% if (Model.IsAdmin || Model.IsSchoolAdmin) {%>
+                <p>
+                    <label for="UserReusable">UserReusable:</label>
+                    <%= Html.CheckBox("QuestionSet.UserReusable")%>
+                    <%= Html.ValidationMessage("QuestionSet.UserReusable", "*")%>
+                </p>
+                <%} %>            
+            <% } %>
             <p>
                 <input type="submit" value="Create" />
             </p>
