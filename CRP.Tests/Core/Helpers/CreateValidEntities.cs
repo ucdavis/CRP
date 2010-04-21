@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CRP.Core.Domain;
 
 namespace CRP.Tests.Core.Helpers
@@ -195,6 +196,7 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Transaction = new Transaction();
             rtValue.QuestionSet = new QuestionSet();
             rtValue.Question = new Question();
+            rtValue.QuantityId = Guid.NewGuid();
             
             return rtValue;
         }
