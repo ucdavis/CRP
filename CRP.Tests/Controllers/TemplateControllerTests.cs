@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
+using CRP.Core.Domain;
+using CRP.Tests.Core.Extensions;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.Attributes;
 using MvcContrib.TestHelper;
+using Rhino.Mocks;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
 using UCDArch.Web.Attributes;
 
@@ -15,8 +21,19 @@ namespace CRP.Tests.Controllers
     public class TemplateControllerTests : ControllerTestBase<TemplateController>
     {
         private readonly Type _controllerClass = typeof(TemplateController);
+        protected List<Template> Templates { get; set; }
+        protected IRepository<Template> TemplateRepository { get; set; }        
 
         #region Init
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TemplateControllerTests"/> class.
+        /// </summary>
+        public TemplateControllerTests()
+        {
+            Templates = new List<Template>();
+            TemplateRepository = FakeRepository<Template>();
+            Controller.Repository.Expect(a => a.OfType<Template>()).Return(TemplateRepository).Repeat.Any();
+        }
         /// <summary>
         /// Registers the routes.
         /// </summary>
@@ -34,6 +51,173 @@ namespace CRP.Tests.Controllers
         }
 
         #endregion Init
+
+        #region Mapping/Route Tests
+
+        /// <summary>
+        /// Tests the edit get mapping.
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetMapping()
+        {
+            "~/Template/Edit".ShouldMapTo<TemplateController>(a => a.Edit());	
+        }
+
+        /// <summary>
+        /// Tests the edit post mapping.
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostMapping()
+        {
+            "~/Template/Edit/Text".ShouldMapTo<TemplateController>(a => a.Edit("Text"), true);	
+        }
+        #endregion Mapping/Route Tests
+
+        #region Edit Get Tests
+
+        /// <summary>
+        /// Tests the edit get when no template is found creates A new template and returns view.
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetWhenNoTemplateIsFoundCreatesANewTemplateAndReturnsView()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTemplates(Templates, 3);
+            TemplateRepository.Expect(a => a.Queryable).Return(Templates.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit()
+                .AssertViewRendered()
+                .WithViewData<Template>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Id);
+            Assert.IsNull(result.Text);
+            #endregion Assert		
+        }
+
+
+        /// <summary>
+        /// Tests the edit get returns the first default template in A view.
+        /// </summary>
+        [TestMethod]
+        public void TestEditGetReturnsTheFirstDefaultTemplateInAView()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTemplates(Templates, 5);
+            Templates[3].Default = true;
+            Templates[4].Default = true;
+            TemplateRepository.Expect(a => a.Queryable).Return(Templates.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit()
+                .AssertViewRendered()
+                .WithViewData<Template>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(4, result.Id);
+            Assert.AreEqual(Templates[3].Text, result.Text);
+            Assert.AreSame(Templates[3], result);
+            #endregion Assert		
+        }
+        #endregion Edit Get Tests
+
+        #region Edit Post Tests
+
+        /// <summary>
+        /// Tests the edit post when A default template is found and text is valid template is updated.
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostWhenADefaultTemplateIsFoundAndTextIsValidTemplateIsUpdated()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTemplates(Templates, 5);
+            Templates[3].Default = true;
+            Templates[4].Default = true;
+            TemplateRepository.Expect(a => a.Queryable).Return(Templates.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit("Updated Template Text")
+                .AssertViewRendered()
+                .WithViewData<Template>();
+            #endregion Act
+
+            #region Assert
+            TemplateRepository.AssertWasCalled(a => a.EnsurePersistent(Templates[3]));
+            Assert.AreEqual("Template has been created successfully.", Controller.Message);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(4, result.Id);
+            Assert.AreEqual(Templates[3].Text, result.Text);
+            Assert.AreSame(Templates[3], result);
+            Assert.AreEqual("Updated Template Text", result.Text);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the edit post when A default template is not found creates A new default template.
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostWhenADefaultTemplateIsNotFoundCreatesANewDefaultTemplate()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTemplates(Templates, 3);
+            TemplateRepository.Expect(a => a.Queryable).Return(Templates.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit("New Template Text")
+                .AssertViewRendered()
+                .WithViewData<Template>();
+            #endregion Act
+
+            #region Assert
+            TemplateRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Template>.Is.Anything));
+            Assert.AreEqual("Template has been created successfully.", Controller.Message);
+            Assert.IsNotNull(result);
+            Assert.AreEqual("New Template Text", result.Text);
+            Assert.IsTrue(result.Default);
+            foreach (var template in Templates)
+            {
+                Assert.IsFalse(template.Default, "An existing template was updated in error.");
+                Assert.AreNotEqual("New Template Text", template.Text, "An existing template was updated in error.");
+            }
+            #endregion Assert		
+        }
+        
+        /// <summary>
+        /// Tests the edit post does not save with invalid text.
+        /// </summary>
+        [TestMethod]
+        public void TestEditPostDoesNotSaveWithInvalidText()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTemplates(Templates, 5);
+            Templates[3].Default = true;
+            TemplateRepository.Expect(a => a.Queryable).Return(Templates.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit("   ")
+                .AssertViewRendered()
+                .WithViewData<Template>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            TemplateRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Template>.Is.Anything));
+            Assert.AreEqual("Template was unable to update.", Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Text: may not be null or empty");
+            #endregion Assert		
+        }
+
+        #endregion Edit Post Tests
 
         #region Reflection Tests
 
