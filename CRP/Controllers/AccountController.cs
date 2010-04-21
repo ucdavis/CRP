@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using CRP.Authentication;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
-using CRP.Core.Domain;
-using DotNetOpenAuth.OpenId;
-using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
-using DotNetOpenAuth.OpenId.RelyingParty;
-using DotNetOpenAuth.Messaging;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
@@ -17,12 +10,30 @@ using UCDArch.Web.Authentication;
 using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Validator;
+using OpenIdUser=CRP.Core.Domain.OpenIdUser;
 
 namespace CRP.Controllers
 {
     public class AccountController : SuperController
     {
         private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
+
+        private string ReturnUrl
+        {
+            get
+            {
+                if (Session["URL"] != null)
+                {
+                    return Session["URL"].ToString();
+                }
+
+                return string.Empty;
+            }
+            set
+            {
+                Session["URL"] = value;
+            }
+        }
 
         public AccountController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository)
         {
@@ -31,7 +42,7 @@ namespace CRP.Controllers
 
         public ActionResult LogOn(string returnUrl, bool? openIdLogin)
         {
-            TempData["URL"] = returnUrl;
+            ReturnUrl = returnUrl;
 
             if (openIdLogin.HasValue && openIdLogin.Value)
             {
@@ -67,44 +78,15 @@ namespace CRP.Controllers
         }
 
         #region Open Id authentication section
-        private static OpenIdRelyingParty openid = new OpenIdRelyingParty();
-        private const string openid_identifier = "openid_identifier";
-
         /// <summary>
         /// Submit request for authentication from open id provider
         /// </summary>
-        /// <param name="returnUrl"></param>
         /// <param name="openid_identifier"></param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult Authenticate(string returnUrl, string openid_identifier)
+        public ActionResult Authenticate(string openid_identifier)
         {
-            // Stage 2: user submitting Identifier
-            Identifier id;
-            if (Identifier.TryParse(openid_identifier, out id))
-            {
-                try
-                {
-                    Session[openid_identifier] = openid_identifier;
-
-                    var request = openid.CreateRequest(id);
-
-                    request.AddExtension(new ClaimsRequest{Email = DemandLevel.Require});
-
-                    return request.RedirectingResponse.AsActionResult();
-                    //return openid.CreateRequest(id).RedirectingResponse.AsActionResult();
-                }
-                catch (ProtocolException ex)
-                {
-                    Message = ex.Message;
-                    return this.RedirectToAction(a => a.LogOn(returnUrl, false));
-                }
-            }
-            else
-            {
-                Message = "Invalid identifier";
-                return this.RedirectToAction(a => a.LogOn(returnUrl, false));
-            }
+            return OpenIdHelper.Login(openid_identifier, OpenIdHelper.CreateClaimsRequest(OpenIdHelper.RequestInformation.Email));
         }
 
         /// <summary>
@@ -113,89 +95,48 @@ namespace CRP.Controllers
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         [ValidateInput(false)]
-        public ActionResult Authenticate(string returnUrl)
+        public ActionResult Authenticate()
         {
-            var response = openid.GetResponse();
+            Authentication.OpenIdUser openIdUser;
+            string message;
 
-            if (response != null)
+            if (OpenIdHelper.ValidateResponse(out openIdUser, out message))
             {
-                // Stage 3: OpenID Provider sending assertion response
-                switch (response.Status)
+                // check to see if we need to create an account in the system
+                var user = _openIdUserRepository.GetNullableByID(openIdUser.ClaimedIdentifier);
+
+                // does not exist create a new one
+                if (user == null)
                 {
-                    case AuthenticationStatus.Authenticated:
-                        //Session["FriendlyIdentifier"] = response.FriendlyIdentifierForDisplay;
+                    user = new OpenIdUser() { UserId = openIdUser.ClaimedIdentifier };
 
-                        // create the auth ticket
-                        CreateTicket(response.ClaimedIdentifier);
+                    openIdUser.Email = openIdUser.Email;
 
-                        // check to see if we need to create an account in the system
-                        var openIdUser = _openIdUserRepository.GetNullableByID(response.ClaimedIdentifier);
+                    _openIdUserRepository.EnsurePersistent(user);
 
-                        // does not exist create a new one
-                        if (openIdUser == null)
-                        {
-                            var claimsResponse = response.GetExtension<ClaimsResponse>();
-                            
-                            openIdUser = new OpenIdUser() {UserId = response.ClaimedIdentifier};
-
-                            if (claimsResponse != null)
-                            {
-                                openIdUser.Email = claimsResponse.Email;
-                            }
-                            else
-                            {
-                                Message = "Please fill in at least an email address.";
-                            }
-
-                            _openIdUserRepository.EnsurePersistent(openIdUser);
-
-                            // redirect to the edit page
-                            return this.RedirectToAction(a => a.OpenIdAccount());
-                        }
-                        // user exists but email was never filled out
-                        else if (string.IsNullOrEmpty(openIdUser.Email))
-                        {
-                            Message = "Please fill in at least an email address.";
-
-                            return this.RedirectToAction(a => a.OpenIdAccount());
-                        }
-
-                        // redirect to the defaults
-                        if (!string.IsNullOrEmpty(returnUrl))
-                        {
-                            return Redirect(returnUrl);
-                        }
-                        else if (TempData["URL"] != null)
-                        {
-                            return Redirect(TempData["URL"].ToString());
-                        }
-                        else
-                        {
-                            return this.RedirectToAction<HomeController>(a => a.Index());
-                        }
-                    case AuthenticationStatus.Canceled:
-                        Message = "Canceled at provider";
-                        return this.RedirectToAction(a => a.LogOn(returnUrl, false));
-                    case AuthenticationStatus.Failed:
-                        Message = response.Exception.Message;
-                        return this.RedirectToAction(a => a.LogOn(returnUrl, false));
+                    // redirect to the edit page
+                    return this.RedirectToAction(a => a.OpenIdAccount());
                 }
+                // user exists but email was never filled out
+                else if (string.IsNullOrEmpty(user.Email))
+                {
+                    Message = "Please fill in at least an email address.";
+
+                    return this.RedirectToAction(a => a.OpenIdAccount());
+                }
+
+                // redirect to the return url
+                if (!string.IsNullOrEmpty(ReturnUrl))
+                {
+                    return Redirect(ReturnUrl);
+                }
+                
+                return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
-            return new EmptyResult();
-        }
-
-        private void CreateTicket(string userId)
-        {
-            // create authenication ticket
-            var authTicket = new FormsAuthenticationTicket(1,
-                                                           userId,
-                                                           DateTime.Now, DateTime.Now.AddMinutes(15), false, StaticValues.OpenId,
-                                                           FormsAuthentication.FormsCookiePath);
-
-            string encTicket = FormsAuthentication.Encrypt(authTicket);
-
-            Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+            // failure, give the message to the user
+            Message = message;
+            return this.RedirectToAction<AccountController>(a => a.LogOn(ReturnUrl, true));
         }
 
         #endregion

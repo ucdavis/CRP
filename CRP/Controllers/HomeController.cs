@@ -17,6 +17,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         public ActionResult AdminHome()
         {
             return View();

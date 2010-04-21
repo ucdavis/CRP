@@ -152,6 +152,7 @@
     <Compile Include="Controllers\Helpers\GoogleMapHelper.cs" />
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Controllers\Helpers\InvoiceNumberGenerator.cs" />
+    <Compile Include="Authentication\OpenIdHelper.cs" />
     <Compile Include="Controllers\Helpers\ReturnUrlGenerator.cs" />
     <Compile Include="Controllers\Helpers\RoleNames.cs" />
     <Compile Include="Controllers\Helpers\UserHelper.cs" />
@@ -580,7 +581,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>60223</DevelopmentServerPort>
+          <DevelopmentServerPort>51400</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
