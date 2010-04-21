@@ -513,6 +513,15 @@ namespace CRP.Controllers
                     {
                         body.Append(k + ":" + ModelState[k].Value + "<br/>");
                     }
+
+                    body.Append("<br/><br/>===== modelstate errors text===<br/>");
+                    foreach (var result in ModelState.Values)
+                    {
+                        foreach (var errs in result.Errors)
+                        {
+                            body.Append("Error:" + errs.ErrorMessage + "<br/>");
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
