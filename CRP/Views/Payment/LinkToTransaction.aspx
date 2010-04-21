@@ -40,6 +40,7 @@
                 cloned.find("input").val("");
                 cloned.find("textarea").val("");
                 cloned.find("input.accepted-field").val(true);
+                cloned.removeClass("deactivated");
 
                 //fieldset.after(cloned);
                 addImg.before(cloned);
@@ -102,9 +103,12 @@
             var sum = 0;
             var total = parseFloat($("input#TotalAmount").val());
             var donationTotal = parseFloat($("input#DonationAmount").val());
-            
+
             $.each($("input.amount"), function(index, item) {
-                sum += parseFloat($(item).val());
+                var checkItem = $(item);
+                if (!checkItem.parents("fieldset").hasClass("deactivated")) {
+                    sum += parseFloat(checkItem.val());
+                }
             });
 
             var remaining = (total + donationTotal) - sum;
@@ -183,13 +187,13 @@
             <td colspan="2">
                 Transaction Total: $ <span id="transactionTotal"><%= Html.Encode(string.Format("{0:0.00}",Model.Transaction.Total))%></span>
                 <br />
-                Payment Total: $ <span id="paymentTotal"><%= Html.Encode(string.Format("{0:0.00}", Model.PaymentLogs.Sum(a => a.Amount)))%></span>
+                Payment Total: $ <span id="paymentTotal"><%= Html.Encode(string.Format("{0:0.00}", Model.Transaction.TotalPaid))%></span>
                 <br />
                 Remaining Balance: $ <span id="remainingTotal">
                     <%= Html.Encode(string.Format("{0:0.00}",
                         Model.Transaction.Total
                         -
-                        Model.PaymentLogs.Sum(a => a.Amount)                                       
+                        Model.Transaction.TotalPaid                                     
                         )) %>
                 </span>
                 

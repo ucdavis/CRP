@@ -72,11 +72,12 @@ namespace CRP.Controllers
             // more money is coming in than the transaction total, make a donation for the rest
             if (checktotal > transactiontotal)
             {
-                var donation = new Transaction(transaction.Item);
-                donation.Donation = true;
-                donation.Amount = checktotal - transactiontotal;
+                //var donation = new Transaction(transaction.Item);
+                //donation.Donation = true;
+                //donation.Amount = checktotal - transactiontotal;
 
-                transaction.AddChildTransaction(donation);
+                //transaction.AddChildTransaction(donation);
+                ModelState.AddModelError("Checks", "The check amount has exceeded the total amount. Enter a donation first.");
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
