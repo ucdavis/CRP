@@ -7,7 +7,7 @@
 </asp:Content>
 
 <asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
-    <% Html.RenderPartial(StaticValues.View_PageHeader, Model.DisplayProfile); %>
+    <% Html.RenderPartial(StaticValues.View_PageHeader, Model.DisplayProfile ?? new DisplayProfile()); %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">

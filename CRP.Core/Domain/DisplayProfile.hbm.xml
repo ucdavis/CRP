@@ -13,7 +13,6 @@
     <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join" />
     <property name="Logo" column="Logo" />
 
-    <property name="SiteMaster" column="SiteMaster" />
     <property name="SchoolMaster" column="SchoolMaster" />
     
   </class>

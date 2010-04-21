@@ -20,7 +20,6 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
-            SiteMaster = false;
             SchoolMaster = false;
         }
 
@@ -30,7 +29,6 @@ namespace CRP.Core.Domain
         public virtual School School { get; set; }
         public virtual byte[] Logo { get; set; }
 
-        public virtual bool SiteMaster { get; set; }
         public virtual bool SchoolMaster { get; set; }
     }
 }

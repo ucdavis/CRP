@@ -19,10 +19,6 @@
     </p>
     
     <p>
-        <%= Html.ActionLink<DisplayProfileController>(a => a.Edit(Model.Where(b=>b.SiteMaster).FirstOrDefault().Id), "Edit Site Master") %>
-    </p>
-    
-    <p>
         Department display profiles:
     </p>
     <% Html.Grid(Model.Where(a => !a.SiteMaster && !a.SchoolMaster))

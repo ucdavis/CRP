@@ -46,7 +46,7 @@
     <property name="SID" column="SID" />
     <property name="UserKey" column="UserKey" />
 
-    <bag name="Units" table="vUnitAssociations" cascade="all-delete-orphan" fetch="join">
+    <bag name="Units" table="vUnitAssociations" cascade="all-delete-orphan">
       <key column="UserId" />
       <many-to-many column="UnitId" class="CRP.Core.Domain.Unit, CRP.Core" />
     </bag>

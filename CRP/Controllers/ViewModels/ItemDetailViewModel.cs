@@ -25,12 +25,6 @@ namespace CRP.Controllers.ViewModels
             {
                 // get the college profile
                 viewModel.DisplayProfile = repository.OfType<DisplayProfile>().Queryable.Where(a => a.School == unit.School && a.SchoolMaster).FirstOrDefault();
-
-                if (viewModel.DisplayProfile == null)
-                {
-                    // get the site master profile
-                    viewModel.DisplayProfile = repository.OfType<DisplayProfile>().Queryable.Where(a => a.SiteMaster).FirstOrDefault();
-                }
             }
 
             return viewModel;
