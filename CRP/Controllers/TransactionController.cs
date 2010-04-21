@@ -165,7 +165,7 @@ namespace CRP.Controllers
                 // generate the unique id for each quantity
                 var quantityId = Guid.NewGuid();
 
-                foreach(var qa in quantityAnswers)
+                foreach(var qa in quantityAnswers.Where(a => a.QuantityIndex == i))
                 {
                     var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
                     // if question is null just drop it
