@@ -106,7 +106,7 @@ namespace CRP.Controllers
         public JsonNetResult Validate(int itemId, string couponCode)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            var coupon = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == couponCode).FirstOrDefault();
+            var coupon = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == couponCode && a.Item == item).FirstOrDefault();
 
             if (item == null || coupon == null)
             {
