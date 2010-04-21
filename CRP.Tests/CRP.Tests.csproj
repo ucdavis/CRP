@@ -148,6 +148,7 @@
     <Compile Include="Controllers\ReportControllerTests.cs" />
     <Compile Include="Controllers\SearchControllerTests.cs" />
     <Compile Include="Controllers\TagControllerTests.cs" />
+    <Compile Include="Controllers\TemplateControllerTests.cs" />
     <Compile Include="Controllers\TransactionControllerTests.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />

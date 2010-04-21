@@ -561,7 +561,7 @@ namespace CRP.Controllers
                     if (question != null)
                     {
                         // send an email to the user
-                        _notificationProvider.SendConfirmation(transaction, question.Answer);
+                        _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
                     }
                     if(transaction.TotalPaid > transaction.Total)
                     {

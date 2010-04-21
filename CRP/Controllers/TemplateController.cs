@@ -12,15 +12,6 @@ namespace CRP.Controllers
     [AdminOnly]
     public class TemplateController : SuperController
     {
-        //
-        // GET: /Template/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-
         /// <summary>
         /// GET: /Template/Edit
         /// </summary>
