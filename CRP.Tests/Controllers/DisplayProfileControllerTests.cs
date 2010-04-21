@@ -357,6 +357,42 @@ namespace CRP.Tests.Controllers
             Controller.ModelState.AssertErrorsAre("Name: may not be null or empty");
         }
 
+        /// <summary>
+        /// Tests the create with duplicate unit does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateWithDuplicateUnitDoesNotSave()
+        {
+            #region Arrange
+            FakeUnits(3);
+            FakeDisplayProfiles(3);
+            for (int i = 0; i < 3; i++)
+            {
+                DisplayProfiles[i].Unit = Units[i];
+            }
+            DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
+            FakeSchools(1);
+            UnitRepository.Expect(a => a.GetAll()).Return(Units).Repeat.Any();
+            SchoolRepository.Expect(a => a.GetAll()).Return(Schools).Repeat.Any();
+            Controller.ControllerContext.HttpContext = new MockHttpContext(0);
+            var newDisplayProfile = CreateValidEntities.DisplayProfile(4);
+            newDisplayProfile.Unit = Units[1];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(newDisplayProfile)
+                .AssertViewRendered()
+                .WithViewData<DisplayProfileViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            DisplayProfileRepository.AssertWasNotCalled(a => a.EnsurePersistent(newDisplayProfile));
+            Assert.AreNotEqual("Display Profile has been created successfully.", Controller.Message);
+            Assert.IsFalse(Controller.ModelState.IsValid);
+            Controller.ModelState.AssertErrorsAre("Display Profile has already been created for this unit.");
+            #endregion Assert		
+        }
         #endregion Create Tests
 
         #region Edit Tests
@@ -394,7 +430,6 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestEditWhenIdNotFound()
         {
-            //Fix in controller, see suggested commented out code
             FakeDisplayProfiles(1);
             DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             Controller.Edit(1, DisplayProfiles[0])
