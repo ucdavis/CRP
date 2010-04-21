@@ -43,7 +43,7 @@ namespace CRP.Tests.Controllers
         /// <summary>
         /// Tests the log on mapping.
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestLogOnMapping()
         {
             "~/Account/LogOn/Test".ShouldMapTo<AccountController>(a => a.LogOn(null), true);
@@ -53,7 +53,7 @@ namespace CRP.Tests.Controllers
         /// <summary>
         /// Tests the log out mapping.
         /// </summary>
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestLogOutMapping()
         {
             "~/Account/LogOut".ShouldMapTo<AccountController>(a => a.LogOut());
