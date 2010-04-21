@@ -69,7 +69,7 @@
 //        {
 //            var transaction = _transactionRepository.GetNullableByID(transactionId);
 
-//            // not sure what to do if this is null, becuase that means touchnet returned something we shouldn't have gotten back
+//            // not sure what to do if this is null, because that means touchnet returned something we shouldn't have gotten back
 //            if (transaction == null || transaction.Paid)
 //            {
 //                return;

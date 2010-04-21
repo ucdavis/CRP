@@ -476,7 +476,7 @@ namespace CRP.Controllers
 
             var regExVal = new Regex(validator.RegEx);
             // valid
-            // check for when answer is null, becuase when doing a radio button it is null when nothing is selected
+            // check for when answer is null, because when doing a radio button it is null when nothing is selected
             if (regExVal.IsMatch(answer ?? string.Empty)) return true;
 
             // not valid input provide error message

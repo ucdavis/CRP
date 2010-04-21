@@ -75,7 +75,7 @@ namespace CRP.Controllers
             // Check to make sure the question set hasn't been used yet
             if ((questionSet.SystemReusable || questionSet.CollegeReusable || questionSet.UserReusable) && questionSet.Items.Count > 0)
             {
-                Message = "Question cannot be added to the question set becuase it is already being used by an item.";
+                Message = "Question cannot be added to the question set because it is already being used by an item.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
             }
 
@@ -177,7 +177,7 @@ namespace CRP.Controllers
             // Check to make sure the question set hasn't been used yet
             if (question.QuestionSet.Items.Count > 0)
             {
-                Message = "Question cannot be deleted from the question set becuase it is already being used by an item.";
+                Message = "Question cannot be deleted from the question set because it is already being used by an item.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
             }
 
@@ -185,7 +185,7 @@ namespace CRP.Controllers
             if (question.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && question.QuestionSet.SystemReusable)
             {
                 //ModelState.AddModelError("Question Set", "This is a sytem default question set and cannot be modified.");
-                Message = "Question cannot be deleted from the question set becuase it is a system default.";
+                Message = "Question cannot be deleted from the question set because it is a system default.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
             }
 
