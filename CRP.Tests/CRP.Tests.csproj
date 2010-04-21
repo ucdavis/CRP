@@ -115,6 +115,7 @@
     <Compile Include="Repositories\ExtendedPropertyRepositoryTests.cs" />
     <Compile Include="Repositories\ItemQuestionSetRepositoryTests.cs" />
     <Compile Include="Repositories\ItemRepositoryTests.cs" />
+    <Compile Include="Repositories\ItemTypeQuestionSetRepositoryTests.cs" />
     <Compile Include="Repositories\ItemTypeRepositoryTests.cs" />
     <Compile Include="Repositories\QuantityAnswerRepositoryTests.cs" />
     <Compile Include="Repositories\QuestionOptionRepositoryTests.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Repositories\QuestionTypeRepositoryTests.cs" />
     <Compile Include="Repositories\SchoolRepositoryTests.cs" />
     <Compile Include="Repositories\TagRepositoryTests.cs" />
+    <Compile Include="Repositories\TemplateRepositoryTests.cs" />
     <Compile Include="Repositories\TransactionAnswerRepositoryTests.cs" />
     <Compile Include="Repositories\TransactionRepositoryTests.cs" />
     <Compile Include="Repositories\UnitRepositoryTests.cs" />

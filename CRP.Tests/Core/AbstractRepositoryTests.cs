@@ -10,7 +10,9 @@ using UCDArch.Testing;
 namespace CRP.Tests.Core
 {
     [TestClass]
+// ReSharper disable InconsistentNaming
     public abstract class AbstractRepositoryTests<T, IdT> : RepositoryTestBase where T : DomainObjectWithTypedId<IdT>
+// ReSharper restore InconsistentNaming
     {
         private int _entriesAdded;
         protected string RestoreValue;

@@ -308,6 +308,35 @@ namespace CRP.Tests.Core.Helpers
             return rtValue;
         }
 
+        /// <summary>
+        /// Create a valid entry for tests. 
+        /// Repository tests may need to modify this data to supply real linked data.
+        /// </summary>
+        /// <returns>Valid Template</returns>
+        public static Template Template(int? counter)
+        {
+            var rtValue = new Template();
+            rtValue.Text = "Text" + counter.Extra();
+            rtValue.Item = new Item();
+
+            return rtValue;
+        }
+
+        /// <summary>
+        /// Create a valid entry for tests.
+        /// Repository tests may need to modify this data to supply real linked data.
+        /// </summary>
+        /// <param name="counter">The counter.</param>
+        /// <returns>Valid ItemTypeQuestionSet</returns>
+        public static ItemTypeQuestionSet ItemTypeQuestionSet(int? counter)
+        {
+            var rtValue = new ItemTypeQuestionSet();
+            rtValue.ItemType = new ItemType();
+            rtValue.QuestionSet = new QuestionSet();
+
+            return rtValue;
+        }
+
         #region Helper Extension
 
         private static string Extra(this int? counter)

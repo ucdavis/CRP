@@ -28,7 +28,7 @@ namespace CRP.Core.Domain
         {
             var flag = true;
             
-            if (TransactionLevel && QuantityLevel || !TransactionLevel && !QuantityLevel)
+            if (TransactionLevel == QuantityLevel)
             {
                 flag = false;
             }
