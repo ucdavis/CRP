@@ -47,7 +47,7 @@
             <p id="Option" style="display:none;">
                 <span id="OptionsContainer">
                 </span>
-                <img id="AddOptions" src="../../Images/plus.png" style="width:24px; height:24px;" />
+                <img id="AddOptions" src="<%= Url.Content("~/Images/plus.png") %>" style="width:24px; height:24px;" />
             </p>
             
             <p>
