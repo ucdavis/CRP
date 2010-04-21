@@ -53,9 +53,12 @@ fieldset ul li label {margin-bottom:0em;}
 
 
 /* jQuery override */
-.ui-widget-header {background-color:#84BDD9; border:1px solid #94B5C3; background-image:none;}
+.ui-widget-header {background-color:#493736; border:1px solid #2A2829; background-image:none;}
 .t-widget {font-family:inherit;}
-
+.ui-state-default {background-color: #e8f7f8 !important; background-image:none !important; color:#2A2829 !important; border:1px solid #2A2829 !important;}
+.ui-state-default a {color:#2A2829 !important;}
+.ui-state-default:hover {background-color: #FFFFFF !important;}
+.ui-tabs-selected {background-color:#FFFFFF !important;}
 
 
 
