@@ -43,7 +43,9 @@ namespace CRP.Core.Domain
 
         public virtual string Description { get; set; }
         public virtual decimal CostPerItem { get; set; }
+        [Length(50)]
         public virtual int Quantity { get; set; }
+        public virtual string QuantityName { get; set; }
         public virtual DateTime? Expiration { get; set; }
         public virtual byte[] Image { get; set; }
         public virtual string Link { get; set; }

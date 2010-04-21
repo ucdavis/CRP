@@ -4,6 +4,10 @@
     Error
 </asp:Content>
 
+<asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
+    <% Html.RenderPartial("~/Views/Shared/PageHeader.ascx", new DisplayProfile()); %>
+</asp:Content>
+
 <asp:Content ID="errorContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2>
         Sorry, an error occurred while processing your request.

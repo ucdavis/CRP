@@ -5,13 +5,11 @@
 	Details
 </asp:Content>
 
+<asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
+    <% Html.RenderPartial("~/Views/Shared/PageHeader.ascx", Model.DisplayProfile); %>
+</asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
-    <p>
-        <img src='<%= Url.Action("GetLogo", "DisplayProfile", new {id = Model.DisplayProfile.Id}) %>' />
-        <%= Html.Encode(Model.DisplayProfile.Name) %>
-    </p>
-
 
     <h2><%= Html.Encode(Model.Item.Name)%></h2>
 

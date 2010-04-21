@@ -1,5 +1,5 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Controllers.ViewModels.ItemViewModel>" %>
-<%@ Import Namespace="CRP.Core.Domain"%>
+
 
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
@@ -47,6 +47,11 @@
                 <label for="Item.Quantity">Quantity:</label>
                 <%= Html.TextBox("Item.Quantity") %>
                 <%= Html.ValidationMessage("Item.Quantity", "*")%>
+            </p>
+            <p>
+                <label for="Item.QuantityName">Quantity Name:</label>
+                <%= Html.TextBox("Item.QuantityName") %>
+                <%= Html.ValidationMessage("Item.QuantityName", "*") %>
             </p>
             <p>
                 <label for="Item.Expiration">Expiration:</label>

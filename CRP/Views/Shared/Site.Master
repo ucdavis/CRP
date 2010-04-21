@@ -33,7 +33,9 @@
 
         <div id="header">
             <div id="title">
-                <h1>Conference Registration and Payments</h1>
+                
+                    <asp:ContentPlaceHolder ID="PageHeader" runat="server">
+                </asp:ContentPlaceHolder>
             </div>
               
             <div id="logindisplay">

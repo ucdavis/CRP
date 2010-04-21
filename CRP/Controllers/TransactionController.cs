@@ -55,4 +55,12 @@ namespace CRP.Controllers
             throw new NotImplementedException();
         }
     }
+
+    public class QuestionAnswerParameter
+    {
+        public int QuestionId { get; set; }
+        public int QuestionSetId { get; set; }
+        public int QuantityIndex { get; set; }
+        public string Answer { get; set; }
+    }
 }

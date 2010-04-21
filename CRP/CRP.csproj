@@ -134,6 +134,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionTypeText.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\ScreenText.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScreenText.resx</DependentUpon>
+    </Compile>
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
@@ -522,10 +527,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>NotificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="App_GlobalResources\ScreenText.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>ScreenText.Designer.cs</LastGenOutput>
+    </Content>
     <Content Include="App_GlobalResources\QuestionTypeText.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>QuestionTypeText.Designer.cs</LastGenOutput>
     </Content>
+    <Content Include="Images\logo.gif" />
+    <Content Include="Views\Shared\PageHeader.ascx" />
+    <Content Include="Views\Shared\QuestionForm.ascx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

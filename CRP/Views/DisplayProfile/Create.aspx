@@ -1,9 +1,13 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.DisplayProfileViewModel>" %>
 <%@ Import Namespace="CRP.Controllers"%>
-<%@ Import Namespace="CRP.Core.Domain"%>
+
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	CreateDisplayProfile
+</asp:Content>
+
+<asp:Content ID="pageHeader" ContentPlaceHolderID="PageHeader" runat="server">
+    <% Html.RenderPartial("~/Views/Shared/PageHeader.ascx", new DisplayProfile()); %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">

@@ -1,51 +1,39 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Core.Domain.Item>" %>
+<%@ Import Namespace="Resources"%>
 
+<h2>Transaction Level</h2>
 <% foreach(var qs in Model.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order)) {%>
-    <fieldset>
+    <fieldset id='<%= Html.Encode(qs.Id) %>'>
         <legend><%= Html.Encode(qs.QuestionSet.Name) %></legend>
         
         <% foreach (var q in qs.QuestionSet.Questions) {%>
         
-            <p>
-            
-                <%= Html.Encode(q.Name) %>
-            
-                <!-- Render the controls now -->
-                <% switch(q.QuestionType.Name) { %>
-                    <% case "Text Box" : %>
-                        <input type="text" />
-                    <% break; %>
-                    <% case "Text Area" : %>
-                        <textarea></textarea>
-                    <% break; %>
-                    <% case "Boolean" : %>
-                        <input type="checkbox" />
-                    <% break; %>
-                    <% case "Radio Buttons" : %>
-                        <% foreach(var o in q.Options) { %>
-                            <input type="radio" value='<%= Html.Encode(o.Id) %>' /><%= Html.Encode(o.Name) %>
-                        <% } %>
-                    <% break; %>
-                    <% case "Checkbox List" : %>
-                        <% foreach(var o in q.Options) { %>
-                            <input type="checkbox" value='<%= Html.Encode(o.Name) %>' />
-                        <% } %>
-                    <% break; %>
-                    <% case "Drop Down" : %>
-                        <select>
-                        <% foreach(var o in q.Options) { %>
-                            <option value='<%= Html.Encode(o.Id) %>'><%= Html.Encode(o.Name) %></option>
-                        <% } %>     
-                        </select>
-                    <% break; %>
-                    <% case "Date" : %>
-                        <input type="text" />
-                    <% break; %>
-                <% }; %>
-                
-            </p>
+            <% Html.RenderPartial("~/Views/Shared/QuestionForm.ascx", q); %>
         
         <% } %>
         
     </fieldset>
 <% } %>
+
+
+<h2>Quantity Level</h2>
+<p>
+    *The following questions must be answered for each of the <%= !String.IsNullOrEmpty(Model.QuantityName) ? Html.Encode(Model.QuantityName) : Html.Encode(ScreenText.STR_QuantityName) %>
+</p>
+
+<div class="QuantityContainer">
+    <% foreach(var qs in Model.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order)) { %> 
+
+            <fieldset>
+            <legend><%= Html.Encode(qs.QuestionSet.Name) %> <span class="quantityIndex">1</span> </legend>
+            
+            <% foreach (var q in qs.QuestionSet.Questions) {%>
+            
+                <% Html.RenderPartial("~/Views/Shared/QuestionForm.ascx", q); %>
+            
+            <% } %>
+            
+        </fieldset>
+
+    <% } %>
+</div>

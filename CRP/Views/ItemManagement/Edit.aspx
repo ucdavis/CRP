@@ -121,7 +121,10 @@
                                     {
                                         col.Add(a =>
                                                     {%>
-                                                        <%= Html.ActionLink<QuestionSetController>(b => b.UnlinkFromItem(a.Id), "Delete") %>
+                                                        <% using(Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(a.Id))) {%>
+                                                            <%= Html.AntiForgeryToken() %>
+                                                            <a href="javascript:;" class="FormSubmit">Delete</a>
+                                                        <%} %>  
                                                     <%});
                                         col.Add(a => a.QuestionSet.Name);
                                         col.Add(a => a.Required);
