@@ -186,6 +186,7 @@
                                     col.Add(a => a.Expiration.HasValue ? a.Expiration.Value.ToString("d"): string.Empty).Title("Expiration");
                                     col.Add(a => a.Used);
                                     col.Add(a => a.Unlimited);
+                                    col.Add(a => a.MaxQuantity);
                                     col.Add(a => a.IsActive);
                                 })
                    .Render();

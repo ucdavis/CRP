@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
@@ -110,16 +111,18 @@ namespace CRP.Controllers
 
             if (item == null || coupon == null)
             {
-                return new JsonNetResult("Invalid code.");
+                return new JsonNetResult(new {message = "Invalid code."});
             }
+
+            var discountAmount = coupon.ValidateCoupon(null, 1, true);
 
             //Done: This needs to work with Coupons that are unlimited.
-            if (coupon.Used && !coupon.Unlimited) //Suggestion to fix failing test            
+            if (!discountAmount.HasValue) //Suggestion to fix failing test            
             {
-                return new JsonNetResult("Coupon has already been redeemed.");
+                return new JsonNetResult(new { message = "Coupon has already been redeemed." });
             }
 
-            return new JsonNetResult(coupon.DiscountAmount);
+            return new JsonNetResult(new {discountAmount = discountAmount.Value, maxQuantity = coupon.MaxQuantity.HasValue ? coupon.MaxQuantity.Value : -1});
         }
 
         /// <summary>

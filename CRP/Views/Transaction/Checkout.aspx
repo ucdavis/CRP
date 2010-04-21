@@ -12,6 +12,8 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     
+    <%= Html.ValidationSummary("Checkout was unsuccessful. Please correct the errors and try again.") %>
+    
     <% using (Html.BeginForm()) { %>
     
     <%= Html.AntiForgeryToken() %>
@@ -47,7 +49,10 @@
                         <label for="Coupon">Coupon Code:</label>
                         <%= Html.TextBox("Coupon") %>
                     </td>
-                    <td>$ <span class="discounterPerItemAmount">0.00</span></td>
+                    <td>$ <span class="discounterPerItemAmount">0.00</span>
+                    
+                        <span class="discounterMaxQuantity" style="display:none;"></span>
+                    </td>
                     <td>$ <span class="discountAmount">0.00</span></td>
                 </tr>
                 <tr style="background-color: #D5D5D5">
@@ -102,6 +107,7 @@
         var class_totalItemAmount = "totalItemAmount";
         var class_donationAmount = "donationAmount";
         var class_discounterPerItemAmount = "discounterPerItemAmount";
+        var class_discounterMaxQuantity = "discounterMaxQuantity";
         var class_discountAmount = "discountAmount";
         var class_totalAmount = "totalAmount";
     </script>
@@ -163,12 +169,18 @@
                 var url = '<%= Url.Action("Validate", "Coupon") %>';//<%= Html.Encode(Model.Item.Id) %>';
                 var couponCode = $("input#Coupon").val();
                 $.getJSON(url, {itemId: <%= Html.Encode(Model.Item.Id) %>, couponCode: couponCode}, function(result) { 
-                    if (isNaN(result))
+                
+                    var message = result.message;
+                
+                    // if the message is undefined, we have a valid coupon
+                    if (message == undefined)
                     {
-                        alert("invalid code");
-                    } 
-                    else{
-                        $("span." + class_discounterPerItemAmount).html(parseFloat(result).toFixed(2));
+                        var discountAmount = result.discountAmount;
+                        var maxQuantity = result.maxQuantity;
+                        
+                        $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
+                        $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
+                        
                         CalculateTotal();
                     }
                 });
@@ -184,12 +196,22 @@
             var costPerItem = parseFloat($("span." + class_perItemAmount).html());
             var quantity = parseInt($("input." + class_quantityAmount).val());
             var discountAmountPerItem = parseFloat($("span." + class_discounterPerItemAmount).html());
+            var maxQuantity = parseInt($("span." + class_discounterMaxQuantity).html());
 
             var donationAmount = parseFloat($("input." + class_donationAmount).val());
 
             // calculate the totals
-            var itemTotal = quantity * costPerItem;
-            var discountTotal = quantity * discountAmountPerItem;
+            var itemTotal = quantity * costPerItem;          
+            var discountTotal;//= quantity * discountAmountPerItem;
+            if (maxQuantity == -1 || maxQuantity > quantity)
+            {
+                discountTotal = quantity * discountAmountPerItem;
+            }
+            else if (maxQuantity <= quantity)
+            {
+                discountTotal = maxQuantity * discountAmountPerItem;
+            }
+            
             var total = itemTotal - discountTotal + donationAmount;
 
             // update the prices

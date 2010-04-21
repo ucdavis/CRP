@@ -17,6 +17,7 @@
     <property name="DiscountAmount" column="DiscountAmount" />
     <property name="UserId" column="UserId" />
     <property name="IsActive" column="IsActive" />
+    <property name="MaxQuantity" column="MaxQuantity" />
     
   </class>
 </hibernate-mapping>

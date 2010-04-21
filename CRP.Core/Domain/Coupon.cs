@@ -47,7 +47,75 @@ namespace CRP.Core.Domain
         [Length(50)]
         public virtual string UserId { get; set; }
 
+        /// <summary>
+        /// The maximum number of quantity use per transaction
+        /// </summary>
+        public virtual int? MaxQuantity { get; set; }
+
         public virtual bool IsActive { get; set; }
+
+        public virtual decimal UseCoupon(string email, int quantity)
+        {
+            // call the validate coupon
+            var discount = ValidateCoupon(email, quantity, false);
+
+            // coupon is valid and usable
+            if (discount.HasValue)
+            {
+                // set the coupon as used
+                Used = true;
+
+                return discount.Value;
+            }
+
+            // coupon is not valid discount is 0.
+            return 0.0m;
+        }
+        public virtual decimal? ValidateCoupon(string email, int quantity, bool ignoreEmail)
+        {
+            // coupon has been used but isn't unlimied, is inactive or has passed expiration
+            if ((Used && !Unlimited) || (!IsActive) || (Expiration.HasValue && Expiration.Value > DateTime.Now))
+            {
+                return null;
+            }
+
+            // has an email restriction
+            if (!string.IsNullOrEmpty(Email) && !ignoreEmail)
+            {
+                if (Email == email)
+                {
+                    return CalculateDiscount(quantity);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            // no email restriction and it's valid
+            return CalculateDiscount(quantity);
+        }
+
+        private decimal CalculateDiscount(int quantity)
+        {
+            // we need to consider a max quantity
+            if (MaxQuantity.HasValue)
+            {
+                // quantity is less than max, so take discount on all quantity
+                if (MaxQuantity > quantity)
+                {
+                    return quantity*DiscountAmount;
+                }
+                // quantity if greater than max, discount only max number
+                else
+                {
+                    return MaxQuantity.Value*DiscountAmount;
+                }
+            }
+            
+            // just take the discount off all attendees
+            return quantity*DiscountAmount;   
+        }
 
         public override bool IsValid()
         {

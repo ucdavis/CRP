@@ -10,7 +10,7 @@
 
     <property name="Name" column="Name" />
     <many-to-one name="QuestionType" class="CRP.Core.Domain.QuestionType, CRP.Core" column="QuestionTypeId" cascade="none" not-null="true" fetch="join" />
-    <many-to-one name="QuestionSet" class="CRP.Core.Domain.QuestionSet, CRP.core" column="QuestionSetId" cascade="none" />
+    <many-to-one name="QuestionSet" class="CRP.Core.Domain.QuestionSet, CRP.core" column="QuestionSetId" cascade="none" fetch="join" />
     <property name="Order" column="[Order]" />
     <property name="Required" column="Required" />
     
