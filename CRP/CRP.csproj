@@ -191,6 +191,7 @@
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
     <Compile Include="Controllers\ViewModels\CouponViewModel.cs" />
     <Compile Include="Controllers\ViewModels\DisplayProfileViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\EditTransactionViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ExtendedPropertyViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemDetailViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
@@ -611,6 +612,7 @@
     <Content Include="ConnectionStringTest.config" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Template\Edit.aspx" />
+    <Content Include="Views\Transaction\Edit.aspx" />
     <None Include="Images\fonts\Quicksand_Bold.eot" />
     <None Include="Images\fonts\Quicksand_Bold.ttf" />
     <None Include="Images\fonts\Quicksand_Bold_Oblique.eot" />

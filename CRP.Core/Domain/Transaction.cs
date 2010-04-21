@@ -34,6 +34,8 @@ namespace CRP.Core.Domain
             TransactionAnswers = new List<TransactionAnswer>();
             QuantityAnswers = new List<QuantityAnswer>();
             ChildTransactions = new List<Transaction>();
+            RegularAmount = false;
+            CorrectionAmount = false;
 
             PaymentType = false;
         }
@@ -44,7 +46,7 @@ namespace CRP.Core.Domain
         public virtual bool Credit { get; set; }
         public virtual bool Check { get; set; }
         //public virtual bool Paid { get; set; }
-        [RangeDouble(Min = 0.00, Message = "must be zero or more")]
+        //[RangeDouble(Min = 0.00, Message = "must be zero or more")]
         public virtual decimal Amount { get; set; }
         public virtual bool Donation { get; set; }
         public virtual int Quantity { get; set; } 
@@ -58,6 +60,8 @@ namespace CRP.Core.Domain
         /// </summary>
         public virtual string TransactionNumber { get; set; }
         public virtual OpenIdUser OpenIDUser { get; set; }
+        public virtual string CreatedBy { get; set; }
+        public virtual string CorrectionReason { get; set; }
 
         [NotNull]
         public virtual ICollection<PaymentLog> PaymentLogs { get; set; }
@@ -203,11 +207,29 @@ namespace CRP.Core.Domain
             {
                 PaymentType = false;
             }
+
+            //We only allow amount to be negative for corrections (CreatedBy is Populated)
+            RegularAmount = true;
+            if(Amount < 0 && CreatedBy != null && Donation)
+            {
+                RegularAmount = false;
+            }
+            CorrectionAmount = true;
+            if(Amount >= 0 && CreatedBy != null && !Donation)
+            {
+                CorrectionAmount = false;
+            }
         }
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "Payment type was not selected.")]
         private bool PaymentType { get; set; }
+
+        [AssertTrue(Message = "Amount must be zero or more.")]
+        private bool RegularAmount { get; set; }
+
+        [AssertTrue(Message = "Amount must be less than zero.")]
+        private bool CorrectionAmount { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
 
     }

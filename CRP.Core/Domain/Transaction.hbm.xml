@@ -16,6 +16,9 @@
     <property name="Amount" column="Amount" />
     <property name="Donation" column="Donation" />
     <property name="Quantity" column="Quantity" />
+    <property name ="CreatedBy" column="CreatedBy" />
+    <property name="CorrectionReason" column="CorrectionReason"/>
+    
     <many-to-one name="ParentTransaction" class="CRP.Core.Domain.Transaction, CRP.Core" column="TransactionId" fetch="join" />
     <property name="TransactionNumber" column="TransactionNumber" insert="false" update="false" />
     <many-to-one name="OpenIDUser" class="CRP.Core.Domain.OpenIdUser, CRP.Core" column="OpenIdUserId" cascade="none" fetch="join" />

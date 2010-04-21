@@ -302,6 +302,97 @@ namespace CRP.Controllers
         {
             throw new NotImplementedException();
         }
+
+        [AnyoneWithRole]
+        public ActionResult Edit(int id)
+        {
+            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
+            if(transaction == null)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            {
+                if (transaction.Item == null)
+                {
+                    return this.RedirectToAction<ItemManagementController>(a => a.List());
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.Details(transaction.Item.Id));
+            }
+            var viewModel = EditTransactionViewModel.Create(Repository);
+            viewModel.TransactionValue = transaction;
+            viewModel.ContactName =
+                transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
+            viewModel.ContactName = viewModel.ContactName + " " + transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
+            viewModel.ContactEmail = transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
+            return View(viewModel);
+        }
+        [AcceptPost]
+        [AnyoneWithRole]
+        public ActionResult Edit(Transaction transaction)
+        {
+            var transactionDest = Repository.OfType<Transaction>().GetNullableByID(transaction.Id);
+            if (transactionDest == null)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            if (transactionDest.Item == null || !Access.HasItemAccess(CurrentUser, transactionDest.Item))
+            {
+                if (transactionDest.Item == null)
+                {
+                    return this.RedirectToAction<ItemManagementController>(a => a.List());
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionDest.Item.Id));
+            }
+
+            var correctionTransaction = new Transaction(transactionDest.Item);
+            correctionTransaction.Amount = transaction.Amount;
+            correctionTransaction.CorrectionReason = transaction.CorrectionReason;
+            if(correctionTransaction.Amount > 0)
+            {
+                correctionTransaction.Donation = true;
+            }
+            else
+            {
+                correctionTransaction.Donation = false;
+            }
+            correctionTransaction.CreatedBy = CurrentUser.Identity.Name;
+
+            transactionDest.AddChildTransaction(correctionTransaction);
+
+            transactionDest.TransferValidationMessagesTo(ModelState);
+            if(ModelState.IsValid)
+            {
+                Repository.OfType<Transaction>().EnsurePersistent(transactionDest);
+                return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionDest.Item.Id));
+            }
+
+            var viewModel = EditTransactionViewModel.Create(Repository);
+            viewModel.TransactionValue = transactionDest;
+            viewModel.ContactName =
+                transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
+            viewModel.ContactName = viewModel.ContactName + " " + transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
+            viewModel.ContactEmail = transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
+            return View(viewModel);
+        }
         
         /// <summary>
         /// POST: /Transaction/PaymentResult/
