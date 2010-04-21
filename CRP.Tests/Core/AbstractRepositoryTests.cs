@@ -4,6 +4,7 @@ using CRP.Core.Domain;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.DomainModel;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
 using UCDArch.Testing;
 
@@ -391,6 +392,16 @@ namespace CRP.Tests.Core
                 validEntity.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
                 validEntity.QuestionType = Repository.OfType<QuestionType>().GetById(1);
                 Repository.OfType<Question>().EnsurePersistent(validEntity);
+            }
+        }
+        protected void LoadSchools(int entriesToAdd)
+        {
+            var schoolRepository = new RepositoryWithTypedId<School, string>();
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.School(i + 1);
+                validEntity.SetIdTo((i + 1).ToString());
+                schoolRepository.EnsurePersistent(validEntity);
             }
         }
         

@@ -30,6 +30,7 @@ namespace CRP.Core.Domain
         }
             
         [Required]
+        [Length(50)]
         public virtual string Name { get; set; }
         public virtual bool CollegeReusable { get; set; }
         public virtual bool SystemReusable { get; set; }

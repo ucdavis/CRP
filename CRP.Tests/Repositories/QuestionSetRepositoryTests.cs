@@ -3,16 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
+using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
+using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
 {
     [TestClass]
     public class QuestionSetRepositoryTests : AbstractRepositoryTests<QuestionSet, int >
     {
+        protected IRepository<QuestionSet> QuestionSetRepository { get; set; }
+        protected IRepositoryWithTypedId<School, string> SchoolRepository { get; set; }
+
+
         #region Init and Overrides
+        public QuestionSetRepositoryTests()
+        {
+            QuestionSetRepository = new Repository<QuestionSet>();
+            SchoolRepository = new RepositoryWithTypedId<School, string>();
+        }
 
         /// <summary>
         /// Gets the valid entity of type T
@@ -98,7 +110,7 @@ namespace CRP.Tests.Repositories
 
             SetupDataToTestCascadeDelete(questionSetToDelete);
 
-            #region Ok, not that it is setup, delete it and make sure related questions are deleted.
+            #region Ok, now that it is setup, delete it and make sure related questions are deleted.
             Repository.OfType<QuestionSet>().DbContext.BeginTransaction();
             Repository.OfType<QuestionSet>().Remove(questionSetToDelete);
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
@@ -114,7 +126,7 @@ namespace CRP.Tests.Repositories
                 Assert.AreNotEqual(question.QuestionSet.Id, 6);
             }
 
-            #endregion Ok, not that it is setup, delete it and make sure related questions are deleted.
+            #endregion Ok, now that it is setup, delete it and make sure related questions are deleted.
         }
 
         /// <summary>
@@ -155,7 +167,395 @@ namespace CRP.Tests.Repositories
 
         #endregion CRUD Cascade Tests
 
-        //TODO: Other tests
+        #region Name Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the name with null value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithNullValueDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.Name = null;
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the name with empty string does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithEmptyStringDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.Name = string.Empty;
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the name with spaces only does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithSpacesOnlyDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.Name = " ";
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(questionSet);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: may not be null or empty");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the name with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNameWithTooLongValueDoesNotSave()
+        {
+            QuestionSet questionSet = null;
+            try
+            {
+                #region Arrange
+                questionSet = GetValid(9);
+                questionSet.Name = "x".RepeatTimes(51);
+                #endregion Arrange
+
+                #region Act
+                QuestionSetRepository.DbContext.BeginTransaction();
+                QuestionSetRepository.EnsurePersistent(questionSet);
+                QuestionSetRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(questionSet);
+                Assert.AreEqual(51, questionSet.Name.Length);
+                var results = questionSet.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Name: length must be between 0 and 50");
+                Assert.IsTrue(questionSet.IsTransient());
+                Assert.IsFalse(questionSet.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the name with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestNameWithOneCharacterSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.Name = "x";
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the name with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestNameWithLongValueSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.Name = "x".RepeatTimes(50);
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(50, questionSet.Name.Length);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion Name Tests
+
+        #region CollegeReusable Tests
+
+        /// <summary>
+        /// Tests the CollegeReusable when true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestCollegeReusableWhenTrueSaves()
+        {
+            #region Arrange
+            LoadSchools(1);
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = true;
+            questionSet.SystemReusable = false;
+            questionSet.UserReusable = false;
+            questionSet.School = SchoolRepository.GetNullableByID("1");
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(questionSet.CollegeReusable);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the CollegeReusable when false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestCollegeReusableWhenFalseSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = false;
+            questionSet.SystemReusable = false;
+            questionSet.UserReusable = true;
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(questionSet.CollegeReusable);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion CollegeReusable Tests
+
+        #region SystemReusable Tests
+
+        /// <summary>
+        /// Tests the SystemReusable when true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestSystemReusableWhenTrueSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = false;
+            questionSet.SystemReusable = true;
+            questionSet.UserReusable = false;
+
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(questionSet.SystemReusable);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the SystemReusable when false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestSystemReusableWhenFalseSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = false;
+            questionSet.SystemReusable = false;
+            questionSet.UserReusable = true;
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(questionSet.SystemReusable);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion SystemReusable Tests
+
+        #region SystemReusable Tests
+
+        /// <summary>
+        /// Tests the UserReusable when true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestUserReusableWhenTrueSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = false;
+            questionSet.SystemReusable = false;
+            questionSet.UserReusable = true;
+
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(questionSet.UserReusable);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the UserReusable when false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestUserReusableWhenFalseSaves()
+        {
+            #region Arrange
+            var questionSet = GetValid(9);
+            questionSet.CollegeReusable = false;
+            questionSet.SystemReusable = true;
+            questionSet.UserReusable = false;
+            #endregion Arrange
+
+            #region Act
+            QuestionSetRepository.DbContext.BeginTransaction();
+            QuestionSetRepository.EnsurePersistent(questionSet);
+            QuestionSetRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(questionSet.UserReusable);
+            Assert.IsFalse(questionSet.IsTransient());
+            Assert.IsTrue(questionSet.IsValid());
+            #endregion Assert
+        }
+        #endregion UserReusable Tests
+
+        #region Reflection of Database
+
+        /// <summary>
+        /// Tests all fields in the database have been tested.
+        /// If this fails and no other tests, it means that a field has been added which has not been tested above.
+        /// </summary>
+        [TestMethod]
+        public void TestAllFieldsInTheDatabaseHaveBeenTested()
+        {
+            #region Arrange
+
+            var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("CollegeReusable", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
+            {
+                 "[Newtonsoft.Json.JsonPropertyAttribute()]", 
+                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]", 
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
+            expectedFields.Add(new NameAndType("SystemReusable", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("UserReusable", "System.Boolean", new List<string>()));
+            #endregion Arrange
+
+            AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(QuestionSet));
+
+        }
+
+        #endregion Reflection of Database
 
         /// <summary>
         /// Setup the data to test cascade delete.
