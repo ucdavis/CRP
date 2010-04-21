@@ -20,8 +20,8 @@
         var getExtendedPropertyUrl = '<%= Url.Action("GetExtendedProperties", "ItemManagement") %>';
     </script>
 
-    <script src="../../Scripts/ItemEdit.js" type="text/javascript"></script>
-    <script src="../../Scripts/tiny_mce/jquery.tinymce.js" type="text/javascript"></script>
+    <script src='<%= Url.Content("~/Scripts/ItemEdit.js") %>' type="text/javascript"></script>
+    <script src="<%= Url.Content("/Scripts/tiny_mce/jquery.tinymce.js") %>' type="text/javascript"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
