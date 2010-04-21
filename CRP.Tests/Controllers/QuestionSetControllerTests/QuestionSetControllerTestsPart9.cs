@@ -399,6 +399,35 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ModelState.AssertErrorsAre("This is a system default question set and cannot be modified.");
             #endregion Assert		
         }
+
+        /// <summary>
+        /// Tests the unlink from item does not save if there is an answer associated with the question.
+        /// </summary>
+        [TestMethod]
+        public void TestUnlinkFromItemDoesNotSaveIfThereIsAnAnswerAssociatedWithTheQuestion()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                          .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                          .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+            SetupDataForUnlinkFromTests();
+            Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
+            TransactionAnswers[1].QuestionSet = QuestionSets[0];
+            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.UnlinkFromItem(2)
+                .AssertHttpRedirect();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Unable to remove question set.", Controller.Message);
+            ItemQuestionSetRepository.AssertWasNotCalled(a => a.Remove(Arg<ItemQuestionSet>.Is.Anything));
+            Controller.ModelState.AssertErrorsAre("Someone has already entered a response to this question set and it cannot be deleted.");            
+            #endregion Assert		
+        }
         #endregion UnlinkFromItem Post Tests
     }
 }
