@@ -351,7 +351,41 @@ namespace CRP.Tests.Controllers
             #endregion Assert		
         }
 
-        //TODO: Checkout Post tests
+
+        /// <summary>
+        /// Tests the checkout post redirects to home controller if item is not available1.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutPostRedirectsToHomeControllerIfItemIsNotAvailable1()
+        {
+            #region Arrange
+            var fakeDate = new DateTime(2010, 02, 14);
+            SystemTime.Now = () => fakeDate;
+            SetupDataForTests();
+            SetupDataForPopulateItemTransactionAnswer();
+            ControllerRecordFakes.FakeTransactions(Transactions, 5);
+            foreach (var transaction in Transactions)
+            {
+                transaction.Item = Items[1];
+                transaction.Quantity = 2;
+                Items[1].Transactions.Add(transaction);
+            }
+            Items[1].Quantity = 10;
+            Items[1].Available = true;
+            Items[1].Expiration = fakeDate.AddDays(5);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, null, null, true)
+                .AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+
+            #endregion Assert		
+        }
+        
         #endregion Checkout Post Tests
 
         #region Total Tests

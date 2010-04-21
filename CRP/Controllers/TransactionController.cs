@@ -58,6 +58,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+
         /// <summary>
         /// POST: /Transaction/Checkout/{id}
         /// </summary>
@@ -74,13 +75,16 @@ namespace CRP.Controllers
         ///         At least Check or Credit field is true
         ///         Quantity answers are populated
         ///         Transaction answers are populated
-        ///     If donation is present, seperate transaction record is created and linked to parent object
+        ///     If donation is present, separate transaction record is created and linked to parent object
         ///         Donation field is marked true
-        /// </remarks>
-        /// <param name="id">Item Id</param>
-        /// <param name="quantity"></param>
-        /// <param name="transactionAnswers"></param>
-        /// <param name="quantityAnswers"></param>
+        /// <param name="quantity">The quantity.</param>
+        /// <param name="donation">The donation.</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="restrictedKey">The restricted key.</param>
+        /// <param name="coupon">The coupon.</param>
+        /// <param name="transactionAnswers">The transaction answers.</param>
+        /// <param name="quantityAnswers">The quantity answers.</param>
+        /// <param name="captchaValid">if set to <c>true</c> [captcha valid].</param>
         /// <returns></returns>
         [CaptchaValidator]
         [AcceptPost]
