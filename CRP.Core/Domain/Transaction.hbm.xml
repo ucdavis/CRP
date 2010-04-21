@@ -22,12 +22,6 @@
 
     <!--<property name="ReferenceNumber" column="ReferenceNumber" />
     <property name="TrackingId" column="TrackingId" />-->
-    
-    <!--<bag name="Checks" table="ChecksXTransactions" cascade="all-delete-orphan" fetch="select" >
-      <key column="TransactionId" />
-      --><!--<many-to-many column="CheckId" class="CRP.Core.Domain.Check, CRP.Core" />--><!--
-      <one-to-many class="CRP.Core.Domain.Check, CRP.Core"/>
-    </bag>-->
 
     <bag name="PaymentLogs" table="PaymentLogs" cascade="all-delete-orphan" fetch="select" >
       <key column="TransactionId" />

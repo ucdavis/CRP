@@ -278,6 +278,8 @@ namespace CRP.Tests.Core.Helpers
         {
             var rtValue = new Transaction();
             rtValue.Item = new Item();
+            rtValue.Check = true;
+            rtValue.Credit = false;
             
             return rtValue;
         }

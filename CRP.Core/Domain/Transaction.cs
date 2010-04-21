@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CRP.Core.Abstractions;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
+using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
@@ -22,17 +24,18 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
-            TransactionDate = DateTime.Now;
+            TransactionDate = SystemTime.Now();
             Credit = false;
             Check = false;
             Amount = 0.0m;
             Donation = false;
 
-            //Checks = new List<Check>();
             PaymentLogs = new List<PaymentLog>();
             TransactionAnswers = new List<TransactionAnswer>();
             QuantityAnswers = new List<QuantityAnswer>();
             ChildTransactions = new List<Transaction>();
+
+            PaymentType = false;
         }
 
         [NotNull]
@@ -41,53 +44,30 @@ namespace CRP.Core.Domain
         public virtual bool Credit { get; set; }
         public virtual bool Check { get; set; }
         //public virtual bool Paid { get; set; }
+        [RangeDouble(Min = 0.00, Message = "must be zero or more")]
         public virtual decimal Amount { get; set; }
         public virtual bool Donation { get; set; }
-        public virtual int Quantity { get; set; } //TODO: Write a test to make sure this quantity can't exceed the amount that is available.
+        public virtual int Quantity { get; set; } 
         /// <summary>
         /// The parent transaction object, this is only populated for donation fields.
         /// </summary>
         public virtual Transaction ParentTransaction { get; set; }
         /// <summary>
         /// Display transaction number
+        /// Database calculated field
         /// </summary>
         public virtual string TransactionNumber { get; set; }
         public virtual OpenIdUser OpenIDUser { get; set; }
 
-        //TODO: get rid of this field
-        //public virtual string PaymentConfirmation { get; set; }
-
-        //TODO: get rid of this field
-        /// <summary>
-        /// uPay reference number
-        /// </summary>
-        //public virtual int? ReferenceNumber { get; set; }
-        //TODO: get rid of this field
-        /// <summary>
-        /// uPay tracking id
-        /// </summary>
-        //public virtual int? TrackingId { get; set; }
-
-        //TODO: get rid of this field
-        //public virtual ICollection<Check> Checks { get; set; }
+        [NotNull]
         public virtual ICollection<PaymentLog> PaymentLogs { get; set; }
-        
+        [NotNull]
         public virtual ICollection<TransactionAnswer> TransactionAnswers { get; set; }
+        [NotNull]
         public virtual ICollection<QuantityAnswer> QuantityAnswers { get; set; }
+        [NotNull]
         public virtual ICollection<Transaction> ChildTransactions { get; set; }
 
-        ////TODO: get rid of this method
-        //public virtual void AddCheck(Check check)
-        //{
-        //    check.Transaction = this;
-        //    Checks.Add(check);
-        //}
-
-        ////TODO: get rid of this method
-        //public virtual void RemoveCheck(Check check)
-        //{
-        //    Checks.Remove(check);
-        //}
 
         public virtual void AddPaymentLog(PaymentLog paymentLog)
         {
@@ -116,6 +96,7 @@ namespace CRP.Core.Domain
 
         public virtual void AddChildTransaction(Transaction transaction)
         {
+            //TODO: Review, should this set dontaion to true?
             transaction.ParentTransaction = this;
             transaction.Check = Check;
             transaction.Credit = Credit;
@@ -194,5 +175,41 @@ namespace CRP.Core.Domain
                 return TotalPaid == Total;
             }
         }
+
+        /// <summary>
+        /// Determines whether this instance is valid.
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool IsValid()
+        {
+            PopulateComplexLogicFields();
+            return base.IsValid();
+        }
+
+        public override ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
+        {
+            PopulateComplexLogicFields();
+            return base.ValidationResults();
+        }
+
+        /// <summary>
+        /// Populates the complex logic fields.
+        /// </summary>
+        private void PopulateComplexLogicFields()
+        {
+            PaymentType = true;
+            if (Credit == Check)
+            {
+                PaymentType = false;
+            }
+        }
+
+        #region Fields ONLY used for complex validation, not in database
+        [AssertTrue(Message = "Payment type was not selected.")]
+        private bool PaymentType { get; set; }
+        #endregion Fields ONLY used for complex validation, not in database
+
     }
 }

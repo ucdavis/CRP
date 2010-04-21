@@ -525,7 +525,30 @@ namespace CRP.Tests.Core
                 schoolRepository.EnsurePersistent(validEntity, true);
             }
         }
-        
+        //protected override OpenIdUser GetValid(int? counter)
+        //{            
+        //    var rtValue = CreateValidEntities.OpenIdUser(counter);
+        //    if (counter != null)
+        //    {
+        //        rtValue.UserId = (counter).ToString();
+        //    }            
+        //    re
+
+        /// <summary>
+        /// Loads the open ID users.
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadOpenIDUsers(int entriesToAdd)
+        {
+            var openIDUserRepository = new RepositoryWithTypedId<OpenIdUser, string>();
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.OpenIdUser(i + 1);
+                validEntity.UserId = (i + 1).ToString();
+                openIDUserRepository.EnsurePersistent(validEntity);
+            }
+        }
+
         /// <summary>
         /// Abstract Repository Tests Action
         /// </summary>

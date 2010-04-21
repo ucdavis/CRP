@@ -116,15 +116,18 @@ namespace CRP.Controllers
             if (paymentType == StaticValues.CreditCard)
             {
                 transaction.Credit = true;
+                transaction.Check = false;
             }
             else if (paymentType == StaticValues.Check)
             {
                 transaction.Check = true;
+                transaction.Credit = false;
             }
-            else
-            {
-                ModelState.AddModelError("Payment Type", "Payment type was not selected.");
-            }
+            //else
+            //{
+                //JCS Moved this validation to Transaction.cs
+                //ModelState.AddModelError("Payment Type", "Payment type was not selected.");
+            //}
 
             
             // deal with the amount
