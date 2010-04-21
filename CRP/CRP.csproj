@@ -91,6 +91,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\MvcContrib.FluentHtml.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="NHibernate, Version=2.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\NHibernate.dll</HintPath>
@@ -609,6 +610,44 @@
   <ItemGroup>
     <Content Include="AppSettingsProd.config" />
     <Content Include="AppSettingsTest.config" />
+    <Content Include="bin\Castle.Core.dll" />
+    <Content Include="bin\Castle.DynamicProxy2.dll" />
+    <Content Include="bin\Castle.MicroKernel.dll" />
+    <Content Include="bin\Castle.Windsor.dll" />
+    <Content Include="bin\Common.Logging.dll" />
+    <Content Include="bin\CRP.Core.dll" />
+    <Content Include="bin\CRP.Core.pdb" />
+    <Content Include="bin\CRP.dll" />
+    <Content Include="bin\CRP.pdb" />
+    <Content Include="bin\DotNetOpenAuth.dll" />
+    <Content Include="bin\DotNetOpenAuth.pdb" />
+    <Content Include="bin\DotNetOpenAuth.xml" />
+    <Content Include="bin\Elmah.dll" />
+    <Content Include="bin\HibernatingRhinos.NHibernate.Profiler.Appender.dll" />
+    <Content Include="bin\Iesi.Collections.dll" />
+    <Content Include="bin\log4net.dll" />
+    <Content Include="bin\Microsoft.Contracts.dll" />
+    <Content Include="bin\Microsoft.Practices.ServiceLocation.dll" />
+    <Content Include="bin\Microsoft.Web.Mvc.dll" />
+    <Content Include="bin\MvcContrib.Castle.dll" />
+    <Content Include="bin\MvcContrib.dll" />
+    <Content Include="bin\MvcContrib.FluentHtml.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\NHibernate.ByteCode.Spring.dll" />
+    <Content Include="bin\NHibernate.dll" />
+    <Content Include="bin\NHibernate.Linq.dll" />
+    <Content Include="bin\NHibernate.Validator.dll" />
+    <Content Include="bin\Recaptcha.dll" />
+    <Content Include="bin\Recaptcha.pdb" />
+    <Content Include="bin\Spring.Aop.dll" />
+    <Content Include="bin\Spring.Core.dll" />
+    <Content Include="bin\Telerik.Web.Mvc.dll" />
+    <Content Include="bin\UCDArch.Core.dll" />
+    <Content Include="bin\UCDArch.Core.NHibernateValidator.dll" />
+    <Content Include="bin\UCDArch.Data.dll" />
+    <Content Include="bin\UCDArch.Web.dll" />
+    <Content Include="bin\UCDArch.Web.Providers.dll" />
+    <Content Include="bin\xVal.dll" />
     <Content Include="ConnectionStringProd.config" />
     <Content Include="ConnectionStringTest.config" />
     <Content Include="Images\ajax-loader.gif" />
