@@ -18,7 +18,8 @@
     
     <h2>Administrative Screens</h2>
     <ul>
-        <li><%= Html.ActionLink("Application Management", "Index", "ApplicationManagement") %></li>
+        <li><%= Html.ActionLink<ApplicationManagementController>(a => a.Index(), "Application Management") %></li>
+        <li><%= Html.ActionLink<ReportController>(a => a.ViewSystemReport(null), "System Reports") %></li>
     </ul>
 
 </asp:Content>

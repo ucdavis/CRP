@@ -12,7 +12,7 @@ using MvcContrib;
 
 namespace CRP.Controllers
 {
-    [RolesFilter.AdminOnlyAttribute]
+    [AdminOnlyAttribute]
     public class ApplicationManagementController : SuperController
     {
         //

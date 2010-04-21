@@ -30,7 +30,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [RolesFilter.UserOnlyAttribute]
+        [UserOnlyAttribute]
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);

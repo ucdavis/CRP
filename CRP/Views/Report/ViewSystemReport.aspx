@@ -4,19 +4,46 @@
 	ViewSystemReport
 </asp:Content>
 
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("select#reportId").change(function(event) {
+                // redirect to this page with the extra parameter
+                window.location = '<%= Url.Action("ViewSystemReport") %>' + '?reportId=' + $(this).val();
+            });
+        });
+    </script>
+</asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>View System Report</h2>
 
-    <select id="reportId" name="reportId">
-        <option value="">--Select a Report--</option>    
-        <% for(var i = 0; i < Model.Reports.Length; i++) { %>
-            <option value="<%= Html.Encode(i) %>"><%= Html.Encode(Model.Reports.GetValue(i)) %></option>    
-        <% } %>
-    </select>
-
-</asp:Content>
-
-<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <p>
+        <select id="reportId" name="reportId">
+            <option value="">--Select a Report--</option>    
+            <% for(var i = 0; i < Model.Reports.Length; i++) { %>
+                <option value="<%= Html.Encode(i) %>" '<%= Model.SelectedReport.HasValue && Model.SelectedReport == i ? "selected" : string.Empty %>'><%= Html.Encode(Model.Reports.GetValue(i)) %></option>    
+            <% } %>
+        </select>
+    </p> 
     
+    <!-- Hide this report stuff because no report is selected -->
+    <% if (Model.SelectedReport.HasValue) {%>
+        <p>
+            <img src='<%= Url.Action("GenerateChart", "Report", new {reportId = Model.SelectedReport.HasValue ? Model.SelectedReport : 0}) %>'
+        </p>
+        
+        <% Html.Grid(Model.SystemReportData)
+               .Name("ReportData")
+               .Columns(col =>
+                            {
+                                col.Add(a => a.Name);
+                                col.Add(a => a.Value.ToString(a.ValueFormat));
+                            })
+                   
+               .Render(); %>
+    <% } %>
 </asp:Content>
+
+

@@ -35,7 +35,7 @@ namespace CRP.Controllers
         /// GET: /ApplicationManagement/ListDisplayProfiles
         /// </summary>
         /// <returns></returns>
-        [RolesFilter.AdminOnlyAttribute]
+        [AdminOnlyAttribute]
         public ActionResult List()
         {
             return View(Repository.OfType<DisplayProfile>().Queryable);
@@ -45,7 +45,7 @@ namespace CRP.Controllers
         /// GET: /ApplicationManagement/CreateDisplayProfile
         /// </summary>
         /// <returns></returns>
-        [RolesFilter.AdminOnlyAttribute]
+        [AdminOnlyAttribute]
         public ActionResult Create()
         {
             return View(DisplayProfileViewModel.Create(Repository, _schoolRepository));

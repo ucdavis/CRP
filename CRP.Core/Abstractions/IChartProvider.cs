@@ -6,7 +6,7 @@ namespace CRP.Core.Abstractions
 {
     public interface IChartProvider
     {
-        MemoryStream CreateChart(string[] xAxis, int[] yAxis, string title, SeriesChartType type);
+        byte[] CreateChart(string[] xAxis, decimal[] yAxis, string title, SeriesChartType type);
     }
 
     public class ChartProvider : IChartProvider
@@ -19,7 +19,7 @@ namespace CRP.Core.Abstractions
         /// <param name="title"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public MemoryStream CreateChart(string[] xAxis, int[] yAxis, string title, SeriesChartType type)
+        public byte[] CreateChart(string[] xAxis, decimal[] yAxis, string title, SeriesChartType type)
         {
             // get a prepped chart
             var chart = PrepChart(title);
@@ -33,11 +33,13 @@ namespace CRP.Core.Abstractions
             series.ShadowOffset = 2;
             series.Points.DataBindXY(xAxis, yAxis);
 
+            chart.Series["Series1"]["PieLabelStyle"] = "Outside";
+
             // Save Chart to MemoryStream
             MemoryStream ms = new MemoryStream();
             chart.SaveImage(ms, ChartImageFormat.Png);
 
-            return ms;
+            return ms.GetBuffer();
         }
 
         /// <summary>
@@ -75,6 +77,5 @@ namespace CRP.Core.Abstractions
 
             return chart;
         }
-        
     }
 }

@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
+using System.Web.UI.DataVisualization.Charting;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
+using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
@@ -16,13 +19,22 @@ namespace CRP.Controllers
 {
     public class ReportController : SuperController
     {
+        const string ImageType = @"image/png";
+
+        private readonly IChartProvider _chartProvider;
+
+        public ReportController(IChartProvider chartProvider)
+        {
+            _chartProvider = chartProvider;
+        }
+
         /// <summary>
         /// GET: /Report/ViewReport/
         /// </summary>
         /// <param name="id"></param>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [RolesFilter.UserOnlyAttribute]
+        [UserOnlyAttribute]
         public ActionResult ViewReport(int id, int itemId)
         {
             var itemReport = Repository.OfType<ItemReport>().GetNullableByID(id);
@@ -37,7 +49,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [RolesFilter.UserOnlyAttribute]
+        [UserOnlyAttribute]
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
@@ -72,7 +84,7 @@ namespace CRP.Controllers
         /// <param name="createReportParameters"></param>
         /// <returns></returns>
         [AcceptPost]
-        [RolesFilter.UserOnlyAttribute]
+        [UserOnlyAttribute]
         public ActionResult Create(int itemId, string name, CreateReportParameter[] createReportParameters)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
@@ -118,24 +130,77 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        [RolesFilter.AdminOnly]
+        [AdminOnly]
         public ActionResult ViewSystemReport(int? reportId)
         {
-            if (reportId.HasValue)
-            {
-            }
-
             var viewModel = SystemReportViewModel.Create(Repository);
-            viewModel.Reports = Enum.GetValues(typeof (SystemReport));
+            viewModel.Reports = Enum.GetValues(typeof(SystemReport));
+            viewModel.SelectedReport = reportId;
+
+            if (reportId.HasValue) viewModel.SystemReportData = GetData(reportId.Value);
 
             return View(viewModel);
+        }
+
+        private IEnumerable<SystemReportData> GetData(int reportId)
+        {
+            switch ((SystemReport)reportId)
+            {
+                // generates a report to show who is using the system the most
+                case SystemReport.DepartmentUsage:
+                    var data = Repository.OfType<Item>().GetAll();
+
+                    return (from i in data.AsQueryable()
+                           group i by i.Unit.FullName into g
+                           select new SystemReportData(g.Key, g.Count())).ToList();
+                case SystemReport.DepartmentMoneyYtd:
+                    var data2 = Repository.OfType<Transaction>().GetAll();
+
+                    return (from t in data2.AsQueryable()
+                           group t by t.Item.Unit.FullName into g
+                           select new SystemReportData(g.Key, g.Sum(a => a.TotalPaid), "C")).ToList();
+            };
+
+            return new List<SystemReportData>();
+        }
+
+        [AdminOnly]
+        public ActionResult GenerateChart(int reportId)
+        {
+            var xParameter = new List<string>();
+            var yParameter = new List<decimal>();
+
+            var data = GetData(reportId);
+
+            foreach (var s in data)
+            {
+                xParameter.Add(s.Name);
+                yParameter.Add(s.Value);
+            }
+
+            switch ((SystemReport)reportId)
+            {
+                    // generates a report to show who is using the system the most
+                case SystemReport.DepartmentUsage:
+                    var chart = _chartProvider.CreateChart(xParameter.ToArray(),
+                                                           yParameter.ToArray(), "Departmental Usage",
+                                                           SeriesChartType.Pie);
+                    return File(chart, ImageType);
+                case SystemReport.DepartmentMoneyYtd:
+                    var chart2 = _chartProvider.CreateChart(xParameter.ToArray(),
+                                       yParameter.ToArray(), "Departmental Money Collected YTD",
+                                       SeriesChartType.Pie);
+                    return File(chart2, ImageType);
+                    break;
+            };
+
+            return File(new byte[0], ImageType);
         }
 
         public enum SystemReport
         {
             DepartmentUsage = 0,
             DepartmentMoneyYtd,
-            DepartmentItemCount
         } ;
     }
 

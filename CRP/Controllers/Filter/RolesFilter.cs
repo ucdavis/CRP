@@ -1,41 +1,33 @@
 ﻿using System;
 using System.Web.Mvc;
+using CRP.Controllers.Helpers;
 
 namespace CRP.Controllers.Filter
 {
-    public class RolesFilter
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class AdminOnlyAttribute : AuthorizeAttribute
     {
-        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-        public class AdminOnlyAttribute : AuthorizeAttribute
+        public AdminOnlyAttribute()
         {
-            public AdminOnlyAttribute()
-            {
-                Roles = RoleNames.RoleAdmin;    //Set the roles prop to a comma delimited string of allowed roles
-            }
+            Roles = RoleNames.Admin;    //Set the roles prop to a comma delimited string of allowed roles
         }
+    }
 
-        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-        public class UserOnlyAttribute : AuthorizeAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class UserOnlyAttribute : AuthorizeAttribute
+    {
+        public UserOnlyAttribute()
         {
-            public UserOnlyAttribute()
-            {
-                Roles = RoleNames.RoleUser;    //Set the roles prop to a comma delimited string of allowed roles
-            }
+            Roles = RoleNames.User;    //Set the roles prop to a comma delimited string of allowed roles
         }
+    }
 
-        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-        public class AnyoneWithRoleAttribute : AuthorizeAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class AnyoneWithRoleAttribute : AuthorizeAttribute
+    {
+        public AnyoneWithRoleAttribute()
         {
-            public AnyoneWithRoleAttribute()
-            {
-                Roles = RoleNames.RoleAdmin + "," + RoleNames.RoleUser;    //Set the roles prop to a comma delimited string of allowed roles
-            }
-        }
-
-        public static class RoleNames
-        {
-            public static readonly string RoleAdmin = "Admin";
-            public static readonly string RoleUser = "User";
+            Roles = RoleNames.Admin + "," + RoleNames.User;    //Set the roles prop to a comma delimited string of allowed roles
         }
     }
 }

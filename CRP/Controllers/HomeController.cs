@@ -17,7 +17,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        [RolesFilter.AnyoneWithRoleAttribute]
+        [AnyoneWithRoleAttribute]
         public ActionResult AdminHome()
         {
             return View();

@@ -16,7 +16,7 @@ using MvcContrib;
 
 namespace CRP.Controllers
 {
-    [RolesFilter.UserOnlyAttribute]
+    [UserOnlyAttribute]
     public class ItemManagementController : SuperController
     {
         //

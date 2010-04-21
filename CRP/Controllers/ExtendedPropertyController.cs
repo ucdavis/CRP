@@ -13,7 +13,7 @@ using CRP.Core.Resources;
 
 namespace CRP.Controllers
 {
-    [RolesFilter.AdminOnlyAttribute]
+    [AdminOnlyAttribute]
     public class ExtendedPropertyController : SuperController
     {
         //

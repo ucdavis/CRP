@@ -19,6 +19,7 @@ namespace CRP
 
             container.AddComponent("searchProvider", typeof (ISearchTermProvider), typeof (DevSearchTermProvider));
             container.AddComponent("notificationProvider", typeof(INotificationProvider), typeof(NotificationProvider));
+            container.AddComponent("chartProvider", typeof(IChartProvider), typeof(ChartProvider));
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)

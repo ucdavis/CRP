@@ -358,7 +358,7 @@ namespace CRP.Controllers
         /// <param name="itemTypeId"></param>
         /// <returns></returns>
         [AcceptPost]
-        [RolesFilter.AdminOnlyAttribute]
+        [AdminOnlyAttribute]
         public ActionResult LinkToItemType(int id, int itemTypeId, bool transaction, bool quantity)
         {
             // get teh question set
@@ -395,7 +395,7 @@ namespace CRP.Controllers
             return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
         }
 
-        [RolesFilter.UserOnlyAttribute]
+        [UserOnlyAttribute]
         public ActionResult LinkToItem(int itemId, bool transaction, bool quantity)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
@@ -435,7 +435,7 @@ namespace CRP.Controllers
         /// <param name="quantity"></param>
         /// <returns></returns>
         [AcceptPost]
-        [RolesFilter.UserOnlyAttribute]
+        [UserOnlyAttribute]
         public ActionResult LinkToItem(int id, int itemId, bool transaction, bool quantity)
         {
             // get teh question set
@@ -495,7 +495,7 @@ namespace CRP.Controllers
         /// <param name="itemId"></param>
         /// <returns></returns>
         [AcceptPost]
-        [RolesFilter.UserOnlyAttribute]
+        [UserOnlyAttribute]
         public ActionResult UnlinkFromItem(int id)
         {
             var itemQuestionSet = Repository.OfType<ItemQuestionSet>().GetNullableByID(id);
