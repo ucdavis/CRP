@@ -253,6 +253,22 @@
     <value>Transactions</value>
     <comment>Tab id used in /ItemManagement/Details/</comment>
   </data>
+  <data name="Upay_Amount" xml:space="preserve">
+    <value>AMT</value>
+    <comment>Upay parameter, amount of money you wish to charge</comment>
+  </data>
+  <data name="Upay_SiteId" xml:space="preserve">
+    <value>UPAY_SITE_ID</value>
+    <comment>Upay parameter, site id for payment on Upay site</comment>
+  </data>
+  <data name="Upay_TransactionId" xml:space="preserve">
+    <value>EXT_TRANS_ID</value>
+    <comment>Upay paramter, my local transaction id for the transaction</comment>
+  </data>
+  <data name="Upay_ValidationKey" xml:space="preserve">
+    <value>VALIDATION_KEY</value>
+    <comment>Upay parameter, validation key</comment>
+  </data>
   <data name="View_PageHeader" xml:space="preserve">
     <value>~/Views/Shared/PageHeader.ascx</value>
     <comment>The path to the page header view</comment>

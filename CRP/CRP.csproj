@@ -172,6 +172,7 @@
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LinkCheckViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\PaymentConfirmationViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ReportViewModel.cs" />
@@ -566,6 +567,7 @@
     <Content Include="Views\Shared\CheckView.ascx" />
     <Content Include="Views\Shared\PageHeader.ascx" />
     <Content Include="Views\Shared\QuestionForm.ascx" />
+    <Content Include="Views\Transaction\Confirmation.aspx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\fonts\Quicksand_Bold.eot" />

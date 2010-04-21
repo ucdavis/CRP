@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
-//using CRP.App_GlobalResources;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
+using UCDArch.Web.Attributes;
 using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Validator;
@@ -23,14 +23,6 @@ namespace CRP.Controllers
         {
             _openIdUserRepository = openIdUserRepository;
             _paymentProvider = paymentProvider;
-        }
-
-        //
-        // GET: /Transaction/
-
-        public ActionResult Index()
-        {
-            return View();
         }
 
         /// <summary>
@@ -209,28 +201,63 @@ namespace CRP.Controllers
 
             if (ModelState.IsValid)
             {
+                // create the new transaction
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
 
-                if (transaction.Credit)
-                {
-                    //TODO: redirect to touchnet to take payment
-                    _paymentProvider.ProcessPayment(amount, transaction.Id, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
-
-                    //for now just accept the payment to simulate payment
-                    _paymentProvider.CompletePayment("success", 12345, transaction.Id, amount, 123456);
-                }
-                else
-                {
-                    // TODO: what do we want to do if they pay by check, check confirmation screen?
-                }
-
-                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Transaction");
-                return this.RedirectToAction<ItemController>(a => a.Details(item.Id));
+                // redirect to confirmation and let the user decide payment or not
+                return this.RedirectToAction(a => a.Confirmation(transaction.Id));
             }
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
             //TODO: add the transaction to the viewmodel so the answers will be populated
             return View(viewModel);
+        }
+
+        
+        /// <summary>
+        /// GET: /Transaction/Confirmation/{id}
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     This is a confirmation page that displays a transaction confirmation
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Confirmation(int id)
+        {
+            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
+
+            if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
+
+            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction);
+            return View(viewModel);
+        }
+
+        /// <summary>
+        /// POST: /Transaction/PaymentResult/
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Deals with the return result from the payment gateway.
+        /// </remarks>
+        /// <param name="EXT_TRANS_ID"></param>
+        /// <param name="PMT_STATUS"></param>
+        /// <param name="PMT_AMT"></param>
+        /// <param name="TPG_TRANS_ID"></param>
+        /// <returns></returns>
+        [AcceptPost]
+        [BypassAntiForgeryToken]
+        public ActionResult PaymentResult(int? EXT_TRANS_ID, string PMT_STATUS, decimal? PMT_AMT, int? TPG_TRANS_ID)
+        {
+            if (EXT_TRANS_ID.HasValue)
+            {
+                var transaction = Repository.OfType<Transaction>().GetNullableByID(EXT_TRANS_ID.Value);
+                if (PMT_STATUS == "success") transaction.Paid = true;
+                transaction.TrackingId = TPG_TRANS_ID;
+
+                Repository.OfType<Transaction>().EnsurePersistent(transaction);
+            }
+            return new EmptyResult();
         }
     }
 

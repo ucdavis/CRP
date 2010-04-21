@@ -43,12 +43,13 @@ namespace CRP.Tests.Controllers
         #region Route Tests
         /// <summary>
         /// Tests the index mapping.
+        /// Alan: Modified to remove index for now. 2/24/2010
         /// </summary>
-        [TestMethod]
-        public void TestIndexMapping()
-        {
-            "~/Transaction/Index/Test".ShouldMapTo<TransactionController>(a => a.Index());
-        }
+        //[TestMethod]
+        //public void TestIndexMapping()
+        //{
+        //    "~/Transaction/Index/Test".ShouldMapTo<TransactionController>(a => a.Index());
+        //}
 
         /// <summary>
         /// Tests the checkout mapping.

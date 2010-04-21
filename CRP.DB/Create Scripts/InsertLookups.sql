@@ -79,7 +79,7 @@ begin
 	VALUES ('Street Address', @tbId, @qsid, 3, 1)
 
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
-	VALUES ('Address Line 2', @tbId, @qsid, 4, 1)	
+	VALUES ('Address Line 2', @tbId, @qsid, 4, 0)	
 	
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
 	VALUES ('City', @tbId, @qsid, 5, 1)	

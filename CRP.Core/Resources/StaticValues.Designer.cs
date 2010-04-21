@@ -367,6 +367,42 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AMT.
+        /// </summary>
+        public static string Upay_Amount {
+            get {
+                return ResourceManager.GetString("Upay_Amount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPAY_SITE_ID.
+        /// </summary>
+        public static string Upay_SiteId {
+            get {
+                return ResourceManager.GetString("Upay_SiteId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EXT_TRANS_ID.
+        /// </summary>
+        public static string Upay_TransactionId {
+            get {
+                return ResourceManager.GetString("Upay_TransactionId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VALIDATION_KEY.
+        /// </summary>
+        public static string Upay_ValidationKey {
+            get {
+                return ResourceManager.GetString("Upay_ValidationKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ~/Views/Shared/PageHeader.ascx.
         /// </summary>
         public static string View_PageHeader {

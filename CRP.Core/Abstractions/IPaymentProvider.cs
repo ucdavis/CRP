@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
@@ -51,6 +52,9 @@ namespace CRP.Core.Abstractions
         public void ProcessPayment(decimal amount, int transactionId, string name, string email, string address1, string address2, string city, string state, string zip, string country)
         {
             // do nothing, we don't have a page to redirect hte user to for now to test payments
+
+            WebClient client = new WebClient();
+
             return;
         }
 
