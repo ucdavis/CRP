@@ -5,7 +5,7 @@ using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
-    public class ItemType : DomainObject
+    public class ItemType : DomainObject 
     {
         public ItemType()
         {

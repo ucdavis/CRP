@@ -1,8 +1,10 @@
-﻿using UCDArch.Core.NHibernateValidator.Extensions;
+﻿using NHibernate.Validator.Constraints;
+using UCDArch.Core.DomainModel;
+using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
-    public class DisplayProfile
+    public class DisplayProfile : DomainObject
     {
         public DisplayProfile()
         {
@@ -16,7 +18,7 @@ namespace CRP.Core.Domain
 
         [Required]
         public virtual string Name { get; set; }
-        [Required]
+        [NotNull]
         public virtual Unit Unit { get; set; }
         public virtual byte[] Logo { get; set; }
     }

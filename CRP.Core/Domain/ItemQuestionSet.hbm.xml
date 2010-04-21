@@ -4,7 +4,7 @@
   <class
     name="ItemQuestionSet"
     table="ItemQuestionSets" >
-    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+    <id name="Id" column="id">
       <generator class="identity" />
     </id>
 

@@ -5,7 +5,7 @@
   <class
     name="Unit"
     table="vUnits" mutable="false" >
-    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+    <id name="Id" column="id">
       <generator class="identity" />
     </id>
 
@@ -20,7 +20,7 @@
   <class
   name="School"
   table="vSchools" mutable="false" >
-    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+    <id name="Id" column="id">
       <generator class="identity" />
     </id>
 
@@ -33,7 +33,7 @@
   <class
     name="User"
     table="vUsers" mutable="false" >
-    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+    <id name="Id" column="id">
       <generator class="identity" />
     </id>
 

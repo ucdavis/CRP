@@ -33,7 +33,7 @@ namespace CRP.Core.Domain
         [Length(200)]
         public virtual string Name { get; set; }
         [NotNull]
-        public QuestionType QuestionType { get; set; }
+        public virtual QuestionType QuestionType { get; set; }
         public virtual bool CollegeReusable { get; set; }
         public virtual bool SystemReusable { get; set; }
         public virtual bool UserReusable { get; set; }

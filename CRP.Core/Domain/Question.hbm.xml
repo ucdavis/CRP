@@ -4,7 +4,7 @@
   <class
     name="Question"
     table="Questions" >
-    <id name="ID" access="nosetter.lowercase" column="id" unsaved-value="0">
+    <id name="Id" column="id">
       <generator class="identity" />
     </id>
 
@@ -18,7 +18,7 @@
 
     <bag name="Options" table="QuestionOptions" cascade="all-delete-orphan" fetch="join">
       <key column="QuestionId" />
-      <one-to-many class="MAAPS2.Core.Domain.Question, MAAPS2.Core" />
+      <one-to-many class="CRP.Core.Domain.QuestionOption, MAAPS2.Core" />
     </bag>
   </class>
 </hibernate-mapping>
