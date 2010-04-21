@@ -442,14 +442,17 @@ namespace CRP.Controllers
                 if(transaction == null)
                 {
                     #region Email Error Results
-                    message = new MailMessage(ConfigurationManager.AppSettings["EmailForErrors"], ConfigurationManager.AppSettings["EmailForErrors"]);
+                    message = new MailMessage("automatedemail@caes.ucdavis.edu", ConfigurationManager.AppSettings["EmailForErrors"]);
                     message.Subject = "TouchNet Post Results -- Transaction not found";
                     message.IsBodyHtml = true;
 
                     foreach (var k in Request.Params.AllKeys)
                     {
-                        body.Append(k + ":" + Request.Params[k]);
-                        body.Append("<br/>");
+                        if (k.ToLower() != "posting_key")
+                        {
+                            body.Append(k + ":" + Request.Params[k]);
+                            body.Append("<br/>");
+                        }
                     }
                     message.Body = body.ToString();
 
@@ -562,14 +565,17 @@ namespace CRP.Controllers
                     }
                     if(transaction.TotalPaid > transaction.Total)
                     {
-                        message = new MailMessage(ConfigurationManager.AppSettings["EmailForErrors"], ConfigurationManager.AppSettings["EmailForErrors"]);
-                        message.Subject = "TouchNet Post Results -- Is Over Paid";
+                        message = new MailMessage("automatedemail@caes.ucdavis.edu", ConfigurationManager.AppSettings["EmailForErrors"]);
+                        message.Subject = "TouchNet Post Results -- Has Overpaid";
                         message.IsBodyHtml = true;
 
                         foreach (var k in Request.Params.AllKeys)
                         {
-                            body.Append(k + ":" + Request.Params[k]);
-                            body.Append("<br/>");
+                            if (k.ToLower() != "posting_key")
+                            {
+                                body.Append(k + ":" + Request.Params[k]);
+                                body.Append("<br/>");
+                            }
                         }
                         message.Body = body.ToString();
 
@@ -600,14 +606,17 @@ namespace CRP.Controllers
                 else
                 {
                     #region InValid PaymentLog -- Email Results
-                    message = new MailMessage(ConfigurationManager.AppSettings["EmailForErrors"], ConfigurationManager.AppSettings["EmailForErrors"]);
+                    message = new MailMessage("automatedemail@caes.ucdavis.edu", ConfigurationManager.AppSettings["EmailForErrors"]);
                     message.Subject = "Touchnet Post Results -- PaymentLog is Not Valid";
                     message.IsBodyHtml = true;
 
                     foreach (var k in Request.Params.AllKeys)
                     {
-                        body.Append(k + ":" + Request.Params[k]);
-                        body.Append("<br/>");
+                        if (k.ToLower() != "posting_key")
+                        {
+                            body.Append(k + ":" + Request.Params[k]);
+                            body.Append("<br/>");
+                        }
                     }
                     message.Body = body.ToString();
 
