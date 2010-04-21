@@ -77,10 +77,11 @@ namespace CRP.Controllers
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, coupon.ValidationResults());
 
-            if (coupon.DiscountAmount <= 0.00m)
-            {
-                ModelState.AddModelError("Discount Amount", "Discount amount must be more than $0.00");
-            }
+            //Moved validation to the domain JCS2010/01/26
+            //if (coupon.DiscountAmount <= 0.00m)
+            //{
+            //    ModelState.AddModelError("Discount Amount", "Discount amount must be more than $0.00");
+            //}
 
             if (ModelState.IsValid)
             {

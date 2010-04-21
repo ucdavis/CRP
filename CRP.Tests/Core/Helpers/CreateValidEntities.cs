@@ -73,6 +73,7 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Email = "email@test.edu" + counter.Extra();
             rtValue.UserId = "UserId" + counter.Extra();
             rtValue.Code = "Code";
+            rtValue.DiscountAmount = 0.01m;
             rtValue.Item = new Item();
             //TODO: Populate values
             

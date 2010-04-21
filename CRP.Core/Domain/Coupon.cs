@@ -38,6 +38,7 @@ namespace CRP.Core.Domain
         [Length(100)]
         public virtual string Email { get; set; }
         public virtual bool Used { get; set; }
+        [RangeDouble(Min = 0.01, Message = "must be more than $0.00")]
         public virtual decimal DiscountAmount { get; set; }
         /// <summary>
         /// User login id of the user creating the coupon
