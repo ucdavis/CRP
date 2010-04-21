@@ -11,7 +11,7 @@ namespace CRP.Tests.Core.Helpers
         /// <summary>
         /// Validates the fields and attributes.
         /// </summary>
-        /// <param name="expectedFields">The expected fields.</param>
+        /// <param name="expectedFields">The expected fields. (Fields must be in ascending order, and any attributes must also be in ascending order.)</param>
         /// <param name="entityType">Type of the entity.</param>
         public static void ValidateFieldsAndAttributes(List<NameAndType> expectedFields, Type entityType)
         {
@@ -30,7 +30,7 @@ namespace CRP.Tests.Core.Helpers
                 Assert.AreEqual(propertyInfos[i].Name, expectedFields[i].Name);
                 Assert.AreEqual(propertyInfos[i].PropertyType.ToString(), expectedFields[i].Property);
                 var foundAttributes = CustomAttributeData.GetCustomAttributes(propertyInfos[i])
-                    .AsQueryable().OrderBy(a => a.NamedArguments.ToString()).ToList();
+                    .AsQueryable().OrderBy(a => a.ToString()).ToList();
                 Assert.AreEqual(expectedFields[i].Attributes.Count, foundAttributes.Count());
                 if (foundAttributes.Count() > 0)
                 {
