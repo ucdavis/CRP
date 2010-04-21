@@ -60,13 +60,14 @@ namespace CRP.Controllers
                     if (!string.IsNullOrEmpty(check.Name) || check.Amount != 0 || !string.IsNullOrEmpty(check.Notes))
                     {
                         paymentLog = Copiers.CopyCheckValues(check, new PaymentLog());
-                        paymentLog.Check = true;
+                        paymentLog.Check = true;                        
+                        transaction.AddPaymentLog(paymentLog);
                         if (!paymentLog.IsValid())
                         {
+                            //var test = paymentLog.ValidationResults();
                             paymentLog.DisplayCheckInvalidMessage = true;
                             checkErrorFound = true;
                         }
-                        transaction.AddPaymentLog(paymentLog);
                     }
                 }
                 // update an existing one
@@ -78,6 +79,7 @@ namespace CRP.Controllers
                     {
                         if (!paymentLog.IsValid())
                         {
+                            var test = paymentLog.ValidationResults();
                             paymentLog.DisplayCheckInvalidMessage = true;
                             checkErrorFound = true;
                         }
