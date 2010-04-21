@@ -37,7 +37,6 @@
         <% } %>
             
         </fieldset>
-
         <fieldset>
             <legend>Extended Properties</legend>
             <p>
@@ -64,8 +63,8 @@
                                  })
                     .Render();
            %>
-        </fieldset>
-        
+        </fieldset> 
+       
         <fieldset>
             <legend>Transaction Question Sets</legend>
             
@@ -73,9 +72,11 @@
                 <%= Html.ActionLink<QuestionSetController>(a => a.LinkToItemType(Model.Id, true, false), "Add Question Set") %>
             </p>
             
+            
+
             <% Html.Grid(Model.QuestionSets.Where(a => a.TransactionLevel))
                    .Transactional()
-                   .Name("QuestionSets")
+                   .Name("TransactionQuestionSets")
                    .PrefixUrlParameters(false)
                    .Columns(col =>
                                 {
@@ -92,10 +93,9 @@
                                         
                                 })
                     .Render();
-                    %>
-            
+                    %>       
         </fieldset>
-        
+
         <fieldset>
             <legend>Quantity Question Sets</legend>
             
@@ -105,7 +105,7 @@
             
             <% Html.Grid(Model.QuestionSets.Where(a => a.QuantityLevel))
                    .Transactional()
-                   .Name("QuestionSets")
+                   .Name("QuantityQuestionSets")
                    .PrefixUrlParameters(false)
                    .Columns(col =>
                                 {
@@ -125,9 +125,6 @@
                     %>
             
         </fieldset>
-
-
-
     <div>
         <%=Html.ActionLink("Back to List", "Index") %>
     </div>
