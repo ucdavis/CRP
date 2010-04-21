@@ -16,9 +16,9 @@
       <one-to-many class="CRP.Core.Domain.ExtendedProperty, CRP.Core" />
     </bag>
 
-    <bag name="QuestionSets" table="ItemTypesXQuestionSets" cascade="all-delete-orphan">
+    <bag name="QuestionSets" table="ItemTypeQuestionSets" cascade="all-delete-orphan">
       <key column="ItemTypeId" />
-      <many-to-many column="QuestionSetId" class="CRP.Core.Domain.QuestionSet, CRP.Core" />
+      <one-to-many class="CRP.Core.Domain.ItemTypeQuestionSet, CRP.Core"/>
     </bag>
 
     <bag name="Items" table="Items" cascade="none" inverse="true">

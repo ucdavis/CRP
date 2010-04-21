@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="ItemTypeQuestionSet"
+    table="ItemTypeQuestionSets" >
+    <id name="Id" column="id">
+      <generator class="identity" />
+    </id>
+
+    <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" not-null="true" />
+    <many-to-one name="QuestionSet" class="CRP.Core.Domain.QuestionSet, CRP.Core" column="QuestionSetId" cascade="none" not-null="true" />
+    <property name="TransactionLevel" column="TransactionLevel" />
+    <property name="QuantityLevel" column="QuantityLevel" />
+
+  </class>
+</hibernate-mapping>

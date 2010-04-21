@@ -7,6 +7,9 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
+    <%= Html.Hidden("transaction", Model.Transaction) %>
+    <%= Html.Hidden("quantity", Model.Quantity) %>
+
     <p>
         <%= Html.ActionLink<QuestionSetController>(a => a.Create(null, Model.ItemTypeId), "Create New Question Set")%>
     </p>
@@ -19,7 +22,7 @@
                         {
                             col.Add(x =>
                                         {%>
-                                            <% using (Html.BeginForm<QuestionSetController>(a => a.LinkToItemType(x.Id, Model.ItemTypeId), FormMethod.Post))
+                                            <% using (Html.BeginForm<QuestionSetController>(a => a.LinkToItemType(x.Id, Model.ItemTypeId, Model.Transaction, Model.Quantity), FormMethod.Post))
                                                {%>
                                                 <%= Html.AntiForgeryToken() %>
                                                 <a href="javascript:;" class="SelectLinkToForm">Select</a>

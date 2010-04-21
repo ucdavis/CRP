@@ -24,7 +24,7 @@ namespace CRP.Core.Domain
             IsActive = true;
 
             ExtendedProperties = new List<ExtendedProperty>();
-            QuestionSets = new List<QuestionSet>();
+            QuestionSets = new List<ItemTypeQuestionSet>();
         }
 
         [Required]
@@ -33,7 +33,7 @@ namespace CRP.Core.Domain
         public virtual bool IsActive { get; set; }
 
         public virtual ICollection<ExtendedProperty> ExtendedProperties { get; set; }
-        public virtual ICollection<QuestionSet> QuestionSets { get; set; }
+        public virtual ICollection<ItemTypeQuestionSet> QuestionSets { get; set; }
         public virtual ICollection<Item> Items { get; set; }
 
         public virtual void AddExtendedProperty(ExtendedProperty extendedProperty)
@@ -43,9 +43,14 @@ namespace CRP.Core.Domain
             ExtendedProperties.Add(extendedProperty);
         }
 
-        public virtual void AddQuestionSet(QuestionSet questionSet)
+        public virtual void AddTransactionQuestionSet(QuestionSet questionSet)
         {
-            QuestionSets.Add(questionSet);
+            QuestionSets.Add(new ItemTypeQuestionSet(this, questionSet){TransactionLevel = true});
+        }
+
+        public virtual void AddQuantityQuestionSet(QuestionSet questionSet)
+        {
+            QuestionSets.Add(new ItemTypeQuestionSet(this, questionSet) { QuantityLevel = true });
         }
     }
 }

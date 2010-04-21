@@ -25,6 +25,21 @@
                 <%= Html.TextBox("QuestionSet.Name") %>
                 <%= Html.ValidationMessage("QuestionSet.Name", "*") %>
             </p>
+            
+            <div style='display:<%= Model.Item != null || Model.ItemType != null ? Html.Encode("Block") : Html.Encode("None") %>'>
+            
+                <p>
+                    <label for="Transaction">Transaction Level:</label>
+                    <%= Html.CheckBox("transaction") %>
+                </p>
+                
+                <p>
+                    <label for="Quantity">Quantity Level:</label>
+                    <%= Html.CheckBox("quantity") %>
+                </p>
+            
+            </div>
+            
             <div style='display:<%= Model.Item == null && Model.ItemType == null ? Html.Encode("Block"): Html.Encode("None") %>'>
             <p>
                 <label for="SystemReusable">SystemReusable:</label>

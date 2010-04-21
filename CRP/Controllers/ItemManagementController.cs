@@ -95,7 +95,14 @@ namespace CRP.Controllers
             // add the default question sets
             foreach(var qs in item.ItemType.QuestionSets)
             {
-                item.AddTransactionQuestionSet(qs);
+                if (qs.TransactionLevel)
+                {
+                    item.AddTransactionQuestionSet(qs.QuestionSet);
+                }
+                else
+                {
+                    item.AddQuantityQuestionSet(qs.QuestionSet);
+                }
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());

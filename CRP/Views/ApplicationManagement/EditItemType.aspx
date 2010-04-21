@@ -62,13 +62,13 @@
         </fieldset>
         
         <fieldset>
-            <legend>Default Question Sets</legend>
+            <legend>Transaction Question Sets</legend>
             
             <p>
-                <%= Html.ActionLink<QuestionSetController>(a => a.LinkToItemType(Model.Id), "Add Question Set") %>
+                <%= Html.ActionLink<QuestionSetController>(a => a.LinkToItemType(Model.Id, true, false), "Add Question Set") %>
             </p>
             
-            <% Html.Grid(Model.QuestionSets)
+            <% Html.Grid(Model.QuestionSets.Where(a => a.TransactionLevel))
                    .Transactional()
                    .Name("QuestionSets")
                    .PrefixUrlParameters(false)
@@ -76,9 +76,39 @@
                                 {
                                     col.Add(a =>
                                                 {%>
-                                                <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.Id), "Edit") %>
+                                                <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.QuestionSet.Id), "Edit")%>
                                                 <% });
-                                    col.Add(a => a.Name).Title("Question Set Name");
+                                    col.Add(a => a.QuestionSet.Name).Title("Question Set Name");
+                                    col.Add(a =>
+                                                {%> 
+                                                
+                                                <%= Html.Encode("List of Questions") %> 
+                                                <% });
+                                        
+                                })
+                    .Render();
+                    %>
+            
+        </fieldset>
+        
+        <fieldset>
+            <legend>Quantity Question Sets</legend>
+            
+            <p>
+                <%= Html.ActionLink<QuestionSetController>(a => a.LinkToItemType(Model.Id, false, true), "Add Question Set") %>
+            </p>
+            
+            <% Html.Grid(Model.QuestionSets.Where(a => a.QuantityLevel))
+                   .Transactional()
+                   .Name("QuestionSets")
+                   .PrefixUrlParameters(false)
+                   .Columns(col =>
+                                {
+                                    col.Add(a =>
+                                                {%>
+                                                <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.QuestionSet.Id), "Edit") %>
+                                                <% });
+                                    col.Add(a => a.QuestionSet.Name).Title("Question Set Name");
                                     col.Add(a =>
                                                 {%> 
                                                 

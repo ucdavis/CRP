@@ -49,7 +49,9 @@ namespace CRP.Controllers.ViewModels
             return viewModel;
         }
 
-        public IQueryable<QuestionSet> QuestionSets;
-        public int ItemTypeId;
+        public IQueryable<QuestionSet> QuestionSets { get; set;}
+        public int ItemTypeId { get; set; }
+        public bool Transaction { get; set; }
+        public bool Quantity { get; set; }
     }
 }

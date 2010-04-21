@@ -169,7 +169,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [AcceptPost]
         [HandleTransactionsManually]
-        public ActionResult Create(int? itemId, int? itemTypeId, [Bind(Exclude="Id")]QuestionSet questionSet)
+        public ActionResult Create(int? itemId, int? itemTypeId, [Bind(Exclude="Id")]QuestionSet questionSet, bool? transaction, bool? quantity)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
             questionSet.User = user;
@@ -180,13 +180,37 @@ namespace CRP.Controllers
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
 
+            if (itemId.HasValue || itemTypeId.HasValue)
+            {
+                if (!transaction.HasValue || !quantity.HasValue)
+                {
+                    ModelState.AddModelError("Transaction/Quantity", "Transaction or Quantity must be specified.");
+                }
+                else if (transaction.Value == quantity.Value)
+                {
+                    ModelState.AddModelError("Transaction/Quantity", "Transaction and Quantity cannot be the same.");
+                }
+            }
+            
             if (ModelState.IsValid)
             {
                 if (itemId.HasValue)
                 {
                     // has an item to automatically associate to
                     var item = Repository.OfType<Item>().GetById(itemId.Value);
-                    item.AddQuestionSet(questionSet);
+                    
+                    if (transaction.Value)
+                    {
+                        item.AddTransactionQuestionSet(questionSet);
+                    }
+                    else
+                    {
+                        item.AddQuantityQuestionSet(questionSet);
+                    }
+
+                    //item.AddQuestionSet(questionSet);
+                    //TODO: fix the add questionset thing
+
 
                     using (var ts = new TransactionScope())
                     {
@@ -200,7 +224,8 @@ namespace CRP.Controllers
                 else if (itemTypeId.HasValue)
                 {
                     var itemType = Repository.OfType<ItemType>().GetById(itemTypeId.Value);
-                    itemType.AddQuestionSet(questionSet);
+                    //itemType.AddQuestionSet(questionSet);
+                    //TODO: fix the add questionset thing
 
                     using (var ts = new TransactionScope())
                     {
@@ -250,11 +275,11 @@ namespace CRP.Controllers
         /// <param name="itemTypeId">The id of the item type to link to</param>
         /// <returns></returns>
         [Authorize(Roles = "Admin")]
-        public ActionResult LinkToItemType(int itemTypeId)
+        public ActionResult LinkToItemType(int itemTypeId, bool transaction, bool quantity)
         {
             var item = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
 
-            if (item == null)
+            if (item == null || transaction == quantity)
             {
                 // redirect no item to link to
                 return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
@@ -262,6 +287,8 @@ namespace CRP.Controllers
 
             var viewModel = QuestionSetLinkViewModel.Create(Repository, CurrentUser.Identity.Name);
             viewModel.ItemTypeId = itemTypeId;
+            viewModel.Transaction = transaction;
+            viewModel.Quantity = quantity;
 
             return View(viewModel);
         }
@@ -284,13 +311,13 @@ namespace CRP.Controllers
         /// <returns></returns>
         [AcceptPost]
         [Authorize(Roles="Admin")]
-        public ActionResult LinkToItemType(int id, int itemTypeId)
+        public ActionResult LinkToItemType(int id, int itemTypeId, bool transaction, bool quantity)
         {
             // get teh question set
             var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
             var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
 
-            if (questionSet == null || itemType == null)
+            if (questionSet == null || itemType == null || transaction == quantity)
             {
                 return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
             }
@@ -299,13 +326,14 @@ namespace CRP.Controllers
 
             if (ModelState.IsValid)
             {
-                itemType.AddQuestionSet(questionSet);
+                //itemType.AddQuestionSet(questionSet);
+                //TODO: specify what type of question set we are adding here
                 Repository.OfType<ItemType>().EnsurePersistent(itemType);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question Set");
             }
             else
             {
-                return LinkToItemType(itemTypeId);
+                return LinkToItemType(itemTypeId, transaction, quantity);
             }
 
             return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
