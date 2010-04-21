@@ -263,6 +263,23 @@ namespace CRP.Tests.Core
         }
 
         /// <summary>
+        /// Loads the item report.
+        /// Requires User
+        /// Requires Item
+        /// </summary>
+        /// <param name="entriesToAdd">The entries to add.</param>
+        protected void LoadItemReport(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.ItemReport(i + 1);
+                validEntity.Item = Repository.OfType<Item>().GetById(1);
+                validEntity.User = Repository.OfType<User>().GetById(1);
+                Repository.OfType<ItemReport>().EnsurePersistent(validEntity);
+            }
+        }
+
+        /// <summary>
         /// Loads the item types.
         /// </summary>
         /// <param name="entriesToAdd">The entries to add.</param>

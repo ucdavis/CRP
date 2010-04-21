@@ -125,6 +125,8 @@
     <Compile Include="Repositories\ExtendedPropertyAnswerRepositoryTests.cs" />
     <Compile Include="Repositories\ExtendedPropertyRepositoryTests.cs" />
     <Compile Include="Repositories\ItemQuestionSetRepositoryTests.cs" />
+    <Compile Include="Repositories\ItemReportColumnRepositoryTests.cs" />
+    <Compile Include="Repositories\ItemReportRepositoryTests.cs" />
     <Compile Include="Repositories\ItemRepositoryTests.cs" />
     <Compile Include="Repositories\ItemTypeQuestionSetRepositoryTests.cs" />
     <Compile Include="Repositories\ItemTypeRepositoryTests.cs" />

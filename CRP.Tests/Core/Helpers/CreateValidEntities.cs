@@ -1,4 +1,5 @@
-﻿using CRP.Core.Domain;
+﻿using System;
+using CRP.Core.Domain;
 
 namespace CRP.Tests.Core.Helpers
 {
@@ -338,6 +339,39 @@ namespace CRP.Tests.Core.Helpers
             return rtValue;
         }
 
+        /// <summary>
+        /// Create a valid entry for tests.
+        /// Repository tests may need to modify this data to supply real linked data.
+        /// </summary>
+        /// <param name="counter">The counter.</param>
+        /// <returns>Valid ItemReport</returns>
+        public static ItemReport ItemReport(int? counter)
+        {
+            var rtValue = new ItemReport();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Item = new Item();
+            rtValue.User = new User();
+
+            return rtValue;
+        }
+
+        /// <summary>
+        /// Create a valid entry for tests.
+        /// Repository tests may need to modify this data to supply real linked data.
+        /// </summary>
+        /// <param name="counter">The counter.</param>
+        /// <returns>Valid ItemReportColumn</returns>
+        public static ItemReportColumn ItemReportColumn(int? counter)
+        {
+            var rtValue = new ItemReportColumn();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Format = "Format" + counter.Extra();
+            rtValue.DisplayName = "DisplayName" + counter.Extra();
+            rtValue.ItemReport = new ItemReport();
+
+            return rtValue;
+        }
+
         #region Helper Extension
 
         private static string Extra(this int? counter)
@@ -351,5 +385,7 @@ namespace CRP.Tests.Core.Helpers
         }
 
         #endregion Helper Extension
+
+        
     }
 }
