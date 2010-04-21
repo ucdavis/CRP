@@ -67,7 +67,7 @@ namespace CRP.Controllers
         ///     Item is created
         ///     Extended properties are created
         ///     Default question sets are added ("Contact Information" and Item Type defaults)
-        /// </summary>
+        /// </remarks>       
         /// <param name="item">The item.</param>
         /// <param name="extendedProperties">The extended properties.</param>
         /// <param name="tags">The tags.</param>
@@ -185,7 +185,7 @@ namespace CRP.Controllers
         ///     User has editor rights
         /// PostCondition:
         ///     Item is updated
-        /// </summary>
+        /// </remarks>
         /// <param name="id">The id.</param>
         /// <param name="item">The item.</param>
         /// <param name="extendedProperties">The extended properties.</param>
@@ -326,7 +326,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
-            //TODO; Review if this is how it should behave if an editor is already attached to the item
+            //TODO: Review if this is how it should behave if an editor is already attached to the item
             if(item.Editors.Where(a => a.User.LoginID == user.LoginID).Any())
             {
                 Message = NotificationMessages.STR_EditorAlreadyExists;
@@ -410,6 +410,56 @@ namespace CRP.Controllers
             var viewModel = UserItemDetailViewModel.Create(Repository, item);
 
             return View(viewModel);
+        }
+
+        /// <summary>
+        /// Toggles the transaction is active.
+        /// </summary>
+        /// <param name="id">The transaction id.</param>
+        /// <returns></returns>
+        [AcceptPost]
+        public ActionResult ToggleTransactionIsActive(int id)
+        {
+            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
+            if (transaction == null)
+            {
+                return this.RedirectToAction(a => a.List());
+            }
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction(a => a.List());
+            }
+            if (transaction.IsActive)
+            {
+                if(transaction.Paid)
+                {
+                    ModelState.AddModelError("Deactivate", NotificationMessages.STR_Paid_transactions_can_not_be_deactivated);
+                }
+            }
+            else
+            {
+                if((transaction.Item.Sold + transaction.Quantity) > transaction.Item.Quantity)
+                {
+                    ModelState.AddModelError("Activate", NotificationMessages.STR_Transaction_can_not_be_activated);
+                }
+            }
+            transaction.IsActive = !transaction.IsActive;
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
+            if(ModelState.IsValid)
+            {
+                Repository.OfType<Transaction>().EnsurePersistent(transaction);
+                Message = transaction.IsActive
+                              ? NotificationMessages.STR_Activated.Replace(NotificationMessages.ObjectType, "Transaction")
+                              :
+                                  NotificationMessages.STR_Deactivated.Replace(NotificationMessages.ObjectType,
+                                                                               "Transaction");
+            }
+            else
+            {
+                Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "transaction");  
+            }                                  
+            return this.RedirectToAction(a => a.Details(transaction.Item.Id));
         }
     }
 

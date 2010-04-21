@@ -388,7 +388,8 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
         #endregion Template Tests
 
-        #region Sold Tests
+        #region Sold Tests 
+        //TODO: Update test to reflect Transaction.IsActive change
 
         /// <summary>
         /// Tests that sold returns expected results.

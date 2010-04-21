@@ -10,6 +10,11 @@
     <script type="text/javascript">
         $(function() { $("#tabs").tabs(); });
     </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("a.FormSubmit").click(function() { $(this).parents("form").submit(); });
+        });
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
@@ -18,10 +23,9 @@
 
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">    
     <h2>Details</h2>
-      
+
     <div id="tabs">
     
         <ul>
@@ -36,13 +40,22 @@
                    .Name("Transactions")
                    .Columns(col =>
                                 {
+                                    col.Add(a =>
+                                        {%>                                        
+                                            <% using(Html.BeginForm<ItemManagementController>(x => x.ToggleTransactionIsActive(a.Id))) {%>                                     
+                                                <%= Html.AntiForgeryToken() %>
+                                                <a href="javascript:;" class="FormSubmit"><%= a.IsActive ? "Deactivate" : "Activate" %></a>
+                                            
+                                            <%} %>
+                                            <%});
                                     col.Add(a => a.TransactionNumber).Title(
-                                        "Transaction Number");
+                                        "Transaction");
                                     col.Add(a => a.Quantity);
                                     col.Add(a => a.Amount.ToString("C")).Title("Amount");
-                                    col.Add(a => a.DonationTotal.ToString("C")).Title("Donation Amount");
+                                    col.Add(a => a.DonationTotal.ToString("C")).Title("Donation");
                                     col.Add(a => a.Credit ? "Credit Card" : "Check").Title("Payment Type");
                                     col.Add(a => a.Paid);
+                                    col.Add(a => a.IsActive);
                                 })
                    .Pageable()
                    .Sortable()
@@ -109,6 +122,7 @@
     </p>
 
 </asp:Content>
+
 
 
 

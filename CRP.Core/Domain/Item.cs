@@ -148,12 +148,12 @@ namespace CRP.Core.Domain
         }
 
         /// <summary>
-        /// # sold
+        /// # of active, sold
         /// </summary>
         public virtual int Sold { 
             get
             {
-                return Transactions.Sum(a => a.Quantity);
+                return Transactions.Where(a => a.IsActive).Sum(a => a.Quantity);
             }
         }
 

@@ -169,6 +169,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paid transactions can not be deactivated..
+        /// </summary>
+        public static string STR_Paid_transactions_can_not_be_deactivated {
+            get {
+                return ResourceManager.GetString("STR_Paid_transactions_can_not_be_deactivated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a user first..
         /// </summary>
         public static string STR_SelectUserFirst {
@@ -201,6 +210,15 @@ namespace CRP.Core.Resources {
         public static string STR_TouchNetSuccess {
             get {
                 return ResourceManager.GetString("STR_TouchNetSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transaction can not be activated because it will cause the amount sold to exceed the amount availble..
+        /// </summary>
+        public static string STR_Transaction_can_not_be_activated {
+            get {
+                return ResourceManager.GetString("STR_Transaction_can_not_be_activated", resourceCulture);
             }
         }
         
