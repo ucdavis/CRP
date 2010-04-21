@@ -1,4 +1,5 @@
-﻿using CRP.Core.Domain;
+﻿using System;
+using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using Check = UCDArch.Core.Utils.Check;
 using System.Linq;
@@ -83,6 +84,13 @@ namespace CRP.Controllers.Helpers
             }
 
             return item;
+        }
+
+        public static DisplayProfile CopyDisplayProfile(DisplayProfile src, DisplayProfile dest)
+        {
+            dest.Name = src.Name;
+
+            return dest;
         }
     }
 }

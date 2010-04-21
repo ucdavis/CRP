@@ -11,7 +11,10 @@
 
     <%= Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.") %>
 
-    <% using (Html.BeginForm()) {%>
+    <% using (Html.BeginForm("Edit", "DisplayProfile", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+       {%>
+
+        <%= Html.AntiForgeryToken() %>
 
         <fieldset>
             <legend>Fields</legend>

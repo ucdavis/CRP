@@ -41,7 +41,9 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
-            return View(item);
+            var viewModel = ItemDetailViewModel.Create(Repository, item);
+            
+            return View(viewModel);
         }
 
         /// <summary>

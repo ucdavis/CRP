@@ -1,6 +1,7 @@
 using System.IO;
 using System.Web.Mvc;
 using CRP.App_GlobalResources;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
@@ -108,6 +109,39 @@ namespace CRP.Controllers
             }
 
             return View(displayProfile);
+        }
+
+        [AcceptPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Edit(int id, [Bind(Exclude = "Id")]DisplayProfile displayProfile)
+        {
+            // get the original item out
+            var destProfile = Repository.OfType<DisplayProfile>().GetNullableByID(id);
+
+            // copy the display profile properties
+            destProfile = Copiers.CopyDisplayProfile(displayProfile, destProfile);
+
+            if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
+            {
+                var file = Request.Files[0];
+                var reader = new BinaryReader(file.InputStream);
+                destProfile.Logo = reader.ReadBytes(file.ContentLength);
+            }
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destProfile.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<DisplayProfile>().EnsurePersistent(destProfile);
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Display Profile");
+                return this.RedirectToAction(a => List());
+            }
+            else
+            {
+                var viewModel = DisplayProfileViewModel.Create(Repository);
+                viewModel.DisplayProfile = displayProfile;
+                return View(viewModel);
+            }
         }
 
         /// <summary>

@@ -9,7 +9,7 @@
     </id>
 
     <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" not-null="true" />
-    <many-to-one name="QuestionSet" class="CRP.Core.Domain.QuestionSet, CRP.Core" column="QuestionSetId" cascade="none" not-null="true" />
+    <many-to-one name="QuestionSet" class="CRP.Core.Domain.QuestionSet, CRP.Core" column="QuestionSetId" cascade="all-delete-orphan" not-null="true" />
     <property name="TransactionLevel" column="TransactionLevel" />
     <property name="QuantityLevel" column="QuantityLevel" />
 

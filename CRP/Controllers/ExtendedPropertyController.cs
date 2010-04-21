@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -108,29 +109,30 @@ namespace CRP.Controllers
         [AcceptPost]
         public ActionResult Delete(int id)
         {
+            // get the extended property itself
             var extendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(id);
 
+            // check to make sure it's valid
             if(extendedProperty == null)
             {
                 return this.RedirectToAction<ApplicationManagementController>(a => a.ListItemTypes());
             }
-            
+
+            // set aside the item type id
             var itemTypeId = extendedProperty.ItemType.Id;
 
-            if (extendedProperty.ItemType.Items.Count <= 0)
+            // check to see if there are any items using the extended property
+            if (!Repository.OfType<ExtendedPropertyAnswer>().Queryable.Where(a => a.ExtendedProperty == extendedProperty).Any())
             {
+                // no item is using the extended property, allow the deletion
                 Repository.OfType<ExtendedProperty>().Remove(extendedProperty);
                 Message = NotificationMessages.STR_ObjectRemoved.Replace(NotificationMessages.ObjectType,
                                                                          "Extended property");
+                return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));   
+            }
 
-                return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));    
-            }
-            else
-            {
-                Message =
-                    "Extended property cannot be deleted, becuase there is already an item associated with the item type.";
-                return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
-            }
+            Message = "Extended property cannot be deleted, becuase there is already an item associated with the item type.";
+            return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
         }
     }
 }

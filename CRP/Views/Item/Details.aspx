@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Core.Domain.Item>" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ItemDetailViewModel>" %>
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -7,29 +7,34 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2><%= Html.Encode(Model.Name) %></h2>
+    <p>
+        <img src='<%= Url.Action("GetLogo", "DisplayProfile", new {id = Model.DisplayProfile.Id}) %>' />
+        <%= Html.Encode(Model.DisplayProfile.Name) %>
+    </p>
+
+
+    <h2><%= Html.Encode(Model.Item.Name)%></h2>
+
+    <% Html.RenderPartial("~/Views/Shared/TagView.ascx", Model.Item.Tags); %>
 
     <fieldset>
         <legend>Details</legend>
         
         <span style="float:right;">
-            <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Id}) %>' />
+            <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item.Id}) %>' />
         </span>
         
         <p>
             <strong>CostPerItem:</strong>
-            <%= Html.Encode(String.Format("{0:C}", Model.CostPerItem)) %>
-        </p>
-        <p>
-            <strong>Quantity:</strong>
-            <%= Html.Encode(Model.Quantity - Model.Sold) %>
+            <%= Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))%>
         </p>
         <p>
             <strong>Expiration:</strong>
-            <%= Html.Encode(String.Format("{0:d}", Model.Expiration)) %>
+            <%= Html.Encode(String.Format("{0:d}", Model.Item.Expiration))%>
         </p>
 
-        <% foreach(var ep in Model.ExtendedPropertyAnswers) {%>
+        <% foreach (var ep in Model.Item.ExtendedPropertyAnswers)
+           {%>
         
             <p>
                 <strong><%= Html.Encode(ep.ExtendedProperty.Name) %>:</strong>
@@ -40,14 +45,14 @@
         <% } %>
         
         <p>
-        <a href='<%= Url.Action("Register", "Transaction", new {id=Model.Id} ) %>'><img src="../../Images/register.png" style="border:0;" /></a>
+        <a href='<%= Url.Action("Register", "Transaction", new {id=Model.Item.Id} ) %>'><img src="../../Images/register.png" style="border:0;" /></a>
         </p>
         
-        <p><%= Model.Description %></p>
+        <p><%= Model.Item.Description%></p>
         
         <p>
             <strong>Link:</strong>
-            <%= Html.Encode(Model.Link) %>
+            <%= Html.Encode(Model.Item.Link)%>
         </p>
         
     </fieldset>

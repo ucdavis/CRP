@@ -29,6 +29,11 @@
                 <%= Html.ValidationMessage("Item.Name", "*")%>
             </p>
             <p>
+                <%= this.Select("Item.Unit").Options(Model.CurrentUser.Units, x=>x.Id, x=>x.FullName)
+                        .Selected(Model.Item != null ? Model.Item.Unit.Id : 0)
+                        .Label("Unit:")%>
+            </p>
+            <p>
                 <label for="Item.Description">Description:</label>
                 <%= Html.TextArea("Item.Description")%>
                 <%= Html.ValidationMessage("Item.Description", "*")%> 
