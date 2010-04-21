@@ -131,7 +131,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));   
             }
 
-            Message = "Extended property cannot be deleted, becuase there is already an item associated with the item type.";
+            Message = "Extended property cannot be deleted, because there is already an item associated with the item type.";
             return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
         }
     }
