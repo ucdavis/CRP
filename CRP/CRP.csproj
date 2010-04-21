@@ -540,18 +540,21 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>NotificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="App_GlobalResources\StaticValues.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
+    <EmbeddedResource Include="App_GlobalResources\StaticValues.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StaticValues.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\ScreenText.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\ScreenText.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ScreenText.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionTypeText.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\QuestionTypeText.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionTypeText.Designer.cs</LastGenOutput>
-    </Content>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
     <Content Include="Images\logo.gif" />
     <Content Include="Views\Check\LinkToTransaction.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />
