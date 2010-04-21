@@ -9,12 +9,14 @@ namespace CRP.Controllers.ViewModels
     {
         public Transaction Transaction { get; set; }
         public IEnumerable<PaymentLog> PaymentLogs { get; set; }
+        public bool AddBlankCheck { get; set; }
 
         public static LinkPaymentViewModel Create(IRepository repository, Transaction transaction)
         {
             Check.Require(repository != null, "Repository is required.");
 
             var viewModel = new LinkPaymentViewModel() {Transaction = transaction};
+            viewModel.AddBlankCheck = true; //Default to true
 
             return viewModel;
         }

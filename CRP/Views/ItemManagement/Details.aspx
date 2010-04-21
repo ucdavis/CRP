@@ -34,7 +34,6 @@
             <% Html.Grid(Model.Item.Transactions.Where(a => a.ParentTransaction == null)) 
                    .Transactional()
                    .Name("Transactions")
-                   .PrefixUrlParameters(false)
                    .Columns(col =>
                                 {
                                     col.Add(a =>
@@ -60,7 +59,6 @@
             <% Html.Grid(Model.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null)) 
                    .Transactional()
                    .Name("Checks")
-                   .PrefixUrlParameters(false)
                    .Columns(col =>
                                 {
                                     col.Add(a =>
@@ -100,7 +98,6 @@
                                     col.Add(a => a.User.FullName).Title("Created By");
                                     col.Add(a => a.SystemReusable).Title("System Report");
                                 })
-                   .PrefixUrlParameters(false)
                    .Render(); %>
         </div>
         

@@ -45,7 +45,7 @@ namespace CRP.Controllers
             {
                 PaymentLog paymentLog;
 
-                if (check.Id <= 0 && check.Accepted && (string.IsNullOrEmpty(check.Name) || check.Amount <= 0.0m))
+                if (check.Id <= 0 && check.Accepted && (string.IsNullOrEmpty(check.Name) || string.IsNullOrEmpty(check.Name.Trim()) || check.Amount <= 0.0m))
                 {
                     ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
                 }
@@ -62,6 +62,10 @@ namespace CRP.Controllers
                 {
                     var tempCheck = Repository.OfType<PaymentLog>().GetNullableByID(check.Id);
                     paymentLog = Copiers.CopyCheckValues(check, tempCheck);
+                    if (paymentLog.Id > 0 && paymentLog.Accepted && (string.IsNullOrEmpty(paymentLog.Name) || string.IsNullOrEmpty(paymentLog.Name.Trim()) || paymentLog.Amount <= 0.0m))
+                    {
+                        ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
+                    }
                 }
             }
 
@@ -87,14 +91,16 @@ namespace CRP.Controllers
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
                 Message = "Checks associated with transaction.";
                 return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
-            }
-            //JCS Ok we have an invalid object, where we have added paymentLogs, 
-            //if they just go back to the list, the automatic commit will save the changes,
-            //so tring a rollback...
-            Repository.OfType<Transaction>().DbContext.RollbackTransaction();
+            }            
 
             var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
             viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
+            viewModel.AddBlankCheck = false; //We had errors, we will display what they entered without adding a new one.
+
+            //JCS Ok we have an invalid object, where we have added paymentLogs, 
+            //if they just go back to the list, the automatic commit will save the changes,
+            //so tring a rollback...
+            Repository.OfType<Transaction>().DbContext.RollbackTransaction(); //Moved after so invalid checks are not removed from the view
 
             return View(viewModel);
         }

@@ -176,12 +176,12 @@
                         <% Html.RenderPartial(StaticValues.Partial_CheckView, Model.PaymentLogs.ToList()[i]); %>
                     </fieldset>
                 <% } %>
-            
+                <% if (Model.AddBlankCheck){ %>
                 <fieldset class="check">
                     <legend>Check <span class="checkIndex"><%= Html.Encode(Model.PaymentLogs.Count() + 1)%></span></legend>
-                    <% Html.RenderPartial(StaticValues.Partial_CheckView, new PaymentLog(){Accepted = true}); %>
+                    <% Html.RenderPartial(StaticValues.Partial_CheckView, new PaymentLog() { Accepted = true }); %>
                 </fieldset>
-                
+                <%} %>
                 <!-- needs a help balloon -->
                 <span id="addCheck">Add Check<img src="../../Images/plus.png" style="width:24px; height:24px" /></span>
             </td>
