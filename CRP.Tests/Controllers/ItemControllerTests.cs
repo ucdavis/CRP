@@ -120,6 +120,130 @@ namespace CRP.Tests.Controllers
             Controller.Details(2)
                 .AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
+            Assert.AreEqual("Item not found.", Controller.Message);
+        }
+
+        /// <summary>
+        /// Tests the index of the details when item found but not available redirects to home.
+        /// </summary>
+        [TestMethod]
+        public void TestDetailsWhenItemFoundButNotAvailableRedirectsToHomeIndex()
+        {
+            #region Arrange
+            FakeItems(1);
+            Items[0].Available = false;
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();            
+            #endregion Arrange
+
+            #region Act
+            Controller.Details(1)
+                .AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());            
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the details when item found but has expired returns view.
+        /// </summary>
+        [TestMethod]
+        public void TestDetailsWhenItemFoundButHasExpiredReturnsView()
+        {
+            #region Arrange
+            FakeDisplayProfiles(4);
+            FakeUnits(3);
+            FakeSchools(2);
+            FakeItems(1);
+            Items[0].Available = true;
+            Items[0].Quantity = 10;
+
+            Items[0].Expiration = DateTime.Today.AddDays(-1); //Value being tested
+            
+            Items[0].Unit = Units[2];
+            DisplayProfiles[2].Unit = Units[1];
+            DisplayProfiles[3].School = Schools[1];
+            DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Details(1)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("This item is unavailable for registration.", Controller.Message);
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the details when item found but has no items available returns view.
+        /// </summary>
+        [TestMethod]
+        public void TestDetailsWhenItemFoundButHasNoItemsAvailableReturnsView()
+        {
+            #region Arrange
+            FakeDisplayProfiles(4);
+            FakeUnits(3);
+            FakeSchools(2);
+            FakeItems(1);
+            Items[0].Available = true;
+
+            Items[0].Quantity = 0;//Value being tested
+
+            Items[0].Expiration = DateTime.Today.AddDays(10); 
+            Items[0].Unit = Units[2];
+            DisplayProfiles[2].Unit = Units[1];
+            DisplayProfiles[3].School = Schools[1];
+            DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Details(1)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("This item is unavailable for registration.", Controller.Message);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the details when item found and is available returns view.
+        /// </summary>
+        [TestMethod]
+        public void TestDetailsWhenItemFoundAndIsAvailableReturnsView()
+        {
+            #region Arrange
+            FakeDisplayProfiles(4);
+            FakeUnits(3);
+            FakeSchools(2);
+            FakeItems(1);
+            Items[0].Available = true;
+            Items[0].Quantity = 10;
+            Items[0].Expiration = DateTime.Today.AddDays(10);
+            Items[0].Unit = Units[2];
+            DisplayProfiles[2].Unit = Units[1];
+            DisplayProfiles[3].School = Schools[1];
+            DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Details(1)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            #endregion Assert
         }
 
         [TestMethod]
@@ -145,6 +269,7 @@ namespace CRP.Tests.Controllers
             Assert.AreSame(Items[1], result.Item);
             Assert.AreSame(DisplayProfiles[2], result.DisplayProfile);
             Assert.AreNotSame(DisplayProfiles[3], result.DisplayProfile);
+            Assert.AreEqual("This item is unavailable for registration.", Controller.Message);
         }
         [TestMethod]
         public void TestDetailsWhenIdFoundReturnsView2()
@@ -170,6 +295,7 @@ namespace CRP.Tests.Controllers
             Assert.AreSame(Items[1], result.Item);
             Assert.AreNotSame(DisplayProfiles[2], result.DisplayProfile);
             Assert.AreSame(DisplayProfiles[3], result.DisplayProfile);
+            Assert.AreEqual("This item is unavailable for registration.", Controller.Message);
         }
 
         #endregion Details Tests
@@ -377,19 +503,6 @@ namespace CRP.Tests.Controllers
             }
         }
 
-        /// <summary>
-        /// Fakes the tags.
-        /// </summary>
-        /// <param name="count">The count.</param>
-        private void FakeTags(int count)
-        {
-            var offSet = Tags.Count;
-            for (int i = 0; i < count; i++)
-            {
-                Tags.Add(CreateValidEntities.Tag(i + 1 + offSet));
-                Tags[i + offSet].SetIdTo(i + 1 + offSet);
-            }
-        }
 
         private void FakeDisplayProfiles(int count)
         {
