@@ -16,6 +16,7 @@ using CRP.Core.Domain;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
+using UCDArch.Core.Utils;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Controller;
 using MvcContrib;
@@ -463,12 +464,15 @@ namespace CRP.Controllers
             {
                 var transaction = Repository.OfType<Transaction>().GetNullableByID(touchNetValues.EXT_TRANS_ID.Value);
 
+                //TODO: What do we want to do if it isn't found? (Email values?)
+                Check.Require(transaction != null);
+
                 // create a payment log
                 var paymentLog = new PaymentLog(transaction.Total);
                 paymentLog.Credit = true;
 
                 // on success, save the valid information
-                if (touchNetValues.PMT_STATUS == "success")
+                if (touchNetValues.PMT_STATUS.ToLower() == "success")
                 {
                     paymentLog.Name = touchNetValues.NAME_ON_ACCT;
                     paymentLog.Amount = touchNetValues.PMT_AMT.Value;
@@ -477,6 +481,35 @@ namespace CRP.Controllers
                     paymentLog.CardType = touchNetValues.CARD_TYPE;
                 }
 
+                paymentLog.TnBillingAddress1 = touchNetValues.acct_addr;
+                paymentLog.TnBillingAddress2 = touchNetValues.acct_addr2;
+                paymentLog.TnBillingCity = touchNetValues.acct_city;
+                paymentLog.TnBillingState = touchNetValues.acct_state;
+                paymentLog.TnBillingZip = touchNetValues.acct_zip;
+                paymentLog.TnCancelLink = touchNetValues.CANCEL_LINK;
+                paymentLog.TnErrorLink = touchNetValues.ERROR_LINK;
+                paymentLog.TnPaymentDate = touchNetValues.pmt_date;
+                paymentLog.TnSubmit = touchNetValues.Submit;
+                paymentLog.TnSuccessLink = touchNetValues.SUCCESS_LINK;
+                paymentLog.TnSysTrackingId = touchNetValues.sys_tracking_id;
+                paymentLog.TnUpaySiteId = touchNetValues.UPAY_SITE_ID;
+                switch (touchNetValues.PMT_STATUS.ToLower())
+                {
+                    case "success":
+                        paymentLog.TnStatus = "S";
+                        break;
+                    case "cancelled":
+                    case "canceled":
+                        paymentLog.TnStatus = "C";
+                        break;
+                    default:
+                        paymentLog.TnStatus = "E";
+                        break;
+                }
+
+
+                //TODO: Do we want any of these errors to prevent saving the transaction?
+                //TODO: Do we even want to check if it is invalid?
                 if(touchNetValues.posting_key != ConfigurationManager.AppSettings["TouchNetPostingKey"])
                 {
                     ModelState.AddModelError("PostingKey", "Posting Key Error");

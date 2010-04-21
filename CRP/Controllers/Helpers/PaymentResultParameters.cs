@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Web;
-
+﻿
 namespace CRP.Controllers.Helpers
 {
     public class PaymentResultParameters
@@ -36,6 +31,10 @@ namespace CRP.Controllers.Helpers
         public string acct_state { get; set; }
         public string acct_zip { get; set; }
         public string UPAY_SITE_ID { get; set; }
+        public string ERROR_LINK { get; set; }
+        public string Submit { get; set; }
+        public string SUCCESS_LINK { get; set; }
+        public string CANCEL_LINK { get; set; }
 
         // ReSharper restore InconsistentNaming
     }

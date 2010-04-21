@@ -19,6 +19,19 @@
     <property name="Check" column="[Check]" />
     <property name="Credit" column="Credit" />
     <property name="Notes" column="Notes" />
+    <property name="TnStatus" column="TnStatus"/>
+    <property name="TnPaymentDate" column="TnPaymentDate"/>
+    <property name="TnSysTrackingId" column="TnSysTrackingId"/>
+    <property name="TnBillingAddress1" column="TnBillingAddress1"/>
+    <property name="TnBillingAddress2" column="TnBillingAddress2"/>
+    <property name="TnBillingCity" column="TnBillingCity"/>
+    <property name="TnBillingState" column="TnBillingState"/>
+    <property name="TnBillingZip" column="TnBillingZip"/>
+    <property name="TnUpaySiteId" column="TnUpaySiteId"/>
+    <property name="TnErrorLink" column="TnErrorLink"/>
+    <property name="TnSubmit" column="TnSubmit"/>
+    <property name="TnSuccessLink" column="TnSuccessLink"/>
+    <property name="TnCancelLink" column="TnCancelLink"/>
 
   </class>
 </hibernate-mapping>

@@ -70,6 +70,25 @@ namespace CRP.Core.Domain
         public virtual bool Credit { get; set; }
         public virtual string Notes { get; set; }
 
+        #region TouchNet Return Values
+
+        public virtual string TnStatus { get; set; } //S=Success, C=Canceled, E=Error
+        public virtual string TnPaymentDate { get; set; }
+        public virtual string TnSysTrackingId { get; set; }
+        public virtual string TnBillingAddress1 { get; set; }
+        public virtual string TnBillingAddress2 { get; set; }
+        public virtual string TnBillingCity { get; set; }
+        public virtual string TnBillingState { get; set; }
+        public virtual string TnBillingZip { get; set; }
+        public virtual string TnUpaySiteId { get; set; }
+        public virtual string TnErrorLink { get; set; }
+        public virtual string TnSubmit { get; set; }
+        public virtual string TnSuccessLink { get; set; }
+        public virtual string TnCancelLink { get; set; }
+
+
+        #endregion TouchNet Return Values
+
         /// <summary>
         /// Determines whether this instance is valid.
         /// </summary>
