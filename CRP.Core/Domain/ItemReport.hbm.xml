@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="ItemReport"
+    table="ItemReports" >
+    <id name="Id" column="id">
+      <generator class="identity" />
+    </id>
+
+    <property name="Name" column="Name" />
+    <many-to-one name="Item" column="ItemId" class="CRP.Core.Domain.Item, CRP.Core" cascade="none" fetch="join" />
+    <many-to-one name="User" column="UserId" class="CRP.Core.Domain.User, CRP.Core" cascade="none" fetch="join" />
+    <property name="SystemReusable" column="SystemReusable" />
+
+    <bag name="Columns" table="ItemReportColumns" cascade="all-delete-orphan" order-by="[Order]">
+      <key column="ItemReportId" />
+      <one-to-many class="CRP.Core.Domain.ItemReportColumn, CRP.Core" />
+    </bag>
+
+  </class>
+
+
+  <class
+  name="ItemReportColumn"
+  table="ItemReportColumns" >
+    <id name="Id" column="id">
+      <generator class="identity" />
+    </id>
+
+    <many-to-one name="ItemReport" column="ItemReportId" class="CRP.Core.Domain.ItemReport, CRP.Core" cascade="none" fetch="join" />
+    <property name="Order" column="[Order]" />
+    <property name="Format" column="Format" />
+    <property name="Name" column="Name" />
+    <property name="Quantity" column="Quantity" />
+    <property name="Transaction" column="[Transaction]" />
+    <property name="Property" column="Property" />
+    <property name="DisplayName" column="DisplayName" />
+
+  </class>
+
+</hibernate-mapping>

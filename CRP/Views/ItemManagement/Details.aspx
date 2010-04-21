@@ -77,7 +77,21 @@
                    %>
         </div>
         <div id="<%= Html.Encode(StaticValues.Tab_Reports) %>">
-            <p>Reports</p>
+            <% Html.Grid(Model.SystemReports)
+                   .Transactional()
+                   .Name("SystemReports")
+                   .Columns(col =>
+                                {
+                                    col.Add(a =>
+                                                {%>
+                                                    <%= Html.ActionLink<ReportController>(b => b.ViewReport(a.Id, Model.Item.Id), "Select") %>
+                                                <%});
+                                    col.Add(a => a.Name);
+                                    col.Add(a => a.Columns.Count).Title("# of Columns");
+                                    col.Add(a => a.User.FullName).Title("Created By");
+                                })
+                   .PrefixUrlParameters(false)
+                   .Render(); %>
         </div>
         
     

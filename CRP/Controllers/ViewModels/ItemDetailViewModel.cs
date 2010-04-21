@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
@@ -34,12 +35,17 @@ namespace CRP.Controllers.ViewModels
     public class UserItemDetailViewModel
     {
         public Item Item { get; set; }
+        public IEnumerable<ItemReport> SystemReports { get; set; }
 
         public static UserItemDetailViewModel Create(IRepository repository, Item item)
         {
             Check.Require(repository != null, "Repository is required.");
 
-            var viewModel = new UserItemDetailViewModel() { Item = item };
+            var viewModel = new UserItemDetailViewModel()
+                                {
+                                    Item = item,
+                                    SystemReports = repository.OfType<ItemReport>().Queryable.Where(a => a.SystemReusable).ToList()
+                                };
 
             return viewModel;
         }

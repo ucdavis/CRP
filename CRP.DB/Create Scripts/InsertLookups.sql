@@ -96,3 +96,38 @@ begin
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order], Required)
 	VALUES ('Email Address', @tbId, @qsid, 5, 1)		
 end
+go
+
+-- //////////////////////////////////////////////////////////////////////////////////////
+-- Insert the default item report
+-- //////////////////////////////////////////////////////////////////////////////////////
+IF NOT EXISTS (select * from ItemReports where Name = 'Transaction Summary' )
+begin
+	INSERT INTO ItemReports ([Name], UserId, SystemReusable)
+	VALUES ('Transaction Summary', 2, 1)
+	
+	declare @irId int
+	
+	set @irId = (select max(id) from ItemReports where [Name] = 'Transaction Summary')
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property)
+	VALUES (@irId, 1, 'First Name', 0, 1, 0)
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property)
+	VALUES (@irId, 2, 'Last Name', 0, 1, 0)
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property)
+	VALUES (@irId, 3, 'Phone Number', 0, 1, 0)		
+
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property)
+	VALUES (@irId, 4, 'Email Address', 0, 1, 0)	
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property)
+	VALUES (@irId, 5, 'DonationTotal', 0, 0, 1)	
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property)
+	VALUES (@irId, 6, 'AmountTotal', 0, 0, 1)	
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property)
+	VALUES (@irId, 7, 'Total', 0, 0, 1)		
+end

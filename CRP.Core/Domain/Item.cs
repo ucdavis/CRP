@@ -72,6 +72,7 @@ namespace CRP.Core.Domain
         public virtual ICollection<ItemQuestionSet> QuestionSets { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual ICollection<Template> Templates { get; set; }
+        public virtual ICollection<ItemReport> Reports { get; set; }
 
         public virtual Template Template
         {
