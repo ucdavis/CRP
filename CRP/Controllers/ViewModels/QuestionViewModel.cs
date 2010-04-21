@@ -10,12 +10,13 @@ namespace CRP.Controllers.ViewModels
         public IEnumerable<QuestionType> QuestionTypes { get; set; }
         public Question Question { get; set; }
         public QuestionSet QuestionSet { get; set; }
+        public IEnumerable<Validator> Validators { get; set; }
 
         public static QuestionViewModel Create(IRepository repository)
         {
             Check.Require(repository != null, "Repository is required.");
 
-            var viewModel = new QuestionViewModel() {QuestionTypes = repository.OfType<QuestionType>().GetAll()};
+            var viewModel = new QuestionViewModel() {QuestionTypes = repository.OfType<QuestionType>().GetAll(), Validators = repository.OfType<Validator>().GetAll()};
 
             return viewModel;
         }

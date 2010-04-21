@@ -14,7 +14,7 @@
     
     <%= Html.ValidationSummary("Checkout was unsuccessful. Please correct the errors and try again.") %>
     
-    <% using (Html.BeginForm()) { %>
+    <% using (Html.BeginForm("Checkout", "Transaction", FormMethod.Post, new {@id = "CheckoutForm"})) { %>
     
     <%= Html.AntiForgeryToken() %>
        
@@ -66,8 +66,8 @@
                 <tr>
                     <td colspan="4">
                         <label for="paymentType">Payment Method: </label>
-                        <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.CreditCard %>" /><label for="credit">Credit Card</label>
-                        <input type="radio" id="paymentType" name="paymentType" value="<%= StaticValues.Check %>" /><label for="check">Check</label>
+                        <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.CreditCard %>" /><label for="credit">Credit Card</label>
+                        <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.Check %>" /><label for="check">Check</label>
                     </td>
                 </tr>
                 <% if (!String.IsNullOrEmpty(Model.Item.RestrictedKey)) { %>
@@ -100,7 +100,7 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
 
-    <script type="text/javascript" src="../../Scripts/RenameForArray.js"></script>
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/RenameForArray.js") %>"></script>
     <script type="text/javascript">
         var class_quantityAmount = "quantityAmount";
         var class_perItemAmount = "perItemAmount";
@@ -116,6 +116,9 @@
 
     
         $(document).ready(function() {
+            // do some client side validation on the dynamic fields
+            $("form#CheckoutForm").validate();
+
             $("input.dateForm").datepicker();
 
             $("input#quantity").blur(function(event) {

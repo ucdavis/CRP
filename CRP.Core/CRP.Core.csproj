@@ -90,6 +90,7 @@
     <Compile Include="Domain\Template.cs" />
     <Compile Include="Domain\Transaction.cs" />
     <Compile Include="Domain\TransactionAnswer.cs" />
+    <Compile Include="Domain\Validator.cs" />
     <Compile Include="Helpers\BooleanExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\NotificationMessages.Designer.cs">
@@ -194,6 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\PaymentLog.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\Validator.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

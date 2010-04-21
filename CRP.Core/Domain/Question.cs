@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
@@ -23,6 +24,7 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             Options = new List<QuestionOption>();
+            Validators = new List<Validator>();
         }
 
         [Required]
@@ -36,6 +38,7 @@ namespace CRP.Core.Domain
         public virtual bool Required { get; set; }
 
         public virtual ICollection<QuestionOption> Options { get; set; }
+        public virtual ICollection<Validator> Validators { get; set; }
 
         public virtual void AddOption(QuestionOption questionOption)
         {
@@ -46,6 +49,13 @@ namespace CRP.Core.Domain
         public virtual void RemoveOptions(QuestionOption questionOption)
         {
             Options.Remove(questionOption);
+        }
+
+        public virtual string ValidationClasses { 
+            get
+            {
+                return string.Join(" ", Validators.Select(a => a.Class).ToArray());
+            }  
         }
 
         public override bool IsValid()

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="Validator"
+    table="Validators" mutable="false" >
+    <id name="Id" column="id">
+      <generator class="identity" />
+    </id>
+
+    <property name="Name" column="Name" />
+    <property name="Class" column="Class" />
+    <property name="RegEx" column="RegEx" />
+    <property name="ErrorMessage" column="ErrorMessage" />
+
+  </class>
+</hibernate-mapping>

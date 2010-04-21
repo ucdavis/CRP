@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
@@ -137,13 +138,13 @@ namespace CRP.Controllers
                 // if question is null just drop it
                 if (question != null)
                 {
-                    // check to make sure there is an answer if it's required
-                    if (question.Required)
+                    // validate each of the validators
+                    foreach (var validator in question.Validators)
                     {
-                        if (string.IsNullOrEmpty(qa.Answer))
+                        string message;
+                        if (!Validate(validator, qa.Answer, question.Name, out message))
                         {
-                            // add a model error
-                            ModelState.AddModelError("Transaction Question", question.Name + " requires an answer.");
+                            ModelState.AddModelError("Transaction Question", message);
                         }
                     }
 
@@ -165,11 +166,15 @@ namespace CRP.Controllers
                     // if question is null just drop it
                     if (question != null)
                     {
-                        if (question.Required)
+                        var fieldName = question.Name + " for attendee " + (i + 1);
+                        
+                        // validate each of the validators
+                        foreach(var validator in question.Validators)
                         {
-                            if (string.IsNullOrEmpty(qa.Answer))
+                            string message;
+                            if (!Validate(validator, qa.Answer, fieldName, out message))
                             {
-                                ModelState.AddModelError("Quantity Question", question.Name + " for attendee " + (i + 1).ToString() + " requires an answer.");
+                                ModelState.AddModelError("Quantity Question", message);
                             }
                         }
 
@@ -277,6 +282,31 @@ namespace CRP.Controllers
             }
 
             return View();
+        }
+
+
+        /// <summary>
+        /// Compares an answer against a regular expression
+        /// </summary>
+        /// <param name="pattern"></param>
+        /// <param name="answer"></param>
+        /// <returns></returns>
+        private bool Validate(Validator validator, string answer, string fieldName, out string message)
+        {
+            // set as default so we can return without having to set it individually
+            message = string.Empty;
+
+            // check to make sure we have a reg ex
+            if (string.IsNullOrEmpty(validator.RegEx)) return true;
+
+            var regExVal = new Regex(validator.RegEx);
+            // valid
+            // check for when answer is null, becuase when doing a radio button it is null when nothing is selected
+            if (regExVal.IsMatch(answer ?? string.Empty)) return true;
+
+            // not valid input provide error message
+            message = string.Format(validator.ErrorMessage, fieldName);
+            return false;
         }
     }
 

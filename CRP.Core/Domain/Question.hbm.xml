@@ -18,5 +18,12 @@
       <key column="QuestionId" />
       <one-to-many class="CRP.Core.Domain.QuestionOption, CRP.Core" />
     </bag>
+
+    <bag name="Validators" table="QuestionXValidator" cascade="save-update" >
+      <key column="QuestionId" />
+      <many-to-many column="ValidatorId" class="CRP.Core.Domain.Validator, CRP.Core" />
+    </bag>
+
+
   </class>
 </hibernate-mapping>
