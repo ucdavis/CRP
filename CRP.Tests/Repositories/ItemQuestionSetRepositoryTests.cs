@@ -35,11 +35,11 @@ namespace CRP.Tests.Repositories
             rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
             if (counter != null && counter == 3)
             {
-                rtValue.Required = true;
+                rtValue.TransactionLevel = true;
             }
             else
             {
-                rtValue.Required = false;
+                rtValue.TransactionLevel = false;
             }
             rtValue.QuantityLevel = !rtValue.TransactionLevel;
             return rtValue;
@@ -52,7 +52,7 @@ namespace CRP.Tests.Repositories
         /// <returns></returns>
         protected override IQueryable<ItemQuestionSet> GetQuery(int numberAtEnd)
         {
-            return Repository.OfType<ItemQuestionSet>().Queryable.Where(a => a.Required);
+            return Repository.OfType<ItemQuestionSet>().Queryable.Where(a => a.TransactionLevel);
         }
 
         /// <summary>
@@ -77,14 +77,14 @@ namespace CRP.Tests.Repositories
             switch (action)
             {
                 case ARTAction.Compare:
-                    Assert.AreEqual(updateValue, entity.Required);
+                    Assert.AreEqual(updateValue, entity.TransactionLevel);
                     break;
                 case ARTAction.Restore:
-                    entity.Required = BoolRestoreValue;
+                    entity.TransactionLevel = BoolRestoreValue;
                     break;
                 case ARTAction.Update:
-                    BoolRestoreValue = entity.Required;
-                    entity.Required = updateValue;
+                    BoolRestoreValue = entity.TransactionLevel;
+                    entity.TransactionLevel = updateValue;
                     break;
             }
         }
@@ -454,7 +454,7 @@ namespace CRP.Tests.Repositories
         }
 
         #endregion Order Tests
-
+/*
         #region Required Tests
         [TestMethod]
         public void TestRequiredWhenTrueSaves()
@@ -500,7 +500,7 @@ namespace CRP.Tests.Repositories
             #endregion Assert
         }
         #endregion Required Tests
-
+*/
         #region TransactionLevelAndQuantityLevel Tests
 
         [TestMethod]
@@ -598,7 +598,7 @@ namespace CRP.Tests.Repositories
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]",
                 "[NHibernate.Validator.Constraints.ValidAttribute()]"
             }));
-            expectedFields.Add(new NameAndType("Required", "System.Boolean", new List<string>()));
+            //expectedFields.Add(new NameAndType("Required", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("TransactionLevel", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("TransactionLevelAndQuantityLevel", "System.Boolean", new List<string>
             {

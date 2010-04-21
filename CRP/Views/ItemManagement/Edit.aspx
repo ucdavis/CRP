@@ -111,7 +111,6 @@
                                                         <% } %>
                                                     <%});
                                         col.Add(a => a.QuestionSet.Name);
-                                        col.Add(a => a.Required);
                                         col.Add(a => a.QuestionSet.Questions.Count()).Title("# of Questions");
                                     })
                        .Render();
@@ -145,7 +144,6 @@
                                                         <% } %>
                                                     <%});
                                         col.Add(a => a.QuestionSet.Name);
-                                        col.Add(a => a.Required);
                                         col.Add(a => a.QuestionSet.Questions.Count()).Title("# of Questions");
                                     })
                        .Render();

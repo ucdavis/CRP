@@ -13,7 +13,6 @@
     <property name="TransactionLevel" column="TransactionLevel" />
     <property name="QuantityLevel" column="QuantityLevel" />
     <property name="Order" column="[Order]" />
-    <property name="Required" column="Required" />
     
   </class>
 </hibernate-mapping>

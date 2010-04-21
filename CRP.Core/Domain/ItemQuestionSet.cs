@@ -23,7 +23,6 @@ namespace CRP.Core.Domain
         {
             TransactionLevel = false;
             QuantityLevel = false;
-            Required = false;
         }
 
         [NotNull]
@@ -34,7 +33,6 @@ namespace CRP.Core.Domain
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
         public virtual int Order { get; set; }
-        public virtual bool Required { get; set; }
         
         public override bool IsValid()
         {
