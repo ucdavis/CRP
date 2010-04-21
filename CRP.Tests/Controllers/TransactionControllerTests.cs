@@ -382,7 +382,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-
+            
             #endregion Assert		
         }
         
@@ -549,10 +549,19 @@ namespace CRP.Tests.Controllers
             #region Arrange
             var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Checkout");
+            var index = 99;
+            if(controllerMethod.ElementAt(0).GetCustomAttributes(true).Count() == 0)
+            {
+                index = 0;
+            }
+            else if (controllerMethod.ElementAt(1).GetCustomAttributes(true).Count() == 0)
+            {
+                index = 1;
+            }
             #endregion Arrange
 
             #region Act
-            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            var allAttributes = controllerMethod.ElementAt(index).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
@@ -570,11 +579,21 @@ namespace CRP.Tests.Controllers
             #region Arrange
             var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Checkout");
+            var index = 99;
+            if(controllerMethod.ElementAt(0).GetCustomAttributes(true).Count() == 2)
+            {
+                index = 0;
+            }
+            else if (controllerMethod.ElementAt(1).GetCustomAttributes(true).Count() == 2)
+            {
+                index = 1;
+            }
+
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var expectedAttribute = controllerMethod.ElementAt(index).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(index).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
@@ -592,11 +611,20 @@ namespace CRP.Tests.Controllers
             #region Arrange
             var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Checkout");
+            var index = 99;
+            if (controllerMethod.ElementAt(0).GetCustomAttributes(true).Count() == 2)
+            {
+                index = 0;
+            }
+            else if (controllerMethod.ElementAt(1).GetCustomAttributes(true).Count() == 2)
+            {
+                index = 1;
+            }
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<CaptchaValidatorAttribute>();
-            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            var expectedAttribute = controllerMethod.ElementAt(index).GetCustomAttributes(true).OfType<CaptchaValidatorAttribute>();
+            var allAttributes = controllerMethod.ElementAt(index).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
