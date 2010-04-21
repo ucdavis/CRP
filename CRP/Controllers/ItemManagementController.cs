@@ -375,6 +375,7 @@ namespace CRP.Controllers
             item.Template = template;
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, template.ValidationResults()); //TODO: Review this extra call
 
             if (ModelState.IsValid)
             {
