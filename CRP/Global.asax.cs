@@ -6,7 +6,6 @@ using CRP.ModelBinder;
 using Microsoft.Practices.ServiceLocation;
 using MvcContrib.Castle;
 using UCDArch.Web.IoC;
-using UCDArch.Web.ModelBinder;
 using UCDArch.Web.Validator;
 
 namespace CRP
