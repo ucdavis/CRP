@@ -61,6 +61,8 @@ namespace CRP.Core.Domain
         /// </summary>
         public virtual string TransactionNumber { get; set; }
         public virtual OpenIdUser OpenIDUser { get; set; }
+
+        //CreatedBy has a max size of 50 characters in the database, but we don't really care as it should only use the Kerbors Id.
         public virtual string CreatedBy { get; set; }
         public virtual string CorrectionReason { get; set; }
 
