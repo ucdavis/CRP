@@ -57,6 +57,89 @@ namespace CRP.Tests.Core.Helpers
             }
         }
 
+        public static void FakeQuestionTypes(List<QuestionType> entity)
+        { 
+            /*
+                 IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Text Box' )
+                 begin
+	                 INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
+	                 VALUES ('Text Box', 0, 1)
+                 end
+                 
+                IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Text Area' )
+                begin
+	                 INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
+	                VALUES ('Text Area', 0, 0)
+                end
+                 
+                IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Boolean' )
+                begin
+	                INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
+	                VALUES ('Boolean', 0, 0)
+                end
+
+                IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Radio Buttons' )
+                begin
+	                INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
+	                VALUES ('Radio Buttons', 1, 0)
+                end
+                 
+                IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Checkbox List' )
+                begin
+	                INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
+	                VALUES ('Checkbox List', 1, 0)
+                end
+                 
+                IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Drop Down' )
+                begin
+	                INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
+	                VALUES ('Drop Down', 1, 0)
+                end
+
+                IF NOT EXISTS ( select * from QuestionTypes where [name] = 'Date' )
+                begin
+	                INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
+	                VALUES ('Date', 0, 1)
+                end
+             */
+            if(entity.Count != 0)
+            {
+                throw new ApplicationException("Didn't set up test correctly");
+            }
+            for (int i = 0; i < 7; i++)
+            {
+                entity.Add(CreateValidEntities.QuestionType(i + 1));
+                entity[i].SetIdTo(i + 1 );
+            }
+            entity[0].Name = "Text Box";
+            entity[0].HasOptions = false;
+            entity[0].ExtendedProperty = true;
+
+            entity[1].Name = "Text Area";
+            entity[1].HasOptions = false;
+            entity[1].ExtendedProperty = false;
+
+            entity[2].Name = "Boolean";
+            entity[2].HasOptions = false;
+            entity[2].ExtendedProperty = false;
+
+            entity[3].Name = "Radio Buttons";
+            entity[3].HasOptions = true;
+            entity[3].ExtendedProperty = false;
+
+            entity[4].Name = "Checkbox List";
+            entity[4].HasOptions = true;
+            entity[4].ExtendedProperty = false;
+
+            entity[5].Name = "Drop Down";
+            entity[5].HasOptions = true;
+            entity[5].ExtendedProperty = false;
+
+            entity[6].Name = "Date";
+            entity[6].HasOptions = false;
+            entity[6].ExtendedProperty = true;
+        }
+
         /// <summary>
         /// Fakes the validators.
         /// </summary>

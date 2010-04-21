@@ -49,6 +49,7 @@ namespace CRP.Tests.Controllers
         protected IRepository<Coupon> CouponRepository { get; set; }
         protected QuestionAnswerParameter[] TransactionAnswerParameters { get; set; }
         protected QuestionAnswerParameter[] QuantityAnswerParameters { get; set; }
+        protected List<QuestionType> QuestionTypes { get; set; }
 
         #region Init
         public TransactionControllerTests()
@@ -86,6 +87,7 @@ namespace CRP.Tests.Controllers
             //Controller.Repository.Expect(a => a.OfType<OpenIdUser>()).Return(OpenIdUserRepository).Repeat.Any();
 
             TransactionAnswerParameters = new QuestionAnswerParameter[1];
+            QuestionTypes = new List<QuestionType>();
         }
         /// <summary>
         /// Registers the routes.
@@ -933,6 +935,72 @@ namespace CRP.Tests.Controllers
             #endregion Assert		
         }
 
+        #region Checkout TextBox Tests
+
+        /// <summary>
+        /// Tests the checkout transaction answers text box.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersTextBox1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "Has Value";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;            
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            Questions[8].Name = "Text Box Test";
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("Has Value", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout transaction answers text box.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersTextBox2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = " ";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            Questions[8].Name = "Text Box Test";
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(" ", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+        //TODO: Rest of text bao with validators too.
+
+        #endregion Checkout TextBox Tests
 
         //TODO: add a transaction only question set to test the validators
 
@@ -940,6 +1008,9 @@ namespace CRP.Tests.Controllers
 
         #region Checkout Quantity Answers Tests
 
+        /// <summary>
+        /// Tests the checkout quantity answers.
+        /// </summary>
         [TestMethod]
         public void TestCheckoutQuantityAnswers()
         {
