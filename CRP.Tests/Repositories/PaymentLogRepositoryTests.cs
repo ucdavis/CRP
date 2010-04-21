@@ -1348,6 +1348,44 @@ namespace CRP.Tests.Repositories
         #endregion Valid Tests
         #endregion Notes Tests
 
+        #region TouchNet return values test
+
+        /// <summary>
+        /// Tests the populated tn values saves.
+        /// </summary>
+        [TestMethod]
+        public void TestPopulatedTnValuesSaves()
+        {
+            #region Arrange
+            var paymentLog = GetValid(9);
+            paymentLog.TnBillingAddress1 = "Address1";
+            paymentLog.TnBillingAddress2 = "Address2";
+            paymentLog.TnBillingCity = "City";
+            paymentLog.TnBillingState = "CA";
+            paymentLog.TnBillingZip = "95616";
+            paymentLog.TnCancelLink = "CancelLink";
+            paymentLog.TnErrorLink = "Error Link";
+            paymentLog.TnPaymentDate = "Oct 18, 2009";
+            paymentLog.TnStatus = "C";
+            paymentLog.TnSubmit = "Submit";
+            paymentLog.TnSuccessLink = "Success Link";
+            paymentLog.TnSysTrackingId = "Tracking";
+            paymentLog.TnUpaySiteId = "17";           
+            #endregion Arrange
+
+            #region Act
+            PaymentLogRepository.DbContext.BeginTransaction();
+            PaymentLogRepository.EnsurePersistent(paymentLog);
+            PaymentLogRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(paymentLog.IsTransient());
+            Assert.IsTrue(paymentLog.IsValid());
+            #endregion Assert		
+        }
+        #endregion TouchNet return values test
+
         #region CheckNumberRequired Tests
 
         #region Invalid Tests
@@ -2409,7 +2447,22 @@ namespace CRP.Tests.Repositories
             {
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Payee name required.\")]"
             }));
-            expectedFields.Add(new NameAndType("Notes", "System.String", new List<string>()));            
+            expectedFields.Add(new NameAndType("Notes", "System.String", new List<string>()));
+
+            expectedFields.Add(new NameAndType("TnBillingAddress1", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnBillingAddress2", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnBillingCity", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnBillingState", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnBillingZip", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnCancelLink", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnErrorLink", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnPaymentDate", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnStatus", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnSubmit", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnSuccessLink", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnSysTrackingId", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("TnUpaySiteId", "System.String", new List<string>()));
+
             expectedFields.Add(new NameAndType("Transaction", "CRP.Core.Domain.Transaction", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
