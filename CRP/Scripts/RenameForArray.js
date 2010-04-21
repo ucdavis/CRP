@@ -1,4 +1,4 @@
-﻿function RenameControls($container, namePrefix) {
+﻿function RenameControls($container, namePrefix, containerType) {
     var name = namePrefix;
 
     var masterIndex = 0;
@@ -6,8 +6,8 @@
     // go through each container passed
     $.each($container, function(cIndex, cItem) {
         // get the paragraph tags that each contain a question
-        var spans = $(cItem).find("span");
-
+        var spans = $(cItem).find(containerType);
+        
         // iterate through the paragraphs
         $.each(spans, function(index, item) {
             // construct the new name
@@ -32,5 +32,5 @@
 
             masterIndex++;
         }); // end of paragraph     
-    });       // end of container
+    });        // end of container
 }

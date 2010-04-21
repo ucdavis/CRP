@@ -70,13 +70,11 @@ namespace CRP.Controllers
             {
                 if (crp.Selected)
                 {
-                    var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(crp.QuestionSetId);
                     var question = Repository.OfType<Question>().GetNullableByID(crp.QuestionId);
 
                     ItemReportColumn itemReportColumn = crp.Property ? new ItemReportColumn(crp.PropertyName, report) 
                         : new ItemReportColumn(question.Name, report);
 
-                    itemReportColumn.QuestionSet = questionSet;
                     itemReportColumn.Transaction = crp.Transaction;
                     itemReportColumn.Quantity = crp.Quantity;
                     itemReportColumn.Property = crp.Property;
@@ -114,7 +112,6 @@ namespace CRP.Controllers
         public bool Quantity { get; set; }
         public bool Property { get; set; }
         public int QuestionId { get; set; }
-        public int QuestionSetId { get; set; }
         public bool Selected { get; set; }
         public string PropertyName { get; set; }
     }

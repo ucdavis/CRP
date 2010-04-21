@@ -13,11 +13,36 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            // rename the controls for input as an array
-            RenameControls($("fieldset.indexedControlContainer"), "createReportParameters");
             // change the look of the checkboxes
             $("input[type='CheckBox']").CaesMutioptionControl();
+
+            $("div.button").live("click", function() {
+                CreateRow($(this).parent(), this);
+
+                RenameControls($("div#selectedColumns"), "createReportParameters", "tr.dataRow");
+            });
         });
+
+        function CreateRow(span, button) {
+
+            if ($(button).hasClass("selected")) {
+                var tbody = $("div#selectedColumns").find("tbody");
+
+                var tr = $("<tr>").addClass("dataRow").attr("id", $(span).find("input#_QuestionId").val());
+
+                var cell1 = $("<td>");
+                cell1.append($(span).find("input.indexedControl[type='hidden']").clone());
+
+                tr.append(cell1);
+                tr.append($("<td>").html($(span).find("label.indexedControl").html()));
+                tr.append($("<td>").html($("<input>").attr("type", "textbox").attr("id", "_Format").attr("name", "_Format")));
+
+                tbody.append(tr);
+            }
+            else {
+                $("tr#" + $(span).find("input#_QuestionId").val()).remove();
+            }
+        }
     </script>
 </asp:Content>
 
@@ -46,6 +71,27 @@
             
         </fieldset>
 
+        <fieldset>
+            <legend>Selected Columns</legend>
+            
+            <div id="selectedColumns" class="t-widget t-grid">
+                <table cellspacing=0>
+                    <thead>
+                        <tr>
+                            <td class="t-header"></td>
+                            <td class="t-header">Field Name</td>
+                            <td class="t-header">Format</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+            
+        </fieldset>
+
+
         <fieldset class="indexedControlContainer">
             <legend>Transaction Level</legend>
             
@@ -57,7 +103,6 @@
                         <label for="Selected" class="indexedControl"><%= Html.Encode(q.Name) %></label>
                         <%= Html.Hidden("_Quantity", true, new { @class = "indexedControl" })%>
                         <%= Html.Hidden("_QuestionId", q.Id, new { @class = "indexedControl" })%>
-                        <%= Html.Hidden("_QuestionSetId", qs.Id, new { @class = "indexedControl" })%>
                         </span>
                     <% } %>
                     
@@ -76,7 +121,6 @@
                         <label for="Selected" class="indexedControl"><%= Html.Encode(q.Name) %></label>
                         <%= Html.Hidden("_Quantity", true, new { @class = "indexedControl" })%>
                         <%= Html.Hidden("_QuestionId", q.Id, new { @class = "indexedControl" })%>
-                        <%= Html.Hidden("_QuestionSetId", qs.Id, new { @class = "indexedControl" })%>
                         </span>
                     <% } %>
                     

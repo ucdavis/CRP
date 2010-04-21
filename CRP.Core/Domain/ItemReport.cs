@@ -85,7 +85,5 @@ namespace CRP.Core.Domain
         public virtual bool Quantity { get; set; }
         public virtual bool Transaction { get; set; }
         public virtual bool Property { get; set; }
-
-        public virtual QuestionSet QuestionSet { get; set; }
     }
 }
