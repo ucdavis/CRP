@@ -113,6 +113,7 @@
     <Compile Include="Controllers\ItemManagementControllerTests.cs" />
     <Compile Include="Controllers\QuestionControllerTests.cs" />
     <Compile Include="Controllers\QuestionSetControllerTests.cs" />
+    <Compile Include="Controllers\ReportControllerTests.cs" />
     <Compile Include="Controllers\TagControllerTests.cs" />
     <Compile Include="Controllers\TransactionControllerTests.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />

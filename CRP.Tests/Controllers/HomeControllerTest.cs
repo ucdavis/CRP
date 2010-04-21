@@ -8,14 +8,18 @@ namespace CRP.Tests.Controllers
     [TestClass]
     public class HomeControllerTest : SuperController
     {
+
+        /// <summary>
+        /// Tests the index.
+        /// </summary>
         [TestMethod]
-        public void Index()
+        public void TestIndex()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            var controller = new HomeController();
 
             // Act
-            ViewResult result = controller.Index() as ViewResult;
+            var result = controller.Index() as ViewResult;
 
             // Assert
             //ViewDataDictionary viewData = result.ViewData;
@@ -24,14 +28,17 @@ namespace CRP.Tests.Controllers
 
         }
 
+        /// <summary>
+        /// Tests the about.
+        /// </summary>
         [TestMethod]
-        public void About()
+        public void TestAbout()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            var controller = new HomeController();
 
             // Act
-            ViewResult result = controller.About() as ViewResult;
+            var result = controller.About() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);

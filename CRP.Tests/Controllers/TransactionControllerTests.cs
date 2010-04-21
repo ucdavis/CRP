@@ -1,5 +1,4 @@
 ﻿using CRP.Controllers;
-using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
