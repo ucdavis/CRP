@@ -304,6 +304,9 @@ namespace CRP.Tests.Controllers
         }
 
 
+        /// <summary>
+        /// Tests the create item type with null extended properties (Parameter) saves.
+        /// </summary>
         [TestMethod]
         public void TestCreateItemTypeWithNullExtendedPropertiesSaves()
         {
@@ -407,6 +410,8 @@ namespace CRP.Tests.Controllers
             ItemTypeRepository.AssertWasNotCalled(a => a.EnsurePersistent(itemTypeToUpdate));
             Assert.AreNotEqual("Item Type has been saved successfully.", Controller.Message);
             Assert.IsFalse(Controller.ModelState.IsValid);
+            Controller.ModelState.AssertErrorsAre("The new name already exists with a different item type.");
+            
         }
 
         /// <summary>
@@ -505,6 +510,33 @@ namespace CRP.Tests.Controllers
             Assert.IsTrue(ItemTypes[0].IsActive);
             ItemTypeRepository.AssertWasCalled(a => a.EnsurePersistent(ItemTypes[0]));
             Assert.AreEqual("Item Type has been activated.", Controller.Message);
+        }
+
+        /// <summary>
+        /// Tests the toggle when data invalid redirects to list and does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestToggleWhenDataInvalidRedirectsToListAndDoesNotSave()
+        {
+            #region Arrange
+            FakeItemTypes(1);
+            ItemTypes[0].Name = " "; //Should never happen, but good to test for
+            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Any();
+            ItemTypes[0].IsActive = false;
+            #endregion Arrange
+
+            #region Act
+            Controller.ToggleActive(1)
+                .AssertActionRedirect()
+                .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
+            #endregion Act
+
+            #region Assert
+            ItemTypeRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<ItemType>.Is.Anything));
+            Assert.AreNotEqual("Item Type has been activated.", Controller.Message);
+            Assert.AreNotEqual("Item Type has been deactivated.", Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Name: may not be null or empty");
+            #endregion Assert		
         }
         #endregion ToggleActive Tests
 
