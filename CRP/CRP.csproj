@@ -133,9 +133,11 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
+    <Compile Include="Controllers\Helpers\Access.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
     <Compile Include="Controllers\Helpers\CustomGridBuilder.cs" />
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
+    <Compile Include="Controllers\Helpers\RoleNames.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
@@ -151,10 +153,55 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ModelBinder\CustomModelBinder.cs" />
+    <Compile Include="App_GlobalResources\NotificationMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NotificationMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteConfigurator.asax.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\2009.3.1103.0\Black\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Black\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Default\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Default\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Forest\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Forest\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Hay\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Hay\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Office2007\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Office2007\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Outlook\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Outlook\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Simple\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Simple\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Sitefinity\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Sitefinity\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Sunset\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Sunset\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\telerik.black.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.common.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.default.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.forest.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.hay.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.office2007.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.outlook.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.simple.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.sitefinity.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.sunset.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.telerik.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.vista.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.web20.min.css" />
+    <Content Include="Content\2009.3.1103.0\telerik.webblue.min.css" />
+    <Content Include="Content\2009.3.1103.0\Telerik\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Telerik\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Vista\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Vista\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\Web20\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\Web20\sprite.png" />
+    <Content Include="Content\2009.3.1103.0\WebBlue\loading.gif" />
+    <Content Include="Content\2009.3.1103.0\WebBlue\sprite.png" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\minus.png" />
@@ -193,6 +240,12 @@
       <Project>{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}</Project>
       <Name>CRP.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App_GlobalResources\NotificationMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>NotificationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

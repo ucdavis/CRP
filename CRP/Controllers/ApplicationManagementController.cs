@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
@@ -6,6 +7,7 @@ using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 using MvcContrib;
+using CRP.App_GlobalResources;
 
 namespace CRP.Controllers
 {
@@ -28,7 +30,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult ListItemTypes()
         {
-            return View(Repository.OfType<ItemType>().GetAll());
+            return View(Repository.OfType<ItemType>().Queryable);
         }
 
         /// <summary>
@@ -84,7 +86,7 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<ItemType>().EnsurePersistent(itemType);
-                Message = "Item Type has been saved.";
+                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Item Type");
                 return this.RedirectToAction(a => a.ListItemTypes());
             }
             else
@@ -112,6 +114,36 @@ namespace CRP.Controllers
             else
             {
                 return this.RedirectToAction(a => a.ListItemTypes());
+            }
+        }
+
+        /// <summary>
+        /// POST: /ApplicationManagement/EditItemType
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Saves the name and the is active flag
+        /// PreCondition:
+        ///     The item type exists
+        /// PostCondition:
+        ///     The item is updated
+        /// </remarks>
+        /// <param name="itemType"></param>
+        /// <returns></returns>
+        [AcceptPost]
+        public ActionResult EditItemType([Bind(Exclude="Id")]ItemType itemType)
+        {
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<ItemType>().EnsurePersistent(itemType);
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item Type");
+                return View(itemType);
+            }
+            else
+            {
+                return View(itemType);
             }
         }
 

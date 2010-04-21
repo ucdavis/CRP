@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -5,6 +6,7 @@ using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
+using CRP.App_GlobalResources;
 
 namespace CRP.Controllers
 {
@@ -44,7 +46,6 @@ namespace CRP.Controllers
         /// Description:
         ///     Creates a new extended property and associates it to the item type
         /// PreCondition:
-        ///     Item Type does not have any existing items associated with this type
         ///     Item Type does not already have extended property with same name
         /// PostCondition:
         ///     Extended property created and associated
@@ -64,10 +65,19 @@ namespace CRP.Controllers
 
                 MvcValidationAdapter.TransferValidationMessagesTo(ModelState, extendedProperty.ValidationResults());
 
+                // check to make sure it doesn't already have an extended property with the same name already
+                foreach(var ep in itemType.ExtendedProperties)
+                {
+                    if (ep.Name == extendedProperty.Name)
+                    {
+                        ModelState.AddModelError("Name", "Item type already has extended property with the same name.");
+                    }
+                }
+
                 if (ModelState.IsValid)
                 {
                     Repository.OfType<ExtendedProperty>().EnsurePersistent(extendedProperty);
-                    Message = "Extended property was added.";
+                    Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Extended property");
                     return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
                 }
                 else
@@ -107,9 +117,20 @@ namespace CRP.Controllers
             
             var itemTypeId = extendedProperty.ItemType.Id;
 
-            Repository.OfType<ExtendedProperty>().Remove(extendedProperty);
-            Message = "Extended property has been removed.";
-            return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
+            if (extendedProperty.ItemType.Items.Count <= 0)
+            {
+                Repository.OfType<ExtendedProperty>().Remove(extendedProperty);
+                Message = NotificationMessages.STR_ObjectRemoved.Replace(NotificationMessages.ObjectType,
+                                                                         "Extended property");
+
+                return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));    
+            }
+            else
+            {
+                Message =
+                    "Extended property cannot be deleted, becuase there is already an item associated with the item type.";
+                return this.RedirectToAction<ApplicationManagementController>(a => a.EditItemType(itemTypeId));
+            }
         }
     }
 }

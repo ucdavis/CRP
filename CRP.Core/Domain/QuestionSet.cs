@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
 
@@ -34,6 +35,7 @@ namespace CRP.Core.Domain
         public virtual bool UserReusable { get; set; }
         public virtual School School { get; set; }
         public virtual User User { get; set; }
+        public virtual bool IsActive { get; set; }
 
         //public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
@@ -68,5 +70,6 @@ namespace CRP.Core.Domain
 
             return base.IsValid() && flag;
         }
+
     }
 }

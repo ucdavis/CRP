@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<CRP.Core.Domain.ItemType>>" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IQueryable<CRP.Core.Domain.ItemType>>" %>
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -10,7 +10,6 @@
     <h2>Item Types</h2>
 
     <p>
-        <%--<%= Html.ActionLink("Create New", "Create") %>--%>
         <%= Html.ActionLink<ApplicationManagementController>(a => a.CreateItemType(), "Create") %>
     </p>
 

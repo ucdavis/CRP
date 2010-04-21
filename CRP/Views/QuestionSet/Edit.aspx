@@ -17,8 +17,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <!-- //TODO: Create a link back based on the conditions of the question set -->
-
     <%= 
         Model.ItemType != null ?
             Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(Model.ItemType.Id), "Back to Item Type") : (
@@ -40,19 +38,10 @@
                 <%= Html.TextBox("QuestionSet.Name") %>
             </p>
             <p>
-                <label for="SystemReusable">System Reusable:</label>
-                <%= Html.CheckBox("QuestionSet.SystemReusable") %>
+                <label for="IsActive">Is Active:</label>
+                <%= Html.CheckBox("QuestionSet.IsActive") %>
             </p>
-            <p>
-                <label for="CollegeReusable">College Reusable:</label>
-                <%= Html.CheckBox("QuestionSet.CollegeReusable")%>
-                
-                <%= Model.QuestionSet.CollegeReusable ? Html.Encode(Model.QuestionSet.School.LongDescription) : Html.Encode(string.Empty) %>
-            </p>    
-            <p>
-                <label for="UserReusable">User Reusable:</label>
-                <%= Html.CheckBox("QuestionSet.UserReusable")%>
-            </p>
+
                     
             <p>
                 <button type="submit">Save</button>

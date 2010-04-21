@@ -34,6 +34,7 @@ namespace CRP.Core.Domain
 
         public virtual ICollection<ExtendedProperty> ExtendedProperties { get; set; }
         public virtual ICollection<QuestionSet> QuestionSets { get; set; }
+        public virtual ICollection<Item> Items { get; set; }
 
         public virtual void AddExtendedProperty(ExtendedProperty extendedProperty)
         {

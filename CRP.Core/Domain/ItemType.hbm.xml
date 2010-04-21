@@ -20,6 +20,11 @@
       <key column="ItemTypeId" />
       <many-to-many column="QuestionSetId" class="CRP.Core.Domain.QuestionSet, CRP.Core" />
     </bag>
+
+    <bag name="Items" table="Items" cascade="none" inverse="true">
+      <key column="ItemTypeId"/>
+      <one-to-many class="CRP.Core.Domain.Item, CRP.Core"/>
+    </bag>
     
   </class>
 </hibernate-mapping>

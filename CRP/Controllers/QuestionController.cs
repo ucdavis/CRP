@@ -1,5 +1,7 @@
 using System;
 using System.Web.Mvc;
+using CRP.App_GlobalResources;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
@@ -27,10 +29,8 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Create(int questionSetId)
         {
-            //TODO: Check to make sure the user is allowed to edit the QuestionSet
-
             var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(questionSetId);
-            if (questionSet == null)
+            if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
                 // go back to the question set edit view
                 return this.RedirectToAction<QuestionSetController>(a => a.List());
@@ -64,10 +64,8 @@ namespace CRP.Controllers
         [AcceptPost]
         public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions)
         {
-            //TODO: Check to make sure the user is allowed to edit the QuestionSet
-
             var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(questionSetId);
-            if (questionSet == null)
+            if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
                 // go back to the question set edit view
                 return this.RedirectToAction<QuestionSetController>(a => a.List());
@@ -108,7 +106,7 @@ namespace CRP.Controllers
             {
                 // valid redirect to edit
                 Repository.OfType<Question>().EnsurePersistent(question);
-                Message = "Question has been created.";
+                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question");
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
             }
             else
@@ -141,10 +139,9 @@ namespace CRP.Controllers
         [AcceptPost]
         public ActionResult Delete(int id)
         {
-            //TODO: Check to make sure the user is allowed to edit the QuestionSet
-
             var question = Repository.OfType<Question>().GetNullableByID(id);
-            if (question == null)
+
+            if (question == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, question.QuestionSet))
             {
                 return this.RedirectToAction<QuestionSetController>(a => a.List());
             }
@@ -154,13 +151,13 @@ namespace CRP.Controllers
             // Check to make sure the question set hasn't been used yet
             if (question.QuestionSet.Items.Count > 0)
             {
-                Message = "Question cannot be added to the question set becuase it is already being used by an item.";
+                Message = "Question cannot be deleted from the question set becuase it is already being used by an item.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
             }
 
             // delete the object
             Repository.OfType<Question>().Remove(question);
-            Message = "Question was deleted.";
+            Message = NotificationMessages.STR_ObjectRemoved.Replace(NotificationMessages.ObjectType, "Question");
             return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
         }
     }

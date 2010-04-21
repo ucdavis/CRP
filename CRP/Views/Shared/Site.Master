@@ -1,3 +1,4 @@
+<%@ Import Namespace="Telerik.Web.Mvc.UI"%>
 <%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -5,6 +6,15 @@
 <head runat="server">
     <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+    
+    <%--//TODO: Remove (if you want) in place of custom style sheets--%>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-lightness/jquery-ui.css" rel="Stylesheet" type="text/css" media="screen" />
+    <%= Html.Telerik().StyleSheetRegistrar()
+                     .DefaultGroup(group => group.Add("telerik.common.css")
+                                                 .Add("telerik.vista.css")
+                                                 .Combined(false)
+                                  )
+                     %>
     
     <script src="https://www.google.com/jsapi" type="text/javascript"></script>
     <script type="text/javascript">
@@ -41,6 +51,9 @@
         </div>
 
         <div id="main">
+            
+            <h3><span style="color:Blue;"><%= Html.Encode(TempData["Message"]) %></span></h3>
+        
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
 
             <div id="footer">

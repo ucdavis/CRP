@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using CRP.App_GlobalResources;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
@@ -45,10 +47,8 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Edit(int id)
         {
-            //TODO: Check to make sure the user is allowed to edit the QuestionSet
-            
             var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
-            if (questionSet == null)
+            if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
                 return this.RedirectToAction(a => a.List());
             }
@@ -76,19 +76,29 @@ namespace CRP.Controllers
         /// <summary>
         /// POST: /QuestionSet/Edit/
         /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Edits a question set.
+        /// PreCondition:
+        /// PostCondition:
+        /// </remarks>
         /// <param name="questionSet"></param>
         /// <returns></returns>
         [AcceptPost]
         public ActionResult Edit(QuestionSet questionSet)
         {
-            //TODO: Check to make sure the user is allowed to edit the QuestionSet
+            // check access
+            if (!Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
+            {
+                return this.RedirectToAction(a => a.List());
+            }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
 
             if (ModelState.IsValid)
             {
                 Repository.OfType<QuestionSet>().EnsurePersistent(questionSet);
-                Message = "Question set has been updated.";
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Question Set");
             }
 
             var viewModel = QuestionSetViewModel.Create(Repository);
@@ -159,6 +169,7 @@ namespace CRP.Controllers
                         ts.CommitTransaction();
                     }
 
+                    Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question Set");
                     return this.RedirectToAction(a => a.Edit(questionSet.Id));
                 }
                 else if (itemTypeId.HasValue)
@@ -172,6 +183,7 @@ namespace CRP.Controllers
                         ts.CommitTransaction();
                     }
 
+                    Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question Set");
                     return this.RedirectToAction(a => a.Edit(questionSet.Id));
                 }
                 else
@@ -185,6 +197,7 @@ namespace CRP.Controllers
                             ts.CommitTransaction();
                         }
 
+                        Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question Set");
                         return this.RedirectToAction(a => a.Edit(questionSet.Id));
                     }
                     else
@@ -263,7 +276,7 @@ namespace CRP.Controllers
             {
                 itemType.AddQuestionSet(questionSet);
                 Repository.OfType<ItemType>().EnsurePersistent(itemType);
-                Message = "Question set has been added.";
+                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question Set");
             }
             else
             {

@@ -14,7 +14,8 @@
     <property name="UserReusable" column="UserReusable" />
     <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join"  />
     <many-to-one name="User" class="CRP.Core.Domain.User, CRP.Core" column="UserId" cascade="none" fetch="join" />
-
+    <property name="IsActive" column="IsActive"/>
+    
     <bag name="Questions" table="Questions" cascade="all-delete-orphan" order-by="[Order]" inverse="true">
       <key column="QuestionSetId" />
       <one-to-many class="CRP.Core.Domain.Question, CRP.Core" />
