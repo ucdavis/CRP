@@ -101,6 +101,7 @@ Your Transaction number is: {TransactionNumber}
             MailMessage message = new MailMessage("automatedemail@caes.ucdavis.edu", emailAddress,
                                                   subject,
                                                   body);
+            message.IsBodyHtml = true;
             SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
             client.Send(message);
         }
