@@ -147,6 +147,7 @@
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
+    <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\DisplayProfileController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
     <Compile Include="Controllers\Helpers\Access.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\CouponViewModel.cs" />
     <Compile Include="Controllers\ViewModels\DisplayProfileViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ExtendedPropertyViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemDetailViewModel.cs" />
@@ -545,6 +547,7 @@
       <LastGenOutput>QuestionTypeText.Designer.cs</LastGenOutput>
     </Content>
     <Content Include="Images\logo.gif" />
+    <Content Include="Views\Coupon\Create.aspx" />
     <Content Include="Views\Shared\PageHeader.ascx" />
     <Content Include="Views\Shared\QuestionForm.ascx" />
   </ItemGroup>

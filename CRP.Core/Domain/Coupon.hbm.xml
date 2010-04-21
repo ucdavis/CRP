@@ -16,6 +16,7 @@
     <property name="Used" column="Used" />
     <property name="DiscountAmount" column="DiscountAmount" />
     <property name="UserId" column="UserId" />
+    <property name="IsActive" column="IsActive" />
     
   </class>
 </hibernate-mapping>

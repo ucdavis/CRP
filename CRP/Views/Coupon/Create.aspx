@@ -1,0 +1,65 @@
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.CouponViewModel>" %>
+<%@ Import Namespace="Resources"%>
+<%@ Import Namespace="CRP.Controllers"%>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
+	
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+
+    <h2>Coupon for <%= Html.Encode(Model.Item.Name) %></h2>
+
+    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
+    
+    <% using(Html.BeginForm()) { %>
+    
+        <%= Html.AntiForgeryToken() %>
+    
+        <%= Html.ClientSideValidation<Coupon>("") %>
+    
+        <fieldset>
+            <legend>Fields</legend>
+            
+            <p>
+                <label for="Unlimited">Unlimited Usage: </label>
+                <%= Html.CheckBox("Unlimited", Model.Coupon != null ? Model.Coupon.Unlimited : false) %>
+                <%= Html.ValidationMessage("Unlimited") %>
+            </p>  
+            <p>
+                <label for="Expiration">Expiration Date: </label>
+                <%= Html.TextBox("Expiration", Model.Coupon == null ? string.Empty : (Model.Coupon.Expiration.HasValue ? Model.Coupon.Expiration.Value.ToString("D") : string.Empty)) %>
+                <%= Html.ValidationMessage("Expiration") %>
+            </p>
+            <p>
+                <label for="Email">E-Mail:</label>
+                <%= Html.TextBox("Email", Model.Coupon != null ? Model.Coupon.Email : string.Empty) %>
+                <%= Html.ValidationMessage("Email") %>
+            </p>
+            <p>
+                <label for="DiscountAmount">Discount Amount:</label>
+                <%= Html.TextBox("DiscountAmount", Model.Coupon != null ? string.Format("{0:0.00}", Model.Coupon.DiscountAmount) : string.Empty) %>
+                <%= Html.ValidationMessage("DiscountAmount") %>
+            </p>
+            
+            <p>
+                <input type="submit" value="Create" />
+            </p>
+        </fieldset>
+    <% } %>
+    
+    <a href="<%= Url.Action("Edit", "ItemManagement", new {id=Model.Item.Id}) %>#<%= StaticValues.Tab_Coupons %>">Back to Item</a>
+    
+</asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("input#Expiration").datepicker();
+        });
+    </script>
+</asp:Content>
+
+<asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
+    <% Html.RenderPartial("~/Views/Shared/PageHeader.ascx", new DisplayProfile()); %>
+</asp:Content>

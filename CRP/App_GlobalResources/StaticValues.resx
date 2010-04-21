@@ -125,4 +125,24 @@
     <value>CreditCard</value>
     <comment>Used in /Transaction/Checkout/</comment>
   </data>
+  <data name="Tab_Coupons" xml:space="preserve">
+    <value>Coupons</value>
+    <comment>Tab id used in /ItemManagement/Edit/</comment>
+  </data>
+  <data name="Tab_Details" xml:space="preserve">
+    <value>Details</value>
+    <comment>Tab id used in /ItemManagement/Edit/</comment>
+  </data>
+  <data name="Tab_Editors" xml:space="preserve">
+    <value>Editors</value>
+    <comment>Tab id used in /ItemManagement/Edit/</comment>
+  </data>
+  <data name="Tab_Questions" xml:space="preserve">
+    <value>Questions</value>
+    <comment>Tab id used in /ItemManagement/Edit/</comment>
+  </data>
+  <data name="Tab_Templates" xml:space="preserve">
+    <value>Templates</value>
+    <comment>Tab id used in /ItemManagement/Edit/</comment>
+  </data>
 </root>

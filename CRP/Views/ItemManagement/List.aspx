@@ -30,7 +30,7 @@
                             col.Add(a => a.Quantity);
                             col.Add(a =>
                                         {%>
-                                            <%= Html.Encode(a.Transactions.Sum(b => b.Quantity)) %>
+                                            <%= Html.Encode(a.Transactions.Where(b=>!b.Donation).Sum(b => b.Quantity)) %>
                                         <%}).Title("# Sold");
                             col.Add(a => a.Expiration).Format("{0:d}");
                             col.Add(a => a.DateCreated);

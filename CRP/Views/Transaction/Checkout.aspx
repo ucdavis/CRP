@@ -39,7 +39,7 @@
                     <td></td>
                     <td>Donation</td>
                     <td></td>
-                    <td>$ <%= Html.TextBox("donation", string.Empty, new {@style="width:40px;", @class="donationAmount"}) %></td>
+                    <td>$ <%= Html.TextBox("donation", "0.00", new {@style="width:40px;", @class="donationAmount"}) %></td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -147,7 +147,20 @@
             });
 
             // update the coupon values and validate the coupon
-            $("input#Coupon").blur(function(event) { });
+            $("input#Coupon").blur(function(event) {
+                var url = '<%= Url.Action("Validate", "Coupon") %>';//<%= Html.Encode(Model.Item.Id) %>';
+                var couponCode = $("input#Coupon").val();
+                $.getJSON(url, {itemId: <%= Html.Encode(Model.Item.Id) %>, couponCode: couponCode}, function(result) { 
+                    if (isNaN(result))
+                    {
+                        alert("invalid code");
+                    } 
+                    else{
+                        $("span." + class_discounterPerItemAmount).html(parseFloat(result).toFixed(2));
+                        CalculateTotal();
+                    }
+                });
+            });
 
 
             // initialize the question names

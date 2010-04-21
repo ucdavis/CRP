@@ -77,5 +77,50 @@ namespace Resources {
                 return ResourceManager.GetString("CreditCard", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coupons.
+        /// </summary>
+        internal static string Tab_Coupons {
+            get {
+                return ResourceManager.GetString("Tab_Coupons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        internal static string Tab_Details {
+            get {
+                return ResourceManager.GetString("Tab_Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editors.
+        /// </summary>
+        internal static string Tab_Editors {
+            get {
+                return ResourceManager.GetString("Tab_Editors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions.
+        /// </summary>
+        internal static string Tab_Questions {
+            get {
+                return ResourceManager.GetString("Tab_Questions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Templates.
+        /// </summary>
+        internal static string Tab_Templates {
+            get {
+                return ResourceManager.GetString("Tab_Templates", resourceCulture);
+            }
+        }
     }
 }

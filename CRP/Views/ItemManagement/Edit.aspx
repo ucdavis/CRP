@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ItemViewModel>" %>
+<%@ Import Namespace="Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -25,13 +26,14 @@
     <div id="tabs">
     
         <ul>
-            <li><a href="#tabs-1">Item Details</a></li>
-            <li><a href="#tabs-2">Editors</a></li>
-            <li><a href="#tabs-3">Questions</a></li>
-            <li><a href="#tabs-4">Confirmation Template</a></li>
+            <li><a href="#<%= StaticValues.Tab_Details %>">Item Details</a></li>
+            <li><a href="#<%= StaticValues.Tab_Editors %>">Editors</a></li>
+            <li><a href="#<%= StaticValues.Tab_Questions %>">Questions</a></li>
+            <li><a href="#<%= StaticValues.Tab_Templates %>">Confirmation Template</a></li>
+            <li><a href="#<%= StaticValues.Tab_Coupons %>">Coupons</a></li>
         </ul>
     
-        <div id="tabs-1">
+        <div id="<%= StaticValues.Tab_Details %>">
         
             <% using (Html.BeginForm("Edit", "ItemManagement", FormMethod.Post, new { @enctype = "multipart/form-data" }))
                {%>
@@ -42,7 +44,7 @@
             <% }%>
         
         </div>
-        <div id="tabs-2">
+        <div id="<%= StaticValues.Tab_Editors %>">
         
             <% using(Html.BeginForm("AddEditor", "ItemManagement", FormMethod.Post)){%>
                 <%= Html.AntiForgeryToken() %>
@@ -75,7 +77,7 @@
                                 })
                    .Render(); %>
         </div>
-        <div id="tabs-3">
+        <div id="<%= StaticValues.Tab_Questions %>">
             <fieldset>
                 <legend>Transaction</legend>
                 
@@ -135,12 +137,41 @@
                 
             </fieldset>
         </div>
-        <div id="tabs-4">
+        <div id="<%= StaticValues.Tab_Templates %>">
         
             <p>
                 <%= Html.TextArea("BodyText", Model.Item.Template != null ? Model.Item.Template.Text : string.Empty) %>
             </p>
         
+        </div>
+        <div id="<%= StaticValues.Tab_Coupons %>">
+            
+            <p>
+                <%= Html.ActionLink<CouponController>(a => a.Create(Model.Item.Id), "Generate Coupon") %>
+            </p>
+            
+            <% Html.Grid(Model.Item.Coupons)
+                   .Transactional()
+                   .Name("Coupons")
+                   .PrefixUrlParameters(false)
+                   .Columns(col =>
+                                {
+                                    col.Add(a =>
+                                                {%>
+                                                    
+                                                    Deactivate
+                                                
+                                                <%});
+                                    col.Add(a => a.Code);
+                                    col.Add(a => a.DiscountAmount.ToString("C")).Title("Discount Amount");
+                                    col.Add(a => a.Email);
+                                    col.Add(a => a.Expiration.HasValue ? a.Expiration.Value.ToString("d"): string.Empty).Title("Expiration");
+                                    col.Add(a => a.Used);
+                                    col.Add(a => a.Unlimited);
+                                })
+                   .Render();
+                    %>
+            
         </div>
     
     </div>

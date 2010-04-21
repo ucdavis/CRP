@@ -17,12 +17,15 @@ namespace CRP.Core.Domain
             Code = code;
             Item = item;
             UserId = userId;
+
+            SetDefaults();
         }
 
         private void SetDefaults()
         {
             Unlimited = false;
-            Used = false;   
+            Used = false;
+            IsActive = true;
         }
 
         [Required]
@@ -32,11 +35,17 @@ namespace CRP.Core.Domain
         public virtual Item Item { get; set; }
         public virtual bool Unlimited { get; set; }
         public virtual DateTime? Expiration { get; set; }
+        [Length(100)]
         public virtual string Email { get; set; }
         public virtual bool Used { get; set; }
         public virtual decimal DiscountAmount { get; set; }
+        /// <summary>
+        /// User login id of the user creating the coupon
+        /// </summary>
         [Required]
         [Length(50)]
         public virtual string UserId { get; set; }
+
+        public virtual bool IsActive { get; set; }
     }
 }
