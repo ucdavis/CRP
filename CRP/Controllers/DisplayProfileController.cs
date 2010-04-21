@@ -11,6 +11,7 @@ using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 using MvcContrib;
+using System.Linq;
 
 namespace CRP.Controllers
 {
@@ -79,10 +80,15 @@ namespace CRP.Controllers
             {
                 displayProfile.SchoolMaster = true;
             }
-            //if(displayProfile.Unit != null)
-            //{
-            //    //TODO: Do test to make sure a duplicate is not being created. (need for edit too)
-            //}
+            if (displayProfile.Unit != null)
+            {
+                //TODO: Do test to make sure a duplicate is not being created.
+
+                if(Repository.OfType<DisplayProfile>().Queryable.Where(a => a.Unit == displayProfile.Unit).Any())
+                {
+                    ModelState.AddModelError("Unit","Display Profile has already been created for this unit.");
+                }
+            }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, displayProfile.ValidationResults());
 
