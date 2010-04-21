@@ -53,7 +53,7 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="questionSetId">Question set Id</param>
         /// <param name="question"></param>
-        /// <param name="options"></param>
+        /// <param name="questionOptions"></param>
         /// <returns></returns>
         [AcceptPost]
         public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions)//, string[] validators)
@@ -112,7 +112,7 @@ namespace CRP.Controllers
             // check to make sure it isn't the system's default contact information set
             if (questionSet.Name == StaticValues.QuestionSet_ContactInformation && questionSet.SystemReusable)
             {
-                ModelState.AddModelError("Question Set", "This is a sytem default question set and cannot be modified.");
+                ModelState.AddModelError("Question Set", "This is a system default question set and cannot be modified.");
             }
 
             //Moved to Questions.cs domain validation
@@ -141,7 +141,7 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// POST: /QuestionSet/Delete/{id}
+        /// POST: /Question/Delete/{id}
         /// </summary>
         /// <remarks>
         /// Assumption:

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
@@ -10,6 +9,7 @@ using CRP.Controllers;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -44,6 +44,8 @@ namespace CRP.Tests.Controllers
         protected List<Item> Items { get; set; }
         protected List<Editor> Editors { get; set; }
         protected List<ItemQuestionSet> ItemQuestionSets { get; set; }
+        protected List<Question> Questions { get; set; }
+        protected IRepository<Question> QuestionRepository { get; set; }
 
         #region Init
         public QuestionControllerTests()
@@ -69,6 +71,10 @@ namespace CRP.Tests.Controllers
             Items = new List<Item>();
             Units = new List<Unit>();
             Schools = new List<School>();
+
+            Questions = new List<Question>();
+            QuestionRepository = FakeRepository<Question>();
+            Controller.Repository.Expect(a => a.OfType<Question>()).Return(QuestionRepository).Repeat.Any();
 
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new [] {RoleNames.Admin});
         }
@@ -545,11 +551,15 @@ namespace CRP.Tests.Controllers
             QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
-            #region Act/Assert
+            #region Act
             Controller.Create(1, CreateValidEntities.Question(null), new[] {"Option1, option2"})
                 .AssertActionRedirect()
                 .ToAction<QuestionSetController>(a => a.List());
-            #endregion Act/Assert
+            #endregion Act
+
+            #region Assert
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert
         }
 
         #region Create Post Redirects To List Because Of HasQuestionSetAccess
@@ -573,6 +583,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
        
@@ -599,6 +610,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
 
@@ -626,6 +638,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
 
@@ -653,6 +666,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
 
@@ -680,6 +694,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
        
@@ -708,6 +723,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
 
@@ -733,6 +749,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert
         }
         #endregion Create Post Redirects To List Because Of HasQuestionSetAccess
@@ -741,7 +758,7 @@ namespace CRP.Tests.Controllers
         /// If a questionSet is reusable, and has been used, we should not be able to add a question
         /// </summary>
         [TestMethod]
-        public void TestCreatePostRedirectsToEditWhenQuestionSetIsUsedAndReusable()
+        public void TestCreatePostRedirectsToEditWhenQuestionSetIsUsedAndReusable1()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
@@ -763,9 +780,582 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("Question cannot be added to the question set because it is already being used by an item.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
             #endregion Assert		
         }
+
+        /// <summary>
+        /// If a questionSet is reusable, and has been used, we should not be able to add a question
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostRedirectsToEditWhenQuestionSetIsUsedAndReusable2()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            SetUpDataForCreateGetTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = true;
+            QuestionSets[0].UserReusable = false;
+            QuestionSets[0].Items.Add(ItemQuestionSets[0]);
+
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+
+            Controller.Create(1, CreateValidEntities.Question(null), new[] { "Option1, option2" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question cannot be added to the question set because it is already being used by an item.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+        /// <summary>
+        /// If a questionSet is reusable, and has been used, we should not be able to add a question
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostRedirectsToEditWhenQuestionSetIsUsedAndReusable3()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            SetUpDataForCreateGetTests();
+            QuestionSets[0].SystemReusable = true;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+            QuestionSets[0].Items.Add(ItemQuestionSets[0]);
+
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+
+            Controller.Create(1, CreateValidEntities.Question(null), new[] { "Option1, option2" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question cannot be added to the question set because it is already being used by an item.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        #region Create Post Invalid Tests
+
+        /// <summary>
+        /// Tests the create post when system contact does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostWhenSystemContactDoesNotSave()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            SetUpDataForCreateGetTests();
+            QuestionSets[0].SystemReusable = true;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+
+            QuestionSets[0].Items = new List<ItemQuestionSet>();
+            QuestionSets[0].Name = StaticValues.QuestionSet_ContactInformation;
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
+            questionToAdd.QuestionType.HasOptions = false; //Not testing this part here.
+
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();            
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Controller.ModelState.AssertErrorsAre("This is a system default question set and cannot be modified.");
+            Assert.AreSame(questionToAdd, result.Question);
+            Assert.AreSame(QuestionSets[0], result.QuestionSet);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the create post when question name is empty does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostWhenQuestionNameIsEmptyDoesNotSave()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            SetUpDataForCreateGetTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+          
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
+            questionToAdd.QuestionType.HasOptions = false; //Not testing this part here.
+
+            questionToAdd.Name = string.Empty;
+
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, null)
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Controller.ModelState.AssertErrorsAre("Name: may not be null or empty");
+            Assert.AreSame(questionToAdd, result.Question);
+            Assert.AreSame(QuestionSets[0], result.QuestionSet);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+        #endregion Create Post Invalid Tests
+
+        #region Create Post Valid Tests
+
+        /// <summary>
+        /// Tests the create post with valid question and no options saves.
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostWithValidQuestionAndNoOptionsSaves()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            SetUpDataForCreateGetTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
+            questionToAdd.QuestionType.HasOptions = false; //Not testing this part here.
+
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, null)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the create post with valid question and options saves.
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostWithValidQuestionAndOptionsSaves()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            SetUpDataForCreateGetTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
+            questionToAdd.QuestionType.HasOptions = true; 
+
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[]{"Option1", "Option3"})
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, questionToAdd.Options.Count);
+            Assert.AreEqual("Option1", questionToAdd.Options.ElementAt(0).Name);
+            Assert.AreEqual("Option3", questionToAdd.Options.ElementAt(1).Name);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the create post with valid question and options saves and ignores empty options.
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostWithValidQuestionAndOptionsSavesAndIgnoresEmptyOptions()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            SetUpDataForCreateGetTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
+            questionToAdd.QuestionType.HasOptions = true;
+
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1","", "Option3" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, questionToAdd.Options.Count);
+            Assert.AreEqual("Option1", questionToAdd.Options.ElementAt(0).Name);
+            Assert.AreEqual("Option3", questionToAdd.Options.ElementAt(1).Name);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the create post with valid question set model state message.
+        /// </summary>
+        [TestMethod]
+        public void TestCreatePostWithValidQuestionSetModelStateMessage()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            SetUpDataForCreateGetTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
+            questionToAdd.QuestionType.HasOptions = true;
+
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] {"Option3" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Create Post Valid Tests
+
         #endregion Create Post Tests
+
+        #region Delete Tests
+        /// <summary>
+        /// Tests the delete redirects to list if the question is not found.
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteRedirectsToListIfTheQuestionIsNotFound()
+        {
+            #region Arrange
+            QuestionRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        #region Delete Redirects To List Because Of HasQuestionSetAccess
+        [TestMethod]
+        public void TestDeleteWhereQuestionIdIsFoundButNoAccessRedirectsToList1()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = true;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// College reusable
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhereQuestionSetIdIFoundButNoAccessRedirectsToList2()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = true;
+            QuestionSets[0].UserReusable = false;
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// College reusable
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhereQuestionSetIdIFoundButNoAccessRedirectsToList3()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = true;
+            QuestionSets[0].UserReusable = false;
+            QuestionSets[0].School = Schools[2];
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// College reusable
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhereQuestionSetIdIFoundButNoAccessRedirectsToList4()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.SchoolAdmin });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = true;
+            QuestionSets[0].UserReusable = false;
+            QuestionSets[0].School = Schools[2];
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// User reusable
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhereQuestionSetIdIFoundButNoAccessRedirectsToList5()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = true;
+            QuestionSets[0].User = Users[0]; //Not the owner
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// no reusable, not admin, and has an item type
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhereQuestionSetIdIFoundButNoAccessRedirectsToList6()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+            QuestionSets[0].User = Users[0]; //Not the owner
+            QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestDeleteWhereQuestionSetIdIFoundButNoAccessRedirectsToList7()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+            QuestionSets[0].User = Users[0]; //Not the owner
+            //QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.List());
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+        #endregion Delete Redirects To List Because Of HasQuestionSetAccess
+
+
+        /// <summary>
+        /// Tests the delete when question set is used by items does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhenQuestionSetIsUsedByItemsDoesNotSave()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question cannot be deleted from the question set because it is already being used by an item.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the delete when question set is contact information does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhenQuestionSetIsContactInformationDoesNotSave()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = true;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+            QuestionSets[0].Name = StaticValues.QuestionSet_ContactInformation;
+            QuestionSets[0].Items = new List<ItemQuestionSet>();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question cannot be deleted from the question set because it is a system default.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the delete when valid saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhenValidSaves()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = true;
+            QuestionSets[0].Items = new List<ItemQuestionSet>();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question has been removed successfully.", Controller.Message);
+            QuestionRepository.AssertWasCalled(a => a.Remove(Questions[0]));
+            #endregion Assert		
+        }
+        #endregion Delete Tests
 
         #region Reflection Tests
 
@@ -988,6 +1578,40 @@ namespace CRP.Tests.Controllers
             ValidatorRepository.Expect(a => a.GetAll()).Return(Validators).Repeat.Any();
         }
 
+        private void SetupDataForDeleteQuestionTests()
+        {
+            ControllerRecordFakes.FakeItemQuestionSets(ItemQuestionSets, 1);
+            ControllerRecordFakes.FakeUnits(Units, 2);
+            ControllerRecordFakes.FakeSchools(Schools, 3);
+            ControllerRecordFakes.FakeEditors(Editors, 2);
+            ControllerRecordFakes.FakeItems(Items, 1);
+            ControllerRecordFakes.FakeUsers(Users, 3);
+            ControllerRecordFakes.FakeQuestionSets(QuestionSets, 1);
+            ControllerRecordFakes.FakeQuestions(Questions, 3);
+            foreach (var question in Questions)
+            {
+                QuestionSets[0].AddQuestion(question);
+            }
+            Editors[0].User = Users[0];
+            Editors[1].User = Users[1]; //Current user, but don't add to the item here.
+            Items[0].AddEditor(Editors[0]);
+            Units[0].School = Schools[0];
+            Units[1].School = Schools[1];
+            Users[1].LoginID = "UserName";
+            Users[1].Units.Add(Units[0]);
+            Users[1].Units.Add(Units[1]);
+            QuestionSets[0].School = Schools[1]; //Exists
+            QuestionSets[0].User = Users[1];
+            ItemQuestionSets[0].Item = Items[0];
+            QuestionSets[0].Items.Add(ItemQuestionSets[0]);
+
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+
+            QuestionRepository.Expect(a => a.GetNullableByID(1)).Return(Questions[0]).Repeat.Any();
+            QuestionRepository.Expect(a => a.GetNullableByID(2)).Return(Questions[1]).Repeat.Any();
+            QuestionRepository.Expect(a => a.GetNullableByID(3)).Return(Questions[2]).Repeat.Any();
+        }
+
 
         #region mocks
         /// <summary>
@@ -1037,14 +1661,7 @@ namespace CRP.Tests.Controllers
 
             public IIdentity Identity
             {
-                get
-                {
-                    if (_identity == null)
-                    {
-                        _identity = new MockIdentity();
-                    }
-                    return _identity;
-                }
+                get { return _identity ?? (_identity = new MockIdentity()); }
             }
 
             public bool IsInRole(string role)
@@ -1063,7 +1680,7 @@ namespace CRP.Tests.Controllers
         public class MockHttpContext : HttpContextBase
         {
             private IPrincipal _user;
-            private int _count;
+            private readonly int _count;
             public string[] UserRoles { get; set; }
             public MockHttpContext(int count, string[] userRoles)
             {
@@ -1073,14 +1690,7 @@ namespace CRP.Tests.Controllers
 
             public override IPrincipal User
             {
-                get
-                {
-                    if (_user == null)
-                    {
-                        _user = new MockPrincipal(UserRoles);
-                    }
-                    return _user;
-                }
+                get { return _user ?? (_user = new MockPrincipal(UserRoles)); }
                 set
                 {
                     _user = value;

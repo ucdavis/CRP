@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using CRP.Core.Domain;
 using UCDArch.Testing;
 
@@ -108,6 +105,16 @@ namespace CRP.Tests.Core.Helpers
             {
                 entity.Add(CreateValidEntities.School(i + 1 + offSet));
                 entity[i + offSet].SetIdTo((i + 1 + offSet).ToString());
+            }
+        }
+
+        public static void FakeQuestions(List<Question> entity, int count)
+        {
+            var offSet = entity.Count;
+            for (int i = 0; i < count; i++)
+            {
+                entity.Add(CreateValidEntities.Question(i + 1 + offSet));
+                entity[i + offSet].SetIdTo(i + 1 + offSet);
             }
         }
     }
