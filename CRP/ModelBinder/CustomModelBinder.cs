@@ -422,7 +422,7 @@ namespace CRP.ModelBinder
             object entityRepository = GenericRepositoryFactory.CreateEntityRepositoryFor(propertyType, idType);
 
             return entityRepository.GetType()
-                .InvokeMember("GetById", BindingFlags.InvokeMethod, null, entityRepository, new[] { typedId });
+                .InvokeMember("GetByID", BindingFlags.InvokeMethod, null, entityRepository, new[] { typedId });
         }
 
         private Type propertyType;
