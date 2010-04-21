@@ -72,7 +72,7 @@
             </li>
             <li><table><tbody><tr><td>
             <!-- NEEDS BALLOON-->
-                <label for="Item.Available">Availabe to public:</label></td><td>
+                <label for="Item.Available">Available to public:</label></td><td>
                 <%= Html.CheckBox("Item.Available") %>
                 <%= Html.ValidationMessage("Item.Available", "*") %></td></tr>
                 <tr><td>
