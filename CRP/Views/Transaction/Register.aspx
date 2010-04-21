@@ -15,10 +15,15 @@
     
     <h2><%= Html.Encode(Model.Item.Name) %></h2>
     
+    <%= Html.AntiForgeryToken() %>
+    
     <div id="priceContainer">
         #
         <%= !String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName) %>:
-        <input type="text" id="Quantity" value="1" style="width: 20px" />
+        <%--<input type="text" id="quantity" value="1" style="width: 20px" />--%>
+        
+        <%= Html.TextBox("quantity", 1, new {@style = "width:20px;"}) %>
+        
         x
         <%= Html.Encode(Model.Item.CostPerItem.ToString("C")) %>
     </div>
@@ -38,7 +43,7 @@
         $(document).ready(function() {
             $("input.dateForm").datepicker();
 
-            $("input#Quantity").blur(function(event) {
+            $("input#quantity").blur(function(event) {
                 var quantity = $(this).val();
 
                 if (isNaN(quantity)) { alert("Please enter a valid number."); return false; }
@@ -95,6 +100,8 @@
         function RenameControls($container, isQuantity) {
             var name;
             if (isQuantity) {name = "quantityAnswers"; } else {name = "transactionAnswers"; }
+
+            var masterIndex = 0;
         
             // go through each container passed
             $.each($container, function(cIndex, cItem) {
@@ -104,10 +111,12 @@
                 // iterate through the paragraphs
                 $.each(p, function(index, item) {
                     // construct the new name
-                    var cName = name + "[" + index + "]";
+                    var cName = name + "[" + masterIndex + "]";
 
                     // get the actual controls
-                    var tControls = $.merge($(item).find("input"), $(item).find("select"));
+                    //var tControls = $.merge($(item).find("input"), $(item).find("select"));
+
+                    var tControls = $(item).find(".QA");
 
                     // iterate through each control inside each paragraph
                     $.each(tControls, function(index2, item2) {
@@ -125,14 +134,15 @@
                         // search for input ending with "_QuantityIndex"
                         if ($(item).find("input[id$='_QuantityIndex']").length == 0) {
                             //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
-                            $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex").attr("name", cName + ".QuantityIndex").val(cIndex));
+                            $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex").attr("name", cName + ".QuantityIndex").addClass("QA").val(cIndex));
                         }
                         else {
                             $(item).find("input[id$='_QuantityIndex']").val(cIndex);
                         }
                     }
-                }); // end of paragraph           
-            });    // end of container
+                    masterIndex++;
+                }); // end of paragraph     
+            });                    // end of container
         }
     </script>
 
