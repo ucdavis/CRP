@@ -15,7 +15,7 @@ namespace CRP.Controllers
     public class PaymentController : SuperController
     {
         /// <summary>
-        /// GET: /Check/LinkToTransaction/{id}
+        /// GET: /Payment/LinkToTransaction/{id}
         /// </summary>
         /// <param name="transactionId">Transaction Id</param>
         /// <returns></returns>

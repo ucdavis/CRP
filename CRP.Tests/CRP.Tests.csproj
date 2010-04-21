@@ -124,6 +124,7 @@
     <Compile Include="Controllers\ExtendedPropertyControllerTests.cs" />
     <Compile Include="Controllers\ItemControllerTests.cs" />
     <Compile Include="Controllers\ItemManagementControllerTests.cs" />
+    <Compile Include="Controllers\PaymentControllerTests.cs" />
     <Compile Include="Controllers\QuestionControllerTests.cs" />
     <Compile Include="Controllers\QuestionSetControllerTests.cs" />
     <Compile Include="Controllers\ReportControllerTests.cs" />
