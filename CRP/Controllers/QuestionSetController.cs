@@ -19,6 +19,13 @@ namespace CRP.Controllers
     [Authorize]
     public class QuestionSetController : SuperController
     {
+        private readonly IRepositoryWithTypedId<School, string> _schoolRepository;
+
+        public QuestionSetController(IRepositoryWithTypedId<School, string> schoolRepository)
+        {
+            _schoolRepository = schoolRepository;
+        }
+
         //
         // GET: /QuestionSet/
 
@@ -86,7 +93,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List());
             }
 
-            var viewModel = QuestionSetViewModel.Create(Repository);
+            var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
             viewModel.QuestionSet = questionSet;
 
             if (!questionSet.SystemReusable && !questionSet.CollegeReusable && !questionSet.UserReusable)
@@ -148,7 +155,7 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Question Set");
             }
 
-            var viewModel = QuestionSetViewModel.Create(Repository);
+            var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
             viewModel.QuestionSet = questionSet;
 
             return View(viewModel);
@@ -161,7 +168,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Create(int? itemId, int? itemTypeId)
         {
-            var viewModel = QuestionSetViewModel.Create(Repository);
+            var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
 
             if (itemId.HasValue) {
                 viewModel.Item = Repository.OfType<Item>().GetById(itemId.Value); 
@@ -297,7 +304,7 @@ namespace CRP.Controllers
             }
 
             // return to the view
-            var viewModel = QuestionSetViewModel.Create(Repository);
+            var viewModel = QuestionSetViewModel.Create(Repository, _schoolRepository);
             viewModel.QuestionSet = questionSet;
 
             if (itemId.HasValue)

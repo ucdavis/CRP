@@ -3,6 +3,8 @@ using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
+using Rhino.Mocks;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
 
 namespace CRP.Tests.Controllers
@@ -13,6 +15,8 @@ namespace CRP.Tests.Controllers
     [TestClass]
     public class QuestionSetControllerTests : ControllerTestBase<QuestionSetController>
     {
+        protected IRepositoryWithTypedId<School, string> SchoolRepository { get; set; }
+
         #region Init
 
         /// <summary>
@@ -28,7 +32,8 @@ namespace CRP.Tests.Controllers
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<QuestionSetController>();
+            SchoolRepository = MockRepository.GenerateStub<IRepositoryWithTypedId<School, string>>();
+            Controller = new TestControllerBuilder().CreateController<QuestionSetController>(SchoolRepository);
         }
 
         #endregion Init

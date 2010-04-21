@@ -8,13 +8,14 @@ namespace CRP.Controllers.ViewModels
 {
     public class QuestionSetViewModel
     {
-        public static QuestionSetViewModel Create(IRepository repository)
+        public static QuestionSetViewModel Create(IRepository repository, IRepositoryWithTypedId<School, string> schoolRepository)
         {
             Check.Require(repository != null, "Repository is required.");
+            Check.Require(schoolRepository != null, "School repository is required.");
 
             var viewModel = new QuestionSetViewModel() {
                 QuestionTypes = repository.OfType<QuestionType>().GetAll(),
-                Schools = repository.OfType<School>().GetAll()
+                Schools = schoolRepository.GetAll()
             };
 
             return viewModel;

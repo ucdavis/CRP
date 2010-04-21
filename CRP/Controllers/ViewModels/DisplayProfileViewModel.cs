@@ -11,14 +11,15 @@ namespace CRP.Controllers.ViewModels
         public IEnumerable<School> Schools { get; set; }
         public DisplayProfile DisplayProfile { get; set; }
 
-        public static DisplayProfileViewModel Create(IRepository repository)
+        public static DisplayProfileViewModel Create(IRepository repository, IRepositoryWithTypedId<School, string> schoolRepository)
         {
             Check.Require(repository != null, "Repository is required.");
+            Check.Require(schoolRepository != null, "School repository is required.");
 
             var viewModel = new DisplayProfileViewModel()
                                 {
                                     Units = repository.OfType<Unit>().GetAll(),
-                                    Schools = repository.OfType<School>().GetAll()
+                                    Schools = schoolRepository.GetAll()
                                 };
 
             return viewModel;

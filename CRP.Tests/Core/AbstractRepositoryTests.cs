@@ -14,7 +14,7 @@ namespace CRP.Tests.Core
     public abstract class AbstractRepositoryTests<T, IdT> : RepositoryTestBase where T : DomainObjectWithTypedId<IdT>
 // ReSharper restore InconsistentNaming
     {
-        private int _entriesAdded;
+        protected int EntriesAdded;
         protected string RestoreValue;
         protected bool BoolRestoreValue;
         
@@ -55,7 +55,7 @@ namespace CRP.Tests.Core
         /// <returns></returns>
         protected virtual void LoadRecords(int entriesToAdd)
         {
-            _entriesAdded += entriesToAdd;
+            EntriesAdded += entriesToAdd;
             for (int i = 0; i < entriesToAdd; i++)
             {
                 var validEntity = GetValid(i + 1);
@@ -101,8 +101,8 @@ namespace CRP.Tests.Core
         public void CanGetAllEntities()
         {
             var foundEntities = Repository.OfType<T>().GetAll().ToList();
-            Assert.AreEqual(_entriesAdded, foundEntities.Count, "GetAll() returned a different number of records");
-            for (int i = 0; i < _entriesAdded; i++)
+            Assert.AreEqual(EntriesAdded, foundEntities.Count, "GetAll() returned a different number of records");
+            for (int i = 0; i < EntriesAdded; i++)
             {
                 FoundEntityComparison(foundEntities[i], i+1);
             }
@@ -128,7 +128,7 @@ namespace CRP.Tests.Core
         {
             if(typeof(IdT) == typeof(int))
             {
-                Assert.IsTrue(_entriesAdded >= 2, "There are not enough entries to complete this test.");
+                Assert.IsTrue(EntriesAdded >= 2, "There are not enough entries to complete this test.");
                 var foundEntity = Repository.OfType<T>().GetById(2);
                 FoundEntityComparison(foundEntity, 2);
             }
@@ -143,7 +143,7 @@ namespace CRP.Tests.Core
         {
             if (typeof(IdT) == typeof(int))
             {
-                Assert.IsTrue(_entriesAdded >= 2, "There are not enough entries to complete this test.");
+                Assert.IsTrue(EntriesAdded >= 2, "There are not enough entries to complete this test.");
                 var foundEntity = Repository.OfType<T>().GetNullableByID(2);
                 FoundEntityComparison(foundEntity, 2);
             }
@@ -157,7 +157,7 @@ namespace CRP.Tests.Core
         {
             if (typeof(IdT) == typeof(int))
             {
-                var foundEntity = Repository.OfType<T>().GetNullableByID(_entriesAdded+1);
+                var foundEntity = Repository.OfType<T>().GetNullableByID(EntriesAdded+1);
                 Assert.IsNull(foundEntity);
             }
         }

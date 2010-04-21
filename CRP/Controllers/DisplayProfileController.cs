@@ -5,6 +5,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using MvcContrib.Attributes;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 using MvcContrib;
@@ -13,6 +14,13 @@ namespace CRP.Controllers
 {
     public class DisplayProfileController : SuperController
     {
+        private readonly IRepositoryWithTypedId<School, string> _schoolRepository;
+
+        public DisplayProfileController(IRepositoryWithTypedId<School, string> schoolRepository)
+        {
+            _schoolRepository = schoolRepository;
+        }
+
         //
         // GET: /DisplayProfile/
 
@@ -38,7 +46,7 @@ namespace CRP.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
-            return View(DisplayProfileViewModel.Create(Repository));
+            return View(DisplayProfileViewModel.Create(Repository, _schoolRepository));
         }
 
         /// <summary>
@@ -92,7 +100,7 @@ namespace CRP.Controllers
             }
             else
             {
-                var viewModel = DisplayProfileViewModel.Create(Repository);
+                var viewModel = DisplayProfileViewModel.Create(Repository, _schoolRepository);
                 viewModel.DisplayProfile = displayProfile;
                 return View(viewModel);
             }
@@ -138,7 +146,7 @@ namespace CRP.Controllers
             }
             else
             {
-                var viewModel = DisplayProfileViewModel.Create(Repository);
+                var viewModel = DisplayProfileViewModel.Create(Repository, _schoolRepository);
                 viewModel.DisplayProfile = displayProfile;
                 return View(viewModel);
             }

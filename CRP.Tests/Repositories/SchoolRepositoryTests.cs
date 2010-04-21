@@ -3,13 +3,23 @@ using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UCDArch.Core.PersistanceSupport;
+using UCDArch.Data.NHibernate;
 
 namespace CRP.Tests.Repositories
 {
     [TestClass]
     public class SchoolRepositoryTests : AbstractRepositoryTests<School,string>
     {
+        protected IRepositoryWithTypedId<School, string> SchoolRepository { get; set; }
+
+
         #region Init and Overrides
+
+        public SchoolRepositoryTests()
+        {
+            SchoolRepository = new RepositoryWithTypedId<School, string>();
+        }
 
         /// <summary>
         /// Gets the valid entity of type T
@@ -62,7 +72,7 @@ namespace CRP.Tests.Repositories
         /// <returns></returns>
         protected override IQueryable<School> GetQuery(int numberAtEnd)
         {
-            return Repository.OfType<School>().Queryable.Where(a => a.LongDescription.EndsWith(numberAtEnd.ToString()));
+            return SchoolRepository.Queryable.Where(a => a.LongDescription.EndsWith(numberAtEnd.ToString()));
         }
 
         /// <summary>
@@ -70,9 +80,19 @@ namespace CRP.Tests.Repositories
         /// </summary>
         protected override void LoadData()
         {
-            Repository.OfType<School>().DbContext.BeginTransaction();
+            SchoolRepository.DbContext.BeginTransaction();
             LoadRecords(5);
-            Repository.OfType<School>().DbContext.CommitTransaction();
+            SchoolRepository.DbContext.CommitTransaction();
+        }
+
+        protected override void LoadRecords(int entriesToAdd)
+        {
+            EntriesAdded += entriesToAdd;
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = GetValid(i + 1);
+                SchoolRepository.EnsurePersistent(validEntity);
+            }
         }
 
         #endregion Init and Overrides

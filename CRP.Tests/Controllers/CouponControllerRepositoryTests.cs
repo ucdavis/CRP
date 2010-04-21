@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
@@ -13,8 +13,6 @@ using MvcContrib.TestHelper;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
-using System.Linq.Expressions;
-using System.Linq;
 using UCDArch.Web.ActionResults;
 
 
@@ -28,8 +26,6 @@ namespace CRP.Tests.Controllers
         protected readonly IPrincipal Principal = new MockPrincipal();
         protected IRepository<Coupon> CouponRepository { get; set; }
         protected List<Coupon> Coupons { get; set; }
-
-
 
         #region Init
 
