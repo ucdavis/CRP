@@ -24,10 +24,27 @@ namespace CRP.Core.Domain
             QuantityLevel = false;
         }
 
-        public override bool IsValid()
+        /// <summary>
+        /// Populates the complex logic fields.
+        /// It needs to be done from both the 
+        /// IsValid and ValidationResults to work
+        /// correctly from both the Controller and Repository.
+        /// </summary>
+        private void PopulateComplexLogicFields()
         {
             TransactionLevelQuantityLevel = TransactionLevel != QuantityLevel;
+        }
+
+        public override bool IsValid()
+        {
+            PopulateComplexLogicFields();
             return base.IsValid();
+        }
+
+        public override System.Collections.Generic.ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
+        {
+            PopulateComplexLogicFields();
+            return base.ValidationResults();
         }
 
         [NotNull]

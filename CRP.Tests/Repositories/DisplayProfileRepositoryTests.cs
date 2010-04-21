@@ -1,16 +1,26 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UCDArch.Core.PersistanceSupport;
+using UCDArch.Data.NHibernate;
+using UCDArch.Testing.Extensions;
 
 namespace CRP.Tests.Repositories
 {
     [TestClass]
     public class DisplayProfileRepositoryTests : AbstractRepositoryTests<DisplayProfile, int>
     {
+        private IRepositoryWithTypedId<School, string> SchoolRepository { get; set; }
+
         #region Init and Overrides
 
+        public DisplayProfileRepositoryTests()
+        {
+            SchoolRepository = new RepositoryWithTypedId<School, string>();
+        }
         /// <summary>
         /// Gets the valid entity of type T
         /// </summary>
@@ -81,6 +91,86 @@ namespace CRP.Tests.Repositories
 
         #endregion Init and Overrides
 
+        #region Validation Moved from the controller Tests
+
+        /// <summary>
+        /// Tests the both school and unit populated will not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestBothSchoolAndUnitPopulatedWillNotSave()
+        {
+            DisplayProfile displayProfileRecord = null;
+            try
+            {
+                SchoolRepository.DbContext.BeginTransaction();
+                LoadSchools(1);
+                SchoolRepository.DbContext.CommitTransaction();
+
+                Repository.OfType<DisplayProfile>().DbContext.BeginTransaction();
+                displayProfileRecord = CreateValidEntities.DisplayProfile(1);
+                displayProfileRecord.Unit = Repository.OfType<Unit>().GetById(1);
+                displayProfileRecord.School = SchoolRepository.GetById("1");
+                Repository.OfType<DisplayProfile>().EnsurePersistent(displayProfileRecord);
+                Repository.OfType<DisplayProfile>().DbContext.CommitTransaction();
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(displayProfileRecord);
+                var results = displayProfileRecord.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("UnitAndSchool: Unit and School cannot be selected together.");
+                Assert.IsTrue(displayProfileRecord.IsTransient());
+                Assert.IsFalse(displayProfileRecord.IsValid());
+                throw;
+            }            
+        }
+
+        /// <summary>
+        /// Tests that neither school and unit populated will not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestNeitherSchoolAndUnitPopulatedWillNotSave()
+        {
+            DisplayProfile displayProfileRecord = null;
+            try
+            {
+                Repository.OfType<DisplayProfile>().DbContext.BeginTransaction();
+                displayProfileRecord = CreateValidEntities.DisplayProfile(1);
+                displayProfileRecord.Unit = null;
+                displayProfileRecord.School = null;
+                Repository.OfType<DisplayProfile>().EnsurePersistent(displayProfileRecord);
+                Repository.OfType<DisplayProfile>().DbContext.CommitTransaction();
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(displayProfileRecord);
+                var results = displayProfileRecord.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("UnitOrSchool: A Unit or School must be specified.");
+                Assert.IsTrue(displayProfileRecord.IsTransient());
+                Assert.IsFalse(displayProfileRecord.IsValid());
+                throw;
+            }
+        }
+
+        
+
+        #endregion Validation Moved from the controller Tests
+
         //TODO: Other tests
+
+        #region HelperMethods
+
+        private void LoadSchools(int entriesToAdd)
+        {
+            for (int i = 0; i < entriesToAdd; i++)
+            {
+                var validEntity = CreateValidEntities.School(i + 1);
+                
+                SchoolRepository.EnsurePersistent(validEntity);
+            }
+        }
+
+        #endregion HelperMethods
     }
 }

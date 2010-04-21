@@ -80,17 +80,18 @@ namespace CRP.Controllers
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, displayProfile.ValidationResults());
 
+            //Moved to domain validation
             // atleast one must be selected
-            if (displayProfile.Unit == null && displayProfile.School == null)
-            {
-                ModelState.AddModelError("Unit/School", "A Unit or School must be specified.");
-            }
+            //if (displayProfile.Unit == null && displayProfile.School == null)
+            //{
+            //    ModelState.AddModelError("Unit/School", "A Unit or School must be specified.");
+            //}
 
-            // but not both
-            if (displayProfile.Unit != null && displayProfile.School != null)
-            {
-                ModelState.AddModelError("Unit/School", "Unit and School cannot be selected together.");
-            }
+            //// but not both
+            //if (displayProfile.Unit != null && displayProfile.School != null)
+            //{
+            //    ModelState.AddModelError("Unit/School", "Unit and School cannot be selected together.");
+            //}
 
             if (ModelState.IsValid)
             {

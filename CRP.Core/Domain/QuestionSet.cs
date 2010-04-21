@@ -54,25 +54,14 @@ namespace CRP.Core.Domain
             Questions.Add(question);
         }
 
-        public override bool IsValid()
+        /// <summary>
+        /// Populates the complex logic fields.
+        /// It needs to be done from both the 
+        /// IsValid and ValidationResults to work
+        /// correctly from both the Controller and Repository.
+        /// </summary>
+        private void PopulateComplexLogicFields()
         {
-            //var flag = true;
-
-            //if (CollegeReusable)
-            //{
-            //    if (School == null)
-            //    {
-            //        flag = false;
-            //    }
-            //}
-
-            //// should really only be reusable at one level
-            //if (SystemReusable && CollegeReusable || SystemReusable && UserReusable || CollegeReusable && UserReusable)
-            //{
-            //    flag = false;
-            //}
-
-            //return base.IsValid() && flag;
             CollegeReusableSchool = true;
             Reusability = true;
             if (CollegeReusable)
@@ -86,9 +75,18 @@ namespace CRP.Core.Domain
             if (SystemReusable && CollegeReusable || SystemReusable && UserReusable || CollegeReusable && UserReusable)
             {
                 Reusability = false;
-            }
+            } 
+        }
 
+        public override bool IsValid()
+        {
+            PopulateComplexLogicFields();
             return base.IsValid();
+        }
+        public override ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
+        {
+            PopulateComplexLogicFields();
+            return base.ValidationResults();
         }
 
         [AssertTrue(Message = "Must have school if college reusable")]
