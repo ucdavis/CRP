@@ -123,7 +123,16 @@
     <Compile Include="Controllers\DisplayProfileControllerTests.cs" />
     <Compile Include="Controllers\ExtendedPropertyControllerTests.cs" />
     <Compile Include="Controllers\ItemControllerTests.cs" />
-    <Compile Include="Controllers\ItemManagementControllerTests.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsInit.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart1.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart2.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart3.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart4.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart5.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart6.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart7.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart8.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart9.cs" />
     <Compile Include="Controllers\PaymentControllerTests.cs" />
     <Compile Include="Controllers\QuestionControllerTests.cs" />
     <Compile Include="Controllers\QuestionSetControllerTests.cs" />
