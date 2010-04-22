@@ -42,7 +42,8 @@
                                 {
                                     col.Add(a =>
                                         {%>                                        
-                                            <% using(Html.BeginForm<ItemManagementController>(x => x.ToggleTransactionIsActive(a.Id))) {%>                                     
+                                            <% using (Html.BeginForm<ItemManagementController>(x => x.ToggleTransactionIsActive(a.Id, Request.QueryString["Transactions-orderBy"], Request.QueryString["Transactions-page"])))
+                                               {%>                                     
                                                 <%= Html.AntiForgeryToken() %>
                                                 <a href="javascript:;" class="FormSubmit"><%= a.IsActive ? "Deactivate" : "Activate" %></a>
                                             

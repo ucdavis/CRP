@@ -116,7 +116,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestToggleTransactionIsActiveMapping()
         {
-            "~/ItemManagement/ToggleTransactionIsActive/5".ShouldMapTo<ItemManagementController>(a => a.ToggleTransactionIsActive(5));	
+            "~/ItemManagement/ToggleTransactionIsActive/5".ShouldMapTo<ItemManagementController>(a => a.ToggleTransactionIsActive(5, null, null));	
         }
         #endregion Route Tests
     }

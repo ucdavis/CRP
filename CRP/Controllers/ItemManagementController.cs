@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -412,14 +415,26 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+
         /// <summary>
         /// Toggles the transaction is active.
         /// </summary>
-        /// <param name="id">The transaction id.</param>
+        /// <param name="id">The id.</param>
+        /// <param name="sort">The sort.</param>
+        /// <param name="page">The page.</param>
         /// <returns></returns>
         [AcceptPost]
-        public ActionResult ToggleTransactionIsActive(int id)
+        public ActionResult ToggleTransactionIsActive(int id, string sort, string page)
         {
+            Int32 validPage;
+            string validSort = ValidateSort(sort);
+
+            if(!int.TryParse(page, out validPage))
+            {
+                validPage = 1;
+            }
+
+
             var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
             if (transaction == null)
             {
@@ -464,9 +479,37 @@ namespace CRP.Controllers
             else
             {
                 Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");  
-            }                                  
-            return this.RedirectToAction(a => a.Details(transaction.Item.Id));
+            }
+            return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Transactions, validSort, validPage.ToString()));              
+            //return this.RedirectToAction(a => a.Details(transaction.Item.Id));
         }
+
+        /// <summary>
+        /// Validates the sort.
+        /// </summary>
+        /// <param name="sort">The sort.</param>
+        /// <returns></returns>
+        private static string ValidateSort(string sort)
+        {
+            var validSort = new List<string>();
+            validSort.Add("TransactionNumber-asc");
+            validSort.Add("TransactionNumber-desc");
+            validSort.Add("Quantity-asc");
+            validSort.Add("Quantity-desc");
+            validSort.Add("Paid-asc");
+            validSort.Add("Paid-desc");
+            validSort.Add("IsActive-asc");
+            validSort.Add("IsActive-desc");
+            if(validSort.Contains(sort))
+            {
+                return sort;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
     }
 
     public class ExtendedPropertyParameter

@@ -1,4 +1,5 @@
-﻿using CRP.Controllers;
+﻿using System.Web.Mvc;
+using CRP.Controllers;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
@@ -23,7 +24,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(1)
+            Controller.ToggleTransactionIsActive(1, null, null)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List());
             #endregion Act
@@ -45,7 +46,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(2)
+            Controller.ToggleTransactionIsActive(2, null, null)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List());
             #endregion Act
@@ -69,7 +70,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(5)
+            Controller.ToggleTransactionIsActive(5, null, null)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List());
             #endregion Act
@@ -87,21 +88,26 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestToggleTransactionIsActiveSavesIfValidAndAnEditor()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
             SetupDataForToggleTransactionIsActiveTests();
             Assert.IsTrue(Transactions[3].IsActive);
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(4)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.Details(1));
+            var result = Controller.ToggleTransactionIsActive(4, null, null)
+                .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
             TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[3]));
             Assert.AreEqual("Transaction has been deactivated.", Controller.Message);
             Assert.IsFalse(Transactions[3].IsActive);
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
             #endregion Assert
         }
 
@@ -112,21 +118,26 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestToggleTransactionIsActiveSavesIfValidAndAnAdmin()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             SetupDataForToggleTransactionIsActiveTests();
             Assert.IsTrue(Transactions[4].IsActive);
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(5)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.Details(1));
+            var result = Controller.ToggleTransactionIsActive(5, null, null)
+                .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
             TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[4]));
             Assert.AreEqual("Transaction has been deactivated.", Controller.Message);
             Assert.IsFalse(Transactions[4].IsActive);
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
             #endregion Assert
         }
 
@@ -137,6 +148,11 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestToggleTransactionIsActiveDoesNotSaveIfPaid()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
+
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             SetupDataForToggleTransactionIsActiveTests();
             ControllerRecordFakes.FakePaymentLogs(PaymentLogs, 1);
@@ -147,9 +163,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(5)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.Details(1));
+            var result = Controller.ToggleTransactionIsActive(5, null, null)
+                .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
@@ -159,7 +174,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             //FYI, the following messages do not appear on the UI
             Controller.ModelState.AssertErrorsAre("Paid transactions can not be deactivated.");
-
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
             #endregion Assert
         }
 
@@ -170,6 +186,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestToggleTransactionIsActiveWhenFalseSavesIfValidAndAnAdmin()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             SetupDataForToggleTransactionIsActiveTests();
             Items[2].Quantity = 100;
@@ -178,15 +198,16 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(5)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.Details(1));
+            var result = Controller.ToggleTransactionIsActive(5, null, null)
+                .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
             TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[4]));
             Assert.AreEqual("Transaction has been activated.", Controller.Message);
             Assert.IsTrue(Transactions[4].IsActive);
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
             #endregion Assert
         }
 
@@ -197,6 +218,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestToggleTransactionIsActiveWhenFalseDoesNotSaveIfActivationWillExceedItemQuantity()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             SetupDataForToggleTransactionIsActiveTests();
             Items[2].Quantity = 1;
@@ -206,9 +231,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(5)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.Details(1));
+            var result = Controller.ToggleTransactionIsActive(5, null, null)
+                .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
@@ -217,7 +241,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
    
             //FYI, the following messages do not appear on the UI
             Controller.ModelState.AssertErrorsAre("Transaction can not be activated because it will cause the amount sold to exceed the amount availble.");
-
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
             #endregion Assert
         }
 
@@ -228,6 +253,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestToggleTransactionIsActiveWhenTransactionInvalidDoesNotSave()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext.Response
+                .Expect(a => a.ApplyAppPathModifier(null)).IgnoreArguments()
+                .Return("http://sample.com/ItemManagement/Edit/2").Repeat.Any();
+            Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             SetupDataForToggleTransactionIsActiveTests();
             Items[2].Quantity = 100;
@@ -238,9 +267,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.ToggleTransactionIsActive(5)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.Details(1));
+            var result = Controller.ToggleTransactionIsActive(5, null, null)
+                .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
@@ -249,7 +277,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             //FYI, the following messages do not appear on the UI
             Controller.ModelState.AssertErrorsAre("TransactionAnswers: may not be empty");
-
+            Assert.IsNotNull(result);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
             #endregion Assert
         }
 

@@ -50,7 +50,11 @@ namespace CRP.Controllers.Helpers
         {
             return url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) + "#" + tabName;
         }
-
+        public static string DetailItemUrl(this UrlHelper url, int itemId, string tabName, string sort, string page)
+        {
+            return url.RouteUrl(new {controller = "ItemManagement", action = "Details", id = itemId}) +
+                   "?" + tabName + "-orderBy=" + sort + "&" + tabName + "-page=" + page;
+        } 
         public static string DetailItemLink(this UrlHelper url, int itemId, string tabName)
         {
             var returnUrl = url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) + "#" + tabName;
@@ -69,5 +73,6 @@ namespace CRP.Controllers.Helpers
 
             return string.Format(link, returnUrl);
         }
+        
     }
 }
