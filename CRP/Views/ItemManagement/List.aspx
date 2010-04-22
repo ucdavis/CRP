@@ -36,7 +36,11 @@
                                         <%}).Title("# Sold");
                             col.Add(a => a.Expiration).Format("{0:d}");
                             col.Add(a => a.DateCreated);
-                            col.Add(a => a.Available);
+                            col.Add(a => a.Available);     
+                            col.Add(a => 
+                                        {%>
+                                            <%= Html.ActionLink<TransactionController>(b => b.Checkout(a.Id ), "Register") %>
+                                        <%});                      
                         })
             .Sortable()
             .Pageable()

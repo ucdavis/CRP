@@ -17,6 +17,7 @@ using CRP.Core.Resources;
 using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Core.PersistanceSupport;
+using UCDArch.Data.NHibernate;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Helpers;
@@ -113,10 +114,13 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
-            if (!item.IsAvailableForReg)
+            if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to over ride and register for things
             {
-                Message = NotificationMessages.STR_NotAvailable.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction<HomeController>(a => a.Index());
+                if (!item.IsAvailableForReg)
+                {
+                    Message = NotificationMessages.STR_NotAvailable.Replace(NotificationMessages.ObjectType, "Item");
+                    return this.RedirectToAction<HomeController>(a => a.Index());
+                }
             }
 
             if (!captchaValid)
@@ -254,11 +258,14 @@ namespace CRP.Controllers
             {
                 ModelState.AddModelError("Restricted Key", "The item is restricted please enter the passphrase.");
             }
-            
-            // do a final check to make sure the inventory is there
-            if (item.Sold + quantity > item.Quantity)
+
+            if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to over ride and register for things
             {
-                ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
+                // do a final check to make sure the inventory is there
+                if (item.Sold + quantity > item.Quantity)
+                {
+                    ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
+                }
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
@@ -268,15 +275,23 @@ namespace CRP.Controllers
                 // create the new transaction
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
 
-                //Re get it to make sure collections are updated
-                //Note, *this* transaction will not been commited until after we leave, so we need to add it in
+
                 var updatedItem = Repository.OfType<Item>().GetNullableByID(transaction.Item.Id);
                 if (updatedItem != null)
                 {
-                    if (updatedItem.Quantity - (updatedItem.Sold + transaction.Quantity) <= 10)
+                    //For whatever reason, if you are logged in with your CAES user, the item is updated, 
+                    //if you are logged in with open id (google), item is not updated.
+                    var transactionQuantity = transaction.Quantity;
+                    if (updatedItem.Transactions.Contains(transaction))
                     {
-                        _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transaction);
+                        transactionQuantity = 0;
                     }
+                    if (updatedItem.Quantity - (updatedItem.Sold + transactionQuantity) <= 10)
+                    {
+                        _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transactionQuantity);
+                    }
+
+
                 }            
                 // redirect to confirmation and let the user decide payment or not
                 return this.RedirectToAction(a => a.Confirmation(transaction.Id));

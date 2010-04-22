@@ -15,7 +15,7 @@ namespace CRP.Core.Abstractions
     public interface INotificationProvider
     {
         void SendConfirmation(IRepository repository, Transaction transaction, string emailAddress);
-        void SendLowQuantityWarning(IRepository repository, Item item, Transaction transaction);
+        void SendLowQuantityWarning(IRepository repository, Item item, int transactionQuantity);
         void SendPaymentResultErrors(string email, PaymentResultParameters touchNetValues, NameValueCollection requestAllParams, string extraBody, PaymentResultType paymentResultType);
     }
 
@@ -121,16 +121,16 @@ Your Transaction number is: {TransactionNumber}
             client.Send(message);
         }
 
+
         /// <summary>
         /// Sends the low quantity warning.
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="item">The item.</param>
-        /// <param name="transaction">The transaction.</param>
-        public void SendLowQuantityWarning(IRepository repository, Item item, Transaction transaction)
+        /// <param name="transactionQuantity">The transaction quantity.</param>
+        public void SendLowQuantityWarning(IRepository repository, Item item, int transactionQuantity)
         {
             Check.Require(item != null);
-            Check.Require(transaction != null);
             var email = item.Editors.Where(a => a.Owner).First().User.Email;
             Check.Require(!string.IsNullOrEmpty(email));
 
@@ -147,7 +147,7 @@ Your Transaction number is: {TransactionNumber}
             bodyBuilder.Append("<tfoot>");
             bodyBuilder.Append("<tr>");
             bodyBuilder.Append("<td>Quantity Remaining:</td>");
-            bodyBuilder.AppendFormat("<td>{0}</td>", item.Quantity - (item.Sold + transaction.Quantity));
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.Quantity - (item.Sold + transactionQuantity));
             bodyBuilder.Append("</tr>");
             bodyBuilder.Append("</tfoot>");
             bodyBuilder.Append("<tbody>");
@@ -158,7 +158,7 @@ Your Transaction number is: {TransactionNumber}
 
             bodyBuilder.Append("<tr>");
             bodyBuilder.Append("<td>Total Sold:</td>");
-            bodyBuilder.AppendFormat("<td>{0}</td>", item.Sold + transaction.Quantity);
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.Sold  + transactionQuantity);
             bodyBuilder.Append("</tr>");
 
             bodyBuilder.Append("<tr>");
