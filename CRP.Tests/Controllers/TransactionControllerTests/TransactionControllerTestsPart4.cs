@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CRP.Controllers;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
@@ -47,9 +48,10 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         [TestMethod]
         public void TestCheckoutPostRedirectsToHomeControllerIfItemIsNotAvailable1()
         {
-            #region Arrange
+            #region Arrange            
             SetupDataForCheckoutTests();
             Items[1].Quantity = 10;
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             #endregion Arrange
 
             #region Act
@@ -73,6 +75,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Arrange
             var fakeDate = SetupDataForCheckoutTests();
             Items[1].Expiration = fakeDate.AddDays(-1);
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             #endregion Arrange
 
             #region Act
@@ -96,6 +99,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Arrange
             SetupDataForCheckoutTests();
             Items[1].Available = false;
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             #endregion Arrange
 
             #region Act
@@ -109,7 +113,72 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Assert.AreEqual("Item is not available.", Controller.Message);
             #endregion Assert
         }
+        /// <summary>
+        /// Tests the checkout post does not redirect to home controller if item is not available but admin.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutPostDoesNotRedirectToHomeControllerIfItemIsNotAvailableButAdmin4()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].Available = false;
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            #endregion Arrange
 
+            #region Act
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            #endregion Assert
+        }
+        /// <summary>
+        /// Tests the checkout post does not redirect to home controller if item is not available but admin.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutPostDoesNotRedirectToHomeControllerIfItemIsNotAvailableButAdmin5()
+        {
+            #region Arrange
+            var fakeDate = SetupDataForCheckoutTests();
+            Items[1].Expiration = fakeDate.AddDays(-1);
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            #endregion Assert
+        }
+        /// <summary>
+        /// Tests the checkout post does not redirect to home controller if item is not available but admin.
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutPostDoesNotRedirectToHomeControllerIfItemIsNotAvailableButAdmin6()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].Quantity = 10;
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 1, null, "Check", string.Empty, string.Empty, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            #endregion Assert
+        } 
 
         /// <summary>
         /// Tests the checkout with minimal valid data saves.
