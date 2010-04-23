@@ -42,6 +42,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         protected QuestionAnswerParameter[] TransactionAnswerParameters { get; set; }
         protected QuestionAnswerParameter[] QuantityAnswerParameters { get; set; }
         protected List<QuestionType> QuestionTypes { get; set; }
+        protected List<Validator> Validators { get; set; }
+
 
         #region Init
         public TransactionControllerTests()
@@ -80,6 +82,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             TransactionAnswerParameters = new QuestionAnswerParameter[1];
             QuestionTypes = new List<QuestionType>();
+            Validators = new List<Validator>();
         }
         /// <summary>
         /// Registers the routes.
@@ -183,6 +186,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Items[1].Quantity = 20;
             Items[1].Available = true;
             Items[1].Expiration = fakeDate.AddDays(5);
+
+            ControllerRecordFakes.FakeValidators(Validators);
 
             return fakeDate;
         }
