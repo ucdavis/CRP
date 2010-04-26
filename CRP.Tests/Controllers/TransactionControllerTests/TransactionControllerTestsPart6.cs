@@ -505,7 +505,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
         #endregion Email Validator Tests
 
-        #region Required Validator Tests
+        #region Url Validator Tests
 
         [TestMethod]
         public void TestCheckoutTransactionAnswersTextBoxUrlValidators1()
@@ -1289,51 +1289,11 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Assert
         }
         #endregion Phone Number Validator Tests
-        //TODO: Rest of text box with validators too.
 
         #endregion Checkout TextBox Tests
 
-        //TODO: add a transaction only question set to test the validators
-
-        #endregion Checkout Transaction Answer Tests
-
-        #region Checkout Quantity Answers Tests
-
-        /// <summary>
-        /// Tests the checkout quantity answers.
-        /// </summary>
-        [TestMethod]
-        public void TestCheckoutQuantityAnswers()
-        {
-            #region Arrange
-            SetupDataForCheckoutTests();
-            //SetupDataForAllContactInformationTransactionAnswerParameters();
-            SetupDataForQuantityQuestionsAnswerParameters();
-            #endregion Arrange
-
-            #region Act
-            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, QuantityAnswerParameters, true)
-                .AssertActionRedirect()
-                .ToAction<TransactionController>(a => a.Confirmation(1));
-            #endregion Act
-
-            #region Assert
-            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
-            Assert.IsNotNull(args);
-            //One because we have a TransactionAnswer here
-            Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.AreEqual(9, args.QuantityAnswers.Count);
-            #endregion Assert
-        }
-
-        #endregion Checkout Quantity Answers Tests
-
-        //test quantity answers
-        //test donation creates another transaction
-        //test restricted key
-        //test inventory exists
-
+       
+        #endregion Checkout Post Tests (Part 3)
 
         #endregion Checkout Post Tests (Part 3)
     }

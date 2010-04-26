@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace CRP.Controllers.Helpers
+namespace CRP.Controllers.Helpers 
 {
     //public static class ReturnUrlGenerator
     //{
@@ -52,8 +52,8 @@ namespace CRP.Controllers.Helpers
         }
         public static string DetailItemUrl(this UrlHelper url, int itemId, string tabName, string sort, string page)
         {
-            return url.RouteUrl(new {controller = "ItemManagement", action = "Details", id = itemId}) +
-                   "?" + tabName + "-orderBy=" + sort + "&" + tabName + "-page=" + page;
+            return url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) +
+                   "?" + tabName + "-orderBy=" + sort + "&" + tabName + "-page=" + page + "#" + tabName;
         } 
         public static string DetailItemLink(this UrlHelper url, int itemId, string tabName)
         {

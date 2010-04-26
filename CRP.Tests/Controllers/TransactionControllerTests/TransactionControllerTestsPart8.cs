@@ -180,7 +180,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.AreEqual("Red", args.TransactionAnswers.ElementAt(0).Answer);
+            Assert.AreEqual("Red", args.TransactionAnswers.ElementAt(0).Answer); 
             #endregion Assert
         }
 

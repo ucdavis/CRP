@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -107,7 +108,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreEqual("Transaction has been deactivated.", Controller.Message);
             Assert.IsFalse(Transactions[3].IsActive);
             Assert.IsNotNull(result);
-            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1" + "#" + StaticValues.Tab_Transactions, result.Url);
             #endregion Assert
         }
 
@@ -137,7 +138,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreEqual("Transaction has been deactivated.", Controller.Message);
             Assert.IsFalse(Transactions[4].IsActive);
             Assert.IsNotNull(result);
-            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1" + "#" + StaticValues.Tab_Transactions, result.Url);
             #endregion Assert
         }
 
@@ -175,7 +176,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             //FYI, the following messages do not appear on the UI
             Controller.ModelState.AssertErrorsAre("Paid transactions can not be deactivated.");
             Assert.IsNotNull(result);
-            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1" + "#" + StaticValues.Tab_Transactions , result.Url);
             #endregion Assert
         }
 
@@ -207,7 +208,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreEqual("Transaction has been activated.", Controller.Message);
             Assert.IsTrue(Transactions[4].IsActive);
             Assert.IsNotNull(result);
-            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1" + "#" + StaticValues.Tab_Transactions, result.Url);
             #endregion Assert
         }
 
@@ -242,7 +243,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             //FYI, the following messages do not appear on the UI
             Controller.ModelState.AssertErrorsAre("Transaction can not be activated because it will cause the amount sold to exceed the amount availble.");
             Assert.IsNotNull(result);
-            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1" + "#" + StaticValues.Tab_Transactions, result.Url);
             #endregion Assert
         }
 
@@ -278,7 +279,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             //FYI, the following messages do not appear on the UI
             Controller.ModelState.AssertErrorsAre("TransactionAnswers: may not be empty");
             Assert.IsNotNull(result);
-            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1", result.Url);
+            Assert.AreEqual("http://sample.com/ItemManagement/Edit/2?Transactions-orderBy=&Transactions-page=1" + "#" + StaticValues.Tab_Transactions, result.Url);
             #endregion Assert
         }
 
