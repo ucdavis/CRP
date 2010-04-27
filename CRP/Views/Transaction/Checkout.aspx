@@ -175,6 +175,8 @@
                 }
 
                 CalculateTotal();
+                // initialize the question names
+                InitializeQuestions();
             });
 
             // update the total when a donation is entered
@@ -220,9 +222,10 @@
                     $("img#CouponValidateImage").hide();
                 });
             });
+            
             // initialize the question names
             InitializeQuestions();
-            $("input.dateForm").datepicker();
+            
         });
 
         function CalculateTotal() {
@@ -256,6 +259,7 @@
 
         function GenerateQuantityQuestionSet() {
             var $container = $($("div.QuantityContainer")[0]);
+            $container.find("input.dateForm").removeClass("hasDatepicker");
             
             $container.after($container.clone());
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "li");
@@ -266,6 +270,13 @@
             RenameControls($("div#TransactionContainer"), "transactionAnswers", "li");
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "li");
             addQuantityIndex($("div.QuantityContainer"));
+            $.each($("input.dateForm"), function(index, item){
+            debugger;
+                if(!$(item).hasClass("hasDatepicker")){
+                    $(item).datepicker();
+                }
+            });
+//            $("input.dateForm").filter().datepicker();
         }
 
         function addQuantityIndex($container)
