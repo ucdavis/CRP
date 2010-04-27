@@ -629,7 +629,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             SetupDataForCheckoutTests();
             ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
             TransactionAnswerParameters[0] = new QuestionAnswerParameter();
-            TransactionAnswerParameters[0].Answer = @"2001/01/01";
+            TransactionAnswerParameters[0].Answer = @"01/01/2001";
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
             Questions[8].Name = "Text Area Test With Date";
@@ -647,7 +647,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.AreEqual(@"2001/01/01", args.TransactionAnswers.ElementAt(0).Answer);
+            Assert.AreEqual(@"01/01/2001", args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
         }
 
@@ -658,7 +658,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             SetupDataForCheckoutTests();
             ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
             TransactionAnswerParameters[0] = new QuestionAnswerParameter();
-            TransactionAnswerParameters[0].Answer = @"2001/1/01";
+            TransactionAnswerParameters[0].Answer = @"01/1/2001";
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
             Questions[8].Name = "Text Area Test With Date";
@@ -676,7 +676,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.AreEqual(@"2001/1/01", args.TransactionAnswers.ElementAt(0).Answer);
+            Assert.AreEqual(@"01/1/2001", args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
         }
 
@@ -687,7 +687,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             SetupDataForCheckoutTests();
             ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
             TransactionAnswerParameters[0] = new QuestionAnswerParameter();
-            TransactionAnswerParameters[0].Answer = @"2001-01-01";
+            TransactionAnswerParameters[0].Answer = @"01-01-2001";
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
             Questions[8].Name = "Text Area Test With Date";
@@ -705,7 +705,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.AreEqual(@"2001-01-01", args.TransactionAnswers.ElementAt(0).Answer);
+            Assert.AreEqual(@"01-01-2001", args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
         }
 
@@ -716,7 +716,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             SetupDataForCheckoutTests();
             ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
             TransactionAnswerParameters[0] = new QuestionAnswerParameter();
-            TransactionAnswerParameters[0].Answer = @"2001-9-30";
+            TransactionAnswerParameters[0].Answer = @"9-30-2001";
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
             Questions[8].Name = "Text Area Test With Date";
@@ -734,7 +734,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.AreEqual(@"2001-9-30", args.TransactionAnswers.ElementAt(0).Answer);
+            Assert.AreEqual(@"9-30-2001", args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
         }
 
@@ -745,7 +745,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             SetupDataForCheckoutTests();
             ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
             TransactionAnswerParameters[0] = new QuestionAnswerParameter();
-            TransactionAnswerParameters[0].Answer = @"2001-9-4";
+            TransactionAnswerParameters[0].Answer = @"9-4-2001";
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
             Questions[8].Name = "Text Area Test With Date";
@@ -763,7 +763,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.AreEqual(@"2001-9-4", args.TransactionAnswers.ElementAt(0).Answer);
+            Assert.AreEqual(@"9-4-2001", args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
         }
 
@@ -882,7 +882,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             SetupDataForCheckoutTests();
             ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
             TransactionAnswerParameters[0] = new QuestionAnswerParameter();
-            TransactionAnswerParameters[0].Answer = "04-05-2001";
+            TransactionAnswerParameters[0].Answer = "02-29-2001"; //Not a leap year
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
             Questions[8].Name = "Text Area Test With Date";
