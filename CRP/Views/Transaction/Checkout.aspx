@@ -270,8 +270,7 @@
             RenameControls($("div#TransactionContainer"), "transactionAnswers", "li");
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "li");
             addQuantityIndex($("div.QuantityContainer"));
-            $.each($("input.dateForm"), function(index, item){
-            debugger;
+            $.each($("input.dateForm"), function(index, item){            
                 if(!$(item).hasClass("hasDatepicker")){
                     $(item).datepicker();
                 }
