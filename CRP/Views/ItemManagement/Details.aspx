@@ -9,13 +9,6 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <script type="text/javascript">
-
-        $.fn.hasAncestor = function(a) {
-            return this.filter(function() {
-                return !!$(this).closest(a).length;
-            });
-        };
-
     
     
         $(function() { $("#tabs").tabs(); });
@@ -23,8 +16,14 @@
             $("a.FormSubmit").click(function() { $(this).parents("form").submit(); });
             $.each($("a.t-link"), function(index, item) {
                 var link = $(item).attr("href");
-                if ($(item).hasAncestor("Div#Check")) {
+                if ($(item).parents().filter("Div#Checks").length > 0) {
                     link = link + "#Checks";
+                }
+                else if ($(item).parents().filter("Div#Transactions").length > 0){
+                    link = link + "#Transactions";
+                }
+                else if ($(item).parents().filter("Div#Reports").length > 0) {
+                    link = link + "#Reports";
                 }
                 $(item).attr("href", link);
             });
