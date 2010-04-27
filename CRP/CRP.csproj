@@ -618,6 +618,7 @@
     <Content Include="ConnectionStringTest.config" />
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Scripts\jquery.tablesorter.min.js" />
+    <Content Include="Scripts\jquery.tablesorter.pager.js" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Shared\TemplateInstructions.ascx" />
     <Content Include="Views\Template\Edit.aspx" />

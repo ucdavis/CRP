@@ -49,7 +49,7 @@
                         .FirstOption("--Select--") %>
             <% break; %>
             <% case "Date" : %>
-                <%= Html.TextBox(".Answer", Model.Answer, new { @class = "dateForm indexedControl" + Model.Question.ValidationClasses })%>
+                <%= Html.TextBox(".Answer", Model.Answer, new { @class = "dateForm indexedControl " + Model.Question.ValidationClasses })%>
             <% break; %>
         <% }; %>
     <span class="val_img">&nbsp</span>    

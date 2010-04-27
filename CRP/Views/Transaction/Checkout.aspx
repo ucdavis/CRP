@@ -139,7 +139,7 @@
                 $("form#CheckoutForm").validate().element(this);
             });
 
-            $("input.dateForm").datepicker();
+            
 
             $("input#quantity").blur(function(event) {
                 var quantity = $(this).val();
@@ -222,6 +222,7 @@
             });
             // initialize the question names
             InitializeQuestions();
+            $("input.dateForm").datepicker();
         });
 
         function CalculateTotal() {

@@ -9,29 +9,25 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <script type="text/javascript">
+
+        $.fn.hasAncestor = function(a) {
+            return this.filter(function() {
+                return !!$(this).closest(a).length;
+            });
+        };
+
+    
+    
         $(function() { $("#tabs").tabs(); });
-    </script>
-<!--
-    <script type="text/javascript">
-        $(function() { $("#tabs2").tabs(); });
-    </script>
-    -->
-    <script type="text/javascript">
         $(document).ready(function() {
             $("a.FormSubmit").click(function() { $(this).parents("form").submit(); });
-        });
-    </script>
-    <script src="<%= Url.Content("~/Scripts/jquery.tablesorter.min.js") %>" type="text/javascript"></script>
-    
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#Transactionsv2 table").tablesorter();
-        });
-    </script>
-    
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#Checksv2 table").tablesorter();
+            $.each($("a.t-link"), function(index, item) {
+                var link = $(item).attr("href");
+                if ($(item).hasAncestor("Div#Check")) {
+                    link = link + "#Checks";
+                }
+                $(item).attr("href", link);
+            });
         });
     </script>
 ); 
@@ -135,93 +131,6 @@
     
     </div>
     
-<!--
-    <div id="tabs2">
-    
-        <ul>
-            <li><a href="#<%= Html.Encode(StaticValues.Tab_Transactions + "v2") %>">Transactionsv2</a></li>
-            <li><a href="#<%= Html.Encode(StaticValues.Tab_Checks + "v2") %>">Checksv2</a></li>
-            <li><a href="#<%= Html.Encode(StaticValues.Tab_Reports + "v2") %>">Reportsv2</a></li>
-        </ul>
-    
-        <div id="<%= Html.Encode(StaticValues.Tab_Transactions + "v2") %>">
-            <% Html.Grid(Model.Item.Transactions.Where(a => a.ParentTransaction == null))
-                   .Transactional()
-                   .Name("Transactionsv2")                  
-                   .Columns(col =>
-                                {
-                                    col.Add(a =>
-                                        {%>                                        
-                                            <% using (Html.BeginForm<ItemManagementController>(x => x.ToggleTransactionIsActive(a.Id, Request.QueryString["Transactions-orderBy"], Request.QueryString["Transactions-page"])))
-                                               {%>                                     
-                                                <%= Html.AntiForgeryToken() %>
-                                                <a href="javascript:;" class="FormSubmit"><%= a.IsActive ? "Deactivate" : "Activate" %></a>
-                                            
-                                            <%} %>
-                                            <%});
-                                    col.Add(a => a.TransactionNumber).Title(
-                                        "Transaction");
-                                    col.Add(a => a.Quantity);
-                                    col.Add(a => a.Amount.ToString("C")).Title("Amount");
-                                    col.Add(a => a.DonationTotal.ToString("C")).Title("Donation");
-                                    col.Add(a => a.Credit ? "Credit Card" : "Check").Title("Payment Type");
-                                    col.Add(a => a.Paid);
-                                    col.Add(a => a.IsActive);
-                                })
-                   .Pageable()
-                   .Render();
-                   %>
-        </div>
-        <div id="<%= Html.Encode(StaticValues.Tab_Checks + "v2") %>">
-            <% Html.Grid(Model.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null  && a.IsActive)) 
-                   .Transactional()
-                   .Name("Checksv2")
-                   .Columns(col =>
-                                {
-                                    col.Add(a =>
-                                                {%>
-                                                
-                                                    <%= Html.ActionLink<PaymentController>(b => b.LinkToTransaction(a.Id), "Select") %>
-                                                
-                                                <%});
-                                    col.Add(a =>
-                                                {%>
-                                                
-                                                    <%= Html.ActionLink<TransactionController>(b => b.Edit(a.Id), "Edit") %>
-                                                
-                                                <%});
-                                    col.Add(a => a.TransactionNumber).Title(
-                                        "Transaction Number");
-                                    col.Add(a => a.Quantity);
-                                    col.Add(a => a.Total.ToString("C")).Title("Amount");
-                                    col.Add(a => a.Paid);
-                                })
-                   .Render();
-                   %>
-        </div>
-        <div id="<%= Html.Encode(StaticValues.Tab_Reports + "v2") %>">
-        
-            <p>
-                <%= Html.ActionLink<ReportController>(a => a.Create(Model.Item.Id), "Create") %>
-            </p>
-        
-            <% Html.Grid(Model.Reports)
-                   .Transactional()
-                   .Name("SystemReportsv2")
-                   .Columns(col =>
-                                {
-                                    col.Add(a =>
-                                                {%>
-                                                    <%= Html.ActionLink<ReportController>(b => b.ViewReport(a.Id, Model.Item.Id), "Select") %>
-                                                <%});
-                                    col.Add(a => a.Name);
-                                    col.Add(a => a.Columns.Count).Title("# of Columns");
-                                    col.Add(a => a.User.FullName).Title("Created By");
-                                    col.Add(a => a.SystemReusable).Title("System Report");
-                                })
-                   .Render(); %>
-        </div>         
--->
     <p>
         <%= Html.ActionLink<ItemManagementController>(a => a.List(), "Back to List") %>
     </p>
