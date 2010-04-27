@@ -61,6 +61,14 @@ namespace CRP.Controllers.Helpers
 
             return string.Format(link, returnUrl);
         }
+        public static string DetailItemLink(this UrlHelper url, int itemId, string tabName, string sort, string page)
+        {
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetail", sort, page);
+            var returnUrl = url.RouteUrl(new { controller = "ItemManagement", action = "Details", id = itemId }) +
+                   "?" + tabName + "-orderBy=" + pageAndSort["sort"] + "&" + tabName + "-page=" + pageAndSort["page"] + "#" + tabName;
+
+            return string.Format(link, returnUrl);
+        }
 
         public static string EditItemUrl(this UrlHelper url, int itemId, string tabName)
         {

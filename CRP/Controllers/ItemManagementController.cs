@@ -426,13 +426,7 @@ namespace CRP.Controllers
         [AcceptPost]
         public ActionResult ToggleTransactionIsActive(int id, string sort, string page)
         {
-            Int32 validPage;
-            string validSort = ValidateSort(sort);
-
-            if(!int.TryParse(page, out validPage))
-            {
-                validPage = 1;
-            }
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
 
 
             var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
@@ -479,36 +473,49 @@ namespace CRP.Controllers
             else
             {
                 Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");  
-            }
-            return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Transactions, validSort, validPage.ToString()));              
+            }             
+            return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Transactions, pageAndSort["sort"], pageAndSort["page"]));              
             //return this.RedirectToAction(a => a.Details(transaction.Item.Id));
         }
 
-        /// <summary>
-        /// Validates the sort.
-        /// </summary>
-        /// <param name="sort">The sort.</param>
-        /// <returns></returns>
-        private static string ValidateSort(string sort)
-        {
-            var validSort = new List<string>();
-            validSort.Add("TransactionNumber-asc");
-            validSort.Add("TransactionNumber-desc");
-            validSort.Add("Quantity-asc");
-            validSort.Add("Quantity-desc");
-            validSort.Add("Paid-asc");
-            validSort.Add("Paid-desc");
-            validSort.Add("IsActive-asc");
-            validSort.Add("IsActive-desc");
-            if(validSort.Contains(sort))
-            {
-                return sort;
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
+        ///// <summary>
+        ///// Validates the parameters.
+        ///// </summary>
+        ///// <param name="pageName">The page name.</param>
+        ///// <param name="sort">The sort.</param>
+        ///// <param name="page">The page.</param>
+        ///// <returns></returns>
+        //private Dictionary<string, string> ValidateParameters(string pageName, string sort, string page)
+        //{
+        //    var rtValue = new Dictionary<string, string>(2);
+
+        //    Int32 validPage;
+        //    if (!int.TryParse(page, out validPage))
+        //    {
+        //        validPage = 1;
+        //    }
+        //    rtValue.Add("page", validPage.ToString());
+
+        //    var validSort = new List<string>();
+        //    validSort.Add("TransactionNumber-asc");
+        //    validSort.Add("TransactionNumber-desc");
+        //    validSort.Add("Quantity-asc");
+        //    validSort.Add("Quantity-desc");
+        //    validSort.Add("Paid-asc");
+        //    validSort.Add("Paid-desc");
+        //    validSort.Add("IsActive-asc");
+        //    validSort.Add("IsActive-desc");
+        //    if (validSort.Contains(sort))
+        //    {
+        //        rtValue.Add("sort", sort);
+        //    }
+        //    else
+        //    {
+        //        rtValue.Add("sort", string.Empty);
+        //    }
+
+        //    return rtValue;
+        //}        
 
     }
 

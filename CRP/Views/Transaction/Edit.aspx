@@ -1,5 +1,7 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.EditTransactionViewModel>" %>
 <%@ Import Namespace="CRP.Controllers"%>
+<%@ Import Namespace="CRP.Controllers.Helpers" %>
+<%@ Import Namespace="CRP.Core.Resources" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Edit
@@ -13,6 +15,8 @@
 
     <% using (Html.BeginForm()) {%>
     <%= Html.AntiForgeryToken() %>
+    <%= Html.Hidden("CheckSort", Model.Sort) %>
+    <%= Html.Hidden("CheckPage", Model.Page) %>
         <fieldset>
             <legend>Fields</legend>
             <ul>
@@ -26,7 +30,6 @@
                 <li>
                     Amount:
                     <%= Html.Encode(Model.TransactionValue.AmountTotal.ToString("C"))%>
-                   <!--<%= Html.Hidden("TotalAmount", Model.TransactionValue.AmountTotal)%>-->
                 </li>
                 <li>
                     Correction Total:
@@ -39,7 +42,6 @@
                 <li>
                     Current Donation Total:
                     <%= Html.Encode(Model.TransactionValue.DonationTotal.ToString("C"))%>
-                    <!--<%= Html.Hidden("DonationTotal", Model.TransactionValue.DonationTotal)%> -->
                 </li>
                 <li>
                     Total Paid:
@@ -76,7 +78,8 @@
     <% } %>
 
     <div>
-        <%=Html.ActionLink<ItemManagementController>(a => a.Details(Model.TransactionValue.Item.Id), "Back to List") %>
+        <%--<%=Html.ActionLink<ItemManagementController>(a => a.Details(Model.TransactionValue.Item.Id), "Back to List") %>--%>
+        <%= Url.DetailItemLink(Model.TransactionValue.Item.Id, StaticValues.Tab_Checks, Model.Sort, Model.Page)%>
     </div>
 
 </asp:Content>

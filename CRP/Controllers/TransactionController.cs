@@ -431,9 +431,11 @@ namespace CRP.Controllers
         /// Edit Get
         /// </summary>
         /// <param name="id">The id.</param>
+        /// <param name="sort"></param>
+        /// <param name="page"></param>
         /// <returns></returns>
         [AnyoneWithRole]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, string sort, string page)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
             if(transaction == null)
@@ -463,6 +465,11 @@ namespace CRP.Controllers
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
+
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
+            viewModel.Page = pageAndSort["page"];
+            viewModel.Sort = pageAndSort["sort"];
+
             return View(viewModel);
         }
 
@@ -470,10 +477,12 @@ namespace CRP.Controllers
         /// Edit Post
         /// </summary>
         /// <param name="transaction">The transaction.</param>
+        /// <param name="checkSort"></param>
+        /// <param name="checkPage"></param>
         /// <returns></returns>
         [AcceptPost]
         [AnyoneWithRole]
-        public ActionResult Edit(Transaction transaction)
+        public ActionResult Edit(Transaction transaction, string checkSort, string checkPage)
         {
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(transaction.Id);
             if (transactionToUpdate == null)
@@ -488,6 +497,8 @@ namespace CRP.Controllers
                 }
                 return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionToUpdate.Item.Id));
             }
+
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", checkSort, checkPage);
 
             var correctionTransaction = new Transaction(transactionToUpdate.Item);
             correctionTransaction.Amount = transaction.Amount;
@@ -513,7 +524,15 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transactionToUpdate);
-                return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionToUpdate.Item.Id));
+                //return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionToUpdate.Item.Id));
+                return
+                    Redirect(Url.DetailItemUrl
+                    (
+                        transactionToUpdate.Item.Id,
+                        StaticValues.Tab_Checks,
+                        pageAndSort["sort"],
+                        pageAndSort["page"])
+                    );
             }
 
             //TODO: We could replace the line below with a rollback to be more consistent.
@@ -534,6 +553,10 @@ namespace CRP.Controllers
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
+
+            viewModel.Sort = pageAndSort["sort"];
+            viewModel.Page = pageAndSort["page"];
+            
             return View(viewModel);
         }
         
@@ -910,8 +933,6 @@ namespace CRP.Controllers
 
             return View(viewModel);
         }
-
-
     }
 
     public class QuestionAnswerParameter

@@ -10,6 +10,8 @@ namespace CRP.Controllers.ViewModels
         public Transaction Transaction { get; set; }
         public IEnumerable<PaymentLog> PaymentLogs { get; set; }
         public bool AddBlankCheck { get; set; }
+        public string Sort { get; set; }
+        public string Page { get; set; }
 
         public static LinkPaymentViewModel Create(IRepository repository, Transaction transaction)
         {

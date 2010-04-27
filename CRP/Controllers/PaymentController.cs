@@ -33,7 +33,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="transactionId">Transaction Id</param>
         /// <returns></returns>
-        public ActionResult LinkToTransaction(int transactionId)
+        public ActionResult LinkToTransaction(int transactionId, string sort, string page)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
             if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List());
@@ -46,12 +46,14 @@ namespace CRP.Controllers
 
             var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
             viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
-
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
+            viewModel.Page = pageAndSort["page"];
+            viewModel.Sort = pageAndSort["sort"];
             return View(viewModel);
         }
 
         [AcceptPost]
-        public ActionResult LinkToTransaction(int transactionId, PaymentLog[] Checks)
+        public ActionResult LinkToTransaction(int transactionId, PaymentLog[] Checks, string checkSort, string checkPage)
         {
             // get the transaction
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
@@ -64,6 +66,9 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
+
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", checkSort, checkPage);
+
             bool checkErrorFound = false;
 
             // go through and process the checks
@@ -147,12 +152,22 @@ namespace CRP.Controllers
                         _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
                     }
                 }
-                return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
+                //return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Checks));
+                return
+                    Redirect(Url.DetailItemUrl
+                    (
+                        transaction.Item.Id, 
+                        StaticValues.Tab_Checks, 
+                        pageAndSort["sort"],
+                        pageAndSort["page"])
+                    );
             }            
-
             var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
             viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
             viewModel.AddBlankCheck = false; //We had errors, we will display what they entered without adding a new one.
+
+            viewModel.Sort = pageAndSort["sort"];
+            viewModel.Page = pageAndSort["page"];
 
             //JCS Ok we have an invalid object, where we have added paymentLogs, 
             //if they just go back to the list, the automatic commit will save the changes,

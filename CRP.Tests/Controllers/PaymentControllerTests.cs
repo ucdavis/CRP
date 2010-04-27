@@ -84,7 +84,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestLinkToTransactionWithOneParameterMapping()
         {
-            "~/Payment/LinkToTransaction/5".ShouldMapTo<PaymentController>(a => a.LinkToTransaction(5),true);		
+            "~/Payment/LinkToTransaction/5".ShouldMapTo<PaymentController>(a => a.LinkToTransaction(5, null, null),true);		
         }
 
 
@@ -94,7 +94,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestLinkToTransactionWithMultipleParametersMapping()
         {
-            "~/Payment/LinkToTransaction/".ShouldMapTo<PaymentController>(a => a.LinkToTransaction(5, new PaymentLog[1]),true);		
+            "~/Payment/LinkToTransaction/".ShouldMapTo<PaymentController>(a => a.LinkToTransaction(5, new PaymentLog[1], null, null),true);		
         }
 
         #endregion Mapping/Route Tests
@@ -112,7 +112,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act/Assert
-            Controller.LinkToTransaction(5)
+            Controller.LinkToTransaction(5, null, null)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List());
             #endregion Act/Assert
@@ -132,7 +132,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.LinkToTransaction(2)
+            var result = Controller.LinkToTransaction(2, null, null)
                 .AssertViewRendered()
                 .WithViewData<LinkPaymentViewModel>();
             #endregion Act
@@ -167,7 +167,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.LinkToTransaction(2)
+            var result = Controller.LinkToTransaction(2, null, null)
                 .AssertViewRendered()
                 .WithViewData<LinkPaymentViewModel>();
             #endregion Act
@@ -203,7 +203,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.LinkToTransaction(2)
+            var result = Controller.LinkToTransaction(2, null, null)
                 .AssertViewRendered()
                 .WithViewData<LinkPaymentViewModel>();
             #endregion Act
@@ -232,7 +232,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.LinkToTransaction(2, payments)
+            Controller.LinkToTransaction(2, payments, null, null)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List());
             #endregion Act
@@ -258,12 +258,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.LinkToTransaction(2, payments)
+            var result = Controller.LinkToTransaction(2, payments, null, null)
                 .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
-            Assert.AreEqual("#Checks", result.Url);
+            Assert.AreEqual("?Checks-orderBy=&Checks-page=1#Checks", result.Url);
             TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[1]));
             Assert.AreEqual("Checks associated with transaction.", Controller.Message);
             #endregion Assert		
@@ -288,12 +288,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.LinkToTransaction(2, payments)
+            var result = Controller.LinkToTransaction(2, payments, null, null)
                 .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
-            Assert.AreEqual("#Checks", result.Url);
+            Assert.AreEqual("?Checks-orderBy=&Checks-page=1#Checks", result.Url);
             TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[1]));
             Assert.AreEqual("Checks associated with transaction.", Controller.Message);
             Assert.AreEqual(2, Transactions[1].PaymentLogs.Count);
@@ -322,7 +322,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.LinkToTransaction(2, payments)
+            Controller.LinkToTransaction(2, payments, null, null)
                 .AssertViewRendered()
                 .WithViewData<LinkPaymentViewModel>();
             #endregion Act
@@ -357,7 +357,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.LinkToTransaction(2, payments)
+            Controller.LinkToTransaction(2, payments, null, null)
                 .AssertViewRendered()
                 .WithViewData<LinkPaymentViewModel>();
             #endregion Act
@@ -391,12 +391,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.LinkToTransaction(2, payments)
+            var result = Controller.LinkToTransaction(2, payments, null, null)
                 .AssertHttpRedirect();
             #endregion Act
 
             #region Assert
-            Assert.AreEqual("#Checks", result.Url);
+            Assert.AreEqual("?Checks-orderBy=&Checks-page=1#Checks", result.Url);
             TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[1]));
             Assert.AreEqual("Checks associated with transaction.", Controller.Message);
             #endregion Assert

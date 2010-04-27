@@ -76,7 +76,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         [TestMethod]
         public void TestEditGetMapping()
         {
-            "~/Transaction/Edit/5".ShouldMapTo<TransactionController>(a => a.Edit(5));
+            "~/Transaction/Edit/5".ShouldMapTo<TransactionController>(a => a.Edit(5, null, null));
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         [TestMethod]
         public void TestEditPostMapping()
         {
-            "~/Transaction/Edit/".ShouldMapTo<TransactionController>(a => a.Edit(new Transaction()), true);
+            "~/Transaction/Edit/".ShouldMapTo<TransactionController>(a => a.Edit(new Transaction(), null, null), true);
         }
 
         /// <summary>

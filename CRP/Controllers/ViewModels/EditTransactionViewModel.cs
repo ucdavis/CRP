@@ -17,6 +17,8 @@ namespace CRP.Controllers.ViewModels
         public string ContactEmail { get; set; }
         public decimal Amount { get; set; }
         public string CorrectionReason { get; set; }
+        public string Sort { get; set; }
+        public string Page { get; set; }
 
         public static EditTransactionViewModel Create(IRepository repository)
         {

@@ -137,12 +137,14 @@
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
     <p>
-        <%= Url.DetailItemLink(Model.Transaction.Item.Id, StaticValues.Tab_Checks) %>
+        <%= Url.DetailItemLink(Model.Transaction.Item.Id, StaticValues.Tab_Checks, Model.Sort, Model.Page) %>
     </p>
     
     <% using(Html.BeginForm()){ %>
 
     <%= Html.AntiForgeryToken() %>
+    <%= Html.Hidden("CheckSort", Model.Sort) %>
+    <%= Html.Hidden("CheckPage", Model.Page) %>
 
     <table id="Container" style="width:100%">
         <tr>
@@ -151,7 +153,7 @@
                 <ul>
                     <li>
                         Transaction Number: <%= Html.Encode(Model.Transaction.TransactionNumber) %>
-                    </li
+                    </li>
                     <li>
                         Transaction Date:
                         <%= Html.Encode(Model.Transaction.TransactionDate) %>

@@ -15,17 +15,19 @@
         $(document).ready(function() {
             $("a.FormSubmit").click(function() { $(this).parents("form").submit(); });
             $.each($("a.t-link"), function(index, item) {
-                var link = $(item).attr("href");
-                if ($(item).parents().filter("Div#Checks").length > 0) {
+                var $item = $(item);
+                var link = $item.attr("href");
+
+                if ($item.parents().filter("Div#Checks").length > 0) {
                     link = link + "#Checks";
                 }
-                else if ($(item).parents().filter("Div#Transactions").length > 0){
+                else if ($item.parents().filter("Div#Transactions").length > 0) {
                     link = link + "#Transactions";
                 }
-                else if ($(item).parents().filter("Div#Reports").length > 0) {
+                else if ($item.parents().filter("Div#Reports").length > 0) {
                     link = link + "#Reports";
                 }
-                $(item).attr("href", link);
+                $item.attr("href", link);
             });
         });
     </script>
@@ -89,8 +91,8 @@
                                     col.Add(a =>
                                                 {%>
                                                 
-                                                    <%= Html.ActionLink<PaymentController>(b => b.LinkToTransaction(a.Id), "Select") %> |
-                                                    <%= Html.ActionLink<TransactionController>(b => b.Edit(a.Id), "Edit") %>
+                                                    <%= Html.ActionLink<PaymentController>(b => b.LinkToTransaction(a.Id, Request.QueryString["Checks-orderBy"], Request.QueryString["Checks-page"]), "Select")%> |
+                                                    <%= Html.ActionLink<TransactionController>(b => b.Edit(a.Id, Request.QueryString["Checks-orderBy"], Request.QueryString["Checks-page"]), "Edit")%>
                                                 
                                                 <%});                      
                                     col.Add(a => a.TransactionNumber).Title("Transaction Number");
