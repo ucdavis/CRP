@@ -30,11 +30,11 @@
     *The following questions must be answered for each of the <%= !String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName)%>
 </p>
 
-<div class="QuantityContainer">
+
     <% for (var i = 0; i < Model.Quantity; i++ ) { %>
         <% foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
            { %> 
-
+<div class="QuantityContainer">
                 <fieldset>
                 <legend><%= Html.Encode(qs.QuestionSet.Name)%> <span class="quantityIndex"><%= Html.Encode(i + 1) %></span> </legend>
                 <ul>
@@ -47,7 +47,6 @@
                 <% } %>
             </ul>    
             </fieldset>
-
+</div>
         <% } %> <!-- End of foreach loop -->
     <% } %> <!-- End of for loop -->
-</div>
