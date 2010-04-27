@@ -170,6 +170,7 @@ INSERT INTO [dbo].[Validators]([Name], [Class], [RegEx], [ErrorMessage])
 GO
 INSERT INTO [dbo].[Validators]([Name], [Class], [RegEx], [ErrorMessage])
   VALUES('Date', 'date', '^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$', '{0} is not a valid date.')
+            ^(0[1-9]|1[012])[-\/](0[1-9]|[12][0-9]|3[01])[-\/](19|20)\d\d$
 GO
 INSERT INTO [dbo].[Validators]([Name], [Class], [RegEx], [ErrorMessage])
   VALUES('Phone Number', 'phoneUS', '^\(?[\d]{3}\)?[\s-]?[\d]{3}[\s-]?[\d]{4}$', '{0} is not a valid phone number.')
@@ -202,7 +203,8 @@ GO
 
             entity[3].Name = "Date";
             entity[3].Class = "date";
-            entity[3].RegEx = @"^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$";
+            //entity[3].RegEx = @"^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$";
+            entity[3].RegEx = @"^(0[1-9]|1[012])[-\/](0[1-9]|[12][0-9]|3[01])[-\/](19|20)\d\d$";
             entity[3].ErrorMessage = "{0} is not a valid date.";
 
             entity[4].Name = "Phone Number";
