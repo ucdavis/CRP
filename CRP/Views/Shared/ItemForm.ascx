@@ -1,5 +1,11 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Controllers.ViewModels.ItemViewModel>" %>
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#Item_Link").watermark("Example: http://www.ucdavis.edu/index.html", { className: 'watermark' });
+            $("#Item_Expiration").watermark("mm/dd/yyyy", { className: "watermark" });
+        });
+    </script>
 
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
