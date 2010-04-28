@@ -21,26 +21,28 @@ namespace CRP.Controllers.ViewModels
         //public ICollection<CRP.Core.Domain.Check> Checks { get; set; }
         public int ItemId { get; set; }
         public string ReportName { get; set; }
+        public int ItemReportId { get; set; }
 
         public static ReportViewModel Create(IRepository repository, ItemReport itemReport, Item item)
         {
             Check.Require(repository != null, "Repository is required.");
 
-            var viewModel = new ReportViewModel()
+            var viewModel = new ReportViewModel
             {
                 ItemId = item.Id,
-                ReportName = itemReport.Name
+                ReportName = itemReport.Name,
+                ItemReportId = itemReport.Id
             };
 
             if (itemReport.Name == "Checks")
             {
-                return GenerateChecks(viewModel, repository, itemReport, item);
+                return GenerateChecks(viewModel, itemReport, item);
             }
 
-            return GenerateGeneric(viewModel, repository, itemReport, item);
+            return GenerateGeneric(viewModel, itemReport, item);
         }
 
-        private static ReportViewModel GenerateGeneric (ReportViewModel viewModel, IRepository repository, ItemReport itemReport, Item item)
+        private static ReportViewModel GenerateGeneric (ReportViewModel viewModel, ItemReport itemReport, Item item)
         {
             //deal with the column names
             foreach (var ir in itemReport.Columns)
@@ -90,7 +92,7 @@ namespace CRP.Controllers.ViewModels
             return viewModel;
         }
 
-        private static ReportViewModel GenerateChecks (ReportViewModel viewModel, IRepository repository, ItemReport itemReport, Item item)
+        private static ReportViewModel GenerateChecks (ReportViewModel viewModel, ItemReport itemReport, Item item)
         {
             //deal with the column names
             foreach (var ir in itemReport.Columns)

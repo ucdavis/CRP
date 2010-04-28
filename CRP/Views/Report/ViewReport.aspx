@@ -1,6 +1,7 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ReportViewModel>" %>
 <%@ Import Namespace="CRP.Controllers.Helpers"%>
 <%@ Import Namespace="CRP.Core.Resources" %>
+<%@ Import Namespace="CRP.Controllers" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	ViewReport
@@ -13,8 +14,8 @@
     <p>
         <%--<%= Html.DetailItemUrl(Model.ItemId, StaticValues.Tab_Reports) %>--%>
         
-        <%= Url.DetailItemLink(Model.ItemId, StaticValues.Tab_Reports) %>
-        
+        <%= Url.DetailItemLink(Model.ItemId, StaticValues.Tab_Reports) %> |
+        <%= Html.ActionLink<ExcelController>(a => a.CreateExcelReport(Model.ItemReportId, Model.ItemId), "Generate Excel Report") %>
         
     </p>
 

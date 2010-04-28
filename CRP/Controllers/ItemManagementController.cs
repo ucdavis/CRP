@@ -17,7 +17,7 @@ using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
-    [UserOnlyAttribute]
+    [UserOnly]
     public class ItemManagementController : SuperController
     {
         //

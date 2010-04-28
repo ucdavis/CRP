@@ -194,6 +194,7 @@
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
+    <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\Helpers\StringExtension.cs" />
     <Compile Include="Controllers\Helpers\ValidateParameters.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
@@ -223,7 +224,6 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
-    <Compile Include="Controllers\TestExcellController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
     <Compile Include="Controllers\ViewModels\CouponViewModel.cs" />
@@ -652,7 +652,6 @@
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Shared\TemplateInstructions.ascx" />
     <Content Include="Views\Template\Edit.aspx" />
-    <Content Include="Views\TestExcell\Index.aspx" />
     <Content Include="Views\Transaction\Edit.aspx" />
     <None Include="Content\NPOITemplate.xls" />
     <None Include="Images\fonts\Quicksand_Bold.eot" />

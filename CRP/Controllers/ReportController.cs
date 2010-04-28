@@ -34,7 +34,7 @@ namespace CRP.Controllers
         /// <param name="id"></param>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [UserOnlyAttribute]
+        [UserOnly]
         public ActionResult ViewReport(int id, int itemId)
         {
             var itemReport = Repository.OfType<ItemReport>().GetNullableByID(id);
@@ -49,6 +49,13 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
+
+            if(!Access.HasItemAccess(CurrentUser, item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+
             var viewModel = ReportViewModel.Create(Repository, itemReport, item);
 
             return View(viewModel);
@@ -59,7 +66,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [UserOnlyAttribute]
+        [UserOnly]
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
@@ -95,7 +102,7 @@ namespace CRP.Controllers
         /// <param name="createReportParameters"></param>
         /// <returns></returns>
         [AcceptPost]
-        [UserOnlyAttribute]
+        [UserOnly]
         public ActionResult Create(int itemId, string name, CreateReportParameter[] createReportParameters)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
