@@ -185,4 +185,7 @@
 	<data name="STR_Transaction_can_not_be_activated">
 		<value xml:space="preserve">Transaction can not be activated because it will cause the amount sold to exceed the amount availble.</value>
 	</data>
+	<data name="ReportControllerReservedWord">
+		<value xml:space="preserve">Checks is a reserved word for report names and cannot be used.</value>
+	</data>
 </root>
