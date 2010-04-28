@@ -270,11 +270,21 @@
             RenameControls($("div#TransactionContainer"), "transactionAnswers", "li");
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "li");
             addQuantityIndex($("div.QuantityContainer"));
-            $.each($("input.dateForm"), function(index, item){            
+            $.each($("input.dateForm"), function(index, item){    
+                $(item).watermark("mm/dd/yyyy", { className: "watermark" });     
                 if(!$(item).hasClass("hasDatepicker")){
                     $(item).datepicker();
                 }
             });
+            $.each($("input.date"), function(index, item){
+                $(item).watermark("mm/dd/yyyy", { className: "watermark" });
+            });
+            $.each($("input.url"), function(index, item){
+                $(item).watermark("Example: http://www.ucdavis.edu/index.html", { className: "watermark" });
+            });
+            $.each($("input.phoneUS"), function(index, item){
+                $(item).watermark("(###) ###-####", { className: "watermark" });
+            });          
 //            $("input.dateForm").filter().datepicker();
         }
 
