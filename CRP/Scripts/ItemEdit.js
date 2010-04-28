@@ -3,7 +3,6 @@
 
     $("select#Item_ItemType").change(function(event) {
         var url = getExtendedPropertyUrl;
-
         $.getJSON(url + '/' + $(this).val(), {},
                     function(result) {
 
@@ -24,18 +23,18 @@
                                                          .attr("id", "ExtendedProperties[" + index + "]_propertyId")
                                                          .attr("name", "ExtendedProperties[" + index + "].propertyId")
                                                          .val(item.Id);
-
+    
                                 if (item.QuestionType.Name == "Date") {
-                                    textBox.datepicker();
+                                    textBox.datepicker().watermark("mm/dd/yyyy", { className: "watermark" });
                                 }
-
+                                
                                 var p = $("<p>").append(label).append(textBox).append(hidden);
                                 $("div#ExtendedProperties").append(p);
                             });
                         }
                     });
     });
-
+    
     $("img#tagAddButton").click(function(event) {
         var input = $("<input>").attr("id", "tags").attr("name", "tags").val($("input#tagInput").val());
         input.attr("type", "text");
