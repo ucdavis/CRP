@@ -404,7 +404,567 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
         #endregion Radio Buttons Tests
 
+        #region CheckBox List Tests
+
+        /// <summary>
+        /// Tests the checkout transaction answers check box list1.
+        /// Check without validators and one option selected
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersCheckBoxList1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].CblAnswer = new[]{"Red"};
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            Questions[8].Name = "Checkbox List Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("Red", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout transaction answers check box list2.
+        /// Check without validators and two option selected
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersCheckBoxList2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].CblAnswer = new[] { "Red", "Blue" };
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            Questions[8].Name = "Checkbox List Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("Red, Blue", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout transaction answers check box list3.
+        /// All options Selected
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersCheckBoxList3()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].CblAnswer = new[] { "Red", "Blue", "No Colour" };
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            Questions[8].Name = "Checkbox List Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("Red, Blue, No Colour", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout transaction answers check box list4.
+        /// Nothing picked, empty string in answer
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersCheckBoxList4()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].CblAnswer = null;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            Questions[8].Name = "Checkbox List Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersCheckBoxList5()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].CblAnswer = new[]{string.Empty};
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            Questions[8].Name = "Checkbox List Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersCheckBoxListWithRequired1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].CblAnswer = new[] { "Red" };
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            Questions[8].Name = "Checkbox List Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("Red", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout transaction answers check box list with required2.
+        /// Required and no value should fail
+        /// </summary>
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersCheckBoxListWithRequired2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].CblAnswer = null;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            Questions[8].Name = "Checkbox List Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Checkbox List Test is a required field");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersCheckBoxListWithRequired3()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].CblAnswer = new []{string.Empty};
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            Questions[8].Name = "Checkbox List Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Checkbox List Test is a required field");
+            #endregion Assert
+        }
+        #endregion CheckBox List Tests
+
+        #region Drop Down Tests
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDropDown1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "Red";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            Questions[8].Name = "Drop Down Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("Red", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the checkout transaction answers DropDown.
+        /// I have this test here, but ignored because there is not validation at the controller level
+        /// to check the answer is in the list of options.
+        /// </summary>
+        [TestMethod, Ignore]
+        public void TestCheckoutTransactionAnswersDropDown2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "Not In List";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            Questions[8].Name = "Drop Down Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDropDown3()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = null;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            Questions[8].Name = "Drop Down Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(null, args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDropDown4()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "No Colour";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            Questions[8].Name = "Drop Down Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("No Colour", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        #region Required Tests
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDropDownRequired1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "Red";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            Questions[8].Name = "Drop Down Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("Red", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDropDownRequired2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = null;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            Questions[8].Name = "Drop Down Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Drop Down Test is a required field");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDropDownRequired3()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = string.Empty;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            Questions[8].Name = "Drop Down Test";
+            QuestionOption[] questionOptions = new QuestionOption[3];
+            questionOptions[0] = new QuestionOption("Blue");
+            questionOptions[1] = new QuestionOption("Red");
+            questionOptions[2] = new QuestionOption("No Colour");
+            Questions[8].AddOption(questionOptions[0]);
+            Questions[8].AddOption(questionOptions[1]);
+            Questions[8].AddOption(questionOptions[2]);
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Drop Down Test is a required field");
+            #endregion Assert
+        }
+
+        #endregion Required Tests
+        
+
+        #endregion Drop Down Tests
+
         //TODO: add a transaction only question set to test the validators
+        //TODO:Date.
 
         #endregion Checkout Transaction Answer Tests continued
 
