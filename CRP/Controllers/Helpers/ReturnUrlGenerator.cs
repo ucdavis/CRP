@@ -81,6 +81,14 @@ namespace CRP.Controllers.Helpers
 
             return string.Format(link, returnUrl);
         }
+
+        public static string ItemManagementListLink(this UrlHelper url, string linkText)
+        {            
+            var returnUrl = url.RouteUrl(new { controller = "ItemManagement", action = "List"}) +
+                   "?orderBy=DateCreated-desc&page=1";
+
+            return string.Format(@"<a href='{0}'>{1}</a>", returnUrl, linkText);
+        }
         
     }
 }

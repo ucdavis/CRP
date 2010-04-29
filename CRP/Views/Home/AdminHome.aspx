@@ -1,6 +1,7 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
 <%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
+<%@ Import Namespace="CRP.Controllers.Helpers" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	AdminHome
@@ -12,7 +13,8 @@
 
     <h2>User Screens</h2>
     <ul>
-        <li><%= Html.ActionLink<ItemManagementController>(a => a.List(), "Items") %></li>
+        <%--<li><%= Html.ActionLink<ItemManagementController>(a => a.List(), "Items") %></li>--%>
+        <li><%= Url.ItemManagementListLink("Items")%></li>
         <li><%= Html.ActionLink<QuestionSetController>(a => a.List(), "Question Sets") %></li>
     </ul>
     
