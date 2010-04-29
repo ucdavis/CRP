@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
 using CRP.Controllers.Helpers;
@@ -108,6 +109,48 @@ namespace CRP.Controllers
             questionSet.AddQuestion(question);
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, question.ValidationResults());
+
+            var validatorsSelected = question.Validators.Count(validator => validator.Class.ToLower().Trim() != "required");
+
+            //Validator and Question type validation:
+            switch (question.QuestionType.Name)
+            {
+                case "Text Box":
+                    //All possible, but only a combination of required and others
+                    if(validatorsSelected > 1)
+                    {
+                        ModelState.AddModelError("Validators", "Cannot have Email, Url, Date, or Phone Number validators selected together.");
+                    }
+                    break;                
+                case "Boolean":
+                    if (question.Validators.Count > 0) //Count of all validators
+                    {
+                        ModelState.AddModelError("Validators", "Boolean Question Type should not have validators.");
+                    }
+                    break;
+                case "Radio Buttons":
+                case "Checkbox List":
+                case "Drop Down":                                
+                case "Text Area":
+                    if (validatorsSelected > 0) //count of all validators excluding required
+                    {
+                        ModelState.AddModelError("Validators", string.Format("The only validator allowed for a Question Type of {0} is Required.", question.QuestionType.Name));
+                    }
+                    break;
+
+                case "Date":
+                    foreach (var validator in question.Validators)
+                    {
+                        if(validator.Class.ToLower().Trim() != "required" && validator.Class.ToLower().Trim() != "date")
+                        {
+                            ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
+                        }
+                    }
+                    break;
+                default:
+                    //No checks
+                    break;
+            }
 
             // check to make sure it isn't the system's default contact information set
             if (questionSet.Name == StaticValues.QuestionSet_ContactInformation && questionSet.SystemReusable)
