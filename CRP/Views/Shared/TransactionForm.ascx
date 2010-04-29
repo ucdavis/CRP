@@ -2,7 +2,8 @@
 <%@ Import Namespace="CRP.Controllers.ViewModels"%>
 <%@ Import Namespace="CRP.Core.Resources"%>
 
-<h2>Transaction Level</h2>
+<div class="two_col_float">
+<h2 class="two_col_float_for_h2">Transaction Level</h2>
 
 <div id="TransactionContainer">
 
@@ -23,8 +24,9 @@
 <% } %>
 
 </div>
+</div>
 
-
+<div class="two_col_float two_col_float_right">
 <h2>Quantity Level</h2>
 <p>
     *The following questions must be answered for each of the <%= !String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName)%>
@@ -48,5 +50,8 @@
             </ul>    
             </fieldset>
 </div>
+
         <% } %> <!-- End of foreach loop -->
     <% } %> <!-- End of for loop -->
+</div>
+<div style="clear:both;">&nbsp</div>

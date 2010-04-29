@@ -42,7 +42,8 @@ body {color:#1c1f22; background-color:#f8f8f8;}
 h3, h1 {color:#1c1f22;}
 
 /* from layout */
-fieldset ul {margin-left:200px;}
+/* fieldset ul {margin-left:200px;} */
+fieldset ul {margin:0; padding:0;}
 fieldset ul li {list-style-type:none; margin-bottom:0.25em;}
 fieldset ul li label {margin-bottom:0em;}
 .save_btn {margin-left:250px; background-color:#0D548A; padding:.25em 1em; color:#fff; -moz-border-radius: 10px; 
@@ -82,3 +83,14 @@ fieldset ul li label {margin-bottom:0em;}
 /* Link to transaction */
 #TransactionDetails ul, .check ul {margin:0; padding:0;}
 #TransactionDetails ul li, .check ul li {list-style-type:none;}
+
+/* not sorted */
+.url {width:300px;}
+
+fieldset.details ul {margin-left:0px;}
+fieldset ul {margin-left:50px;}
+fieldset a {text-decoration:underline; color:#0D548A; font-weight:bold;}
+fieldset {font-size:100%;}
+
+.two_col_float {display:inline-block; float:left; width:490px;}
+.two_col_float_right {margin-left:20px;}
