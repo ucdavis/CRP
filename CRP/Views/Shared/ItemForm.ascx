@@ -4,8 +4,13 @@
         $(document).ready(function() {
             $("#Item_Link").watermark("Example: http://www.ucdavis.edu/index.html", { className: 'watermark' });
             $("#Item_Expiration").watermark("mm/dd/yyyy", { className: "watermark" });
+            $.each($("input.isDate"), function(index, item) {
+                $(item).watermark("mm/dd/yyyy", { className: "watermark" });
+                $(item).datepicker();
+            });
         });
     </script>
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>
 
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
@@ -73,7 +78,7 @@
             </li>
             <li>
                 <label for="Item.Link">Link:</label><br />
-                <%= Html.TextBox("Item.Link")%>
+                <%= Html.TextBox("Item.Link",string.Empty , new { @class = "validateLink"})%>
                 <%= Html.ValidationMessage("Item.Link", "*")%>
             </li>
             <li>
@@ -99,32 +104,39 @@
             </li>
 
         </fieldset>
-        
+                
         <fieldset>
             <legend>Extended Properties</legend>
             <ul>
             
-            <div id="ExtendedProperties">
-            
+            <div id="ExtendedProperties">            
                 <%  if (Model.Item != null)
                     {
                         for (int i = 0; i < Model.Item.ItemType.ExtendedProperties.Count; i++)
                         {
                             var ep = Model.Item.ItemType.ExtendedProperties.ToArray()[i];
                             var ans = Model.Item.ExtendedPropertyAnswers.Where(a => a.ExtendedProperty == ep).FirstOrDefault();
+                            var isDate = "";
+                            if(Model.Item.ItemType.ExtendedProperties.ElementAtOrDefault(i).QuestionType.Name == "Date")
+                            {
+                                isDate = "isDate";                                
+                            }                                           
                     %>
                                     <li>
                                         <label for="extendedProperty"><%=Html.Encode(ep.Name)%></label>
                                         <input type="text" id='<%=Html.Encode("ExtendedProperties[" + i + "]_value")%>' 
                                                 name='<%=Html.Encode("ExtendedProperties[" + i + "].value")%>' 
                                                 value='<%=Html.Encode(ans != null ? ans.Answer : string.Empty)%>'
+                                                class='<%=Html.Encode(isDate)%>'
                                                 />
                                         <input type="hidden" id='<%=Html.Encode("ExtendedProperties[" + i + "]_propertyId")%>' 
                                                 name='<%=Html.Encode("ExtendedProperties[" + i + "].propertyId")%>' 
                                                 value='<%= Html.Encode(ep.Id) %>'
                                                 />
                                     </li>
+                             
                                     <%
+                            
                         }
                     }%>
             

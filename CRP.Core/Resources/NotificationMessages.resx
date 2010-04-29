@@ -179,13 +179,10 @@
     <value>Coupon could not be used.</value>
     <comment>For Model State error</comment>
   </data>
-	<data name="STR_Paid_transactions_can_not_be_deactivated">
-		<value xml:space="preserve">Paid transactions can not be deactivated.</value>
-	</data>
-	<data name="STR_Transaction_can_not_be_activated">
-		<value xml:space="preserve">Transaction can not be activated because it will cause the amount sold to exceed the amount availble.</value>
-	</data>
-	<data name="ReportControllerReservedWord">
-		<value xml:space="preserve">Checks is a reserved word for report names and cannot be used.</value>
-	</data>
+  <data name="STR_Paid_transactions_can_not_be_deactivated" xml:space="preserve">
+    <value>Paid transactions can not be deactivated.</value>
+  </data>
+  <data name="STR_Transaction_can_not_be_activated" xml:space="preserve">
+    <value>Transaction can not be activated because it will cause the amount sold to exceed the amount availble.</value>
+  </data>
 </root>

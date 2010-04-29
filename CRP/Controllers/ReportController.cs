@@ -140,12 +140,6 @@ namespace CRP.Controllers
                 report.AddReportColumn(itemReportColumn);
             }
 
-
-            if (report.Name == "Checks")
-            {
-                ModelState.AddModelError("Name", NotificationMessages.ReportControllerReservedWord);
-            }
-
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, report.ValidationResults());
 
             if (ModelState.IsValid)

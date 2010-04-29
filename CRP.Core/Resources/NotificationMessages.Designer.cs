@@ -70,15 +70,6 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Checks is a reserved word for report names and cannot be used..
-        /// </summary>
-        public static string ReportControllerReservedWord {
-            get {
-                return ResourceManager.GetString("ReportControllerReservedWord", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {ObjectType} has been activated..
         /// </summary>
         public static string STR_Activated {
