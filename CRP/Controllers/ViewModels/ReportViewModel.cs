@@ -34,7 +34,7 @@ namespace CRP.Controllers.ViewModels
                 ItemReportId = itemReport.Id
             };
 
-            if (itemReport.Name == "Checks")
+            if (itemReport.Name == "Checks" && itemReport.SystemReusable)
             {
                 return GenerateChecks(viewModel, itemReport, item);
             }

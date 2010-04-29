@@ -78,7 +78,7 @@ begin
 	declare @tbId int 
 	declare @ddId int	-- drop down id
 
-	set @qsid = (select Max(id) from QuestionSets where [Name] = 'Contact Information')
+	set @qsid = (select Max(id) from QuestionSets where [Name] = 'Contact Information' and SystemReusable = 1)
 	set @tbId = (select max(id) from QuestionTypes where [name] = 'Text Box')
 	set @ddId = (select max(id) from QuestionTypes where [name] = 'Drop Down')
 	
@@ -143,7 +143,7 @@ begin
 	set @qid = (select max(id) from questions where name = 'Email Address')
 	insert into QuestionXValidator (QuestionId, ValidatorId) values (@qid, @required)
 	insert into QuestionXValidator (QuestionId, ValidatorId) values (@qid, @email)
-	
+
 	-- get the state drop down question and insert the options
 	declare @stateId int
 	
@@ -202,6 +202,7 @@ begin
 	
 	end
 GO
+
 -- //////////////////////////////////////////////////////////////////////////////////////
 -- Insert the default site master into the display profiles
 -- //////////////////////////////////////////////////////////////////////////////////////
@@ -215,7 +216,7 @@ GO
 -- Insert the default item report
 -- Be sure to update the user id if that userid doesn't exist
 -- //////////////////////////////////////////////////////////////////////////////////////
-IF NOT EXISTS (select * from ItemReports where Name = 'Transaction Summary' )
+IF NOT EXISTS (select * from ItemReports where Name = 'Transaction Summary' and SystemReusable = 1 )
 begin
 	INSERT INTO ItemReports ([Name], UserId, SystemReusable)
 	VALUES ('Transaction Summary', 1, 1)
@@ -224,7 +225,7 @@ begin
 	declare @quesetionSetId int
 	
 	set @quesetionSetId = (select Max(id) from QuestionSets where [Name] = 'Contact Information')	
-	set @irId = (select max(id) from ItemReports where [Name] = 'Transaction Summary')
+	set @irId = (select max(id) from ItemReports where [Name] = 'Transaction Summary' and SystemReusable = 1)
 	
 	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
 	VALUES (@irId, 1, 'First Name', 0, 1, 0, @quesetionSetId)
@@ -248,4 +249,37 @@ begin
 	VALUES (@irId, 7, 'Total', 0, 0, 1, @quesetionSetId)		
 end
 
+GO
+
+-- //////////////////////////////////////////////////////////////////////////////////////
+-- Insert the default item report
+-- Be sure to update the user id if that userid doesn't exist
+-- //////////////////////////////////////////////////////////////////////////////////////
+IF NOT EXISTS (select * from ItemReports where Name = 'Checks' and SystemReusable = 1 )
+begin
+	INSERT INTO ItemReports ([Name], UserId, SystemReusable)
+	VALUES ('Checks', 1, 1)
+	
+	declare @irId int
+	set @irId = (select max(id) from ItemReports where [Name] = 'Checks' and SystemReusable = 1)
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 1, 'Checks_Amount', 0, 0, 1, null)		
+
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 1, 'Checks_CheckNumber', 0, 0, 1, null)		
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 1, 'Checks_DateReceived', 0, 0, 1, null)		
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 1, 'Checks_Notes', 0, 0, 1, null)		
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 1, 'Checks_Payee', 0, 0, 1, null)		
+	
+	INSERT INTO ItemReportColumns (ItemReportId, [Order], [Name], Quantity, [Transaction], Property, QuestionSetId)
+	VALUES (@irId, 1, 'Checks_TransactionId', 0, 0, 1, null)		
+		
+end
 GO
