@@ -34,9 +34,12 @@
 
 
     <% for (var i = 0; i < Model.Quantity; i++ ) { %>
+    <div class="QuantityContainer">
+    <fieldset>
+    <legend><%= Html.Encode(Model.Item.QuantityName)%> <span class="quantityIndex"><%= Html.Encode(i + 1) %></span> </legend>
         <% foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
            { %> 
-<div class="QuantityContainer">
+
                 <fieldset>
                 <legend><%= Html.Encode(qs.QuestionSet.Name)%> <span class="quantityIndex"><%= Html.Encode(i + 1) %></span> </legend>
                 <ul>
@@ -49,9 +52,11 @@
                 <% } %>
             </ul>    
             </fieldset>
-</div>
+
 
         <% } %> <!-- End of foreach loop -->
+    </fieldset>
+    </div>
     <% } %> <!-- End of for loop -->
 </div>
 <div style="clear:both;">&nbsp</div>

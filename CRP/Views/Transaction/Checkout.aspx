@@ -143,7 +143,6 @@
 
             $("input#quantity").blur(function(event) {
                 var quantity = $(this).val();
-
                 if (isNaN(quantity)) { alert("Please enter a valid number."); return false; }
                 else {
                     var existingContainers = $("div.QuantityContainer");
