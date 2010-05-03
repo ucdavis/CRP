@@ -143,7 +143,7 @@
 
             $("input#quantity").blur(function(event) {
                 var quantity = $(this).val();
-                if (isNaN(quantity)) { alert("Please enter a valid number."); return false; }
+                if (isNaN(quantity) || quantity <= 0) { alert("Please enter a valid number."); return false; }
                 else {
                     var existingContainers = $("div.QuantityContainer");
                     quantity = parseInt(quantity);
@@ -153,10 +153,10 @@
                     // deal with the situation where we have too many of the containers
                     if (existingContainers.length > quantity) {
                         do {
-                            $(existingContainers[counter]).remove();
+                            $(existingContainers[(counter-1)]).remove();
 
                             counter--;
-                        } while (counter >= quantity);
+                        } while (counter > quantity);
                     }
                     // deal with the situation where we don't have enough containers
                     else if (existingContainers.length < quantity) {
