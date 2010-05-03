@@ -17,6 +17,8 @@
     <% using (Html.BeginForm("Checkout", "Transaction", FormMethod.Post, new {@id = "CheckoutForm"})) { %>
     
     <%= Html.AntiForgeryToken() %>
+    <%= Html.Hidden("displayAmount") %>
+    
     <!-- t-widget t-grid -->   
     <div id="Items" class="t-widget t-grid">
         <table cellspacing="0">
@@ -34,8 +36,8 @@
                     <td><%= Html.TextBox("quantity", Model.Quantity, new {@style = "width:20px;", @class="quantityAmount"}) %></td>
                     <td><%= Html.Encode(Model.Item.Name) %></td>
                     <td>$ <span class="perItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
-                    <td>$ <span class="totalItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
-                </tr>
+                    <td>$ <span class="totalItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>                    
+                </tr>                
                 <tr>
                     <td colspan="4">&nbsp</td>
                 </tr>
@@ -62,7 +64,7 @@
                 <tr style="background-color: #D5D5D5">
                     <td></td>
                     <td colspan="2" style="text-align:right;">Total Amount: </td>
-                    <td>$ <span class="totalAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
+                    <td>$ <span class="totalAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>                    
                 </tr>
 
             </tbody>
@@ -159,7 +161,7 @@
                         } while (counter > quantity);
                     }
                     // deal with the situation where we don't have enough containers
-                    else if (existingContainers.length < quantity) {
+                    else if (existingContainers.length > 0 && existingContainers.length < quantity) {
                         do {
                             GenerateQuantityQuestionSet();
                             counter++;
@@ -249,6 +251,8 @@
             }
             
             var total = itemTotal - discountTotal + donationAmount;
+
+            $("#displayAmount").val(total.toFixed(2));
 
             // update the prices
             $("span." + class_totalItemAmount).html(itemTotal.toFixed(2));
