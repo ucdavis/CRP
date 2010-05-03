@@ -433,7 +433,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         }
 
         [TestMethod]
-        public void TestCheckoutTransactionAnswersTextBoxEmailValidators4()
+        public void TestCheckoutTransactionAnswersTextBoxEmailValidators4A()
         {
             #region Arrange
             SetupDataForCheckoutTests();
@@ -468,6 +468,33 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             //Assert.IsNull(Controller.Message);
             //Controller.ModelState.AssertErrorsAre("Text Box Test With Email is not a valid email.");
             //#endregion Assert
+        }
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersTextBoxEmailValidators4B()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = null;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            Questions[8].Name = "Text Box Test With Email";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Text Box Test With Email is a required field");
+            #endregion Assert
         }
 
         [TestMethod]

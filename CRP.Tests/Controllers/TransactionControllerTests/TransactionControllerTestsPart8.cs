@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CRP.Controllers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -1282,12 +1281,98 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Assert
         }
 
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateNotRequired2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = string.Empty;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
         #endregion Not Required
 
-        #endregion Date Tests
+        #region Required
 
-        //TODO: add a transaction only question set to test the validators
-        //TODO:Date.
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateRequired1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = null;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Date Test is a required field");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateRequired2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = string.Empty;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Date Test is a required field");
+            #endregion Assert
+        }
+
+        #endregion Required
+
+        #endregion Date Tests
 
         #endregion Checkout Transaction Answer Tests continued
 
