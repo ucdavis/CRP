@@ -26,6 +26,7 @@
 </div>
 </div>
 
+<%if(Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count() >= 1) {%>
 <div class="two_col_float two_col_float_right">
 <h2>Quantity Level</h2>
 <p>
@@ -59,4 +60,5 @@
     </div>
     <% } %> <!-- End of for loop -->
 </div>
+<%}%>
 <div style="clear:both;">&nbsp</div>
