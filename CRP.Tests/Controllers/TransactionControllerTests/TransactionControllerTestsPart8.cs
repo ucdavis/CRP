@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CRP.Controllers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -123,7 +124,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             SetupDataForCheckoutTests();
             ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
             TransactionAnswerParameters[0] = new QuestionAnswerParameter();
-            TransactionAnswerParameters[0].Answer = "anthingElse";
+            TransactionAnswerParameters[0].Answer = "any thing Else";
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Boolean").Single();
             Questions[8].Name = "Boolean Test";
@@ -160,7 +161,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
             Questions[8].Name = "Radio Buttons Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -200,7 +201,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
             Questions[8].Name = "Radio Buttons Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -235,7 +236,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
             Questions[8].Name = "Radio Buttons Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -270,7 +271,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
             Questions[8].Name = "Radio Buttons Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -307,7 +308,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
             Questions[8].Name = "Radio Buttons Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -343,7 +344,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
             Questions[8].Name = "Radio Buttons Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -377,7 +378,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
             Questions[8].Name = "Radio Buttons Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -421,7 +422,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
             Questions[8].Name = "Checkbox List Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -460,7 +461,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
             Questions[8].Name = "Checkbox List Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -499,7 +500,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
             Questions[8].Name = "Checkbox List Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -538,7 +539,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
             Questions[8].Name = "Checkbox List Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -573,7 +574,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
             Questions[8].Name = "Checkbox List Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -608,7 +609,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
             Questions[8].Name = "Checkbox List Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -648,7 +649,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
             Questions[8].Name = "Checkbox List Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -682,7 +683,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
             Questions[8].Name = "Checkbox List Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -718,7 +719,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
             Questions[8].Name = "Drop Down Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -758,7 +759,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
             Questions[8].Name = "Drop Down Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -793,7 +794,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
             Questions[8].Name = "Drop Down Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -813,7 +814,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.AreEqual(null, args.TransactionAnswers.ElementAt(0).Answer);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
         }
 
@@ -828,7 +829,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
             Questions[8].Name = "Drop Down Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -865,7 +866,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
             Questions[8].Name = "Drop Down Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -901,7 +902,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
             Questions[8].Name = "Drop Down Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -935,7 +936,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
             Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
             Questions[8].Name = "Drop Down Test";
-            QuestionOption[] questionOptions = new QuestionOption[3];
+            var questionOptions = new QuestionOption[3];
             questionOptions[0] = new QuestionOption("Blue");
             questionOptions[1] = new QuestionOption("Red");
             questionOptions[2] = new QuestionOption("No Colour");
@@ -962,6 +963,328 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         
 
         #endregion Drop Down Tests
+
+        #region Date Tests
+
+        #region Valid Format Tests
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDate1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "02/29/2000";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("02/29/2000", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDate2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "02/28/2001";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("02/28/2001", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDate3()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "12/31/2010";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("12/31/2010", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDate4()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "1/1/2010";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("1/1/2010", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDate5()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "1-1-2010";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("1-1-2010", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+        #endregion Valid Format Tests
+
+        #region Invalid Format Tests
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateInvalid1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "1x1x2010";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Date Test is not a valid date.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateInvalid2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "1.1.2010";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Date Test is not a valid date.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateInvalid3()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "13/01/2010";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Date Test is not a valid date.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateInvalid4()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "02/29/2010";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Date Test is not a valid date.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateInvalid5()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = "00/01/2010";
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertViewRendered()
+                .WithViewData<ItemDetailViewModel>();
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Date Test is not a valid date.");
+            #endregion Assert
+        }
+
+        #endregion Invalid Format Tests
+
+        #region Not Required
+
+        [TestMethod]
+        public void TestCheckoutTransactionAnswersDateNotRequired1()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            TransactionAnswerParameters[0] = new QuestionAnswerParameter();
+            TransactionAnswerParameters[0].Answer = null;
+            TransactionAnswerParameters[0].QuestionId = Questions[8].Id;
+            Questions[8].QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            Questions[8].Name = "Date Test";
+            Questions[8].Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual("", args.TransactionAnswers.ElementAt(0).Answer);
+            #endregion Assert
+        }
+
+        #endregion Not Required
+
+        #endregion Date Tests
 
         //TODO: add a transaction only question set to test the validators
         //TODO:Date.

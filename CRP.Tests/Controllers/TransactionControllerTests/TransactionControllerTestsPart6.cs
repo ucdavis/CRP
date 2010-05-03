@@ -216,7 +216,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(1, args.TransactionAnswers.Count);
-            Assert.IsNull(args.TransactionAnswers.ElementAt(0).Answer);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
         }
 
@@ -410,15 +410,26 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Act
             Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
-                .AssertViewRendered()
-                .WithViewData<ItemDetailViewModel>();
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
 
             #region Assert
-            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            Assert.IsNull(Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text Box Test With Email is not a valid email.");
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
+            //    .AssertViewRendered()
+            //    .WithViewData<ItemDetailViewModel>();
+            //#endregion Act
+
+            //#region Assert
+            //TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            //Assert.IsNull(Controller.Message);
+            //Controller.ModelState.AssertErrorsAre("Text Box Test With Email is not a valid email.");
+            //#endregion Assert
         }
 
         [TestMethod]
@@ -437,15 +448,26 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Act
             Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
-                .AssertViewRendered()
-                .WithViewData<ItemDetailViewModel>();
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
 
             #region Assert
-            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            Assert.IsNull(Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text Box Test With Email is not a valid email.");
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
+            //    .AssertViewRendered()
+            //    .WithViewData<ItemDetailViewModel>();
+            //#endregion Act
+
+            //#region Assert
+            //TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            //Assert.IsNull(Controller.Message);
+            //Controller.ModelState.AssertErrorsAre("Text Box Test With Email is not a valid email.");
+            //#endregion Assert
         }
 
         [TestMethod]
@@ -579,15 +601,26 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Act
             Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
-                .AssertViewRendered()
-                .WithViewData<ItemDetailViewModel>();
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
 
             #region Assert
-            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            Assert.IsNull(Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text Box Test With Url is not a valid url.");
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
+            //    .AssertViewRendered()
+            //    .WithViewData<ItemDetailViewModel>();
+            //#endregion Act
+
+            //#region Assert
+            //TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            //Assert.IsNull(Controller.Message);
+            //Controller.ModelState.AssertErrorsAre("Text Box Test With Url is not a valid url.");
+            //#endregion Assert
         }
 
         [TestMethod]
@@ -606,15 +639,26 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Act
             Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
-                .AssertViewRendered()
-                .WithViewData<ItemDetailViewModel>();
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
 
             #region Assert
-            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            Assert.IsNull(Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text Box Test With Url is not a valid url.");
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
+            //    .AssertViewRendered()
+            //    .WithViewData<ItemDetailViewModel>();
+            //#endregion Act
+
+            //#region Assert
+            //TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            //Assert.IsNull(Controller.Message);
+            //Controller.ModelState.AssertErrorsAre("Text Box Test With Url is not a valid url.");
+            //#endregion Assert
         }
 
         [TestMethod]
@@ -862,15 +906,26 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Act
             Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
-                .AssertViewRendered()
-                .WithViewData<ItemDetailViewModel>();
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
 
             #region Assert
-            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            Assert.IsNull(Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text Box Test With Date is not a valid date.");
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
+            //    .AssertViewRendered()
+            //    .WithViewData<ItemDetailViewModel>();
+            //#endregion Act
+
+            //#region Assert
+            //TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            //Assert.IsNull(Controller.Message);
+            //Controller.ModelState.AssertErrorsAre("Text Box Test With Date is not a valid date.");
+            //#endregion Assert
         }
 
         [TestMethod]
@@ -889,15 +944,26 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Act
             Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
-                .AssertViewRendered()
-                .WithViewData<ItemDetailViewModel>();
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
 
             #region Assert
-            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            Assert.IsNull(Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text Box Test With Date is not a valid date.");
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
+            //    .AssertViewRendered()
+            //    .WithViewData<ItemDetailViewModel>();
+            //#endregion Act
+
+            //#region Assert
+            //TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            //Assert.IsNull(Controller.Message);
+            //Controller.ModelState.AssertErrorsAre("Text Box Test With Date is not a valid date.");
+            //#endregion Assert
         }
 
         [TestMethod]
@@ -1197,15 +1263,26 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Act
             Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
-                .AssertViewRendered()
-                .WithViewData<ItemDetailViewModel>();
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
 
             #region Assert
-            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            Assert.IsNull(Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text Box Test With Phone Number is not a valid phone number.");
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
+            //    .AssertViewRendered()
+            //    .WithViewData<ItemDetailViewModel>();
+            //#endregion Act
+
+            //#region Assert
+            //TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            //Assert.IsNull(Controller.Message);
+            //Controller.ModelState.AssertErrorsAre("Text Box Test With Phone Number is not a valid phone number.");
+            //#endregion Assert
         }
 
         [TestMethod]
@@ -1224,15 +1301,26 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Act
             Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
-                .AssertViewRendered()
-                .WithViewData<ItemDetailViewModel>();
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
 
             #region Assert
-            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
-            Assert.IsNull(Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text Box Test With Phone Number is not a valid phone number.");
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(1, args.TransactionAnswers.Count);
+            Assert.AreEqual(string.Empty, args.TransactionAnswers.ElementAt(0).Answer);
             #endregion Assert
+            //    .AssertViewRendered()
+            //    .WithViewData<ItemDetailViewModel>();
+            //#endregion Act
+
+            //#region Assert
+            //TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            //Assert.IsNull(Controller.Message);
+            //Controller.ModelState.AssertErrorsAre("Text Box Test With Phone Number is not a valid phone number.");
+            //#endregion Assert
         }
 
         [TestMethod]

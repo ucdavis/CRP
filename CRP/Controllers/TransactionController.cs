@@ -80,7 +80,7 @@ namespace CRP.Controllers
         /// <param name="id"></param>
         /// <param name="quantity">The quantity.</param>
         /// <param name="donation">The donation.</param>
-        /// <param name="totalAmount">total amount calculated on the form</param>
+        /// <param name="displayAmount">total amount calculated on the form</param>
         /// <param name="paymentType">Type of the payment.</param>
         /// <param name="restrictedKey">The restricted key.</param>
         /// <param name="coupon">The coupon.</param>
@@ -341,13 +341,13 @@ namespace CRP.Controllers
                         answer = "true";
                     }
                 }
-                else if (name == QuestionTypeText.STR_RadioButtons)
-                {
-                    answer = qa.Answer ?? string.Empty;
-                }
-                else
+                else if(name == QuestionTypeText.STR_TextArea)
                 {
                     answer = qa.Answer;
+                }
+                else
+                {                 
+                    answer = qa.Answer ?? string.Empty;    
                 }
             }
             else
