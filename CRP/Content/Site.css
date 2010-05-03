@@ -31,7 +31,7 @@ a img {border:none;}
 
 /* fonts */
 body {font: 14px/22px 'QuicksandBook', Arial, sans-serif; }
-h1, h1 a {font: 40px/48px 'QuicksandLight', Arial, sans-serif; letter-spacing:5px;}
+h1, h1 a {font: 40px/48px 'QuicksandLight', Arial, sans-serif; letter-spacing:5px; }
 
 
 
@@ -68,7 +68,12 @@ fieldset ul li label {margin-bottom:0em;}
 
 
 /* details view */
-.itemdetailsimg img{float:right; margin:0 0 1m 1em; width:auto; height:200px;}
+.itemdetailsimg img{margin:0 0 1m 1em; height:auto; width:292px;}
+.itemdetailsimg {display:block; text-align:center;}
+.reg_btn h3{background-color:#0D548A; color:#FFF; font: 22px/30px 'QuicksandBook', Arial, sans-serif;  letter-spacing:2px; text-align:center; -moz-border-radius: 10px; 
+-webkit-border-radius: 10px; border:3px solid #F8F8F8; padding: 0.2em 0;}
+/* .reg_btn h3:hover{background-color:#FFF; color:#0D548A;} */
+.reg_btn h3:hover{font: 22px/30px 'QuicksandBold', Arial, sans-serif; border:3px solid #000;}
 
 
 
@@ -94,3 +99,6 @@ fieldset {font-size:100%;}
 
 .two_col_float {display:inline-block; float:left; width:490px;}
 .two_col_float_right {margin-left:20px;}
+
+.two_col_float_uneven_left {float:left; width:680px;}
+.two_col_float_uneven_right {float:right; width:300px;}

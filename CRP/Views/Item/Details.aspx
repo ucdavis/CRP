@@ -19,38 +19,11 @@
     <fieldset class="details">
         <!-- <legend>Details</legend> -->
         
-        <span class="itemdetailsimg">
-            <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item.Id}) %>' />
-        </span>
-        
-        <ul><li>
-            <strong>CostPerItem:</strong>
-            <%= Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))%>
-        </p>
-        <p>
-            <strong>Expiration:</strong>
-            <%= Html.Encode(String.Format("{0:d}", Model.Item.Expiration))%>
-        </p>
 
-        <% foreach (var ep in Model.Item.ExtendedPropertyAnswers)
-           {%>
         
-            <p>
-                <strong><%= Html.Encode(ep.ExtendedProperty.Name) %>:</strong>
-                <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
-                                            ? ep.Answer : String.Format("{0:d}", ep.Answer)) %>
-            </p>
+        <ul>
         
-        <% } %>
-        
-        <% if (Model.Item.Expiration > DateTime.Now) { %>
-        <p>
-            <% if (Model.Item.IsAvailableForReg) { %>
-                <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>'><img src="<%= Url.Content("~/Images/register.png") %>" style="border:0;" /></a>
-            <% } %>
-        </p>
-        <% } %>
-               
+        <li class="two_col_float_uneven_left">   
         <p>
             <%= Html.HtmlEncode(Model.Item.Description) %>
         </p>
@@ -66,6 +39,47 @@
         <small>
             <a href="<%= Model.Item.LinkLink %>" style="color:#0000FF;text-align:left">View Larger Map</a>
         </small>
+        </li>
+        
+        <l class="two_col_float_uneven_right">
+        <ul>
+        <li><span class="itemdetailsimg">
+            <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item.Id}) %>' />
+        </span>
+        </li>
+        <li>
+                <% if (Model.Item.Expiration > DateTime.Now) { %>
+        <!-- <p>
+            <% if (Model.Item.IsAvailableForReg) { %>
+                <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>'><img src="<%= Url.Content("~/Images/register.png") %>" style="border:0;" /></a>
+            <% } %>
+        </p> -->
+        
+        <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>' class="reg_btn"><h3>Register</h3></a>
+        </li>
+        <li>
+        <% } %>
+            <strong>CostPerItem:</strong>
+            <%= Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))%>
+        </li>
+        <li>
+            <strong>Expiration:</strong>
+            <%= Html.Encode(String.Format("{0:d}", Model.Item.Expiration))%>
+        </li>
+
+        <% foreach (var ep in Model.Item.ExtendedPropertyAnswers)
+           {%>
+        
+            <li>
+                <strong><%= Html.Encode(ep.ExtendedProperty.Name) %>:</strong>
+                <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
+                                            ? ep.Answer : String.Format("{0:d}", ep.Answer)) %>
+            </li>
+        
+        <% } %>
+        </ul>
+        </li>
+        
         
     </fieldset>
     <p>
