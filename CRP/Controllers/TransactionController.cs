@@ -132,6 +132,16 @@ namespace CRP.Controllers
 
             var transaction = new Transaction(item);
 
+            var questionCount = 0;
+            foreach (var itemQuestionSet in item.QuestionSets.Where(a => a.QuantityLevel))
+            {
+                questionCount += itemQuestionSet.QuestionSet.Questions.Count;
+            }
+            if (questionCount * quantity != quantityAnswers.Count())
+            {
+                ModelState.AddModelError("Quanity Level", "The number of answers does not match the number of Quantity Level questions.");
+            }
+
             // fill the openid user if they are openid validated
             if (HttpContext.Request.IsOpenId())
             {

@@ -243,6 +243,10 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Questions[10].QuestionSet = QuestionSets[2];
             Questions[11].Name = "What is your Favorite Food?";
             Questions[11].QuestionSet = QuestionSets[2];
+            Items[1].AddQuantityQuestionSet(QuestionSets[2]);
+            QuestionSets[2].AddQuestion(Questions[9]);
+            QuestionSets[2].AddQuestion(Questions[10]);
+            QuestionSets[2].AddQuestion(Questions[11]);
             var counter = 0;
             for (int i = 0; i < 3; i++)
             {

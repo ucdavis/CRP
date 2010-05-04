@@ -121,6 +121,7 @@
         var class_discounterMaxQuantity = "discounterMaxQuantity";
         var class_discountAmount = "discountAmount";
         var class_totalAmount = "totalAmount";
+        var questionSet_Count = '<%= Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count() %>';
     </script>
 
     <script type="text/javascript">
@@ -178,6 +179,10 @@
                 CalculateTotal();
                 // initialize the question names
                 InitializeQuestions();
+                
+                
+                if(questionSet_Count > 0 && $("div.QuantityContainer").length != quantity) { alert("Error on page. Please reselect quantity."); return false;}
+                    
             });
 
             // update the total when a donation is entered
