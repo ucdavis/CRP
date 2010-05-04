@@ -646,7 +646,9 @@
     <Content Include="AppSettingsTest.config" />
     <Content Include="ConnectionStringProd.config" />
     <Content Include="ConnectionStringTest.config" />
+    <Content Include="Content\jquery.bt.css" />
     <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Scripts\jquery.bt.min.js" />
     <Content Include="Scripts\jquery.tablesorter.min.js" />
     <Content Include="Scripts\jquery.tablesorter.pager.js" />
     <Content Include="Scripts\jquery.UrlValidator.js" />

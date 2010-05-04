@@ -2,10 +2,13 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#Item_Link").watermark("Example: http://www.ucdavis.edu/index.html", { className: 'watermark' });
-            $("#Item_Expiration").watermark("mm/dd/yyyy", { className: "watermark" });
+            //$("#Item_Link").watermark("Example: http://www.ucdavis.edu/index.html", { className: 'watermark' });
+            $("#Item_Link").bt('You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html');
+            //$("#Item_Expiration").watermark("mm/dd/yyyy", { className: "watermark" });
+            $("#Item_Expiration").bt('mm/dd/yyyy format');
             $.each($("input.isDate"), function(index, item) {
-                $(item).watermark("mm/dd/yyyy", { className: "watermark" });
+                //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
+                $(item).bt('mm/dd/yyyy format');
                 $(item).datepicker();
             });
         });

@@ -23,18 +23,19 @@
                                                          .attr("id", "ExtendedProperties[" + index + "]_propertyId")
                                                          .attr("name", "ExtendedProperties[" + index + "].propertyId")
                                                          .val(item.Id);
-    
+
                                 if (item.QuestionType.Name == "Date") {
-                                    textBox.datepicker().watermark("mm/dd/yyyy", { className: "watermark" });
+                                    //textBox.datepicker().watermark("mm/dd/yyyy", { className: "watermark" });
+                                    textBox.datepicker().bt('mm/dd/yyyy format');                                    
                                 }
-                                
+
                                 var p = $("<p>").append(label).append(textBox).append(hidden);
                                 $("div#ExtendedProperties").append(p);
                             });
                         }
                     });
     });
-    
+
     $("img#tagAddButton").click(function(event) {
         var input = $("<input>").attr("id", "tags").attr("name", "tags").val($("input#tagInput").val());
         input.attr("type", "text");
