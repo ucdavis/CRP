@@ -139,7 +139,7 @@ namespace CRP.Controllers
             }
             if (questionCount * quantity != quantityAnswers.Count())
             {
-                ModelState.AddModelError("Quanity Level", "The number of answers does not match the number of Quantity Level questions.");
+                ModelState.AddModelError("Quantity Level", "The number of answers does not match the number of Quantity Level questions.");
             }
 
             // fill the openid user if they are openid validated
@@ -235,7 +235,7 @@ namespace CRP.Controllers
 
                         var answer = CleanUpAnswer(question.QuestionType.Name, qa);
                         
-                        var fieldName = question.Name + " for attendee " + (i + 1);
+                        var fieldName = string.Format("The answer for question \"{0}\" for {1} {2}", question.Name, item.QuantityName, (i + 1));
 
                         // validate each of the validators
                         foreach (var validator in question.Validators)
