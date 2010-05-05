@@ -460,15 +460,21 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
             if(transaction == null)
             {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
             if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
             {
                 if (transaction.Item == null)
                 {
-                    return this.RedirectToAction<ItemManagementController>(a => a.List());
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");                    
                 }
-                return this.RedirectToAction<ItemManagementController>(a => a.Details(transaction.Item.Id));
+                else
+                {
+                    Message = NotificationMessages.STR_NoEditorRights.Replace(NotificationMessages.ObjectType, "Item"); 
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                //return this.RedirectToAction<ItemManagementController>(a => a.Details(transaction.Item.Id));
             }
             var viewModel = EditTransactionViewModel.Create(Repository);
             viewModel.TransactionValue = transaction;

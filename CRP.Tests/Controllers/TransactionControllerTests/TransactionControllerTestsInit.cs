@@ -43,7 +43,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         protected QuestionAnswerParameter[] QuantityAnswerParameters { get; set; }
         protected List<QuestionType> QuestionTypes { get; set; }
         protected List<Validator> Validators { get; set; }
-
+        protected List<User> Users { get; set; }
+        protected List<Editor> Editors { get; set; }
 
         #region Init
         public TransactionControllerTests()
@@ -83,6 +84,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionAnswerParameters = new QuestionAnswerParameter[1];
             QuestionTypes = new List<QuestionType>();
             Validators = new List<Validator>();
+            Users = new List<User>();
+            Editors = new List<Editor>();
         }
         /// <summary>
         /// Registers the routes.
@@ -337,6 +340,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             }
         }
 
+
         /// <summary>
         /// Mock the HTTPContext. Used for getting the current user name
         /// </summary>
@@ -366,6 +370,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
                 {
                     return new MockHttpRequest(_count);
                 }
+                
             }
         }
 
@@ -400,6 +405,18 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
                 }
             }
+            //This is for viewModel.SuccessLink = String.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, url.Action("PaymentSuccess", "Transaction"));
+            public override Uri Url
+            {
+                get
+                {
+                    string url = "http://www.Sample.com/somefolder/getStuff.aspx?id=1&var2=abc&var3=55";
+                    Uri uri = new Uri(url);
+
+                    return uri;
+                }
+            }
+            
         }
 
 

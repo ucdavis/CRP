@@ -160,6 +160,7 @@
     <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart07.cs" />
     <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart08.cs" />
     <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart09.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart10.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
     <Compile Include="Core\Extensions\RouteTestingExtensions.cs" />
