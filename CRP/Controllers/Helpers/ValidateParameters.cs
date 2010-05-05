@@ -23,6 +23,10 @@ namespace CRP.Controllers.Helpers
             {
                 validPage = 1;
             }
+            if(validPage <= 1)
+            {
+                validPage = 1;
+            }
             rtValue.Add("page", validPage.ToString());
 
             var validSort = new List<string>();

@@ -45,6 +45,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         protected List<Validator> Validators { get; set; }
         protected List<User> Users { get; set; }
         protected List<Editor> Editors { get; set; }
+        protected List<TransactionAnswer> TransactionAnswers { get; set; }
 
         #region Init
         public TransactionControllerTests()
@@ -86,6 +87,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Validators = new List<Validator>();
             Users = new List<User>();
             Editors = new List<Editor>();
+            TransactionAnswers = new List<TransactionAnswer>();
         }
         /// <summary>
         /// Registers the routes.

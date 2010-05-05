@@ -513,15 +513,20 @@ namespace CRP.Controllers
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(transaction.Id);
             if (transactionToUpdate == null)
             {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
             if (transactionToUpdate.Item == null || !Access.HasItemAccess(CurrentUser, transactionToUpdate.Item))
             {
                 if (transactionToUpdate.Item == null)
                 {
-                    return this.RedirectToAction<ItemManagementController>(a => a.List());
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");                    
                 }
-                return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionToUpdate.Item.Id));
+                else
+                {
+                    Message = NotificationMessages.STR_NoEditorRights.Replace(NotificationMessages.ObjectType, "Item"); 
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
 
             var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", checkSort, checkPage);
