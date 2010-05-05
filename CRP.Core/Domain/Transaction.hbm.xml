@@ -19,6 +19,7 @@
     <property name="Quantity" column="Quantity" />
     <property name ="CreatedBy" column="CreatedBy" />
     <property name="CorrectionReason" column="CorrectionReason"/>
+    <property name="TransactionGuid" column="TransactionGuid"/>
     
     <many-to-one name="ParentTransaction" class="CRP.Core.Domain.Transaction, CRP.Core" column="TransactionId" fetch="join" />
     <property name="TransactionNumber" column="TransactionNumber" insert="false" update="false" />
