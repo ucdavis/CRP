@@ -697,17 +697,25 @@ namespace CRP.Controllers
                 if (ModelState.IsValid)
                 {
                     Repository.OfType<Transaction>().EnsurePersistent(transaction);
-
-                    // attempt to get the contact information question set and retrieve email address
-                    var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
-                    if (question != null)
+                    if (paymentLog.Accepted)
                     {
-                        // send an email to the user
-                        _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
-                    }
-                    if(transaction.TotalPaid > transaction.Total)
-                    {
-                        _notificationProvider.SendPaymentResultErrors(ConfigurationManager.AppSettings["EmailForErrors"], touchNetValues, Request.Params, null, PaymentResultType.OverPaid);         
+                        // attempt to get the contact information question set and retrieve email address
+                        var question =
+                            transaction.TransactionAnswers.Where(
+                                a =>
+                                a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                                a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+                        if (question != null)
+                        {
+                            // send an email to the user
+                            _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
+                        }
+                        if (transaction.TotalPaid > transaction.Total)
+                        {
+                            _notificationProvider.SendPaymentResultErrors(
+                                ConfigurationManager.AppSettings["EmailForErrors"], touchNetValues, Request.Params, null,
+                                PaymentResultType.OverPaid);
+                        }
                     }
                 }
                 else
