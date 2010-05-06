@@ -49,8 +49,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         {
             #region Arrange
             var parameters = new PaymentResultParameters();
-            parameters.EXT_TRANS_ID = 1;
-            TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            parameters.EXT_TRANS_ID = Guid.Empty.ToString();
+            TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
             #endregion Arrange
 
             #region Act

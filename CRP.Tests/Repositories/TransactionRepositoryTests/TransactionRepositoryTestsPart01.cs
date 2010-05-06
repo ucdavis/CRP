@@ -182,6 +182,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
             expectedFields.Add(new NameAndType("TransactionDate", "System.DateTime", new List<string>()));
+            expectedFields.Add(new NameAndType("TransactionGuid", "System.Guid", new List<string>()));
             expectedFields.Add(new NameAndType("TransactionNumber", "System.String", new List<string>()));
             expectedFields.Add(new NameAndType("UncorrectedDonationTotal", "System.Decimal", new List<string>()));
             #endregion Arrange

@@ -40,6 +40,8 @@ namespace CRP.Core.Domain
             //CorrectionTotalAmountPaid = false;
 
             PaymentType = false;
+
+            TransactionGuid = Guid.NewGuid();
         }
          
         [NotNull]

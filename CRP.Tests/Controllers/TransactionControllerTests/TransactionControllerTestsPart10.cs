@@ -44,6 +44,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         {
             #region Arrange
             SetupDataForConfirmationTests();
+            Transactions[1].TransactionGuid = new Guid("c7e4f7cc-670e-48c2-8f0a-03262180aa67");
             #endregion Arrange
 
             #region Act
@@ -59,7 +60,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Assert.IsNotNull(result.ErrorLink);
             Assert.IsNotNull(result.SiteId);
             Assert.IsNotNull(result.PaymentGatewayUrl);
-            Assert.AreEqual("bqjmuo37nABh8nZtuJsVgQ==",result.ValidationKey, "The amount, and other values can cause this hash to change.");
+            Assert.AreEqual(@"fyQbylaAdaiir//SYXs1SA==", result.ValidationKey, "The amount, and other values can cause this hash to change.");
             #endregion Assert		
         }
 

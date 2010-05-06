@@ -390,7 +390,7 @@ namespace CRP.Controllers
 
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
             string postingString = ConfigurationManager.AppSettings["TouchNetPostingKey"]; 
-            var validationKey = CalculateValidationString(postingString, transaction.Id.ToString(), transaction.Total.ToString());
+            var validationKey = CalculateValidationString(postingString, transaction.TransactionGuid.ToString(), transaction.Total.ToString());
             var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url);
             return View(viewModel);
         }
@@ -604,9 +604,12 @@ namespace CRP.Controllers
         {
             #region Actual Work
             // validate to make sure a transaction value was received
-            if (touchNetValues.EXT_TRANS_ID.HasValue)
+            if (!string.IsNullOrEmpty(touchNetValues.EXT_TRANS_ID))
             {
-                var transaction = Repository.OfType<Transaction>().GetNullableByID(touchNetValues.EXT_TRANS_ID.Value);
+                var transaction = Repository.OfType<Transaction>()
+                    .Queryable.Where(a => a.TransactionGuid == new Guid(touchNetValues.EXT_TRANS_ID))
+                    .SingleOrDefault();
+                //var transaction = Repository.OfType<Transaction>().GetNullableByID(touchNetValues.EXT_TRANS_ID.Value);
 
                 if(transaction == null)
                 {

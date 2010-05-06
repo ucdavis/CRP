@@ -41,7 +41,7 @@
             
             <!-- This form submits the payment information to uPay for processing -->
             <form method="post" action="<%= Model.PaymentGatewayUrl %>" id="PaymentForm">
-                <%= Html.Hidden(StaticValues.Upay_TransactionId, Model.Transaction.Id) %>
+                <%= Html.Hidden(StaticValues.Upay_TransactionId, Model.Transaction.TransactionGuid.ToString()) %>
                 <%= Html.Hidden(StaticValues.Upay_Amount, Model.Transaction.Total) %>
                 <%= Html.Hidden(StaticValues.Upay_SiteId, Model.SiteId) %>
                 <%= Html.Hidden(StaticValues.Upay_ValidationKey, Model.ValidationKey) %>

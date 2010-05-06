@@ -5,6 +5,7 @@ using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Testing.Extensions;
+using System.Linq;
 
 namespace CRP.Tests.Repositories.TransactionRepositoryTests
 {
@@ -326,5 +327,68 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         #endregion CorrectionTotalAmount Tests
 
         #endregion CorrectionAmount Tests
+
+        #region Transaction GUID Tests
+
+
+        [TestMethod]
+        public void TestTransactionGuidIsInitialized()
+        {
+            #region Arrange
+            Transaction transaction;
+            #endregion Arrange
+
+            #region Act
+            transaction = new Transaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(string.IsNullOrEmpty(transaction.TransactionGuid.ToString().Trim()));
+            Assert.AreNotEqual(Guid.Empty, transaction.TransactionGuid);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestTransactionGuidIsInitializedWithItemToo()
+        {
+            #region Arrange
+            var item = Repository.OfType<Item>().GetByID(1);
+            Transaction transaction;
+            #endregion Arrange
+
+            #region Act
+            transaction = new Transaction(item);
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(string.IsNullOrEmpty(transaction.TransactionGuid.ToString().Trim()));
+            Assert.AreNotEqual(Guid.Empty, transaction.TransactionGuid);
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestTransactionGuidAsQueryableReturnsExpectedRecord()
+        {
+            #region Arrange
+            var transaction1 = TransactionRepository.GetByID(2);
+            Assert.IsNotNull(transaction1);
+            #endregion Arrange
+
+            #region Act
+
+            var transaction2 = TransactionRepository
+                .Queryable
+                .Where(a => a.TransactionGuid == transaction1.TransactionGuid)
+                .SingleOrDefault();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(transaction2);
+            Assert.AreSame(transaction1, transaction2);
+            #endregion Assert		
+        }
+
+        #endregion Transaction GUID Tests
     }
 }

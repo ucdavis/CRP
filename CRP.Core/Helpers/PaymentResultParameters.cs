@@ -15,7 +15,7 @@ namespace CRP.Core.Helpers
             * Mark the transaction as "paid” and perform any post-payment processing
         */ 
         // ReSharper disable InconsistentNaming
-        public int? EXT_TRANS_ID { get; set; }
+        public string EXT_TRANS_ID { get; set; }
         public string PMT_STATUS { get; set; }
         public string NAME_ON_ACCT { get; set; }
         public decimal? PMT_AMT { get; set; }
