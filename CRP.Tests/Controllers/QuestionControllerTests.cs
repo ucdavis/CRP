@@ -1058,6 +1058,2018 @@ namespace CRP.Tests.Controllers
         }
         #endregion Create Post Valid Tests
 
+        #region Create Post Validator Tests
+
+        #region Text Box Tests
+        #region Valid Validators
+        [TestMethod]
+        public void TestTextBoxWithNoValidatorsSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithRequiredValidatorOnlySaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithRequiredValidatorAndOneMoreSaves1()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithRequiredValidatorAndOneMoreSaves2()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithRequiredValidatorAndOneMoreSaves3()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithRequiredValidatorAndOneMoreSaves4()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithEmailOnlyValidatorSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithUrlOnlyValidatorSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithDateOnlyValidatorSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithPhoneNumberOnlyValidatorSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Valid Validators
+
+        #region Invalid Validators
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave1()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave2()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave3()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave4()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave5()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave6()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave7()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave8()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave9()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave10()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave11()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextBoxWithTwoValidatorsButNotRequiredDoesNotSave12()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Box").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Cannot have Email, Url, Date, or Phone Number validators selected together.");
+            #endregion Assert
+        }
+
+        #endregion Invalid Validators
+        #endregion Text Box Tests
+
+        #region Boolean Tests
+
+        #region Valid Tests
+        [TestMethod]
+        public void TestBooleanWithNoValidatorsSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Boolean").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Valid Tests
+
+        #region Invalid Tests
+        [TestMethod]
+        public void TestBooleanWithAnyValidatorDoesNotSave1()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Boolean").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Boolean Question Type should not have validators.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestBooleanWithAnyValidatorDoesNotSave2()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Boolean").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Boolean Question Type should not have validators.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestBooleanWithAnyValidatorDoesNotSave3()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Boolean").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Boolean Question Type should not have validators.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestBooleanWithAnyValidatorDoesNotSave4()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Boolean").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Boolean Question Type should not have validators.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestBooleanWithAnyValidatorDoesNotSave5()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Boolean").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Boolean Question Type should not have validators.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestBooleanWithAnyValidatorDoesNotSave6()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Boolean").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Boolean Question Type should not have validators.");
+            #endregion Assert
+        }
+        #endregion Invalid Tests
+
+        #endregion Boolean Tests
+
+        #region Text Area Tests
+
+        #region Valid Tests
+        [TestMethod]
+        public void TestTextAreaWithNoValidatorsSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTextAreaWithRequiredValidatorOnlySaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Valid Tests
+
+        #region Invalid Tests
+        [TestMethod]
+        public void TestTextAreaWithAnyValidatorsButNotRequiredDoesNotSave1()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Text Area is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestTextAreaWithAnyValidatorsButNotRequiredDoesNotSave2()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Text Area is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestTextAreaWithAnyValidatorsButNotRequiredDoesNotSave3()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Text Area is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestTextAreaWithAnyValidatorsButNotRequiredDoesNotSave4()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Text Area is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestTextAreaWithAnyValidatorsButNotRequiredDoesNotSave5()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Text Area is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestTextAreaWithAnyValidatorsButNotRequiredDoesNotSave6()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Text Area").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Text Area is Required.");
+            #endregion Assert
+        }
+        #endregion Invalid Tests
+
+        #endregion Text Area Tests
+
+        #region RadioButton Test
+
+        #region Valid Tests
+        [TestMethod]
+        public void TestRadioButtonsWithNoValidatorsSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new []{"Option1", "Option2"})
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestRadioButtonsWithRequiredValidatorOnlySaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new [] { "Option1", "Option2" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #region Invalid Tests
+        [TestMethod]
+        public void TestRadioButtonsWithAnyValidatorsButNotRequiredDoesNotSave1()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Radio Buttons is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestRadioButtonsWithAnyValidatorsButNotRequiredDoesNotSave2()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Radio Buttons is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestRadioButtonsWithAnyValidatorsButNotRequiredDoesNotSave3()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Radio Buttons is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestRadioButtonsWithAnyValidatorsButNotRequiredDoesNotSave4()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Radio Buttons is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestRadioButtonsWithAnyValidatorsButNotRequiredDoesNotSave5()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Radio Buttons is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestRadioButtonsWithAnyValidatorsButNotRequiredDoesNotSave6()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Radio Buttons").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Radio Buttons is Required.");
+            #endregion Assert
+        }
+        #endregion Invalid Tests
+        #endregion RadioButton Test
+
+        #region Checkbox List Test
+
+        #region Valid Tests
+        [TestMethod]
+        public void TestCheckboxListWithNoValidatorsSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckboxListWithRequiredValidatorOnlySaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #region Invalid Tests
+        [TestMethod]
+        public void TestCheckboxListWithAnyValidatorsButNotRequiredDoesNotSave1()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Checkbox List is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestCheckboxListWithAnyValidatorsButNotRequiredDoesNotSave2()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Checkbox List is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestCheckboxListWithAnyValidatorsButNotRequiredDoesNotSave3()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Checkbox List is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestCheckboxListWithAnyValidatorsButNotRequiredDoesNotSave4()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Checkbox List is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestCheckboxListWithAnyValidatorsButNotRequiredDoesNotSave5()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Checkbox List is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestCheckboxListWithAnyValidatorsButNotRequiredDoesNotSave6()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Checkbox List").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Checkbox List is Required.");
+            #endregion Assert
+        }
+        #endregion Invalid Tests
+        #endregion Checkbox List Test
+
+        #region RadioButton Test
+
+        #region Valid Tests
+        [TestMethod]
+        public void TestDropDownWithNoValidatorsSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestDropDownWithRequiredValidatorOnlySaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #region Invalid Tests
+        [TestMethod]
+        public void TestDropDownWithAnyValidatorsButNotRequiredDoesNotSave1()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Drop Down is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDropDownWithAnyValidatorsButNotRequiredDoesNotSave2()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Drop Down is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDropDownWithAnyValidatorsButNotRequiredDoesNotSave3()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Drop Down is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDropDownWithAnyValidatorsButNotRequiredDoesNotSave4()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Drop Down is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDropDownWithAnyValidatorsButNotRequiredDoesNotSave5()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Drop Down is Required.");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDropDownWithAnyValidatorsButNotRequiredDoesNotSave6()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Drop Down").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new[] { "Option1", "Option2" })
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("The only validator allowed for a Question Type of Drop Down is Required.");
+            #endregion Assert
+        }
+        #endregion Invalid Tests
+        #endregion Drop Down Test
+
+        #region Date Tests
+        #region Valid Tests
+        [TestMethod]
+        public void TestDateWithNoValidatorsSaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestDateWithRequiredValidatorOnlySaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestDateWithDateValidatorOnlySaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestDateWithDateAndRequiredValidatorsOnlySaves()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasCalled(a => a.EnsurePersistent(questionToAdd));
+            Assert.AreEqual("Question has been created successfully.", Controller.Message);
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #region Invalid Tests
+        [TestMethod]
+        public void TestDateWithAnyValidatorsButNotRequiredAndOrDateDoesNotSave1()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Email is not a valid validator for a Question Type of Date");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDateWithAnyValidatorsButNotRequiredAndOrDateDoesNotSave2()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Url is not a valid validator for a Question Type of Date");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDateWithAnyValidatorsButNotRequiredAndOrDateDoesNotSave3()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Phone Number is not a valid validator for a Question Type of Date");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDateWithAnyValidatorsButNotRequiredAndOrDateDoesNotSave4()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            //questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre("Email is not a valid validator for a Question Type of Date");
+            #endregion Assert
+        }
+        [TestMethod]
+        public void TestDateWithAnyValidatorsButNotRequiredAndOrDateDoesNotSave5()
+        {
+            #region Arrange
+            SetUpDataForValidatorTests();
+
+            var questionToAdd = CreateValidEntities.Question(null);
+            questionToAdd.QuestionType = QuestionTypes.Where(a => a.Name == "Date").Single();
+            questionToAdd.QuestionSet = QuestionSets[0];
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Required").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Email").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Url").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Date").Single());
+            questionToAdd.Validators.Add(Validators.Where(a => a.Name == "Phone Number").Single());
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Create(1, questionToAdd, new string[0])
+                .AssertViewRendered()
+                .WithViewData<QuestionViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            QuestionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Question>.Is.Anything));
+            Assert.IsNull(Controller.Message);
+            Controller.ModelState.AssertErrorsAre(
+                "Email is not a valid validator for a Question Type of Date",
+                "Url is not a valid validator for a Question Type of Date",
+                "Phone Number is not a valid validator for a Question Type of Date");
+            #endregion Assert
+        }
+        #endregion Invalid Tests
+        #endregion Date Tests
+
+        #endregion Create Post Validator Tests
+
         #endregion Create Post Tests
 
         #region Delete Tests
@@ -1549,6 +3561,24 @@ namespace CRP.Tests.Controllers
         #endregion Reflection Tests
 
         #region Helper Methods
+
+        private void SetUpDataForValidatorTests()
+        {
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User, RoleNames.Admin });
+            ControllerRecordFakes.FakeUsers(Users, 3);
+            ControllerRecordFakes.FakeValidators(Validators);
+            ControllerRecordFakes.FakeQuestionTypes(QuestionTypes);
+            ControllerRecordFakes.FakeQuestionSets(QuestionSets, 1);
+
+            Users[1].LoginID = "UserName";
+
+            QuestionSets[0].SystemReusable = true;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+            
+            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+        }
 
         private void SetUpDataForCreateGetTests()
         {
