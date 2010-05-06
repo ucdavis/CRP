@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
-using CRP.Controllers;
-using CRP.Controllers.Helpers;
-using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Core.Helpers;
 using CRP.Core.Resources;
-using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
-using UCDArch.Testing;
 
 namespace CRP.Tests.Controllers.TransactionControllerTests
 {
@@ -127,27 +120,32 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Transactions[1]))[0][0];
             Assert.IsTrue(args.IsActive);
             Assert.AreEqual(1, args.PaymentLogs.Count);
-            var arg_PaymentLog = args.PaymentLogs.ElementAt(0);
-            Assert.IsTrue(arg_PaymentLog.Credit);
-            Assert.IsFalse(arg_PaymentLog.Check);
-            Assert.IsTrue(arg_PaymentLog.Accepted);
-            Assert.AreEqual(parameters.NAME_ON_ACCT, arg_PaymentLog.Name);
-            Assert.AreEqual(parameters.PMT_AMT.Value, arg_PaymentLog.Amount);
-            Assert.AreEqual(parameters.TPG_TRANS_ID, arg_PaymentLog.GatewayTransactionId);
-            Assert.AreEqual(parameters.CARD_TYPE, arg_PaymentLog.CardType);
-            Assert.AreEqual(parameters.acct_addr, arg_PaymentLog.TnBillingAddress1);
-            Assert.AreEqual(parameters.acct_addr2, arg_PaymentLog.TnBillingAddress2);
-            Assert.AreEqual(parameters.acct_city, arg_PaymentLog.TnBillingCity);
-            Assert.AreEqual(parameters.acct_state, arg_PaymentLog.TnBillingState);
-            Assert.AreEqual(parameters.acct_zip, arg_PaymentLog.TnBillingZip);
-            Assert.AreEqual(parameters.CANCEL_LINK, arg_PaymentLog.TnCancelLink);
-            Assert.AreEqual(parameters.ERROR_LINK, arg_PaymentLog.TnErrorLink);
-            Assert.AreEqual(parameters.pmt_date, arg_PaymentLog.TnPaymentDate);
-            Assert.AreEqual(parameters.Submit, arg_PaymentLog.TnSubmit);
-            Assert.AreEqual(parameters.SUCCESS_LINK, arg_PaymentLog.TnSuccessLink);
-            Assert.AreEqual(parameters.sys_tracking_id, arg_PaymentLog.TnSysTrackingId);
-            Assert.AreEqual(parameters.UPAY_SITE_ID, arg_PaymentLog.TnUpaySiteId);
-            Assert.AreEqual("S", arg_PaymentLog.TnStatus);            
+            Assert.IsNotNull(args.PaymentLogs.ElementAt(0));
+            var argPaymentLog = args.PaymentLogs.ElementAt(0);
+            if (argPaymentLog != null)
+            {
+                Assert.IsTrue(argPaymentLog.Credit);
+                Assert.IsFalse(argPaymentLog.Check);
+                Assert.IsTrue(argPaymentLog.Accepted);
+                Assert.AreEqual(parameters.NAME_ON_ACCT, argPaymentLog.Name);
+                Assert.AreEqual(parameters.PMT_AMT.Value, argPaymentLog.Amount);
+                Assert.AreEqual(parameters.TPG_TRANS_ID, argPaymentLog.GatewayTransactionId);
+                Assert.AreEqual(parameters.CARD_TYPE, argPaymentLog.CardType);
+                Assert.AreEqual(parameters.acct_addr, argPaymentLog.TnBillingAddress1);
+                Assert.AreEqual(parameters.acct_addr2, argPaymentLog.TnBillingAddress2);
+                Assert.AreEqual(parameters.acct_city, argPaymentLog.TnBillingCity);
+                Assert.AreEqual(parameters.acct_state, argPaymentLog.TnBillingState);
+                Assert.AreEqual(parameters.acct_zip, argPaymentLog.TnBillingZip);
+                Assert.AreEqual(parameters.CANCEL_LINK, argPaymentLog.TnCancelLink);
+                Assert.AreEqual(parameters.ERROR_LINK, argPaymentLog.TnErrorLink);
+                Assert.AreEqual(parameters.pmt_date, argPaymentLog.TnPaymentDate);
+                Assert.AreEqual(parameters.Submit, argPaymentLog.TnSubmit);
+                Assert.AreEqual(parameters.SUCCESS_LINK, argPaymentLog.TnSuccessLink);
+                Assert.AreEqual(parameters.sys_tracking_id, argPaymentLog.TnSysTrackingId);
+                Assert.AreEqual(parameters.UPAY_SITE_ID, argPaymentLog.TnUpaySiteId);
+                Assert.AreEqual("S", argPaymentLog.TnStatus);
+            }
+
             #endregion Assert		
         }
 
@@ -183,27 +181,27 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Transactions[1]))[0][0];
             Assert.IsFalse(args.IsActive);
             Assert.AreEqual(1, args.PaymentLogs.Count);
-            var arg_PaymentLog = args.PaymentLogs.ElementAt(0);
-            Assert.IsTrue(arg_PaymentLog.Credit);
-            Assert.IsFalse(arg_PaymentLog.Check);
-            Assert.IsFalse(arg_PaymentLog.Accepted);
-            Assert.IsNull(arg_PaymentLog.Name);
-            Assert.AreEqual(parameters.PMT_AMT.Value, arg_PaymentLog.Amount);
-            Assert.IsNull(arg_PaymentLog.GatewayTransactionId);
-            Assert.IsNull(arg_PaymentLog.CardType);
-            Assert.AreEqual(parameters.acct_addr, arg_PaymentLog.TnBillingAddress1);
-            Assert.AreEqual(parameters.acct_addr2, arg_PaymentLog.TnBillingAddress2);
-            Assert.AreEqual(parameters.acct_city, arg_PaymentLog.TnBillingCity);
-            Assert.AreEqual(parameters.acct_state, arg_PaymentLog.TnBillingState);
-            Assert.AreEqual(parameters.acct_zip, arg_PaymentLog.TnBillingZip);
-            Assert.AreEqual(parameters.CANCEL_LINK, arg_PaymentLog.TnCancelLink);
-            Assert.AreEqual(parameters.ERROR_LINK, arg_PaymentLog.TnErrorLink);
-            Assert.AreEqual(parameters.pmt_date, arg_PaymentLog.TnPaymentDate);
-            Assert.AreEqual(parameters.Submit, arg_PaymentLog.TnSubmit);
-            Assert.AreEqual(parameters.SUCCESS_LINK, arg_PaymentLog.TnSuccessLink);
-            Assert.AreEqual(parameters.sys_tracking_id, arg_PaymentLog.TnSysTrackingId);
-            Assert.AreEqual(parameters.UPAY_SITE_ID, arg_PaymentLog.TnUpaySiteId);
-            Assert.AreEqual("C", arg_PaymentLog.TnStatus);
+            var argPaymentLog = args.PaymentLogs.ElementAt(0);
+            Assert.IsTrue(argPaymentLog.Credit);
+            Assert.IsFalse(argPaymentLog.Check);
+            Assert.IsFalse(argPaymentLog.Accepted);
+            Assert.IsNull(argPaymentLog.Name);
+            Assert.AreEqual(parameters.PMT_AMT.Value, argPaymentLog.Amount);
+            Assert.IsNull(argPaymentLog.GatewayTransactionId);
+            Assert.IsNull(argPaymentLog.CardType);
+            Assert.AreEqual(parameters.acct_addr, argPaymentLog.TnBillingAddress1);
+            Assert.AreEqual(parameters.acct_addr2, argPaymentLog.TnBillingAddress2);
+            Assert.AreEqual(parameters.acct_city, argPaymentLog.TnBillingCity);
+            Assert.AreEqual(parameters.acct_state, argPaymentLog.TnBillingState);
+            Assert.AreEqual(parameters.acct_zip, argPaymentLog.TnBillingZip);
+            Assert.AreEqual(parameters.CANCEL_LINK, argPaymentLog.TnCancelLink);
+            Assert.AreEqual(parameters.ERROR_LINK, argPaymentLog.TnErrorLink);
+            Assert.AreEqual(parameters.pmt_date, argPaymentLog.TnPaymentDate);
+            Assert.AreEqual(parameters.Submit, argPaymentLog.TnSubmit);
+            Assert.AreEqual(parameters.SUCCESS_LINK, argPaymentLog.TnSuccessLink);
+            Assert.AreEqual(parameters.sys_tracking_id, argPaymentLog.TnSysTrackingId);
+            Assert.AreEqual(parameters.UPAY_SITE_ID, argPaymentLog.TnUpaySiteId);
+            Assert.AreEqual("C", argPaymentLog.TnStatus);
             #endregion Assert
         }
 
@@ -221,7 +219,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
             parameters.PMT_AMT = Transactions[1].Total;
-            parameters.PMT_STATUS = "Succe";
+            parameters.PMT_STATUS = "Fail";
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
             #endregion Arrange
 
@@ -239,31 +237,31 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Transactions[1]))[0][0];
             Assert.IsFalse(args.IsActive);
             Assert.AreEqual(1, args.PaymentLogs.Count);
-            var arg_PaymentLog = args.PaymentLogs.ElementAt(0);
-            Assert.IsTrue(arg_PaymentLog.Credit);
-            Assert.IsFalse(arg_PaymentLog.Check);
-            Assert.IsFalse(arg_PaymentLog.Accepted);
-            Assert.IsNull(arg_PaymentLog.Name);
-            Assert.AreEqual(parameters.PMT_AMT.Value, arg_PaymentLog.Amount);
-            Assert.IsNull(arg_PaymentLog.GatewayTransactionId);
-            Assert.IsNull(arg_PaymentLog.CardType);
-            Assert.AreEqual(parameters.acct_addr, arg_PaymentLog.TnBillingAddress1);
-            Assert.AreEqual(parameters.acct_addr2, arg_PaymentLog.TnBillingAddress2);
-            Assert.AreEqual(parameters.acct_city, arg_PaymentLog.TnBillingCity);
-            Assert.AreEqual(parameters.acct_state, arg_PaymentLog.TnBillingState);
-            Assert.AreEqual(parameters.acct_zip, arg_PaymentLog.TnBillingZip);
-            Assert.AreEqual(parameters.CANCEL_LINK, arg_PaymentLog.TnCancelLink);
-            Assert.AreEqual(parameters.ERROR_LINK, arg_PaymentLog.TnErrorLink);
-            Assert.AreEqual(parameters.pmt_date, arg_PaymentLog.TnPaymentDate);
-            Assert.AreEqual(parameters.Submit, arg_PaymentLog.TnSubmit);
-            Assert.AreEqual(parameters.SUCCESS_LINK, arg_PaymentLog.TnSuccessLink);
-            Assert.AreEqual(parameters.sys_tracking_id, arg_PaymentLog.TnSysTrackingId);
-            Assert.AreEqual(parameters.UPAY_SITE_ID, arg_PaymentLog.TnUpaySiteId);
-            Assert.AreEqual("E", arg_PaymentLog.TnStatus);
+            var argPaymentLog = args.PaymentLogs.ElementAt(0);
+            Assert.IsTrue(argPaymentLog.Credit);
+            Assert.IsFalse(argPaymentLog.Check);
+            Assert.IsFalse(argPaymentLog.Accepted);
+            Assert.IsNull(argPaymentLog.Name);
+            Assert.AreEqual(parameters.PMT_AMT.Value, argPaymentLog.Amount);
+            Assert.IsNull(argPaymentLog.GatewayTransactionId);
+            Assert.IsNull(argPaymentLog.CardType);
+            Assert.AreEqual(parameters.acct_addr, argPaymentLog.TnBillingAddress1);
+            Assert.AreEqual(parameters.acct_addr2, argPaymentLog.TnBillingAddress2);
+            Assert.AreEqual(parameters.acct_city, argPaymentLog.TnBillingCity);
+            Assert.AreEqual(parameters.acct_state, argPaymentLog.TnBillingState);
+            Assert.AreEqual(parameters.acct_zip, argPaymentLog.TnBillingZip);
+            Assert.AreEqual(parameters.CANCEL_LINK, argPaymentLog.TnCancelLink);
+            Assert.AreEqual(parameters.ERROR_LINK, argPaymentLog.TnErrorLink);
+            Assert.AreEqual(parameters.pmt_date, argPaymentLog.TnPaymentDate);
+            Assert.AreEqual(parameters.Submit, argPaymentLog.TnSubmit);
+            Assert.AreEqual(parameters.SUCCESS_LINK, argPaymentLog.TnSuccessLink);
+            Assert.AreEqual(parameters.sys_tracking_id, argPaymentLog.TnSysTrackingId);
+            Assert.AreEqual(parameters.UPAY_SITE_ID, argPaymentLog.TnUpaySiteId);
+            Assert.AreEqual("E", argPaymentLog.TnStatus);
             #endregion Assert
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void TestPaymentResultWithWrongPostingKeyDoesNotSave()
         {
             #region Arrange
@@ -287,34 +285,190 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Act
 
             #region Assert
-            NotificationProvider.AssertWasNotCalled(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything));
+            NotificationProvider.AssertWasCalled(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything));
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            NotificationProvider.AssertWasNotCalled(a => a.SendConfirmation(Controller.Repository, Transactions[1], TransactionAnswers[0].Answer));
+            var args = NotificationProvider.GetArgumentsForCallsMadeOn(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything))[0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual("<br/><br/>Payment log values:<br/>Name:Zoid<br/>Amount:200.00<br/>Accepted:False<br/>Gateway transaction id:GateWayId<br/>Card Type: MC<br/>ModelState: False<br/><br/>===== modelstate errors text===<br/>Error:Posting Key Error<br/>", args[3]);
+            Assert.AreEqual("InValidPaymentLog", args[4].ToString());
+            Assert.AreSame(parameters, args[1]);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestPaymentResultWithWrongSiteIdDoesNotSave()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTransactions(Transactions, 3);
+
+            AssignContactEmail(Transactions[1]);
+
+            Transactions[1].Amount = 200.00m;
+            var parameters = DefaultParameters();
+
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.PMT_AMT = Transactions[1].Total;
+            parameters.UPAY_SITE_ID = "5";
+            TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+
+            Controller.PaymentResult(parameters)
+                .AssertViewRendered();
+            #endregion Act
+
+            #region Assert
+            NotificationProvider.AssertWasCalled(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything));
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            NotificationProvider.AssertWasNotCalled(a => a.SendConfirmation(Controller.Repository, Transactions[1], TransactionAnswers[0].Answer));
+            var args = NotificationProvider.GetArgumentsForCallsMadeOn(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything))[0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual("<br/><br/>Payment log values:<br/>Name:Zoid<br/>Amount:200.00<br/>Accepted:False<br/>Gateway transaction id:GateWayId<br/>Card Type: MC<br/>ModelState: False<br/><br/>===== modelstate errors text===<br/>Error:TouchNet Site Id Error<br/>", args[3]);
+            Assert.AreEqual("InValidPaymentLog", args[4].ToString());
+            Assert.AreSame(parameters, args[1]);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestPaymentResultWithDummyTransIdDoesNotSave()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTransactions(Transactions, 3);
+
+            AssignContactEmail(Transactions[1]);
+
+            Transactions[1].Amount = 200.00m;
+            var parameters = DefaultParameters();
+
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.PMT_AMT = Transactions[1].Total;
+            parameters.TPG_TRANS_ID = "DUMMY_TRANS_ID";
+            TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+
+            Controller.PaymentResult(parameters)
+                .AssertViewRendered();
+            #endregion Act
+
+            #region Assert
+            NotificationProvider.AssertWasCalled(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything));
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            NotificationProvider.AssertWasNotCalled(a => a.SendConfirmation(Controller.Repository, Transactions[1], TransactionAnswers[0].Answer));
+            var args = NotificationProvider.GetArgumentsForCallsMadeOn(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything))[0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual("<br/><br/>Payment log values:<br/>Name:Zoid<br/>Amount:200.00<br/>Accepted:False<br/>Gateway transaction id:DUMMY_TRANS_ID<br/>Card Type: MC<br/>ModelState: False<br/><br/>===== modelstate errors text===<br/>Error:TouchNet TPG_TRANS_ID Error<br/>", args[3]);
+            Assert.AreEqual("InValidPaymentLog", args[4].ToString());
+            Assert.AreSame(parameters, args[1]);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestPaymentResultWithDifferentAmountDoesNotSave()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTransactions(Transactions, 3);
+
+            AssignContactEmail(Transactions[1]);
+
+            Transactions[1].Amount = 200.00m;
+            var parameters = DefaultParameters();
+
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.PMT_AMT = 50.00m;
+            TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+
+            Controller.PaymentResult(parameters)
+                .AssertViewRendered();
+            #endregion Act
+
+            #region Assert
+            NotificationProvider.AssertWasCalled(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything));
+            TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            NotificationProvider.AssertWasNotCalled(a => a.SendConfirmation(Controller.Repository, Transactions[1], TransactionAnswers[0].Answer));
+            var args = NotificationProvider.GetArgumentsForCallsMadeOn(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything))[0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual("<br/><br/>Payment log values:<br/>Name:Zoid<br/>Amount:50.00<br/>Accepted:False<br/>Gateway transaction id:GateWayId<br/>Card Type: MC<br/>ModelState: False<br/><br/>===== modelstate errors text===<br/>Error:TouchNet Amount does not match local amount<br/>", args[3]);
+            Assert.AreEqual("InValidPaymentLog", args[4].ToString());
+            Assert.AreSame(parameters, args[1]);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestPaymentResultWithValidPaymentButOverPaymentCreatesPaymentLog()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTransactions(Transactions, 3);
+
+            AssignContactEmail(Transactions[1]);
+
+            Transactions[1].Amount = 200.00m;
+            var payment = CreateValidEntities.PaymentLog(null);
+            payment.Amount = 100.00m;
+            payment.Accepted = true;
+            payment.Credit = true;
+            payment.Check = false;
+            Transactions[1].AddPaymentLog(payment);
+
+            var parameters = DefaultParameters();
+
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.PMT_AMT = Transactions[1].Total;
+            TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+
+            Controller.PaymentResult(parameters)
+                .AssertViewRendered();
+            #endregion Act
+
+            #region Assert
+            NotificationProvider.AssertWasCalled(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything));
             TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Transactions[1]));
             NotificationProvider.AssertWasCalled(a => a.SendConfirmation(Controller.Repository, Transactions[1], TransactionAnswers[0].Answer));
 
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Transactions[1]))[0][0];
             Assert.IsTrue(args.IsActive);
-            Assert.AreEqual(1, args.PaymentLogs.Count);
-            var arg_PaymentLog = args.PaymentLogs.ElementAt(0);
-            Assert.IsTrue(arg_PaymentLog.Credit);
-            Assert.IsFalse(arg_PaymentLog.Check);
-            Assert.IsTrue(arg_PaymentLog.Accepted);
-            Assert.AreEqual(parameters.NAME_ON_ACCT, arg_PaymentLog.Name);
-            Assert.AreEqual(parameters.PMT_AMT.Value, arg_PaymentLog.Amount);
-            Assert.AreEqual(parameters.TPG_TRANS_ID, arg_PaymentLog.GatewayTransactionId);
-            Assert.AreEqual(parameters.CARD_TYPE, arg_PaymentLog.CardType);
-            Assert.AreEqual(parameters.acct_addr, arg_PaymentLog.TnBillingAddress1);
-            Assert.AreEqual(parameters.acct_addr2, arg_PaymentLog.TnBillingAddress2);
-            Assert.AreEqual(parameters.acct_city, arg_PaymentLog.TnBillingCity);
-            Assert.AreEqual(parameters.acct_state, arg_PaymentLog.TnBillingState);
-            Assert.AreEqual(parameters.acct_zip, arg_PaymentLog.TnBillingZip);
-            Assert.AreEqual(parameters.CANCEL_LINK, arg_PaymentLog.TnCancelLink);
-            Assert.AreEqual(parameters.ERROR_LINK, arg_PaymentLog.TnErrorLink);
-            Assert.AreEqual(parameters.pmt_date, arg_PaymentLog.TnPaymentDate);
-            Assert.AreEqual(parameters.Submit, arg_PaymentLog.TnSubmit);
-            Assert.AreEqual(parameters.SUCCESS_LINK, arg_PaymentLog.TnSuccessLink);
-            Assert.AreEqual(parameters.sys_tracking_id, arg_PaymentLog.TnSysTrackingId);
-            Assert.AreEqual(parameters.UPAY_SITE_ID, arg_PaymentLog.TnUpaySiteId);
-            Assert.AreEqual("S", arg_PaymentLog.TnStatus);
+            Assert.AreEqual(2, args.PaymentLogs.Count);
+            Assert.IsNotNull(args.PaymentLogs.ElementAt(1));
+            var argPaymentLog = args.PaymentLogs.ElementAt(1);
+            if (argPaymentLog != null)
+            {
+                Assert.IsTrue(argPaymentLog.Credit);
+                Assert.IsFalse(argPaymentLog.Check);
+                Assert.IsTrue(argPaymentLog.Accepted);
+                Assert.AreEqual(parameters.NAME_ON_ACCT, argPaymentLog.Name);
+                Assert.AreEqual(parameters.PMT_AMT.Value, argPaymentLog.Amount);
+                Assert.AreEqual(parameters.TPG_TRANS_ID, argPaymentLog.GatewayTransactionId);
+                Assert.AreEqual(parameters.CARD_TYPE, argPaymentLog.CardType);
+                Assert.AreEqual(parameters.acct_addr, argPaymentLog.TnBillingAddress1);
+                Assert.AreEqual(parameters.acct_addr2, argPaymentLog.TnBillingAddress2);
+                Assert.AreEqual(parameters.acct_city, argPaymentLog.TnBillingCity);
+                Assert.AreEqual(parameters.acct_state, argPaymentLog.TnBillingState);
+                Assert.AreEqual(parameters.acct_zip, argPaymentLog.TnBillingZip);
+                Assert.AreEqual(parameters.CANCEL_LINK, argPaymentLog.TnCancelLink);
+                Assert.AreEqual(parameters.ERROR_LINK, argPaymentLog.TnErrorLink);
+                Assert.AreEqual(parameters.pmt_date, argPaymentLog.TnPaymentDate);
+                Assert.AreEqual(parameters.Submit, argPaymentLog.TnSubmit);
+                Assert.AreEqual(parameters.SUCCESS_LINK, argPaymentLog.TnSuccessLink);
+                Assert.AreEqual(parameters.sys_tracking_id, argPaymentLog.TnSysTrackingId);
+                Assert.AreEqual(parameters.UPAY_SITE_ID, argPaymentLog.TnUpaySiteId);
+                Assert.AreEqual("S", argPaymentLog.TnStatus);
+            }
+
+            var emailArgs = NotificationProvider.GetArgumentsForCallsMadeOn(a => a.SendPaymentResultErrors(Arg<String>.Is.Anything, Arg<PaymentResultParameters>.Is.Anything, Arg<System.Collections.Specialized.NameValueCollection>.Is.Anything, Arg<string>.Is.Anything, Arg<PaymentResultType>.Is.Anything))[0];
+            Assert.IsNotNull(emailArgs);
+            Assert.IsNull(emailArgs[3]);
+            Assert.AreEqual("OverPaid", emailArgs[4].ToString());
+            Assert.AreSame(parameters, emailArgs[1]);
+
             #endregion Assert
         }
 
