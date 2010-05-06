@@ -501,28 +501,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             return parameters;
         }
 
-        private void AssignContactEmail(Transaction transaction)
-        {
-            if (QuestionSets.Count == 0)
-            {
-                ControllerRecordFakes.FakeQuestionSets(QuestionSets, 1);   
-            }
-            if (Questions.Count == 0)
-            {
-                ControllerRecordFakes.FakeQuestions(Questions, 1);
-            }
-            if (TransactionAnswers.Count == 0)
-            {
-                ControllerRecordFakes.FakeTransactionAnswers(TransactionAnswers, 1);
-            }
-            
-            QuestionSets[0].Name = StaticValues.QuestionSet_ContactInformation;
-            Questions[0].Name = StaticValues.Question_Email;
-            TransactionAnswers[0].Answer = "jasoncsylvestre@gmail.com";
-            TransactionAnswers[0].Question = Questions[0];
-            TransactionAnswers[0].QuestionSet = QuestionSets[0];
-            transaction.AddTransactionAnswer(TransactionAnswers[0]);
-        }
+
 
         #endregion Helper Methods
     }

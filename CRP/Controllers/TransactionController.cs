@@ -952,17 +952,26 @@ namespace CRP.Controllers
                     viewModel.TransactionNumber = orderNumber;
                     viewModel.Email = email;
                     viewModel.Transaction = transaction;
-                }
-                if (transaction.Credit && transaction.Check == false)
-                {
-                    if (!transaction.Paid && transaction.IsActive)
+                    if (transaction.Credit && transaction.Check == false)
                     {
-                        if (transaction.PaymentLogs.Where(a => a.TnStatus == "C" || a.TnStatus == "E").Any())
+                        if (!transaction.Paid && transaction.IsActive)
                         {
-                            viewModel.ShowCreditCardReSubmit = true;
+                            if (transaction.PaymentLogs.Where(a => a.TnStatus == "C" || a.TnStatus == "E").Any())
+                            {
+                                viewModel.ShowCreditCardReSubmit = true;
+                            }
                         }
                     }
+                    Message = string.Empty;
                 }
+                else
+                {
+                    viewModel.TransactionNumber = orderNumber;
+                    viewModel.Email = email;
+
+                    Message = "Unable to locate order, please check your information and try again.";  
+                }
+                
             }
 
             else

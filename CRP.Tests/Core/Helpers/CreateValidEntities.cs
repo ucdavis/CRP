@@ -286,7 +286,11 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Item = new Item();
             rtValue.Check = true;
             rtValue.Credit = false;
-            
+            if(counter != null)
+            {
+                var locCount = (int)counter;
+                rtValue.TransactionNumber = string.Format("{0}-{1}", rtValue.TransactionDate.Year, locCount.ToString("000000"));
+            }
             return rtValue;
         }
 
