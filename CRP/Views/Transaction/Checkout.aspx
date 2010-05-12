@@ -36,7 +36,7 @@
                     <td><%= Html.TextBox("quantity", Model.Quantity, new {@style = "width:20px;", @class="quantityAmount"}) %></td>
                     <td><%= Html.Encode(Model.Item.Name) %></td>
                     <td>$ <span class="perItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
-                    <td>$ <span class="totalItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>                    
+                    <td>$ <span class="totalItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem * Model.Quantity)) %></span></td>                    
                 </tr>                
                 <tr>
                     <td colspan="4">&nbsp</td>
