@@ -7,6 +7,7 @@
         <%= Html.Encode(Model.Question.Name) %>
         <%= Html.Hidden(".QuestionId", Model.Question.Id, new { @class = StaticValues.Class_indexedControl })%>
         <%= Html.Hidden(".QuestionSetId", Model.Question.QuestionSet.Id, new { @class = StaticValues.Class_indexedControl })%>
+        <%= Html.Hidden(".QuantityIndex", 0, new { @class = StaticValues.Class_indexedControl })%>
         <br />
     
         <!-- Render the controls now -->

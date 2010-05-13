@@ -45,7 +45,8 @@
                 <legend><%= Html.Encode(qs.QuestionSet.Name)%> <span class="quantityIndex"><%= Html.Encode(i + 1) %></span> </legend>
                 <ul>
                 <% foreach (var q in qs.QuestionSet.Questions) {
-                    var answer = Model.Answers.Where(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i).FirstOrDefault();
+    int i1 = i;
+    var answer = Model.Answers.Where(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i1).FirstOrDefault();
                    %>
                 
                     <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty)); %>

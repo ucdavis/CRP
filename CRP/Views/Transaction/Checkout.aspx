@@ -306,7 +306,7 @@
             var cName = "quantityAnswers";
             
             $.each($container, function(cIndex, cItem){
-                var p = $(cItem).find("p");
+                var p = $(cItem).find("li");
                 
                 $.each(p, function(index, item){               
                     // quantity index doesn't exist, create it
