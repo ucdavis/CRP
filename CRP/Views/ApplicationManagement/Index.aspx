@@ -16,12 +16,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Application Management</h2>
-    
+<div id="adminscreen">    
     <ul>
         <li><%= Html.ActionLink<ApplicationManagementController>(a => a.ListItemTypes(), "Item Types")%></li>
         <li><%= Html.ActionLink<QuestionSetController>(a => a.List(), "Question Sets") %></li>
         <li><%= Html.ActionLink<DisplayProfileController>(a => a.List(), "Display Profiles") %></li>
     </ul>
+</div>
 
 </asp:Content>
 

@@ -28,7 +28,7 @@
                                         {%>
                                             <%= Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(x.Id), "Edit") %> |
                                             
-                                            <% using(Html.BeginForm<ApplicationManagementController>(a => a.ToggleActive(x.Id))) {%>
+                                            <% using(Html.BeginForm<ApplicationManagementController>(a => a.ToggleActive(x.Id), FormMethod.Post, new {@class = "inline"})) {%>
                                             
                                                 <%= Html.AntiForgeryToken() %>
                                                 <a href="javascript:;" class="FormSubmit"><%= x.IsActive ? "Deactivate" : "Activate" %></a>

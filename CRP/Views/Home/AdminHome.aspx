@@ -8,7 +8,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
+<div id="adminscreen">
     <h2>AdminHome</h2>
 
     <h2>User Screens</h2>
@@ -25,7 +25,7 @@
         <li><%= Html.ActionLink<AccountController>(a => a.ManageUsers(), "Manage Users") %></li>
         <li><%= Html.ActionLink<TemplateController>(a => a.Edit(), "Edit System Confirmation Template") %></li>
     </ul>
-
+</div>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">

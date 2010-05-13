@@ -63,10 +63,15 @@ fieldset ul li label {margin-bottom:0em;}
 .ui-state-default:hover {background-color: #FFFFFF !important;}
 .ui-tabs-selected {background-color:#FFFFFF !important;}
 .ui-widget-content {border:1px solid #2A2829;}
-.t-header, t-grid-header {background-color: #0D548A !important; background-image:none !important; color:#FFF;}
-.t-footer {background-color:#0D548A !important; color:#FFF;}
+.t-header, t-grid-header {background-color: #0D548A !important; background-image:none !important; color:#FFF !important;}
+.t-footer {background-color:#FFF !important; color:#000 !important;}
 #Items.t-widget.t-grid {border:1px solid #0D548A;}
 #Items.t-widget.t-grid td {border:none;}
+.inline{display:inline;}
+.t-grid .t-header {border:none;}
+.t-grid.t-widget .t-header a.t-link{border:none; color:#FFFFFF;}
+.t-widget .t-footer, .t-widget .t-status {background: #FFF; border: #FFF;}
+
 
 
 /* details view */
@@ -104,3 +109,7 @@ fieldset {font-size:100%;border: 1px solid #0D548A;}
 
 .two_col_float_uneven_left {float:left; width:680px;}
 .two_col_float_uneven_right {float:right; width:300px;}
+
+/* admin screen */
+#adminscreen a:hover{color:#0D548A;}
+#adminscreen li{list-style:none;}
