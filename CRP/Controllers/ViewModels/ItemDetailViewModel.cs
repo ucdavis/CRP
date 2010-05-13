@@ -17,6 +17,9 @@ namespace CRP.Controllers.ViewModels
         public IEnumerable<ItemTransactionAnswer> Answers { get; set; }
         public bool CreditPayment { get; set; }
         public bool CheckPayment { get; set; }
+        public decimal TotalAmountToRedisplay { get; set; }
+        public decimal CouponAmountToDisplay { get; set; }
+        public decimal CouponTotalDiscountToDisplay { get; set; }
 
         /// <summary>
         /// Creates the specified View Model.

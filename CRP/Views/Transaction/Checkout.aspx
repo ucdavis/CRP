@@ -55,16 +55,16 @@
                         <span id="CouponMessage"></span>
                         
                     </td>
-                    <td>$ <span class="discounterPerItemAmount">0.00</span>
+                    <td>$ <span class="discounterPerItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.CouponAmountToDisplay))%></span>
                     
                         <span class="discounterMaxQuantity" style="display:none;"></span>
                     </td>
-                    <td>$ <span class="discountAmount">0.00</span></td>
+                    <td>$ <span class="discountAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.CouponTotalDiscountToDisplay))%></span></td>
                 </tr>
                 <tr style="background-color: #D5D5D5">
                     <td></td>
                     <td colspan="2" style="text-align:right;">Total Amount: </td>
-                    <td>$ <span class="totalAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>                    
+                    <td>$ <span class="totalAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.TotalAmountToRedisplay))%></span></td>                    
                 </tr>
 
             </tbody>

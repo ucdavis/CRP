@@ -54,6 +54,9 @@ namespace CRP.Controllers
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
             viewModel.Quantity = 1;
             viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
+            viewModel.TotalAmountToRedisplay = viewModel.Quantity*item.CostPerItem;
+            viewModel.CouponAmountToDisplay = 0.0m; //They have not entered a coupon yet
+            viewModel.CouponTotalDiscountToDisplay = 0.0m;
             return View(viewModel);
         }
 
@@ -164,7 +167,7 @@ namespace CRP.Controllers
             // deal with the amount
             var amount = item.CostPerItem*quantity; // get the initial amount
             decimal discount = 0.0m;
-            
+            decimal couponAmount = 0.0m;
             // get the email
             if (coup != null)
             {
@@ -183,6 +186,10 @@ namespace CRP.Controllers
                 if(discount == 0)
                 {
                     ModelState.AddModelError("Coupon", NotificationMessages.STR_Coupon_could_not_be_used);
+                }
+                else
+                {
+                    couponAmount = coup.DiscountAmount;
                 }
             }
             transaction.Amount = amount - discount;
@@ -322,6 +329,9 @@ namespace CRP.Controllers
             viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
             viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);
             viewModel.CheckPayment = (paymentType == StaticValues.Check);
+            viewModel.TotalAmountToRedisplay = transaction.Total;
+            viewModel.CouponAmountToDisplay = couponAmount;
+            viewModel.CouponTotalDiscountToDisplay = discount;
             return View(viewModel);
         }
 
