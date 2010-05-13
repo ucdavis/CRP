@@ -63,8 +63,10 @@ fieldset ul li label {margin-bottom:0em;}
 .ui-state-default:hover {background-color: #FFFFFF !important;}
 .ui-tabs-selected {background-color:#FFFFFF !important;}
 .ui-widget-content {border:1px solid #2A2829;}
-.t-header, t-grid-header {background-color: #e8f7f8 !important; background-image:none !important;}
-.t-footer {background-color:#e8f7f8 !important;}
+.t-header, t-grid-header {background-color: #0D548A !important; background-image:none !important; color:#FFF;}
+.t-footer {background-color:#0D548A !important; color:#FFF;}
+#Items.t-widget.t-grid {border:1px solid #0D548A;}
+#Items.t-widget.t-grid td {border:none;}
 
 
 /* details view */
@@ -95,7 +97,7 @@ fieldset ul li label {margin-bottom:0em;}
 fieldset.details ul {margin-left:0px;}
 fieldset ul {margin-left:50px;}
 fieldset a {text-decoration:underline; color:#0D548A; font-weight:bold;}
-fieldset {font-size:100%;}
+fieldset {font-size:100%;border: 1px solid #0D548A;}
 
 .two_col_float {display:inline-block; float:left; width:490px;}
 .two_col_float_right {margin-left:20px;}
