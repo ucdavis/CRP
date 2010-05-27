@@ -63,8 +63,8 @@
             <%= Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))%>
         </li>
         <li>
-            <strong>Expiration:</strong>
-            <%= Html.Encode(String.Format("{0:d}", Model.Item.Expiration))%>
+            <strong>Last day to register online:</strong>
+            <%= Html.Encode(String.Format("{0:D}", Model.Item.Expiration))%>
         </li>
 
         <% foreach (var ep in Model.Item.ExtendedPropertyAnswers)

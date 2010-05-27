@@ -21,7 +21,7 @@
                         
                         <img src='<%= Url.Action("GetImage", "Item", new {id = item.Id}) %>' />
                         
-                        <h3><%= Html.Encode(item.Expiration.HasValue ? item.Expiration.Value.ToString("d") : string.Empty) %></h3>                    
+                        <h3>Last day to register online: <%= Html.Encode(item.Expiration.HasValue ? item.Expiration.Value.ToString("D") : string.Empty) %></h3>                    
                         
                         <% Html.RenderPartial(StaticValues.Partial_TagView, item.Tags); %>
                         
