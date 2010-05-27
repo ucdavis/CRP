@@ -82,13 +82,8 @@
             </li>
             <li>
                 <label for="Item.Link">Link:</label><br />
-                <%= Html.TextBox("Item.Link",string.Empty , new { @class = "validateLink"})%>
+                <%= Html.TextBox("Item.Link", Model.Item != null ? Model.Item.Link : string.Empty, new { @class = "validateLink" })%>
                 <%= Html.ValidationMessage("Item.Link", "*")%>
-            </li>
-            <li>
-                <label for="Item.MapLink">Map Link:</label><br  />
-                <%= Html.TextBox("MapLink") %>
-                <%= Html.ValidationMessage("MapLink", "*") %>
             </li>
             <li><table><tbody><tr><td>
             <!-- NEEDS BALLOON-->
@@ -107,6 +102,28 @@
                 <%= Html.ValidationMessage("Item.RestrictedKey", "*") %>
             </li>
 
+        </fieldset>
+        
+        <fieldset>
+            <legend>Map Link</legend>
+            
+            <ul>
+            <li>
+                <label for="Item.MapLink">Map Link:</label><br  />
+                <%= Html.TextBox("MapLink") %>
+                <%= Html.ValidationMessage("MapLink", "*") %>
+            </li>
+            <% if(Model.Item != null && !string.IsNullOrEmpty(Model.Item.MapLink)) {%>
+            <li>
+                <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" 
+                    marginwidth="0" 
+                    src="<%= Model.Item.MapLink %>"></iframe><br />
+                <small>
+                    <a href="<%= Model.Item.LinkLink %>" style="color:#0000FF;text-align:left">View Larger Map</a>
+                </small>
+            </li>
+            <%}%>
+            </ul>
         </fieldset>
                 
         <fieldset>
