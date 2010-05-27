@@ -90,6 +90,7 @@
     <Compile Include="Domain\Editor.cs" />
     <Compile Include="Domain\ExtendedProperty.cs" />
     <Compile Include="Domain\ExtendedPropertyAnswer.cs" />
+    <Compile Include="Domain\HelpTopic.cs" />
     <Compile Include="Domain\Item.cs" />
     <Compile Include="Domain\ItemQuestionSet.cs" />
     <Compile Include="Domain\ItemReport.cs" />
@@ -215,6 +216,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\Validator.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Domain\HelpTopic.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
