@@ -11,6 +11,7 @@
                 $(item).bt('mm/dd/yyyy format');
                 $(item).datepicker();
             });
+            $("#file").bt('The maximum picture size is 4 meg. A feel online resize tool can be found at: http://www.picresize.com/');
         });
     </script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>
