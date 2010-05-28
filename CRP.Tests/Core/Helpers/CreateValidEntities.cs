@@ -385,7 +385,14 @@ namespace CRP.Tests.Core.Helpers
 
             return rtValue;
         }
-
+        public static HelpTopic HelpTopic(int? counter)
+        {
+            var rtValue = new HelpTopic();
+            rtValue.Name = "Name" + counter.Extra();
+            rtValue.Description = "Description" + counter.Extra();
+            rtValue.AvailableToPublic = true;
+            return rtValue;
+        }
         /// <summary>
         /// Create a valid entry for tests.
         /// Repository tests may need to modify this data to supply real linked data.
