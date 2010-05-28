@@ -20,5 +20,23 @@ namespace CRP.Core.Domain
         public virtual string Description { get; set; }
         [NotNull]
         public virtual bool AvailableToPublic { get; set; }
+
+        public virtual string ShortDescription
+        {
+            get
+            {
+                if(Description == null)
+                {
+                    return string.Empty;
+                }
+                if(Description.Length < 80)
+                {
+                    return Description.Substring(0, Description.Length);
+                }
+
+                return Description.Substring(0, 80);
+
+            }
+        }
     }
 }

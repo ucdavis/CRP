@@ -82,6 +82,7 @@
                 <li><%= Html.ActionLink<HomeController>(a => a.AdminHome(), "Admin Tools") %></li>
                 <li><%= Html.ActionLink<TransactionController>(a => a.Lookup(), "Lookup Order") %></li>
                 <% Html.RenderPartial(StaticValues.Partial_LogOnUserControl); %>
+                <li><%= Html.ActionLink<HelpController>(a => a.Index(), "Help") %></li>
                 </ul>
             </div> 
             <div>
