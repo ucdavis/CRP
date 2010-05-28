@@ -10,6 +10,7 @@
 
     <property name="Name" />
     <property name="Description" />
+    <property name="AvailableToPublic"/>
 
   </class>
 </hibernate-mapping>
