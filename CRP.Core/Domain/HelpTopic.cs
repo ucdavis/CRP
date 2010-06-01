@@ -14,12 +14,17 @@ namespace CRP.Core.Domain
         public virtual void SetDefaults()
         {
             AvailableToPublic = false;
+            IsActive = true;
+            NumberOfReads = 0;
         }
         [Required]
         public virtual string Name { get; set; }
         public virtual string Description { get; set; }
         [NotNull]
         public virtual bool AvailableToPublic { get; set; }
+        public virtual bool IsActive { get; set; }
+        public virtual int NumberOfReads { get; set; }
+
 
         public virtual string ShortDescription
         {

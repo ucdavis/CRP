@@ -23,10 +23,14 @@
                                     col.Add(x =>
                                                 { %>
                                                     <%= Html.ActionLink<HelpController>(a => a.Details(x.Id),"Select")%> 
-                                                    <% if (Model.IsUserAuthorized){%>|
+                                                    <% if (Model.IsUserAdmin){%>|
                                                     <%=Html.ActionLink<HelpController>(a => a.Edit(x.Id), "Edit")%> 
                                                     <%}%>
                                                 <% });
+                                    <% if (Model.IsUserAdmin){%>
+                                    col.Add(x => x.IsActive);
+                                    col.Add(x => x.NumberOfReads);
+                                    <%}%>
                                     col.Add(x => x.Name);
                                     col.Add(x => x.ShortDescription);
                                 })

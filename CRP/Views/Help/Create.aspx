@@ -31,10 +31,15 @@
                 <%= Html.TextBox("AvailableToPublic") %>
                 <%= Html.ValidationMessage("AvailableToPublic", "*") %>
             </p>
+             <p>
+                <label for="IsActive">IsActive:</label>
+                <%= Html.TextBox("IsActive") %>
+                <%= Html.ValidationMessage("IsActive", "*")%>
+            </p>
             <p>
-                <label for="Id">Id:</label>
-                <%= Html.TextBox("Id") %>
-                <%= Html.ValidationMessage("Id", "*") %>
+                <label for="NumberOfReads">NumberOfReads:</label>
+                <%= Html.TextBox("NumberOfReads")%>
+                <%= Html.ValidationMessage("NumberOfReads", "*")%>
             </p>
             <p>
                 <input type="submit" value="Create" />

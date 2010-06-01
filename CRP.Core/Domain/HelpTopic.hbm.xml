@@ -11,6 +11,8 @@
     <property name="Name" />
     <property name="Description" />
     <property name="AvailableToPublic"/>
-
+    <property name="IsAcive"/>
+    <property name="NumberOfReads"/>
+    
   </class>
 </hibernate-mapping>
