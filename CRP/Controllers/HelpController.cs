@@ -58,6 +58,8 @@ namespace CRP.Controllers
             topic.Name = helpTopic.Name;
             topic.Description = helpTopic.Description;
             topic.AvailableToPublic = helpTopic.AvailableToPublic;
+            topic.IsActive = helpTopic.IsActive;
+            topic.NumberOfReads = helpTopic.NumberOfReads;
 
             topic.TransferValidationMessagesTo(ModelState);
 
@@ -90,18 +92,28 @@ namespace CRP.Controllers
         [AdminOnly]
         [AcceptPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, HelpTopic helpTopic)
         {
-            try
+            var topic = Repository.OfType<HelpTopic>().GetNullableByID(id);
+            if (helpTopic == null)
             {
-                // TODO: Add update logic here
- 
-                return RedirectToAction("Index");
+                return this.RedirectToAction(a => a.Index());
             }
-            catch
+            topic.Name = helpTopic.Name;
+            topic.Description = helpTopic.Description;
+            topic.AvailableToPublic = helpTopic.AvailableToPublic;
+            topic.IsActive = helpTopic.IsActive;
+            topic.NumberOfReads = helpTopic.NumberOfReads;
+            topic.TransferValidationMessagesTo(ModelState);
+
+            if (ModelState.IsValid)
             {
-                return View();
+                Repository.OfType<HelpTopic>().EnsurePersistent(topic);
+
+                return this.RedirectToAction<HelpController>(a => a.Index());
             }
+
+            return View(helpTopic);
         }
     }
 }

@@ -649,6 +649,8 @@
     <Content Include="ConnectionStringProd.config" />
     <Content Include="ConnectionStringTest.config" />
     <Content Include="Content\jquery.bt.css" />
+    <Content Include="Content\telerik.common.css" />
+    <Content Include="Content\telerik.vista.css" />
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Scripts\jquery.bt.min.js" />
     <Content Include="Scripts\jquery.tablesorter.min.js" />

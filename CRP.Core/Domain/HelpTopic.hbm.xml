@@ -11,7 +11,7 @@
     <property name="Name" />
     <property name="Description" />
     <property name="AvailableToPublic"/>
-    <property name="IsAcive"/>
+    <property name="IsActive"/>
     <property name="NumberOfReads"/>
     
   </class>

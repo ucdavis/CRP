@@ -17,22 +17,20 @@
                 <% Html.Grid(Model.HelpTopics)
                    .Transactional()
                    .Name("Help Topics")
-                   .PrefixUrlParameters(false)
+                   .PrefixUrlParameters(false)                   
                    .Columns(col =>
                                 {
-                                    col.Add(x =>
+                                    col.Template(x =>
                                                 { %>
                                                     <%= Html.ActionLink<HelpController>(a => a.Details(x.Id),"Select")%> 
                                                     <% if (Model.IsUserAdmin){%>|
                                                     <%=Html.ActionLink<HelpController>(a => a.Edit(x.Id), "Edit")%> 
                                                     <%}%>
                                                 <% });
-                                    <% if (Model.IsUserAdmin){%>
-                                    col.Add(x => x.IsActive);
-                                    col.Add(x => x.NumberOfReads);
-                                    <%}%>
-                                    col.Add(x => x.Name);
-                                    col.Add(x => x.ShortDescription);
+                                    col.Bound(x => x.IsActive).Visible(Model.IsUserAdmin);
+                                    col.Bound(x => x.NumberOfReads).Title("Reads").Hidden(Model.IsUserAdmin);
+                                    col.Bound(x => x.Name);
+                                    col.Bound(x => x.ShortDescription).Sortable(false);
                                 })
                     .Pageable(x=>x.PageSize(20))
                     .Sortable()
