@@ -32,7 +32,7 @@ namespace CRP.Controllers.ViewModels
             }
             else
             {
-                viewModel.HelpTopics = repository.OfType<HelpTopic>().Queryable.Where(a => a.AvailableToPublic && a.IsActive);
+                viewModel.HelpTopics = repository.OfType<HelpTopic>().Queryable.Where(a => a.AvailableToPublic && a.IsActive).OrderByDescending(a => a.NumberOfReads);
             }
 
             return viewModel;

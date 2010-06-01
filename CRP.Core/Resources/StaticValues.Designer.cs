@@ -106,6 +106,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ~/Views/Shared/HelpForm.ascx.
+        /// </summary>
+        public static string Partial_HelpForm {
+            get {
+                return ResourceManager.GetString("Partial_HelpForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ~/Views/Shared/ItemBrowse.ascx.
         /// </summary>
         public static string Partial_ItemBrowse {

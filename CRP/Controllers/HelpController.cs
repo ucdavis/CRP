@@ -35,6 +35,8 @@ namespace CRP.Controllers
             {
                 return this.RedirectToAction(a => a.Index());
             }
+            helpTopic.NumberOfReads++;
+            Repository.OfType<HelpTopic>().EnsurePersistent(helpTopic);
             return View(helpTopic);
         }
 
@@ -55,8 +57,8 @@ namespace CRP.Controllers
         public ActionResult Create(HelpTopic helpTopic)
         {
             var topic = new HelpTopic();
-            topic.Name = helpTopic.Name;
-            topic.Description = helpTopic.Description;
+            topic.Question = helpTopic.Question;
+            topic.Answer = helpTopic.Answer;
             topic.AvailableToPublic = helpTopic.AvailableToPublic;
             topic.IsActive = helpTopic.IsActive;
             topic.NumberOfReads = helpTopic.NumberOfReads;
@@ -99,8 +101,8 @@ namespace CRP.Controllers
             {
                 return this.RedirectToAction(a => a.Index());
             }
-            topic.Name = helpTopic.Name;
-            topic.Description = helpTopic.Description;
+            topic.Question = helpTopic.Question;
+            topic.Answer = helpTopic.Answer;
             topic.AvailableToPublic = helpTopic.AvailableToPublic;
             topic.IsActive = helpTopic.IsActive;
             topic.NumberOfReads = helpTopic.NumberOfReads;

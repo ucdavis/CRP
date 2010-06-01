@@ -18,30 +18,10 @@ namespace CRP.Core.Domain
             NumberOfReads = 0;
         }
         [Required]
-        public virtual string Name { get; set; }
-        public virtual string Description { get; set; }
-        [NotNull]
+        public virtual string Question { get; set; }
+        public virtual string Answer { get; set; }
         public virtual bool AvailableToPublic { get; set; }
         public virtual bool IsActive { get; set; }
         public virtual int NumberOfReads { get; set; }
-
-
-        public virtual string ShortDescription
-        {
-            get
-            {
-                if(Description == null)
-                {
-                    return string.Empty;
-                }
-                if(Description.Length < 80)
-                {
-                    return Description.Substring(0, Description.Length);
-                }
-
-                return Description.Substring(0, 80);
-
-            }
-        }
     }
 }

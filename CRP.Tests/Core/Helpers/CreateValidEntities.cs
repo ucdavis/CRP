@@ -388,8 +388,8 @@ namespace CRP.Tests.Core.Helpers
         public static HelpTopic HelpTopic(int? counter)
         {
             var rtValue = new HelpTopic();
-            rtValue.Name = "Name" + counter.Extra();
-            rtValue.Description = "Description" + counter.Extra();
+            rtValue.Question = "Question" + counter.Extra();
+            rtValue.Answer = "Answer" + counter.Extra();
             rtValue.AvailableToPublic = true;
             return rtValue;
         }

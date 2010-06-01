@@ -8,8 +8,8 @@
       <generator class="identity" />
     </id>
 
-    <property name="Name" />
-    <property name="Description" />
+    <property name="Question" />
+    <property name="Answer" />
     <property name="AvailableToPublic"/>
     <property name="IsActive"/>
     <property name="NumberOfReads"/>

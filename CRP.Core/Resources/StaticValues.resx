@@ -137,6 +137,10 @@
     <value>~/Views/Shared/CheckView.ascx</value>
     <comment>Path to check view partial</comment>
   </data>
+  <data name="Partial_HelpForm" xml:space="preserve">
+    <value>~/Views/Shared/HelpForm.ascx</value>
+    <comment>The path to the help form partial view</comment>
+  </data>
   <data name="Partial_ItemBrowse" xml:space="preserve">
     <value>~/Views/Shared/ItemBrowse.ascx</value>
     <comment>Path to item browse partial</comment>

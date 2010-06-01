@@ -177,7 +177,6 @@
     <Compile Include="Repositories\EditorRepositoryTests.cs" />
     <Compile Include="Repositories\ExtendedPropertyAnswerRepositoryTests.cs" />
     <Compile Include="Repositories\ExtendedPropertyRepositoryTests.cs" />
-    <Compile Include="Repositories\HelpTopicRepositoryTests.cs" />
     <Compile Include="Repositories\ItemQuestionSetRepositoryTests.cs" />
     <Compile Include="Repositories\ItemReportColumnRepositoryTests.cs" />
     <Compile Include="Repositories\ItemReportRepositoryTests.cs" />
