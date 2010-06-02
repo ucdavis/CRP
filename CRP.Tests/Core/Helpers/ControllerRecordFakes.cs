@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CRP.Core.Domain;
+using Rhino.Mocks;
+using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
 
 namespace CRP.Tests.Core.Helpers
@@ -453,5 +456,59 @@ GO
             }
         }
 
+
+        /// <summary>
+        /// Fakes the help topic.
+        /// </summary>
+        /// <param name="count">The count.</param>
+        /// <param name="helpTopicRepository">The help topic repository.</param>
+        public static void FakeHelpTopic(int count, IRepository<HelpTopic> helpTopicRepository)
+        {
+            var helpTopics = new List<HelpTopic>(1);
+            helpTopics.Add(CreateValidEntities.HelpTopic(1));
+            helpTopics[0].IsActive = false;
+            FakeHelpTopic(0, helpTopicRepository, helpTopics);
+        }
+
+
+        /// <summary>
+        /// Fakes the help topic.
+        /// </summary>
+        /// <param name="count">The count.</param>
+        /// <param name="helpTopicRepository">The help topic repository.</param>
+        /// <param name="specificHelpTopics">The specific help topics.</param>
+        public static void FakeHelpTopic(int count, IRepository<HelpTopic> helpTopicRepository, List<HelpTopic> specificHelpTopics)
+        {
+            var helpTopics = new List<HelpTopic>();
+            var specificHelpTopicsCount = 0;
+            if (specificHelpTopics != null)
+            {
+                specificHelpTopicsCount = specificHelpTopics.Count;
+                for (int i = 0; i < specificHelpTopicsCount; i++)
+                {
+                    helpTopics.Add(specificHelpTopics[i]);
+                }
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                helpTopics.Add(CreateValidEntities.HelpTopic(i + specificHelpTopicsCount + 1));
+            }
+
+            var totalCount = helpTopics.Count;
+            for (int i = 0; i < totalCount; i++)
+            {
+                helpTopics[i].SetIdTo(i + 1);
+                int i1 = i;
+                helpTopicRepository
+                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Return(helpTopics[i])
+                    .Repeat
+                    .Any();
+            }
+            helpTopicRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            helpTopicRepository.Expect(a => a.Queryable).Return(helpTopics.AsQueryable()).Repeat.Any();
+            helpTopicRepository.Expect(a => a.GetAll()).Return(helpTopics).Repeat.Any();
+        }
     }
 }

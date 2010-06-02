@@ -604,7 +604,25 @@ namespace CRP.Tests.Repositories
 
         #endregion NumberOfReads Tests
 
+        #region Constructor Tests
 
+        /// <summary>
+        /// Tests the defaults are set as expected.
+        /// </summary>
+        [TestMethod]
+        public void TestDefaultsAreSetAsExpected()
+        {
+            #region Arrange
+            var record = new HelpTopic();           
+            #endregion Arrange
+
+            #region Assert
+            Assert.IsFalse(record.AvailableToPublic);
+            Assert.IsTrue(record.IsActive);
+            Assert.AreEqual(0, record.NumberOfReads);
+            #endregion Assert		
+        }
+        #endregion Constructor Tests
 
         #region Reflection of Database.
 

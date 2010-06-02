@@ -7,6 +7,7 @@ using System.Web.Mvc.Ajax;
 using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using UCDArch.Web.Controller;
 using MvcContrib.Attributes;
 using UCDArch.Web.Helpers;
@@ -68,7 +69,8 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<HelpTopic>().EnsurePersistent(topic);
-
+                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType,
+                                                                       "Help Topic");
                 return this.RedirectToAction<HelpController>(a => a.Index());
             }
 
@@ -83,6 +85,8 @@ namespace CRP.Controllers
             var helpTopic = Repository.OfType<HelpTopic>().GetNullableByID(id);
             if (helpTopic == null)
             {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,
+                                                                      "Help Topic");
                 return this.RedirectToAction(a => a.Index());
             }
             return View(helpTopic);
@@ -111,7 +115,8 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<HelpTopic>().EnsurePersistent(topic);
-
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
+                                                                     "Help Topic");
                 return this.RedirectToAction<HelpController>(a => a.Index());
             }
 
