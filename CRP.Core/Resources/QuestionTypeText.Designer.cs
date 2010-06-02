@@ -97,6 +97,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Answer.
+        /// </summary>
+        public static string STR_NoAnswer {
+            get {
+                return ResourceManager.GetString("STR_NoAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Radio Buttons.
         /// </summary>
         public static string STR_RadioButtons {

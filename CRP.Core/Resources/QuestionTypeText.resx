@@ -129,6 +129,10 @@
   <data name="STR_DropDown" xml:space="preserve">
     <value>Drop Down</value>
   </data>
+  <data name="STR_NoAnswer" xml:space="preserve">
+    <value>No Answer</value>
+    <comment>Used to display text with allowing an answer</comment>
+  </data>
   <data name="STR_RadioButtons" xml:space="preserve">
     <value>Radio Buttons</value>
   </data>

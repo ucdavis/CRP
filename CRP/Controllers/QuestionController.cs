@@ -147,6 +147,12 @@ namespace CRP.Controllers
                         }
                     }
                     break;
+                case "No Answer":
+                    foreach (var validator in question.Validators)
+                    {
+                        ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
+                    }
+                    break;
                 default:
                     //No checks
                     break;

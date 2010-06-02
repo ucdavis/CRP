@@ -45,6 +45,12 @@ begin
 	INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
 	VALUES ('Date', 0, 1)
 end
+
+IF NOT EXISTS ( select * from QuestionTypes where [name] = 'No Answer' )
+begin
+	INSERT INTO QuestionTypes ([Name], hasOptions, ExtendedProperty)
+	VALUES ('No Answer', 0, 0)
+end
 GO
 
 -- //////////////////////////////////////////////////////////////////////////////////////
