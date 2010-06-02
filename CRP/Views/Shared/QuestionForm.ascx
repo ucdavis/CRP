@@ -3,12 +3,15 @@
 <%@ Import Namespace="CRP.Core.Resources"%>
 
     <li>
-    
-        <%= Html.Encode(Model.Question.Name) %>
+        <% if (Model.Question.QuestionType.Name != "Boolean"){%>
+        <%=Html.Encode(Model.Question.Name)%>
+        <%}%>
         <%= Html.Hidden(".QuestionId", Model.Question.Id, new { @class = StaticValues.Class_indexedControl })%>
         <%= Html.Hidden(".QuestionSetId", Model.Question.QuestionSet.Id, new { @class = StaticValues.Class_indexedControl })%>
         <%= Html.Hidden(".QuantityIndex", 0, new { @class = StaticValues.Class_indexedControl })%>
+        <% if (Model.Question.QuestionType.Name != "Boolean"){%>
         <br />
+        <%}%>
     
         <!-- Render the controls now -->
         <% switch(Model.Question.QuestionType.Name) { %>
@@ -19,12 +22,12 @@
                 <%= Html.TextArea(".Answer", Model.Answer, new { @class = StaticValues.Class_indexedControl })%>
             <% break; %>
             <% case "Boolean" : %>
-                <%= Html.Encode(Model.Question.Name) %>
+                <%--<%= Html.Encode(Model.Question.Name) %>--%>
                 <%
                     var ans = false;
                     if (!Boolean.TryParse(Model.Answer, out ans)) {
                         ans = false; } %>
-                <%= Html.CheckBox(".Answer", ans, new {@class="indexedControl"})%>
+                <%= Html.CheckBox(".Answer", ans, new {@class="indexedControl"})%> <%= Html.Encode(Model.Question.Name) %>
             <% break; %>
             <% case "Radio Buttons" : %>               
                 <% foreach (var o in Model.Question.Options)
