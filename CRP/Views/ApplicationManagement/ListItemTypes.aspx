@@ -24,7 +24,7 @@
            .PrefixUrlParameters(false)
            .Columns(col =>
                         {
-                            col.Add(x =>
+                            col.Template(x =>
                                         {%>
                                             <%= Html.ActionLink<ApplicationManagementController>(a => a.EditItemType(x.Id), "Edit") %> |
                                             
@@ -36,8 +36,8 @@
                                             <%} %>
                                             
                                         <%});
-                            col.Add(x => x.Name);
-                            col.Add(x => x.IsActive);
+                            col.Bound(x => x.Name);
+                            col.Bound(x => x.IsActive);
                         })
             .Pageable()
             .Sortable()

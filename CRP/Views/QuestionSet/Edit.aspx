@@ -68,9 +68,21 @@
                 .Transactional()
                 .Name("Questions")
                 .PrefixUrlParameters(false)
+                .CellAction(cell =>
+                {
+                    switch (cell.Column.Member)
+                    {
+                        case "Options":
+                            cell.Text = string.Join(", ", cell.DataItem.Options.Select(b => b.Name).ToArray());
+                            break;
+                        case "Validators":
+                            cell.Text = string.Join(", ", cell.DataItem.Validators.Select(b => b.Name).ToArray());
+                            break;
+                    }
+                })
                 .Columns(col =>
                              {
-                                 col.Add(x =>
+                                 col.Template(x =>
                                              {%>
                                                 <% using(Html.BeginForm<QuestionController>(a => a.Delete(x.Id), FormMethod.Post, new { name="DeleteQuestionForm"})) { %>
                                                     <%= Html.AntiForgeryToken() %>
@@ -78,11 +90,10 @@
                                                 <%} %>
                                             <%
                                              });
-                                 col.Add(x => x.Name).Title("Question");
-                                 col.Add(x => x.QuestionType.Name).Title("Type");
-                                 col.Add(x => string.Join(", ", x.Options.Select(b => b.Name).ToArray())).Title("Options");
-                                 col.Add(x => string.Join(", ", x.Validators.Select(b => b.Name).ToArray())).Title(
-                                     "Validators");
+                                 col.Bound(x => x.Name).Title("Question");
+                                 col.Bound(x => x.QuestionType.Name).Title("Type");
+                                 col.Bound(x => x.Options).Title("Options");
+                                 col.Bound(x => x.Validators).Title("Validators");
                              }
                 )
                 .Render(); %>

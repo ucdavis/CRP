@@ -81,7 +81,7 @@
                .Name("Transactions")
                .Columns(col =>
                             {
-                                col.Add(a =>
+                                col.Template(a =>
                                             { %>
                                               <% using (Html.BeginForm("Lookup", "Transaction", FormMethod.Post)) {
                                                     //pull the email
@@ -97,13 +97,13 @@
                                                     <%= Html.SubmitButton("Submit", "View") %>
                                               <% } %>  
                                             <% }); 
-                                col.Add(a => a.TransactionNumber).Title("Transaction");
-                                col.Add(a => a.IsActive);
-                                col.Add(a => a.TransactionDate);
-                                col.Add(a => a.Quantity);
-                                col.Add(a => a.AmountTotal.ToString("C")).Title("Amount");
-                                col.Add(a => a.DonationTotal.ToString("C")).Title("Donation");
-                                col.Add(a => a.Total.ToString("C")).Title("Total");
+                                col.Bound(a => a.TransactionNumber).Title("Transaction");
+                                col.Bound(a => a.IsActive);
+                                col.Bound(a => a.TransactionDate);
+                                col.Bound(a => a.Quantity);
+                                col.Bound(a => a.AmountTotal).Format("C").Title("Amount");
+                                col.Bound(a => a.DonationTotal).Format("C").Title("Donation");
+                                col.Bound(a => a.Total).Format("C").Title("Total");
                             })
                .Render(); %>
     </fieldset>

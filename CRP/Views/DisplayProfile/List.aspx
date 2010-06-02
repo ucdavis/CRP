@@ -27,13 +27,13 @@
            .PrefixUrlParameters(false)
            .Columns(col =>
                         {
-                            col.Add(a =>
+                            col.Template(a =>
                                         {%>
                                             <%= Html.ActionLink<DisplayProfileController>(b=>b.Edit(a.Id), "Edit") %>
                                         <%});
-                            col.Add(a=>a.Name);
-                            col.Add(a => a.Unit.FullName).Title("Unit");
-                            col.Add(a => a.Unit.School.LongDescription).Title("College");
+                            col.Bound(a => a.Name);
+                            col.Bound(a => a.Unit.FullName).Title("Unit");
+                            col.Bound(a => a.Unit.School.LongDescription).Title("College");
                         }) 
             .Pageable()
             .Sortable()
@@ -49,12 +49,12 @@
            .PrefixUrlParameters(false)
            .Columns(col =>
                         {
-                            col.Add(a =>
+                            col.Template(a =>
                                     {%>
                                         <%= Html.ActionLink<DisplayProfileController>(b=>b.Edit(a.Id), "Edit") %>
                                     <%});
-                            col.Add(a=>a.Name);
-                            col.Add(a => a.School.LongDescription);
+                            col.Bound(a => a.Name);
+                            col.Bound(a => a.School.LongDescription);
                         }) 
             .Pageable()
             .Sortable()

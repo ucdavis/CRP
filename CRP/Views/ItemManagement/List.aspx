@@ -22,22 +22,22 @@
            .PrefixUrlParameters(false)
            .Columns(col =>
                         {
-                            col.Add(a =>
+                            col.Template(a =>
                                         {%>
                                             <%= Html.ActionLink<ItemManagementController>(b => b.Details(a.Id), "Details") %> | 
                                             <%= Html.ActionLink<ItemManagementController>(b => b.Edit(a.Id), "Edit") %>
                                         <%});
-                            col.Add(a => a.Name);
-                            col.Add(a => a.CostPerItem).Format("{0:C}");
-                            col.Add(a => a.Quantity);
-                            col.Add(a =>
+                            col.Bound(a => a.Name);
+                            col.Bound(a => a.CostPerItem).Format("{0:C}");
+                            col.Bound(a => a.Quantity);
+                            col.Template(a =>
                                         {%>
                                             <%= Html.Encode(a.Transactions.Where(b=>!b.Donation && b.IsActive).Sum(b => b.Quantity)) %>
                                         <%}).Title("# Sold");
-                            col.Add(a => a.Expiration).Format("{0:d}");
-                            col.Add(a => a.DateCreated);
-                            col.Add(a => a.Available);     
-                            col.Add(a => 
+                            col.Bound(a => a.Expiration).Format("{0:d}");
+                            col.Bound(a => a.DateCreated);
+                            col.Bound(a => a.Available);     
+                            col.Template(a => 
                                         {%>
                                             <%= Html.ActionLink<TransactionController>(b => b.Checkout(a.Id ), "Register") %>
                                         <%});                      

@@ -34,7 +34,7 @@
            .PrefixUrlParameters(false)
            .Columns(col =>
                         {
-                            col.Add(x =>
+                            col.Template(x =>
                                         {%>
                                             <% using (Html.BeginForm<QuestionSetController>(a => a.LinkToItem(x.Id, Model.ItemId, Model.Transaction, Model.Quantity), FormMethod.Post))
                                                {%>
@@ -42,11 +42,11 @@
                                                 <a href="javascript:;" class="SelectLinkToForm">Select</a>
                                             <%} %>
                                         <%});
-                            col.Add(x => x.Name);
-                            col.Add(x => x.SystemReusable);
-                            col.Add(x => x.CollegeReusable);
-                            col.Add(x => x.UserReusable);
-                            col.Add(x => x.Questions.Count).Title("# of Questions");
+                            col.Bound(x => x.Name);
+                            col.Bound(x => x.SystemReusable);
+                            col.Bound(x => x.CollegeReusable);
+                            col.Bound(x => x.UserReusable);
+                            col.Bound(x => x.Questions.Count).Title("# of Questions");
                         })
             .Pageable()
             .Sortable()

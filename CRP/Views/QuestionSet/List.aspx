@@ -21,19 +21,28 @@
                    .Transactional()
                    .Name("QuestionSets")
                    .PrefixUrlParameters(false)
+                   .CellAction(cell =>
+                   {
+                       switch (cell.Column.Member)
+                       {
+                           case "User":
+                               cell.Text = cell.DataItem.User != null ? cell.DataItem.User.FullName : string.Empty;
+                               break;
+                       }
+                   }) 
                    .Columns(col =>
                                 {
-                                    col.Add(x =>
+                                    col.Template(x =>
                                                 { %>
                                                     <%= Html.ActionLink<QuestionSetController>(a => a.Details(x.Id),"Select")%> |
                                                     <%= Html.ActionLink<QuestionSetController>(a => a.Edit(x.Id), "Edit") %>
                                                 <% });
-                                    col.Add(x => x.Name);
-                                    col.Add(x => x.CollegeReusable);
-                                    col.Add(x => x.SystemReusable);
-                                    col.Add(x => x.UserReusable);
-                                    col.Add(x => x.User != null ? x.User.FullName : string.Empty).Title("User");
-                                    col.Add(x => x.Questions.Count).Title("# of Questions");
+                                    col.Bound(x => x.Name);
+                                    col.Bound(x => x.CollegeReusable);
+                                    col.Bound(x => x.SystemReusable);
+                                    col.Bound(x => x.UserReusable);
+                                    col.Bound(x => x.User).Title("User");
+                                    col.Bound(x => x.Questions.Count).Title("# of Questions");
                                 })
                     .Pageable(x=>x.PageSize(20))
                     .Sortable()

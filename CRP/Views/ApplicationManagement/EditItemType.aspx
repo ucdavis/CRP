@@ -52,7 +52,7 @@
                     .PrefixUrlParameters(false)
                     .Columns(col =>
                                  {
-                                     col.Add(a => { %> 
+                                     col.Template(a => { %> 
                                         
                                             <% using (Html.BeginForm<ExtendedPropertyController>(b => b.Delete(a.Id), FormMethod.Post)) { %>
                                                 <%= Html.AntiForgeryToken() %>
@@ -61,8 +61,8 @@
                                             <% } %>
                                         
                                         <% });
-                                     col.Add(a => a.Name).Title("Property Name");
-                                     col.Add(a => a.QuestionType.Name).Title("Question Type");
+                                     col.Bound(a => a.Name).Title("Property Name");
+                                     col.Bound(a => a.QuestionType.Name).Title("Question Type");
                                  })
                     .Render();
            %>
@@ -83,12 +83,12 @@
                    .PrefixUrlParameters(false)
                    .Columns(col =>
                                 {
-                                    col.Add(a =>
+                                    col.Template(a =>
                                                 {%>
                                                 <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.QuestionSet.Id), "Edit")%>
                                                 <% });
-                                    col.Add(a => a.QuestionSet.Name).Title("Question Set Name");
-                                    col.Add(a =>
+                                    col.Bound(a => a.QuestionSet.Name).Title("Question Set Name");
+                                    col.Template(a =>
                                                 {%> 
                                                 
                                                 <%= Html.Encode("List of Questions") %> 
@@ -112,12 +112,12 @@
                    .PrefixUrlParameters(false)
                    .Columns(col =>
                                 {
-                                    col.Add(a =>
+                                    col.Template(a =>
                                                 {%>
                                                 <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.QuestionSet.Id), "Edit") %>
                                                 <% });
-                                    col.Add(a => a.QuestionSet.Name).Title("Question Set Name");
-                                    col.Add(a =>
+                                    col.Bound(a => a.QuestionSet.Name).Title("Question Set Name");
+                                    col.Template(a =>
                                                 {%> 
                                                 
                                                 <%= Html.Encode("List of Questions") %> 

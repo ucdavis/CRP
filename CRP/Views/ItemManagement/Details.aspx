@@ -56,9 +56,18 @@
             <% Html.Grid(Model.Item.Transactions.Where(a => a.ParentTransaction == null)) 
                    .Transactional()
                    .Name("Transactions")
+                   .CellAction(cell =>
+                   {
+                       switch (cell.Column.Member)
+                       {
+                           case "Credit":
+                               cell.Text = cell.DataItem.Credit ? "Credit Card" : "Check";
+                               break;
+                       }
+                   }) 
                    .Columns(col =>
                                 {
-                                    col.Add(a =>
+                                    col.Template(a =>
                                         {%>                                        
                                             <% using (Html.BeginForm<ItemManagementController>(x => x.ToggleTransactionIsActive(a.Id, Request.QueryString["Transactions-orderBy"], Request.QueryString["Transactions-page"])))
                                                {%>                                     
@@ -67,14 +76,14 @@
                                             
                                             <%} %>
                                             <%});
-                                    col.Add(a => a.TransactionNumber).Title(
+                                    col.Bound(a => a.TransactionNumber).Title(
                                         "Transaction");
-                                    col.Add(a => a.Quantity);
-                                    col.Add(a => a.Amount.ToString("C")).Title("Amount");
-                                    col.Add(a => a.DonationTotal.ToString("C")).Title("Donation");
-                                    col.Add(a => a.Credit ? "Credit Card" : "Check").Title("Payment Type");
-                                    col.Add(a => a.Paid);
-                                    col.Add(a => a.IsActive);
+                                    col.Bound(a => a.Quantity);
+                                    col.Bound(a => a.Amount).Format("C");
+                                    col.Bound(a => a.DonationTotal).Format("C").Title("Donation");
+                                    col.Bound(a => a.Credit).Title("Payment Type");
+                                    col.Bound(a => a.Paid);
+                                    col.Bound(a => a.IsActive);
                                 })
                    .Pageable()
                    .Sortable()
@@ -88,17 +97,17 @@
                    .Name("Checks")
                    .Columns(col =>
                                 {
-                                    col.Add(a =>
+                                    col.Template(a =>
                                                 {%>
                                                 
                                                     <%= Html.ActionLink<PaymentController>(b => b.LinkToTransaction(a.Id, Request.QueryString["Checks-orderBy"], Request.QueryString["Checks-page"]), "Select")%> |
                                                     <%= Html.ActionLink<TransactionController>(b => b.Edit(a.Id, Request.QueryString["Checks-orderBy"], Request.QueryString["Checks-page"]), "Edit")%>
                                                 
-                                                <%});                      
-                                    col.Add(a => a.TransactionNumber).Title("Transaction Number");
-                                    col.Add(a => a.Quantity);
-                                    col.Add(a => a.Total.ToString("C")).Title("Amount");
-                                    col.Add(a => a.Paid);
+                                                <%});
+                                    col.Bound(a => a.TransactionNumber).Title("Transaction Number");
+                                    col.Bound(a => a.Quantity);
+                                    col.Bound(a => a.Total).Format("C").Title("Amount");
+                                    col.Bound(a => a.Paid);
                                 })
                    .Pageable()
                    .Sortable()
@@ -117,14 +126,14 @@
                    .Name("SystemReports")
                    .Columns(col =>
                                 {
-                                    col.Add(a =>
+                                    col.Template(a =>
                                                 {%>
                                                     <%= Html.ActionLink<ReportController>(b => b.ViewReport(a.Id, Model.Item.Id), "Select") %>
                                                 <%});
-                                    col.Add(a => a.Name);
-                                    col.Add(a => a.Columns.Count).Title("# of Columns");
-                                    col.Add(a => a.User.FullName).Title("Created By");
-                                    col.Add(a => a.SystemReusable).Title("System Report");
+                                    col.Bound(a => a.Name);
+                                    col.Bound(a => a.Columns.Count).Title("# of Columns");
+                                    col.Bound(a => a.User.FullName).Title("Created By");
+                                    col.Bound(a => a.SystemReusable).Title("System Report");
                                 })
                    .Render(); %>
         </div>

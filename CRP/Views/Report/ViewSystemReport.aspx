@@ -36,10 +36,19 @@
         
         <% Html.Grid(Model.SystemReportData)
                .Name("ReportData")
+               .CellAction(cell =>
+                {
+                    switch (cell.Column.Member)
+                    {
+                        case "Value":
+                            cell.Text = cell.DataItem.Value.ToString(cell.DataItem.ValueFormat);
+                            break;
+                    }
+                })
                .Columns(col =>
                             {
-                                col.Add(a => a.Name);
-                                col.Add(a => a.Value.ToString(a.ValueFormat));
+                                col.Bound(a => a.Name);
+                                col.Bound(a => a.Value);
                             })
                    
                .Render(); %>

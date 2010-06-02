@@ -65,7 +65,7 @@
                    .PrefixUrlParameters(false)
                    .Columns(col =>
                                 {
-                                    col.Add(a =>
+                                    col.Template(a =>
                                                 {%>
                                                 
                                                     <% using (Html.BeginForm("RemoveEditor", "ItemManagement", FormMethod.Post, new {id="RemoveForm"})) {%>
@@ -79,8 +79,8 @@
                                                     <%} %>
                                                 
                                                 <%});
-                                    col.Add(a => a.User.FullName);
-                                    col.Add(a => a.Owner);
+                                    col.Bound(a => a.User.FullName);
+                                    col.Bound(a => a.Owner);
                                 })
                    .Render(); %>
         </div>
@@ -98,7 +98,7 @@
                        .PrefixUrlParameters(false)
                        .Columns(col =>
                                     {
-                                        col.Add(a =>
+                                        col.Template(a =>
                                                     {%>
                                                         <% using(Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(a.Id))) {%>
                                                             <%= Html.AntiForgeryToken() %>
@@ -110,8 +110,8 @@
                                                             <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.QuestionSet.Id), "Edit") %>
                                                         <% } %>
                                                     <%});
-                                        col.Add(a => a.QuestionSet.Name);
-                                        col.Add(a => a.QuestionSet.Questions.Count()).Title("# of Questions");
+                                        col.Bound(a => a.QuestionSet.Name);
+                                        col.Bound(a => a.QuestionSet.Questions.Count).Title("# of Questions");
                                     })
                        .Render();
                         %>
@@ -131,7 +131,7 @@
                        .PrefixUrlParameters(false)
                        .Columns(col =>
                                     {
-                                        col.Add(a =>
+                                        col.Template(a =>
                                                     {%>
                                                         <% using(Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(a.Id))) {%>
                                                             <%= Html.AntiForgeryToken() %>
@@ -143,8 +143,8 @@
                                                             <%= Html.ActionLink<QuestionSetController>(b => b.Edit(a.QuestionSet.Id), "Edit") %>
                                                         <% } %>
                                                     <%});
-                                        col.Add(a => a.QuestionSet.Name);
-                                        col.Add(a => a.QuestionSet.Questions.Count()).Title("# of Questions");
+                                        col.Bound(a => a.QuestionSet.Name);
+                                        col.Bound(a => a.QuestionSet.Questions.Count).Title("# of Questions");
                                     })
                        .Render();
                         %>
@@ -168,9 +168,18 @@
                    .Transactional()
                    .Name("Coupons")
                    .PrefixUrlParameters(false)
+                   .CellAction(cell =>
+                   {
+                       switch (cell.Column.Member)
+                       {
+                           case "Expiration":
+                               cell.Text = cell.DataItem.Expiration.HasValue ? cell.DataItem.Expiration.Value.ToString("d") : string.Empty;
+                               break;
+                       }
+                   }) 
                    .Columns(col =>
                                 {
-                                    col.Add(a =>
+                                    col.Template(a =>
                                                 {%>
                                                     <% if (a.IsActive) { %> 
                                                         <% using (Html.BeginForm<CouponController>(b => b.Deactivate(a.Id), FormMethod.Post)) { %> 
@@ -179,14 +188,14 @@
                                                         <% } %>
                                                     <% } %>
                                                 <%});
-                                    col.Add(a => a.Code);
-                                    col.Add(a => a.DiscountAmount.ToString("C")).Title("Discount Amount");
-                                    col.Add(a => a.Email);
-                                    col.Add(a => a.Expiration.HasValue ? a.Expiration.Value.ToString("d"): string.Empty).Title("Expiration");
-                                    col.Add(a => a.Used);
-                                    col.Add(a => a.Unlimited);
-                                    col.Add(a => a.MaxQuantity);
-                                    col.Add(a => a.IsActive);
+                                    col.Bound(a => a.Code);
+                                    col.Bound(a => a.DiscountAmount).Format("C").Title("Discount Amount");
+                                    col.Bound(a => a.Email);
+                                    col.Bound(a => a.Expiration).Title("Expiration");
+                                    col.Bound(a => a.Used);
+                                    col.Bound(a => a.Unlimited);
+                                    col.Bound(a => a.MaxQuantity);
+                                    col.Bound(a => a.IsActive);
                                 })
                    .Render();
                     %>
