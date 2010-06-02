@@ -37,7 +37,7 @@
     <asp:ContentPlaceHolder ID="HeaderContent" runat="server">
     </asp:ContentPlaceHolder>
     
-     <link href="<%= Url.Content("~/Content/Site.css") %>" rel="stylesheet" type="text/css" />
+    <link href="<%= Url.Content("~/Content/Site.css") %>" rel="stylesheet" type="text/css" />
     <link href="<%= Url.Content("~/Content/quicksandstylesheet.css") %>" rel="stylesheet" type="text/css" />
 
     <% if(false){ //Load the jquery docs for intellisense %>
