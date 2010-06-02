@@ -101,9 +101,9 @@
                                 col.Bound(a => a.IsActive);
                                 col.Bound(a => a.TransactionDate);
                                 col.Bound(a => a.Quantity);
-                                col.Bound(a => a.AmountTotal).Format("C").Title("Amount");
-                                col.Bound(a => a.DonationTotal).Format("C").Title("Donation");
-                                col.Bound(a => a.Total).Format("C").Title("Total");
+                                col.Bound(a => a.AmountTotal).Format("{0:C}").Title("Amount");
+                                col.Bound(a => a.DonationTotal).Format("{0:C}").Title("Donation");
+                                col.Bound(a => a.Total).Format("{0:C}").Title("Total");
                             })
                .Render(); %>
     </fieldset>

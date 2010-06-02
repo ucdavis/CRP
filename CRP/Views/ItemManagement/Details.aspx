@@ -79,8 +79,8 @@
                                     col.Bound(a => a.TransactionNumber).Title(
                                         "Transaction");
                                     col.Bound(a => a.Quantity);
-                                    col.Bound(a => a.Amount).Format("C");
-                                    col.Bound(a => a.DonationTotal).Format("C").Title("Donation");
+                                    col.Bound(a => a.Amount).Format("{0:C}");
+                                    col.Bound(a => a.DonationTotal).Format("{0:C}").Title("Donation");
                                     col.Bound(a => a.Credit).Title("Payment Type");
                                     col.Bound(a => a.Paid);
                                     col.Bound(a => a.IsActive);
@@ -106,7 +106,7 @@
                                                 <%});
                                     col.Bound(a => a.TransactionNumber).Title("Transaction Number");
                                     col.Bound(a => a.Quantity);
-                                    col.Bound(a => a.Total).Format("C").Title("Amount");
+                                    col.Bound(a => a.Total).Format("{0:C}").Title("Amount");
                                     col.Bound(a => a.Paid);
                                 })
                    .Pageable()

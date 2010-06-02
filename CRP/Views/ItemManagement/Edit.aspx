@@ -189,7 +189,7 @@
                                                     <% } %>
                                                 <%});
                                     col.Bound(a => a.Code);
-                                    col.Bound(a => a.DiscountAmount).Format("C").Title("Discount Amount");
+                                    col.Bound(a => a.DiscountAmount).Format("{0:C}").Title("Discount Amount");
                                     col.Bound(a => a.Email);
                                     col.Bound(a => a.Expiration).Title("Expiration");
                                     col.Bound(a => a.Used);
