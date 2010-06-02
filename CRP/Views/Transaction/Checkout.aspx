@@ -17,7 +17,7 @@
     <% using (Html.BeginForm("Checkout", "Transaction", FormMethod.Post, new {@id = "CheckoutForm"})) { %>
     
     <%= Html.AntiForgeryToken() %>
-    <%= Html.Hidden("displayAmount") %>
+    <%= Html.Hidden("displayAmount", Model.Item.CostPerItem)%>
     
     <!-- t-widget t-grid -->   
     <div id="Items" class="t-widget t-grid">
