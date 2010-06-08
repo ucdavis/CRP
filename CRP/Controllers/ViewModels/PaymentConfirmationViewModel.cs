@@ -20,8 +20,9 @@ namespace CRP.Controllers.ViewModels
         public string SuccessLink { get; set; } //The link we want touchnet to post back to on success
         public string CancelLink { get; set; } //If the user cancels in touchnet
         public string ErrorLink { get; set; } //Oops from touchnet
+        public string Fid { get; set; }
 
-        public static PaymentConfirmationViewModel Create(IRepository repository, Transaction transaction, string validationKey, HttpRequestBase request, UrlHelper url)
+        public static PaymentConfirmationViewModel Create(IRepository repository, Transaction transaction, string validationKey, HttpRequestBase request, UrlHelper url, string fid)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(url != null);
@@ -31,6 +32,7 @@ namespace CRP.Controllers.ViewModels
                 , PaymentGatewayUrl = ConfigurationManager.AppSettings["PaymentGateway"]
                 , ValidationKey = validationKey
                 , SiteId = ConfigurationManager.AppSettings["TouchNetSiteId"]
+                , Fid = fid
             };
             
             // get the proper display profile
