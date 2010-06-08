@@ -29,6 +29,7 @@ namespace CRP.Core.Domain
             Amount = 0.0m;
             Donation = false;
             IsActive = true;
+            Refunded = false;
 
             PaymentLogs = new List<PaymentLog>();
             TransactionAnswers = new List<TransactionAnswer>();
@@ -50,6 +51,9 @@ namespace CRP.Core.Domain
         public virtual bool IsActive { get; set; }
         public virtual bool Credit { get; set; }
         public virtual bool Check { get; set; }
+
+        public virtual bool Refunded { get; set; }
+
         //public virtual bool Paid { get; set; }
         //[RangeDouble(Min = 0.00, Message = "must be zero or more")]
         public virtual decimal Amount { get; set; }
@@ -141,7 +145,23 @@ namespace CRP.Core.Domain
         {
             get
             {
-                return ChildTransactions.Where(a => !a.Donation && a.CreatedBy != null).Sum(a => a.Amount);
+                return ChildTransactions.Where(a => !a.Donation && a.CreatedBy != null && !a.Refunded).Sum(a => a.Amount);
+            }
+        }
+
+        public virtual decimal RefundAmount
+        {
+            get
+            {
+                return ChildTransactions.Where(a => !a.Donation && a.Refunded).Sum(a => a.Amount);
+            }
+        }
+
+        public virtual bool RefundIssued
+        {
+            get
+            {
+                return ChildTransactions.Where(a => a.Refunded).Any();
             }
         }
 
@@ -175,7 +195,7 @@ namespace CRP.Core.Domain
         {
             get
             {
-                return PaymentLogs.Where(a => a.Accepted).Sum(a => a.Amount);
+                return PaymentLogs.Where(a => a.Accepted).Sum(a => a.Amount) - RefundAmount;
             }
         }
 

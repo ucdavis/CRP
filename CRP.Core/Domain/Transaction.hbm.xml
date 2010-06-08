@@ -13,6 +13,8 @@
     <property name="IsActive" column="IsActive"/>
     <property name="Credit" column="Credit" />
     <property name="Check" column="[Check]" />
+    <property name="Refunded" column="Refunded" />
+    
     <!--<property name="Paid" column="Paid" />-->
     <property name="Amount" column="Amount" />
     <property name="Donation" column="Donation" />
