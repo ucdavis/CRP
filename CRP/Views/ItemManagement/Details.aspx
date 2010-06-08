@@ -27,6 +27,9 @@
                 else if ($item.parents().filter("Div#Reports").length > 0) {
                     link = link + "#Reports";
                 }
+                else if ($item.parents().filter("Div#Refunds").length > 0) {
+                    link = link + "#Refunds";
+                }
                 $item.attr("href", link);
             });
         });
@@ -50,6 +53,7 @@
             <li><a href="#<%= Html.Encode(StaticValues.Tab_Transactions) %>">Transactions</a></li>
             <li><a href="#<%= Html.Encode(StaticValues.Tab_Checks) %>">Checks</a></li>
             <li><a href="#<%= Html.Encode(StaticValues.Tab_Reports) %>">Reports</a></li>
+            <li><a href="#<%= Html.Encode(StaticValues.Tab_Refunds) %>">Refunds</a></li>
         </ul>
     
         <div id="<%= Html.Encode(StaticValues.Tab_Transactions) %>">
@@ -137,7 +141,56 @@
                                 })
                    .Render(); %>
         </div>
-        
+        <div id="<%= Html.Encode(StaticValues.Tab_Refunds) %>">
+            <% Html.Grid(Model.Item.Transactions.Where(a => a.ParentTransaction == null)) 
+                   .Transactional()
+                   .Name("Refunds")
+                   .CellAction(cell =>
+                   {
+                       switch (cell.Column.Member)
+                       {
+                           case "Credit":
+                               cell.Text = cell.DataItem.Credit ? "Credit Card" : "Check";
+                               break;
+                           case "Paid":
+                               cell.Text = cell.DataItem.Paid ? "x" : string.Empty;
+                               break;
+                           case "RefundIssued":
+                               cell.Text = cell.DataItem.RefundIssued ? "x" : string.Empty;
+                               break;
+                       }
+                   }) 
+                   .Columns(col =>
+                                {
+                                    col.Template(a =>
+                                                {%>     
+                                                    <%if (!a.RefundIssued)
+                                                      {%>                                                                                               
+                                                        <%=Html.ActionLink<TransactionController>(b => b.Refund(a.Id, Request.QueryString["Refunds-orderBy"], Request.QueryString["Refunds-page"]), "Refund")%>
+                                                    <%}%>
+                                                    <%else{%>
+                                                        <% using (Html.BeginForm<TransactionController>(x => x.RemoveRefund(a.Id, Request.QueryString["Transactions-orderBy"], Request.QueryString["Transactions-page"])))
+                                                        {%>                                     
+                                                            <%= Html.AntiForgeryToken() %>
+                                                            <a href="javascript:;" class="FormSubmit"><%= "Undo" %></a>                                            
+                                                        <%} %>
+                                                    <%}%>                                                
+                                                <%});
+                                    col.Bound(a => a.TransactionNumber).Title("Transaction Number");
+                                    col.Bound(a => a.TransactionGuid).Title("Unique Identifier");
+                                    col.Bound(a => a.Credit).Title("Payment Type");                                  
+                                    col.Bound(a => a.Total).Format("{0:C}").Title("Amount");
+                                    col.Bound(a => a.TotalPaid).Format("{0:$#,##0.00;($#,##0.00); }");
+                                    col.Bound(a => a.Paid);
+                                    col.Bound(a => a.RefundAmount).Format("{0:$#,##0.00;($#,##0.00); }").Title("Refunded");
+                                    col.Bound(a => a.RefundIssued);
+                                })
+                   .Pageable()
+                   .Sortable()
+                   .PrefixUrlParameters(true)
+                   .Render(); 
+                   %>
+        </div>
     
     </div>
     

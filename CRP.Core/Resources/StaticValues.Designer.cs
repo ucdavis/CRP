@@ -421,6 +421,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refunds.
+        /// </summary>
+        public static string Tab_Refunds {
+            get {
+                return ResourceManager.GetString("Tab_Refunds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reports.
         /// </summary>
         public static string Tab_Reports {

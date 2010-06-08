@@ -153,7 +153,7 @@ namespace CRP.Core.Domain
         {
             get
             {
-                return ChildTransactions.Where(a => !a.Donation && a.Refunded).Sum(a => a.Amount);
+                return ChildTransactions.Where(a => !a.Donation && a.Refunded && a.IsActive).Sum(a => a.Amount);
             }
         }
 
@@ -161,7 +161,7 @@ namespace CRP.Core.Domain
         {
             get
             {
-                return ChildTransactions.Where(a => a.Refunded).Any();
+                return ChildTransactions.Where(a => a.Refunded && a.IsActive).Any();
             }
         }
 
@@ -173,7 +173,7 @@ namespace CRP.Core.Domain
             //JCS Filter out corrections
             get
             {
-                return Amount + ChildTransactions.Where(a => !a.Donation && a.Amount > 0).Sum(a => a.Amount);
+                return Amount + ChildTransactions.Where(a => !a.Donation && !a.Refunded && a.Amount > 0).Sum(a => a.Amount);
             }
         }
 
@@ -271,7 +271,7 @@ namespace CRP.Core.Domain
             }
             //We don't want corrections to have a positive value
             CorrectionAmount = true;
-            if(Amount >= 0 && CreatedBy != null && !Donation)
+            if(Amount >= 0 && CreatedBy != null && !Donation && !Refunded)
             {
                 CorrectionAmount = false;
             }

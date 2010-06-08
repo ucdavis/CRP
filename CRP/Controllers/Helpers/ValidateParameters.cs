@@ -38,6 +38,16 @@ namespace CRP.Controllers.Helpers
             validSort.Add("Paid-desc");
             validSort.Add("IsActive-asc");
             validSort.Add("IsActive-desc");
+            validSort.Add("TransactionGuid-asc");
+            validSort.Add("TransactionGuid-desc");
+            validSort.Add("Credit-asc");
+            validSort.Add("Credit-desc");
+            validSort.Add("Total-asc");
+            validSort.Add("Total-desc");
+            validSort.Add("RefundAmount-asc");
+            validSort.Add("RefundAmount-desc");
+            validSort.Add("RefundIssued-asc");
+            validSort.Add("RefundIssued-desc");
             if (validSort.Contains(sort))
             {
                 rtValue.Add("sort", sort);

@@ -665,6 +665,7 @@
     <Content Include="Views\Shared\TemplateInstructions.ascx" />
     <Content Include="Views\Template\Edit.aspx" />
     <Content Include="Views\Transaction\Edit.aspx" />
+    <Content Include="Views\Transaction\Refund.aspx" />
     <None Include="Content\NPOITemplate.xls" />
     <None Include="Images\fonts\Quicksand_Bold.eot" />
     <None Include="Images\fonts\Quicksand_Bold.ttf" />

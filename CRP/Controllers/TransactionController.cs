@@ -399,9 +399,10 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
 
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
-            string postingString = ConfigurationManager.AppSettings["TouchNetPostingKey"]; 
-            var validationKey = CalculateValidationString(postingString, transaction.TransactionGuid.ToString(), transaction.Total.ToString());
-            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url);
+            string postingString = ConfigurationManager.AppSettings["TouchNetPostingKey"];
+            string Fid = " FID=" + ConfigurationManager.AppSettings["TouchNetFid"]; 
+            var validationKey = CalculateValidationString(postingString, transaction.TransactionGuid.ToString() + Fid, transaction.Total.ToString());
+            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url, Fid);
             return View(viewModel);
         }
         /// <summary>
@@ -600,7 +601,197 @@ namespace CRP.Controllers
             
             return View(viewModel);
         }
-        
+
+        /// <summary>
+        /// Refunds the specified id.
+        /// Get ..\Transaction\Refund
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="sort">The sort.</param>
+        /// <param name="page">The page.</param>
+        /// <returns></returns>
+        [AdminOnly]
+        public ActionResult Refund(int id, string sort, string page)
+        {
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
+            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
+            if (transaction == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            {
+                if (transaction.Item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                else
+                {
+                    Message = NotificationMessages.STR_NoEditorRights.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                //return this.RedirectToAction<ItemManagementController>(a => a.Details(transaction.Item.Id));
+            }
+            if(transaction.ChildTransactions.Where(a => a.Refunded && a.IsActive).Any())
+            {
+                Message = @"Active Refund already exists.";
+                return Redirect(Url.DetailItemUrl
+                    (
+                        transaction.Item.Id,
+                        StaticValues.Tab_Refunds,
+                        pageAndSort["sort"],
+                        pageAndSort["page"])
+                    );
+            }
+            var viewModel = EditTransactionViewModel.Create(Repository);
+            viewModel.TransactionValue = transaction;
+            viewModel.ContactName =
+                transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
+            viewModel.ContactName = viewModel.ContactName + " " + transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
+            viewModel.ContactEmail = transaction.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
+
+            viewModel.Page = pageAndSort["page"];
+            viewModel.Sort = pageAndSort["sort"];
+
+            return View(viewModel);
+        }
+
+        /// <summary>
+        /// Refunds the specified transaction.
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        /// <param name="refundSort">The refund sort.</param>
+        /// <param name="refundPage">The refund page.</param>
+        /// <returns></returns>
+        [AdminOnly]
+        [AcceptPost]
+        public ActionResult Refund(Transaction transaction, string refundSort, string refundPage)
+        {
+            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(transaction.Id);
+            if (transactionToUpdate == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            if (transactionToUpdate.Item == null || !Access.HasItemAccess(CurrentUser, transactionToUpdate.Item))
+            {
+                if (transactionToUpdate.Item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                else
+                {
+                    Message = NotificationMessages.STR_NoEditorRights.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", refundSort, refundPage);
+
+            var refundTransaction = new Transaction(transactionToUpdate.Item);
+            refundTransaction.Amount = transaction.Amount;
+            refundTransaction.CorrectionReason = transaction.CorrectionReason;
+            refundTransaction.Donation = false;
+            refundTransaction.Refunded = true;
+
+            refundTransaction.CreatedBy = CurrentUser.Identity.Name;
+
+            transactionToUpdate.AddChildTransaction(refundTransaction);
+            if(refundTransaction.Amount <= 0)
+            {
+                ModelState.AddModelError("Amount", @"Refund Amount must be greater than zero.");
+            }
+            //There is a similar check in the payment controller, but with a different message
+            if (transactionToUpdate.TotalPaid < 0)
+            {
+                ModelState.AddModelError("TotalPaid", @"The refund amount must not exceed the amount already paid.");
+            }
+            refundTransaction.TransferValidationMessagesTo(ModelState);//Validate Child as well as parent(next Line)
+            transactionToUpdate.TransferValidationMessagesTo(ModelState);
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<Transaction>().EnsurePersistent(transactionToUpdate);
+                return
+                    Redirect(Url.DetailItemUrl
+                    (
+                        transactionToUpdate.Item.Id,
+                        StaticValues.Tab_Refunds,
+                        pageAndSort["sort"],
+                        pageAndSort["page"])
+                    );
+            }
+
+            //TODO: We could replace the line below with a rollback to be more consistent.
+            transactionToUpdate.ChildTransactions.Remove(refundTransaction);
+
+            var viewModel = EditTransactionViewModel.Create(Repository);
+            viewModel.TransactionValue = transactionToUpdate;
+            viewModel.ContactName =
+                transactionToUpdate.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
+            viewModel.ContactName = viewModel.ContactName + " " + transactionToUpdate.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
+            viewModel.ContactEmail = transactionToUpdate.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
+
+            viewModel.Sort = pageAndSort["sort"];
+            viewModel.Page = pageAndSort["page"];
+
+            return View(viewModel);
+
+        }
+
+        [AdminOnly]
+        [AcceptPost]
+        public ActionResult RemoveRefund(int id, string sort, string page)
+        {
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
+            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(id);
+            if (transactionToUpdate == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            var childTransaction = transactionToUpdate.ChildTransactions.Where(a => a.Refunded && a.IsActive).FirstOrDefault();
+            if(childTransaction == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Refund");
+                return Redirect(Url.DetailItemUrl
+                    (
+                        transactionToUpdate.Item.Id,
+                        StaticValues.Tab_Refunds,
+                        pageAndSort["sort"],
+                        pageAndSort["page"])
+                    );
+            }
+
+            childTransaction.IsActive = false;
+            Repository.OfType<Transaction>().EnsurePersistent(transactionToUpdate);
+            return Redirect(Url.DetailItemUrl
+                (
+                    transactionToUpdate.Item.Id,
+                    StaticValues.Tab_Refunds,
+                    pageAndSort["sort"],
+                    pageAndSort["page"])
+                );
+        }
+
         /// <summary>
         /// POST: /Transaction/PaymentResult/
         /// </summary>
@@ -616,8 +807,11 @@ namespace CRP.Controllers
             // validate to make sure a transaction value was received
             if (!string.IsNullOrEmpty(touchNetValues.EXT_TRANS_ID))
             {
+                string parsedTransaction = touchNetValues.EXT_TRANS_ID.Substring(0,
+                                                                                 touchNetValues.EXT_TRANS_ID.LastIndexOf
+                                                                                     (" FID="));
                 var transaction = Repository.OfType<Transaction>()
-                    .Queryable.Where(a => a.TransactionGuid == new Guid(touchNetValues.EXT_TRANS_ID))
+                    .Queryable.Where(a => a.TransactionGuid == new Guid(parsedTransaction))
                     .SingleOrDefault();
                 //var transaction = Repository.OfType<Transaction>().GetNullableByID(touchNetValues.EXT_TRANS_ID.Value);
 

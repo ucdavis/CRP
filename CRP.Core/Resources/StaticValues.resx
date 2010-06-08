@@ -276,6 +276,10 @@
     <value>Questions</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>
   </data>
+  <data name="Tab_Refunds" xml:space="preserve">
+    <value>Refunds</value>
+    <comment>Tab id used in /ItemManagement/Details/</comment>
+  </data>
   <data name="Tab_Reports" xml:space="preserve">
     <value>Reports</value>
     <comment>Tab id used in /ItemManagement/Details/</comment>
