@@ -25,7 +25,7 @@
                 </li>               
                 <li>
                     Transaction Unique Identifier (Needed for Credit Card Refund): 
-                    <%= Html.Encode(Model.TransactionValue.TransactionGuid)%>
+                    <%= Html.Encode(Model.TransactionValue.TransactionGuid + Model.Fid)%>
                 </li>
                 <li>
                     Transaction Date:

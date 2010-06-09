@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using CRP.Core.Domain;
@@ -19,14 +20,15 @@ namespace CRP.Controllers.ViewModels
         public string CorrectionReason { get; set; }
         public string Sort { get; set; }
         public string Page { get; set; }
+        public string Fid { get; set; }
 
         public static EditTransactionViewModel Create(IRepository repository)
         {
             Check.Require(repository != null, "Repository is required.");
 
             var viewModel = new EditTransactionViewModel() { };
-          
 
+            viewModel.Fid = string.Format(" FID={0}", ConfigurationManager.AppSettings["TouchNetFid"]);
             return viewModel;
         }
 

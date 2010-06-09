@@ -38,10 +38,6 @@
                     $(item).bt({trigger: 'click'});
                 }
             });
-
-
-
-
         });
     </script>
 
