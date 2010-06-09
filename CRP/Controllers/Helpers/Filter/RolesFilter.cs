@@ -39,4 +39,13 @@ namespace CRP.Controllers.Filter
             Roles = RoleNames.ManageAll + "," + RoleNames.SchoolAdmin;    //Set the roles prop to a comma delimited string of allowed roles
         }
     }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class RefunderOnlyAttribute : AuthorizeAttribute
+    {
+        public RefunderOnlyAttribute()
+        {
+            Roles = RoleNames.Refunder;    //Set the roles prop to a comma delimited string of allowed roles
+        }
+    }
 }

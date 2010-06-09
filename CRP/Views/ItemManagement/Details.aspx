@@ -32,6 +32,16 @@
                 }
                 $item.attr("href", link);
             });
+
+            $.each($("Img"), function(index, item) {
+                if ($(item).hasClass("CreditIdImage")) {
+                    $(item).bt({trigger: 'click'});
+                }
+            });
+
+
+
+
         });
     </script>
 
@@ -149,15 +159,16 @@
                    {
                        switch (cell.Column.Member)
                        {
-                           case "Credit":
-                               cell.Text = cell.DataItem.Credit ? "Credit Card" : "Check";
-                               break;
+                           //case "Credit":
+                           //    cell.Text = cell.DataItem.Credit ? "x" : string.Empty;
+                           //    break;
                            case "Paid":
                                cell.Text = cell.DataItem.Paid ? "x" : string.Empty;
                                break;
-                           case "RefundIssued":
-                               cell.Text = cell.DataItem.RefundIssued ? "x" : string.Empty;
-                               break;
+                           //case "TransactionGuid":
+                           //    cell.Text = cell.DataItem.Credit ? cell.DataItem.TransactionGuid.ToString() + Model.Fid : " ";
+                           //    break;
+                               
                        }
                    }) 
                    .Columns(col =>
@@ -176,17 +187,22 @@
                                                         <%} %>
                                                     <%}%>                                                
                                                 <%});
-                                    col.Bound(a => a.TransactionNumber).Title("Transaction Number");
-                                    col.Bound(a => a.TransactionGuid).Title("Unique Identifier");
-                                    col.Bound(a => a.Credit).Title("Payment Type");                                  
+                                    col.Bound(a => a.TransactionNumber).Title("Transaction");
+                                    col.Template(a => 
+                                        {%> 
+                                            <%if (a.Credit){%>
+                                                <%= Html.Image("~/images/technorati.ico",new {@class="CreditIdImage", title=Html.Encode(a.TransactionGuid) + Model.Fid})%> 
+                                            <%}%>
+                                        <%}).Title("Credit Card Id");
+                                    //col.Bound(a => a.TransactionGuid).Title("Refund Identifier");
+                                    //col.Bound(a => a.Credit).Title("Credit Card");                                  
                                     col.Bound(a => a.Total).Format("{0:C}").Title("Amount");
                                     col.Bound(a => a.TotalPaid).Format("{0:$#,##0.00;($#,##0.00); }");
                                     col.Bound(a => a.Paid);
                                     col.Bound(a => a.RefundAmount).Format("{0:$#,##0.00;($#,##0.00); }").Title("Refunded");
-                                    col.Bound(a => a.RefundIssued);
                                 })
                    .Pageable()
-                   .Sortable()
+                   .Sortable()                   
                    .PrefixUrlParameters(true)
                    .Render(); 
                    %>

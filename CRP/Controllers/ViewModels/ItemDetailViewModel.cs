@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
@@ -60,6 +61,7 @@ namespace CRP.Controllers.ViewModels
     {
         public Item Item { get; set; }
         public IEnumerable<ItemReport> Reports { get; set; }
+        public string Fid { get; set; }
 
         public static UserItemDetailViewModel Create(IRepository repository, Item item)
         {
@@ -75,6 +77,7 @@ namespace CRP.Controllers.ViewModels
             var userReports = repository.OfType<ItemReport>().Queryable.Where(b => !b.SystemReusable && b.Item == item).ToList();
 
             viewModel.Reports = systemReports.Union(userReports);
+            viewModel.Fid = string.Format(" FID={0}", ConfigurationManager.AppSettings["TouchNetFid"]);
 
             return viewModel;
         }
