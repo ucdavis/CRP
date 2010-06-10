@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
+using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Testing.Extensions;
 using System.Linq;
@@ -390,5 +391,340 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         }
 
         #endregion Transaction GUID Tests
+
+        #region Refunded Tests
+
+        #region Refunded Tests
+
+        /// <summary>
+        /// Tests the Refunded is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundedIsFalseSaves()
+        {
+            #region Arrange
+
+            Transaction transaction = GetValid(9);
+            transaction.Refunded = false;
+
+            #endregion Arrange
+
+            #region Act
+
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsFalse(transaction.Refunded);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the Refunded is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundedIsTrueSaves()
+        {
+            #region Arrange
+
+            var transaction = GetValid(9);
+            transaction.Refunded = true;
+
+            #endregion Arrange
+
+            #region Act
+
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsTrue(transaction.Refunded);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+
+            #endregion Assert
+        }
+
+        #endregion Refunded Tests
+
+        #region RefundIssued Tests
+
+
+        /// <summary>
+        /// Tests the refund issued is false when no child transactions.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundIssuedIsFalseWhenNoChildTransactions()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.RefundIssued);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert		
+        }
+
+
+        /// <summary>
+        /// Tests the refund issued is false when refunds have been deactivated.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundIssuedIsFalseWhenRefundsHaveBeenDeactivated()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var refundTransaction = new Transaction(transaction.Item);
+            refundTransaction.Refunded = true;
+            refundTransaction.IsActive = false;
+            refundTransaction.Amount = 1.00m;
+            refundTransaction.CreatedBy = "test";
+            var refundTransaction2 = new Transaction(transaction.Item);
+            refundTransaction2.Refunded = true;
+            refundTransaction2.IsActive = false;
+            refundTransaction2.Amount = 1.00m;
+            refundTransaction2.CreatedBy = "test";
+            var refundTransaction3 = new Transaction(transaction.Item);
+            refundTransaction3.Refunded = true;
+            refundTransaction3.IsActive = false;
+            refundTransaction3.Amount = 1.00m;
+            refundTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(refundTransaction);
+            transaction.AddChildTransaction(refundTransaction2);
+            transaction.AddChildTransaction(refundTransaction3);
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.RefundIssued);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert			
+        }
+
+        /// <summary>
+        /// Tests the refund issued is true when refunds have been created and are active.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundIssuedIsTrueWhenRefundsHaveBeenCreatedAndAreActive()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var refundTransaction = new Transaction(transaction.Item);
+            refundTransaction.Refunded = true;
+            refundTransaction.IsActive = true;
+            refundTransaction.Amount = 1.00m;
+            refundTransaction.CreatedBy = "test";
+            transaction.AddChildTransaction(refundTransaction);
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(transaction.RefundIssued);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert
+        }
+
+        #endregion RefundIssued Tests
+
+        #region RefundAmount Tests
+
+        /// <summary>
+        /// Tests the refund amount is zero when there are no active refunds.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundAmountIsZeroWhenThereAreNoActiveRefunds1()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var refundTransaction = new Transaction(transaction.Item);
+            refundTransaction.Refunded = true;
+            refundTransaction.IsActive = false;
+            refundTransaction.Amount = 1.00m;
+            refundTransaction.CreatedBy = "test";
+            var refundTransaction2 = new Transaction(transaction.Item);
+            refundTransaction2.Refunded = true;
+            refundTransaction2.IsActive = false;
+            refundTransaction2.Amount = 1.00m;
+            refundTransaction2.CreatedBy = "test";
+            var refundTransaction3 = new Transaction(transaction.Item);
+            refundTransaction3.Refunded = true;
+            refundTransaction3.IsActive = false;
+            refundTransaction3.Amount = 1.00m;
+            refundTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(refundTransaction);
+            transaction.AddChildTransaction(refundTransaction2);
+            transaction.AddChildTransaction(refundTransaction3);
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0m, transaction.RefundAmount);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert			
+        }
+
+        /// <summary>
+        /// Tests the refund amount is zero when there are no active refunds.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundAmountIsZeroWhenThereAreNoActiveRefunds2()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0m, transaction.RefundAmount);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the refund amount has A value when there is an active refund.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundAmountHasAValueWhenThereIsAnActiveRefund()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var refundTransaction = new Transaction(transaction.Item);
+            refundTransaction.Refunded = true;
+            refundTransaction.IsActive = false;
+            refundTransaction.Amount = 1.00m;
+            refundTransaction.CreatedBy = "test";
+            var refundTransaction2 = new Transaction(transaction.Item);
+            refundTransaction2.Refunded = true;
+            refundTransaction2.IsActive = true;
+            refundTransaction2.Amount = 2.00m;
+            refundTransaction2.CreatedBy = "test";
+            var refundTransaction3 = new Transaction(transaction.Item);
+            refundTransaction3.Refunded = true;
+            refundTransaction3.IsActive = false;
+            refundTransaction3.Amount = 1.00m;
+            refundTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(refundTransaction);
+            transaction.AddChildTransaction(refundTransaction2);
+            transaction.AddChildTransaction(refundTransaction3);
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(2m, transaction.RefundAmount);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert		
+        }
+
+
+        /// <summary>
+        /// Tests the refund amount is subtracted from total amount.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundAmountIsSubtractedFromTotalAmount()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.Amount = 3m;
+            var refundTransaction = new Transaction(transaction.Item);
+            refundTransaction.Refunded = true;
+            refundTransaction.IsActive = false;
+            refundTransaction.Amount = 1.00m;
+            refundTransaction.CreatedBy = "test";
+            var refundTransaction2 = new Transaction(transaction.Item);
+            refundTransaction2.Refunded = true;
+            refundTransaction2.IsActive = true;
+            refundTransaction2.Amount = 2.00m;
+            refundTransaction2.CreatedBy = "test";
+            var refundTransaction3 = new Transaction(transaction.Item);
+            refundTransaction3.Refunded = true;
+            refundTransaction3.IsActive = false;
+            refundTransaction3.Amount = 1.00m;
+            refundTransaction3.CreatedBy = "test";
+            transaction.AddChildTransaction(refundTransaction);
+            transaction.AddChildTransaction(refundTransaction2);
+            transaction.AddChildTransaction(refundTransaction3);
+
+            var paymentLog = CreateValidEntities.PaymentLog(1);
+            paymentLog.Accepted = true;
+            paymentLog.Amount = 3; 
+            paymentLog.Check = true;
+            paymentLog.Credit = false;
+
+            transaction.AddPaymentLog(paymentLog);
+
+
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1m, transaction.TotalPaid);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert			
+        }
+
+        #endregion RefundAmount Tests
+
+
+        #endregion Refunded Tests
     }
 }

@@ -169,6 +169,9 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("RefundAmount", "System.Decimal", new List<string>()));
+            expectedFields.Add(new NameAndType("Refunded", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("RefundIssued", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("RegularAmount", "System.Boolean", new List<string>
             {
                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Amount must be zero or more.\")]"
