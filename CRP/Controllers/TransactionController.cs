@@ -1162,7 +1162,10 @@ namespace CRP.Controllers
                         {
                             if (transaction.PaymentLogs.Where(a => a.TnStatus == "C" || a.TnStatus == "E").Any())
                             {
-                                viewModel.ShowCreditCardReSubmit = true;
+                                if(!transaction.RefundIssued ) //Just in case
+                                {
+                                    viewModel.ShowCreditCardReSubmit = true;
+                                }
                             }
                         }
                     }

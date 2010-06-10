@@ -50,6 +50,15 @@
             Transaction has been canceled
         </li>
         <%} %>
+        <%if (Model.Transaction.RefundIssued){%>
+        <li>
+            Refund has been issued
+        </li>
+        <li>
+            Refund Amount:
+            <%=Html.Encode(Model.Transaction.RefundAmount.ToString("C")) %>
+        </li>
+        <%}%>
         <%if (Model.ShowCreditCardReSubmit) {%>
             <%= Html.ActionLink<TransactionController>(a => a.Confirmation(Model.Transaction.Id), "Resubmit Credit Card Payment") %>
         <%} %>

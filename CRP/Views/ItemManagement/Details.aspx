@@ -35,7 +35,7 @@
 
             $.each($("Img"), function(index, item) {
                 if ($(item).hasClass("CreditIdImage")) {
-                    $(item).bt({trigger: 'click'});
+                    $(item).bt({trigger: 'click', width: '430px'});
                 }
             });
         });
