@@ -231,7 +231,7 @@
             
             // initialize the question names
             InitializeQuestions();
-            
+            RepopulateRadioButtonAnswers();
         });
 
         function CalculateTotal() {
@@ -298,6 +298,14 @@
                 $(item).bt('(###) ###-#### format');
             });          
 //            $("input.dateForm").filter().datepicker();
+        }
+        
+        function RepopulateRadioButtonAnswers(){
+            $.each($("input[type=radio][checked=checked]"), function(index, item){
+                if($(item).hasClass("indexedControl")){
+                    $(item).attr("checked", true);
+                }
+            });    
         }
 
         function addQuantityIndex($container)

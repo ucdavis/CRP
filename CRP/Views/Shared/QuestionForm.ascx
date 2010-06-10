@@ -29,20 +29,21 @@
                         ans = false; } %>
                 <%= Html.CheckBox(".Answer", ans, new {@class="indexedControl"})%> <%= Html.Encode(Model.Question.Name) %>
             <% break; %>
-            <% case "Radio Buttons" : %>               
-                <% foreach (var o in Model.Question.Options)
-                   { %> 
-                    <%= Html.RadioButton(".Answer", o.Name, o.Name == Model.Answer , new { @class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses })%>
+            <% case "Radio Buttons" : %>  
+                <%--<%= Html.Encode(Model.Answer) %>--%> 
+                <% var option = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Trim().ToLower() : string.Empty;%>            
+                <% foreach (var o in Model.Question.Options){ %> 
+                    <%var isChecked = option == o.Name.Trim().ToLower();%>
+                    <%= Html.RadioButton(".Answer", o.Name, isChecked , new { @class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses })%>
                     <%= Html.Encode(o.Name) %>
                 <% } %>
             <% break; %>
             <% case "Checkbox List" : %>
                 <% var options = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Split(',') : new string[1]; %>
-                <%= Html.Encode(Model.Answer) %>
-                <% foreach (var o in Model.Question.Options)
-                   {
-                       var cblAns = options.Contains(o.Name);
-                       %> 
+                <%--<%= Html.Encode(Model.Answer) %>--%>
+                <% foreach (var o in Model.Question.Options){%>
+                    <%var cblAns = options.Contains(o.Name); %>
+                        
                     <%= Html.CheckBox(".CblAnswer", cblAns, new { @class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses, @value = o.Name })%>
                     <%= Html.Encode(o.Name) %>
                 <% } %>
