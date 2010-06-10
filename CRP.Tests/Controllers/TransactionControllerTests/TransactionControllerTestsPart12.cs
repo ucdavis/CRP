@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using CRP.Controllers;
-using CRP.Controllers.Helpers;
+﻿using System.Linq;
 using CRP.Controllers.ViewModels;
-using CRP.Core.Domain;
-using CRP.Core.Resources;
-using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
 using Rhino.Mocks;
-using UCDArch.Testing;
 
 namespace CRP.Tests.Controllers.TransactionControllerTests
 {

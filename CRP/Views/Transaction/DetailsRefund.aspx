@@ -2,6 +2,7 @@
 <%@ Import Namespace="CRP.Controllers"%>
 <%@ Import Namespace="CRP.Controllers.Helpers" %>
 <%@ Import Namespace="CRP.Core.Resources" %>
+<%@ Import Namespace="System.Security.Policy" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Refund
@@ -9,12 +10,9 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2>Refund</h2>
+    <h2>Refund Details</h2>
 
-    <%= Html.ValidationSummary("Refund was unsuccessful. Please correct the errors and try again.") %>
 
-    <% using (Html.BeginForm()) {%>
-    <%= Html.AntiForgeryToken() %>
     <%= Html.Hidden("RefundSort", Model.Sort) %>
     <%= Html.Hidden("RefundPage", Model.Page)%>
         <fieldset>
@@ -58,23 +56,25 @@
                     Total Paid:
                     <%= Html.Encode(Model.TransactionValue.TotalPaid.ToString("C"))%>
                 </li>
-
                 <li>
-                    <label for="Amount">Refund Amount:</label>
-                    <%= Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new {@class="amount"}) %>
-                    <%= Html.ValidationMessage("Amount", "*") %>
+                    Refund Amount:
+                    <%= Html.Encode(Model.RefundAmount.ToString("C"))%>
+                </li>
+                <li>
+                    Refund Date:
+                    <%= Html.Encode(Model.CreateDate.ToString())%>
+                </li>
+                <li>
+                    Refund Created By:
+                    <%= Html.Encode(Model.CreatedBy)%>
+                </li>
+                <li>
+                    Refund Reason:
+                    <%= Html.Encode(Model.CorrectionReason)%>
                 </li>
                 
-                <li>
-                    <label for="CorrectionReason">Refund Reason:</label>
-                    <%= Html.TextArea("CorrectionReason", Model.CorrectionReason)%>
-                    <%= Html.ValidationMessage("CorrectionReason", "*")%>
-                </li>
-            <li><input type="submit" value="Refund" /></li>   
             </ul>
         </fieldset>
-
-    <% } %>
 
     <div>
         <%= Url.DetailItemLink(Model.TransactionValue.Item.Id, StaticValues.Tab_Refunds, Model.Sort, Model.Page)%>

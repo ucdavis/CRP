@@ -38,6 +38,12 @@
                     $(item).bt({trigger: 'click', width: '430px'});
                 }
             });
+
+            $.each($("Img"), function(index, item) {
+                if ($(item).hasClass("ReasonImage")) {
+                    $(item).bt({ width: '430px' });
+                }
+            });
         });
     </script>
 
@@ -164,7 +170,6 @@
                            //case "TransactionGuid":
                            //    cell.Text = cell.DataItem.Credit ? cell.DataItem.TransactionGuid.ToString() + Model.Fid : " ";
                            //    break;
-                               
                        }
                    }) 
                    .Columns(col =>
@@ -181,6 +186,7 @@
                                                             <%= Html.AntiForgeryToken() %>
                                                             <a href="javascript:;" class="FormSubmit"><%= "Undo" %></a>                                            
                                                         <%} %>
+                                                        | <%=Html.ActionLink<TransactionController>(b => b.DetailsRefund(a.Id, Request.QueryString["Refunds-orderBy"], Request.QueryString["Refunds-page"]), "Details")%>
                                                     <%}%>                                                
                                                 <%});
                                     col.Bound(a => a.TransactionNumber).Title("Transaction");

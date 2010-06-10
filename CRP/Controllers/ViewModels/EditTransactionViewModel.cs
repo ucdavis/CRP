@@ -21,6 +21,9 @@ namespace CRP.Controllers.ViewModels
         public string Sort { get; set; }
         public string Page { get; set; }
         public string Fid { get; set; }
+        public DateTime CreateDate { get; set; }
+        public string CreatedBy { get; set; }
+        public decimal RefundAmount { get; set; }
 
         public static EditTransactionViewModel Create(IRepository repository)
         {

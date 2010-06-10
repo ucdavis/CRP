@@ -165,6 +165,7 @@
     <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart10.cs" />
     <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart11.cs" />
     <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart12.cs" />
+    <Compile Include="Controllers\TransactionControllerTests\TransactionControllerTestsPart13.cs" />
     <Compile Include="Core\AbstractRepositoryTests.cs" />
     <Compile Include="Core\Extensions\AssertExtensions.cs" />
     <Compile Include="Core\Extensions\RouteTestingExtensions.cs" />

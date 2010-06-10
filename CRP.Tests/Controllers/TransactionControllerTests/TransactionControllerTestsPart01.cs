@@ -109,7 +109,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(12, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(16, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -457,6 +457,92 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method refund get contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodRefundGetContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = ControllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Refund");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<RefunderOnlyAttribute>();
+            var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "RefunderOnlyAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method refund post contains expected attributes1.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodRefundPostContainsExpectedAttributes1()
+        {
+            #region Arrange
+            var controllerClass = ControllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Refund");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<RefunderOnlyAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "RefunderOnlyAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method refund post contains expected attributes2.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodRefundPostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = ControllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Refund");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method details refund contains expected attributes.
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodDetailsRefundContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = ControllerClass;
+            var controllerMethod = controllerClass.GetMethod("DetailsRefund");
+            #endregion Arrange
+
+            #region Act
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
         #endregion Controller Method Tests

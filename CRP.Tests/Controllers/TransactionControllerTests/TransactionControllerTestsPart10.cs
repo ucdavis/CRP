@@ -60,7 +60,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Assert.IsNotNull(result.ErrorLink);
             Assert.IsNotNull(result.SiteId);
             Assert.IsNotNull(result.PaymentGatewayUrl);
-            Assert.AreEqual(@"fyQbylaAdaiir//SYXs1SA==", result.ValidationKey, "The amount, and other values can cause this hash to change.");
+            Assert.AreEqual(@"Cqd2bnEIDGuljg6PAAGRew==", result.ValidationKey, "The amount, and other values like the FID in the config can cause this hash to change.");
             #endregion Assert		
         }
 
@@ -526,7 +526,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         }
 
         [TestMethod]
-        public void TestEditPostCreatesADonationWithValidValuesAndNegativeAmountWithPaymentLogsMoreThanCorrectyionWillAllow()
+        public void TestEditPostCreatesADonationWithValidValuesAndNegativeAmountWithPaymentLogsMoreThanCorrectionWillAllow()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext.Response

@@ -793,6 +793,61 @@ namespace CRP.Controllers
         }
 
         /// <summary>
+        /// Detailses the refund.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="sort">The sort.</param>
+        /// <param name="page">The page.</param>
+        /// <returns></returns>
+        public ActionResult DetailsRefund(int id, string sort, string page)
+        {
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
+            var transactionToView = Repository.OfType<Transaction>().GetNullableByID(id);
+            if (transactionToView == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            var childTransaction = transactionToView.ChildTransactions.Where(a => a.Refunded && a.IsActive).FirstOrDefault();
+            if(childTransaction == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Refund");
+                return Redirect(Url.DetailItemUrl
+                    (
+                        transactionToView.Item.Id,
+                        StaticValues.Tab_Refunds,
+                        pageAndSort["sort"],
+                        pageAndSort["page"])
+                    );
+            }
+
+            var viewModel = EditTransactionViewModel.Create(Repository);
+            viewModel.TransactionValue = transactionToView;
+            viewModel.ContactName =
+                transactionToView.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
+            viewModel.ContactName = viewModel.ContactName + " " + transactionToView.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
+            viewModel.ContactEmail = transactionToView.TransactionAnswers.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
+
+            viewModel.Sort = pageAndSort["sort"];
+            viewModel.Page = pageAndSort["page"];
+            viewModel.CorrectionReason = childTransaction.CorrectionReason;
+            viewModel.CreateDate = childTransaction.TransactionDate;
+            viewModel.CreatedBy = childTransaction.CreatedBy;
+            viewModel.RefundAmount = childTransaction.Amount;
+
+            return View(viewModel);
+        }
+
+        /// <summary>
         /// POST: /Transaction/PaymentResult/
         /// </summary>
         /// <remarks>

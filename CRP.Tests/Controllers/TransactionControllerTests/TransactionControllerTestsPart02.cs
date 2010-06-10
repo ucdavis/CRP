@@ -114,6 +114,42 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         {
             "~/Transaction/Lookup/test".ShouldMapTo<TransactionController>(a => a.Lookup("order", "email"), true);
         }
+
+        /// <summary>
+        /// Tests the refund get mapping.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundGetMapping()
+        {
+            "~/Transaction/Refund/3".ShouldMapTo<TransactionController>(a => a.Refund(3, "", ""), true);
+        }
+
+        /// <summary>
+        /// Tests the refund post mapping.
+        /// </summary>
+        [TestMethod]
+        public void TestRefundPostMapping()
+        {
+            "~/Transaction/Refund/".ShouldMapTo<TransactionController>(a => a.Refund(new Transaction(),"", "" ), true);
+        }
+
+        /// <summary>
+        /// Tests the remove refund post mapping.
+        /// </summary>
+        [TestMethod]
+        public void TestRemoveRefundPostMapping()
+        {
+            "~/Transaction/RemoveRefund/5".ShouldMapTo<TransactionController>(a => a.RemoveRefund(5, "", ""), true);
+        }
+
+        /// <summary>
+        /// Tests the details refund post mapping.
+        /// </summary>
+        [TestMethod]
+        public void TestDetailsRefundPostMapping()
+        {
+            "~/Transaction/DetailsRefund/5".ShouldMapTo<TransactionController>(a => a.DetailsRefund(5, "", ""), true);
+        }
         #endregion Route Tests
 
         #region Misc Tests

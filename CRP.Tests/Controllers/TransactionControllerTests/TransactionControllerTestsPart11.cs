@@ -42,7 +42,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         {
             #region Arrange
             var parameters = new PaymentResultParameters();
-            parameters.EXT_TRANS_ID = Guid.Empty.ToString();
+            parameters.EXT_TRANS_ID = Guid.Empty.ToString() + " FID=001";
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
             #endregion Arrange
 
@@ -69,7 +69,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
                 ControllerRecordFakes.FakeTransactions(Transactions, 3);
                 Transactions[2].TransactionGuid = Transactions[0].TransactionGuid;
                 var parameters = new PaymentResultParameters();
-                parameters.EXT_TRANS_ID = Transactions[0].TransactionGuid.ToString();
+                parameters.EXT_TRANS_ID = Transactions[0].TransactionGuid.ToString() + " FID=001";
                 TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
                 #endregion Arrange
 
@@ -100,8 +100,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Transactions[1].Amount = 200.00m;
             Transactions[1].IsActive = false; // Will be changed
             var parameters = DefaultParameters();
-            
-            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = Transactions[1].Total;
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();            
             #endregion Arrange
@@ -161,7 +161,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Transactions[1].IsActive = false; // Will *NOT* be changed because payment was canceled
             var parameters = DefaultParameters();
 
-            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = Transactions[1].Total;
             parameters.PMT_STATUS = "Canceled";
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
@@ -217,7 +217,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Transactions[1].IsActive = false; // Will *NOT* be changed because payment was canceled
             var parameters = DefaultParameters();
 
-            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = Transactions[1].Total;
             parameters.PMT_STATUS = "Fail";
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
@@ -272,7 +272,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Transactions[1].Amount = 200.00m;
             var parameters = DefaultParameters();
 
-            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = Transactions[1].Total;
             parameters.posting_key = "Wrong";
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
@@ -307,7 +307,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Transactions[1].Amount = 200.00m;
             var parameters = DefaultParameters();
 
-            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = Transactions[1].Total;
             parameters.UPAY_SITE_ID = "5";
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
@@ -342,7 +342,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Transactions[1].Amount = 200.00m;
             var parameters = DefaultParameters();
 
-            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = Transactions[1].Total;
             parameters.TPG_TRANS_ID = "DUMMY_TRANS_ID";
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
@@ -377,7 +377,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Transactions[1].Amount = 200.00m;
             var parameters = DefaultParameters();
 
-            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = 50.00m;
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
             #endregion Arrange
@@ -418,7 +418,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             var parameters = DefaultParameters();
 
-            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString();
+            parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = Transactions[1].Total;
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
             #endregion Arrange
