@@ -752,6 +752,8 @@ namespace CRP.Controllers
 
             viewModel.Sort = pageAndSort["sort"];
             viewModel.Page = pageAndSort["page"];
+            viewModel.CorrectionReason = transaction.CorrectionReason;
+            viewModel.RefundAmount = transaction.Amount;
 
             return View(viewModel);
 
@@ -768,6 +770,19 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
+            if (transactionToUpdate.Item == null || !Access.HasItemAccess(CurrentUser, transactionToUpdate.Item))
+            {
+                if (transactionToUpdate.Item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                else
+                {
+                    Message = NotificationMessages.STR_NoEditorRights.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+
             var childTransaction = transactionToUpdate.ChildTransactions.Where(a => a.Refunded && a.IsActive).FirstOrDefault();
             if(childTransaction == null)
             {
@@ -806,6 +821,18 @@ namespace CRP.Controllers
             if (transactionToView == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
+                return this.RedirectToAction<ItemManagementController>(a => a.List());
+            }
+            if (transactionToView.Item == null || !Access.HasItemAccess(CurrentUser, transactionToView.Item))
+            {
+                if (transactionToView.Item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                else
+                {
+                    Message = NotificationMessages.STR_NoEditorRights.Replace(NotificationMessages.ObjectType, "Item");
+                }
                 return this.RedirectToAction<ItemManagementController>(a => a.List());
             }
             var childTransaction = transactionToView.ChildTransactions.Where(a => a.Refunded && a.IsActive).FirstOrDefault();
