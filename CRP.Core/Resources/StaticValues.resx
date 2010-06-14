@@ -208,6 +208,10 @@
     <value>Zip Code</value>
     <comment>Question name for default question set Contact Information</comment>
   </data>
+  <data name="Report_Active" xml:space="preserve">
+    <value>Active</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
   <data name="Report_AmountTotal" xml:space="preserve">
     <value>AmountTotal</value>
     <comment>Report View Model static value column name</comment>
@@ -252,8 +256,28 @@
     <value>Quantity</value>
     <comment>Report View Model static value column name</comment>
   </data>
+  <data name="Report_RefundAmount" xml:space="preserve">
+    <value>RefundAmount</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_RefundIssued" xml:space="preserve">
+    <value>RefundIssued</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
   <data name="Report_Total" xml:space="preserve">
     <value>Total</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_TotalPaid" xml:space="preserve">
+    <value>TotalPaid</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_TransactionDate" xml:space="preserve">
+    <value>TransactionDate</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
+  <data name="Report_TransactionNumber" xml:space="preserve">
+    <value>TransactionNumber</value>
     <comment>Report View Model static value column name</comment>
   </data>
   <data name="Tab_Checks" xml:space="preserve">

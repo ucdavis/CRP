@@ -157,6 +157,18 @@ namespace CRP.Controllers.ViewModels
                 {
                     result = transaction.DonationTotal.ToString("C");
                 }
+                else if (itemReportColumn.Name == StaticValues.Report_TransactionNumber)
+                {
+                    result = transaction.TransactionNumber;
+                }
+                else if (itemReportColumn.Name == StaticValues.Report_TransactionDate)
+                {
+                    result = transaction.TransactionDate.ToString();
+                }
+                else if (itemReportColumn.Name == StaticValues.Report_Active)
+                {
+                    result = transaction.IsActive.ToString();
+                }
                 else if(itemReportColumn.Name == StaticValues.Report_AmountTotal)
                 {
                     result = transaction.AmountTotal.ToString("C");
@@ -176,6 +188,18 @@ namespace CRP.Controllers.ViewModels
                 else if (itemReportColumn.Name == StaticValues.Report_Paid)
                 {
                     result = transaction.Paid.ToString();
+                }
+                else if (itemReportColumn.Name == StaticValues.Report_TotalPaid)
+                {
+                    result = transaction.TotalPaid.ToString("C");
+                }
+                else if (itemReportColumn.Name == StaticValues.Report_RefundIssued)
+                {
+                    result = transaction.RefundIssued.ToString();
+                }
+                else if (itemReportColumn.Name == StaticValues.Report_RefundAmount)
+                {
+                    result = transaction.RefundAmount.ToString("C");
                 }
             }
 
