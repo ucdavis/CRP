@@ -664,6 +664,7 @@
     <Content Include="Views\Shared\HelpForm.ascx" />
     <Content Include="Views\Shared\TemplateInstructions.ascx" />
     <Content Include="Views\Template\Edit.aspx" />
+    <Content Include="Views\Transaction\AdminLookup.aspx" />
     <Content Include="Views\Transaction\DetailsRefund.aspx" />
     <Content Include="Views\Transaction\Edit.aspx" />
     <Content Include="Views\Transaction\Refund.aspx" />

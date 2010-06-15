@@ -1273,6 +1273,32 @@ namespace CRP.Controllers
 
             return View(viewModel);
         }
+
+        [AdminOnly]
+        public ActionResult AdminLookup(string email)
+        {
+            //TODO: figure out why the foreach loop works but the select doesn't
+            //TODO: Clean up
+            if(email == null)
+            {
+                email = string.Empty;
+            }
+            var answers =
+                Repository.OfType<TransactionAnswer>().Queryable.Where(
+                    a =>
+                    a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                    a.Question.Name == StaticValues.Question_Email && a.Answer == email);
+
+            var transactions = new List<Transaction>();
+            foreach (var transactionAnswer in answers)
+            {
+                transactions.Add(transactionAnswer.Transaction);
+            }
+            //var transactions = answers.Select(transactionAnswer => transactionAnswer.Transaction).ToList();
+            //var transactions = answers.Select(transactionAnswer => transactionAnswer.Transaction);
+            //var transactions = (from a in answers select a.Transaction).ToList();
+            return View(transactions);
+        }
     }
 
     public class QuestionAnswerParameter
