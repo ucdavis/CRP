@@ -47,6 +47,24 @@ namespace CRP.Controllers
             return View(query);
         }
 
+        [AcceptPost]
+        public ActionResult List(string transactionNumber)
+        {
+            var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
+
+            var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
+            // admins can see all
+            if (CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                query = Repository.OfType<Item>().Queryable;
+            }
+            if (transactionNumber != null)
+            {
+                query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
+            }
+            return View(query); 
+        }
+
         /// <summary>
         /// GET: /ItemManagement/Create
         /// </summary>
