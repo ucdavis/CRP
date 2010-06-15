@@ -154,7 +154,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Edit(1, null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -176,7 +176,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Edit(2, null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -198,7 +198,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Edit(2, null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -345,7 +345,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Edit(Transactions[0], null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -365,7 +365,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Edit(Transactions[1], null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -384,7 +384,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Edit(Transactions[1], null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert

@@ -31,7 +31,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.LinkToItem(1, true, false)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -53,7 +53,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.LinkToItem(2, true, true)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -75,7 +75,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.LinkToItem(2, false, false)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -157,7 +157,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.LinkToItem(1, 2, true, false)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -180,7 +180,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.LinkToItem(2, 1, true, false)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -203,7 +203,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.LinkToItem(2, 2, true, true)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -226,7 +226,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.LinkToItem(2, 2, false, false)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -378,7 +378,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.LinkToItem(2, 2, true, false)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -429,7 +429,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.UnlinkFromItem(1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -522,7 +522,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Act
             Controller.UnlinkFromItem(2)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert

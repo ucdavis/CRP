@@ -35,7 +35,7 @@ namespace CRP.Controllers
 
             if (item == null)
             {
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             var viewModel = CouponViewModel.Create(Repository, item);
@@ -68,7 +68,7 @@ namespace CRP.Controllers
 
             if (item == null)
             {
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             coupon.Code = CouponGenerator.GenerateCouponCode();
@@ -146,7 +146,7 @@ namespace CRP.Controllers
 
             if (coupon == null)
             {
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             //Done: This needs to work with Coupons that are unlimited.

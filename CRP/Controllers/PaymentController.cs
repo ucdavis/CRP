@@ -36,12 +36,12 @@ namespace CRP.Controllers
         public ActionResult LinkToTransaction(int transactionId, string sort, string page)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
-            if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List());
+            if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List(null));
 
             if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
@@ -59,12 +59,12 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
             if (transaction == null)
             {
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
             if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", checkSort, checkPage);

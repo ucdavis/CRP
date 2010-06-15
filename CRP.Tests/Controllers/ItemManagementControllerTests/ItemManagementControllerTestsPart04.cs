@@ -124,7 +124,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], epp, new[] { "Name1" }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
             Assert.AreEqual("Item has been created successfully.", Controller.Message);
@@ -163,7 +163,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], epp, new[] { "Name1" }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
 
@@ -182,7 +182,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], null, new[] { "Name1" }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
 
@@ -215,7 +215,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], epp, new[] { "Name1" }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
 
@@ -253,7 +253,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], epp, new[] { "Name1" }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
 
@@ -288,7 +288,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], epp, new[] { "" }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
 
@@ -321,7 +321,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], epp, new[] { Tags[0].Name, Tags[1].Name }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
 
@@ -355,7 +355,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], epp, new[] { Tags[1].Name }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
 
@@ -383,7 +383,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Create(Items[0], epp, new[] { "NewTag" }, mapLinkText)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
 

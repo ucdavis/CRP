@@ -42,7 +42,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
             Controller.AddEditor(1, 1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
 
@@ -55,7 +55,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             UserRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             Controller.AddEditor(1, 1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
 
@@ -136,7 +136,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.AddEditor(1, 1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
 
 
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Items[0]));

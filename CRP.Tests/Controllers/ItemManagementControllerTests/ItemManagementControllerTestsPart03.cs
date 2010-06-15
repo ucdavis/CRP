@@ -23,7 +23,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             Controller.Index()
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
         }
 
 
@@ -47,7 +47,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             ItemRepository.Expect(a => a.Queryable).Return(Items.AsQueryable()).Repeat.Any();
 
-            var result = Controller.List()
+            var result = Controller.List(null)
                 .AssertViewRendered()
                 .WithViewData<IQueryable<Item>>();
             Assert.IsNotNull(result);
@@ -65,7 +65,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.List()
+            var result = Controller.List(null)
                 .AssertViewRendered()
                 .WithViewData<IQueryable<Item>>();
             #endregion Act
@@ -91,7 +91,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.List()
+            var result = Controller.List(null)
                 .AssertViewRendered()
                 .WithViewData<IQueryable<Item>>();
             #endregion Act

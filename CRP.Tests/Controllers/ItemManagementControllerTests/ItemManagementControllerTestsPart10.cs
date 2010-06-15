@@ -27,7 +27,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Act
             Controller.ToggleTransactionIsActive(1, null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -49,7 +49,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Act
             Controller.ToggleTransactionIsActive(2, null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -73,7 +73,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Act
             Controller.ToggleTransactionIsActive(5, null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert

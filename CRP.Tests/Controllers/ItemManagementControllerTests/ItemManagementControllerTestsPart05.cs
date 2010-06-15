@@ -26,7 +26,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
             Controller.Edit(2)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Act/Assert
             Controller.Edit(2)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act/Assert
         }
 
@@ -272,7 +272,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Edit(2, new Item(), epp, new[] { "Test" }, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
@@ -306,7 +306,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.Edit(1, Items[0], epp, new[] { "NewTag" }, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }

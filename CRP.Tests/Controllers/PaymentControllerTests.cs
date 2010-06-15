@@ -114,7 +114,7 @@ namespace CRP.Tests.Controllers
             #region Act/Assert
             Controller.LinkToTransaction(5, null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act/Assert
         }
 
@@ -234,7 +234,7 @@ namespace CRP.Tests.Controllers
             #region Act
             Controller.LinkToTransaction(2, payments, null, null)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert

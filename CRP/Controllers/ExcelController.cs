@@ -23,19 +23,19 @@ namespace CRP.Controllers
             if (itemReport == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemReport");
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
             if (item == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             if (!Access.HasItemAccess(CurrentUser, item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             var viewModel = ReportViewModel.Create(Repository, itemReport, item);

@@ -138,7 +138,7 @@ namespace CRP.Tests.Controllers
             #region Act
             Controller.ViewReport(1, 2)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -156,7 +156,7 @@ namespace CRP.Tests.Controllers
             #region Act
             Controller.ViewReport(2, 1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -197,7 +197,7 @@ namespace CRP.Tests.Controllers
             #region Act
             Controller.Create(1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -236,7 +236,7 @@ namespace CRP.Tests.Controllers
             #region Act
             Controller.Create(1, "Name", new CreateReportParameter[0])
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert

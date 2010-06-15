@@ -16,8 +16,8 @@
         <%= Html.ActionLink<ItemManagementController>(a => a.Create(), "Create New") %>
     </p>
     <p>
-        <% using (Html.BeginForm()){%>
-            <%= Html.AntiForgeryToken() %>
+        <% using (Html.BeginForm("List","ItemManagement", FormMethod.Get)){%>
+            <%--<%= Html.AntiForgeryToken() %>--%>
             <label for="transactionNumber">Transaction Number: </label>
             <%= Html.TextBox("transactionNumber")%>
             <input type="submit" value="Filter" />

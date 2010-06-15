@@ -25,7 +25,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestListMapping()
         {
-            "~/ItemManagement/List".ShouldMapTo<ItemManagementController>(a => a.List());
+            "~/ItemManagement/List".ShouldMapTo<ItemManagementController>(a => a.List(null));
         }
 
         /// <summary>

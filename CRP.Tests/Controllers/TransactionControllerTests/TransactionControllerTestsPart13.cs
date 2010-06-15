@@ -41,7 +41,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Refund(4, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -66,7 +66,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Refund(1, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -108,7 +108,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Refund(1, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -352,7 +352,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Refund(transaction,"", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -374,7 +374,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Refund(transactions[0], "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -416,7 +416,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.Refund(transactions[0], "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -643,7 +643,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.RemoveRefund(4, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -669,7 +669,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.RemoveRefund(1, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -712,7 +712,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.RemoveRefund(1, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -889,7 +889,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.DetailsRefund(4, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -915,7 +915,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.DetailsRefund(1, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert
@@ -958,7 +958,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Act
             Controller.DetailsRefund(1, "", "")
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert

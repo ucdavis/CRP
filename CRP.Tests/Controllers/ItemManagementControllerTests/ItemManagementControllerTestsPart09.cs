@@ -18,7 +18,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             Controller.Details(1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #region Act
             Controller.Details(1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             #endregion Act
 
             #region Assert

@@ -25,29 +25,32 @@ namespace CRP.Controllers
 
         public ActionResult Index()
         {
-            return this.RedirectToAction(a => a.List());
+            return this.RedirectToAction(a => a.List(null));
         }
 
         /// <summary>
         /// GET: /ItemManagement/List
         /// </summary>
         /// <returns></returns>
-        public ActionResult List()
-        {
-            // list items that the user has editor rights to
-            var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
+        //public ActionResult List()
+        //{
+        //    // list items that the user has editor rights to
+        //    var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
-            var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
-            // admins can see all
-            if (CurrentUser.IsInRole(RoleNames.Admin))
-            {
-                query = Repository.OfType<Item>().Queryable;
-            }
+        //    var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
+        //    // admins can see all
+        //    if (CurrentUser.IsInRole(RoleNames.Admin))
+        //    {
+        //        query = Repository.OfType<Item>().Queryable;
+        //    }
 
-            return View(query);
-        }
+        //    return View(query);
+        //}
 
-        [AcceptPost]
+        /// <summary>
+        /// GET: /ItemManagement/List
+        /// </summary>
+        /// <returns></returns>
         public ActionResult List(string transactionNumber)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
@@ -58,7 +61,7 @@ namespace CRP.Controllers
             {
                 query = Repository.OfType<Item>().Queryable;
             }
-            if (transactionNumber != null)
+            if (!string.IsNullOrEmpty(transactionNumber))
             {
                 query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
             }
@@ -150,7 +153,7 @@ namespace CRP.Controllers
             {
                 Repository.OfType<Item>().EnsurePersistent(item);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
             else
             {
@@ -186,7 +189,7 @@ namespace CRP.Controllers
             var item = Repository.OfType<Item>().GetNullableByID(id);
             if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
 
             var viewModel = ItemViewModel.Create(Repository, CurrentUser, item);
@@ -224,7 +227,7 @@ namespace CRP.Controllers
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
 
             destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);//PopulateObject.Item(Repository, item, extendedProperties, tags);
@@ -273,7 +276,7 @@ namespace CRP.Controllers
 
             if (item == null || editor == null)
             {
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
             //Only allow an editor to be removed if the current user is in the editors -JCS
             //if (item.Editors == null || !item.Editors.Where(a => a.User.LoginID == CurrentUser.Identity.Name).Any())
@@ -281,7 +284,7 @@ namespace CRP.Controllers
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
 
             if (editor.Owner)
@@ -335,7 +338,7 @@ namespace CRP.Controllers
             
             if (item == null || user == null)
             {
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
 
 
@@ -344,7 +347,7 @@ namespace CRP.Controllers
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
 
             //TODO: Review if this is how it should behave if an editor is already attached to the item
@@ -425,7 +428,7 @@ namespace CRP.Controllers
             if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
 
             var viewModel = UserItemDetailViewModel.Create(Repository, item);
@@ -451,17 +454,17 @@ namespace CRP.Controllers
             if (transaction == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
             if (transaction.Item == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
             if(!Access.HasItemAccess(CurrentUser, transaction.Item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction(a => a.List());
+                return this.RedirectToAction(a => a.List(null));
             }
             if (transaction.IsActive)
             {

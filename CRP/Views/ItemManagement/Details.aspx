@@ -213,7 +213,7 @@
     </div>
     
     <p>
-        <%= Html.ActionLink<ItemManagementController>(a => a.List(), "Back to List") %>
+        <%= Html.ActionLink<ItemManagementController>(a => a.List(null), "Back to List") %>
     </p>
 
 </asp:Content>

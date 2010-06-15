@@ -135,7 +135,7 @@ namespace CRP.Tests.Controllers
             ItemRepository.Expect(a => a.GetNullableByID(5)).Return(null).Repeat.Any();
             Controller.Create(5)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace CRP.Tests.Controllers
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
             Controller.Create(2, new Coupon())
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
         }
 
@@ -437,7 +437,7 @@ namespace CRP.Tests.Controllers
             CouponRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             Controller.Deactivate(1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
         }
 

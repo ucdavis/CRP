@@ -550,7 +550,7 @@ namespace CRP.Controllers
                 {
                     Message = NotificationMessages.STR_TransactionQuantitySame;
                 }
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             var viewModel = QuestionSetLinkViewModel.Create(Repository, CurrentUser.Identity.Name);
@@ -603,13 +603,13 @@ namespace CRP.Controllers
                 {
                     Message = NotificationMessages.STR_TransactionQuantitySame;
                 }
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
             if (!Access.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
             
             // add the questionset
@@ -682,13 +682,13 @@ namespace CRP.Controllers
             if (itemQuestionSet == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemQuestionSet");
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
             if (!Access.HasItemAccess(CurrentUser, itemQuestionSet.Item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List());
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
             var itemId = itemQuestionSet.Item.Id;

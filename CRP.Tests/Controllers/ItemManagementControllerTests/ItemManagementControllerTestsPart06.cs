@@ -122,7 +122,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Controller.RemoveEditor(1, 1)
                 .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List());
+                .ToAction<ItemManagementController>(a => a.List(null));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.AreEqual(3, Items[0].Editors.Count);
             Assert.IsTrue(Items[0].Editors.Contains(Editors[0]));
