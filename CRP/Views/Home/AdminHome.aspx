@@ -20,6 +20,7 @@
     
     <h2>Administrative Screens</h2>
     <ul>
+        <li><%= Html.ActionLink<TransactionController>(a => a.AdminLookup(null), "Transaction Lookup") %></li>
         <li><%= Html.ActionLink<ApplicationManagementController>(a => a.Index(), "Application Management") %></li>
         <li><%= Html.ActionLink<ReportController>(a => a.ViewSystemReport(null), "System Reports") %></li>
         <li><%= Html.ActionLink<AccountController>(a => a.ManageUsers(), "Manage Users") %></li>

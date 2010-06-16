@@ -206,7 +206,7 @@ namespace CRP.Controllers
                     //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
                     //                 ? qa.Answer
                     //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
-                    var answer = CleanUpAnswer(question.QuestionType.Name, qa);
+                    var answer = CleanUpAnswer(question.QuestionType.Name, qa, question.ValidationClasses);
 
                     // validate each of the validators
                     foreach (var validator in question.Validators)
@@ -240,7 +240,7 @@ namespace CRP.Controllers
                         //                 ? qa.Answer
                         //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
 
-                        var answer = CleanUpAnswer(question.QuestionType.Name, qa);
+                        var answer = CleanUpAnswer(question.QuestionType.Name, qa, question.ValidationClasses);
                         
                         var fieldName = string.Format("The answer for question \"{0}\" for {1} {2}", question.Name, item.QuantityName, (i + 1));
 
@@ -335,6 +335,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+
         /// <summary>
         /// Cleans up answer.
         /// Null bools get changed to false
@@ -343,8 +344,9 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="qa">The qa.</param>
+        /// <param name="validationClasses"></param>
         /// <returns>The answer</returns>
-        private static string CleanUpAnswer(string name, QuestionAnswerParameter qa)
+        private static string CleanUpAnswer(string name, QuestionAnswerParameter qa, string validationClasses)
         {
             string answer;
             if (name != QuestionTypeText.STR_CheckboxList)
@@ -364,10 +366,14 @@ namespace CRP.Controllers
                 else if(name == QuestionTypeText.STR_TextArea)
                 {
                     answer = qa.Answer;
-                }
+                }                
                 else
-                {                 
-                    answer = qa.Answer ?? string.Empty;    
+                {      
+                    answer = qa.Answer ?? string.Empty;
+                    if (validationClasses != null && validationClasses.Contains("email"))
+                    {
+                        answer = answer.ToLower();
+                    }
                 }
             }
             else
@@ -1224,7 +1230,10 @@ namespace CRP.Controllers
         public ActionResult Lookup(string orderNumber, string email)
         {
             var transaction = Repository.OfType<Transaction>().Queryable.Where(a => a.TransactionNumber == orderNumber).FirstOrDefault();
-
+            if(email != null)
+            {
+                email = email.ToLower();
+            }
             var viewModel = LookupViewModel.Create(Repository);
             if (transaction != null)
             {
@@ -1277,26 +1286,22 @@ namespace CRP.Controllers
         [AdminOnly]
         public ActionResult AdminLookup(string email)
         {
-            //TODO: figure out why the foreach loop works but the select doesn't
-            //TODO: Clean up
             if(email == null)
             {
                 email = string.Empty;
             }
-            var answers =
+            else
+            {
+                email = email.Trim().ToLower();
+            }
+            var transactionAnswers =
                 Repository.OfType<TransactionAnswer>().Queryable.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
-                    a.Question.Name == StaticValues.Question_Email && a.Answer == email);
+                    a.Question.Name == StaticValues.Question_Email && a.Answer == email).ToList();
 
-            var transactions = new List<Transaction>();
-            foreach (var transactionAnswer in answers)
-            {
-                transactions.Add(transactionAnswer.Transaction);
-            }
-            //var transactions = answers.Select(transactionAnswer => transactionAnswer.Transaction).ToList();
-            //var transactions = answers.Select(transactionAnswer => transactionAnswer.Transaction);
-            //var transactions = (from a in answers select a.Transaction).ToList();
+            var transactions = transactionAnswers.Select(transactionAnswer => transactionAnswer.Transaction);
+
             return View(transactions);
         }
     }
