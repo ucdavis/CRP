@@ -46,6 +46,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         protected List<User> Users { get; set; }
         protected List<Editor> Editors { get; set; }
         protected List<TransactionAnswer> TransactionAnswers { get; set; }
+        protected IRepository<TransactionAnswer> TransactionAnswerRepository { get; set; }
 
         #region Init
         public TransactionControllerTests()
@@ -77,6 +78,9 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Coupons = new List<Coupon>();
             CouponRepository = FakeRepository<Coupon>();
             Controller.Repository.Expect(a => a.OfType<Coupon>()).Return(CouponRepository).Repeat.Any();
+
+            TransactionAnswerRepository = FakeRepository<TransactionAnswer>();
+            Controller.Repository.Expect(a => a.OfType<TransactionAnswer>()).Return(TransactionAnswerRepository).Repeat.Any();
 
             OpenIdUsers = new List<OpenIdUser>();
             //OpenIdUserRepository = FakeRepository<OpenIdUser>();

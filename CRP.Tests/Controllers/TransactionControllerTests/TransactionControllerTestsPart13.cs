@@ -21,10 +21,6 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
     /// </summary>
     public partial class TransactionControllerTests
     {
-        //Test Refund Get, Post
-        //test Remove Refund
-        //Test Details Refund
-
         #region Refund Get Tests
 
 
@@ -1128,5 +1124,138 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
 
         #endregion DetailsRefund Test
+
+        #region AdminLookup Tests
+
+        /// <summary>
+        /// Tests the admin lookup with null returns empty view.
+        /// </summary>
+        [TestMethod]
+        public void TestAdminLookupWithNullReturnsEmptyView()
+        {
+            #region Arrange
+            var transactionAnswers = new List<TransactionAnswer>();
+            var questionSet = CreateValidEntities.QuestionSet(1);
+            questionSet.SetIdTo(1);
+            questionSet.Name = StaticValues.QuestionSet_ContactInformation;
+            var question = CreateValidEntities.Question(1);
+            question.SetIdTo(1);
+            question.Name = StaticValues.Question_Email;
+            for (int i = 0; i < 7; i++)
+            {
+                transactionAnswers.Add(CreateValidEntities.TransactionAnswer(i + 1));
+                transactionAnswers[i].SetIdTo(i + 1);
+                transactionAnswers[i].Transaction = CreateValidEntities.Transaction(i + 1);
+                transactionAnswers[i].Answer = "jasoncsylvestre@gmail.com".ToLower();
+                transactionAnswers[i].Question = question;
+                transactionAnswers[i].QuestionSet = questionSet;
+            }
+
+            transactionAnswers[2].Answer = "notMyEmail.ucdavis.edu".ToLower();
+            transactionAnswers[4].Answer = "notMyEmail.ucdavis.edu".ToLower();
+            transactionAnswers[5].Question = new Question();
+            transactionAnswers[6].QuestionSet = new QuestionSet();
+            ControllerRecordFakes.FakeTransactionAnswer(0, TransactionAnswerRepository, transactionAnswers);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.AdminLookup(null)
+                .AssertViewRendered()
+                .WithViewData<IEnumerable<Transaction>>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count());
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the admin lookup with value returns expected view.
+        /// </summary>
+        [TestMethod]
+        public void TestAdminLookupWithValueReturnsExpectedView1()
+        {
+            #region Arrange
+            var transactionAnswers = new List<TransactionAnswer>();
+            var questionSet = CreateValidEntities.QuestionSet(1);
+            questionSet.SetIdTo(1);
+            questionSet.Name = StaticValues.QuestionSet_ContactInformation;
+            var question = CreateValidEntities.Question(1);
+            question.SetIdTo(1);
+            question.Name = StaticValues.Question_Email;
+            for (int i = 0; i < 7; i++)
+            {
+                transactionAnswers.Add(CreateValidEntities.TransactionAnswer(i + 1));
+                transactionAnswers[i].SetIdTo(i + 1);
+                transactionAnswers[i].Transaction = CreateValidEntities.Transaction(i + 1);
+                transactionAnswers[i].Answer = "jasoncsylvestre@gmail.com".ToLower();
+                transactionAnswers[i].Question = question;
+                transactionAnswers[i].QuestionSet = questionSet;
+            }
+
+            transactionAnswers[2].Answer = "notMyEmail.ucdavis.edu".ToLower();
+            transactionAnswers[4].Answer = "notMyEmail.ucdavis.edu".ToLower();
+            transactionAnswers[5].Question = new Question();
+            transactionAnswers[6].QuestionSet = new QuestionSet();
+            ControllerRecordFakes.FakeTransactionAnswer(0, TransactionAnswerRepository, transactionAnswers);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.AdminLookup("  jasonCsylvestre@gmail.com")
+                .AssertViewRendered()
+                .WithViewData<IEnumerable<Transaction>>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the admin lookup with value returns expected view.
+        /// </summary>
+        [TestMethod]
+        public void TestAdminLookupWithValueReturnsExpectedView2()
+        {
+            #region Arrange
+            var transactionAnswers = new List<TransactionAnswer>();
+            var questionSet = CreateValidEntities.QuestionSet(1);
+            questionSet.SetIdTo(1);
+            questionSet.Name = StaticValues.QuestionSet_ContactInformation;
+            var question = CreateValidEntities.Question(1);
+            question.SetIdTo(1);
+            question.Name = StaticValues.Question_Email;
+            for (int i = 0; i < 7; i++)
+            {
+                transactionAnswers.Add(CreateValidEntities.TransactionAnswer(i + 1));
+                transactionAnswers[i].SetIdTo(i + 1);
+                transactionAnswers[i].Transaction = CreateValidEntities.Transaction(i + 1);
+                transactionAnswers[i].Answer = "jasoncsylvestre@gmail.com".ToLower();
+                transactionAnswers[i].Question = question;
+                transactionAnswers[i].QuestionSet = questionSet;
+            }
+
+            transactionAnswers[2].Answer = "notMyEmail.ucdavis.edu".ToLower();
+            transactionAnswers[4].Answer = "notMyEmail.ucdavis.edu".ToLower();
+            transactionAnswers[5].Question = new Question();
+            transactionAnswers[6].QuestionSet = new QuestionSet();
+            ControllerRecordFakes.FakeTransactionAnswer(0, TransactionAnswerRepository, transactionAnswers);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.AdminLookup("  notmyEmail.ucdavis.edu")
+                .AssertViewRendered()
+                .WithViewData<IEnumerable<Transaction>>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count());
+            #endregion Assert
+        }
+        
+        #endregion AdminLookup Tests
     }
 }

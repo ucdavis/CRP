@@ -150,6 +150,15 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         {
             "~/Transaction/DetailsRefund/5".ShouldMapTo<TransactionController>(a => a.DetailsRefund(5, "", ""), true);
         }
+
+        /// <summary>
+        /// Tests the admin lookup get mapping.
+        /// </summary>
+        [TestMethod]
+        public void TestAdminLookupGetMapping()
+        {
+            "~/Transaction/AdminLookup/?email=jasoncsylvestre@gmail.com".ShouldMapTo<TransactionController>(a => a.AdminLookup("jasoncsylvestre@gmail.com"), true);
+        }
         #endregion Route Tests
 
         #region Misc Tests

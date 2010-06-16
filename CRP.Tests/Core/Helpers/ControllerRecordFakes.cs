@@ -467,7 +467,7 @@ GO
             var helpTopics = new List<HelpTopic>(1);
             helpTopics.Add(CreateValidEntities.HelpTopic(1));
             helpTopics[0].IsActive = false;
-            FakeHelpTopic(0, helpTopicRepository, helpTopics);
+            FakeHelpTopic(count, helpTopicRepository, helpTopics);
         }
 
 
@@ -518,9 +518,8 @@ GO
         /// <param name="transactionRepository">The transaction repository.</param>
         public static void FakeTransaction(int count, IRepository<Transaction> transactionRepository)
         {
-            var transactions = new List<Transaction>(1);
-            transactions.Add(CreateValidEntities.Transaction(1));
-            FakeTransaction(0, transactionRepository, transactions);
+            var transactions = new List<Transaction>();
+            FakeTransaction(count, transactionRepository, transactions);
         }
 
         /// <summary>
@@ -561,6 +560,53 @@ GO
             transactionRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
             transactionRepository.Expect(a => a.Queryable).Return(transactions.AsQueryable()).Repeat.Any();
             transactionRepository.Expect(a => a.GetAll()).Return(transactions).Repeat.Any();
+        }
+
+
+        public static void FakeTransactionAnswer(int count, IRepository<TransactionAnswer> transactionAnswerRepository)
+        {
+            var transactionAnswers = new List<TransactionAnswer>();
+            FakeTransactionAnswer(count, transactionAnswerRepository, transactionAnswers);
+        }
+
+        /// <summary>
+        /// Fakes the transaction answer.
+        /// </summary>
+        /// <param name="count">The count.</param>
+        /// <param name="transactionAnswerRepository">The transaction answer repository.</param>
+        /// <param name="specificTransactionAnswers">The specific transaction answers.</param>
+        public static void FakeTransactionAnswer(int count, IRepository<TransactionAnswer> transactionAnswerRepository, List<TransactionAnswer> specificTransactionAnswers)
+        {
+            var transactionAnswers = new List<TransactionAnswer>();
+            var specificTransactionAnswersCount = 0;
+            if (specificTransactionAnswers != null)
+            {
+                specificTransactionAnswersCount = specificTransactionAnswers.Count;
+                for (int i = 0; i < specificTransactionAnswersCount; i++)
+                {
+                    transactionAnswers.Add(specificTransactionAnswers[i]);
+                }
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                transactionAnswers.Add(CreateValidEntities.TransactionAnswer(i + specificTransactionAnswersCount + 1));
+            }
+
+            var totalCount = transactionAnswers.Count;
+            for (int i = 0; i < totalCount; i++)
+            {
+                transactionAnswers[i].SetIdTo(i + 1);
+                int i1 = i;
+                transactionAnswerRepository
+                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Return(transactionAnswers[i])
+                    .Repeat
+                    .Any();
+            }
+            transactionAnswerRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            transactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
+            transactionAnswerRepository.Expect(a => a.GetAll()).Return(transactionAnswers).Repeat.Any();
         }
     }
 }

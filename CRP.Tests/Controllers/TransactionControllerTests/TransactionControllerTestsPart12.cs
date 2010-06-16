@@ -95,7 +95,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Assert
             Assert.IsNotNull(result);
             Assert.IsNull(result.Transaction);
-            Assert.AreEqual("NotMe@gmail.com", result.Email);
+            Assert.AreEqual("NotMe@gmail.com".ToLower(), result.Email);
             Assert.AreEqual(Transactions[1].TransactionNumber, result.TransactionNumber);
             Assert.AreEqual("Unable to locate order, please check your information and try again.", Controller.Message);
             Assert.IsFalse(result.ShowCreditCardReSubmit);

@@ -109,7 +109,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(16, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(17, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -543,6 +543,29 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Assert
             Assert.AreEqual(0, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method admin lookup contains expected attributes.
+        /// #17
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodAdminLookupContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = ControllerClass;
+            var controllerMethod = controllerClass.GetMethod("AdminLookup");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AdminOnlyAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
         #endregion Controller Method Tests
