@@ -133,7 +133,7 @@
         </div>
         <div id="<%= Html.Encode(StaticValues.Tab_Reports) %>">
         
-            <p>
+            <p style="position:absolute; margin:-2em 0 0 64em;">
                 <%= Html.ActionLink<ReportController>(a => a.Create(Model.Item.Id), "Create") %>
             </p>
         
@@ -181,10 +181,10 @@
                                                         <%=Html.ActionLink<TransactionController>(b => b.Refund(a.Id, Request.QueryString["Refunds-orderBy"], Request.QueryString["Refunds-page"]), "Refund")%>
                                                     <%}%>
                                                     <%else{%>
-                                                        <% using (Html.BeginForm<TransactionController>(x => x.RemoveRefund(a.Id, Request.QueryString["Transactions-orderBy"], Request.QueryString["Transactions-page"])))
-                                                        {%>                                     
-                                                            <%= Html.AntiForgeryToken() %>
-                                                            <a href="javascript:;" class="FormSubmit"><%= "Undo" %></a>                                            
+                                                        <% using (Html.BeginForm<TransactionController>(x => x.RemoveRefund(a.Id, Request.QueryString["Transactions-orderBy"], Request.QueryString["Transactions-page"]), FormMethod.Post, new { @class = "display_inline" }))
+                                                           {%>                                     
+                                                            <%= Html.AntiForgeryToken()%>
+                                                            <a href="javascript:;" class="FormSubmit"><%= "Undo"%></a>                                            
                                                         <%} %>
                                                         | <%=Html.ActionLink<TransactionController>(b => b.DetailsRefund(a.Id, Request.QueryString["Refunds-orderBy"], Request.QueryString["Refunds-page"]), "Details")%>
                                                     <%}%>                                                
