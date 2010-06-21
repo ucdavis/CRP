@@ -67,16 +67,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-657
 EndProject
 Project("{4F174C21-8C12-11D0-8340-0000F80270F8}") = "CRP.DB", "CRP.DB\CRP.DB.dbp", "{56839976-E154-430C-BAC7-881DC42BF754}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.CardSimulator", "CRP.CardSimulator\CRP.CardSimulator.csproj", "{12D7804E-D1C5-4F85-87B9-AE898F43116A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{176A7FB7-9299-4CD0-9962-931C697BB023} = {176A7FB7-9299-4CD0-9962-931C697BB023}
-	EndProjectSection
-EndProject
 Project("{2CFEAB61-6A3B-4EB8-B523-560B4BEEF521}") = "CRP.Deploy", "CRP.Deploy\CRP.Deploy.wdproj", "{1BA8D426-2727-4133-B98F-1D583A913C72}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.caes.ucdavis.edu:8088/tfs
 		SccLocalPath0 = .
@@ -92,12 +87,9 @@ Global
 		SccProjectUniqueName4 = CRP.DB\\CRP.DB.dbp
 		SccProjectName4 = CRP.DB
 		SccLocalPath4 = CRP.DB
-		SccProjectUniqueName5 = CRP.CardSimulator\\CRP.CardSimulator.csproj
-		SccProjectName5 = CRP.CardSimulator
-		SccLocalPath5 = CRP.CardSimulator
-		SccProjectUniqueName6 = CRP.Deploy\\CRP.Deploy.wdproj
-		SccProjectName6 = CRP.Deploy
-		SccLocalPath6 = CRP.Deploy
+		SccProjectUniqueName5 = CRP.Deploy\\CRP.Deploy.wdproj
+		SccProjectName5 = CRP.Deploy
+		SccLocalPath5 = CRP.Deploy
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,9 +114,6 @@ Global
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.Build.0 = Test|Any CPU
-		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12D7804E-D1C5-4F85-87B9-AE898F43116A}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.Build.0 = Release|Any CPU
