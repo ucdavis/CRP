@@ -218,7 +218,8 @@ namespace CRP.Controllers
             var questionSetId = question.QuestionSet.Id;
 
             // Check to make sure the question set hasn't been used yet
-            if (question.QuestionSet.Items.Count > 0)
+            if (question.QuestionSet.Items.Count > 0 && 
+                (question.QuestionSet.CollegeReusable || question.QuestionSet.SystemReusable || question.QuestionSet.UserReusable))
             {
                 Message = "Question cannot be deleted from the question set because it is already being used by an item.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
@@ -229,6 +230,15 @@ namespace CRP.Controllers
             {
                 //ModelState.AddModelError("Question Set", "This is a sytem default question set and cannot be modified.");
                 Message = "Question cannot be deleted from the question set because it is a system default.";
+                return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
+            }
+
+            //Check to make sure there isn't an answer
+            if(Repository.OfType<TransactionAnswer>().Queryable.Where(a => a.Question == question).Any()
+                || Repository.OfType<QuantityAnswer>().Queryable.Where(a => a.Question == question).Any())
+            {
+                Message =
+                    "Question cannot be deleted from the question set because it has an answer associated with it.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
             }
 

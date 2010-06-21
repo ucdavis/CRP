@@ -46,6 +46,8 @@ namespace CRP.Tests.Controllers
         protected List<ItemQuestionSet> ItemQuestionSets { get; set; }
         protected List<Question> Questions { get; set; }
         protected IRepository<Question> QuestionRepository { get; set; }
+        protected IRepository<TransactionAnswer> TransactionAnswerRepository { get; set; }
+        protected IRepository<QuantityAnswer> QuantityAnswerRepository { get; set; }
 
         #region Init
         public QuestionControllerTests()
@@ -65,6 +67,12 @@ namespace CRP.Tests.Controllers
             Validators = new List<Validator>();
             ValidatorRepository = FakeRepository<Validator>();
             Controller.Repository.Expect(a => a.OfType<Validator>()).Return(ValidatorRepository).Repeat.Any();
+
+            TransactionAnswerRepository = FakeRepository<TransactionAnswer>();
+            Controller.Repository.Expect(a => a.OfType<TransactionAnswer>()).Return(TransactionAnswerRepository).Repeat.Any();
+
+            QuantityAnswerRepository = FakeRepository<QuantityAnswer>();
+            Controller.Repository.Expect(a => a.OfType<QuantityAnswer>()).Return(QuantityAnswerRepository).Repeat.Any();
             
             Editors = new List<Editor>();
             ItemQuestionSets = new List<ItemQuestionSet>();
@@ -3294,10 +3302,14 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            var transactionAnswers = new List<TransactionAnswer>();
+            var quantityAnswers = new List<QuantityAnswer>();
+            TransactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
+            QuantityAnswerRepository.Expect(a => a.Queryable).Return(quantityAnswers.AsQueryable()).Repeat.Any();
             SetupDataForDeleteQuestionTests();
             QuestionSets[0].SystemReusable = false;
             QuestionSets[0].CollegeReusable = false;
-            QuestionSets[0].UserReusable = false;
+            QuestionSets[0].UserReusable = true;
             #endregion Arrange
 
             #region Act
@@ -3341,6 +3353,44 @@ namespace CRP.Tests.Controllers
         }
 
 
+        [TestMethod]
+        public void TestDeleteDoesNotSaveIfAnswerAssociatedWithQuestion()
+        {
+            #region Arrange
+
+            Assert.Inconclusive("TODO Test: Question cannot be deleted from the question set because it has an answer associated with it.");
+
+            #endregion Arrange
+
+            #region Act
+
+            #endregion Act
+
+            #region Assert
+
+            #endregion Assert		
+        }
+
+
+        [TestMethod]
+        public void TestDeleteWhenOnlyUsedByItemDoesSave()
+        {
+            #region Arrange
+
+            Assert.Inconclusive("TODO Test: Question cannot be deleted from the question set because it is already being used by an item.");
+
+            #endregion Arrange
+
+            #region Act
+
+            #endregion Act
+
+            #region Assert
+
+            #endregion Assert		
+        }
+
+
         /// <summary>
         /// Tests the delete when valid saves.
         /// </summary>
@@ -3349,6 +3399,10 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            var transactionAnswers = new List<TransactionAnswer>();
+            var quantityAnswers = new List<QuantityAnswer>();
+            TransactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
+            QuantityAnswerRepository.Expect(a => a.Queryable).Return(quantityAnswers.AsQueryable()).Repeat.Any();
             SetupDataForDeleteQuestionTests();
             QuestionSets[0].SystemReusable = false;
             QuestionSets[0].CollegeReusable = false;
