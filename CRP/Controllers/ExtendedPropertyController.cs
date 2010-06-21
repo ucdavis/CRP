@@ -64,7 +64,7 @@ namespace CRP.Controllers
 
             if (itemType != null)
             {
-                MvcValidationAdapter.TransferValidationMessagesTo(ModelState, extendedProperty.ValidationResults());
+                
 
                 // check to make sure it doesn't already have an extended property with the same name already
                 foreach(var ep in itemType.ExtendedProperties)
@@ -76,6 +76,8 @@ namespace CRP.Controllers
                 }
 
                 itemType.AddExtendedProperty(extendedProperty); //Moved to be after the name check above
+
+                MvcValidationAdapter.TransferValidationMessagesTo(ModelState, extendedProperty.ValidationResults());
 
                 if (ModelState.IsValid)
                 {
