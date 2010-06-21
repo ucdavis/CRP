@@ -41,6 +41,7 @@ namespace CRP.Tests.Controllers
         protected IRepository<Unit> UnitRepository { get; set; }
         protected List<Transaction> Transactions { get; set; }
         protected IRepository<Transaction> TransactionRepository { get; set; }
+        protected IRepository<QuestionType> QuestionTypeRepository { get; set; }
 
 
         #region Init
@@ -61,6 +62,9 @@ namespace CRP.Tests.Controllers
             Units = new List<Unit>();
             UnitRepository = FakeRepository<Unit>();
             Controller.Repository.Expect(a => a.OfType<Unit>()).Return(UnitRepository).Repeat.Any();
+
+            QuestionTypeRepository = FakeRepository<QuestionType>();
+            Controller.Repository.Expect(a => a.OfType<QuestionType>()).Return(QuestionTypeRepository).Repeat.Any();
         
             Transactions = new List<Transaction>();
             TransactionRepository = FakeRepository<Transaction>();
@@ -448,6 +452,11 @@ namespace CRP.Tests.Controllers
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             QuestionRepository.Expect(a => a.GetNullableByID(0)).Return(null).Repeat.Any();
             QuestionSetRepository.Expect(a => a.GetNullableByID(0)).Return(null).Repeat.Any();
+
+            var questionTypes = new List<QuestionType>();
+            ControllerRecordFakes.FakeQuestionTypes(questionTypes);
+            QuestionTypeRepository.Expect(a => a.Queryable).Return(questionTypes.AsQueryable()).Repeat.Any();
+
         }
 
         #region mocks

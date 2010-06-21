@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using Rhino.Mocks;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Testing;
@@ -109,7 +110,7 @@ namespace CRP.Tests.Core.Helpers
             {
                 throw new ApplicationException("Didn't set up test correctly");
             }
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 8; i++)
             {
                 entity.Add(CreateValidEntities.QuestionType(i + 1));
                 entity[i].SetIdTo(i + 1 );
@@ -141,6 +142,10 @@ namespace CRP.Tests.Core.Helpers
             entity[6].Name = "Date";
             entity[6].HasOptions = false;
             entity[6].ExtendedProperty = true;
+
+            entity[7].Name = QuestionTypeText.STR_NoAnswer;
+            entity[7].HasOptions = false;
+            entity[7].ExtendedProperty = false;
         }
 
         /// <summary>
