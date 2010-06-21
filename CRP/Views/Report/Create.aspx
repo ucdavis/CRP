@@ -121,7 +121,7 @@
             
             <% foreach(var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order)) {%>
                     
-                    <% foreach (var q in qs.QuestionSet.Questions) {%>
+                    <% foreach (var q in qs.QuestionSet.Questions.Where(a => a.QuestionType != Model.QuestionTypeNoAnswer)) {%>
                         <span id='<%= q.Id %>'>
                         <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                         <label for="Selected" class="indexedControl"><%= Html.Encode(q.Name + " (" + q.QuestionSet.Name + ")" ) %></label>
@@ -137,10 +137,8 @@
 
         <fieldset class="indexedControlContainer">
             <legend>Quantity Level</legend>
-            
-            <% foreach(var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order)) {%>
-                    
-                    <% foreach (var q in qs.QuestionSet.Questions) {%>
+            <% foreach(var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order)) {%>                    
+                    <% foreach (var q in qs.QuestionSet.Questions.Where(a => a.QuestionType != Model.QuestionTypeNoAnswer)) {%>
                         <span id='<%= q.Id %>'>
                         <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                         <label for="Selected" class="indexedControl"><%= Html.Encode(q.Name + " (" + q.QuestionSet.Name + ")")%></label>
@@ -148,10 +146,8 @@
                         <%= Html.Hidden("_QuestionId", q.Id, new { @class = StaticValues.Class_indexedControl })%>
                         <%= Html.Hidden("_QuestionSetId", q.QuestionSet.Id, new {@class = StaticValues.Class_indexedControl}) %>
                         </span>
-                    <% } %>
-                    
+                    <% } %>                    
             <% } %>
-            
         </fieldset>
 
         <fieldset class="indexedControlContainer">

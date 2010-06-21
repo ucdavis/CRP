@@ -250,12 +250,16 @@ namespace CRP.Controllers.ViewModels
     {
         public Item Item { get; set; }
         public ItemReport ItemReport { get; set; }
+        public QuestionType QuestionTypeNoAnswer { get; set; }
 
         public static CreateReportViewModel Create(IRepository repository, Item item)
         {
             Check.Require(repository != null, "Repository is required.");
 
             var viewModel = new CreateReportViewModel() {Item = item};
+            viewModel.QuestionTypeNoAnswer =
+                repository.OfType<QuestionType>().Queryable.Where(a => a.Name == QuestionTypeText.STR_NoAnswer).
+                    FirstOrDefault();
 
             return viewModel;
         }
