@@ -9,7 +9,7 @@
     <h2>ManageUsers</h2>
     
     <iframe id="frame" frameborder="0" src='<%= ConfigurationManager.AppSettings["AdminPageUrl"] %>'
-        scrolling="auto" name="frame" style="width:100%; height:100%;">
+        scrolling="auto" name="frame" style="width:1200px; height:800px;">
     </iframe>
 </asp:Content>
 
