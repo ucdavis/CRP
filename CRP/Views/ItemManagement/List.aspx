@@ -13,7 +13,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <p>
-        <%= Html.ActionLink<ItemManagementController>(a => a.Create(), "Create New") %>
+        <%= Html.ActionLink<ItemManagementController>(a => a.Create(), "Create New") %> |
+        <%= Html.ActionLink<HelpController>(a => a.CreateItem(), "Watch Demo") %>
     </p>
     <p>
         <% using (Html.BeginForm("List","ItemManagement", FormMethod.Get)){%>

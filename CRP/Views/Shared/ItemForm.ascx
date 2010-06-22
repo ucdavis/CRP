@@ -1,4 +1,5 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Controllers.ViewModels.ItemViewModel>" %>
+<%@ Import Namespace="CRP.Controllers" %>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -24,6 +25,7 @@
         <fieldset>
             <legend>Fields</legend>
             <ul>
+            <li><%= Html.ActionLink<HelpController>(a => a.CreateItem(), "Watch Demo") %></li>
             <li><label for="ItemType">Item Type:</label><br />
             <% if (Model.Item == null) {%>
             

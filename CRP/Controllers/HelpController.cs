@@ -122,5 +122,11 @@ namespace CRP.Controllers
 
             return View(helpTopic);
         }
+
+        [AnyoneWithRole]
+        public ActionResult CreateItem()
+        {
+            return View();
+        }
     }
 }
