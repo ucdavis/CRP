@@ -3298,7 +3298,7 @@ namespace CRP.Tests.Controllers
         /// Tests the delete when question set is used by items does not save.
         /// </summary>
         [TestMethod]
-        public void TestDeleteWhenQuestionSetIsUsedByItemsDoesNotSave()
+        public void TestDeleteWhenQuestionSetIsUsedByItemsDoesNotSave1()
         {
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
@@ -3322,6 +3322,66 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("Question cannot be deleted from the question set because it is already being used by an item.", Controller.Message);
             QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
             #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the delete when question set is used by items does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhenQuestionSetIsUsedByItemsDoesNotSave2()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            var transactionAnswers = new List<TransactionAnswer>();
+            var quantityAnswers = new List<QuantityAnswer>();
+            TransactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
+            QuantityAnswerRepository.Expect(a => a.Queryable).Return(quantityAnswers.AsQueryable()).Repeat.Any();
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = true;
+            QuestionSets[0].UserReusable = false;
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question cannot be deleted from the question set because it is already being used by an item.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the delete when question set is used by items does not save.
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteWhenQuestionSetIsUsedByItemsDoesNotSave3()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            var transactionAnswers = new List<TransactionAnswer>();
+            var quantityAnswers = new List<QuantityAnswer>();
+            TransactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
+            QuantityAnswerRepository.Expect(a => a.Queryable).Return(quantityAnswers.AsQueryable()).Repeat.Any();
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = true;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question cannot be deleted from the question set because it is already being used by an item.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
         }
 
         /// <summary>
@@ -3353,40 +3413,106 @@ namespace CRP.Tests.Controllers
         }
 
 
+        /// <summary>
+        /// Tests the delete does not save if answer associated with question.
+        /// </summary>
         [TestMethod]
-        public void TestDeleteDoesNotSaveIfAnswerAssociatedWithQuestion()
+        public void TestDeleteDoesNotSaveIfAnswerAssociatedWithQuestion1()
         {
             #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = true;
+            QuestionSets[0].Items = new List<ItemQuestionSet>();
 
-            Assert.Inconclusive("TODO Test: Question cannot be deleted from the question set because it has an answer associated with it.");
-
+            var transactionAnswers = new List<TransactionAnswer>();
+            var quantityAnswers = new List<QuantityAnswer>();
+            transactionAnswers.Add(CreateValidEntities.TransactionAnswer(1));
+            transactionAnswers[0].Answer = "Answered";
+            transactionAnswers[0].Question = Questions[0];
+            TransactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
+            QuantityAnswerRepository.Expect(a => a.Queryable).Return(quantityAnswers.AsQueryable()).Repeat.Any();
             #endregion Arrange
 
             #region Act
-
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
             #endregion Act
 
             #region Assert
+            Assert.AreEqual("Question cannot be deleted from the question set because it has an answer associated with it.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert			
+        }
 
-            #endregion Assert		
+        /// <summary>
+        /// Tests the delete does not save if answer associated with question.
+        /// </summary>
+        [TestMethod]
+        public void TestDeleteDoesNotSaveIfAnswerAssociatedWithQuestion2()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = true;
+            QuestionSets[0].Items = new List<ItemQuestionSet>();
+
+            var transactionAnswers = new List<TransactionAnswer>();
+            var quantityAnswers = new List<QuantityAnswer>();
+            quantityAnswers.Add(CreateValidEntities.QuantityAnswer(1));
+            quantityAnswers[0].Answer = "Answered";
+            quantityAnswers[0].Question = Questions[0];
+            TransactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
+            QuantityAnswerRepository.Expect(a => a.Queryable).Return(quantityAnswers.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Question cannot be deleted from the question set because it has an answer associated with it.", Controller.Message);
+            QuestionRepository.AssertWasNotCalled(a => a.Remove(Arg<Question>.Is.Anything));
+            #endregion Assert
         }
 
 
+        /// <summary>
+        /// Tests the delete when only used by item does save.
+        /// </summary>
         [TestMethod]
         public void TestDeleteWhenOnlyUsedByItemDoesSave()
         {
             #region Arrange
-
-            Assert.Inconclusive("TODO Test: Question cannot be deleted from the question set because it is already being used by an item.");
-
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            var transactionAnswers = new List<TransactionAnswer>();
+            var quantityAnswers = new List<QuantityAnswer>();
+            TransactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
+            QuantityAnswerRepository.Expect(a => a.Queryable).Return(quantityAnswers.AsQueryable()).Repeat.Any();
+            SetupDataForDeleteQuestionTests();
+            QuestionSets[0].SystemReusable = false;
+            QuestionSets[0].CollegeReusable = false;
+            QuestionSets[0].UserReusable = false;           
+            QuestionSets[0].Items = new List<ItemQuestionSet>();
+            QuestionSets[0].Items.Add(CreateValidEntities.ItemQuestionSet(1));
             #endregion Arrange
 
             #region Act
-
+            Controller.Delete(1)
+                .AssertActionRedirect()
+                .ToAction<QuestionSetController>(a => a.Edit(1));
             #endregion Act
 
             #region Assert
-
+            Assert.AreEqual("Question has been removed successfully.", Controller.Message);
+            QuestionRepository.AssertWasCalled(a => a.Remove(Questions[0]));
             #endregion Assert		
         }
 
