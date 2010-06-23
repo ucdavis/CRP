@@ -35,7 +35,11 @@
                                 {
                                     col.Template(x =>
                                                 { %>
-                                                    <%= Html.ActionLink<HelpController>(a => a.Details(x.Id),"View")%> 
+                                                    <% if (x.IsVideo){%>
+                                                        <%= Html.ActionLink<HelpController>(a => a.WatchVideo(x.Id),"Watch")%>
+                                                    <%}else{%>
+                                                        <%= Html.ActionLink<HelpController>(a => a.Details(x.Id),"View")%>
+                                                    <%}%>                                    
                                                     <% if (Model.IsUserAdmin){%>|
                                                     <%=Html.ActionLink<HelpController>(a => a.Edit(x.Id), "Edit")%> 
                                                     <%}%>

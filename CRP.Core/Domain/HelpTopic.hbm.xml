@@ -13,6 +13,8 @@
     <property name="AvailableToPublic"/>
     <property name="IsActive"/>
     <property name="NumberOfReads"/>
+    <property name="IsVideo"/>
+    <property name="VideoName" />
     
   </class>
 </hibernate-mapping>

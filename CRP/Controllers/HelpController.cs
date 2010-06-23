@@ -63,6 +63,8 @@ namespace CRP.Controllers
             topic.AvailableToPublic = helpTopic.AvailableToPublic;
             topic.IsActive = helpTopic.IsActive;
             topic.NumberOfReads = helpTopic.NumberOfReads;
+            topic.IsVideo = helpTopic.IsVideo;
+            topic.VideoName = helpTopic.VideoName;
 
             topic.TransferValidationMessagesTo(ModelState);
 
@@ -110,6 +112,8 @@ namespace CRP.Controllers
             topic.AvailableToPublic = helpTopic.AvailableToPublic;
             topic.IsActive = helpTopic.IsActive;
             topic.NumberOfReads = helpTopic.NumberOfReads;
+            topic.IsVideo = helpTopic.IsVideo;
+            topic.VideoName = helpTopic.VideoName;
             topic.TransferValidationMessagesTo(ModelState);
 
             if (ModelState.IsValid)
@@ -127,6 +131,18 @@ namespace CRP.Controllers
         public ActionResult CreateItem()
         {
             return View();
+        }
+
+        public ActionResult WatchVideo(int id)
+        {
+            var helpTopic = Repository.OfType<HelpTopic>().GetNullableByID(id);
+            if (helpTopic == null)
+            {
+                return this.RedirectToAction(a => a.Index());
+            }
+            helpTopic.NumberOfReads++;
+            Repository.OfType<HelpTopic>().EnsurePersistent(helpTopic);
+            return View(helpTopic);
         }
     }
 }

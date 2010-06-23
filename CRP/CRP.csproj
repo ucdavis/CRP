@@ -661,6 +661,7 @@
     <Content Include="Views\Help\Details.aspx" />
     <Content Include="Views\Help\Edit.aspx" />
     <Content Include="Views\Help\Index.aspx" />
+    <Content Include="Views\Help\WatchVideo.aspx" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Shared\HelpForm.ascx" />
     <Content Include="Views\Shared\TemplateInstructions.ascx" />

@@ -32,6 +32,7 @@
 	            external_image_list_url: "js/image_list.js",
 	            media_external_list_url: "js/media_list.js"
 	        });
+	        $("input[name*=VideoName]").bt('Only name, no extension or path. <br>Video must already exist on hosted server.');
 	    });
 	</script>
 
@@ -58,6 +59,16 @@
                 <label for="AvailableToPublic">Available To Public:</label>
                 <%= Html.CheckBox("AvailableToPublic", Model != null ? Model.AvailableToPublic : false) %>
                 <%= Html.ValidationMessage("AvailableToPublic") %>
+            </li>
+            <li>
+                <label for="IsVideo">Video:</label>
+                <%= Html.CheckBox("IsVideo", Model != null ? Model.IsVideo : false)%>
+                <%= Html.ValidationMessage("IsVideo")%>
+            </li>
+            <li>
+                <label for="VideoName">Name of video:</label>
+                <%= Html.TextBox("VideoName")%>
+                <%= Html.ValidationMessage("VideoName")%>
             </li>
             <li>
                 <label for="NumberOfReads">Number Of Reads:</label>
