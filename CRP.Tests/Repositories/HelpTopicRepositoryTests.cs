@@ -604,6 +604,333 @@ namespace CRP.Tests.Repositories
 
         #endregion NumberOfReads Tests
 
+        #region IsVideo Tests
+
+        /// <summary>
+        /// Tests the IsVideo is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsVideoIsFalseSaves()
+        {
+            #region Arrange
+
+            HelpTopic helpTopic = GetValid(9);
+            helpTopic.IsVideo = false;
+
+            #endregion Arrange
+
+            #region Act
+
+            HelpTopicRepository.DbContext.BeginTransaction();
+            HelpTopicRepository.EnsurePersistent(helpTopic);
+            HelpTopicRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsFalse(helpTopic.IsVideo);
+            Assert.IsFalse(helpTopic.IsTransient());
+            Assert.IsTrue(helpTopic.IsValid());
+
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the IsVideo is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestIsVideoIsTrueSaves()
+        {
+            #region Arrange
+
+            var helpTopic = GetValid(9);
+            helpTopic.IsVideo = true;
+            helpTopic.VideoName = "x";
+            #endregion Arrange
+
+            #region Act
+
+            HelpTopicRepository.DbContext.BeginTransaction();
+            HelpTopicRepository.EnsurePersistent(helpTopic);
+            HelpTopicRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsTrue(helpTopic.IsVideo);
+            Assert.IsFalse(helpTopic.IsTransient());
+            Assert.IsTrue(helpTopic.IsValid());
+
+            #endregion Assert
+        }
+
+        #endregion IsVideo Tests   
+
+        #region VideoName Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the VideoName with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestVideoNameWithTooLongValueDoesNotSave()
+        {
+            HelpTopic helpTopic = null;
+            try
+            {
+                #region Arrange
+                helpTopic = GetValid(9);
+                helpTopic.VideoName = "x".RepeatTimes((50 + 1));
+                #endregion Arrange
+
+                #region Act
+                HelpTopicRepository.DbContext.BeginTransaction();
+                HelpTopicRepository.EnsurePersistent(helpTopic);
+                HelpTopicRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(helpTopic);
+                Assert.AreEqual(50 + 1, helpTopic.VideoName.Length);
+                var results = helpTopic.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("VideoName: length must be between 0 and 50");
+                Assert.IsTrue(helpTopic.IsTransient());
+                Assert.IsFalse(helpTopic.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the VideoName with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestVideoNameWithNullValueSaves()
+        {
+            #region Arrange
+            var helpTopic = GetValid(9);
+            helpTopic.VideoName = null;
+            #endregion Arrange
+
+            #region Act
+            HelpTopicRepository.DbContext.BeginTransaction();
+            HelpTopicRepository.EnsurePersistent(helpTopic);
+            HelpTopicRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(helpTopic.IsTransient());
+            Assert.IsTrue(helpTopic.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the VideoName with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestVideoNameWithEmptyStringSaves()
+        {
+            #region Arrange
+            var helpTopic = GetValid(9);
+            helpTopic.VideoName = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            HelpTopicRepository.DbContext.BeginTransaction();
+            HelpTopicRepository.EnsurePersistent(helpTopic);
+            HelpTopicRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(helpTopic.IsTransient());
+            Assert.IsTrue(helpTopic.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the VideoName with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestVideoNameWithOneSpaceSaves()
+        {
+            #region Arrange
+            var helpTopic = GetValid(9);
+            helpTopic.VideoName = " ";
+            #endregion Arrange
+
+            #region Act
+            HelpTopicRepository.DbContext.BeginTransaction();
+            HelpTopicRepository.EnsurePersistent(helpTopic);
+            HelpTopicRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(helpTopic.IsTransient());
+            Assert.IsTrue(helpTopic.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the VideoName with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestVideoNameWithOneCharacterSaves()
+        {
+            #region Arrange
+            var helpTopic = GetValid(9);
+            helpTopic.VideoName = "x";
+            #endregion Arrange
+
+            #region Act
+            HelpTopicRepository.DbContext.BeginTransaction();
+            HelpTopicRepository.EnsurePersistent(helpTopic);
+            HelpTopicRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(helpTopic.IsTransient());
+            Assert.IsTrue(helpTopic.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the VideoName with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestVideoNameWithLongValueSaves()
+        {
+            #region Arrange
+            var helpTopic = GetValid(9);
+            helpTopic.VideoName = "x".RepeatTimes(50);
+            #endregion Arrange
+
+            #region Act
+            HelpTopicRepository.DbContext.BeginTransaction();
+            HelpTopicRepository.EnsurePersistent(helpTopic);
+            HelpTopicRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(50, helpTopic.VideoName.Length);
+            Assert.IsFalse(helpTopic.IsTransient());
+            Assert.IsTrue(helpTopic.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion VideoName Tests
+
+        #region IsVideoNeedsVideoName Tests
+
+
+        /// <summary>
+        /// Tests the is video needs video name prevents save when is video is true and video name is null.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestIsVideoNeedsVideoNamePreventsSaveWhenIsVideoIsTrueAndVideoNameIsNull()
+        {
+            HelpTopic helpTopic = null;
+            try
+            {
+                #region Arrange
+                helpTopic = GetValid(9);
+                helpTopic.IsVideo = true;
+                helpTopic.VideoName = null;
+                #endregion Arrange
+
+                #region Act
+                HelpTopicRepository.DbContext.BeginTransaction();
+                HelpTopicRepository.EnsurePersistent(helpTopic);
+                HelpTopicRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(helpTopic);
+                var results = helpTopic.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("IsVideoNeedsVideoName: VideoName required when IsVideo selected");
+                Assert.IsTrue(helpTopic.IsTransient());
+                Assert.IsFalse(helpTopic.IsValid());
+                throw;
+            }	
+        }
+
+        /// <summary>
+        /// Tests the is video needs video name prevents save when is video is true and video name is empty.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestIsVideoNeedsVideoNamePreventsSaveWhenIsVideoIsTrueAndVideoNameIsEmpty()
+        {
+            HelpTopic helpTopic = null;
+            try
+            {
+                #region Arrange
+                helpTopic = GetValid(9);
+                helpTopic.IsVideo = true;
+                helpTopic.VideoName = string.Empty;
+                #endregion Arrange
+
+                #region Act
+                HelpTopicRepository.DbContext.BeginTransaction();
+                HelpTopicRepository.EnsurePersistent(helpTopic);
+                HelpTopicRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(helpTopic);
+                var results = helpTopic.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("IsVideoNeedsVideoName: VideoName required when IsVideo selected");
+                Assert.IsTrue(helpTopic.IsTransient());
+                Assert.IsFalse(helpTopic.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the is video needs video name prevents save when is video is true and video name is spaces only.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestIsVideoNeedsVideoNamePreventsSaveWhenIsVideoIsTrueAndVideoNameIsSpacesOnly()
+        {
+            HelpTopic helpTopic = null;
+            try
+            {
+                #region Arrange
+                helpTopic = GetValid(9);
+                helpTopic.IsVideo = true;
+                helpTopic.VideoName = null;
+                #endregion Arrange
+
+                #region Act
+                HelpTopicRepository.DbContext.BeginTransaction();
+                HelpTopicRepository.EnsurePersistent(helpTopic);
+                HelpTopicRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(helpTopic);
+                var results = helpTopic.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("IsVideoNeedsVideoName: VideoName required when IsVideo selected");
+                Assert.IsTrue(helpTopic.IsTransient());
+                Assert.IsFalse(helpTopic.IsValid());
+                throw;
+            }
+        }
+        
+
+        #endregion IsVideoNeedsVideoName Tests
+
         #region Constructor Tests
 
         /// <summary>
@@ -643,12 +970,19 @@ namespace CRP.Tests.Repositories
                 "[System.Xml.Serialization.XmlIgnoreAttribute()]"
             }));
             expectedFields.Add(new NameAndType("IsActive", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("IsVideo", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("IsVideoNeedsVideoName", "System.Boolean", new List<string>{
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"VideoName required when IsVideo selected\")]"
+            }));
             expectedFields.Add(new NameAndType("NumberOfReads", "System.Int32", new List<string>()));
             expectedFields.Add(new NameAndType("Question", "System.String", new List<string>
             {
                  "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
             }));
-
+            expectedFields.Add(new NameAndType("VideoName", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
+            }));
             #endregion Arrange
 
             AttributeAndFieldValidation.ValidateFieldsAndAttributes(expectedFields, typeof(HelpTopic));

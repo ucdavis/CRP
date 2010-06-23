@@ -127,6 +127,10 @@ namespace CRP.Controllers
             return View(helpTopic);
         }
 
+        /// <summary>
+        /// This is only for running the Create Item Demo video. There are links to this on the pages related to creating items.
+        /// </summary>
+        /// <returns></returns>
         [AnyoneWithRole]
         public ActionResult CreateItem()
         {

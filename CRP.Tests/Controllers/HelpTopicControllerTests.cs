@@ -120,6 +120,26 @@ namespace CRP.Tests.Controllers
             "~/Help/Edit/".ShouldMapTo<HelpController>(a => a.Edit(5, new HelpTopic()), true);
         }
 
+        /// <summary>
+        /// Tests the create item mapping.
+        /// 7
+        /// </summary>
+        [TestMethod]
+        public void TestCreateItemMapping()
+        {
+            "~/Help/CreateItem/".ShouldMapTo<HelpController>(a => a.CreateItem());
+        }
+
+        /// <summary>
+        /// Tests the watch video mapping.
+        /// 8
+        /// </summary>
+        [TestMethod]
+        public void TestWatchVideoMapping()
+        {
+            "~/Help/WatchVideo/5".ShouldMapTo<HelpController>(a => a.WatchVideo(5));
+        }
+
         #endregion Mapping Tests
 
         #region Index Tests
@@ -496,6 +516,74 @@ namespace CRP.Tests.Controllers
         }
         #endregion Edit Tests
 
+        #region CreateItem Tests
+
+        /// <summary>
+        /// Tests the create item returns view.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateItemReturnsView()
+        {
+            #region Arrange
+            //Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.CreateItem()
+                .AssertViewRendered();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            #endregion Assert				
+        }
+        #endregion CreateItem Tests
+
+        #region WatchVideo Tests
+
+        /// <summary>
+        /// Tests the watch video redirects to index if id not found.
+        /// </summary>
+        [TestMethod]
+        public void TestWatchVideoRedirectsToIndexIfIdNotFound()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForTests();
+            #endregion Arrange
+
+            #region Act/Assert
+            Controller.WatchVideo(7)
+                .AssertActionRedirect()
+                .ToAction<HelpController>(a => a.Index());
+            #endregion Act/Assert		
+        }
+
+
+        /// <summary>
+        /// Tests the watch video returns view with expected data when id found.
+        /// </summary>
+        [TestMethod]
+        public void TestWatchVideoReturnsViewWithExpectedDataWhenIdFound()
+        {
+            #region Arrange
+            Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
+            SetupDataForTests();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.WatchVideo(6)
+                .AssertViewRendered()
+                .WithViewData<HelpTopic>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Question6", result.Question);
+            #endregion Assert			
+        }
+
+        #endregion WatchVideo Tests
 
         #region Reflection Tests
 
@@ -594,7 +682,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(6, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(8, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -828,6 +916,50 @@ namespace CRP.Tests.Controllers
             #endregion Assert
         }
 
+        /// <summary>
+        /// Tests the controller method create item contains expected attributes.
+        /// 7
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodCreateItemContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("CreateItem");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AnyoneWithRoleAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AnyoneWithRoleAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+
+        /// <summary>
+        /// Tests the controller method watch video contains expected attributes.
+        /// 8
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodWatchVideoContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("WatchVideo");
+            #endregion Arrange
+
+            #region Act
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
         #endregion Controller Method Tests
 
         #endregion Reflection Tests
