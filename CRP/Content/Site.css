@@ -87,6 +87,8 @@ fieldset ul li label {margin-bottom:0em;}
 /* .reg_btn h3:hover{background-color:#FFF; color:#0D548A;} */
 .reg_btn h3:hover{font: 22px/30px 'QuicksandBold', Arial, sans-serif; border:3px solid #000;}
 
+/* calendar popup month/year */
+.ui-datepicker-title{color:Blue;}
 
 /* client side validation messages */
 .failed
