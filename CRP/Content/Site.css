@@ -99,6 +99,11 @@ fieldset ul li label {margin-bottom:0em;}
 	border: none;    
 	color:inherit;
 }
+.field-validation-error
+{
+	border: 1px solid #ff0000;    
+	color:Red;
+}
 
 
 
