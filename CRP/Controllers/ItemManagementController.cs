@@ -108,7 +108,10 @@ namespace CRP.Controllers
                 var reader = new BinaryReader(file.InputStream);
                 item.Image = reader.ReadBytes(file.ContentLength);
             }
-
+            if (item.Image == null || item.Image.Length <= 0)
+            {
+                ModelState.AddModelError("Image", @"An image is required.");
+            }
             // process the extended properties and tags
             //item = PopulateObject.Item(Repository, item, extendedProperties, tags);
             item = Copiers.PopulateItem(Repository, item, extendedProperties, tags, mapLink);
@@ -134,16 +137,19 @@ namespace CRP.Controllers
                 item.AddTransactionQuestionSet(questionSet);
             }
 
-            // add the default question sets
-            foreach(var qs in item.ItemType.QuestionSets)
+            if (item.ItemType != null)
             {
-                if (qs.TransactionLevel)
+                // add the default question sets
+                foreach (var qs in item.ItemType.QuestionSets)
                 {
-                    item.AddTransactionQuestionSet(qs.QuestionSet);
-                }
-                else
-                {
-                    item.AddQuantityQuestionSet(qs.QuestionSet);
+                    if (qs.TransactionLevel)
+                    {
+                        item.AddTransactionQuestionSet(qs.QuestionSet);
+                    }
+                    else
+                    {
+                        item.AddQuantityQuestionSet(qs.QuestionSet);
+                    }
                 }
             }
 
@@ -238,6 +244,10 @@ namespace CRP.Controllers
                 var file = Request.Files[0];
                 var reader = new BinaryReader(file.InputStream);
                 destinationItem.Image = reader.ReadBytes(file.ContentLength);
+            }
+            if(destinationItem.Image == null ||destinationItem.Image.Length <=0)
+            {
+                ModelState.AddModelError("Image", @"An image is required.");
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destinationItem.ValidationResults());

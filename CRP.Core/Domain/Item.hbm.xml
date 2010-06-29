@@ -27,6 +27,8 @@
     <property name="MapLink" column="MapLink" />
     <property name="LinkLink" column="LinkLink" />
     <property name="CheckPaymentInstructions" column="CheckPaymentInstructions" />
+    <property name="AllowCheckPayment" column="AllowCheckPayment"/>
+    <property name="AllowCreditPayment" column="AllowCreditPayment" />
 
     <bag name="Templates" table="Templates" cascade="all-delete-orphan" inverse="true" >
       <key column="ItemId" />

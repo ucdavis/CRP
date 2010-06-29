@@ -144,7 +144,7 @@ begin
 	insert into QuestionXValidator (QuestionId, ValidatorId) values (@qid, @phonenumber)
 
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order])
-	VALUES ('Email Address', @tbId, @qsid, 5)		
+	VALUES ('Email Address', @tbId, @qsid, 9)		
 	
 	set @qid = (select max(id) from questions where name = 'Email Address')
 	insert into QuestionXValidator (QuestionId, ValidatorId) values (@qid, @required)

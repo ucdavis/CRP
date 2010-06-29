@@ -21,12 +21,15 @@ namespace CRP.Controllers.Helpers
             dest.CheckPaymentInstructions = src.CheckPaymentInstructions;
             dest.CostPerItem = src.CostPerItem;
             dest.Quantity = src.Quantity;
+            dest.QuantityName = src.QuantityName; //Was missing this JCS 2010/06/29
             dest.Expiration = src.Expiration;
             dest.Link = src.Link;
             dest.Available = src.Available;
             dest.Private = src.Private;
             dest.Unit = src.Unit;
             dest.RestrictedKey = src.RestrictedKey;
+            dest.AllowCheckPayment = src.AllowCheckPayment;
+            dest.AllowCreditPayment = src.AllowCreditPayment;
 
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 

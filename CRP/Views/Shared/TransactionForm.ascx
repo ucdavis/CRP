@@ -38,11 +38,13 @@
     <div class="QuantityContainer">
     <fieldset>
     <legend><%= Html.Encode(Model.Item.QuantityName)%> <span class="quantityIndex"><%= Html.Encode(i + 1) %></span> </legend>
+        <%var questionSetCount = Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count(); %>
         <% foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
            { %> 
-
+                <%if (questionSetCount > 1){%>
                 <fieldset>
-                <legend><%= Html.Encode(qs.QuestionSet.Name)%> <span class="quantityIndex"><%= Html.Encode(i + 1) %></span> </legend>
+                <legend><%=Html.Encode(qs.QuestionSet.Name)%> <span class="quantityIndex"><%=Html.Encode(i + 1)%></span> </legend>
+                <%}%>
                 <ul>
                 <% foreach (var q in qs.QuestionSet.Questions) {
     int i1 = i;
@@ -53,7 +55,9 @@
                 
                 <% } %>
             </ul>    
+            <%if (questionSetCount > 1){%>
             </fieldset>
+            <%}%>
 
 
         <% } %> <!-- End of foreach loop -->

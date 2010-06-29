@@ -41,6 +41,9 @@ namespace CRP.Core.Domain
             ItemCoupons = false;
             TransactionQuestionSet = false;
             QuantityQuestionSet = false;
+
+            AllowCheckPayment = true;
+            AllowCreditPayment = true;
         }
 
         [Required]
@@ -59,6 +62,9 @@ namespace CRP.Core.Domain
         public virtual DateTime? Expiration { get; set; }
         public virtual byte[] Image { get; set; }
         public virtual string Link { get; set; }
+
+        public virtual bool AllowCheckPayment { get; set; }
+        public virtual bool AllowCreditPayment { get; set; }
 
         [NotNull]
         public virtual ItemType ItemType { get; set; }
@@ -343,6 +349,19 @@ namespace CRP.Core.Domain
         private bool TransactionQuestionSet { get; set; }
         [AssertTrue(Message = "Quantity Question is already added")]
         private bool QuantityQuestionSet { get; set; }
+
+        [AssertTrue(Message = "Must check at least one payment method")]
+        private bool AllowedPaymentMethods
+        {
+            get
+            {
+                if(AllowCheckPayment == false && AllowCreditPayment == false)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

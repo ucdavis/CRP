@@ -72,8 +72,12 @@
                 <tr>
                     <td colspan="4">
                         <label for="paymentType">Payment Method: </label>
-                        <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.CreditCard %>" "<%= Model.CreditPayment ? "checked" : string.Empty %>" /><label for="credit">Credit Card</label>
-                        <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.Check %>" "<%= Model.CheckPayment ? "checked" : string.Empty %>" /><label for="check">Check</label>
+                        <%if (Model.Item.AllowCreditPayment){%>
+                            <input type="radio" id="paymentType" name="paymentType" class="required" value="<%=StaticValues.CreditCard%>" "<%=Model.CreditPayment ? "checked" : string.Empty%>" /><label for="credit">Credit Card</label>
+                        <%}%>
+                        <%if (Model.Item.AllowCheckPayment){%>
+                            <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.Check %>" "<%= Model.CheckPayment ? "checked" : string.Empty %>" /><label for="check">Check</label>
+                        <%}%>
                     </td>
                 </tr>
                 <% if (!String.IsNullOrEmpty(Model.Item.RestrictedKey)) { %>
