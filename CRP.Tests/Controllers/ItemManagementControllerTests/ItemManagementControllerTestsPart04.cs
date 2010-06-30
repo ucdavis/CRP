@@ -146,9 +146,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         /// Tests the create with no image saves.
         /// </summary>
         [TestMethod]
-        public void TestCreateWithNoImageSaves()
+        public void TestCreateWithNoImageDoesNotSave() //Change request that all items have images (so easier to click by users)
         {
             SetupDataForCreateTests();
+            ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             Controller.ControllerContext.HttpContext = new MockHttpContext(0, false);
 
             var epp = new ExtendedPropertyParameter[2];
@@ -162,13 +163,17 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             const string mapLinkText = "<iframe width=\"425\" height=\"350\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=davis+ca&amp;sll=37.0625,-95.677068&amp;sspn=51.887315,79.013672&amp;ie=UTF8&amp;hq=&amp;hnear=Davis,+Yolo,+California&amp;ll=38.544906,-121.740517&amp;spn=0.00158,0.002411&amp;t=h&amp;z=19&amp;output=embed\"></iframe><br /><small><a href=\"http://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=davis+ca&amp;sll=37.0625,-95.677068&amp;sspn=51.887315,79.013672&amp;ie=UTF8&amp;hq=&amp;hnear=Davis,+Yolo,+California&amp;ll=38.544906,-121.740517&amp;spn=0.00158,0.002411&amp;t=h&amp;z=19\" style=\"color:#0000FF;text-align:left\">View Larger Map</a></small>";
 
             Controller.Create(Items[0], epp, new[] { "Name1" }, mapLinkText)
-                .AssertActionRedirect()
-                .ToAction<ItemManagementController>(a => a.List(null));
-
-            ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
+                .AssertViewRendered()
+                .WithViewData<ItemViewModel>();
 
             Assert.IsNull(Items[0].Image);
+            ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
+            Assert.AreNotEqual("Item has been created successfully.", Controller.Message);
+            Assert.IsFalse(Controller.ModelState.IsValid);
+            Controller.ModelState.AssertErrorsAre("An image is required.");
         }
+
+
 
         /// <summary>
         /// Tests the create with no extended properties saves.

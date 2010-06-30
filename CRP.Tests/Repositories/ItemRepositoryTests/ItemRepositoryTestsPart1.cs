@@ -108,6 +108,12 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             #region Arrange
             List<AttributeList> attributeList;
             var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("AllowCheckPayment", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("AllowCreditPayment", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("AllowedPaymentMethods", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Must check at least one payment method\")]"
+            }));
             expectedFields.Add(new NameAndType("Available", "System.Boolean", new List<string>()));
             attributeList = new List<AttributeList>();
             attributeList.Add(new AttributeList("[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(", new List<string>

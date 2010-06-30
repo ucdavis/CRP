@@ -213,5 +213,187 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
 
         #endregion Valid Tests
         #endregion QuantityQuestionSet Tests
+
+        #region AllowCheckPayment Tests
+
+        /// <summary>
+        /// Tests the AllowCheckPayment is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestAllowCheckPaymentIsFalseSaves()
+        {
+            #region Arrange
+            Item item = GetValid(9);
+            item.AllowCheckPayment = false;            
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.AllowCheckPayment);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the AllowCheckPayment is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestAllowCheckPaymentIsTrueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.AllowCheckPayment = true;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(item.AllowCheckPayment);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        #endregion AllowCheckPayment Tests
+
+        #region AllowCreditPayment Tests
+
+        /// <summary>
+        /// Tests the AllowCreditPayment is false saves.
+        /// </summary>
+        [TestMethod]
+        public void TestAllowCreditPaymentIsFalseSaves()
+        {
+            #region Arrange
+
+            Item item = GetValid(9);
+            item.AllowCreditPayment = false;
+
+            #endregion Arrange
+
+            #region Act
+
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsFalse(item.AllowCreditPayment);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the AllowCreditPayment is true saves.
+        /// </summary>
+        [TestMethod]
+        public void TestAllowCreditPaymentIsTrueSaves()
+        {
+            #region Arrange
+
+            var item = GetValid(9);
+            item.AllowCreditPayment = true;
+
+            #endregion Arrange
+
+            #region Act
+
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+
+            #endregion Act
+
+            #region Assert
+
+            Assert.IsTrue(item.AllowCreditPayment);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+
+            #endregion Assert
+        }
+
+        #endregion AllowCreditPayment Tests
+
+        #region AllowedPaymentMethods Tests
+
+        /// <summary>
+        /// Tests the allowed payment methods allows save with default values.
+        /// </summary>
+        [TestMethod]
+        public void TestAllowedPaymentMethodsAllowsSaveWithDefaultValues()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(item.AllowCreditPayment);
+            Assert.IsTrue(item.AllowCheckPayment);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the allowed payment methods prevents save with both payment method values false.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestAllowedPaymentMethodsPreventsSaveWithBothPaymentMethodValuesFalse()
+        {
+            Item item = null;
+            try
+            {
+                #region Arrange
+                item = GetValid(9);
+                item.AllowCreditPayment = false;
+                item.AllowCheckPayment = false;
+                #endregion Arrange
+
+                #region Act
+                ItemRepository.DbContext.BeginTransaction();
+                ItemRepository.EnsurePersistent(item);
+                ItemRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(item);
+                Assert.IsFalse(item.AllowCreditPayment);
+                Assert.IsFalse(item.AllowCheckPayment);
+                var results = item.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("AllowedPaymentMethods: Must check at least one payment method");
+                Assert.IsTrue(item.IsTransient());
+                Assert.IsFalse(item.IsValid());
+                throw;
+            }
+        }
+
+
+
+        #endregion AllowedPaymentMethods Tests
+
     }
 }
