@@ -200,6 +200,11 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             }));
             expectedFields.Add(new NameAndType("Sold", "System.Int32", new List<string>()));
             expectedFields.Add(new NameAndType("SoldAndPaidQuantity", "System.Int32", new List<string>()));
+            expectedFields.Add(new NameAndType("Summary", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)750)]", 
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+            }));
             expectedFields.Add(new NameAndType("Tags", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Tag]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"

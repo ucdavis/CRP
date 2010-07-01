@@ -156,6 +156,7 @@ namespace CRP.Tests.Core.Helpers
             rtValue.Private = false;
             rtValue.Available = true;
             rtValue.CostPerItem = 20.00m;
+            rtValue.Summary = "Summary" + counter.Extra();
             rtValue.CheckPaymentInstructions =
                 "<h1>Thank you for your purchase!</h1>  <h2>Please mail your payment to:</h2>  <address>John Zoidberg<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 94534 <br /></address>";
             
