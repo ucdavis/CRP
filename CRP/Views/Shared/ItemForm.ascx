@@ -13,6 +13,7 @@
                 $(item).datepicker();
             });
             $("#file").bt('The maximum picture size is 4 meg. A free online resize tool can be found at: http://www.picresize.com/');
+            $("#Item_Summary").bt('A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters.');
         });
     </script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>
@@ -50,6 +51,11 @@
             <label for="Item.Unit">Unit:</label><br />
                 <%= this.Select("Item.Unit").Options(Model.Units, x=>x.Id, x=>x.FullName)
                         .Selected(Model.Item != null ? Model.Item.Unit.Id : 0)%>
+            </li>
+            <li>
+                <label for="Item.Summary">Summary:</label><br />
+                <%= Html.TextArea("Item.Summary", new { style="height:175px; width: 750px" })%>
+                <%= Html.ValidationMessage("Item.Summary", "*")%> 
             </li>
             <li>
                 <label for="Item.Description">Description:</label><br />

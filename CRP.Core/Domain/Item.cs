@@ -49,6 +49,11 @@ namespace CRP.Core.Domain
         [Required]
         [Length(100)]
         public virtual string Name { get; set; }
+
+        [Required]
+        [Length(750)]
+        public virtual string Summary { get; set; }
+
         public virtual string Description { get; set; }
         [RangeDouble(Min = 0.00, Max = 922337203685477.00, Message = "must be zero or more")]
         public virtual decimal CostPerItem { get; set; }

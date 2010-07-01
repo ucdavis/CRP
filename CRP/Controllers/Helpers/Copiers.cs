@@ -30,6 +30,7 @@ namespace CRP.Controllers.Helpers
             dest.RestrictedKey = src.RestrictedKey;
             dest.AllowCheckPayment = src.AllowCheckPayment;
             dest.AllowCreditPayment = src.AllowCreditPayment;
+            dest.Summary = src.Summary;
 
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 

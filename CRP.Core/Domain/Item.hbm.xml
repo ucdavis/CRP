@@ -9,6 +9,7 @@
     </id>
 
     <property name="Name" column="Name" />
+    <property name="Summary" column="Summary" />
     <property name="Description" column="Description" />
     <property name="CostPerItem" column="CostPerItem" />
     <property name="Quantity" column="Quantity" />
