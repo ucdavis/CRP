@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.ViewModels;
@@ -23,7 +24,20 @@ namespace CRP.Controllers
             }
             else
             {
-                viewModel.Items = viewModel.Items.Where(a => a.Tags.Contains(existingTag));    
+                var items = new List<Item>();
+                //viewModel.Items = viewModel.Items.Where(a => a.Tags.Contains(existingTag));
+                foreach (var item in viewModel.Items)
+                {
+                    foreach (var itemtag in item.Tags)
+                    {
+                        if(itemtag.Name.Trim().ToLower() == tag.Trim().ToLower())
+                        {
+                            items.Add(item);
+                            break;                            
+                        }
+                    }
+                }
+                viewModel.Items = items.AsQueryable();
             }
 
             return View(viewModel);
