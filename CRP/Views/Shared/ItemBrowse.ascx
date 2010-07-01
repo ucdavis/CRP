@@ -24,11 +24,12 @@
                         <h3>Last day to register online: <%= Html.Encode(item.Expiration.HasValue ? item.Expiration.Value.ToString("D") : string.Empty) %></h3>                    
                         
                         <% Html.RenderPartial(StaticValues.Partial_TagView, item.Tags); %>
-                        
-                        <p>
+
+                        <a href='<%= Url.Action("Details", "Item", new {id = item.Id}) %>'>
                             <%= Html.Encode(item.Summary) %>
                             <%--<%= item.Description.Length > 1000 ? Html.HtmlEncode(item.Description.Substring(0, 1000)) : Html.HtmlEncode(item.Description) %>--%>
-                        </p>
+                        </a>
+                        <%Item item1 = item;%><%= Html.ActionLink<ItemController>(a => a.Details(item1.Id), "Click here to register.", new{style="color: rgb(0, 0, 255)"}) %>
                     
                     </a>
                 </td>
