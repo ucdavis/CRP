@@ -29,7 +29,8 @@
                             <%= Html.Encode(item.Summary) %>
                             <%--<%= item.Description.Length > 1000 ? Html.HtmlEncode(item.Description.Substring(0, 1000)) : Html.HtmlEncode(item.Description) %>--%>
                         </a>
-                        <%Item item1 = item;%><%= Html.ActionLink<ItemController>(a => a.Details(item1.Id), "Click here to register.", new{style="color: rgb(0, 0, 255)"}) %>
+                        
+                        <div><%Item item1 = item;%><%= Html.ActionLink<ItemController>(a => a.Details(item1.Id), "Click here to register.", new{style="color: rgb(0, 0, 255)"}) %></div>
                     
                     </a>
                 </td>
