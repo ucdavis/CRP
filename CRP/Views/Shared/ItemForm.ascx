@@ -82,19 +82,19 @@
                 <%= Html.ValidationMessage("Item.HideDonation", "*")%></td>
             </tr></tbody></table></li>
             <li>
-                <label for="Item.CostPerItem">CostPerItem:</label><br />
+                <label for="Item.QuantityName">Name Of Item:</label><br />
+                <%= Html.TextBox("Item.QuantityName", Model.Item != null ? Model.Item.QuantityName : "Ticket") %>
+                <%= Html.ValidationMessage("Item.QuantityName", "*") %>
+            </li>
+            <li>
+                <label id="CostPerItemLabel" for="Item.CostPerItem">Cost Per <%= Html.Encode(Model.Item != null ? Model.Item.QuantityName : "Ticket") %>:</label><br />
                 <%= Html.TextBox("Item.CostPerItem", Model.Item != null ? string.Format("{0:0.00}", Model.Item.CostPerItem) : string.Empty)  %>
                 <%= Html.ValidationMessage("Item.CostPerItem", "*")%>
             </li>
             <li>
-                <label for="Item.Quantity">Quantity:</label><br />
+                <label id="QuantityLabel" for="Item.Quantity">Number of <%= Html.Encode(Model.Item != null ? Model.Item.QuantityName : "Ticket") %>(s) Available:</label><br />
                 <%= Html.TextBox("Item.Quantity") %>
                 <%= Html.ValidationMessage("Item.Quantity", "*")%>
-            </li>
-            <li>
-                <label for="Item.QuantityName">Quantity Name:</label><br />
-                <%= Html.TextBox("Item.QuantityName") %>
-                <%= Html.ValidationMessage("Item.QuantityName", "*") %>
             </li>
             <li>
                 <label for="Item.Expiration">Expiration:</label> <br />

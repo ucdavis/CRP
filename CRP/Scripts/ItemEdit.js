@@ -26,7 +26,7 @@
 
                                 if (item.QuestionType.Name == "Date") {
                                     //textBox.datepicker().watermark("mm/dd/yyyy", { className: "watermark" });
-                                    textBox.datepicker().bt('mm/dd/yyyy format');                                    
+                                    textBox.datepicker().bt('mm/dd/yyyy format');
                                 }
 
                                 var p = $("<p>").append(label).append(textBox).append(hidden);
@@ -147,5 +147,11 @@
         external_link_list_url: "js/link_list.js",
         external_image_list_url: "js/image_list.js",
         media_external_list_url: "js/media_list.js"
+    });
+
+    $("input#Item_QuantityName").change(function(event) {
+        var quantityName = $(this).val();
+        $("#CostPerItemLabel").text("Cost Per " + quantityName + ":");
+        $("#QuantityLabel").text("Number of " + quantityName + "(s) Available:");
     });
 });
