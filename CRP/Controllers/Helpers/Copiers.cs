@@ -31,6 +31,7 @@ namespace CRP.Controllers.Helpers
             dest.AllowCheckPayment = src.AllowCheckPayment;
             dest.AllowCreditPayment = src.AllowCreditPayment;
             dest.Summary = src.Summary;
+            dest.HideDonation = src.HideDonation;
 
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 

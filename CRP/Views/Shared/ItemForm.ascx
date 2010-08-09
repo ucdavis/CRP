@@ -67,15 +67,20 @@
                 <%= Html.TextArea("Item.CheckPaymentInstructions", Model.Item == null || Model.Item.CheckPaymentInstructions == null ? Html.HtmlEncode("<h1>Thank you for your purchase!</h1> <h2>Please mail your payment to:</h2> <address>College of Agricultural and Environmental Sciences<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 95616<br /></address>") : Html.HtmlEncode(Model.Item.CheckPaymentInstructions))%>
                 <%= Html.ValidationMessage("Item.CheckPaymentInstructions", "*")%> 
             </li>
-            <li><table><tbody><tr><td>
+            <li><table><tbody>
+            <tr><td>
                 <label for="Item.AllowCreditPayment">Allow Credit Payment:</label></td><td>
                 <%= Html.CheckBox("Item.AllowCreditPayment", true)%>
                 <%= Html.ValidationMessage("Item.AllowCreditPayment", "*")%></td></tr>
                 <tr><td>
                 <label for="Item.AllowCheckPayment">Allow Check Payment:</label></td><td>
                 <%= Html.CheckBox("Item.AllowCheckPayment", true)%>
-                <%= Html.ValidationMessage("Item.AllowCheckPayment", "*")%>
-            </td></tr></tbody></table></li>
+                <%= Html.ValidationMessage("Item.AllowCheckPayment", "*")%></td>
+                <tr><td>
+                <label for="Item.HideDonation">Hide Donation Column:</label></td><td>
+                <%= Html.CheckBox("Item.HideDonation")%>
+                <%= Html.ValidationMessage("Item.HideDonation", "*")%></td>
+            </tr></tbody></table></li>
             <li>
                 <label for="Item.CostPerItem">CostPerItem:</label><br />
                 <%= Html.TextBox("Item.CostPerItem", Model.Item != null ? string.Format("{0:0.00}", Model.Item.CostPerItem) : string.Empty)  %>

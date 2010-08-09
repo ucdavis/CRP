@@ -37,11 +37,23 @@
                     <td><%= Html.Encode(Model.Item.Name) %></td>
                     <td>$ <span class="perItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem)) %></span></td>
                     <td>$ <span class="totalItemAmount"><%= Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem * Model.Quantity)) %></span></td>                    
-                </tr>                
+                </tr>  
+                <%if (Model.Item.HideDonation)
+                  {%>
+                <tr style="background-color: #D5D5D5">
+                <%}
+                else{%>              
                 <tr>
+                <%}%>
                     <td colspan="4">&nbsp</td>
                 </tr>
+                <%if (Model.Item.HideDonation)
+                  {%>
+                <tr style="background-color: #D5D5D5;display:none">
+                <%}
+                else{%>              
                 <tr style="background-color: #D5D5D5">
+                <%}%>                
                     <td></td>
                     <td>Donation</td>
                     <td></td>
@@ -70,7 +82,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4">
+                    <td colspan="4" style="text-align:right;">
                         <label for="paymentType">Payment Method: </label>
                         <%if (Model.Item.AllowCreditPayment){%>
                             <input type="radio" id="paymentType" name="paymentType" class="required" value="<%=StaticValues.CreditCard%>" "<%=Model.CreditPayment ? "checked" : string.Empty%>" /><label for="credit">Credit Card</label>
@@ -82,7 +94,7 @@
                 </tr>
                 <% if (!String.IsNullOrEmpty(Model.Item.RestrictedKey)) { %>
                 <tr>
-                    <td colspan="4">
+                    <td colspan="4" style="background-color: #D5D5D5">
                         <label for="restrictedKey">Passphrase to purchase: </label>
                         <%= Html.TextBox("restrictedKey") %>
                     </td>

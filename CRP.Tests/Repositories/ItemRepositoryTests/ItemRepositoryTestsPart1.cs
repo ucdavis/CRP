@@ -145,7 +145,8 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             expectedFields.Add(new NameAndType("ExtendedPropertyAnswers", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.ExtendedPropertyAnswer]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
-            })); 
+            }));
+            expectedFields.Add(new NameAndType("HideDonation", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 

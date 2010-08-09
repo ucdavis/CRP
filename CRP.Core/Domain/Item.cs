@@ -44,6 +44,7 @@ namespace CRP.Core.Domain
 
             AllowCheckPayment = true;
             AllowCreditPayment = true;
+            HideDonation = false;
         }
 
         [Required]
@@ -70,6 +71,8 @@ namespace CRP.Core.Domain
 
         public virtual bool AllowCheckPayment { get; set; }
         public virtual bool AllowCreditPayment { get; set; }
+
+        public virtual bool HideDonation { get; set; }
 
         [NotNull]
         public virtual ItemType ItemType { get; set; }
