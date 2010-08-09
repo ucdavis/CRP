@@ -97,7 +97,7 @@
                 <%= Html.ValidationMessage("Item.Quantity", "*")%>
             </li>
             <li>
-                <label for="Item.Expiration">Expiration:</label> <br />
+                <label for="Item.Expiration">Last Day To Register Online:</label> <br />
                 <%= Html.TextBox("Item.Expiration", Model.Item != null && Model.Item.Expiration.HasValue ? Model.Item.Expiration.Value.ToString("d") : string.Empty)%>
                 <%= Html.ValidationMessage("Item.Expiration", "*")%>
             </li>
