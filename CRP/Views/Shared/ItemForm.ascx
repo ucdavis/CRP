@@ -129,6 +129,7 @@
             <legend>Map Link</legend>
             
             <ul>
+            <li><%= Html.ActionLink<HelpController>(a => a.LinkMap(), "Watch Demo to Link a Map") %></li>
             <li>
                 <label for="Item.MapLink">Map Link:</label><br  />
                 <%= Html.TextBox("MapLink") %>

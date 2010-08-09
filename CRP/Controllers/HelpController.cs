@@ -137,6 +137,12 @@ namespace CRP.Controllers
             return View();
         }
 
+        [AnyoneWithRole]
+        public ActionResult LinkMap()
+        {
+            return View();
+        }
+
         public ActionResult WatchVideo(int id)
         {
             var helpTopic = Repository.OfType<HelpTopic>().GetNullableByID(id);
