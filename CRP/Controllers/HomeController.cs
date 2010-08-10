@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
+using Elmah;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Attributes;
 
@@ -26,6 +27,12 @@ namespace CRP.Controllers
         public ActionResult About()
         {
             return View();
+        }
+
+        [AdminOnly]
+        public ActionResult TestException()
+        {
+            throw new ApplicationException("Exception successfully thrown.");
         }
     }
 }
