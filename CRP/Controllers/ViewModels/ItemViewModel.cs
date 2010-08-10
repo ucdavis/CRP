@@ -10,6 +10,8 @@ namespace CRP.Controllers.ViewModels
 {
     public class ItemViewModel
     {
+        public bool IsNew { get; set; }
+
         public static ItemViewModel Create(IRepository repository, IPrincipal principal, Item item)
         {
             Check.Require(repository != null, "Repository is required.");
@@ -41,6 +43,7 @@ namespace CRP.Controllers.ViewModels
             {
                 viewModel.Item = item;
             }
+            viewModel.IsNew = false; //Set to true in Create methods
 
             return viewModel;
         }

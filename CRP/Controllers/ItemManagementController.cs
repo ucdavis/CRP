@@ -75,6 +75,7 @@ namespace CRP.Controllers
         public ActionResult Create()
         {
             var viewModel = ItemViewModel.Create(Repository, CurrentUser, null);
+            viewModel.IsNew = true;
 
             return View(viewModel);
         }
@@ -163,7 +164,8 @@ namespace CRP.Controllers
             }
             else
             {
-                var viewModel = ItemViewModel.Create(Repository, CurrentUser, item);                
+                var viewModel = ItemViewModel.Create(Repository, CurrentUser, item);
+                viewModel.IsNew = true;
                 return View(viewModel);
             }
         }

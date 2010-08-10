@@ -555,7 +555,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(displayProfileRecord);
                 var results = displayProfileRecord.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnitAndSchool: Unit and School cannot be selected together.");
+                results.AssertErrorsAre("DepartmentAndSchool: Department and School cannot be selected together.");
                 Assert.IsTrue(displayProfileRecord.IsTransient());
                 Assert.IsFalse(displayProfileRecord.IsValid());
                 throw;
@@ -583,7 +583,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(displayProfileRecord);
                 var results = displayProfileRecord.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnitOrSchool: A Unit or School must be specified.");
+                results.AssertErrorsAre("DepartmentOrSchool: A Department or School must be specified.");
                 Assert.IsTrue(displayProfileRecord.IsTransient());
                 Assert.IsFalse(displayProfileRecord.IsValid());
                 throw;
@@ -643,7 +643,15 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
 
-            var expectedFields = new List<NameAndType>();
+            var expectedFields = new List<NameAndType>();            
+            expectedFields.Add(new NameAndType("DepartmentAndSchool", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Department and School cannot be selected together.\")]"
+            }));
+            expectedFields.Add(new NameAndType("DepartmentOrSchool", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"A Department or School must be specified.\")]"
+            }));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 
@@ -661,14 +669,6 @@ namespace CRP.Tests.Repositories
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"SchoolMaster may only be true when School is selected.\")]"
             }));
             expectedFields.Add(new NameAndType("Unit", "CRP.Core.Domain.Unit", new List<string>()));
-            expectedFields.Add(new NameAndType("UnitAndSchool", "System.Boolean", new List<string>
-            {
-                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Unit and School cannot be selected together.\")]"
-            }));
-            expectedFields.Add(new NameAndType("UnitOrSchool", "System.Boolean", new List<string>
-            {
-                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"A Unit or School must be specified.\")]"
-            }));
     
             #endregion Arrange
 

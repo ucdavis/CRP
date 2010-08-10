@@ -682,7 +682,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(8, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(9, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -960,6 +960,30 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual(0, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
+
+        /// <summary>
+        /// Tests the controller method Link Map contains expected attributes.
+        /// 9
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodLinkMapContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("LinkMap");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AnyoneWithRoleAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "AnyoneWithRoleAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
         #endregion Controller Method Tests
 
         #endregion Reflection Tests

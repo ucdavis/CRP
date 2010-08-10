@@ -289,7 +289,7 @@ namespace CRP.Tests.Controllers
             DisplayProfileRepository.AssertWasNotCalled(a => a.EnsurePersistent(newDisplayProfile));
             Assert.AreNotEqual("Display Profile has been created successfully.", Controller.Message);
             Assert.IsFalse(Controller.ModelState.IsValid);
-            Controller.ModelState.AssertErrorsAre("UnitAndSchool: Unit and School cannot be selected together.");
+            Controller.ModelState.AssertErrorsAre("DepartmentAndSchool: Department and School cannot be selected together.");
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace CRP.Tests.Controllers
             DisplayProfileRepository.AssertWasNotCalled(a => a.EnsurePersistent(newDisplayProfile));
             Assert.AreNotEqual("Display Profile has been created successfully.", Controller.Message);
             Assert.IsFalse(Controller.ModelState.IsValid);
-            Controller.ModelState.AssertErrorsAre("UnitOrSchool: A Unit or School must be specified.");
+            Controller.ModelState.AssertErrorsAre("DepartmentOrSchool: A Department or School must be specified.");
         }
 
         /// <summary>
@@ -390,7 +390,7 @@ namespace CRP.Tests.Controllers
             DisplayProfileRepository.AssertWasNotCalled(a => a.EnsurePersistent(newDisplayProfile));
             Assert.AreNotEqual("Display Profile has been created successfully.", Controller.Message);
             Assert.IsFalse(Controller.ModelState.IsValid);
-            Controller.ModelState.AssertErrorsAre("Display Profile has already been created for this unit.");
+            Controller.ModelState.AssertErrorsAre("Display Profile has already been created for this Department.");
             #endregion Assert		
         }
         #endregion Create Tests

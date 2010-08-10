@@ -31,16 +31,16 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            UnitAndSchool = true;
-            UnitOrSchool = true;
+            DepartmentAndSchool = true;
+            DepartmentOrSchool = true;
             SchoolMasterAndSchool = true;
             if (Unit != null && School != null)
             {
-                UnitAndSchool = false;
+                DepartmentAndSchool = false;
             }
             if (Unit == null && School == null)
             {
-                UnitOrSchool = false;
+                DepartmentOrSchool = false;
             }     
             if(School == null && SchoolMaster)
             {
@@ -71,11 +71,11 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database
         
-        [AssertTrue(Message = "Unit and School cannot be selected together.")]
-        private bool UnitAndSchool { get; set; }
-        
-        [AssertTrue(Message = "A Unit or School must be specified.")]
-        private bool UnitOrSchool { get; set; }
+        [AssertTrue(Message = "Department and School cannot be selected together.")]
+        private bool DepartmentAndSchool { get; set; }
+
+        [AssertTrue(Message = "A Department or School must be specified.")]
+        private bool DepartmentOrSchool { get; set; }
         
         [AssertTrue(Message = "SchoolMaster may only be true when School is selected.")]
         private bool SchoolMasterAndSchool { get; set; }

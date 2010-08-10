@@ -60,5 +60,6 @@
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
+    <% Html.RenderPartial(StaticValues.Partial_PageHeader, new DisplayProfile()); %>
 </asp:Content>
 

@@ -86,7 +86,7 @@ namespace CRP.Controllers
 
                 if(Repository.OfType<DisplayProfile>().Queryable.Where(a => a.Unit == displayProfile.Unit).Any())
                 {
-                    ModelState.AddModelError("Unit","Display Profile has already been created for this unit.");
+                    ModelState.AddModelError("Department", "Display Profile has already been created for this Department.");
                 }
             }
 

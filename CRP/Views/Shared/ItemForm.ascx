@@ -14,6 +14,8 @@
             });
             $("#file").bt('The maximum picture size is 4 meg. A free online resize tool can be found at: http://www.picresize.com/');
             $("#Item_Summary").bt('A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters.');
+            $("#tagInput").bt('You must click on the plus button to add the tag you have entered here.', { positions: 'top' });
+            $("#tags").bt('Click on the tag to remove it.', { positions: 'bottom' });
         });
     </script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>
@@ -28,7 +30,7 @@
             <ul>
             <li><%= Html.ActionLink<HelpController>(a => a.CreateItem(), "Watch Demo") %></li>
             <li><label for="ItemType">Item Type:</label><br /> 
-            <% if (Model.Item == null) {%>                               
+            <% if (Model.Item == null || Model.IsNew) {%>                               
                 <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
                         .Selected(Model.Item != null ? Model.Item.ItemType.Id : 0)                         
                     %>
