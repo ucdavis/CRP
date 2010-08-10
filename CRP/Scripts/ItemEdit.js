@@ -6,6 +6,8 @@
         $.getJSON(url + '/' + $(this).val(), {},
                     function(result) {
 
+                        $("div#ExtendedProperties").children().remove();
+
                         var length = result.length;
 
                         if (length > 0) {
