@@ -2,7 +2,7 @@
 <%@ Import Namespace="CRP.Controllers"%>
 
 
-    <div class="TagContainer">
+    <%--<div class="TagContainer">
     
         <strong>Tags:</strong>
     
@@ -11,4 +11,4 @@
             <%= Html.ActionLink<TagController>(a => a.Index(s), s) %>
         
         <% } %>
-    </div>
+    </div>--%>
