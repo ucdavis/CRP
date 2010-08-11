@@ -194,6 +194,7 @@
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\Helpers\StringExtension.cs" />
@@ -275,7 +276,7 @@
     <Content Include="Content\2009.3.1103.0\Sunset\loading.gif" />
     <Content Include="Content\2009.3.1103.0\Sunset\sprite.png" />
     <Content Include="Content\2009.3.1103.0\telerik.black.min.css" />
-    <Content Include="Content\2009.3.1103.0\telerik.common.min.css" />
+    <Content Include="Content\telerik.common.min.css" />
     <Content Include="Content\2009.3.1103.0\telerik.default.min.css" />
     <Content Include="Content\2009.3.1103.0\telerik.forest.min.css" />
     <Content Include="Content\2009.3.1103.0\telerik.hay.min.css" />
@@ -290,8 +291,8 @@
     <Content Include="Content\2009.3.1103.0\telerik.webblue.min.css" />
     <Content Include="Content\2009.3.1103.0\Telerik\loading.gif" />
     <Content Include="Content\2009.3.1103.0\Telerik\sprite.png" />
-    <Content Include="Content\2009.3.1103.0\Vista\loading.gif" />
-    <Content Include="Content\2009.3.1103.0\Vista\sprite.png" />
+    <Content Include="Content\Vista\loading.gif" />
+    <Content Include="Content\Vista\sprite.png" />
     <Content Include="Content\2009.3.1103.0\Web20\loading.gif" />
     <Content Include="Content\2009.3.1103.0\Web20\sprite.png" />
     <Content Include="Content\2009.3.1103.0\WebBlue\loading.gif" />
@@ -648,6 +649,8 @@
     <Content Include="AppSettingsTest.config" />
     <Content Include="ConnectionStringProd.config" />
     <Content Include="ConnectionStringTest.config" />
+    <Content Include="Content\Windows7\loading.gif" />
+    <Content Include="Content\Windows7\sprite.png" />
     <Content Include="Content\jquery.bt.css" />
     <Content Include="Content\telerik.common.css" />
     <Content Include="Content\telerik.vista.css" />
@@ -656,6 +659,7 @@
     <Content Include="Scripts\jquery.tablesorter.min.js" />
     <Content Include="Scripts\jquery.tablesorter.pager.js" />
     <Content Include="Scripts\jquery.UrlValidator.js" />
+    <Content Include="Views\Error\Index.aspx" />
     <Content Include="Views\Help\Create.aspx" />
     <Content Include="Views\Help\CreateItem.aspx" />
     <Content Include="Views\Help\Details.aspx" />
