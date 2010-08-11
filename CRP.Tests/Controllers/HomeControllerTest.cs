@@ -257,8 +257,9 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(3, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(4, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
+            //We don't care about the TestException method. (it was #4)
         }
 
 
