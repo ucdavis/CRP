@@ -71,6 +71,10 @@ GO
 INSERT INTO [dbo].[Validators]([Name], [Class], [RegEx], [ErrorMessage])
   VALUES('Phone Number', 'phoneUS', '(^\(?[\d]{3}\)?[\s-]?[\d]{3}[\s-]?[\d]{4}$){1}|^$', '{0} is not a valid phone number.')
 GO
+INSERT INTO [dbo].[Validators]([Name], [Class], [RegEx], [ErrorMessage])
+  VALUES('Zip Code', 'zipUS', '^\d{5}(-\d{4})?$', '{0} is not a valid zip code.')
+GO
+
 
 -- //////////////////////////////////////////////////////////////////////////////////////
 -- Insert question set for contact information
@@ -92,10 +96,12 @@ begin
 	declare @phonenumber int	-- phone validator
 	declare @email int		-- email validator
 	declare @qid int		-- question id to add validation
+	declare @zipCode int   -- zip code validator, format only
 	
 	set @required = (select max(id) from validators where [name] = 'Required')
 	set @phonenumber = (select max(id) from validators where [name] = 'Phone Number')
 	set @email = (select max(id) from validators where [name] = 'Email')
+	set @zipCode = (select max(id) from validators where [name] = 'Zip Code')
 	
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order])
 	VALUES ('First Name', @tbId, @qsid, 1)
@@ -135,6 +141,7 @@ begin
 	
 	set @qid = (select max(id) from questions where name = 'Zip Code')
 	insert into QuestionXValidator (QuestionId, ValidatorId) values (@qid, @required)
+	insert into QuestionXValidator (QuestionId, ValidatorId) values (@qid, @zipCode)
 
 	INSERT INTO Questions ([Name], QuestionTypeId, QuestionSetId, [Order])
 	VALUES ('Phone Number', @tbId, @qsid, 8)		

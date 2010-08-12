@@ -128,6 +128,7 @@
 
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/RenameForArray.js") %>"></script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.PhoneValidator.js") %>"></script>
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.ZipValidator.js") %>"></script>
     <script type="text/javascript">
         var class_quantityAmount = "quantityAmount";
         var class_perItemAmount = "perItemAmount";

@@ -659,6 +659,7 @@
     <Content Include="Scripts\jquery.tablesorter.min.js" />
     <Content Include="Scripts\jquery.tablesorter.pager.js" />
     <Content Include="Scripts\jquery.UrlValidator.js" />
+    <Content Include="Scripts\jquery.ZipValidator.js" />
     <Content Include="Views\Error\Index.aspx" />
     <Content Include="Views\Help\Create.aspx" />
     <Content Include="Views\Help\CreateItem.aspx" />
