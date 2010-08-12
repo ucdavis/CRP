@@ -86,7 +86,7 @@ namespace CRP.Core.Abstractions
             var donationThanks = string.Empty;
             if (transaction.DonationTotal > 0)
             {
-                donationThanks = string.Format("Thank you for your donation of {0}.", transaction.DonationTotal.ToString("C"));
+                donationThanks = string.Format(ScreenText.STR_DonationText, transaction.DonationTotal.ToString("C"));
             }
 
             body = body.Replace("{FirstName}", firstName);
