@@ -11,7 +11,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Refund Details</h2>
-
+    <h3>Internal use only</h3>
 
     <%= Html.Hidden("RefundSort", Model.Sort) %>
     <%= Html.Hidden("RefundPage", Model.Page)%>
