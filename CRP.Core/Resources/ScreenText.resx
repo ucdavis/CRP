@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="STR_DonationText" xml:space="preserve">
-    <value>Thank you for your donation of {0}.</value>
+    <value>Thank you for your donation of {0}. Your in-kind contribution will be tax deductible to the fullest extent allowable by law.</value>
     <comment>This is written in the email and displayed on screen so they can see the format. The container "{0}" for the amount must be supplied.</comment>
   </data>
   <data name="STR_LowInventory" xml:space="preserve">
