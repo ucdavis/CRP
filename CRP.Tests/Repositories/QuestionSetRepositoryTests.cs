@@ -701,7 +701,7 @@ namespace CRP.Tests.Repositories
             #endregion Act
 
             #region Assert
-            Assert.IsNull(questionSet.School);
+            Assert.IsNull(questionSet.User);
             Assert.IsFalse(questionSet.IsTransient());
             Assert.IsTrue(questionSet.IsValid());
             #endregion Assert
