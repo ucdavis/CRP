@@ -59,7 +59,7 @@
         </li>
         <li>
         <% } %>
-            <strong>CostPerItem:</strong>
+            <strong>Price Per <%=Html.Encode(Model.Item.QuantityName) %>:</strong>
             <%= Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))%>
         </li>
         <li>
