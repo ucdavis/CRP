@@ -28,7 +28,7 @@
             <legend>Fields</legend>
             <p>
                 <label for="Name">Name:</label>
-                <%= Html.TextBox("QuestionSet.Name") %>
+                <%= Html.TextBox("QuestionSet.Name", Model.QuestionSet != null? Model.QuestionSet.Name:string.Empty,new { style = "width: 300px" })%>
                 <%= Html.ValidationMessage("QuestionSet.Name", "*") %>
             </p>
             

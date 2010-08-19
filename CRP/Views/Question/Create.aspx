@@ -30,7 +30,7 @@
             
             <p>
                 <label for="Name">Name:</label>
-                <%= Html.TextBox("Name") %>
+                <%= Html.TextBox("Name", Model.Question != null ? Model.Question.Name : string.Empty, new { style = "width: 700px" })%>
             </p>
             
             <p>
