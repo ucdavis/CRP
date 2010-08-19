@@ -656,6 +656,7 @@
     <Content Include="Content\telerik.vista.css" />
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Scripts\jquery.bt.min.js" />
+    <Content Include="Scripts\jquery.enableTinyMce.js" />
     <Content Include="Scripts\jquery.tablesorter.min.js" />
     <Content Include="Scripts\jquery.tablesorter.pager.js" />
     <Content Include="Scripts\jquery.UrlValidator.js" />
