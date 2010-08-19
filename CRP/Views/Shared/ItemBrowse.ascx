@@ -21,18 +21,20 @@
                         
                         <img src='<%= Url.Action("GetImage", "Item", new {id = item.Id}) %>' />
                         <% foreach (var ep in item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty)){%>    
-                            <h3>
+                            <strong>
                                 <%= Html.Encode(ep.ExtendedProperty.Name) %>:
+                            </strong> 
                                 <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
-                                                            ? ep.Answer : String.Format("{0:d}", ep.Answer)) %>
-                            </h3>        
+                                                            ? ep.Answer : String.Format("{0:d}", ep.Answer)) %> <br/>
+                                   
                         <% } %>    
-                        <h3>        
+                        <strong>        
                             Price Per <%=Html.Encode(item.QuantityName) %>:
+                        </strong>  
                             <%= Html.Encode(String.Format("{0:C}", item.CostPerItem))%>
-                        </h3>                    
-                        <h3>Last day to register online: <%= Html.Encode(item.Expiration.HasValue ? item.Expiration.Value.ToString("D") : string.Empty) %></h3>                    
-                        
+                        <br/>                  
+                        <strong>Last day to register online:</strong> <%= Html.Encode(item.Expiration.HasValue ? item.Expiration.Value.ToString("D") : string.Empty) %>                    
+                        <br/>
                         <% Html.RenderPartial(StaticValues.Partial_TagView, item.Tags); %>
 
                         <a href='<%= Url.Action("Details", "Item", new {id = item.Id}) %>'>
