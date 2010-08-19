@@ -41,7 +41,7 @@
         </small>
         </li>
         
-        <l class="two_col_float_uneven_right">
+        <li class="two_col_float_uneven_right">
         <ul>
         <li><span class="itemdetailsimg">
             <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item.Id}) %>' />
@@ -57,8 +57,15 @@
         
         <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>' class="reg_btn"><h3>Register</h3></a>
         </li>
-        <li>
         <% } %>
+        <% foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty)){%>    
+            <li>
+                <strong><%= Html.Encode(ep.ExtendedProperty.Name) %>:</strong>
+                <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
+                                            ? ep.Answer : String.Format("{0:d}", ep.Answer)) %>
+            </li>        
+        <% } %>
+        <li>        
             <strong>Price Per <%=Html.Encode(Model.Item.QuantityName) %>:</strong>
             <%= Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))%>
         </li>
@@ -66,17 +73,6 @@
             <strong>Last day to register online:</strong>
             <%= Html.Encode(String.Format("{0:D}", Model.Item.Expiration))%>
         </li>
-
-        <% foreach (var ep in Model.Item.ExtendedPropertyAnswers)
-           {%>
-        
-            <li>
-                <strong><%= Html.Encode(ep.ExtendedProperty.Name) %>:</strong>
-                <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
-                                            ? ep.Answer : String.Format("{0:d}", ep.Answer)) %>
-            </li>
-        
-        <% } %>
         </ul>
         </li>
         
