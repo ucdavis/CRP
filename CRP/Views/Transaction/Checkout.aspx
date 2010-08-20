@@ -55,8 +55,8 @@
                 <tr style="background-color: #D5D5D5">
                 <%}%>                
                     <td></td>
-                    <td>Donation</td>
                     <td></td>
+                    <td style="text-align:right;">Tax-Deductible Contribution:</td>
                     <td>$ <%= Html.TextBox("donation", "0.00", new {@style="width:40px;", @class="donationAmount"}) %></td>
                 </tr>
                 <tr>
