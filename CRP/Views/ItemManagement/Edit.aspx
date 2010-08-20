@@ -24,6 +24,16 @@
 
     <script src="<%= Url.Content("~/Scripts/ItemEdit.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/jquery.enableTinyMce.js") %>" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#BodyText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
+            $(".add_token").click(function(event) {
+                tinyMCE.execInstanceCommand("BodyText", "mceInsertContent", false, $(this).html());
+            });
+        });
+   </script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
