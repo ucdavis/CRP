@@ -28,8 +28,8 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#BodyText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
-            $(".add_token").click(function(event) {
+            //$("#BodyText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
+            $(".add-token").click(function(event) {
                 tinyMCE.execInstanceCommand("BodyText", "mceInsertContent", false, $(this).html());
             });
         });
