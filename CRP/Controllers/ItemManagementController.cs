@@ -154,6 +154,16 @@ namespace CRP.Controllers
                 }
             }
 
+            if(item.Template == null)
+            {
+                var tempTemplate = Repository.OfType<Template>().Queryable.Where(a => a.Default).FirstOrDefault();
+                if (tempTemplate != null && !string.IsNullOrEmpty(tempTemplate.Text))
+                {
+                    var template = new Template(tempTemplate.Text);
+                    item.Template = template;
+                }
+            }
+
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
 
             if (ModelState.IsValid)
