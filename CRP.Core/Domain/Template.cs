@@ -22,7 +22,7 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             Default = false;
-            ItemAndDefault = false;
+            //ItemAndDefault = false;
         }
 
         [Required]
@@ -38,31 +38,42 @@ namespace CRP.Core.Domain
         /// </returns>
         public override bool IsValid()
         {
-            PopulateComplexLogicFields();
+            //PopulateComplexLogicFields();
             return base.IsValid();
         }
 
         public override ICollection<UCDArch.Core.CommonValidator.IValidationResult> ValidationResults()
         {
-            PopulateComplexLogicFields();
+            //PopulateComplexLogicFields();
             return base.ValidationResults();
         }
 
         /// <summary>
         /// Populates the complex logic fields.
         /// </summary>
-        private void PopulateComplexLogicFields()
-        {
-            ItemAndDefault = true;
-            if (Default == false && Item == null)
-            {
-                ItemAndDefault = false;
-            }
-        }
+        //private void PopulateComplexLogicFields()
+        //{
+        //    //ItemAndDefault = true;
+        //    if (Default == false && Item == null)
+        //    {
+        //        //ItemAndDefault = false;
+        //    }
+        //}
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "Item may not be empty when default not selected")]
-        private bool ItemAndDefault { get; set; }
+        private bool ItemAndDefault
+        {
+            get
+            {
+                if (Default == false && Item == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

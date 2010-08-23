@@ -28,12 +28,21 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            //$("#BodyText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
+            $("#BodyText2").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
             $(".add-token").click(function(event) {
-                tinyMCE.execInstanceCommand("BodyText", "mceInsertContent", false, $(this).html());
+                tinyMCE.execInstanceCommand("BodyText2", "mceInsertContent", false, $(this).html());
             });
         });
    </script>
+    <script type="text/javascript">
+        function SaveTemplateText(){
+            var textbox = $("#BodyText2");
+            var token = $($("input:hidden[name='__RequestVerificationToken']")[0]).val();
+            $.post(saveTemplateUrl, { id: id, text: textbox.val(), __RequestVerificationToken: token }
+                , function(result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
+        }    
+    </script>
+   
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -164,7 +173,8 @@
         <div id="<%= StaticValues.Tab_Templates %>">
             <% Html.RenderPartial(StaticValues.View_TemplateInstructions);%>
             <p>
-                <%= Html.TextArea("BodyText", Model.Item.Template != null ? Model.Item.Template.Text : string.Empty) %>
+                <%= Html.TextArea("BodyText2", Model.Item.Template != null ? Model.Item.Template.Text : string.Empty) %>
+                <input type="button" value="Save" onclick="SaveTemplateText()" />
             </p>
         
         </div>

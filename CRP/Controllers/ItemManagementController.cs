@@ -421,10 +421,12 @@ namespace CRP.Controllers
             
             if (item == null || string.IsNullOrEmpty(text) || !Access.HasItemAccess(CurrentUser, item))
             {
-                return new JsonNetResult(false);
+                return new JsonNetResult(null);
             }
 
             var template = new Template(text);
+            template.Default = false;
+            template.Item = item;
             item.Template = template;
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
@@ -436,7 +438,7 @@ namespace CRP.Controllers
                 return new JsonNetResult(true);
             }
 
-            return new JsonNetResult(false);
+            return new JsonNetResult(null);
         }
 
         /// <summary>
