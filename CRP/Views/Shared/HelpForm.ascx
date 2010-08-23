@@ -1,7 +1,14 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Core.Domain.HelpTopic>" %>
 
     <script src='<%= Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js") %>' type="text/javascript"></script>
-	<script type="text/javascript">
+    <script src="<%= Url.Content("~/Scripts/jquery.enableTinyMce.js") %>" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#Answer").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overRideHeigth: '225', overRideWidth: '925' });
+        });
+   </script>
+<%--	<script type="text/javascript">
 	    $(document).ready(function() {
 	        var scriptUrl = '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>';
 	        $("textarea#Answer").tinymce({
@@ -34,7 +41,7 @@
 	        });
 	        $("input[name*=VideoName]").bt('Only name, no extension or path. <br>Video must already exist on hosted server.');
 	    });
-	</script>
+	</script>--%>
 
     <%= Html.ValidationSummary("Save was unsuccessful. Please correct the errors and try again.") %>
 

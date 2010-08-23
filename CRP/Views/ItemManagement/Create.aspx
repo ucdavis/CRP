@@ -23,7 +23,14 @@
 
     <script src='<%= Url.Content("~/Scripts/ItemEdit.js") %>' type="text/javascript"></script>
     <script src='<%= Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js") %>' type="text/javascript"></script>
-   
+    <script src="<%= Url.Content("~/Scripts/jquery.enableTinyMce.js") %>" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#Item_Description").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
+            $("#Item_CheckPaymentInstructions").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overRideHeigth: '255' });      
+        });
+   </script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">

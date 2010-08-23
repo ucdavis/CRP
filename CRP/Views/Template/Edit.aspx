@@ -10,7 +10,7 @@
 
     <script src="<%= Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js") %>" type="text/javascript"></script>
 
-    <script type="text/javascript">
+<%--    <script type="text/javascript">
 
         $(document).ready(function() {
             $("textarea#Text").tinymce({
@@ -43,14 +43,14 @@
             });
         });
     
-    </script>
+    </script>--%>
     
-     <script src="<%= Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js") %>" type="text/javascript"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.enableTinyMce.js") %>" type="text/javascript"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            //$("#BodyText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
+        $("#Text").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
             $(".add-token").click(function(event) {
             tinyMCE.execInstanceCommand("Text", "mceInsertContent", false, $(this).html());
             });
