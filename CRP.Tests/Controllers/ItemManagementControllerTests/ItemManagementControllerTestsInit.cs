@@ -47,6 +47,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         protected IRepository<Transaction> TransactionRepository { get; set; }
         protected List<PaymentLog> PaymentLogs { get; set; }
         protected IRepository<PaymentLog> PaymentLogRepository { get; set; }
+        protected List<Template> Templates { get; set; }
+        protected IRepository<Template> TemplateRepository { get; set; }
 
         protected Type _controllerClass = typeof(ItemManagementController);
 
@@ -102,6 +104,14 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             PaymentLogs = new List<PaymentLog>();
             PaymentLogRepository = FakeRepository<PaymentLog>();
             Controller.Repository.Expect(a => a.OfType<PaymentLog>()).Return(PaymentLogRepository).Repeat.Any();
+
+            Templates = new List<Template>();
+            Templates.Add(CreateValidEntities.Template(1));
+            Templates[0].Default = true;
+            Templates[0].Item = null;
+            TemplateRepository = FakeRepository<Template>();
+            Controller.Repository.Expect(a => a.OfType<Template>()).Return(TemplateRepository).Repeat.Any();
+            TemplateRepository.Expect(a => a.Queryable).Return(Templates.AsQueryable()).Repeat.Any();
         }
 
 

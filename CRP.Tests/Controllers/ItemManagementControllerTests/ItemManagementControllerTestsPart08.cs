@@ -19,7 +19,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
             var result = Controller.SaveTemplate(1, "Test")
                 .AssertResultIs<JsonNetResult>();
-            Assert.IsFalse((bool)result.Data);
+            //Assert.IsFalse((bool)result.Data);
+            Assert.IsNull(result.Data);
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
 
@@ -30,7 +31,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.SaveTemplate(1, null)
                 .AssertResultIs<JsonNetResult>();
-            Assert.IsFalse((bool)result.Data);
+            //Assert.IsFalse((bool)result.Data);
+            Assert.IsNull(result.Data);
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
 
@@ -41,7 +43,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.SaveTemplate(1, string.Empty)
                 .AssertResultIs<JsonNetResult>();
-            Assert.IsFalse((bool)result.Data);
+            //Assert.IsFalse((bool)result.Data);
+            Assert.IsNull(result.Data);
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
         [TestMethod]
@@ -57,7 +60,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.SaveTemplate(1, " ")
                 .AssertResultIs<JsonNetResult>();
-            Assert.IsFalse((bool)result.Data);
+            //Assert.IsFalse((bool)result.Data);
+            Assert.IsNull(result.Data);
             Controller.ModelState.AssertErrorsAre("Text: may not be null or empty");
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
@@ -75,7 +79,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Items[0].Name = " "; //Also invalid
             var result = Controller.SaveTemplate(1, " ")
                 .AssertResultIs<JsonNetResult>();
-            Assert.IsFalse((bool)result.Data);
+            //Assert.IsFalse((bool)result.Data);
+            Assert.IsNull(result.Data);
             Controller.ModelState.AssertErrorsAre("Text: may not be null or empty"
                                                   , "Name: may not be null or empty");
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
@@ -94,7 +99,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Items[0].AddEditor(Editors[0]);
             var result = Controller.SaveTemplate(1, "test")
                 .AssertResultIs<JsonNetResult>();
-            Assert.IsFalse((bool)result.Data);
+            //Assert.IsFalse((bool)result.Data);
+            Assert.IsNull(result.Data);
             Controller.ModelState.AssertErrorsAre("Name: may not be null or empty");
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
@@ -141,7 +147,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Act
 
             #region Assert
-            Assert.IsFalse((bool)result.Data);
+            //Assert.IsFalse((bool)result.Data);
+            Assert.IsNull(result.Data);
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.AreNotEqual(1, Items[0].Templates.Count);
             #endregion Assert		
