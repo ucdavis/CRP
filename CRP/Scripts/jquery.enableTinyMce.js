@@ -10,6 +10,15 @@
             }, options);
 
 
+            var overRideHeigth = settings.overRideHeigth;
+            var overRideWidth = settings.overRideWidth;
+            if (overRideHeigth == undefined) {
+                overRideHeigth = "400";
+            }
+            if (overRideWidth == undefined) {
+                overRideWidth = "400";
+            }
+
             // iterate through each of the objects passed in to generate the calendar
             return this.each(function(index, item) {
 
@@ -30,8 +39,8 @@
                     theme_advanced_resizing: false,
 
                     // dimensions stuff
-                    height: "400",
-                    width: "400",
+                    height: overRideHeigth,
+                    width: overRideWidth,
 
                     // Example content CSS (should be your site CSS)
                     //content_css: "css/Main.css",
