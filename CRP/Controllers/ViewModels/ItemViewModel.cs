@@ -22,6 +22,8 @@ namespace CRP.Controllers.ViewModels
                 CurrentUser = repository.OfType<User>().Queryable.Where(a => a.LoginID == principal.Identity.Name).FirstOrDefault()
             };
 
+            viewModel.UserUnit = viewModel.CurrentUser.Units.FirstOrDefault();
+
             if (principal.IsInRole(RoleNames.Admin))
             {
                 viewModel.Units = repository.OfType<Unit>().GetAll();
@@ -53,5 +55,6 @@ namespace CRP.Controllers.ViewModels
         public Item Item { get; set; }
         public User CurrentUser { get; set; }
         public IEnumerable<Unit> Units { get; set; }
+        public Unit UserUnit { get; set; }
     }
 }

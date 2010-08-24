@@ -52,7 +52,9 @@
             <li>
             <label for="Item.Unit">Unit:</label><br />
                 <%= this.Select("Item.Unit").Options(Model.Units, x=>x.Id, x=>x.FullName)
-                        .Selected(Model.Item != null ? Model.Item.Unit.Id : 0)%>
+                        .Selected(Model.Item != null ? Model.Item.Unit.Id 
+                        : (Model.UserUnit != null ? Model.UserUnit.Id : 0)
+                                                        )%>
             </li>
             <li>
                 <label for="Item.Summary">Summary:</label><br />
