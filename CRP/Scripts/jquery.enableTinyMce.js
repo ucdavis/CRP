@@ -5,19 +5,14 @@
 
         enableTinyMce: function(options) {
 
+            debugger;
+
             var settings = $.extend({
-                script_location: "../../Scripts/tiny_mce/tiny_mce.js"
+                script_location: "../../Scripts/tiny_mce/tiny_mce.js",
+                overRideHeigth: "800",
+                overRideWidth: "800"
             }, options);
-
-
-            var overRideHeigth = settings.overRideHeigth;
-            var overRideWidth = settings.overRideWidth;
-            if (overRideHeigth == undefined) {
-                overRideHeigth = "400";
-            }
-            if (overRideWidth == undefined) {
-                overRideWidth = "400";
-            }
+            
 
             // iterate through each of the objects passed in to generate the calendar
             return this.each(function(index, item) {
@@ -39,8 +34,8 @@
                     theme_advanced_resizing: false,
 
                     // dimensions stuff
-                    height: overRideHeigth,
-                    width: overRideWidth,
+                    height: settings.overRideHeigth,
+                    width: settings.overRideWidth,
 
                     // Example content CSS (should be your site CSS)
                     //content_css: "css/Main.css",
