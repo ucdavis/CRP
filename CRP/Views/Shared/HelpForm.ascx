@@ -5,7 +5,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#Answer").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overRideHeigth: '225', overRideWidth: '925' });
+            $("#Answer").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideHeight: '225', overrideWidth: '925' });
         });
    </script>
 <%--	<script type="text/javascript">

@@ -5,12 +5,10 @@
 
         enableTinyMce: function(options) {
 
-            debugger;
-
             var settings = $.extend({
                 script_location: "../../Scripts/tiny_mce/tiny_mce.js",
-                overRideHeigth: "800",
-                overRideWidth: "800"
+                overrideHeight: "400",
+                overrideWidth: "400"
             }, options);
             
 
@@ -34,8 +32,8 @@
                     theme_advanced_resizing: false,
 
                     // dimensions stuff
-                    height: settings.overRideHeigth,
-                    width: settings.overRideWidth,
+                    height: settings.overrideHeight,
+                    width: settings.overrideWidth,
 
                     // Example content CSS (should be your site CSS)
                     //content_css: "css/Main.css",
