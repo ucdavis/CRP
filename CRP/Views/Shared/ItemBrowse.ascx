@@ -25,7 +25,9 @@
                                 <%= Html.Encode(ep.ExtendedProperty.Name) %>:
                             </strong> 
                                 <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
-                                                            ? ep.Answer : String.Format("{0:d}", ep.Answer)) %> <br/>
+                                                            ? ep.Answer : Convert.ToDateTime(ep.Answer).ToString("D")) %> <br/>
+                                                            <%--<%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
+                                                            ? ep.Answer : String.Format("{0:D}", ep.Answer)) %> <br/>--%>
                                    
                         <% } %>    
                         <strong>        
