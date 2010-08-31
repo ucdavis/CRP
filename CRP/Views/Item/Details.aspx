@@ -55,7 +55,7 @@
             <% } %>
         </p> -->
         
-        <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>' class="reg_btn"><h3>Register</h3></a>
+        <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>' class="reg_btn"><h3>Click Here To Register</h3></a>
         </li>
         <% } %>
         <% foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty)){%>    
