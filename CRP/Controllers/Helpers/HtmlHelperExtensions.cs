@@ -97,6 +97,7 @@ namespace CRP.Helpers
             ReplaceSingleTagContents(formattedEncodedText, "br");
 
             formattedEncodedText = formattedEncodedText.Replace(@"&amp;nbsp;", @"&nbsp;");
+            formattedEncodedText = formattedEncodedText.Replace(@"&amp;mdash;", @"&mdash;");
 
             // <span style="text-decoration:underline;">
             ReplaceComplexTag(formattedEncodedText, Span,
