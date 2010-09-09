@@ -158,7 +158,25 @@
             $("input").blur(function(){
                 $("form#CheckoutForm").validate().element(this);
             });
-
+    
+            $("input.email").blur(function(event){
+                if($(this).hasClass("warning")){
+                    $(this).removeClass("warning");
+                }
+                if($(this).hasClass("failed")){
+                    //Do nothing
+                }
+                else{
+                    var emailVal = $(this).val().toLowerCase();                
+                    //if(emailVal != null && emailVal != "" && emailVal.match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.(?:[a-z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)$/) == null){
+                    if(emailVal != null && emailVal != "" && emailVal.match(<%=StaticValues.EmailWarningRegEx %>) == null){
+                        //alert("no match " + emailVal);
+                        $(this).addClass("warning");
+                        $(this).next().text("This may be invalid");
+                    }
+                }
+                    
+            });
             
 
             $("input#quantity").blur(function(event) {

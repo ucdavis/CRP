@@ -129,6 +129,9 @@
     <value>CreditCard</value>
     <comment>Used in /Transaction/Checkout/</comment>
   </data>
+  <data name="EmailWarningRegEx" xml:space="preserve">
+    <value>/^[a-z0-9._%+-]+@[a-z0-9.-]+\.(?:[a-z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)$/</value>
+  </data>
   <data name="OpenId" xml:space="preserve">
     <value>OpenId</value>
     <comment>signifier if the user is an openid user or not</comment>
