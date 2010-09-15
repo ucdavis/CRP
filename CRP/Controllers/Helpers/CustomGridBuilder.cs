@@ -3,7 +3,7 @@ using Telerik.Web.Mvc.UI;
 using Telerik.Web.Mvc.UI.Fluent;
 using UCDArch.Core.PersistanceSupport;
 
-namespace CRP.Helpers
+namespace CRP.Controllers.Helpers
 {
     public class CustomGridBuilder<T> : GridBuilder<T> where T : class
     {

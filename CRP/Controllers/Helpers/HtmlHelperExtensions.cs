@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -7,10 +6,9 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
-using CRP.Controllers.Helpers;
 using Telerik.Web.Mvc.UI;
 
-namespace CRP.Helpers
+namespace CRP.Controllers.Helpers
 {
     public static class HtmlHelperExtensions
     {
@@ -43,14 +41,17 @@ namespace CRP.Helpers
         private const string Span = "span";
         private const string SpanEncodedStyled = @"&lt;span style=&quot;{0}&quot;&gt;";
         private const string SpanStyled = @"<span style=""{0}"">";
-
+        // ReSharper disable InconsistentNaming
         private const string Underline = "text-decoration: underline;";
         private const string XXSmallText = "font-size: xx-small;";
         private const string XSmallText = "font-size: x-small;";
         private const string SmallText = "font-size: small;";
         private const string MediumText = "font-size: medium;";
         private const string LargeText = "font-size: large;";
-
+        private const string XLargeText = "font-size: x-large;";
+        private const string XXLargeText = "font-size: xx-large;";
+        // ReSharper restore InconsistentNaming
+        
         /// <summary>
         /// This allows limited html encoding, while still encoding the rest of the string
         /// </summary>
@@ -128,6 +129,16 @@ namespace CRP.Helpers
             ReplaceComplexTag(formattedEncodedText, Span,
                               string.Format(SpanEncodedStyled, LargeText),
                               string.Format(SpanStyled, LargeText));
+
+            // <span style="font-size: xlarge;">
+            ReplaceComplexTag(formattedEncodedText, Span,
+                              string.Format(SpanEncodedStyled, XLargeText),
+                              string.Format(SpanStyled, XLargeText));
+
+            // <span style="font-size: xxlarge;">
+            ReplaceComplexTag(formattedEncodedText, Span,
+                              string.Format(SpanEncodedStyled, XXLargeText),
+                              string.Format(SpanStyled, XXLargeText));
 
             return formattedEncodedText.ToString();
         }
@@ -240,6 +251,7 @@ namespace CRP.Helpers
         /// <param name="searchText"></param>
         /// <param name="replacementTag"></param>
         /// <param name="tag"></param>
+        /// <param name="closingTag"></param>
         /// <returns></returns>
         public static string[] MapOpeningTags(string searchText, string replacementTag, string tag, string closingTag)
         {
