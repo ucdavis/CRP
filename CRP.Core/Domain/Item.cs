@@ -193,7 +193,7 @@ namespace CRP.Core.Domain
             get
             {
                 var lastDayToRegisterOnLine = Expiration == null ? SystemTime.Now().AddDays(-1).Date : (DateTime)Expiration;
-                if (Sold >= Quantity || SystemTime.Now().Date > lastDayToRegisterOnLine || !Available)
+                if (Sold >= Quantity || SystemTime.Now().Date > lastDayToRegisterOnLine.Date || !Available)
                 {
                     return false;
                 }

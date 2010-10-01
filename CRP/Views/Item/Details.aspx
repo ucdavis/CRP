@@ -48,7 +48,7 @@
         </span>
         </li>
         <li>
-                <% if (Model.Item.Expiration >= DateTime.Now) { %>
+                <% if (Model.Item.Expiration >= DateTime.Now.Date) { %>
         <!-- <p>
             <% if (Model.Item.IsAvailableForReg) { %>
                 <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>'><img src="<%= Url.Content("~/Images/register.png") %>" style="border:0;" /></a>
