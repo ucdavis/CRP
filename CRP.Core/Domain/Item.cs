@@ -65,6 +65,9 @@ namespace CRP.Core.Domain
         public virtual int Quantity { get; set; }
         [Length(50)]
         public virtual string QuantityName { get; set; }
+        /// <summary>
+        /// This is now called Last Date to Register Online, so it needs to be available of that date
+        /// </summary>
         public virtual DateTime? Expiration { get; set; }
         public virtual byte[] Image { get; set; }
         public virtual string Link { get; set; }

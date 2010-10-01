@@ -18,7 +18,7 @@ namespace CRP.Controllers.ViewModels
 
             var viewModel = new BrowseItemsViewModel()
                                 {
-                                    Items = repository.OfType<Item>().Queryable.Where(a => a.Available && !a.Private && a.Expiration > DateTime.Now).OrderBy(a => a.Expiration),
+                                    Items = repository.OfType<Item>().Queryable.Where(a => a.Available && !a.Private && a.Expiration >= DateTime.Now).OrderBy(a => a.Expiration),
                                     Tags = repository.OfType<Tag>().Queryable.OrderBy(a => a.Items.Count()).Take(2)
                                 };
 
