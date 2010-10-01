@@ -830,7 +830,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             item.Quantity = 12;
             var fakeDate = new DateTime(2010, 02, 01);
             SystemTime.Now = () => fakeDate;
-            item.Expiration = null;
+            item.Expiration = new DateTime(2010, 02, 01);
             item.Available = true;
 
             #endregion Arrange
