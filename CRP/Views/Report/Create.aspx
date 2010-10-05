@@ -35,6 +35,23 @@
                     });
                 });
             });
+
+            <%if(Model.ItemReport != null){
+                foreach (var irc in Model.ItemReport.Columns){
+                    var columnId = irc.Property
+                                       ? "property" + irc.Name
+                                       : irc.QuestionSet.Questions.Where(a => a.Name == irc.Name).FirstOrDefault().Id.
+                                             ToString();%>
+                    var spans = $('#<%=columnId%>');
+                    $.each(spans, function(index2, item2) {
+                        var btn = $(item2).find("div.button");
+                        if (btn.hasClass("selected")) { btn.removeClass("selected"); }
+                        else { btn.addClass("selected"); }
+                        CreateRow(item2, btn);
+                        RenameControls($("div#selectedColumns"), "createReportParameters", "tr.dataRow");
+                    });                     
+                <%}%>                
+            <%}%>
         });
 
         function CreateRow(span, button) {
@@ -108,7 +125,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <%  if (Model.ItemReport != null)
+<%--                        <%  if (Model.ItemReport != null)
                             {
                                 foreach (var irc in Model.ItemReport.Columns)
                                 { %>
@@ -132,7 +149,7 @@
                                 </td>
                             </tr>
                         <% }
-                            } %>
+                            } %>--%>
                     </tbody>
                 </table>
             </div>
