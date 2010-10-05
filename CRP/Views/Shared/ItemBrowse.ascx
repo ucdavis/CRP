@@ -1,4 +1,4 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IQueryable<CRP.Core.Domain.Item>>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IEnumerable<CRP.Core.Domain.Item>>" %>
 <%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
@@ -10,6 +10,10 @@
         </thead>
     
     <tbody>
+    
+        <% if (Model == null || Model.Count() <= 0){%>
+            <h1>There are currently no events to browse</h1>
+        <%}%>
     
         <%  // for loop to go through all the items passed
             foreach(var item in Model) { %>

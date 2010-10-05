@@ -37,7 +37,7 @@ namespace CRP.Controllers
                         }
                     }
                 }
-                viewModel.Items = items.AsQueryable();
+                viewModel.Items = items;//.AsQueryable();
             }
 
             return View(viewModel);

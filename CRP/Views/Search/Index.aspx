@@ -17,7 +17,7 @@
         <span id="suggestion"></span>
     </p>
     
-    <% Html.RenderPartial(CRP.Core.Resources.StaticValues.Partial_ItemBrowse, Model.Items.AsQueryable()); %>
+    <% Html.RenderPartial(CRP.Core.Resources.StaticValues.Partial_ItemBrowse, Model.Items.ToList()); %>
 
 </asp:Content>
 

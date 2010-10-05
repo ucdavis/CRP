@@ -14,7 +14,7 @@
 
     <%= Html.ActionLink<HomeController>(a => a.Index(), "View All") %>
 
-    <% Html.RenderPartial(StaticValues.Partial_ItemBrowse, Model.Items); %>
+    <% Html.RenderPartial(StaticValues.Partial_ItemBrowse, Model.Items.ToList()); %>
 
 </asp:Content>
 
