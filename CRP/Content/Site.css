@@ -139,4 +139,5 @@ fieldset {font-size:100%;border: 1px solid #0D548A;}
 #adminscreen a:hover{color:#0D548A;}
 #adminscreen li{list-style:none;}
 
-.button {color: blue; cursor: pointer}
+.button:hover {color: blue; cursor: pointer}
+#toggle_all:hover {color: blue; cursor: pointer}

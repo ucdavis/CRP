@@ -92,7 +92,7 @@
             
             
         </fieldset>
-            <div id="toggle_all" style="color:Blue; cursor:pointer">
+            <div id="toggle_all">
                 Toggle Selected Columns
             </div>
         <fieldset>
