@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.CreateReportViewModel>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.CreateReportViewModel>" %>
 <%@ Import Namespace="CRP.Controllers.Helpers"%>
 <%@ Import Namespace="CRP.Core.Resources"%>
 
@@ -85,14 +85,18 @@
             
             <p>
                 <label for="Name">Name: </label>
-                <%= Html.TextBox("Name") %>
+                <%= Html.TextBox("Name", Model.ItemReport != null ? Model.ItemReport.Name : string.Empty, new { style = "width: 300px", @class="required"})%>
+                <%= Html.ValidationMessage("ItemReport.Name")%>
+                <%--<%= Html.TextBox("Name" ) %>--%>
             </p>
             
             
         </fieldset>
-
+            <div id="toggle_all" style="color:Blue; cursor:pointer">
+                Toggle Selected Columns
+            </div>
         <fieldset>
-            <legend>Selected Columns</legend>
+            <legend>Selected Columns</legend>           
             
             <div id="selectedColumns" class="t-widget t-grid">
                 <table cellspacing=0>
@@ -135,10 +139,6 @@
             
         </fieldset>
 
-        <div id="toggle_all">
-            Toggle
-        </div>
-
         <fieldset class="indexedControlContainer">
             <legend>Transaction Level</legend>
             
@@ -147,7 +147,7 @@
                     <% foreach (var q in qs.QuestionSet.Questions.Where(a => a.QuestionType != Model.QuestionTypeNoAnswer)) {%>
                         <span id='<%= q.Id %>'>
                         <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
-                        <label for="Selected" class="indexedControl"><%= Html.Encode(q.Name + " (" + q.QuestionSet.Name + ")" ) %></label>
+                        <label for="Selected" class="indexedControl"><%= Html.Encode(q.Name + " (" + q.QuestionSet.Name + ")")%></label>
                         <%= Html.Hidden("_Transaction", true, new { @class = StaticValues.Class_indexedControl })%>
                         <%= Html.Hidden("_QuestionId", q.Id, new { @class = StaticValues.Class_indexedControl })%>
                         <%= Html.Hidden("_QuestionSetId", q.QuestionSet.Id, new {@class = StaticValues.Class_indexedControl}) %>
