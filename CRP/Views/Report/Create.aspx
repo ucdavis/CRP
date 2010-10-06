@@ -27,15 +27,12 @@
                 $.each(containers, function(index, item) {
                     var spans = $(item).find("span");
                     $.each(spans, function(index2, item2) {
-                        var btn = $(item2).find("div.button");
-                        if (btn.hasClass("selected")) { btn.removeClass("selected"); }
-                        else { btn.addClass("selected"); }
-                        CreateRow(item2, btn);
-                        RenameControls($("div#selectedColumns"), "createReportParameters", "tr.dataRow");
+                        $(item2).find("div.button").click();
                     });
                 });
             });
 
+            //If a server side error happened, this reloads the selected report columns.
             <%if(Model.ItemReport != null){
                 foreach (var irc in Model.ItemReport.Columns){
                     var columnId = irc.Property
@@ -44,11 +41,7 @@
                                              ToString();%>
                     var spans = $('#<%=columnId%>');
                     $.each(spans, function(index2, item2) {
-                        var btn = $(item2).find("div.button");
-                        if (btn.hasClass("selected")) { btn.removeClass("selected"); }
-                        else { btn.addClass("selected"); }
-                        CreateRow(item2, btn);
-                        RenameControls($("div#selectedColumns"), "createReportParameters", "tr.dataRow");
+                        $(item2).find("div.button").click();
                     });                     
                 <%}%>                
             <%}%>
