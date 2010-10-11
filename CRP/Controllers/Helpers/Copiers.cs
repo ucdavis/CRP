@@ -32,6 +32,15 @@ namespace CRP.Controllers.Helpers
             dest.AllowCreditPayment = src.AllowCreditPayment;
             dest.Summary = src.Summary;
             dest.HideDonation = src.HideDonation;
+            if(string.IsNullOrEmpty(src.TouchnetFID))
+            {
+                dest.TouchnetFID = null;
+            }
+            else
+            {
+                dest.TouchnetFID = src.TouchnetFID;
+            }
+
 
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 

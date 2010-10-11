@@ -113,6 +113,9 @@ namespace CRP.Core.Domain
         /// <value>The check payment instructions.</value>
         [Required]
         public virtual string CheckPaymentInstructions { get; set; }
+
+
+        public virtual string TouchnetFID { get; set; }
         
 
         [NotNull]
@@ -368,6 +371,19 @@ namespace CRP.Core.Domain
             get
             {
                 if(AllowCheckPayment == false && AllowCreditPayment == false)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        [AssertTrue(Message = "Must select a FID when available to public is checked and credit payment is allowed")]
+        private bool FID
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(TouchnetFID) && Available && AllowCreditPayment)
                 {
                     return false;
                 }

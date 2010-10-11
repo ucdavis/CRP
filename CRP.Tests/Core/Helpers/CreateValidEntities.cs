@@ -424,6 +424,13 @@ namespace CRP.Tests.Core.Helpers
 
         #endregion Helper Extension
 
-        
+        public static TouchnetFID TouchnetFID(int counter)
+        {
+            var rtValue = new TouchnetFID("001", "Test");
+            rtValue.FID = counter.ToString("00#");
+            rtValue.Description = "Description" + counter;
+
+            return rtValue;
+        }
     }
 }

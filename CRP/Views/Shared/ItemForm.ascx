@@ -57,6 +57,21 @@
                                                         )%>
             </li>
             <li>
+                <label for="Item.TouchnetFID">FID:</label><br />
+                <% if (Model.Item == null || Model.IsNew || Model.CanChangeFID){%> 
+                    <%=this.Select("Item.TouchnetFID")
+                        .Options(Model.TouchnetFIDs, x=>x.FID, x=>x.Description)
+                        .FirstOption("--Select a Touchnet FID--")
+                        .Selected(Model.Item != null && Model.Item.TouchnetFID != null ? Model.Item.TouchnetFID : null)%>
+                <%} else {%>
+                    <%=this.Select("Item.TouchnetFID")
+                            .Options(Model.TouchnetFIDs, x=>x.FID, x=>x.Description)
+                            .FirstOption("--Select a Touchnet FID--")
+                            .Selected(Model.Item != null && Model.Item.TouchnetFID != null ? Model.Item.TouchnetFID : null).Disabled(true)%>
+                <% } %>
+                <%=Html.Encode("*Note: If you choose the wrong FID, you may not recieve your payments made by Credit Card.") %>                
+            </li>
+            <li>
                 <label for="Item.Summary">Summary:</label><br />
                 <%= Html.TextArea("Item.Summary", new { style="height:175px; width: 750px" })%>
                 <%= Html.ValidationMessage("Item.Summary", "*")%> 

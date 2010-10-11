@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="TouchnetFID"
+    table="TouchnetFIDs" >
+    <id name="Id" column="id">
+      <generator class="identity" />
+    </id>
+
+    <property name="FID" column="FID" />
+    <property name="Description" column="Description"/>
+    
+  </class>
+</hibernate-mapping>

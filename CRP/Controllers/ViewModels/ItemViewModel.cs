@@ -11,6 +11,7 @@ namespace CRP.Controllers.ViewModels
     public class ItemViewModel
     {
         public bool IsNew { get; set; }
+        public bool CanChangeFID { get; set; }
 
         public static ItemViewModel Create(IRepository repository, IPrincipal principal, Item item)
         {
@@ -19,14 +20,17 @@ namespace CRP.Controllers.ViewModels
             var viewModel = new ItemViewModel(){
                 ItemTypes = repository.OfType<ItemType>().Queryable.Where(a => a.IsActive).ToList(),
                 Users = repository.OfType<User>().Queryable,
-                CurrentUser = repository.OfType<User>().Queryable.Where(a => a.LoginID == principal.Identity.Name).FirstOrDefault()
+                CurrentUser = repository.OfType<User>().Queryable.Where(a => a.LoginID == principal.Identity.Name).FirstOrDefault(),
+                TouchnetFIDs = repository.OfType<TouchnetFID>().GetAll()
             };
 
             viewModel.UserUnit = viewModel.CurrentUser.Units.FirstOrDefault();
+            viewModel.CanChangeFID = false;
 
             if (principal.IsInRole(RoleNames.Admin))
             {
                 viewModel.Units = repository.OfType<Unit>().GetAll();
+                viewModel.CanChangeFID = true;
             }
             else
             {
@@ -39,6 +43,13 @@ namespace CRP.Controllers.ViewModels
                 else
                 {
                     viewModel.Units = viewModel.CurrentUser.Units;
+                }
+                if(item != null && item.Editors != null && item.Editors.Count > 0)
+                {
+                    if(item.Editors.Where(a => a.Owner).FirstOrDefault().User.LoginID == principal.Identity.Name)
+                    {
+                        viewModel.CanChangeFID = true;
+                    }
                 }
             }
             if(item != null)
@@ -56,5 +67,6 @@ namespace CRP.Controllers.ViewModels
         public User CurrentUser { get; set; }
         public IEnumerable<Unit> Units { get; set; }
         public Unit UserUnit { get; set; }
+        public IEnumerable<TouchnetFID> TouchnetFIDs { get; set; }
     }
 }

@@ -205,6 +205,7 @@
     <Compile Include="Repositories\SchoolRepositoryTests.cs" />
     <Compile Include="Repositories\TagRepositoryTests.cs" />
     <Compile Include="Repositories\TemplateRepositoryTests.cs" />
+    <Compile Include="Repositories\TouchnetFIDRepositoryTests.cs" />
     <Compile Include="Repositories\TransactionAnswerRepositoryTests.cs" />
     <Compile Include="Repositories\TransactionRepositoryTests\TransactionRepositoryTestsPart01.cs" />
     <Compile Include="Repositories\TransactionRepositoryTests\TransactionRepositoryTestsPart10.cs" />
