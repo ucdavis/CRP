@@ -1,10 +1,92 @@
 ﻿USE [CRP]
 GO
-/****** Object:  FullTextCatalog [Items]    Script Date: 08/09/2010 09:21:34 ******/
+/****** Object:  FullTextCatalog [Items]    Script Date: 10/11/2010 15:15:59 ******/
 CREATE FULLTEXT CATALOG [Items]WITH ACCENT_SENSITIVITY = ON
 AUTHORIZATION [dbo]
 GO
-/****** Object:  UserDefinedFunction [dbo].[udf_GenerateTransactionNumber]    Script Date: 08/09/2010 09:21:33 ******/
+/****** Object:  Table [dbo].[Tags]    Script Date: 10/11/2010 15:15:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Tags](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Tags] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[TouchnetFIDs]    Script Date: 10/11/2010 15:15:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[TouchnetFIDs](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[FID] [char](3) NOT NULL,
+	[Description] [varchar](100) NOT NULL,
+ CONSTRAINT [PK_TouchnetFIDs] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[OpenIdUsers]    Script Date: 10/11/2010 15:15:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[OpenIdUsers](
+	[id] [varchar](255) NOT NULL,
+	[Email] [varchar](255) NULL,
+	[FirstName] [varchar](255) NULL,
+	[LastName] [varchar](255) NULL,
+	[StreetAddress] [varchar](255) NULL,
+	[Address2] [varchar](255) NULL,
+	[City] [varchar](255) NULL,
+	[State] [varchar](50) NULL,
+	[Zip] [varchar](10) NULL,
+	[PhoneNumber] [varchar](20) NULL,
+ CONSTRAINT [PK_OpenIdUsers] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ItemTypes]    Script Date: 10/11/2010 15:15:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ItemTypes](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_ItemTypes] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  UserDefinedFunction [dbo].[udf_GenerateTransactionNumber]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -42,52 +124,7 @@ BEGIN
 
 END
 GO
-/****** Object:  Table [dbo].[OpenIdUsers]    Script Date: 08/09/2010 09:21:31 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
-CREATE TABLE [dbo].[OpenIdUsers](
-	[id] [varchar](255) NOT NULL,
-	[Email] [varchar](255) NULL,
-	[FirstName] [varchar](255) NULL,
-	[LastName] [varchar](255) NULL,
-	[StreetAddress] [varchar](255) NULL,
-	[Address2] [varchar](255) NULL,
-	[City] [varchar](255) NULL,
-	[State] [varchar](50) NULL,
-	[Zip] [varchar](10) NULL,
-	[PhoneNumber] [varchar](20) NULL,
- CONSTRAINT [PK_OpenIdUsers] PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_PADDING OFF
-GO
-/****** Object:  Table [dbo].[ItemTypes]    Script Date: 08/09/2010 09:21:31 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
-CREATE TABLE [dbo].[ItemTypes](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [varchar](50) NOT NULL,
-	[IsActive] [bit] NOT NULL,
- CONSTRAINT [PK_ItemTypes] PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_PADDING OFF
-GO
-/****** Object:  Table [dbo].[Validators]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Table [dbo].[Validators]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -108,25 +145,7 @@ CREATE TABLE [dbo].[Validators](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Tags]    Script Date: 08/09/2010 09:21:32 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
-CREATE TABLE [dbo].[Tags](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [varchar](50) NOT NULL,
- CONSTRAINT [PK_Tags] PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET ANSI_PADDING OFF
-GO
-/****** Object:  Table [dbo].[QuestionTypes]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[QuestionTypes]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -146,7 +165,7 @@ CREATE TABLE [dbo].[QuestionTypes](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[QuestionSets]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[QuestionSets]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -170,7 +189,7 @@ CREATE TABLE [dbo].[QuestionSets](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[DisplayProfiles]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[DisplayProfiles]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -192,7 +211,7 @@ CREATE TABLE [dbo].[DisplayProfiles](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[HelpTopics]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[HelpTopics]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -216,7 +235,7 @@ CREATE TABLE [dbo].[HelpTopics](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Items]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[Items]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -246,6 +265,7 @@ CREATE TABLE [dbo].[Items](
 	[AllowCheckPayment] [bit] NOT NULL,
 	[AllowCreditPayment] [bit] NOT NULL,
 	[HideDonation] [bit] NOT NULL,
+	[TouchnetFID] [char](3) NULL,
  CONSTRAINT [PK_Items] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -254,7 +274,7 @@ CREATE TABLE [dbo].[Items](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[ExtendedProperties]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[ExtendedProperties]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -275,7 +295,7 @@ CREATE TABLE [dbo].[ExtendedProperties](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Questions]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[Questions]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -296,7 +316,7 @@ CREATE TABLE [dbo].[Questions](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  View [dbo].[vUsers]    Script Date: 08/09/2010 09:21:34 ******/
+/****** Object:  View [dbo].[vUsers]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -433,7 +453,7 @@ End
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'vUsers'
 GO
-/****** Object:  View [dbo].[vUnits]    Script Date: 08/09/2010 09:21:34 ******/
+/****** Object:  View [dbo].[vUnits]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -565,7 +585,7 @@ End
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'vUnits'
 GO
-/****** Object:  View [dbo].[vUnitAssociations]    Script Date: 08/09/2010 09:21:34 ******/
+/****** Object:  View [dbo].[vUnitAssociations]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -701,7 +721,7 @@ End
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'vUnitAssociations'
 GO
-/****** Object:  View [dbo].[vSchools]    Script Date: 08/09/2010 09:21:34 ******/
+/****** Object:  View [dbo].[vSchools]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -833,7 +853,7 @@ End
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'vSchools'
 GO
-/****** Object:  Table [dbo].[ItemTypeQuestionSets]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[ItemTypeQuestionSets]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -850,22 +870,7 @@ CREATE TABLE [dbo].[ItemTypeQuestionSets](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ItemsXTags]    Script Date: 08/09/2010 09:21:31 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[ItemsXTags](
-	[ItemId] [int] NOT NULL,
-	[TagId] [int] NOT NULL,
- CONSTRAINT [PK_ItemsXTags] PRIMARY KEY CLUSTERED 
-(
-	[ItemId] ASC,
-	[TagId] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Templates]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Table [dbo].[Templates]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -885,22 +890,7 @@ CREATE TABLE [dbo].[Templates](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[QuestionXValidator]    Script Date: 08/09/2010 09:21:32 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[QuestionXValidator](
-	[QuestionId] [int] NOT NULL,
-	[ValidatorId] [int] NOT NULL,
- CONSTRAINT [PK_QuestionXValidator] PRIMARY KEY CLUSTERED 
-(
-	[QuestionId] ASC,
-	[ValidatorId] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[ItemQuestionSets]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[ItemQuestionSets]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -919,7 +909,37 @@ CREATE TABLE [dbo].[ItemQuestionSets](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[QuestionOptions]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[QuestionXValidator]    Script Date: 10/11/2010 15:16:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[QuestionXValidator](
+	[QuestionId] [int] NOT NULL,
+	[ValidatorId] [int] NOT NULL,
+ CONSTRAINT [PK_QuestionXValidator] PRIMARY KEY CLUSTERED 
+(
+	[QuestionId] ASC,
+	[ValidatorId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ItemsXTags]    Script Date: 10/11/2010 15:16:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ItemsXTags](
+	[ItemId] [int] NOT NULL,
+	[TagId] [int] NOT NULL,
+ CONSTRAINT [PK_ItemsXTags] PRIMARY KEY CLUSTERED 
+(
+	[ItemId] ASC,
+	[TagId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[QuestionOptions]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -938,7 +958,7 @@ CREATE TABLE [dbo].[QuestionOptions](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[ExtendedPropertyAnswers]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[ExtendedPropertyAnswers]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -958,7 +978,7 @@ CREATE TABLE [dbo].[ExtendedPropertyAnswers](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Editors]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[Editors]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -974,7 +994,7 @@ CREATE TABLE [dbo].[Editors](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Coupons]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[Coupons]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1001,7 +1021,7 @@ CREATE TABLE [dbo].[Coupons](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[ItemReports]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[ItemReports]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1022,7 +1042,7 @@ CREATE TABLE [dbo].[ItemReports](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[ItemReportColumns]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[ItemReportColumns]    Script Date: 10/11/2010 15:16:00 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1047,7 +1067,7 @@ CREATE TABLE [dbo].[ItemReportColumns](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  StoredProcedure [dbo].[usp_ItemsSearch]    Script Date: 08/09/2010 09:21:30 ******/
+/****** Object:  StoredProcedure [dbo].[usp_ItemsSearch]    Script Date: 10/11/2010 15:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1082,7 +1102,7 @@ WHERE
 
 END
 GO
-/****** Object:  Table [dbo].[Transactions]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Table [dbo].[Transactions]    Script Date: 10/11/2010 15:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1117,7 +1137,7 @@ CREATE TABLE [dbo].[Transactions](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[TransactionAnswers]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Table [dbo].[TransactionAnswers]    Script Date: 10/11/2010 15:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1138,7 +1158,7 @@ CREATE TABLE [dbo].[TransactionAnswers](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[QuantityAnswers]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[QuantityAnswers]    Script Date: 10/11/2010 15:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1160,7 +1180,7 @@ CREATE TABLE [dbo].[QuantityAnswers](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[PaymentLogs]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[PaymentLogs]    Script Date: 10/11/2010 15:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1201,7 +1221,7 @@ CREATE TABLE [dbo].[PaymentLogs](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Checks]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Table [dbo].[Checks]    Script Date: 10/11/2010 15:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1224,315 +1244,315 @@ CREATE TABLE [dbo].[Checks](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Default [DF_Coupons_Unlimited]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Coupons] ADD  CONSTRAINT [DF_Coupons_Unlimited]  DEFAULT ((0)) FOR [Unlimited]
-GO
-/****** Object:  Default [DF_Coupons_Used]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Coupons] ADD  CONSTRAINT [DF_Coupons_Used]  DEFAULT ((0)) FOR [Used]
-GO
-/****** Object:  Default [DF_Coupons_IsActive]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Coupons] ADD  CONSTRAINT [DF_Coupons_IsActive]  DEFAULT ((1)) FOR [IsActive]
-GO
-/****** Object:  Default [DF_DisplayProfiles_CollegeMaster]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[DisplayProfiles] ADD  CONSTRAINT [DF_DisplayProfiles_CollegeMaster]  DEFAULT ((0)) FOR [SchoolMaster]
-GO
-/****** Object:  Default [DF_Editors_Owner]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Editors] ADD  CONSTRAINT [DF_Editors_Owner]  DEFAULT ((0)) FOR [Owner]
-GO
-/****** Object:  Default [DF_ItemQuestionSets_TransactionLevel]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemQuestionSets] ADD  CONSTRAINT [DF_ItemQuestionSets_TransactionLevel]  DEFAULT ((0)) FOR [TransactionLevel]
-GO
-/****** Object:  Default [DF_ItemQuestionSets_QuantityLevel]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemQuestionSets] ADD  CONSTRAINT [DF_ItemQuestionSets_QuantityLevel]  DEFAULT ((0)) FOR [QuantityLevel]
-GO
-/****** Object:  Default [DF_ItemQuestionSets_Required]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemQuestionSets] ADD  CONSTRAINT [DF_ItemQuestionSets_Required]  DEFAULT ((0)) FOR [Required]
-GO
-/****** Object:  Default [DF_ItemReportColumns_Quantity]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemReportColumns] ADD  CONSTRAINT [DF_ItemReportColumns_Quantity]  DEFAULT ((0)) FOR [Quantity]
-GO
-/****** Object:  Default [DF_ItemReportColumns_Transaction]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemReportColumns] ADD  CONSTRAINT [DF_ItemReportColumns_Transaction]  DEFAULT ((0)) FOR [Transaction]
-GO
-/****** Object:  Default [DF_ItemReportColumns_Property]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemReportColumns] ADD  CONSTRAINT [DF_ItemReportColumns_Property]  DEFAULT ((0)) FOR [Property]
-GO
-/****** Object:  Default [DF_ItemReports_SystemReusable]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemReports] ADD  CONSTRAINT [DF_ItemReports_SystemReusable]  DEFAULT ((0)) FOR [SystemReusable]
-GO
-/****** Object:  Default [DF_Items_Quantity]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_Quantity]  DEFAULT ((0)) FOR [Quantity]
-GO
-/****** Object:  Default [DF_Items_DateCreated]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_DateCreated]  DEFAULT (getdate()) FOR [DateCreated]
-GO
-/****** Object:  Default [DF_Items_Available]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_Available]  DEFAULT ((0)) FOR [Available]
-GO
-/****** Object:  Default [DF_Items_Private]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_Private]  DEFAULT ((0)) FOR [Private]
-GO
-/****** Object:  Default [DF_Items_AllowCheckPayment]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_AllowCheckPayment]  DEFAULT ((1)) FOR [AllowCheckPayment]
-GO
-/****** Object:  Default [DF_Items_AllowCreditPayment]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_AllowCreditPayment]  DEFAULT ((1)) FOR [AllowCreditPayment]
-GO
-/****** Object:  Default [DF_Items_HideDonation]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_HideDonation]  DEFAULT ((0)) FOR [HideDonation]
-GO
-/****** Object:  Default [DF_ItemTypeQuestionSets_TransactionLevel]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemTypeQuestionSets] ADD  CONSTRAINT [DF_ItemTypeQuestionSets_TransactionLevel]  DEFAULT ((0)) FOR [TransactionLevel]
-GO
-/****** Object:  Default [DF_ItemTypeQuestionSets_QuantityLevel]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemTypeQuestionSets] ADD  CONSTRAINT [DF_ItemTypeQuestionSets_QuantityLevel]  DEFAULT ((0)) FOR [QuantityLevel]
-GO
-/****** Object:  Default [DF_ItemTypes_IsActive]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  Default [DF_ItemTypes_IsActive]    Script Date: 10/11/2010 15:15:59 ******/
 ALTER TABLE [dbo].[ItemTypes] ADD  CONSTRAINT [DF_ItemTypes_IsActive]  DEFAULT ((1)) FOR [IsActive]
 GO
-/****** Object:  Default [DF_PaymentLogs_DatePayment]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[PaymentLogs] ADD  CONSTRAINT [DF_PaymentLogs_DatePayment]  DEFAULT (getdate()) FOR [DatePayment]
-GO
-/****** Object:  Default [DF_PaymentLogs_Accepted]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[PaymentLogs] ADD  CONSTRAINT [DF_PaymentLogs_Accepted]  DEFAULT ((0)) FOR [Accepted]
-GO
-/****** Object:  Default [DF_PaymentLogs_Check]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[PaymentLogs] ADD  CONSTRAINT [DF_PaymentLogs_Check]  DEFAULT ((0)) FOR [Check]
-GO
-/****** Object:  Default [DF_PaymentLogs_Credit]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[PaymentLogs] ADD  CONSTRAINT [DF_PaymentLogs_Credit]  DEFAULT ((0)) FOR [Credit]
-GO
-/****** Object:  Default [DF_QuestionSets_CollegeReusable]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[QuestionSets] ADD  CONSTRAINT [DF_QuestionSets_CollegeReusable]  DEFAULT ((0)) FOR [CollegeReusable]
-GO
-/****** Object:  Default [DF_QuestionSets_SystemReusable]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[QuestionSets] ADD  CONSTRAINT [DF_QuestionSets_SystemReusable]  DEFAULT ((0)) FOR [SystemReusable]
-GO
-/****** Object:  Default [DF_QuestionSets_UserReusable]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[QuestionSets] ADD  CONSTRAINT [DF_QuestionSets_UserReusable]  DEFAULT ((0)) FOR [UserReusable]
-GO
-/****** Object:  Default [DF_QuestionSets_IsActive]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[QuestionSets] ADD  CONSTRAINT [DF_QuestionSets_IsActive]  DEFAULT ((1)) FOR [IsActive]
-GO
-/****** Object:  Default [DF_QuestionTypes_HasOptions]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Default [DF_QuestionTypes_HasOptions]    Script Date: 10/11/2010 15:16:00 ******/
 ALTER TABLE [dbo].[QuestionTypes] ADD  CONSTRAINT [DF_QuestionTypes_HasOptions]  DEFAULT ((0)) FOR [HasOptions]
 GO
-/****** Object:  Default [DF_Templates_Default]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Default [DF_QuestionSets_CollegeReusable]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[QuestionSets] ADD  CONSTRAINT [DF_QuestionSets_CollegeReusable]  DEFAULT ((0)) FOR [CollegeReusable]
+GO
+/****** Object:  Default [DF_QuestionSets_SystemReusable]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[QuestionSets] ADD  CONSTRAINT [DF_QuestionSets_SystemReusable]  DEFAULT ((0)) FOR [SystemReusable]
+GO
+/****** Object:  Default [DF_QuestionSets_UserReusable]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[QuestionSets] ADD  CONSTRAINT [DF_QuestionSets_UserReusable]  DEFAULT ((0)) FOR [UserReusable]
+GO
+/****** Object:  Default [DF_QuestionSets_IsActive]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[QuestionSets] ADD  CONSTRAINT [DF_QuestionSets_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+/****** Object:  Default [DF_DisplayProfiles_CollegeMaster]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[DisplayProfiles] ADD  CONSTRAINT [DF_DisplayProfiles_CollegeMaster]  DEFAULT ((0)) FOR [SchoolMaster]
+GO
+/****** Object:  Default [DF_Items_Quantity]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_Quantity]  DEFAULT ((0)) FOR [Quantity]
+GO
+/****** Object:  Default [DF_Items_DateCreated]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_DateCreated]  DEFAULT (getdate()) FOR [DateCreated]
+GO
+/****** Object:  Default [DF_Items_Available]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_Available]  DEFAULT ((0)) FOR [Available]
+GO
+/****** Object:  Default [DF_Items_Private]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_Private]  DEFAULT ((0)) FOR [Private]
+GO
+/****** Object:  Default [DF_Items_AllowCheckPayment]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_AllowCheckPayment]  DEFAULT ((1)) FOR [AllowCheckPayment]
+GO
+/****** Object:  Default [DF_Items_AllowCreditPayment]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_AllowCreditPayment]  DEFAULT ((1)) FOR [AllowCreditPayment]
+GO
+/****** Object:  Default [DF_Items_HideDonation]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Items] ADD  CONSTRAINT [DF_Items_HideDonation]  DEFAULT ((0)) FOR [HideDonation]
+GO
+/****** Object:  Default [DF_ItemTypeQuestionSets_TransactionLevel]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemTypeQuestionSets] ADD  CONSTRAINT [DF_ItemTypeQuestionSets_TransactionLevel]  DEFAULT ((0)) FOR [TransactionLevel]
+GO
+/****** Object:  Default [DF_ItemTypeQuestionSets_QuantityLevel]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemTypeQuestionSets] ADD  CONSTRAINT [DF_ItemTypeQuestionSets_QuantityLevel]  DEFAULT ((0)) FOR [QuantityLevel]
+GO
+/****** Object:  Default [DF_Templates_Default]    Script Date: 10/11/2010 15:16:00 ******/
 ALTER TABLE [dbo].[Templates] ADD  CONSTRAINT [DF_Templates_Default]  DEFAULT ((0)) FOR [Default]
 GO
-/****** Object:  Default [DF_Transactions_IsActive]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Default [DF_ItemQuestionSets_TransactionLevel]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemQuestionSets] ADD  CONSTRAINT [DF_ItemQuestionSets_TransactionLevel]  DEFAULT ((0)) FOR [TransactionLevel]
+GO
+/****** Object:  Default [DF_ItemQuestionSets_QuantityLevel]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemQuestionSets] ADD  CONSTRAINT [DF_ItemQuestionSets_QuantityLevel]  DEFAULT ((0)) FOR [QuantityLevel]
+GO
+/****** Object:  Default [DF_ItemQuestionSets_Required]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemQuestionSets] ADD  CONSTRAINT [DF_ItemQuestionSets_Required]  DEFAULT ((0)) FOR [Required]
+GO
+/****** Object:  Default [DF_Editors_Owner]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Editors] ADD  CONSTRAINT [DF_Editors_Owner]  DEFAULT ((0)) FOR [Owner]
+GO
+/****** Object:  Default [DF_Coupons_Unlimited]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Coupons] ADD  CONSTRAINT [DF_Coupons_Unlimited]  DEFAULT ((0)) FOR [Unlimited]
+GO
+/****** Object:  Default [DF_Coupons_Used]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Coupons] ADD  CONSTRAINT [DF_Coupons_Used]  DEFAULT ((0)) FOR [Used]
+GO
+/****** Object:  Default [DF_Coupons_IsActive]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Coupons] ADD  CONSTRAINT [DF_Coupons_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+/****** Object:  Default [DF_ItemReports_SystemReusable]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemReports] ADD  CONSTRAINT [DF_ItemReports_SystemReusable]  DEFAULT ((0)) FOR [SystemReusable]
+GO
+/****** Object:  Default [DF_ItemReportColumns_Quantity]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemReportColumns] ADD  CONSTRAINT [DF_ItemReportColumns_Quantity]  DEFAULT ((0)) FOR [Quantity]
+GO
+/****** Object:  Default [DF_ItemReportColumns_Transaction]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemReportColumns] ADD  CONSTRAINT [DF_ItemReportColumns_Transaction]  DEFAULT ((0)) FOR [Transaction]
+GO
+/****** Object:  Default [DF_ItemReportColumns_Property]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemReportColumns] ADD  CONSTRAINT [DF_ItemReportColumns_Property]  DEFAULT ((0)) FOR [Property]
+GO
+/****** Object:  Default [DF_Transactions_IsActive]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions] ADD  CONSTRAINT [DF_Transactions_IsActive]  DEFAULT ((1)) FOR [IsActive]
 GO
-/****** Object:  Default [DF_Transactions_Credit]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Default [DF_Transactions_Credit]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions] ADD  CONSTRAINT [DF_Transactions_Credit]  DEFAULT ((0)) FOR [Credit]
 GO
-/****** Object:  Default [DF_Transactions_Check]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Default [DF_Transactions_Check]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions] ADD  CONSTRAINT [DF_Transactions_Check]  DEFAULT ((0)) FOR [Check]
 GO
-/****** Object:  Default [DF_Transactions_Donation]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Default [DF_Transactions_Donation]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions] ADD  CONSTRAINT [DF_Transactions_Donation]  DEFAULT ((0)) FOR [Donation]
 GO
-/****** Object:  Default [DF_Transactions_Quantity]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Default [DF_Transactions_Quantity]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions] ADD  CONSTRAINT [DF_Transactions_Quantity]  DEFAULT ((0)) FOR [Quantity]
 GO
-/****** Object:  Default [DF_Transactions_Refunded]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  Default [DF_Transactions_Refunded]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions] ADD  CONSTRAINT [DF_Transactions_Refunded]  DEFAULT ((0)) FOR [Refunded]
 GO
-/****** Object:  ForeignKey [FK_Checks_Transactions]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Checks]  WITH CHECK ADD  CONSTRAINT [FK_Checks_Transactions] FOREIGN KEY([TransactionId])
-REFERENCES [dbo].[Transactions] ([id])
+/****** Object:  Default [DF_PaymentLogs_DatePayment]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[PaymentLogs] ADD  CONSTRAINT [DF_PaymentLogs_DatePayment]  DEFAULT (getdate()) FOR [DatePayment]
 GO
-ALTER TABLE [dbo].[Checks] CHECK CONSTRAINT [FK_Checks_Transactions]
+/****** Object:  Default [DF_PaymentLogs_Accepted]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[PaymentLogs] ADD  CONSTRAINT [DF_PaymentLogs_Accepted]  DEFAULT ((0)) FOR [Accepted]
 GO
-/****** Object:  ForeignKey [FK_Coupons_Items]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Coupons]  WITH CHECK ADD  CONSTRAINT [FK_Coupons_Items] FOREIGN KEY([ItemId])
-REFERENCES [dbo].[Items] ([id])
+/****** Object:  Default [DF_PaymentLogs_Check]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[PaymentLogs] ADD  CONSTRAINT [DF_PaymentLogs_Check]  DEFAULT ((0)) FOR [Check]
 GO
-ALTER TABLE [dbo].[Coupons] CHECK CONSTRAINT [FK_Coupons_Items]
+/****** Object:  Default [DF_PaymentLogs_Credit]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[PaymentLogs] ADD  CONSTRAINT [DF_PaymentLogs_Credit]  DEFAULT ((0)) FOR [Credit]
 GO
-/****** Object:  ForeignKey [FK_Editors_Items]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[Editors]  WITH CHECK ADD  CONSTRAINT [FK_Editors_Items] FOREIGN KEY([ItemId])
-REFERENCES [dbo].[Items] ([id])
-GO
-ALTER TABLE [dbo].[Editors] CHECK CONSTRAINT [FK_Editors_Items]
-GO
-/****** Object:  ForeignKey [FK_ExtendedProperties_ItemTypes]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ExtendedProperties]  WITH CHECK ADD  CONSTRAINT [FK_ExtendedProperties_ItemTypes] FOREIGN KEY([ItemTypeId])
-REFERENCES [dbo].[ItemTypes] ([id])
-GO
-ALTER TABLE [dbo].[ExtendedProperties] CHECK CONSTRAINT [FK_ExtendedProperties_ItemTypes]
-GO
-/****** Object:  ForeignKey [FK_ExtendedProperties_QuestionTypes]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ExtendedProperties]  WITH CHECK ADD  CONSTRAINT [FK_ExtendedProperties_QuestionTypes] FOREIGN KEY([QuestionTypeId])
-REFERENCES [dbo].[QuestionTypes] ([id])
-GO
-ALTER TABLE [dbo].[ExtendedProperties] CHECK CONSTRAINT [FK_ExtendedProperties_QuestionTypes]
-GO
-/****** Object:  ForeignKey [FK_ExtendedPropertyAnswers_ExtendedProperties]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ExtendedPropertyAnswers]  WITH CHECK ADD  CONSTRAINT [FK_ExtendedPropertyAnswers_ExtendedProperties] FOREIGN KEY([ExtendedPropertyId])
-REFERENCES [dbo].[ExtendedProperties] ([id])
-GO
-ALTER TABLE [dbo].[ExtendedPropertyAnswers] CHECK CONSTRAINT [FK_ExtendedPropertyAnswers_ExtendedProperties]
-GO
-/****** Object:  ForeignKey [FK_ExtendedPropertyAnswers_Items]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ExtendedPropertyAnswers]  WITH CHECK ADD  CONSTRAINT [FK_ExtendedPropertyAnswers_Items] FOREIGN KEY([ItemId])
-REFERENCES [dbo].[Items] ([id])
-GO
-ALTER TABLE [dbo].[ExtendedPropertyAnswers] CHECK CONSTRAINT [FK_ExtendedPropertyAnswers_Items]
-GO
-/****** Object:  ForeignKey [FK_ItemQuestionSets_Items]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemQuestionSets]  WITH CHECK ADD  CONSTRAINT [FK_ItemQuestionSets_Items] FOREIGN KEY([ItemId])
-REFERENCES [dbo].[Items] ([id])
-GO
-ALTER TABLE [dbo].[ItemQuestionSets] CHECK CONSTRAINT [FK_ItemQuestionSets_Items]
-GO
-/****** Object:  ForeignKey [FK_ItemQuestionSets_QuestionSets]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemQuestionSets]  WITH CHECK ADD  CONSTRAINT [FK_ItemQuestionSets_QuestionSets] FOREIGN KEY([QuestionSetId])
-REFERENCES [dbo].[QuestionSets] ([id])
-GO
-ALTER TABLE [dbo].[ItemQuestionSets] CHECK CONSTRAINT [FK_ItemQuestionSets_QuestionSets]
-GO
-/****** Object:  ForeignKey [FK_ItemReportColumns_ItemReports]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemReportColumns]  WITH CHECK ADD  CONSTRAINT [FK_ItemReportColumns_ItemReports] FOREIGN KEY([ItemReportId])
-REFERENCES [dbo].[ItemReports] ([id])
-GO
-ALTER TABLE [dbo].[ItemReportColumns] CHECK CONSTRAINT [FK_ItemReportColumns_ItemReports]
-GO
-/****** Object:  ForeignKey [FK_ItemReports_Items]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemReports]  WITH CHECK ADD  CONSTRAINT [FK_ItemReports_Items] FOREIGN KEY([ItemId])
-REFERENCES [dbo].[Items] ([id])
-GO
-ALTER TABLE [dbo].[ItemReports] CHECK CONSTRAINT [FK_ItemReports_Items]
-GO
-/****** Object:  ForeignKey [FK_Items_ItemTypes]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  ForeignKey [FK_Items_ItemTypes]    Script Date: 10/11/2010 15:16:00 ******/
 ALTER TABLE [dbo].[Items]  WITH CHECK ADD  CONSTRAINT [FK_Items_ItemTypes] FOREIGN KEY([ItemTypeId])
 REFERENCES [dbo].[ItemTypes] ([id])
 GO
 ALTER TABLE [dbo].[Items] CHECK CONSTRAINT [FK_Items_ItemTypes]
 GO
-/****** Object:  ForeignKey [FK_ItemsXTags_Items]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemsXTags]  WITH CHECK ADD  CONSTRAINT [FK_ItemsXTags_Items] FOREIGN KEY([ItemId])
-REFERENCES [dbo].[Items] ([id])
-GO
-ALTER TABLE [dbo].[ItemsXTags] CHECK CONSTRAINT [FK_ItemsXTags_Items]
-GO
-/****** Object:  ForeignKey [FK_ItemsXTags_Tags]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemsXTags]  WITH CHECK ADD  CONSTRAINT [FK_ItemsXTags_Tags] FOREIGN KEY([TagId])
-REFERENCES [dbo].[Tags] ([id])
-GO
-ALTER TABLE [dbo].[ItemsXTags] CHECK CONSTRAINT [FK_ItemsXTags_Tags]
-GO
-/****** Object:  ForeignKey [FK_ItemTypesXQuestionSets_ItemTypes]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemTypeQuestionSets]  WITH CHECK ADD  CONSTRAINT [FK_ItemTypesXQuestionSets_ItemTypes] FOREIGN KEY([ItemTypeId])
+/****** Object:  ForeignKey [FK_ExtendedProperties_ItemTypes]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ExtendedProperties]  WITH CHECK ADD  CONSTRAINT [FK_ExtendedProperties_ItemTypes] FOREIGN KEY([ItemTypeId])
 REFERENCES [dbo].[ItemTypes] ([id])
 GO
-ALTER TABLE [dbo].[ItemTypeQuestionSets] CHECK CONSTRAINT [FK_ItemTypesXQuestionSets_ItemTypes]
+ALTER TABLE [dbo].[ExtendedProperties] CHECK CONSTRAINT [FK_ExtendedProperties_ItemTypes]
 GO
-/****** Object:  ForeignKey [FK_ItemTypesXQuestionSets_QuestionSets]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[ItemTypeQuestionSets]  WITH CHECK ADD  CONSTRAINT [FK_ItemTypesXQuestionSets_QuestionSets] FOREIGN KEY([QuestionSetId])
-REFERENCES [dbo].[QuestionSets] ([id])
+/****** Object:  ForeignKey [FK_ExtendedProperties_QuestionTypes]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ExtendedProperties]  WITH CHECK ADD  CONSTRAINT [FK_ExtendedProperties_QuestionTypes] FOREIGN KEY([QuestionTypeId])
+REFERENCES [dbo].[QuestionTypes] ([id])
 GO
-ALTER TABLE [dbo].[ItemTypeQuestionSets] CHECK CONSTRAINT [FK_ItemTypesXQuestionSets_QuestionSets]
+ALTER TABLE [dbo].[ExtendedProperties] CHECK CONSTRAINT [FK_ExtendedProperties_QuestionTypes]
 GO
-/****** Object:  ForeignKey [FK_PaymentLogs_Transactions]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[PaymentLogs]  WITH CHECK ADD  CONSTRAINT [FK_PaymentLogs_Transactions] FOREIGN KEY([TransactionId])
-REFERENCES [dbo].[Transactions] ([id])
-GO
-ALTER TABLE [dbo].[PaymentLogs] CHECK CONSTRAINT [FK_PaymentLogs_Transactions]
-GO
-/****** Object:  ForeignKey [FK_QuantityAnswers_Questions]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[QuantityAnswers]  WITH CHECK ADD  CONSTRAINT [FK_QuantityAnswers_Questions] FOREIGN KEY([QuestionId])
-REFERENCES [dbo].[Questions] ([id])
-GO
-ALTER TABLE [dbo].[QuantityAnswers] CHECK CONSTRAINT [FK_QuantityAnswers_Questions]
-GO
-/****** Object:  ForeignKey [FK_QuantityAnswers_QuestionSets]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[QuantityAnswers]  WITH CHECK ADD  CONSTRAINT [FK_QuantityAnswers_QuestionSets] FOREIGN KEY([QuestionSetId])
-REFERENCES [dbo].[QuestionSets] ([id])
-GO
-ALTER TABLE [dbo].[QuantityAnswers] CHECK CONSTRAINT [FK_QuantityAnswers_QuestionSets]
-GO
-/****** Object:  ForeignKey [FK_QuantityAnswers_Transactions]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[QuantityAnswers]  WITH CHECK ADD  CONSTRAINT [FK_QuantityAnswers_Transactions] FOREIGN KEY([TransactionId])
-REFERENCES [dbo].[Transactions] ([id])
-GO
-ALTER TABLE [dbo].[QuantityAnswers] CHECK CONSTRAINT [FK_QuantityAnswers_Transactions]
-GO
-/****** Object:  ForeignKey [FK_QuestionOptions_Questions]    Script Date: 08/09/2010 09:21:31 ******/
-ALTER TABLE [dbo].[QuestionOptions]  WITH CHECK ADD  CONSTRAINT [FK_QuestionOptions_Questions] FOREIGN KEY([QuestionId])
-REFERENCES [dbo].[Questions] ([id])
-GO
-ALTER TABLE [dbo].[QuestionOptions] CHECK CONSTRAINT [FK_QuestionOptions_Questions]
-GO
-/****** Object:  ForeignKey [FK_Questions_QuestionSets]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  ForeignKey [FK_Questions_QuestionSets]    Script Date: 10/11/2010 15:16:00 ******/
 ALTER TABLE [dbo].[Questions]  WITH CHECK ADD  CONSTRAINT [FK_Questions_QuestionSets] FOREIGN KEY([QuestionSetId])
 REFERENCES [dbo].[QuestionSets] ([id])
 GO
 ALTER TABLE [dbo].[Questions] CHECK CONSTRAINT [FK_Questions_QuestionSets]
 GO
-/****** Object:  ForeignKey [FK_Questions_QuestionTypes]    Script Date: 08/09/2010 09:21:31 ******/
+/****** Object:  ForeignKey [FK_Questions_QuestionTypes]    Script Date: 10/11/2010 15:16:00 ******/
 ALTER TABLE [dbo].[Questions]  WITH CHECK ADD  CONSTRAINT [FK_Questions_QuestionTypes] FOREIGN KEY([QuestionTypeId])
 REFERENCES [dbo].[QuestionTypes] ([id])
 GO
 ALTER TABLE [dbo].[Questions] CHECK CONSTRAINT [FK_Questions_QuestionTypes]
 GO
-/****** Object:  ForeignKey [FK_QuestionXValidator_Questions]    Script Date: 08/09/2010 09:21:32 ******/
-ALTER TABLE [dbo].[QuestionXValidator]  WITH CHECK ADD  CONSTRAINT [FK_QuestionXValidator_Questions] FOREIGN KEY([QuestionId])
-REFERENCES [dbo].[Questions] ([id])
+/****** Object:  ForeignKey [FK_ItemTypesXQuestionSets_ItemTypes]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemTypeQuestionSets]  WITH CHECK ADD  CONSTRAINT [FK_ItemTypesXQuestionSets_ItemTypes] FOREIGN KEY([ItemTypeId])
+REFERENCES [dbo].[ItemTypes] ([id])
 GO
-ALTER TABLE [dbo].[QuestionXValidator] CHECK CONSTRAINT [FK_QuestionXValidator_Questions]
+ALTER TABLE [dbo].[ItemTypeQuestionSets] CHECK CONSTRAINT [FK_ItemTypesXQuestionSets_ItemTypes]
 GO
-/****** Object:  ForeignKey [FK_QuestionXValidator_Validators]    Script Date: 08/09/2010 09:21:32 ******/
-ALTER TABLE [dbo].[QuestionXValidator]  WITH CHECK ADD  CONSTRAINT [FK_QuestionXValidator_Validators] FOREIGN KEY([ValidatorId])
-REFERENCES [dbo].[Validators] ([id])
+/****** Object:  ForeignKey [FK_ItemTypesXQuestionSets_QuestionSets]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemTypeQuestionSets]  WITH CHECK ADD  CONSTRAINT [FK_ItemTypesXQuestionSets_QuestionSets] FOREIGN KEY([QuestionSetId])
+REFERENCES [dbo].[QuestionSets] ([id])
 GO
-ALTER TABLE [dbo].[QuestionXValidator] CHECK CONSTRAINT [FK_QuestionXValidator_Validators]
+ALTER TABLE [dbo].[ItemTypeQuestionSets] CHECK CONSTRAINT [FK_ItemTypesXQuestionSets_QuestionSets]
 GO
-/****** Object:  ForeignKey [FK_Templates_Items]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  ForeignKey [FK_Templates_Items]    Script Date: 10/11/2010 15:16:00 ******/
 ALTER TABLE [dbo].[Templates]  WITH CHECK ADD  CONSTRAINT [FK_Templates_Items] FOREIGN KEY([ItemId])
 REFERENCES [dbo].[Items] ([id])
 GO
 ALTER TABLE [dbo].[Templates] CHECK CONSTRAINT [FK_Templates_Items]
 GO
-/****** Object:  ForeignKey [FK_TransactionAnswers_Questions]    Script Date: 08/09/2010 09:21:32 ******/
-ALTER TABLE [dbo].[TransactionAnswers]  WITH CHECK ADD  CONSTRAINT [FK_TransactionAnswers_Questions] FOREIGN KEY([QuestionId])
-REFERENCES [dbo].[Questions] ([id])
+/****** Object:  ForeignKey [FK_ItemQuestionSets_Items]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemQuestionSets]  WITH CHECK ADD  CONSTRAINT [FK_ItemQuestionSets_Items] FOREIGN KEY([ItemId])
+REFERENCES [dbo].[Items] ([id])
 GO
-ALTER TABLE [dbo].[TransactionAnswers] CHECK CONSTRAINT [FK_TransactionAnswers_Questions]
+ALTER TABLE [dbo].[ItemQuestionSets] CHECK CONSTRAINT [FK_ItemQuestionSets_Items]
 GO
-/****** Object:  ForeignKey [FK_TransactionAnswers_QuestionSets]    Script Date: 08/09/2010 09:21:32 ******/
-ALTER TABLE [dbo].[TransactionAnswers]  WITH CHECK ADD  CONSTRAINT [FK_TransactionAnswers_QuestionSets] FOREIGN KEY([QuestionSetId])
+/****** Object:  ForeignKey [FK_ItemQuestionSets_QuestionSets]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemQuestionSets]  WITH CHECK ADD  CONSTRAINT [FK_ItemQuestionSets_QuestionSets] FOREIGN KEY([QuestionSetId])
 REFERENCES [dbo].[QuestionSets] ([id])
 GO
-ALTER TABLE [dbo].[TransactionAnswers] CHECK CONSTRAINT [FK_TransactionAnswers_QuestionSets]
+ALTER TABLE [dbo].[ItemQuestionSets] CHECK CONSTRAINT [FK_ItemQuestionSets_QuestionSets]
 GO
-/****** Object:  ForeignKey [FK_TransactionAnswers_Transactions]    Script Date: 08/09/2010 09:21:32 ******/
-ALTER TABLE [dbo].[TransactionAnswers]  WITH CHECK ADD  CONSTRAINT [FK_TransactionAnswers_Transactions] FOREIGN KEY([TransactionId])
-REFERENCES [dbo].[Transactions] ([id])
+/****** Object:  ForeignKey [FK_QuestionXValidator_Questions]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[QuestionXValidator]  WITH CHECK ADD  CONSTRAINT [FK_QuestionXValidator_Questions] FOREIGN KEY([QuestionId])
+REFERENCES [dbo].[Questions] ([id])
 GO
-ALTER TABLE [dbo].[TransactionAnswers] CHECK CONSTRAINT [FK_TransactionAnswers_Transactions]
+ALTER TABLE [dbo].[QuestionXValidator] CHECK CONSTRAINT [FK_QuestionXValidator_Questions]
 GO
-/****** Object:  ForeignKey [FK_Transactions_Coupons]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  ForeignKey [FK_QuestionXValidator_Validators]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[QuestionXValidator]  WITH CHECK ADD  CONSTRAINT [FK_QuestionXValidator_Validators] FOREIGN KEY([ValidatorId])
+REFERENCES [dbo].[Validators] ([id])
+GO
+ALTER TABLE [dbo].[QuestionXValidator] CHECK CONSTRAINT [FK_QuestionXValidator_Validators]
+GO
+/****** Object:  ForeignKey [FK_ItemsXTags_Items]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemsXTags]  WITH CHECK ADD  CONSTRAINT [FK_ItemsXTags_Items] FOREIGN KEY([ItemId])
+REFERENCES [dbo].[Items] ([id])
+GO
+ALTER TABLE [dbo].[ItemsXTags] CHECK CONSTRAINT [FK_ItemsXTags_Items]
+GO
+/****** Object:  ForeignKey [FK_ItemsXTags_Tags]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemsXTags]  WITH CHECK ADD  CONSTRAINT [FK_ItemsXTags_Tags] FOREIGN KEY([TagId])
+REFERENCES [dbo].[Tags] ([id])
+GO
+ALTER TABLE [dbo].[ItemsXTags] CHECK CONSTRAINT [FK_ItemsXTags_Tags]
+GO
+/****** Object:  ForeignKey [FK_QuestionOptions_Questions]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[QuestionOptions]  WITH CHECK ADD  CONSTRAINT [FK_QuestionOptions_Questions] FOREIGN KEY([QuestionId])
+REFERENCES [dbo].[Questions] ([id])
+GO
+ALTER TABLE [dbo].[QuestionOptions] CHECK CONSTRAINT [FK_QuestionOptions_Questions]
+GO
+/****** Object:  ForeignKey [FK_ExtendedPropertyAnswers_ExtendedProperties]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ExtendedPropertyAnswers]  WITH CHECK ADD  CONSTRAINT [FK_ExtendedPropertyAnswers_ExtendedProperties] FOREIGN KEY([ExtendedPropertyId])
+REFERENCES [dbo].[ExtendedProperties] ([id])
+GO
+ALTER TABLE [dbo].[ExtendedPropertyAnswers] CHECK CONSTRAINT [FK_ExtendedPropertyAnswers_ExtendedProperties]
+GO
+/****** Object:  ForeignKey [FK_ExtendedPropertyAnswers_Items]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ExtendedPropertyAnswers]  WITH CHECK ADD  CONSTRAINT [FK_ExtendedPropertyAnswers_Items] FOREIGN KEY([ItemId])
+REFERENCES [dbo].[Items] ([id])
+GO
+ALTER TABLE [dbo].[ExtendedPropertyAnswers] CHECK CONSTRAINT [FK_ExtendedPropertyAnswers_Items]
+GO
+/****** Object:  ForeignKey [FK_Editors_Items]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Editors]  WITH CHECK ADD  CONSTRAINT [FK_Editors_Items] FOREIGN KEY([ItemId])
+REFERENCES [dbo].[Items] ([id])
+GO
+ALTER TABLE [dbo].[Editors] CHECK CONSTRAINT [FK_Editors_Items]
+GO
+/****** Object:  ForeignKey [FK_Coupons_Items]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[Coupons]  WITH CHECK ADD  CONSTRAINT [FK_Coupons_Items] FOREIGN KEY([ItemId])
+REFERENCES [dbo].[Items] ([id])
+GO
+ALTER TABLE [dbo].[Coupons] CHECK CONSTRAINT [FK_Coupons_Items]
+GO
+/****** Object:  ForeignKey [FK_ItemReports_Items]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemReports]  WITH CHECK ADD  CONSTRAINT [FK_ItemReports_Items] FOREIGN KEY([ItemId])
+REFERENCES [dbo].[Items] ([id])
+GO
+ALTER TABLE [dbo].[ItemReports] CHECK CONSTRAINT [FK_ItemReports_Items]
+GO
+/****** Object:  ForeignKey [FK_ItemReportColumns_ItemReports]    Script Date: 10/11/2010 15:16:00 ******/
+ALTER TABLE [dbo].[ItemReportColumns]  WITH CHECK ADD  CONSTRAINT [FK_ItemReportColumns_ItemReports] FOREIGN KEY([ItemReportId])
+REFERENCES [dbo].[ItemReports] ([id])
+GO
+ALTER TABLE [dbo].[ItemReportColumns] CHECK CONSTRAINT [FK_ItemReportColumns_ItemReports]
+GO
+/****** Object:  ForeignKey [FK_Transactions_Coupons]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions]  WITH CHECK ADD  CONSTRAINT [FK_Transactions_Coupons] FOREIGN KEY([CouponId])
 REFERENCES [dbo].[Coupons] ([id])
 GO
 ALTER TABLE [dbo].[Transactions] CHECK CONSTRAINT [FK_Transactions_Coupons]
 GO
-/****** Object:  ForeignKey [FK_Transactions_Items]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  ForeignKey [FK_Transactions_Items]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions]  WITH CHECK ADD  CONSTRAINT [FK_Transactions_Items] FOREIGN KEY([ItemId])
 REFERENCES [dbo].[Items] ([id])
 GO
 ALTER TABLE [dbo].[Transactions] CHECK CONSTRAINT [FK_Transactions_Items]
 GO
-/****** Object:  ForeignKey [FK_Transactions_OpenIdUsers]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  ForeignKey [FK_Transactions_OpenIdUsers]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions]  WITH CHECK ADD  CONSTRAINT [FK_Transactions_OpenIdUsers] FOREIGN KEY([OpenIdUserId])
 REFERENCES [dbo].[OpenIdUsers] ([id])
 GO
 ALTER TABLE [dbo].[Transactions] CHECK CONSTRAINT [FK_Transactions_OpenIdUsers]
 GO
-/****** Object:  ForeignKey [FK_Transactions_Transactions]    Script Date: 08/09/2010 09:21:32 ******/
+/****** Object:  ForeignKey [FK_Transactions_Transactions]    Script Date: 10/11/2010 15:16:01 ******/
 ALTER TABLE [dbo].[Transactions]  WITH CHECK ADD  CONSTRAINT [FK_Transactions_Transactions] FOREIGN KEY([TransactionId])
 REFERENCES [dbo].[Transactions] ([id])
 GO
 ALTER TABLE [dbo].[Transactions] CHECK CONSTRAINT [FK_Transactions_Transactions]
+GO
+/****** Object:  ForeignKey [FK_TransactionAnswers_Questions]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[TransactionAnswers]  WITH CHECK ADD  CONSTRAINT [FK_TransactionAnswers_Questions] FOREIGN KEY([QuestionId])
+REFERENCES [dbo].[Questions] ([id])
+GO
+ALTER TABLE [dbo].[TransactionAnswers] CHECK CONSTRAINT [FK_TransactionAnswers_Questions]
+GO
+/****** Object:  ForeignKey [FK_TransactionAnswers_QuestionSets]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[TransactionAnswers]  WITH CHECK ADD  CONSTRAINT [FK_TransactionAnswers_QuestionSets] FOREIGN KEY([QuestionSetId])
+REFERENCES [dbo].[QuestionSets] ([id])
+GO
+ALTER TABLE [dbo].[TransactionAnswers] CHECK CONSTRAINT [FK_TransactionAnswers_QuestionSets]
+GO
+/****** Object:  ForeignKey [FK_TransactionAnswers_Transactions]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[TransactionAnswers]  WITH CHECK ADD  CONSTRAINT [FK_TransactionAnswers_Transactions] FOREIGN KEY([TransactionId])
+REFERENCES [dbo].[Transactions] ([id])
+GO
+ALTER TABLE [dbo].[TransactionAnswers] CHECK CONSTRAINT [FK_TransactionAnswers_Transactions]
+GO
+/****** Object:  ForeignKey [FK_QuantityAnswers_Questions]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[QuantityAnswers]  WITH CHECK ADD  CONSTRAINT [FK_QuantityAnswers_Questions] FOREIGN KEY([QuestionId])
+REFERENCES [dbo].[Questions] ([id])
+GO
+ALTER TABLE [dbo].[QuantityAnswers] CHECK CONSTRAINT [FK_QuantityAnswers_Questions]
+GO
+/****** Object:  ForeignKey [FK_QuantityAnswers_QuestionSets]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[QuantityAnswers]  WITH CHECK ADD  CONSTRAINT [FK_QuantityAnswers_QuestionSets] FOREIGN KEY([QuestionSetId])
+REFERENCES [dbo].[QuestionSets] ([id])
+GO
+ALTER TABLE [dbo].[QuantityAnswers] CHECK CONSTRAINT [FK_QuantityAnswers_QuestionSets]
+GO
+/****** Object:  ForeignKey [FK_QuantityAnswers_Transactions]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[QuantityAnswers]  WITH CHECK ADD  CONSTRAINT [FK_QuantityAnswers_Transactions] FOREIGN KEY([TransactionId])
+REFERENCES [dbo].[Transactions] ([id])
+GO
+ALTER TABLE [dbo].[QuantityAnswers] CHECK CONSTRAINT [FK_QuantityAnswers_Transactions]
+GO
+/****** Object:  ForeignKey [FK_PaymentLogs_Transactions]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[PaymentLogs]  WITH CHECK ADD  CONSTRAINT [FK_PaymentLogs_Transactions] FOREIGN KEY([TransactionId])
+REFERENCES [dbo].[Transactions] ([id])
+GO
+ALTER TABLE [dbo].[PaymentLogs] CHECK CONSTRAINT [FK_PaymentLogs_Transactions]
+GO
+/****** Object:  ForeignKey [FK_Checks_Transactions]    Script Date: 10/11/2010 15:16:01 ******/
+ALTER TABLE [dbo].[Checks]  WITH CHECK ADD  CONSTRAINT [FK_Checks_Transactions] FOREIGN KEY([TransactionId])
+REFERENCES [dbo].[Transactions] ([id])
+GO
+ALTER TABLE [dbo].[Checks] CHECK CONSTRAINT [FK_Checks_Transactions]
 GO
