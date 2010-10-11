@@ -25,13 +25,16 @@ namespace CRP.Controllers.ViewModels
         public string CreatedBy { get; set; }
         public decimal RefundAmount { get; set; }
 
-        public static EditTransactionViewModel Create(IRepository repository)
+        public static EditTransactionViewModel Create(IRepository repository, Transaction transaction)
         {
             Check.Require(repository != null, "Repository is required.");
 
             var viewModel = new EditTransactionViewModel() { };
+            viewModel.TransactionValue = transaction;
 
-            viewModel.Fid = string.Format(" FID={0}", ConfigurationManager.AppSettings["TouchNetFid"]);
+            //viewModel.Fid = string.Format(" FID={0}", ConfigurationManager.AppSettings["TouchNetFid"]);
+            viewModel.Fid = string.Format(" FID={0}", string.IsNullOrEmpty(viewModel.TransactionValue.Item.TouchnetFID)? string.Empty:viewModel.TransactionValue.Item.TouchnetFID);
+            
             return viewModel;
         }
 

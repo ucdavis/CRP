@@ -17,6 +17,7 @@ using CRP.Core.Resources;
 using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Core.PersistanceSupport;
+using UCDArch.Core.Utils;
 using UCDArch.Data.NHibernate;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Controller;
@@ -402,11 +403,16 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Confirmation(int id)
         {
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
+            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);            
 
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
+
+            Check.Require(transaction.Item != null);
+            Check.Require(!string.IsNullOrEmpty(transaction.Item.TouchnetFID));
+
             string postingString = ConfigurationManager.AppSettings["TouchNetPostingKey"];
-            string Fid = " FID=" + ConfigurationManager.AppSettings["TouchNetFid"]; 
+            //string Fid = " FID=" + ConfigurationManager.AppSettings["TouchNetFid"]; 
+            string Fid = " FID=" + transaction.Item.TouchnetFID; 
             var validationKey = CalculateValidationString(postingString, transaction.TransactionGuid.ToString() + Fid, transaction.Total.ToString());
             var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url, Fid);
             return View(viewModel);
@@ -493,7 +499,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
                 //return this.RedirectToAction<ItemManagementController>(a => a.Details(transaction.Item.Id));
             }
-            var viewModel = EditTransactionViewModel.Create(Repository);
+            var viewModel = EditTransactionViewModel.Create(Repository, transaction);
             viewModel.TransactionValue = transaction;
             viewModel.ContactName =
                 transaction.TransactionAnswers.Where(
@@ -586,7 +592,7 @@ namespace CRP.Controllers
             //TODO: We could replace the line below with a rollback to be more consistent.
             transactionToUpdate.ChildTransactions.Remove(correctionTransaction);
 
-            var viewModel = EditTransactionViewModel.Create(Repository);
+            var viewModel = EditTransactionViewModel.Create(Repository, transactionToUpdate);
             viewModel.TransactionValue = transactionToUpdate;
             viewModel.ContactName =
                 transactionToUpdate.TransactionAnswers.Where(
@@ -650,7 +656,7 @@ namespace CRP.Controllers
                         pageAndSort["page"])
                     );
             }
-            var viewModel = EditTransactionViewModel.Create(Repository);
+            var viewModel = EditTransactionViewModel.Create(Repository, transaction);
             viewModel.TransactionValue = transaction;
             viewModel.ContactName =
                 transaction.TransactionAnswers.Where(
@@ -740,7 +746,7 @@ namespace CRP.Controllers
             //TODO: We could replace the line below with a rollback to be more consistent.
             transactionToUpdate.ChildTransactions.Remove(refundTransaction);
 
-            var viewModel = EditTransactionViewModel.Create(Repository);
+            var viewModel = EditTransactionViewModel.Create(Repository, transactionToUpdate);
             viewModel.TransactionValue = transactionToUpdate;
             viewModel.ContactName =
                 transactionToUpdate.TransactionAnswers.Where(
@@ -854,7 +860,7 @@ namespace CRP.Controllers
                     );
             }
 
-            var viewModel = EditTransactionViewModel.Create(Repository);
+            var viewModel = EditTransactionViewModel.Create(Repository, transactionToView);
             viewModel.TransactionValue = transactionToView;
             viewModel.ContactName =
                 transactionToView.TransactionAnswers.Where(

@@ -102,6 +102,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Edits the specified id.
+        /// GET
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns></returns>
@@ -117,9 +118,14 @@ namespace CRP.Controllers
             return View(touchnetFID);
         }
 
-        //
-        // POST: /FID/Edit/5
 
+        /// <summary>
+        /// Edits the specified id.
+        /// POST
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="touchnetFID">The touchnet FID.</param>
+        /// <returns></returns>
         [AcceptPost]
         public ActionResult Edit(int id, TouchnetFID touchnetFID)
         {
