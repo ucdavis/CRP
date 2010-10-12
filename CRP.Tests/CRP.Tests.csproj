@@ -123,6 +123,7 @@
     <Compile Include="Controllers\DisplayProfileControllerTests.cs" />
     <Compile Include="Controllers\ExcelControllerTests.cs" />
     <Compile Include="Controllers\ExtendedPropertyControllerTests.cs" />
+    <Compile Include="Controllers\FIDControllerTests.cs" />
     <Compile Include="Controllers\HelpTopicControllerTests.cs" />
     <Compile Include="Controllers\ItemControllerTests.cs" />
     <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsInit.cs" />

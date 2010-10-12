@@ -1,25 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Mvc.Ajax;
 using CRP.Controllers.Filter;
-using UCDArch.Web.Controller;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Mvc.Ajax;
-using CRP.Controllers.Filter;
-using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
-using UCDArch.Web.Controller;
-using MvcContrib.Attributes;
-using UCDArch.Web.Helpers;
 using MvcContrib;
+using MvcContrib.Attributes;
+using UCDArch.Web.Controller;
+using UCDArch.Web.Helpers;
 
 namespace CRP.Controllers
 {
@@ -29,6 +16,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Index
+        /// 1
         /// </summary>
         /// <returns>Queryable of TouchnetFID</returns>
         public ActionResult Index()
@@ -47,7 +35,8 @@ namespace CRP.Controllers
             var touchnetFID = Repository.OfType<TouchnetFID>().GetNullableByID(id);
             if (touchnetFID == null)
             {
-                Message = "FID Not Found";
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,
+                                                                       "Touchnet FID");
                 return this.RedirectToAction(a => a.Index());
             }
 
@@ -68,13 +57,12 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="touchnetFID">The touchnet FID.</param>
         /// <returns></returns>
-        [AdminOnly]
         [AcceptPost]
         public ActionResult Create(TouchnetFID touchnetFID)
         {
             var fid = new TouchnetFID();
             fid.FID = touchnetFID.FID.Trim();
-            fid.Description = touchnetFID.Description;
+            fid.Description = touchnetFID.Description.Trim();
 
             fid.TransferValidationMessagesTo(ModelState);
 
@@ -93,7 +81,7 @@ namespace CRP.Controllers
                 Repository.OfType<TouchnetFID>().EnsurePersistent(fid);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType,
                                                                        "Touchnet FID");
-                return this.RedirectToAction<FIDController>(a => a.Index());
+                return this.RedirectToAction(a => a.Index());
             }
 
             return View(fid);
@@ -132,11 +120,12 @@ namespace CRP.Controllers
             var fid = Repository.OfType<TouchnetFID>().GetNullableByID(id);
             if (fid == null)
             {
-                Message = "FID Not Found";
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,
+                                                                       "Touchnet FID");
                 return this.RedirectToAction(a => a.Index());
             }
             fid.FID = touchnetFID.FID.Trim();
-            fid.Description = touchnetFID.Description;
+            fid.Description = touchnetFID.Description.Trim();
 
             fid.TransferValidationMessagesTo(ModelState);
 
@@ -153,9 +142,9 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<TouchnetFID>().EnsurePersistent(fid);
-                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType,
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
                                                                        "Touchnet FID");
-                return this.RedirectToAction<FIDController>(a => a.Index());
+                return this.RedirectToAction(a => a.Index());
             }
 
             return View(fid);
