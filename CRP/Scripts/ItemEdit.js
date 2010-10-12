@@ -37,8 +37,8 @@
                             });
                         }
                     });
-                });
-    
+    });
+
 
     $("img#tagAddButton").click(function(event) {
         var input = $("<input>").attr("id", "tags").attr("name", "tags").val($("input#tagInput").val());
@@ -61,102 +61,106 @@
         $(this).parent().submit();
     });
 
-//    $("textarea#BodyText").tinymce({
-//        script_url: scriptUrl,
-//        // General options
-//        theme: "advanced",
-//        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
+    //    $("textarea#BodyText").tinymce({
+    //        script_url: scriptUrl,
+    //        // General options
+    //        theme: "advanced",
+    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
 
-//        // Theme options
-//        theme_advanced_buttons1: "save,print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-//        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo,|,bullist,numlist",
-//        theme_advanced_buttons3: "",
-//        theme_advanced_toolbar_location: "top",
-//        theme_advanced_toolbar_align: "left",
-//        theme_advanced_statusbar_location: "bottom",
-//        theme_advanced_resizing: false,
+    //        // Theme options
+    //        theme_advanced_buttons1: "save,print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
+    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo,|,bullist,numlist",
+    //        theme_advanced_buttons3: "",
+    //        theme_advanced_toolbar_location: "top",
+    //        theme_advanced_toolbar_align: "left",
+    //        theme_advanced_statusbar_location: "bottom",
+    //        theme_advanced_resizing: false,
 
-//        // dimensions stuff
-//        height: "400",
+    //        // dimensions stuff
+    //        height: "400",
 
-//        // Example content CSS (should be your site CSS)
-//        //content_css: "css/Main.css",
+    //        // Example content CSS (should be your site CSS)
+    //        //content_css: "css/Main.css",
 
-//        // Drop lists for link/image/media/template dialogs
-//        template_external_list_url: "js/template_list.js",
-//        external_link_list_url: "js/link_list.js",
-//        external_image_list_url: "js/image_list.js",
-//        media_external_list_url: "js/media_list.js",
+    //        // Drop lists for link/image/media/template dialogs
+    //        template_external_list_url: "js/template_list.js",
+    //        external_link_list_url: "js/link_list.js",
+    //        external_image_list_url: "js/image_list.js",
+    //        media_external_list_url: "js/media_list.js",
 
-//        save_onsavecallback: function() {
-//            var textbox = $(this);
-//            var token = $($("input:hidden[name='__RequestVerificationToken']")[0]).val();
+    //        save_onsavecallback: function() {
+    //            var textbox = $(this);
+    //            var token = $($("input:hidden[name='__RequestVerificationToken']")[0]).val();
 
-//            $.post(saveTemplateUrl, { id: id, text: textbox.val(), __RequestVerificationToken: token }
-//                , function(result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
-//        }
-//    });    
+    //            $.post(saveTemplateUrl, { id: id, text: textbox.val(), __RequestVerificationToken: token }
+    //                , function(result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
+    //        }
+    //    });    
 
 
-//    $("textarea#Item_Description").tinymce({
-//        script_url: scriptUrl,
-//        // General options
-//        theme: "advanced",
-//        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
+    //    $("textarea#Item_Description").tinymce({
+    //        script_url: scriptUrl,
+    //        // General options
+    //        theme: "advanced",
+    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
 
-//        // Theme options
-//        theme_advanced_buttons1: "print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-//        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
-//        theme_advanced_buttons3: "",
-//        theme_advanced_toolbar_location: "top",
-//        theme_advanced_toolbar_align: "left",
-//        theme_advanced_statusbar_location: "bottom",
-//        theme_advanced_resizing: false,
+    //        // Theme options
+    //        theme_advanced_buttons1: "print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
+    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
+    //        theme_advanced_buttons3: "",
+    //        theme_advanced_toolbar_location: "top",
+    //        theme_advanced_toolbar_align: "left",
+    //        theme_advanced_statusbar_location: "bottom",
+    //        theme_advanced_resizing: false,
 
-//        // dimensions stuff
-//        height: "400",
+    //        // dimensions stuff
+    //        height: "400",
 
-//        // Example content CSS (should be your site CSS)
-//        //content_css: "css/Main.css",
+    //        // Example content CSS (should be your site CSS)
+    //        //content_css: "css/Main.css",
 
-//        // Drop lists for link/image/media/template dialogs
-//        template_external_list_url: "js/template_list.js",
-//        external_link_list_url: "js/link_list.js",
-//        external_image_list_url: "js/image_list.js",
-//        media_external_list_url: "js/media_list.js"
-//    });
+    //        // Drop lists for link/image/media/template dialogs
+    //        template_external_list_url: "js/template_list.js",
+    //        external_link_list_url: "js/link_list.js",
+    //        external_image_list_url: "js/image_list.js",
+    //        media_external_list_url: "js/media_list.js"
+    //    });
 
-//    $("textarea#Item_CheckPaymentInstructions").tinymce({
-//        script_url: scriptUrl,
-//        // General options
-//        theme: "advanced",
-//        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
+    //    $("textarea#Item_CheckPaymentInstructions").tinymce({
+    //        script_url: scriptUrl,
+    //        // General options
+    //        theme: "advanced",
+    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
 
-//        // Theme options
-//        theme_advanced_buttons1: "print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-//        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
-//        theme_advanced_buttons3: "",
-//        theme_advanced_toolbar_location: "top",
-//        theme_advanced_toolbar_align: "left",
-//        theme_advanced_statusbar_location: "bottom",
-//        theme_advanced_resizing: false,
+    //        // Theme options
+    //        theme_advanced_buttons1: "print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
+    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
+    //        theme_advanced_buttons3: "",
+    //        theme_advanced_toolbar_location: "top",
+    //        theme_advanced_toolbar_align: "left",
+    //        theme_advanced_statusbar_location: "bottom",
+    //        theme_advanced_resizing: false,
 
-//        // dimensions stuff
-//        height: "225",
+    //        // dimensions stuff
+    //        height: "225",
 
-//        // Example content CSS (should be your site CSS)
-//        //content_css: "css/Main.css",
+    //        // Example content CSS (should be your site CSS)
+    //        //content_css: "css/Main.css",
 
-//        // Drop lists for link/image/media/template dialogs
-//        template_external_list_url: "js/template_list.js",
-//        external_link_list_url: "js/link_list.js",
-//        external_image_list_url: "js/image_list.js",
-//        media_external_list_url: "js/media_list.js"
-//    });
+    //        // Drop lists for link/image/media/template dialogs
+    //        template_external_list_url: "js/template_list.js",
+    //        external_link_list_url: "js/link_list.js",
+    //        external_image_list_url: "js/image_list.js",
+    //        media_external_list_url: "js/media_list.js"
+    //    });
 
     $("input#Item_QuantityName").change(function(event) {
         var quantityName = $(this).val();
         $("#CostPerItemLabel").text("Cost Per " + quantityName + ":");
         $("#QuantityLabel").text("Number of " + quantityName + "(s) Available:");
+    });
+
+    $("#Item_TouchnetFID").change(function(event) {
+        $("#TouchnetFidExtraLable").text(" " + $(this).val());    
     });
 });

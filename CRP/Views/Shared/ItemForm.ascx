@@ -26,7 +26,6 @@
 
         <%= Html.AntiForgeryToken() %>
         <fieldset>
-            <legend>Fields</legend>
             <ul>
             <li><%= Html.ActionLink<HelpController>(a => a.CreateItem(), "Watch Demo") %></li>
             <li><label for="ItemType">Item Type:</label><br /> 
@@ -57,7 +56,7 @@
                                                         )%>
             </li>
             <li>
-                <label for="Item.TouchnetFID">FID:</label><br />
+                <label for="Item.TouchnetFID">FID:</label><span id="TouchnetFidExtraLable"><%=Html.Encode(Model.Item != null && Model.Item.TouchnetFID != null ? " " + Model.Item.TouchnetFID : string.Empty)%></span> <br />
                 <% if (Model.Item == null || Model.IsNew || Model.CanChangeFID){%> 
                     <%=this.Select("Item.TouchnetFID")
                         .Options(Model.TouchnetFIDs, x=>x.FID, x=>x.Description)

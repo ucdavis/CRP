@@ -77,6 +77,7 @@
             <% using(Html.BeginForm("AddEditor", "ItemManagement", FormMethod.Post)){%>
                 <%= Html.AntiForgeryToken() %>
                 <%= Html.Hidden("id") %>
+            <fieldset>
                 Add User: <%= this.Select("userId").Options(Model.Users.OrderBy(a => a.LastName), x=>x.Id, x=>x.SortableName).FirstOption("--Select a User--") %>
                 <input type="submit" value="Add User" />
             <%} %>
@@ -104,8 +105,10 @@
                                     col.Bound(a => a.Owner);
                                 })
                    .Render(); %>
+                   </fieldset>
         </div>
         <div id="<%= StaticValues.Tab_Questions %>">
+            <fieldset>
             <fieldset>
                 <legend>Transaction</legend>
                 
@@ -171,17 +174,19 @@
                         %>
                 
             </fieldset>
+            </fieldset>
         </div>
         <div id="<%= StaticValues.Tab_Templates %>">
+            <fieldset>
             <% Html.RenderPartial(StaticValues.View_TemplateInstructions);%>
             <p>
                 <%= Html.TextArea("BodyText2", Model.Item.Template != null ? Model.Item.Template.Text : string.Empty) %>
                 <input type="button" value="Save" onclick="SaveTemplateText()" />
             </p>
-        
+            </fieldset>
         </div>
         <div id="<%= StaticValues.Tab_Coupons %>">
-            
+            <fieldset>
             <p>
                 <%= Html.ActionLink<CouponController>(a => a.Create(Model.Item.Id), "Generate Coupon") %>
             </p>
@@ -221,7 +226,7 @@
                                 })
                    .Render();
                     %>
-            
+            </fieldset>
         </div>
     
     </div>
