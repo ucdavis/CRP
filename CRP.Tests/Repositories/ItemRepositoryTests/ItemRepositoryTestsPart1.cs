@@ -146,6 +146,14 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("FID", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Must select a FID when available to public is checked and credit payment is allowed\")]"
+            }));
+            expectedFields.Add(new NameAndType("FID_Length", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"FID must be 3 characters long when selected\")]"
+            }));
             expectedFields.Add(new NameAndType("HideDonation", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
@@ -216,6 +224,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]",
                 "[NHibernate.Validator.Constraints.SizeAttribute(Max = 1)]"
             }));
+            expectedFields.Add(new NameAndType("TouchnetFID", "System.String", new List<string>()));
             expectedFields.Add(new NameAndType("TransactionQuestionSet", "System.Boolean", new List<string>
             {
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Transaction Question is already added\")]"

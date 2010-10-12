@@ -390,6 +390,19 @@ namespace CRP.Core.Domain
                 return true;
             }
         }
+
+        [AssertTrue(Message = "FID must be 3 characters long when selected")]
+        private bool FID_Length
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(TouchnetFID) && TouchnetFID.Trim().Length != 3)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }
