@@ -150,6 +150,7 @@ namespace CRP.Tests.Core.Helpers
         public static Item Item(int? counter)
         {
             var rtValue = new Item();
+            rtValue.TouchnetFID = "001";
             rtValue.Name = "Name" + counter.Extra();
             rtValue.ItemType = new ItemType();
             rtValue.Unit = new Unit();
