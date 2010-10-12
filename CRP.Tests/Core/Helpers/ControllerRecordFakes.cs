@@ -516,6 +516,46 @@ GO
             helpTopicRepository.Expect(a => a.GetAll()).Return(helpTopics).Repeat.Any();
         }
 
+        public static void FakeTouchnetFID(int count, IRepository<TouchnetFID> touchnetFIDRepository)
+        {
+            var fids = new List<TouchnetFID>();
+            FakeTouchnetFID(count, touchnetFIDRepository, fids);
+        }
+
+        public static void FakeTouchnetFID(int count, IRepository<TouchnetFID> touchnetFIDRepository, List<TouchnetFID> specificFids)
+        {
+            var fids = new List<TouchnetFID>();
+            var specificFidsCount = 0;
+            if (specificFids != null)
+            {
+                specificFidsCount = specificFids.Count;
+                for (int i = 0; i < specificFidsCount; i++)
+                {
+                    fids.Add(specificFids[i]);
+                }
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                fids.Add(CreateValidEntities.TouchnetFID(i + specificFidsCount + 1));
+            }
+
+            var totalCount = fids.Count;
+            for (int i = 0; i < totalCount; i++)
+            {
+                fids[i].SetIdTo(i + 1);
+                int i1 = i;
+                touchnetFIDRepository
+                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Return(fids[i])
+                    .Repeat
+                    .Any();
+            }
+            touchnetFIDRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            touchnetFIDRepository.Expect(a => a.Queryable).Return(fids.AsQueryable()).Repeat.Any();
+            touchnetFIDRepository.Expect(a => a.GetAll()).Return(fids).Repeat.Any();
+        }
+
         /// <summary>
         /// Fakes the transaction.
         /// </summary>

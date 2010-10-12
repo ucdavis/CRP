@@ -46,7 +46,8 @@ namespace CRP.Controllers.ViewModels
                 }
                 if(item != null && item.Editors != null && item.Editors.Count > 0)
                 {
-                    if(item.Editors.Where(a => a.Owner).FirstOrDefault().User.LoginID == principal.Identity.Name)
+                    var owner = item.Editors.Where(a => a.Owner).FirstOrDefault();
+                    if(owner != null && owner.User != null && owner.User.LoginID == principal.Identity.Name)
                     {
                         viewModel.CanChangeFID = true;
                     }

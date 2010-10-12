@@ -114,6 +114,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
             #endregion Arrange
 
             #region Act
@@ -197,6 +198,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
+            ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
             #endregion Arrange
 
             #region Act
@@ -319,7 +321,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             //Mock one file
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
-
+            ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
             ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;
@@ -444,7 +446,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             //Mock one file
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
-
+            ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
             Assert.AreEqual("UserName", Controller.CurrentUser.Identity.Name);
             ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = Controller.CurrentUser.Identity.Name;

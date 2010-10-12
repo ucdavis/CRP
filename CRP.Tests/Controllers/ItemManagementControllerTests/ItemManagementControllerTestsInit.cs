@@ -49,6 +49,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         protected IRepository<PaymentLog> PaymentLogRepository { get; set; }
         protected List<Template> Templates { get; set; }
         protected IRepository<Template> TemplateRepository { get; set; }
+        protected IRepository<TouchnetFID> TouchnetFIDRepository { get; set; }
 
         protected Type _controllerClass = typeof(ItemManagementController);
 
@@ -112,6 +113,9 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             TemplateRepository = FakeRepository<Template>();
             Controller.Repository.Expect(a => a.OfType<Template>()).Return(TemplateRepository).Repeat.Any();
             TemplateRepository.Expect(a => a.Queryable).Return(Templates.AsQueryable()).Repeat.Any();
+            
+            TouchnetFIDRepository = FakeRepository<TouchnetFID>();
+            Controller.Repository.Expect(a => a.OfType<TouchnetFID>()).Return(TouchnetFIDRepository).Repeat.Any();
         }
 
 
@@ -173,6 +177,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemTypes[2].QuestionSets.Add(ItemTypeQuestionSets[3]);
 
             Items[0].ItemType = ItemTypes[0];
+            ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
         }
 
 

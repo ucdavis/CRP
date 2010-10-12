@@ -55,6 +55,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             
             UnitRepository.Expect(a => a.GetAll()).Return(Units).Repeat.Any();
+
+            ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
             #endregion Arrange
 
             #region Act
@@ -88,6 +90,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
 
             UnitRepository.Expect(a => a.GetAll()).Return(Units).Repeat.Any();
+            ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
             #endregion Arrange
 
             #region Act
