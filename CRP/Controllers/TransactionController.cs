@@ -287,9 +287,14 @@ namespace CRP.Controllers
                     ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
                 }
             }
-            if (transaction.Total == 0 && transaction.Credit)
+            //if (transaction.Total == 0 && transaction.Credit)
+            //{
+            //    ModelState.AddModelError("Payment Method", "Please select check payment type when amount is zero.");
+            //}
+            if(transaction.Total == 0)
             {
-                ModelState.AddModelError("Payment Method", "Please select check payment type when amount is zero.");
+                transaction.Credit = false;
+                transaction.Check = true;
             }
             if (transaction.Total != displayAmount)
             {
@@ -408,7 +413,10 @@ namespace CRP.Controllers
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
 
             Check.Require(transaction.Item != null);
-            Check.Require(!string.IsNullOrEmpty(transaction.Item.TouchnetFID));
+            if(transaction.Credit)
+            {
+                Check.Require(!string.IsNullOrEmpty(transaction.Item.TouchnetFID));
+            }
 
             string postingString = ConfigurationManager.AppSettings["TouchNetPostingKey"];
             //string Fid = " FID=" + ConfigurationManager.AppSettings["TouchNetFid"]; 

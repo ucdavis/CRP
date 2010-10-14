@@ -83,13 +83,15 @@
             <tfoot>
                 <tr>
                     <td colspan="4" style="text-align:right;">
+                        <span id = "paymentTypeSpan">
                         <label for="paymentType">Payment Method: </label>
                         <%if (Model.Item.AllowCreditPayment){%>
-                            <input type="radio" id="paymentType" name="paymentType" class="required" value="<%=StaticValues.CreditCard%>" "<%=Model.CreditPayment ? "checked" : string.Empty%>" /><label for="credit">Credit Card</label>
+                            <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="<%=StaticValues.CreditCard%>" "<%=Model.CreditPayment ? "checked" : string.Empty%>" /><label for="credit">Credit Card</label>
                         <%}%>
                         <%if (Model.Item.AllowCheckPayment){%>
-                            <input type="radio" id="paymentType" name="paymentType" class="required" value="<%= StaticValues.Check %>" "<%= Model.CheckPayment ? "checked" : string.Empty %>" /><label for="check">Check</label>
+                            <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="<%= StaticValues.Check %>" "<%= Model.CheckPayment ? "checked" : string.Empty %>" /><label for="check">Check</label>
                         <%}%>
+                        </span>
                     </td>
                 </tr>
                 <% if (!String.IsNullOrEmpty(Model.Item.RestrictedKey)) { %>
@@ -264,6 +266,7 @@
                 });
             });
             
+            
             // initialize the question names
             InitializeQuestions();
             RepopulateRadioButtonAnswers();
@@ -298,6 +301,16 @@
             $("span." + class_totalItemAmount).html(itemTotal.toFixed(2));
             $("span." + class_discountAmount).html(discountTotal.toFixed(2));
             $("span." + class_totalAmount).html(total.toFixed(2));
+            if(total == 0)
+            {            
+                $(".allowBypass").removeClass("required");
+                $("#paymentTypeSpan").hide();
+            }
+            else
+            {
+                $("#paymentTypeSpan").show();
+                $(".allowBypass").addClass("required");  
+            }
         }
 
         function GenerateQuantityQuestionSet() {
