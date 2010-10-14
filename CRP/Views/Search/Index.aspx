@@ -2,12 +2,12 @@
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-	Index
+	Search Results
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2>Index</h2>
+    <h2>Search Results</h2>
 
     <p>
         <%= Html.ActionLink<HomeController>(a => a.Index(), "View All") %>
