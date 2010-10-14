@@ -367,7 +367,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
         #region Other Validation Tests
 
-        [TestMethod]
+        [TestMethod, Ignore] //This has been changed to automatically change it to a payment type of check
         public void TestCheckoutWithZeroTotalDoesNotSaveIfCreditCard()
         {
             #region Arrange
@@ -392,6 +392,36 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             TransactionRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
             Assert.IsNull(Controller.Message);
             Controller.ModelState.AssertErrorsAre("Please select check payment type when amount is zero.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutWithZeroTotalDoesSaveIfCreditAndChangedToCheck()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Coupons[1].Item = Items[1];
+            Coupons[1].Code = "COUPON";
+            Coupons[1].IsActive = true;
+            Coupons[1].DiscountAmount = Items[1].CostPerItem;
+            Coupons[1].Unlimited = true;
+            Coupons[1].Used = true; //And used
+            Coupons[1].MaxQuantity = 2;
+            Coupons[1].Email = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 1, null, 0, StaticValues.CreditCard, null, "COUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.IsTrue(args.Check);
+            Assert.IsFalse(args.Credit);
             #endregion Assert
         }
 
