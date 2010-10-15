@@ -43,7 +43,7 @@ namespace CRP.Controllers
             
             if (!item.IsAvailableForReg)
             {
-                Message = "This item is unavailable for registration.";
+                Message = "Online registration for this event has passed.";
             }
 
             return View(viewModel);

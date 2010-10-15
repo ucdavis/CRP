@@ -176,7 +176,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual("This item is unavailable for registration.", Controller.Message);
+            Assert.AreEqual("Online registration for this event has passed.", Controller.Message);
             #endregion Assert		
         }
 
@@ -210,7 +210,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual("This item is unavailable for registration.", Controller.Message);
+            Assert.AreEqual("Online registration for this event has passed.", Controller.Message);
             #endregion Assert
         }
 
@@ -269,7 +269,7 @@ namespace CRP.Tests.Controllers
             Assert.AreSame(Items[1], result.Item);
             Assert.AreSame(DisplayProfiles[2], result.DisplayProfile);
             Assert.AreNotSame(DisplayProfiles[3], result.DisplayProfile);
-            Assert.AreEqual("This item is unavailable for registration.", Controller.Message);
+            Assert.AreEqual("Online registration for this event has passed.", Controller.Message);
         }
         [TestMethod]
         public void TestDetailsWhenIdFoundReturnsView2()
@@ -295,7 +295,7 @@ namespace CRP.Tests.Controllers
             Assert.AreSame(Items[1], result.Item);
             Assert.AreNotSame(DisplayProfiles[2], result.DisplayProfile);
             Assert.AreSame(DisplayProfiles[3], result.DisplayProfile);
-            Assert.AreEqual("This item is unavailable for registration.", Controller.Message);
+            Assert.AreEqual("Online registration for this event has passed.", Controller.Message);
         }
 
         #endregion Details Tests
