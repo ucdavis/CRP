@@ -28,12 +28,13 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#BodyText2").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
+            $("#BodyText2").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500' });
             $(".add-token").click(function(event) {
-                tinyMCE.execInstanceCommand("BodyText2", "mceInsertContent", false, $(this).html());
+                var pasteValue = $(this).attr("name");
+                tinyMCE.execInstanceCommand("BodyText2", "mceInsertContent", false, pasteValue);
             });
             $("#Item_Description").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
-            $("#Item_CheckPaymentInstructions").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideHeight: '255' });      
+            $("#Item_CheckPaymentInstructions").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideHeight: '255' });
         });
    </script>
     <script type="text/javascript">

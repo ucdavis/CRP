@@ -656,6 +656,7 @@
     <Content Include="Content\telerik.common.css" />
     <Content Include="Content\telerik.vista.css" />
     <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Images\question_blue.png" />
     <Content Include="Scripts\jquery.bt.min.js" />
     <Content Include="Scripts\jquery.enableTinyMce.js" />
     <Content Include="Scripts\jquery.tablesorter.min.js" />
