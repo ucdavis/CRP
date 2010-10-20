@@ -50,7 +50,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#Text").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideShowPreview: 'preview' });
+        $("#Text").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideShowPreview: 'preview', overridePlugin_preview_pageurl: '<%= Url.Content("~/Static/Preview.html") %>'});
             $(".add-token").click(function(event) {
                 var pasteValue = $(this).attr("name");
                 tinyMCE.execInstanceCommand("Text", "mceInsertContent", false, pasteValue);

@@ -28,7 +28,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#BodyText2").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideShowPreview: 'preview' });
+        $("#BodyText2").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideShowPreview: 'preview', overridePlugin_preview_pageurl: '<%= Url.Content("~/Static/Preview.html") %>' });
             $(".add-token").click(function(event) {
                 var pasteValue = $(this).attr("name");
                 tinyMCE.execInstanceCommand("BodyText2", "mceInsertContent", false, pasteValue);

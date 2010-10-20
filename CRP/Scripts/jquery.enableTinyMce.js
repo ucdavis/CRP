@@ -4,12 +4,12 @@
     $.fn.extend({
 
         enableTinyMce: function(options) {
-
             var settings = $.extend({
                 script_location: "../../Scripts/tiny_mce/tiny_mce.js",
                 overrideHeight: "400",
                 overrideWidth: "400",
                 overrideShowPreview: "",
+                overridePlugin_preview_pageurl: "../../Static/Preview.html",
             }, options);
             
 
@@ -43,7 +43,7 @@
                     external_link_list_url: "js/link_list.js",
                     external_image_list_url: "js/image_list.js",
                     media_external_list_url: "js/media_list.js",
-                    plugin_preview_pageurl: "../../Static/Preview.html"
+                    plugin_preview_pageurl: settings.overridePlugin_preview_pageurl
                 });
 
             });
