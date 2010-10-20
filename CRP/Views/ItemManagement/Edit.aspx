@@ -28,7 +28,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#BodyText2").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500' });
+            $("#BodyText2").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideShowPreview: 'preview' });
             $(".add-token").click(function(event) {
                 var pasteValue = $(this).attr("name");
                 tinyMCE.execInstanceCommand("BodyText2", "mceInsertContent", false, pasteValue);
@@ -45,7 +45,7 @@
                 , function(result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
         }    
     </script>
-   
+       
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
