@@ -163,4 +163,14 @@ font-size:0.8em;
 }
 #Confirmation_Word_Bank a:hover{color: #A50000}
 
+#versionInformation 
+{
+	font-family:Trebuchet MS,Arial,Georgia;
+	position:absolute;
+	bottom:0;
+	width: 100%;
+	height: 60px;	
+	text-align:center;			
+}
+
 
