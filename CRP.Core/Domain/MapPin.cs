@@ -6,6 +6,24 @@ namespace CRP.Core.Domain
 {
     public class MapPin : DomainObject
     {
+        public MapPin()
+        {
+            SetDefaults();
+        }
+
+        public MapPin(Item item, bool isPrimary)
+        {
+            SetDefaults();
+            Item = item;
+            IsPrimary = isPrimary;
+        }
+
+        private void SetDefaults()
+        {
+            IsPrimary = false;
+        }
+
+
         [NotNull]
         public virtual Item Item { get; set; }
 
