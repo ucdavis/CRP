@@ -140,6 +140,11 @@
                 <%= Html.TextBox("Item.RestrictedKey") %>
                 <%= Html.ValidationMessage("Item.RestrictedKey", "*") %>
             </li>
+            <li>
+                Direct Link to Register: 
+               <%= Url.ItemDetailsPath(Model.Item != null ? Model.Item.Id:0) %>
+               <%--<%= Url.Action("Details", "Item", new { id = Model.Item != null ? Model.Item.Id : 0 }, "https")%> --%>           
+            </li>
 
         </fieldset>
         

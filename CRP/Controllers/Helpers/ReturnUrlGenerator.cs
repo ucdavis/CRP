@@ -89,6 +89,16 @@ namespace CRP.Controllers.Helpers
 
             return string.Format(@"<a href='{0}'>{1}</a>", returnUrl, linkText);
         }
+
+        public static string ItemDetailsPath(this UrlHelper url, int? itemId)
+        {
+            if(itemId==null || itemId == 0)
+            {
+                return "Save Item to see link.";
+            }
+            var returnUrl = url.Action("Details", "Item", new { id = itemId }, "https");
+            return returnUrl;
+        }
         
     }
 }
