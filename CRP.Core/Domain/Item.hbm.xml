@@ -72,6 +72,12 @@
       <key column="ItemId" />
       <one-to-many class="CRP.Core.Domain.ItemReport, CRP.Core"/>
     </bag>
+
+    <bag name="MapPins" table="MapPins" cascade="all-delete-orphan" inverse="true" >
+      <key column="ItemId" />
+      <one-to-many class="CRP.Core.Domain.MapPin, CRP.Core"/>
+    </bag>
+    
   </class>
 
     <sql-query name="ItemsSearch">

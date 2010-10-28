@@ -99,6 +99,7 @@
     <Compile Include="Domain\ItemReport.cs" />
     <Compile Include="Domain\ItemType.cs" />
     <Compile Include="Domain\ItemTypeQuestionSet.cs" />
+    <Compile Include="Domain\MapPin.cs" />
     <Compile Include="Domain\OpenIdUser.cs" />
     <Compile Include="Domain\PaymentLog.cs" />
     <Compile Include="Domain\QuantityAnswer.cs" />
@@ -226,6 +227,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\TouchnetFID.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Domain\MapPin.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
