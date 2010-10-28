@@ -11,11 +11,13 @@ namespace CRP.Core.Domain
             SetDefaults();
         }
 
-        public MapPin(Item item, bool isPrimary)
+        public MapPin(Item item, bool isPrimary, string latitude, string longitude)
         {
             SetDefaults();
             Item = item;
             IsPrimary = isPrimary;
+            Latitude = latitude;
+            Longitude = longitude;
         }
 
         private void SetDefaults()
