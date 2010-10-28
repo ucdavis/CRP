@@ -112,6 +112,18 @@ namespace CRP.Tests.Core.Helpers
             return rtValue;
         }
 
+        public static MapPin MapPin(int? counter)
+        {
+            var rtValue = new MapPin();
+            rtValue.Item = new Item();
+            rtValue.Title = "Title" + counter.Extra();
+            rtValue.Description = "Description" + counter.Extra();
+            rtValue.Latitude = "38.537052";
+            rtValue.Longitude = "-121.749150";
+
+            return rtValue;
+        }
+
         /// <summary>
         /// Create a valid entry for tests. 
         /// Repository tests may need to modify this data to supply real linked data.

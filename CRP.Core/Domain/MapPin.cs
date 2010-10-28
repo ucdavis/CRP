@@ -31,8 +31,10 @@ namespace CRP.Core.Domain
 
         public virtual bool IsPrimary { get; set; }
         [Required]
+        [Length(50)]
         public virtual string Latitude { get; set; }
         [Required]
+        [Length(50)]
         public virtual string Longitude { get; set; }
         [Length(50)]
         public virtual string Title { get; set; }

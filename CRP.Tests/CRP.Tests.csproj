@@ -196,6 +196,7 @@
     <Compile Include="Repositories\ItemRepositoryTests\ItemRepositoryTestsPart9.cs" />
     <Compile Include="Repositories\ItemTypeQuestionSetRepositoryTests.cs" />
     <Compile Include="Repositories\ItemTypeRepositoryTests.cs" />
+    <Compile Include="Repositories\MapPinRepositoryTests.cs" />
     <Compile Include="Repositories\OpenIdUserRepositoryTests.cs" />
     <Compile Include="Repositories\PaymentLogRepositoryTests.cs" />
     <Compile Include="Repositories\QuantityAnswerRepositoryTests.cs" />
