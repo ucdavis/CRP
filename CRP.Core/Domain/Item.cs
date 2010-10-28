@@ -36,6 +36,7 @@ namespace CRP.Core.Domain
             Templates = new List<Template>();
             Transactions = new List<Transaction>();
             Reports = new List<ItemReport>();
+            MapPins = new List<MapPin>();
 
             DateCreated = SystemTime.Now();
             ItemCoupons = false;
@@ -135,6 +136,9 @@ namespace CRP.Core.Domain
         public virtual ICollection<Template> Templates { get; set; }
         [NotNull]
         public virtual ICollection<ItemReport> Reports { get; set; }
+
+        [NotNull]
+        public virtual ICollection<MapPin> MapPins { get; set; }
 
         public virtual Template Template
         {
@@ -246,6 +250,17 @@ namespace CRP.Core.Domain
         public virtual void RemoveEditor(Editor editor)
         {
             Editors.Remove(editor);
+        }
+
+        public virtual void AddMapPin(MapPin mapPin)
+        {
+            mapPin.Item = this;
+            MapPins.Add(mapPin);
+        }
+
+        public virtual void RemoveMapPin(MapPin mapPin)
+        {
+            MapPins.Remove(mapPin);
         }
 
         public virtual void AddTransactionQuestionSet(QuestionSet questionSet)

@@ -7,7 +7,7 @@ namespace CRP.Core.Domain
     public class MapPin : DomainObject
     {
         [NotNull]
-        public virtual int ItemId { get; set; }
+        public virtual Item Item { get; set; }
 
         public virtual bool IsPrimary { get; set; }
         [Required]
