@@ -949,7 +949,77 @@ namespace CRP.Tests.Repositories
         }
         #endregion Valid Test
         #endregion Item Tests
-        
+
+        #region Constructor Tests
+
+        [TestMethod]
+        public void TestConstructorWithNoParametersDefaultsExpectedValues()
+        {
+            #region Arrange
+            var mapPin = new MapPin();
+            #endregion Arrange
+
+            #region Act
+
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(mapPin.IsPrimary);
+            Assert.IsNull(mapPin.Item);
+            Assert.IsNull(mapPin.Description);
+            Assert.IsNull(mapPin.Latitude);
+            Assert.IsNull(mapPin.Longitude);
+            Assert.IsNull(mapPin.Title);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestConstructorWithParametersDefaultsExpectedValues()
+        {
+            #region Arrange
+            var mapPin = new MapPin(CreateValidEntities.Item(9), true, "Lat", "Long");
+            #endregion Arrange
+
+            #region Act
+
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(mapPin.IsPrimary);
+            Assert.IsNotNull(mapPin.Item);
+            Assert.AreEqual("Name9", mapPin.Item.Name);
+            Assert.IsNull(mapPin.Description);
+            Assert.AreEqual("Lat", mapPin.Latitude);
+            Assert.AreEqual("Long", mapPin.Longitude);
+            Assert.IsNull(mapPin.Title);
+            #endregion Assert
+        }
+        #endregion Constructor Tests
+
+        #region Cascade Tests
+
+        [TestMethod]
+        public void TestRemoveMapPinDoesNotCascadeToItem()
+        {
+            #region Arrange
+            var itemCount = Repository.OfType<Item>().Queryable.Count();
+            Assert.IsTrue(itemCount > 1);
+            var mapPin = Repository.OfType<MapPin>().GetByID(2);
+            Assert.IsNotNull(mapPin);
+            #endregion Arrange
+
+            #region Act
+            MapPinRepository.DbContext.BeginTransaction();
+            MapPinRepository.Remove(mapPin);
+            MapPinRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Repository.OfType<MapPin>().GetNullableByID(2));
+            Assert.AreEqual(itemCount, Repository.OfType<Item>().GetAll().Count());
+            #endregion Assert		
+        }
+        #endregion Cascade Tests
         
         #region Reflection of Database.
 
