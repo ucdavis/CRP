@@ -88,9 +88,9 @@
                                     {
                                         col.Template(a =>
                                         {%>
-                                            <%= Html.ActionLink<MapPinController>(b=>b.Details(a.Id), "View") %>|
-                                            <%= Html.ActionLink<MapPinController>(b=>b.Edit(a.Id), "Edit") %>|
-                                            <%= Html.ActionLink<MapPinController>(b=>b.Remove(Model.Item.Id,a.Id), "Remove") %>
+                                            <%= Html.ActionLink<MapPinController>(b=>b.Details(Model.Item.Id,a.Id), "View") %>|
+                                            <%= Html.ActionLink<MapPinController>(b=>b.Edit(Model.Item.Id, a.Id), "Edit") %>|
+                                            <%= Html.ActionLink<MapPinController>(b=>b.RemoveMapPin(Model.Item.Id,a.Id), "Remove") %>
                                         <%});
                                         col.Bound(a => a.Title);
                                         col.Bound(a => a.Description);

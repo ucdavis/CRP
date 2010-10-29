@@ -5,9 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
+using MvcContrib;
+using MvcContrib.Attributes;
+using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
@@ -17,22 +22,55 @@ namespace CRP.Controllers
         //
         // GET: /MapPin/Details/5
 
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, int mapPinId)
         {
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+            if (item == null || !Access.HasItemAccess(CurrentUser, item))
+            {
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+            var mapPin = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
+            if (mapPin == null || !item.MapPins.Contains(mapPin))
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
+                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
+            }
+
+            Message = "View not done";
+            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
             return View();
         }
 
         //
         // GET: /MapPin/Create
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">Item Id</param>
+        /// <returns></returns>
         public ActionResult Create(int id)
         {
-            return View();
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+            if (item == null || !Access.HasItemAccess(CurrentUser, item))
+            {
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+            Message = "Create View not done";
+            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
         } 
 
         //
         // POST: /MapPin/Create
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">Item Id</param>
+        /// <param name="mapPin"></param>
+        /// <returns></returns>
         [AcceptPost]
         public ActionResult Create(int id, MapPin mapPin)
         {
@@ -52,8 +90,24 @@ namespace CRP.Controllers
         //
         // GET: /MapPin/Edit/5
  
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, int mapPinId)
         {
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+            if (item == null || !Access.HasItemAccess(CurrentUser, item))
+            {
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+            var mapPin = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
+            if (mapPin == null || !item.MapPins.Contains(mapPin))
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
+                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
+            }
+
+            Message = "View not done";
+            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
             return View();
         }
 
@@ -61,7 +115,7 @@ namespace CRP.Controllers
         // POST: /MapPin/Edit/5
 
         [AcceptPost]
-        public ActionResult Edit(int id, MapPin mapPin)
+        public ActionResult Edit(int id, int mapPinId, MapPin mapPin)
         {
             try
             {
@@ -74,28 +128,37 @@ namespace CRP.Controllers
                 return View();
             }
         }
-
-        [AcceptPost]
-        public ActionResult Remove(int id, int mapPinId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">item id</param>
+        /// <param name="mapPinId">map pin id</param>
+        /// <returns></returns>
+        public ActionResult RemoveMapPin(int id, int mapPinId)
         {
-            //TODO :Check that there is editor access
             var item = Repository.OfType<Item>().GetNullableByID(id);
-            if(item == null)
+            if(item == null || !Access.HasItemAccess(CurrentUser, item))
             {
-                //TODO: Redirect with message
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
             var mapPin = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
-            if(mapPin == null)
+            if(mapPin == null || !item.MapPins.Contains(mapPin))
             {
-                //TODO: Redirect with message
-            }
-            if(!item.MapPins.Contains(mapPin))
-            {
-                //TODO: Redirect with messgae
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
+                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
             }
             item.RemoveMapPin(mapPin);
-            //TODO: Return back to map tab with message
-            return View();
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<Item>().EnsurePersistent(item);
+                Message = NotificationMessages.STR_ObjectRemoved.Replace(NotificationMessages.ObjectType, "MapPin");
+            }
+
+            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
         }
     }
 }
