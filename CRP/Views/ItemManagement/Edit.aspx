@@ -76,12 +76,22 @@
         </div>
         <div id="<%= StaticValues.Tab_MapPins %>">
             <fieldset>
+                <p>
+                    <%= Html.ActionLink<MapPinController>(a => a.Create(Model.Item.Id), "Add Map Pin") %>
+                </p>
+            
                 <% Html.Grid(Model.Item.MapPins.OrderByDescending(a => a.IsPrimary)) 
                        .Transactional()
                        .Name("MapPinLocations")
                        .PrefixUrlParameters(false)
                        .Columns(col =>
                                     {
+                                        col.Template(a =>
+                                        {%>
+                                            <%= Html.ActionLink<MapPinController>(b=>b.Details(a.Id), "View") %>|
+                                            <%= Html.ActionLink<MapPinController>(b=>b.Edit(a.Id), "Edit") %>|
+                                            <%= Html.ActionLink<MapPinController>(b=>b.Remove(Model.Item.Id,a.Id), "Remove") %>
+                                        <%});
                                         col.Bound(a => a.Title);
                                         col.Bound(a => a.Description);
                                     })

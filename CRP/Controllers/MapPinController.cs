@@ -25,7 +25,7 @@ namespace CRP.Controllers
         //
         // GET: /MapPin/Create
 
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
             return View();
         } 
@@ -34,7 +34,7 @@ namespace CRP.Controllers
         // POST: /MapPin/Create
 
         [AcceptPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(int id, MapPin mapPin)
         {
             //try
             //{
@@ -61,7 +61,7 @@ namespace CRP.Controllers
         // POST: /MapPin/Edit/5
 
         [AcceptPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, MapPin mapPin)
         {
             try
             {
