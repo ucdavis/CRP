@@ -177,6 +177,14 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             expectedFields.Add(new NameAndType("Link", "System.String", new List<string>()));
             expectedFields.Add(new NameAndType("LinkLink", "System.String", new List<string>()));
             expectedFields.Add(new NameAndType("MapLink", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("MapPinPrimary", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Only 1 MapPin can be Primary\")]"
+            }));
+            expectedFields.Add(new NameAndType("MapPins", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.MapPin]", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
             expectedFields.Add(new NameAndType("Name", "System.String", new List<string>
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)100)]",

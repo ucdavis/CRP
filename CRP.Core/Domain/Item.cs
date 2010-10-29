@@ -418,6 +418,29 @@ namespace CRP.Core.Domain
                 return true;
             }
         }
+
+        [AssertTrue(Message = "Only 1 MapPin can be Primary")]
+        private bool MapPinPrimary
+        {
+            get { 
+                var count = 0;
+                if (MapPins != null) //Null check done elsewhere
+                {
+                    foreach (MapPin mapPin in MapPins)
+                    {
+                        if (mapPin.IsPrimary)
+                        {
+                            count++;
+                        }
+                    }
+                }
+                if(count > 1)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }
