@@ -679,6 +679,8 @@
     <Content Include="Views\Help\LinkMap.aspx" />
     <Content Include="Views\Help\WatchVideo.aspx" />
     <Content Include="Views\MapPin\Create.aspx" />
+    <Content Include="Views\MapPin\Details.aspx" />
+    <Content Include="Views\MapPin\Edit.aspx" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Shared\FIDForm.ascx" />
     <Content Include="Views\Shared\HelpForm.ascx" />

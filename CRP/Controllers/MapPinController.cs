@@ -24,9 +24,9 @@ namespace CRP.Controllers
         //
         // GET: /MapPin/Details/5
 
-        public ActionResult Details(int id, int mapPinId)
+        public ActionResult Details(int itemId, int mapPinId)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableByID(itemId);
             if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
@@ -37,12 +37,13 @@ namespace CRP.Controllers
             if (mapPin == null || !item.MapPins.Contains(mapPin))
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
-                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
+                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
             }
 
-            Message = "View not done";
-            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_MapPins));
-            //return View();
+            var viewModel = MapPinViewModel.Create(Repository, item);
+            viewModel.MapPin = mapPin;
+
+            return View(viewModel);
         }
 
         //
@@ -91,6 +92,7 @@ namespace CRP.Controllers
             mapPin.TransferValidationMessagesTo(ModelState);
             if(ModelState.IsValid)
             {
+                //TODO: Replace with EnsurePersistent(item)?
                 Repository.OfType<MapPin>().EnsurePersistent(mapPin);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType,
                                                                        "Map Pin");
@@ -120,28 +122,60 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
                 return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
             }
-
-            Message = "View not done";
-            return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
-            return View();
+            var viewModel = MapPinViewModel.Create(Repository, item);
+            viewModel.MapPin = mapPin;
+            return View(viewModel);
         }
 
         //
         // POST: /MapPin/Edit/5
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="mapPinId"></param>
+        /// <param name="mapPin"></param>
+        /// <returns></returns>
         [AcceptPost]
         public ActionResult Edit(int itemId, int mapPinId, MapPin mapPin)
         {
-            try
+            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
-                // TODO: Add update logic here
- 
-                return RedirectToAction("Index");
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-            catch
+            var mapPinToUpdate = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
+            if (mapPinToUpdate == null || !item.MapPins.Contains(mapPinToUpdate))
             {
-                return View();
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
+                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
             }
+
+            mapPinToUpdate.Latitude = mapPin.Latitude;
+            mapPinToUpdate.Longitude = mapPin.Longitude;
+            mapPinToUpdate.Title = mapPin.Title;
+            mapPinToUpdate.Description = mapPin.Description;
+            //mapPinToUpdate.Item = item;
+
+            mapPinToUpdate.TransferValidationMessagesTo(ModelState);
+            item.TransferValidationMessagesTo(ModelState);
+
+            if(ModelState.IsValid)
+            {
+                //TODO: Replace with EnsurePersistent(item)?
+                Repository.OfType<MapPin>().EnsurePersistent(mapPinToUpdate);
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
+                                                                       "Map Pin");
+                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+            }
+
+            Message = "Unable to save Map Pin changes.";
+            var viewModel = MapPinViewModel.Create(Repository, item);
+            viewModel.MapPin = mapPinToUpdate;
+            return View(viewModel);
+
         }
 
         /// <summary>

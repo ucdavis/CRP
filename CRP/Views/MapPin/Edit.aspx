@@ -2,14 +2,14 @@
 <%@ Import Namespace="CRP.Core.Resources" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-	Create
+	Edit
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2>Create</h2>
+    <h2>Edit</h2>
 
-    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
+    <%= Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.") %>
 
     <% using (Html.BeginForm()) {%>
         <%= Html.AntiForgeryToken() %>
@@ -20,27 +20,27 @@
             <ul>
             <li>
                 <label for="Latitude">Latitude:</label>
-                <%= Html.TextBox("Latitude") %>
+                <%= Html.TextBox("Latitude", Model != null && Model.MapPin != null ? Model.MapPin.Latitude : string.Empty)%>
                 <%= Html.ValidationMessage("MapPin.Latitude")%>
             </li>
             <li>
                 <label for="Longitude">Longitude:</label>
-                <%= Html.TextBox("Longitude") %>
+                <%= Html.TextBox("Longitude", Model != null && Model.MapPin != null ? Model.MapPin.Longitude : string.Empty)%>
                 <%= Html.ValidationMessage("MapPin.Longitude")%>
             </li>
             <li>
                 <label for="Title">Title:</label>
-                <%= Html.TextBox("Title") %>
+                <%= Html.TextBox("Title", Model != null && Model.MapPin != null ? Model.MapPin.Title : string.Empty)%>
                 <%= Html.ValidationMessage("MapPinTitle") %>
             </li>
             <li>
                 <label for="Description">Description:</label>
-                <%= Html.TextArea("Description") %>
+                <%= Html.TextArea("Description", Model != null && Model.MapPin != null ? Model.MapPin.Description : string.Empty)%>
                 <%= Html.ValidationMessage("MapPinDescription")%>
             </li>
             </ul>
             <p>
-                <input type="submit" value="Create" />
+                <input type="submit" value="Save" />
             </p>
         </fieldset>
 
