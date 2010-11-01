@@ -240,6 +240,7 @@
     <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LinkPaymentViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LookupViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\MapPinViewModel.cs" />
     <Compile Include="Controllers\ViewModels\PaymentConfirmationViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
@@ -677,6 +678,7 @@
     <Content Include="Views\Help\Index.aspx" />
     <Content Include="Views\Help\LinkMap.aspx" />
     <Content Include="Views\Help\WatchVideo.aspx" />
+    <Content Include="Views\MapPin\Create.aspx" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Shared\FIDForm.ascx" />
     <Content Include="Views\Shared\HelpForm.ascx" />
