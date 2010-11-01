@@ -134,6 +134,11 @@ namespace CRP.Controllers
                 ModelState.AddModelError("Captcha", "Captcha values are not valid.");
             }
 
+            if(quantity < 1 )
+            {
+                ModelState.AddModelError("Quantity", "Quantity must be at least 1");
+            }
+
             var transaction = new Transaction(item);
 
             var questionCount = 0;
