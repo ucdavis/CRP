@@ -76,6 +76,14 @@
         </div>
         <div id="<%= StaticValues.Tab_MapPins %>">
             <fieldset>
+            <% if(Model.Item != null && !string.IsNullOrEmpty(Model.Item.MapLink)) {%>
+                <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" 
+                    marginwidth="0" 
+                    src="<%= Model.Item.MapLink %>"></iframe><br />
+                <small>
+                    <a href="<%= Model.Item.LinkLink %>" style="color:#0000FF;text-align:left">View Larger Map</a>
+                </small>
+            <%}%>
                 <p>
                     <%= Html.ActionLink<MapPinController>(a => a.Create(Model.Item.Id), "Add Map Pin") %>
                 </p>
