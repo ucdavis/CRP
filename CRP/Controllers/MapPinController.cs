@@ -18,7 +18,7 @@ using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
-    [UserOnly]
+    [AnyoneWithRole]
     public class MapPinController : SuperController
     {
         //
