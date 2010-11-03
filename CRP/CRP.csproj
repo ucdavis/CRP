@@ -652,7 +652,8 @@
     <Content Include="AppSettingsTest.config" />
     <Content Include="ConnectionStringProd.config" />
     <Content Include="ConnectionStringTest.config" />
-    <Content Include="Content\jquery.bingMaps.js" />
+    <Content Include="Content\jquery.bingmaps.css" />
+    <Content Include="Scripts\jquery.bingMaps.js" />
     <Content Include="Content\Windows7\loading.gif" />
     <Content Include="Content\Windows7\sprite.png" />
     <Content Include="Content\jquery.bt.css" />
