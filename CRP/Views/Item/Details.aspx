@@ -33,12 +33,29 @@
             <a href="<%= Html.Encode(Model.Item.Link)%>"><%= Html.Encode(Model.Item.Link) %></a>
         </p>
         
-        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" 
+<%--        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" 
             marginwidth="0" 
             src="<%= Model.Item.MapLink %>"></iframe><br />
         <small>
             <a href="<%= Model.Item.LinkLink %>" style="color:#0000FF;text-align:left">View Larger Map</a>
-        </small>
+        </small>--%>
+        
+        <div id="map">
+		    <div >
+		    
+		    <dl>
+		        <% foreach(var a in Model.Item.MapPins) { %>
+		            <div class="location mapBtn">
+		                <dt lat="<%= a.Latitude %>" lng="<%= a.Longitude %>"><%= Html.Encode(a.Title) %></dt>
+		                <% if (!string.IsNullOrEmpty(a.Description)) { %>
+		                    <dd><%= Html.Encode(a.Description ?? string.Empty) %></dd>
+		                <% } %>
+		            </div>
+		        <% } %>
+		    </dl>
+		    </div>
+	    </div>
+        
         </li>
         
         <li class="two_col_float_uneven_right">
@@ -85,5 +102,16 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.bingmaps.js") %>"></script>
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#map").bingMaps({ enableRouting: false, displayCurrentLocation: false });
+        });        
+    </script>
+    
+    <link href="<%= Url.Content("~/Content/jquerymap.css") %>" rel="stylesheet" type="text/css" />
+    		
 </asp:Content>
 
