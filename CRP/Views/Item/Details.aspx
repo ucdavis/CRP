@@ -45,8 +45,8 @@
 		    
 		    <dl>
 		        <% foreach(var a in Model.Item.MapPins) { %>
-		            <div class="location mapBtn">
-		                <dt lat="<%= a.Latitude %>" lng="<%= a.Longitude %>"><%= Html.Encode(a.Title) %></dt>
+		            <div class="<%= a.IsPrimary ? "default-location" : string.Empty %>" lat="<%= a.Latitude %>" lng="<%= a.Longitude %>">
+		                <dt><%= Html.Encode(a.Title) %></dt>
 		                <% if (!string.IsNullOrEmpty(a.Description)) { %>
 		                    <dd><%= Html.Encode(a.Description ?? string.Empty) %></dd>
 		                <% } %>
@@ -102,16 +102,14 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
-    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.bingmaps.js") %>"></script>
+    <link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
-    
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>
+        
     <script type="text/javascript">
-        $(document).ready(function() {
-            $("#map").bingMaps({ enableRouting: false, displayCurrentLocation: false });
+        $(function() {
+            $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false });
         });        
     </script>
-    
-    <link href="<%= Url.Content("~/Content/jquerymap.css") %>" rel="stylesheet" type="text/css" />
-    		
 </asp:Content>
 

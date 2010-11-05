@@ -9,7 +9,9 @@
 
     <h2>Edit</h2>
 
-    <%= Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.") %>
+    <% Html.RenderPartial("MapPinView"); %>
+
+    <%--<%= Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.") %>
 
     <% using (Html.BeginForm()) {%>
         <%= Html.AntiForgeryToken() %>
@@ -18,16 +20,6 @@
         <fieldset>
             <legend>Fields</legend>
             <ul>
-            <li>
-                <label for="Latitude">Latitude:</label>
-                <%= Html.TextBox("Latitude", Model != null && Model.MapPin != null ? Model.MapPin.Latitude : string.Empty)%>
-                <%= Html.ValidationMessage("MapPin.Latitude")%>
-            </li>
-            <li>
-                <label for="Longitude">Longitude:</label>
-                <%= Html.TextBox("Longitude", Model != null && Model.MapPin != null ? Model.MapPin.Longitude : string.Empty)%>
-                <%= Html.ValidationMessage("MapPin.Longitude")%>
-            </li>
             <li>
                 <label for="Title">Title:</label>
                 <%= Html.TextBox("Title", Model != null && Model.MapPin != null ? Model.MapPin.Title : string.Empty)%>
@@ -45,7 +37,7 @@
         </fieldset>
 
     <% } %>
-
+--%>
     <div>
        <%= Url.EditItemLink(Model.Item.Id, StaticValues.Tab_MapPins) %>
     </div>

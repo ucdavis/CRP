@@ -652,8 +652,7 @@
     <Content Include="AppSettingsTest.config" />
     <Content Include="ConnectionStringProd.config" />
     <Content Include="ConnectionStringTest.config" />
-    <Content Include="Content\jquery.bingmaps.css" />
-    <Content Include="Scripts\jquery.bingMaps.js" />
+    <Content Include="Content\ui.BingMaps.css" />
     <Content Include="Content\Windows7\loading.gif" />
     <Content Include="Content\Windows7\sprite.png" />
     <Content Include="Content\jquery.bt.css" />
@@ -668,6 +667,7 @@
     <Content Include="Scripts\jquery.tablesorter.pager.js" />
     <Content Include="Scripts\jquery.UrlValidator.js" />
     <Content Include="Scripts\jquery.ZipValidator.js" />
+    <Content Include="Scripts\ui.BingMaps.js" />
     <Content Include="Static\Preview.html" />
     <Content Include="Views\Error\Index.aspx" />
     <Content Include="Views\FID\Create.aspx" />
@@ -684,6 +684,7 @@
     <Content Include="Views\MapPin\Create.aspx" />
     <Content Include="Views\MapPin\Details.aspx" />
     <Content Include="Views\MapPin\Edit.aspx" />
+    <Content Include="Views\MapPin\MapPinView.ascx" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\Shared\FIDForm.ascx" />
     <Content Include="Views\Shared\HelpForm.ascx" />
