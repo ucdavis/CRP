@@ -199,7 +199,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(mapPin);
                 var results = mapPin.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Latitude: may not be null or empty");
+                results.AssertErrorsAre("MapPosition: Select map to position the pointer.");
                 Assert.IsTrue(mapPin.IsTransient());
                 Assert.IsFalse(mapPin.IsValid());
                 throw;
@@ -231,7 +231,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(mapPin);
                 var results = mapPin.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Latitude: may not be null or empty");
+                results.AssertErrorsAre("MapPosition: Select map to position the pointer.");
                 Assert.IsTrue(mapPin.IsTransient());
                 Assert.IsFalse(mapPin.IsValid());
                 throw;
@@ -263,7 +263,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(mapPin);
                 var results = mapPin.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Latitude: may not be null or empty");
+                results.AssertErrorsAre("MapPosition: Select map to position the pointer.");
                 Assert.IsTrue(mapPin.IsTransient());
                 Assert.IsFalse(mapPin.IsValid());
                 throw;
@@ -384,7 +384,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(mapPin);
                 var results = mapPin.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Longitude: may not be null or empty");
+                results.AssertErrorsAre("MapPosition: Select map to position the pointer.");
                 Assert.IsTrue(mapPin.IsTransient());
                 Assert.IsFalse(mapPin.IsValid());
                 throw;
@@ -416,7 +416,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(mapPin);
                 var results = mapPin.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Longitude: may not be null or empty");
+                results.AssertErrorsAre("MapPosition: Select map to position the pointer.");
                 Assert.IsTrue(mapPin.IsTransient());
                 Assert.IsFalse(mapPin.IsValid());
                 throw;
@@ -448,7 +448,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(mapPin);
                 var results = mapPin.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Longitude: may not be null or empty");
+                results.AssertErrorsAre("MapPosition: Select map to position the pointer.");
                 Assert.IsTrue(mapPin.IsTransient());
                 Assert.IsFalse(mapPin.IsValid());
                 throw;
@@ -545,6 +545,102 @@ namespace CRP.Tests.Repositories
         #region Invalid Tests
 
         /// <summary>
+        /// Tests the Title with null value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestTitleWithNullValueDoesNotSave()
+        {
+            MapPin mapPin = null;
+            try
+            {
+                #region Arrange
+                mapPin = GetValid(9);
+                mapPin.Title = null;
+                #endregion Arrange
+
+                #region Act
+                MapPinRepository.DbContext.BeginTransaction();
+                MapPinRepository.EnsurePersistent(mapPin);
+                MapPinRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(mapPin);
+                var results = mapPin.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Title: may not be null or empty");
+                Assert.IsTrue(mapPin.IsTransient());
+                Assert.IsFalse(mapPin.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the Title with empty string does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestTitleWithEmptyStringDoesNotSave()
+        {
+            MapPin mapPin = null;
+            try
+            {
+                #region Arrange
+                mapPin = GetValid(9);
+                mapPin.Title = string.Empty;
+                #endregion Arrange
+
+                #region Act
+                MapPinRepository.DbContext.BeginTransaction();
+                MapPinRepository.EnsurePersistent(mapPin);
+                MapPinRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(mapPin);
+                var results = mapPin.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Title: may not be null or empty");
+                Assert.IsTrue(mapPin.IsTransient());
+                Assert.IsFalse(mapPin.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Tests the Title with spaces only does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestTitleWithSpacesOnlyDoesNotSave()
+        {
+            MapPin mapPin = null;
+            try
+            {
+                #region Arrange
+                mapPin = GetValid(9);
+                mapPin.Title = " ";
+                #endregion Arrange
+
+                #region Act
+                MapPinRepository.DbContext.BeginTransaction();
+                MapPinRepository.EnsurePersistent(mapPin);
+                MapPinRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(mapPin);
+                var results = mapPin.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Title: may not be null or empty");
+                Assert.IsTrue(mapPin.IsTransient());
+                Assert.IsFalse(mapPin.IsValid());
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Tests the Title with too long value does not save.
         /// </summary>
         [TestMethod]
@@ -579,75 +675,6 @@ namespace CRP.Tests.Repositories
         #endregion Invalid Tests
 
         #region Valid Tests
-
-        /// <summary>
-        /// Tests the Title with null value saves.
-        /// </summary>
-        [TestMethod]
-        public void TestTitleWithNullValueSaves()
-        {
-            #region Arrange
-            var mapPin = GetValid(9);
-            mapPin.Title = null;
-            #endregion Arrange
-
-            #region Act
-            MapPinRepository.DbContext.BeginTransaction();
-            MapPinRepository.EnsurePersistent(mapPin);
-            MapPinRepository.DbContext.CommitTransaction();
-            #endregion Act
-
-            #region Assert
-            Assert.IsFalse(mapPin.IsTransient());
-            Assert.IsTrue(mapPin.IsValid());
-            #endregion Assert
-        }
-
-        /// <summary>
-        /// Tests the Title with empty string saves.
-        /// </summary>
-        [TestMethod]
-        public void TestTitleWithEmptyStringSaves()
-        {
-            #region Arrange
-            var mapPin = GetValid(9);
-            mapPin.Title = string.Empty;
-            #endregion Arrange
-
-            #region Act
-            MapPinRepository.DbContext.BeginTransaction();
-            MapPinRepository.EnsurePersistent(mapPin);
-            MapPinRepository.DbContext.CommitTransaction();
-            #endregion Act
-
-            #region Assert
-            Assert.IsFalse(mapPin.IsTransient());
-            Assert.IsTrue(mapPin.IsValid());
-            #endregion Assert
-        }
-
-        /// <summary>
-        /// Tests the Title with one space saves.
-        /// </summary>
-        [TestMethod]
-        public void TestTitleWithOneSpaceSaves()
-        {
-            #region Arrange
-            var mapPin = GetValid(9);
-            mapPin.Title = " ";
-            #endregion Arrange
-
-            #region Act
-            MapPinRepository.DbContext.BeginTransaction();
-            MapPinRepository.EnsurePersistent(mapPin);
-            MapPinRepository.DbContext.CommitTransaction();
-            #endregion Act
-
-            #region Assert
-            Assert.IsFalse(mapPin.IsTransient());
-            Assert.IsTrue(mapPin.IsValid());
-            #endregion Assert
-        }
 
         /// <summary>
         /// Tests the Title with one character saves.
@@ -857,6 +884,43 @@ namespace CRP.Tests.Repositories
         #endregion Valid Tests
         #endregion Description Tests
 
+        #region MapPosition Tests
+
+        /// <summary>
+        /// Tests the longitude and latitude with spaces only does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestLongitudeAndLatitudeWithSpacesOnlyDoesNotSave()
+        {
+            MapPin mapPin = null;
+            try
+            {
+                #region Arrange
+                mapPin = GetValid(9);
+                mapPin.Longitude = " ";
+                mapPin.Latitude = " ";
+                #endregion Arrange
+
+                #region Act
+                MapPinRepository.DbContext.BeginTransaction();
+                MapPinRepository.EnsurePersistent(mapPin);
+                MapPinRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(mapPin);
+                var results = mapPin.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("MapPosition: Select map to position the pointer.");
+                Assert.IsTrue(mapPin.IsTransient());
+                Assert.IsFalse(mapPin.IsValid());
+                throw;
+            }
+        }
+
+        #endregion MapPosition Tests
+
         #region Item Tests
 
         #region Invalid Tests
@@ -1048,17 +1112,20 @@ namespace CRP.Tests.Repositories
             }));
             expectedFields.Add(new NameAndType("Latitude", "System.String", new List<string>
             {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]", 
-                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
             }));
             expectedFields.Add(new NameAndType("Longitude", "System.String", new List<string>
             {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]", 
-                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
+            }));
+            expectedFields.Add(new NameAndType("MapPosition", "System.Boolean", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Select map to position the pointer.\")]"
             }));
             expectedFields.Add(new NameAndType("Title", "System.String", new List<string>
             {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]", 
+                 "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
             }));
             #endregion Arrange
 

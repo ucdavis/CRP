@@ -45,7 +45,7 @@ namespace CRP.Core.Domain
         {
             get
             {
-                if(string.IsNullOrEmpty(Latitude) || string.IsNullOrEmpty(Longitude))
+                if (string.IsNullOrEmpty(Latitude) || string.IsNullOrEmpty(Latitude.Trim()) || string.IsNullOrEmpty(Longitude) || string.IsNullOrEmpty(Longitude.Trim()))
                 {
                     return false;
                 }

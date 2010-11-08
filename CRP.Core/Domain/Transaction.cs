@@ -30,6 +30,7 @@ namespace CRP.Core.Domain
             Donation = false;
             IsActive = true;
             Refunded = false;
+            Notified = false;
 
             PaymentLogs = new List<PaymentLog>();
             TransactionAnswers = new List<TransactionAnswer>();
@@ -53,6 +54,8 @@ namespace CRP.Core.Domain
         public virtual bool Check { get; set; }
 
         public virtual bool Refunded { get; set; }
+        public virtual bool Notified { get; set; }
+        public virtual DateTime? NotifiedDate { get; set; }
 
         //public virtual bool Paid { get; set; }
         //[RangeDouble(Min = 0.00, Message = "must be zero or more")]

@@ -14,6 +14,9 @@
     <property name="Credit" column="Credit" />
     <property name="Check" column="[Check]" />
     <property name="Refunded" column="Refunded" />
+    <property name="Notified" column="Notified"/>
+    <property name="NotifiedDate" column="NotifiedDate"/>
+    
     
     <!--<property name="Paid" column="Paid" />-->
     <property name="Amount" column="Amount" />
