@@ -8,7 +8,8 @@
         $(function() {
         $("#map").bingmaps({ enableRouting: false,
                 loadAllPins: true,
-                displayCurrentLocation: false
+                displayCurrentLocation: false,
+                hideCoordinates: true                
             });
         });        
     </script> 
