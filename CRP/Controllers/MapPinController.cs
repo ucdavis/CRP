@@ -15,6 +15,7 @@ using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Web.Helpers;
 using UCDArch.Web.Validator;
+using System.Web.Mvc;
 
 namespace CRP.Controllers
 {
@@ -24,27 +25,27 @@ namespace CRP.Controllers
         //
         // GET: /MapPin/Details/5
 
-        public ActionResult Details(int itemId, int mapPinId)
-        {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            if (item == null || !Access.HasItemAccess(CurrentUser, item))
-            {
-                //Don't Have editor rights
-                Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
-            }
-            var mapPin = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
-            if (mapPin == null || !item.MapPins.Contains(mapPin))
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
-                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
-            }
+        //public ActionResult Details(int itemId, int mapPinId)
+        //{
+        //    var item = Repository.OfType<Item>().GetNullableByID(itemId);
+        //    if (item == null || !Access.HasItemAccess(CurrentUser, item))
+        //    {
+        //        //Don't Have editor rights
+        //        Message = NotificationMessages.STR_NoEditorRights;
+        //        return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+        //    }
+        //    var mapPin = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
+        //    if (mapPin == null || !item.MapPins.Contains(mapPin))
+        //    {
+        //        Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
+        //        return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+        //    }
 
-            var viewModel = MapPinViewModel.Create(Repository, item);
-            viewModel.MapPin = mapPin;
+        //    var viewModel = MapPinViewModel.Create(Repository, item);
+        //    viewModel.MapPin = mapPin;
 
-            return View(viewModel);
-        }
+        //    return View(viewModel);
+        //}
 
         //
         // GET: /MapPin/Create
@@ -96,12 +97,13 @@ namespace CRP.Controllers
                 Repository.OfType<MapPin>().EnsurePersistent(mapPin);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType,
                                                                        "Map Pin");
-                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                //return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                return this.RedirectToAction<ItemManagementController>(a => a.Map(item.Id));
             }
             var viewModel = MapPinViewModel.Create(Repository, item);
             viewModel.MapPin = mapPin;
 
-            return View(mapPin);
+            return View(viewModel);
         }
 
         //
@@ -120,7 +122,8 @@ namespace CRP.Controllers
             if (mapPin == null || !item.MapPins.Contains(mapPin))
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
-                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                //return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                return this.RedirectToAction<ItemManagementController>(a => a.Map(item.Id));
             }
             var viewModel = MapPinViewModel.Create(Repository, item);
             viewModel.MapPin = mapPin;
@@ -168,7 +171,8 @@ namespace CRP.Controllers
                 Repository.OfType<MapPin>().EnsurePersistent(mapPinToUpdate);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
                                                                        "Map Pin");
-                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                //return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                return this.RedirectToAction<ItemManagementController>(a => a.Map(item.Id));
             }
 
             Message = "Unable to save Map Pin changes.";
@@ -197,7 +201,8 @@ namespace CRP.Controllers
             if(mapPin == null || !item.MapPins.Contains(mapPin))
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
-                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                //return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                return this.RedirectToAction<ItemManagementController>(a => a.Map(item.Id));
             }
             item.RemoveMapPin(mapPin);
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
@@ -217,7 +222,8 @@ namespace CRP.Controllers
                 Message = "Unable to save item/remove map pin.";
             }
 
-            return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+            //return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+            return this.RedirectToAction<ItemManagementController>(a => a.Map(item.Id));
         }
     }
 }

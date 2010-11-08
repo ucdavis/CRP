@@ -31,24 +31,25 @@
             
             <div id="map">
             </div>
-            
-            <%= Html.Hidden("Latitude") %>
-            <%= Html.Hidden("Longitude") %>
+            <%--<input id="Latitude" type="hidden" name="Latitude" value="<%= Model != null && Model.MapPin != null ? Model.MapPin.Latitude : string.Empty %>" />
+            <input id="Longitude" type="hidden" name="Longitude" value="<%= Model != null && Model.MapPin != null ? Model.MapPin.Longitude : string.Empty %>" />--%>
+            <%= Html.Hidden("Latitude", Model != null && Model.MapPin != null ? Model.MapPin.Latitude : string.Empty) %>
+            <%= Html.Hidden("Longitude", Model != null && Model.MapPin != null ? Model.MapPin.Longitude : string.Empty)%>
             
            <ul>
             <li>
                 <label for="Title">Title:</label>
-                <%= Html.TextBox("Title") %>
+                <%= Html.TextBox("Title", Model != null && Model.MapPin != null ? Model.MapPin.Title : string.Empty) %>
                 <%= Html.ValidationMessage("MapPinTitle") %>
             </li>
             <li>
                 <label for="Description">Description:</label>
-                <%= Html.TextArea("Description") %>
+                <%= Html.TextArea("Description", Model != null && Model.MapPin != null ? Model.MapPin.Description : string.Empty)%>
                 <%= Html.ValidationMessage("MapPinDescription")%>
             </li>
             </ul>
             <p>
-                <input type="submit" value="Create" />
+                <input type="submit" value="Save" />
             </p>
         </fieldset>
 

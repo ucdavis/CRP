@@ -1,5 +1,6 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.MapPinViewModel>" %>
 <%@ Import Namespace="CRP.Core.Resources" %>
+<%@ Import Namespace="CRP.Controllers" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Edit
@@ -39,7 +40,7 @@
     <% } %>
 --%>
     <div>
-       <%= Url.EditItemLink(Model.Item.Id, StaticValues.Tab_MapPins) %>
+       <%=Html.ActionLink<ItemManagementController>(a => a.Map(Model.Item.Id), "Back to Map") %>
     </div>
 
 </asp:Content>

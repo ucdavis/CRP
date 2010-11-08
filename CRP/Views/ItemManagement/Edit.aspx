@@ -56,7 +56,6 @@
     
         <ul>
             <li><a href="#<%= StaticValues.Tab_Details %>">Item Details</a></li>
-            <li><a href="#<%= StaticValues.Tab_MapPins %>">Map</a></li>
             <li><a href="#<%= StaticValues.Tab_Editors %>">Editors</a></li>
             <li><a href="#<%= StaticValues.Tab_Questions %>">Questions</a></li>
             <li><a href="#<%= StaticValues.Tab_Templates %>">Confirmation Template</a></li>
@@ -73,9 +72,6 @@
 
             <% }%>
         
-        </div>
-        <div id="<%= StaticValues.Tab_MapPins %>">
-            <% Html.RenderPartial("ItemMapPinsView"); %>
         </div>
         <div id="<%= StaticValues.Tab_Editors %>">
         

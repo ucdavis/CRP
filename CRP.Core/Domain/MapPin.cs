@@ -30,15 +30,27 @@ namespace CRP.Core.Domain
         public virtual Item Item { get; set; }
 
         public virtual bool IsPrimary { get; set; }
-        [Required]
         [Length(50)]
         public virtual string Latitude { get; set; }
-        [Required]
         [Length(50)]
         public virtual string Longitude { get; set; }
+        [Required]
         [Length(50)]
         public virtual string Title { get; set; }
         [Length(250)]
         public virtual string Description { get; set; }
+
+        [AssertTrue(Message = "Select map to position the pointer.")]
+        public virtual bool MapPosition
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(Latitude) || string.IsNullOrEmpty(Longitude))
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }

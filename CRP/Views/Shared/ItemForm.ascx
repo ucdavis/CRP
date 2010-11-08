@@ -148,7 +148,7 @@
 
         </fieldset>
         
-        <fieldset>
+<%--        <fieldset>
             <legend>Map Link</legend>
             
             <ul>
@@ -169,7 +169,7 @@
             </li>
             <%}%>
             </ul>
-        </fieldset>
+        </fieldset>--%>
                 
         <fieldset>
             <legend>Extended Properties</legend>
