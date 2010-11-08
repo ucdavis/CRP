@@ -17,7 +17,7 @@
             crosshairLocation: "crosshair.gif", /* location of the crosshair image file */
             displayZoom: false,                 /* displays the current zoom level */
             displayZoomControl: undefined,      /* control to set zoom if you have a specific control to put the zoom level in */
-            displaySearch: false, 			/* displays search controls */
+            displaySearch: false, 			    /* displays search controls */
             locationTitle: "Current Location",
             searchTitle: "Search",
             coordinateTitle: "Locations"
@@ -74,14 +74,13 @@
             // set the default pin if there is one			
             var defaultCoordinate = this.coordinates.find("div.default-location");
             if (defaultCoordinate.length > 0) {
-                //AddPushPin(map, $coordinates, defaultCoordinate);
                 this._addPushPin(defaultCoordinate);
             }
         },
         _addPushPin: function($button) {
             // prepare a pin to be added to the map
             var pushPinId = this._randomId();
-            var veLocation = new VELatLong($button.attr("lat"), $button.attr("lng"));
+            var veLocation = this._readLatLng($button);
             var title = $button.find("dt").html();
             var description = $button.find("dd").html();
             var vePin = new VEPushpin(pushPinId, veLocation, null, title, description);
@@ -94,12 +93,15 @@
             }
             else {
                 $button.addClass("selected");
-
             }
 
             if (addPin) {
                 this.veMap.AddPushpin(vePin);
                 $button.attr("pinId", vePin.ID);
+            }
+
+            if (!this.options.enableRouting) {
+                this._handleShowBestFit();
             }
 
         },
@@ -199,6 +201,20 @@
             var options = new VERouteOptions();
             options.RouteMode = this.options.routeMode;
             this.veMap.GetDirections([start, end], options);
+        },
+        _handleShowBestFit: function() {
+            var locations = new Array();
+            var selected = this.coordinates.find("div.src,div.dest,div.selected");
+            var that = this;
+            $.each(selected, function(index, item) { locations.push(that._readLatLng($(item))); });
+
+            // show best fit for multiple pins
+            if (locations.length > 1) this.veMap.SetMapView(locations);
+            // show standard zoom for 1 pin
+            if (locations.length == 1) this.veMap.SetCenterAndZoom(locations[0], 16);
+        },
+        _readLatLng: function($button) {
+            return new VELatLong($button.attr("lat"), $button.attr("lng"));
         },
         _randomId: function() {
             var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";

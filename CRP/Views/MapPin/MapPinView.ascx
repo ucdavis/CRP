@@ -13,6 +13,7 @@
             , defaultLat: <%= Model.MapPin.Id > 0 ? Model.MapPin.Latitude : (38.539438402158495).ToString() %>
             , defaultLng: <%= Model.MapPin.Id > 0 ? Model.MapPin.Longitude : (-121.75701141357422).ToString() %>
             , defaultZoom : <%= Model.MapPin.Id > 0 ? 16 : 14 %>
+            , displaySearch: true
             });
         });        
     </script> 
