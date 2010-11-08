@@ -484,15 +484,6 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MapPins.
-        /// </summary>
-        public static string Tab_MapPins {
-            get {
-                return ResourceManager.GetString("Tab_MapPins", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Questions.
         /// </summary>
         public static string Tab_Questions {

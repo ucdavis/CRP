@@ -303,10 +303,6 @@
     <value>Editors</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>
   </data>
-  <data name="Tab_MapPins" xml:space="preserve">
-    <value>MapPins</value>
-    <comment>Tab id used in /ItemManagement/Details</comment>
-  </data>
   <data name="Tab_Questions" xml:space="preserve">
     <value>Questions</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>

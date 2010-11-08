@@ -153,7 +153,8 @@ namespace CRP.Controllers
             if (mapPinToUpdate == null || !item.MapPins.Contains(mapPinToUpdate))
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
-                return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                //return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                return this.RedirectToAction<ItemManagementController>(a => a.Map(item.Id));
             }
 
             mapPinToUpdate.Latitude = mapPin.Latitude;
