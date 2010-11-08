@@ -226,6 +226,7 @@
     <Compile Include="Repositories\TransactionRepositoryTests\TransactionRepositoryTestsPart13.cs" />
     <Compile Include="Repositories\TransactionRepositoryTests\TransactionRepositoryTestsPart14.cs" />
     <Compile Include="Repositories\TransactionRepositoryTests\TransactionRepositoryTestsPart15.cs" />
+    <Compile Include="Repositories\TransactionRepositoryTests\TransactionRepositoryTestsPart16.cs" />
     <Compile Include="Repositories\UnitRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />

@@ -153,6 +153,8 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
+            expectedFields.Add(new NameAndType("Notified", "System.Boolean", new List<string>()));
+            expectedFields.Add(new NameAndType("NotifiedDate", "System.Nullable`1[System.DateTime]", new List<string>()));
             expectedFields.Add(new NameAndType("OpenIDUser", "CRP.Core.Domain.OpenIdUser", new List<string>()));
             expectedFields.Add(new NameAndType("Paid", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("ParentTransaction", "CRP.Core.Domain.Transaction", new List<string>()));
