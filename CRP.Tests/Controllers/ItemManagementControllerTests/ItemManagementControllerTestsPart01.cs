@@ -125,7 +125,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(12, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(13, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -449,6 +449,25 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Assert		
         }
 
+
+        [TestMethod]
+        public void TestControllerMethodMapContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("Map");
+            #endregion Arrange
+
+            #region Act
+            //var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var allAttributes = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            //Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(0, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
         #endregion Controller Method Tests
 
         #endregion Reflection Tests

@@ -137,6 +137,7 @@
     <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart08.cs" />
     <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart09.cs" />
     <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart10.cs" />
+    <Compile Include="Controllers\ItemManagementControllerTests\ItemManagementControllerTestsPart11.cs" />
     <Compile Include="Controllers\MapPinControllerTests.cs" />
     <Compile Include="Controllers\PaymentControllerTests.cs" />
     <Compile Include="Controllers\QuestionControllerTests.cs" />

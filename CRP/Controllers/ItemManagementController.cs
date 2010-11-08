@@ -211,36 +211,7 @@ namespace CRP.Controllers
             return View(item);
 
         }
-        [AcceptPost]
-        public ActionResult Map(int id, [Bind(Exclude="Id")]Item item)
-        {
-            var destinationItem = Repository.OfType<Item>().GetNullableByID(id);
 
-            // check rights to edit
-            if (destinationItem == null || !Access.HasItemAccess(CurrentUser, destinationItem))
-            {
-                //Don't Have editor rights
-                Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction(a => a.List(null));
-            }
-
-            destinationItem.MapPins = item.MapPins;
-
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destinationItem.ValidationResults());
-
-            if (ModelState.IsValid)
-            {
-                Repository.OfType<Item>().EnsurePersistent(destinationItem);
-                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item");
-            }
-
-            //var viewModel = ItemViewModel.Create(Repository, CurrentUser, destinationItem);
-            //viewModel.Item = destinationItem;
-            //return View(viewModel);
-
-            return View(destinationItem);
-
-        }
 
         /// <summary>
         /// GET: /ItemManagement/Edit/{id}
