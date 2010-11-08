@@ -108,7 +108,7 @@
         
     <script type="text/javascript">
         $(function() {
-            $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false });
+            $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, height:"300px", width:"500px" });
         });        
     </script>
 </asp:Content>
