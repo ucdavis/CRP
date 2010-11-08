@@ -17,10 +17,12 @@
             crosshairLocation: "crosshair.gif", /* location of the crosshair image file */
             displayZoom: false,                 /* displays the current zoom level */
             displayZoomControl: undefined,      /* control to set zoom if you have a specific control to put the zoom level in */
-            displaySearch: false, 			    /* displays search controls */
+            displaySearch: false, 				/* displays search controls */
             locationTitle: "Current Location",
             searchTitle: "Search",
-            coordinateTitle: "Locations"
+            coordinateTitle: "Locations",
+			loadAllPins: false,					/* initially load all pins */
+			hideCoordinates: false				/* hides all the coordinates */
         },
         _create: function() {
             this.id = this.element.attr("id");
@@ -55,6 +57,11 @@
 
                 this._registerSearch();
             }
+			
+			if (this.options.hideCoordinates)
+			{
+				this.coordinates.hide();
+			}
         },
         _formatCoordinates: function($coordinateContainer /* div holding dl */) {
             $coordinateContainer.addClass("coordinate-container");
@@ -71,11 +78,21 @@
 
             this.veMap = veMap;
 
-            // set the default pin if there is one			
-            var defaultCoordinate = this.coordinates.find("div.default-location");
-            if (defaultCoordinate.length > 0) {
-                this._addPushPin(defaultCoordinate);
-            }
+			
+            // set the default load pins
+			if (this.options.loadAllPins)
+			{
+				var locations = this.coordinates.find("div.map-button");
+				var that = this;
+				$.each(locations, function(index, item){ that._addPushPin($(item)); });
+			}
+			else // load single default location if there is one
+			{
+				var defaultCoordinate = this.coordinates.find("div.default-location");
+				if (defaultCoordinate.length > 0) {
+					this._addPushPin(defaultCoordinate);
+				}
+			}
         },
         _addPushPin: function($button) {
             // prepare a pin to be added to the map
@@ -99,10 +116,11 @@
                 this.veMap.AddPushpin(vePin);
                 $button.attr("pinId", vePin.ID);
             }
-
-            if (!this.options.enableRouting) {
-                this._handleShowBestFit();
-            }
+			
+			if (!this.options.enableRouting)
+			{
+				this._handleShowBestFit();
+			}
 
         },
         _handleRouting: function($button, veLocation, vePin) {
@@ -202,20 +220,20 @@
             options.RouteMode = this.options.routeMode;
             this.veMap.GetDirections([start, end], options);
         },
-        _handleShowBestFit: function() {
-            var locations = new Array();
-            var selected = this.coordinates.find("div.src,div.dest,div.selected");
-            var that = this;
-            $.each(selected, function(index, item) { locations.push(that._readLatLng($(item))); });
-
-            // show best fit for multiple pins
-            if (locations.length > 1) this.veMap.SetMapView(locations);
-            // show standard zoom for 1 pin
-            if (locations.length == 1) this.veMap.SetCenterAndZoom(locations[0], 16);
-        },
-        _readLatLng: function($button) {
-            return new VELatLong($button.attr("lat"), $button.attr("lng"));
-        },
+		_handleShowBestFit: function(){				
+			var locations = new Array();
+			var selected = this.coordinates.find("div.src,div.dest,div.selected");
+			var that = this;
+			$.each(selected, function(index,item){ locations.push(that._readLatLng($(item))); });
+			
+			// show best fit for multiple pins
+			if (locations.length > 1) this.veMap.SetMapView(locations);
+			// show standard zoom for 1 pin
+			if (locations.length == 1) this.veMap.SetCenterAndZoom(locations[0], 16);
+		},
+		_readLatLng: function($button) {
+			return new VELatLong($button.attr("lat"), $button.attr("lng"));		
+		},
         _randomId: function() {
             var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
             var string_length = 8;

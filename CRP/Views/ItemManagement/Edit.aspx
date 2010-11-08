@@ -75,37 +75,7 @@
         
         </div>
         <div id="<%= StaticValues.Tab_MapPins %>">
-            <fieldset>
-            <% if(Model.Item != null && !string.IsNullOrEmpty(Model.Item.MapLink)) {%>
-                <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" 
-                    marginwidth="0" 
-                    src="<%= Model.Item.MapLink %>"></iframe><br />
-                <small>
-                    <a href="<%= Model.Item.LinkLink %>" style="color:#0000FF;text-align:left">View Larger Map</a>
-                </small>
-            <%}%>
-                <p>
-                    <%= Html.ActionLink<MapPinController>(a => a.Create(Model.Item.Id), "Add Map Pin") %>
-                </p>
-            
-                <% Html.Grid(Model.Item.MapPins.OrderByDescending(a => a.IsPrimary)) 
-                       .Transactional()
-                       .Name("MapPinLocations")
-                       .PrefixUrlParameters(false)
-                       .Columns(col =>
-                                    {
-                                        col.Template(a =>
-                                        {%>
-                                            <%= Html.ActionLink<MapPinController>(b=>b.Details(Model.Item.Id,a.Id), "View") %>|
-                                            <%= Html.ActionLink<MapPinController>(b=>b.Edit(Model.Item.Id, a.Id), "Edit") %>|
-                                            <%= Html.ActionLink<MapPinController>(b=>b.RemoveMapPin(Model.Item.Id,a.Id), "Remove") %>
-                                        <%});
-                                        col.Bound(a => a.Title);
-                                        col.Bound(a => a.Description);
-                                    })
-                       .Render();
-                       %>
-            </fieldset>    
+            <% Html.RenderPartial("ItemMapPinsView"); %>
         </div>
         <div id="<%= StaticValues.Tab_Editors %>">
         
