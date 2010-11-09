@@ -251,6 +251,65 @@ GO
             }
         }
 
+
+        public static void FakeItems(int count, IRepository<Item> itemRepository)
+        {
+            var items = new List<Item>();
+            FakeItems(count, itemRepository, items);
+        }
+
+        public static void FakeItems(int count, IRepository<Item> itemRepository, List<Item> specificItems)
+        {
+            var items = new List<Item>();
+            var specificItemsCount = 0;
+            if (specificItems != null)
+            {
+                specificItemsCount = specificItems.Count;
+                for (int i = 0; i < specificItemsCount; i++)
+                {
+                    items.Add(specificItems[i]);
+                }
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                items.Add(CreateValidEntities.Item(i + specificItemsCount + 1));
+            }
+
+            var totalCount = items.Count;
+            for (int i = 0; i < totalCount; i++)
+            {
+                items[i].SetIdTo(i + 1);
+                int i1 = i;
+                itemRepository
+                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Return(items[i])
+                    .Repeat
+                    .Any();
+            }
+            itemRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            itemRepository.Expect(a => a.Queryable).Return(items.AsQueryable()).Repeat.Any();
+            itemRepository.Expect(a => a.GetAll()).Return(items).Repeat.Any();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// Fakes the item question sets.
         /// </summary>

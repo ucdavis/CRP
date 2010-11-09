@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Services;
@@ -21,15 +23,18 @@ namespace CRP.Tests.Controllers
     {
         private readonly Type _controllerClass = typeof(MapPinController);
         IRepository<MapPin> MapPinRepository { get; set; }
+        private IRepository<Item> ItemRepository { get; set; }
         public IAccessControllService AccessControllService;
 
         #region Init
 
         public MapPinControllerTests()
         {
-            MapPinRepository = FakeRepository<MapPin>();
-                        
+            MapPinRepository = FakeRepository<MapPin>();                       
             Controller.Repository.Expect(a => a.OfType<MapPin>()).Return(MapPinRepository).Repeat.Any();
+            
+            ItemRepository = FakeRepository<Item>();
+            Controller.Repository.Expect(a => a.OfType<Item>()).Return(ItemRepository).Repeat.Any();
         }
 
         /// <summary>
@@ -53,9 +58,58 @@ namespace CRP.Tests.Controllers
         #endregion Init
 
         #region Mapping Tests        
-
+        [TestMethod]
+        public void TestCreateGetMapping()
+        {
+            "~/MapPin/Create/5".ShouldMapTo<MapPinController>(a => a.Create(5));
+        }
         #endregion Mapping Tests
 
+        #region Create Tests
+
+        #region Create Get
+
+        [TestMethod]
+        public void TestCreateGetRedirectsToListIfItemIsNull()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeItems(3, ItemRepository);
+            AccessControllService
+                .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
+                .Return(true).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(4)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List(null));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
+            #endregion Assert		
+        }
+
+
+        [TestMethod]
+        public void TestTest()
+        {
+            #region Arrange
+
+            Assert.Inconclusive("Write more tests");
+
+            #endregion Arrange
+
+            #region Act
+
+            #endregion Act
+
+            #region Assert
+
+            #endregion Assert		
+        }
+        #endregion Create Get
+        #endregion Create Tests
 
 
         #region Reflection Tests
