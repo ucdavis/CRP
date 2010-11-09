@@ -2,6 +2,7 @@
 using System.Linq;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Services;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
@@ -20,13 +21,14 @@ namespace CRP.Tests.Controllers
     {
         private readonly Type _controllerClass = typeof(MapPinController);
         IRepository<MapPin> MapPinRepository { get; set; }
+        public IAccessControllService AccessControllService;
 
         #region Init
 
         public MapPinControllerTests()
         {
             MapPinRepository = FakeRepository<MapPin>();
-       
+                        
             Controller.Repository.Expect(a => a.OfType<MapPin>()).Return(MapPinRepository).Repeat.Any();
         }
 
@@ -43,7 +45,8 @@ namespace CRP.Tests.Controllers
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<MapPinController>();
+            AccessControllService = MockRepository.GenerateStub<IAccessControllService>();
+            Controller = new TestControllerBuilder().CreateController<MapPinController>(AccessControllService);
         }
 
 
