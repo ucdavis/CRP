@@ -87,7 +87,34 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
+            AccessControllService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestCreateGetRedirectsToListIfNoItemAccess()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeItems(3, ItemRepository);
+            AccessControllService
+                .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
+                .Return(false).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            Controller.Create(3)
+                .AssertActionRedirect()
+                .ToAction<ItemManagementController>(a => a.List(null));
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
+            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+
+            var args = (Item)AccessControllService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
+            Assert.IsNotNull(args);
+            Assert.AreEqual(args.Name , "Name3");
+            #endregion Assert
         }
 
 
