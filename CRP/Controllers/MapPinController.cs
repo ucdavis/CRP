@@ -29,17 +29,15 @@ namespace CRP.Controllers
             _accessControllService = accessControllService;
         }
 
-        //
-        // GET: /MapPin/Create
         /// <summary>
-        /// 
+        /// GET: /MapPin/Create
+        /// #1
         /// </summary>
         /// <param name="id">Item Id</param>
         /// <returns></returns>
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            //if (item == null || !Access.HasItemAccess(CurrentUser, item))
             if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
@@ -52,10 +50,9 @@ namespace CRP.Controllers
             return View(viewModel);
         } 
 
-        //
-        // POST: /MapPin/Create
         /// <summary>
-        /// 
+        /// POST: /MapPin/Create
+        /// #2
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPin"></param>
@@ -64,7 +61,6 @@ namespace CRP.Controllers
         public ActionResult Create(int itemId, [Bind(Exclude = "Id")]MapPin mapPin)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            //if (item == null || !Access.HasItemAccess(CurrentUser, item))
             if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
@@ -77,7 +73,7 @@ namespace CRP.Controllers
             mapPin.TransferValidationMessagesTo(ModelState);
             if(ModelState.IsValid)
             {
-                //TODO: Replace with EnsurePersistent(item)?
+                //could replace with EnsurePersistent(item), but this is working fine.
                 Repository.OfType<MapPin>().EnsurePersistent(mapPin);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType,
                                                                        "Map Pin");
@@ -90,13 +86,16 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        //
-        // GET: /MapPin/Edit/5
-
+        /// <summary>
+        /// GET: /MapPin/Edit/5
+        /// #3
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="mapPinId"></param>
+        /// <returns></returns>
         public ActionResult Edit(int itemId, int mapPinId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            //if (item == null || !Access.HasItemAccess(CurrentUser, item))
             if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
@@ -115,10 +114,9 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        //
-        // POST: /MapPin/Edit/5
         /// <summary>
-        /// 
+        /// POST: /MapPin/Edit/5
+        /// #4
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPinId"></param>
@@ -128,7 +126,6 @@ namespace CRP.Controllers
         public ActionResult Edit(int itemId, int mapPinId, MapPin mapPin)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            //if (item == null || !Access.HasItemAccess(CurrentUser, item))
             if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
@@ -154,7 +151,7 @@ namespace CRP.Controllers
 
             if(ModelState.IsValid)
             {
-                //TODO: Replace with EnsurePersistent(item)?
+                //could replace with EnsurePersistent(item), but this is working fine.
                 Repository.OfType<MapPin>().EnsurePersistent(mapPinToUpdate);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
                                                                        "Map Pin");
@@ -178,7 +175,6 @@ namespace CRP.Controllers
         public ActionResult RemoveMapPin(int itemId, int mapPinId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            //if(item == null || !Access.HasItemAccess(CurrentUser, item))
             if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights

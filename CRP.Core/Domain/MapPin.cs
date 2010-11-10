@@ -37,7 +37,7 @@ namespace CRP.Core.Domain
         [Required]
         [Length(50)]
         public virtual string Title { get; set; }
-        [Length(250)]
+        [Length(100)]
         public virtual string Description { get; set; }
 
         [AssertTrue(Message = "Select map to position the pointer.")]
