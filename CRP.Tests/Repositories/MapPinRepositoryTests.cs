@@ -741,7 +741,7 @@ namespace CRP.Tests.Repositories
             {
                 #region Arrange
                 mapPin = GetValid(9);
-                mapPin.Description = "x".RepeatTimes((250 + 1));
+                mapPin.Description = "x".RepeatTimes((100 + 1));
                 #endregion Arrange
 
                 #region Act
@@ -753,9 +753,9 @@ namespace CRP.Tests.Repositories
             catch (Exception)
             {
                 Assert.IsNotNull(mapPin);
-                Assert.AreEqual(250 + 1, mapPin.Description.Length);
+                Assert.AreEqual(100 + 1, mapPin.Description.Length);
                 var results = mapPin.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Description: length must be between 0 and 250");
+                results.AssertErrorsAre("Description: length must be between 0 and 100");
                 Assert.IsTrue(mapPin.IsTransient());
                 Assert.IsFalse(mapPin.IsValid());
                 throw;
@@ -865,7 +865,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var mapPin = GetValid(9);
-            mapPin.Description = "x".RepeatTimes(250);
+            mapPin.Description = "x".RepeatTimes(100);
             #endregion Arrange
 
             #region Act
@@ -875,7 +875,7 @@ namespace CRP.Tests.Repositories
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(250, mapPin.Description.Length);
+            Assert.AreEqual(100, mapPin.Description.Length);
             Assert.IsFalse(mapPin.IsTransient());
             Assert.IsTrue(mapPin.IsValid());
             #endregion Assert
@@ -1098,7 +1098,7 @@ namespace CRP.Tests.Repositories
             var expectedFields = new List<NameAndType>();
             expectedFields.Add(new NameAndType("Description", "System.String", new List<string>
             {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)250)]"
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)100)]"
             }));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
