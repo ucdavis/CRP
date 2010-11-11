@@ -159,6 +159,12 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         {
             "~/Transaction/AdminLookup/?email=jasoncsylvestre@gmail.com".ShouldMapTo<TransactionController>(a => a.AdminLookup("jasoncsylvestre@gmail.com"), true);
         }
+
+        [TestMethod]
+        public void TestSendNotificationMapping()
+        {
+            "~/Transaction/SendNotification/5".ShouldMapTo<TransactionController>(a => a.SendNotification(5, "", ""), true);
+        }
         #endregion Route Tests
 
         #region Misc Tests
