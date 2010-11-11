@@ -25,7 +25,7 @@ namespace CRP.Tests.Controllers
         private readonly Type _controllerClass = typeof(MapPinController);
         IRepository<MapPin> MapPinRepository { get; set; }
         private IRepository<Item> ItemRepository { get; set; }
-        public IAccessControllService AccessControllService;
+        public IAccessControlService AccessControlService;
 
         #region Init
 
@@ -51,8 +51,8 @@ namespace CRP.Tests.Controllers
         /// </summary>
         protected override void SetupController()
         {
-            AccessControllService = MockRepository.GenerateStub<IAccessControllService>();
-            Controller = new TestControllerBuilder().CreateController<MapPinController>(AccessControllService);
+            AccessControlService = MockRepository.GenerateStub<IAccessControlService>();
+            Controller = new TestControllerBuilder().CreateController<MapPinController>(AccessControlService);
         }
 
 
@@ -115,7 +115,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             #endregion Arrange
@@ -129,7 +129,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
-            AccessControllService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             #endregion Assert		
         }
 
@@ -138,7 +138,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(false).Repeat.Any();
             #endregion Arrange
@@ -151,9 +151,9 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
 
-            var args = (Item)AccessControllService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
+            var args = (Item)AccessControlService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
             Assert.IsNotNull(args);
             Assert.AreEqual(args.Name , "Name3");
             #endregion Assert 
@@ -166,7 +166,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             #endregion Arrange
@@ -191,7 +191,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             #endregion Arrange
@@ -205,7 +205,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
-            AccessControllService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             #endregion Assert
         }
 
@@ -214,7 +214,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(false).Repeat.Any();
             #endregion Arrange
@@ -227,9 +227,9 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
 
-            var args = (Item)AccessControllService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
+            var args = (Item)AccessControlService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
             Assert.IsNotNull(args);
             Assert.AreEqual(args.Name, "Name3");
             #endregion Assert
@@ -242,7 +242,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPins = new List<MapPin>();
@@ -277,7 +277,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i+1));
             }
             ControllerRecordFakes.FakeItems(0,ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPins = new List<MapPin>();
@@ -318,7 +318,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPins = new List<MapPin>();
@@ -359,7 +359,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPins = new List<MapPin>();
@@ -395,7 +395,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPins = new List<MapPin>();
@@ -443,7 +443,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             MapPinRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<MapPin>.Is.Anything));
-            AccessControllService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
             #endregion Assert
         }
@@ -453,7 +453,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(false).Repeat.Any();
             #endregion Arrange
@@ -467,9 +467,9 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             MapPinRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<MapPin>.Is.Anything));
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
-            var args = (Item)AccessControllService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
+            var args = (Item)AccessControlService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
             Assert.IsNotNull(args);
             Assert.AreEqual(args.Name, "Name3");
             #endregion Assert
@@ -485,7 +485,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i+1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -502,7 +502,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
@@ -519,7 +519,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -537,7 +537,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.IsNull(Controller.Message);
 
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             Assert.IsNotNull(result);
             Assert.AreEqual("Name3", result.Item.Name);
@@ -565,7 +565,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             MapPinRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<MapPin>.Is.Anything));
-            AccessControllService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
             #endregion Assert
         }
@@ -575,7 +575,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(false).Repeat.Any();
             var mapPinToUpdate = CreateValidEntities.MapPin(4);
@@ -590,9 +590,9 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             MapPinRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<MapPin>.Is.Anything));
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
-            var args = (Item)AccessControllService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
+            var args = (Item)AccessControlService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
             Assert.IsNotNull(args);
             Assert.AreEqual(args.Name, "Name3");
             #endregion Assert
@@ -608,7 +608,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -626,7 +626,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
@@ -643,7 +643,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -661,7 +661,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
@@ -678,7 +678,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -699,7 +699,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("Unable to save Map Pin changes.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             MapPinRepository.AssertWasCalled(a => a.GetNullableByID(1));
             Assert.IsNotNull(result);
@@ -724,7 +724,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -744,7 +744,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("Unable to save Map Pin changes.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             MapPinRepository.AssertWasCalled(a => a.GetNullableByID(1));
             Assert.IsNotNull(result);
@@ -764,7 +764,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -785,7 +785,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("Map Pin has been saved successfully.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             MapPinRepository.AssertWasCalled(a => a.GetNullableByID(1));
             Assert.IsNotNull(result);
@@ -819,7 +819,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
-            AccessControllService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             #endregion Assert
@@ -830,7 +830,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             ControllerRecordFakes.FakeItems(3, ItemRepository);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(false).Repeat.Any();
             #endregion Arrange
@@ -843,10 +843,10 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
-            var args = (Item)AccessControllService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
+            var args = (Item)AccessControlService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
             Assert.IsNotNull(args);
             Assert.AreEqual(args.Name, "Name3");
             #endregion Assert
@@ -862,7 +862,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -879,7 +879,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.IsNotNull(result);
@@ -897,7 +897,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPin = CreateValidEntities.MapPin(1);
@@ -914,7 +914,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.IsNotNull(result);
@@ -932,7 +932,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPins = new List<MapPin>();
@@ -954,7 +954,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("Can't remove the primary pin when there are still other pins.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.IsNotNull(result);
@@ -972,7 +972,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPins = new List<MapPin>();
@@ -995,7 +995,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("Unable to save item/remove map pin.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.IsNotNull(result);
@@ -1013,7 +1013,7 @@ namespace CRP.Tests.Controllers
                 items.Add(CreateValidEntities.Item(i + 1));
             }
             ControllerRecordFakes.FakeItems(0, ItemRepository, items);
-            AccessControllService
+            AccessControlService
                 .Expect(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))
                 .Return(true).Repeat.Any();
             var mapPins = new List<MapPin>();
@@ -1035,7 +1035,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual("MapPin has been removed successfully.", Controller.Message);
-            AccessControllService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
+            AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(items[2]));
             Assert.IsNotNull(result);

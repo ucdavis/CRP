@@ -4,12 +4,12 @@ using CRP.Core.Domain;
 
 namespace CRP.Controllers.Services
 {
-    public interface IAccessControllService
+    public interface IAccessControlService
     {
         bool HasItemAccess(IPrincipal currentUser, Item item);
     }
 
-    public class AccessControllService : IAccessControllService
+    public class AccessControlService : IAccessControlService
     {
         public bool HasItemAccess(IPrincipal currentUser, Item item)
         {

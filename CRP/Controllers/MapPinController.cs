@@ -23,10 +23,10 @@ namespace CRP.Controllers
     [AnyoneWithRole]
     public class MapPinController : SuperController
     {
-        private readonly IAccessControllService _accessControllService;
-        public MapPinController(IAccessControllService accessControllService)
+        private readonly IAccessControlService _accessControlService;
+        public MapPinController(IAccessControlService AccessControlService)
         {
-            _accessControllService = accessControllService;
+            _accessControlService = AccessControlService;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace CRP.Controllers
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
+            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
@@ -61,7 +61,7 @@ namespace CRP.Controllers
         public ActionResult Create(int itemId, [Bind(Exclude = "Id")]MapPin mapPin)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
+            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
@@ -96,7 +96,7 @@ namespace CRP.Controllers
         public ActionResult Edit(int itemId, int mapPinId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
+            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
@@ -126,7 +126,7 @@ namespace CRP.Controllers
         public ActionResult Edit(int itemId, int mapPinId, MapPin mapPin)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
+            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
@@ -175,7 +175,7 @@ namespace CRP.Controllers
         public ActionResult RemoveMapPin(int itemId, int mapPinId)
         {
             var item = Repository.OfType<Item>().GetNullableByID(itemId);
-            if (item == null || !_accessControllService.HasItemAccess(CurrentUser, item))
+            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
