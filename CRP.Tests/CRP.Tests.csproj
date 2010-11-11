@@ -177,6 +177,7 @@
     <Compile Include="Core\Helpers\ControllerRecordFakes.cs" />
     <Compile Include="Core\Helpers\CreateValidEntities.cs" />
     <Compile Include="Core\Helpers\NameAndType.cs" />
+    <Compile Include="InterfaceTests\AccessControllServiceTests.cs" />
     <Compile Include="Repositories\CouponRepositoryTests.cs" />
     <Compile Include="Repositories\DisplayProfileRepositoryTests.cs" />
     <Compile Include="Repositories\EditorRepositoryTests.cs" />
@@ -247,9 +248,6 @@
       <Project>{176A7FB7-9299-4CD0-9962-931C697BB023}</Project>
       <Name>CRP</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="InterfaceTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
