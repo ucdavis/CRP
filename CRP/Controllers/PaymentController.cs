@@ -142,7 +142,7 @@ namespace CRP.Controllers
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
                 Message = "Checks associated with transaction.";
-                if(transaction.Paid)
+                if(transaction.Paid && !transaction.Notified)
                 {
                     // attempt to get the contact information question set and retrieve email address
                     var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();

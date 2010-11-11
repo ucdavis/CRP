@@ -367,6 +367,24 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notified.
+        /// </summary>
+        public static string Report_Notified {
+            get {
+                return ResourceManager.GetString("Report_Notified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NotifiedDate.
+        /// </summary>
+        public static string Report_NotifiedDate {
+            get {
+                return ResourceManager.GetString("Report_NotifiedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paid.
         /// </summary>
         public static string Report_Paid {
@@ -480,6 +498,15 @@ namespace CRP.Core.Resources {
         public static string Tab_Editors {
             get {
                 return ResourceManager.GetString("Tab_Editors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notifications.
+        /// </summary>
+        public static string Tab_Notifications {
+            get {
+                return ResourceManager.GetString("Tab_Notifications", resourceCulture);
             }
         }
         

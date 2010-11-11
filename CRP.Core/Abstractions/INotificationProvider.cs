@@ -119,6 +119,17 @@ Your Transaction number is: {TransactionNumber}
             message.IsBodyHtml = true;
             SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
             client.Send(message);
+
+            try
+            {
+                transaction.Notified = true;
+                transaction.NotifiedDate = SystemTime.Now();
+                repository.OfType<Transaction>().EnsurePersistent(transaction);
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
 

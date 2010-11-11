@@ -251,6 +251,14 @@
     <value>DonationTotal</value>
     <comment>Report View Model static value column name</comment>
   </data>
+  <data name="Report_Notified" xml:space="preserve">
+    <value>Notified</value>
+    <comment>Report view model static value column name</comment>
+  </data>
+  <data name="Report_NotifiedDate" xml:space="preserve">
+    <value>NotifiedDate</value>
+    <comment>Report view model static value column name</comment>
+  </data>
   <data name="Report_Paid" xml:space="preserve">
     <value>Paid</value>
     <comment>Report View Model static value column name</comment>
@@ -302,6 +310,10 @@
   <data name="Tab_Editors" xml:space="preserve">
     <value>Editors</value>
     <comment>Tab id used in /ItemManagement/Edit/</comment>
+  </data>
+  <data name="Tab_Notifications" xml:space="preserve">
+    <value>Notifications</value>
+    <comment>Tab id used in /ItemManagement/Details</comment>
   </data>
   <data name="Tab_Questions" xml:space="preserve">
     <value>Questions</value>

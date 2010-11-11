@@ -30,6 +30,9 @@
                 else if ($item.parents().filter("Div#Refunds").length > 0) {
                     link = link + "#Refunds";
                 }
+                else if ($item.parents().filter("Div#Notifications").length > 0) {
+                    link = link + "#Notifications";
+                }
                 $item.attr("href", link);
             });
 
@@ -66,6 +69,7 @@
             <li><a href="#<%= Html.Encode(StaticValues.Tab_Checks) %>">Checks</a></li>
             <li><a href="#<%= Html.Encode(StaticValues.Tab_Reports) %>">Reports</a></li>
             <li><a href="#<%= Html.Encode(StaticValues.Tab_Refunds) %>">Refunds</a></li>
+            <li><a href="#<%= Html.Encode(StaticValues.Tab_Notifications) %>">Notifications</a></li>
         </ul>
     
         <div id="<%= Html.Encode(StaticValues.Tab_Transactions) %>">
@@ -202,6 +206,51 @@
                                     col.Bound(a => a.TotalPaid).Format("{0:$#,##0.00;($#,##0.00); }");
                                     col.Bound(a => a.Paid);
                                     col.Bound(a => a.RefundAmount).Format("{0:$#,##0.00;($#,##0.00); }").Title("Refunded");
+                                })
+                   .Pageable()
+                   .Sortable()                   
+                   .PrefixUrlParameters(true)
+                   .Render(); 
+                   %>
+        </div>
+        <div id="<%= Html.Encode(StaticValues.Tab_Notifications) %>">
+            <% Html.Grid(Model.Item.Transactions.Where(a => a.ParentTransaction == null  && a.IsActive && (a.Paid || a.Notified))) 
+                   .Transactional()
+                   .Name("Notifiactions")
+                   .CellAction(cell =>
+                   {
+                       switch (cell.Column.Member)
+                       {
+                           case "Check":
+                               cell.Text = cell.DataItem.Check ? "x" : string.Empty ;
+                               break;
+                           case "Paid":
+                               cell.Text = cell.DataItem.Paid ? "x" : string.Empty;
+                               break;
+                           case "Notified":
+                               cell.Text = cell.DataItem.Notified ? "x" : string.Empty;
+                               break;
+                           //case "NotifiedDate":
+                           //    cell.Text = cell.DataItem.NotifiedDate == null ? string.Empty : (DateTime)cell.DataItem.NotifiedDate;
+                           //    break;
+                       }
+                   }) 
+                   .Columns(col =>
+                                {
+                                    col.Template(a =>
+                                                {%>                                                                                                 
+                                                    <% using (Html.BeginForm<TransactionController>(x => x.SendNotification(a.Id, Request.QueryString["Notifications-orderBy"], Request.QueryString["Notifications-page"]), FormMethod.Post, new { @class = "display_inline" }))
+                                                       {%>                                     
+                                                        <%= Html.AntiForgeryToken()%>
+                                                        <a href="javascript:;" class="FormSubmit"><%= "Send"%></a>                                            
+                                                    <%} %>                                              
+                                                <%});
+                                    col.Bound(a => a.TransactionNumber).Title("Transaction");
+                                    col.Bound(a => a.Notified);
+                                    col.Bound(a => a.NotifiedDate);
+                                    col.Bound(a => a.Paid);
+                                    col.Bound(a => a.TotalPaid).Format("{0:$#,##0.00;($#,##0.00); }");
+                                    col.Bound(a => a.Check).Title("Check"); 
                                 })
                    .Pageable()
                    .Sortable()                   

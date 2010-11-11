@@ -313,6 +313,28 @@ namespace CRP.Controllers
                 // create the new transaction
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
 
+                if(transaction.Paid && transaction.Check)
+                {
+                    if(transaction.Item.CostPerItem == 0.0m || couponAmount > 0.0m)
+                    {
+                        //Ok, it is paid because the amount is zero, and it is because a coupon was used or the cost was zero
+                        try
+                        {
+                            // attempt to get the contact information question set and retrieve email address
+                            var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+                            if (question != null)
+                            {
+                                // send an email to the user
+                                _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            
+
+                        }
+                    }
+                }
 
                 var updatedItem = Repository.OfType<Item>().GetNullableByID(transaction.Item.Id);
                 if (updatedItem != null)
@@ -830,6 +852,45 @@ namespace CRP.Controllers
                     pageAndSort["sort"],
                     pageAndSort["page"])
                 );
+        }
+
+        public ActionResult SendNotification(int id, string sort, string page)
+        {
+            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
+            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(id);
+            if (transactionToUpdate == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+            if (transactionToUpdate.Item == null || !Access.HasItemAccess(CurrentUser, transactionToUpdate.Item))
+            {
+                if (transactionToUpdate.Item == null)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                else
+                {
+                    Message = NotificationMessages.STR_NoEditorRights.Replace(NotificationMessages.ObjectType, "Item");
+                }
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+
+            // attempt to get the contact information question set and retrieve email address
+            var question = transactionToUpdate.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+            if (question != null)
+            {
+                // send an email to the user
+                _notificationProvider.SendConfirmation(Repository, transactionToUpdate, question.Answer);
+            }
+
+            return Redirect(Url.DetailItemUrl
+            (
+                transactionToUpdate.Item.Id,
+                StaticValues.Tab_Notifications,
+                pageAndSort["sort"],
+                pageAndSort["page"])
+            );
         }
 
         /// <summary>

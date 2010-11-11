@@ -201,6 +201,14 @@ namespace CRP.Controllers.ViewModels
                 {
                     result = transaction.RefundAmount.ToString("C");
                 }
+                else if (itemReportColumn.Name == StaticValues.Report_Notified)
+                {
+                    result = transaction.Notified.ToString();
+                }
+                else if (itemReportColumn.Name == StaticValues.Report_NotifiedDate)
+                {
+                    result = transaction.NotifiedDate == null ? string.Empty : transaction.NotifiedDate.ToString();
+                }
             }
 
             return result;
