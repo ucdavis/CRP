@@ -3,12 +3,11 @@
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-	Item Map
+	Map
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
-    <h2>Item Map</h2>
+    <h2>Map: <%=Html.Encode(Model.Name) %></h2>
     <% Html.RenderPartial("ItemMapPinsView"); %>
     
      <div>

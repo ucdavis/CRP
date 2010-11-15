@@ -60,7 +60,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">    
-    <h2>Details</h2>
+    <h2>Details: <%=Html.Encode(Model.Item.Name) %></h2>
 
     <div id="tabs">
     
