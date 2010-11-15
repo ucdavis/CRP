@@ -320,6 +320,10 @@ namespace CRP.Controllers
                         //Ok, it is paid because the amount is zero, and it is because a coupon was used or the cost was zero
                         try
                         {
+                            //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
+                            var saveId = transaction.Id;
+                            NHibernateSessionManager.Instance.GetSession().Evict(transaction);
+                            transaction = Repository.OfType<Transaction>().GetNullableByID(saveId);
                             // attempt to get the contact information question set and retrieve email address
                             var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
                             if (question != null)

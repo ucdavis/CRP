@@ -84,7 +84,7 @@ namespace CRP.Core.Abstractions
                 }
             }
             var donationThanks = string.Empty;
-            if (transaction.DonationTotal > 0)
+            if (transaction.DonationTotal > 0 && transaction.Paid)
             {
                 donationThanks = string.Format(ScreenText.STR_DonationText, transaction.DonationTotal.ToString("C"));
             }
