@@ -96,7 +96,9 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Template.Id);
-            Assert.IsNull(result.PaidText);
+            Assert.IsNull(result.Template.Text);
+            Assert.AreEqual(string.Empty, result.PaidText);
+            Assert.AreEqual(string.Empty, result.UnpaidText);
             #endregion Assert		
         }
 
@@ -207,14 +209,14 @@ namespace CRP.Tests.Controllers
             #region Act
             var result = Controller.Edit("   ", string.Empty)
                 .AssertViewRendered()
-                .WithViewData<Template>();
+                .WithViewData<ConfirmationTemplateViewModel>();
             #endregion Act
 
             #region Assert
             Assert.IsNotNull(result);
             TemplateRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Template>.Is.Anything));
             Assert.AreEqual("Template was unable to update.", Controller.Message);
-            Controller.ModelState.AssertErrorsAre("Text: may not be null or empty");
+            Controller.ModelState.AssertErrorsAre("text may not be null or empty");
             #endregion Assert		
         }
 

@@ -41,6 +41,10 @@ namespace CRP.Controllers
 
             // update the text
             template.Text = paidText + StaticValues.ConfirmationTemplateDelimiter + unpaidText;
+            if(template.Text.Trim() == StaticValues.ConfirmationTemplateDelimiter)
+            {
+                ModelState.AddModelError("Text", "text may not be null or empty");
+            }
 
             // ensure the default value
             template.Default = true;

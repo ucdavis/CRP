@@ -20,7 +20,7 @@ namespace CRP.Controllers.ViewModels
             Check.Require(template != null, "Template is required.");
 
             var viewModel = new ConfirmationTemplateViewModel{Template = template};
-            if (template.Text.Contains(StaticValues.ConfirmationTemplateDelimiter))
+            if (template.Text != null && template.Text.Contains(StaticValues.ConfirmationTemplateDelimiter))
             {
                 //var index = template.Text.IndexOf("<<PaidTextAbove>>");
                 var delimiter = new string[] { StaticValues.ConfirmationTemplateDelimiter };
@@ -30,7 +30,7 @@ namespace CRP.Controllers.ViewModels
             }
             else
             {
-                viewModel.PaidText = template.Text;
+                viewModel.PaidText = template.Text ?? string.Empty;
                 viewModel.UnpaidText = string.Empty;
             }
             return viewModel;
