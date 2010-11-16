@@ -155,7 +155,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             TemplateRepository.AssertWasCalled(a => a.EnsurePersistent(Templates[3]));
-            Assert.AreEqual("Template has been created successfully.", Controller.Message);
+            Assert.AreEqual("Template has been saved successfully.", Controller.Message);
             Assert.IsNotNull(result);
             Assert.AreEqual(4, result.Template.Id);
             Assert.AreEqual(Templates[3].Text, result.PaidText + StaticValues.ConfirmationTemplateDelimiter);
@@ -182,7 +182,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             TemplateRepository.AssertWasCalled(a => a.EnsurePersistent(Templates[3]));
-            Assert.AreEqual("Template has been created successfully.", Controller.Message);
+            Assert.AreEqual("Template has been saved successfully.", Controller.Message);
             Assert.IsNotNull(result);
             Assert.AreEqual(4, result.Template.Id);
             Assert.AreEqual(Templates[3].Text, "Updated Template Text" + StaticValues.ConfirmationTemplateDelimiter + "Updated Unpaid Text");
@@ -211,7 +211,7 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             TemplateRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Template>.Is.Anything));
-            Assert.AreEqual("Template has been created successfully.", Controller.Message);
+            Assert.AreEqual("Template has been saved successfully.", Controller.Message);
             Assert.IsNotNull(result);
             Assert.AreEqual("New Template Text", result.PaidText);
             Assert.IsTrue(result.Template.Default);
