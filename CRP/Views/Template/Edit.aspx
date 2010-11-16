@@ -46,7 +46,7 @@
     </script>--%>
     
     <script src="<%= Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js") %>" type="text/javascript"></script>
-    <script src="<%= Url.Content("~/Scripts/jquery.enableTinyMce.js") %>" type="text/javascript"></script>
+    <script src="<%= Url.Content("~/Scripts/jquery.enableTinyMce.js") %>" type="text/javascript"></script>   
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -71,6 +71,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Edit System Confirmation Template</h2>
+     <%= Html.ValidationSummary() %>
 
     <% using (Html.BeginForm()) { %>
     

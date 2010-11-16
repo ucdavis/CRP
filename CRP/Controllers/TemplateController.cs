@@ -55,7 +55,7 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Template>().EnsurePersistent(template);
-                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Template");
+                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Template");
                 
                 return View(viewModel);
             }
