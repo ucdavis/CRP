@@ -17,7 +17,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestSaveTemplateDoesNotSaveIfIdNotFound()
         {
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
-            var result = Controller.SaveTemplate(1, "Test")
+            var result = Controller.SaveTemplate(1, "Test", "Test2")
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
             Assert.IsNull(result.Data);
@@ -29,7 +29,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             ControllerRecordFakes.FakeItems(Items, 1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            var result = Controller.SaveTemplate(1, null)
+            var result = Controller.SaveTemplate(1, null, null)
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
             Assert.IsNull(result.Data);
@@ -41,7 +41,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             ControllerRecordFakes.FakeItems(Items, 1);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            var result = Controller.SaveTemplate(1, string.Empty)
+            var result = Controller.SaveTemplate(1, string.Empty, string.Empty)
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
             Assert.IsNull(result.Data);
@@ -58,7 +58,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Items[0].AddEditor(Editors[0]);
 
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            var result = Controller.SaveTemplate(1, " ")
+            var result = Controller.SaveTemplate(1, " ", " ")
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
             Assert.IsNull(result.Data);
@@ -77,7 +77,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Items[0].AddEditor(Editors[0]);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             Items[0].Name = " "; //Also invalid
-            var result = Controller.SaveTemplate(1, " ")
+            var result = Controller.SaveTemplate(1, " ", " ")
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
             Assert.IsNull(result.Data);
@@ -97,7 +97,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             FakeEditors(1);
             Editors[0].User = Users[1];
             Items[0].AddEditor(Editors[0]);
-            var result = Controller.SaveTemplate(1, "test")
+            var result = Controller.SaveTemplate(1, "test", "test2")
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
             Assert.IsNull(result.Data);
@@ -116,7 +116,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Items[0].AddEditor(Editors[0]);
             ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
             Assert.AreEqual(0, Items[0].Templates.Count);
-            var result = Controller.SaveTemplate(1, "test")
+            var result = Controller.SaveTemplate(1, "test", "test2")
                 .AssertResultIs<JsonNetResult>();
             Assert.IsTrue((bool)result.Data);
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
@@ -142,7 +142,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.SaveTemplate(1, "test")
+            var result = Controller.SaveTemplate(1, "test", "test2")
                 .AssertResultIs<JsonNetResult>();
             #endregion Act
 
@@ -172,7 +172,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.SaveTemplate(1, "test")
+            var result = Controller.SaveTemplate(1, "test", "test2")
                 .AssertResultIs<JsonNetResult>();
             #endregion Act
 

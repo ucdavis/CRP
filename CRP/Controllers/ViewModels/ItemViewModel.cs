@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Principal;
 using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
 
@@ -64,10 +65,10 @@ namespace CRP.Controllers.ViewModels
 
                 viewModel.UnpaidText = string.Empty;
                 viewModel.PaidText = string.Empty;
-                if (item.Template != null && item.Template.Text.Contains("{PaidTextAbove}"))
+                if (item.Template != null && item.Template.Text.Contains(StaticValues.ConfirmationTemplateDelimiter))
                 {
                     //var index = template.Text.IndexOf("<<PaidTextAbove>>");
-                    var delimiter = new string[] { "{PaidTextAbove}" };
+                    var delimiter = new string[] { StaticValues.ConfirmationTemplateDelimiter };
                     var parse = item.Template.Text.Split(delimiter, StringSplitOptions.None);
                     viewModel.PaidText = parse[0];
                     viewModel.UnpaidText = parse[1];

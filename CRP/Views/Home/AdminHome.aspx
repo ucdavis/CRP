@@ -17,16 +17,14 @@
         <%--<li><%= Html.ActionLink<ItemManagementController>(a => a.List(null), "Items") %></li>--%>
         <li><%= Url.ItemManagementListLink("Items")%></li>
         <li><%= Html.ActionLink<QuestionSetController>(a => a.List(), "Question Sets") %></li>
+        <li><%= Html.ActionLink<TransactionController>(a => a.AdminLookup(null), "Transaction Lookup") %></li>
     </ul>
     
     <h2>Administrative Screens</h2>
-    <ul>
-        <li><%=Html.ActionLink<FIDController>(a => a.Index(), "FID management") %></li>
-        <li><%= Html.ActionLink<TransactionController>(a => a.AdminLookup(null), "Transaction Lookup") %></li>
+    <ul>                
         <li><%= Html.ActionLink<ApplicationManagementController>(a => a.Index(), "Application Management") %></li>
         <li><%= Html.ActionLink<ReportController>(a => a.ViewSystemReport(null), "System Reports") %></li>
-        <li><%= Html.ActionLink<AccountController>(a => a.ManageUsers(), "Manage Users") %></li>
-        <li><%= Html.ActionLink<TemplateController>(a => a.Edit(), "Edit System Confirmation Template") %></li>
+        <li><%= Html.ActionLink<AccountController>(a => a.ManageUsers(), "Manage Users") %></li>      
     </ul>
 </div>
 

@@ -17,10 +17,12 @@
 
     <h2>Application Management</h2>
 <div id="adminscreen">    
-    <ul>
+    <ul>        
         <li><%= Html.ActionLink<ApplicationManagementController>(a => a.ListItemTypes(), "Item Types")%></li>
         <li><%= Html.ActionLink<QuestionSetController>(a => a.List(), "Question Sets") %></li>
         <li><%= Html.ActionLink<DisplayProfileController>(a => a.List(), "Display Profiles") %></li>
+        <li><%= Html.ActionLink<TemplateController>(a => a.Edit(), "Edit System Confirmation Template") %></li>
+        <li><%=Html.ActionLink<FIDController>(a => a.Index(), "FID management") %></li>
     </ul>
 </div>
 

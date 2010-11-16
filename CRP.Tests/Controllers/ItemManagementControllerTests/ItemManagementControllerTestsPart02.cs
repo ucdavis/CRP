@@ -97,7 +97,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestSaveTemplateWithParametersMapping()
         {
-            "~/ItemManagement/SaveTemplate/5".ShouldMapTo<ItemManagementController>(a => a.SaveTemplate(5, "Test"), true);
+            "~/ItemManagement/SaveTemplate/5".ShouldMapTo<ItemManagementController>(a => a.SaveTemplate(5, "Test", "test2"), true);
         }
 
         /// <summary>

@@ -440,7 +440,7 @@ namespace CRP.Controllers
                 return new JsonNetResult(null);
             }
 
-            var template = new Template(textPaid + "{PaidTextAbove}" + textUnpaid);
+            var template = new Template(textPaid + StaticValues.ConfirmationTemplateDelimiter + textUnpaid);
             template.Default = false;
             template.Item = item;
             item.Template = template;

@@ -45,9 +45,9 @@ namespace CRP.Core.Abstractions
                 body = repository.OfType<Template>().Queryable.Where(a => a.Default).FirstOrDefault().Text ?? string.Empty;
             }
 
-            if(body.Contains("{PaidTextAbove}"))
+            if (body.Contains(StaticValues.ConfirmationTemplateDelimiter))
             {
-                var delimiter = new string[] { "{PaidTextAbove}" };
+                var delimiter = new string[] { StaticValues.ConfirmationTemplateDelimiter };
                 var parse = body.Split(delimiter, StringSplitOptions.None);
                 //if(transaction.Paid && transaction.TotalPaid > 0)
                 if (transaction.TotalPaid > 0)

@@ -79,6 +79,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {PaidTextAbove}.
+        /// </summary>
+        public static string ConfirmationTemplateDelimiter {
+            get {
+                return ResourceManager.GetString("ConfirmationTemplateDelimiter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CreditCard.
         /// </summary>
         public static string CreditCard {

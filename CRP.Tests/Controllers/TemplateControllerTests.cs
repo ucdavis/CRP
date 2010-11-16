@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
+using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
@@ -69,7 +70,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestEditPostMapping()
         {
-            "~/Template/Edit/Text".ShouldMapTo<TemplateController>(a => a.Edit("Text"), true);	
+            "~/Template/Edit/Text".ShouldMapTo<TemplateController>(a => a.Edit("Text", "text2"), true);	
         }
         #endregion Mapping/Route Tests
 
@@ -89,13 +90,13 @@ namespace CRP.Tests.Controllers
             #region Act
             var result = Controller.Edit()
                 .AssertViewRendered()
-                .WithViewData<Template>();
+                .WithViewData<ConfirmationTemplateViewModel>();
             #endregion Act
 
             #region Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(0, result.Id);
-            Assert.IsNull(result.Text);
+            Assert.AreEqual(0, result.Template.Id);
+            Assert.IsNull(result.PaidText);
             #endregion Assert		
         }
 
@@ -116,14 +117,14 @@ namespace CRP.Tests.Controllers
             #region Act
             var result = Controller.Edit()
                 .AssertViewRendered()
-                .WithViewData<Template>();
+                .WithViewData<ConfirmationTemplateViewModel>();
             #endregion Act
 
             #region Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(4, result.Id);
-            Assert.AreEqual(Templates[3].Text, result.Text);
-            Assert.AreSame(Templates[3], result);
+            Assert.AreEqual(4, result.Template.Id);
+            Assert.AreEqual(Templates[3].Text, result.PaidText);
+            Assert.AreSame(Templates[3], result.Template);
             #endregion Assert		
         }
         #endregion Edit Get Tests
@@ -144,7 +145,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.Edit("Updated Template Text")
+            var result = Controller.Edit("Updated Template Text", string.Empty)
                 .AssertViewRendered()
                 .WithViewData<Template>();
             #endregion Act
@@ -172,7 +173,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.Edit("New Template Text")
+            var result = Controller.Edit("New Template Text", string.Empty)
                 .AssertViewRendered()
                 .WithViewData<Template>();
             #endregion Act
@@ -204,7 +205,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.Edit("   ")
+            var result = Controller.Edit("   ", string.Empty)
                 .AssertViewRendered()
                 .WithViewData<Template>();
             #endregion Act

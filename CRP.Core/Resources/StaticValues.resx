@@ -125,6 +125,10 @@
     <value>indexedControl</value>
     <comment>CSS Class used to find controls that need to be indexed for an array</comment>
   </data>
+  <data name="ConfirmationTemplateDelimiter" xml:space="preserve">
+    <value>{PaidTextAbove}</value>
+    <comment>Delimiter to split paid and unpaid text</comment>
+  </data>
   <data name="CreditCard" xml:space="preserve">
     <value>CreditCard</value>
     <comment>Used in /Transaction/Checkout/</comment>

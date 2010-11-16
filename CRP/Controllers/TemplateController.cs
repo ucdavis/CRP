@@ -24,7 +24,7 @@ namespace CRP.Controllers
 
             // check to see if it's null, just send a blank one
             if (template == null) template = new Template();
-            var viewModel = ConfirmationTemplateViewModel.Create(Repository, template);
+            var viewModel = ConfirmationTemplateViewModel.Create(template);
 
             return View(viewModel);
         }
@@ -40,14 +40,14 @@ namespace CRP.Controllers
             if (template == null) template = new Template();
 
             // update the text
-            template.Text = paidText + "{PaidTextAbove}" + unpaidText;
+            template.Text = paidText + StaticValues.ConfirmationTemplateDelimiter + unpaidText;
 
             // ensure the default value
             template.Default = true;
 
             // validate
             template.TransferValidationMessagesTo(ModelState);
-            var viewModel = ConfirmationTemplateViewModel.Create(Repository, template);
+            var viewModel = ConfirmationTemplateViewModel.Create(template);
             if (ModelState.IsValid)
             {
                 Repository.OfType<Template>().EnsurePersistent(template);
