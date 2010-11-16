@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using CRP.Controllers.Helpers;
@@ -12,6 +13,10 @@ namespace CRP.Controllers.ViewModels
     {
         public bool IsNew { get; set; }
         public bool CanChangeFID { get; set; }
+
+        public string PaidText { get; set; }
+        public string UnpaidText { get; set; }
+        public Template Template { get; set; }
 
         public static ItemViewModel Create(IRepository repository, IPrincipal principal, Item item)
         {
@@ -56,7 +61,26 @@ namespace CRP.Controllers.ViewModels
             if(item != null)
             {
                 viewModel.Item = item;
+
+                viewModel.UnpaidText = string.Empty;
+                viewModel.PaidText = string.Empty;
+                if (item.Template != null && item.Template.Text.Contains("{PaidTextAbove}"))
+                {
+                    //var index = template.Text.IndexOf("<<PaidTextAbove>>");
+                    var delimiter = new string[] { "{PaidTextAbove}" };
+                    var parse = item.Template.Text.Split(delimiter, StringSplitOptions.None);
+                    viewModel.PaidText = parse[0];
+                    viewModel.UnpaidText = parse[1];
+                }
+                else if (item.Template != null)
+                {
+                    viewModel.PaidText = item.Template.Text;
+                    viewModel.UnpaidText = string.Empty;
+                }
             }
+
+
+
             viewModel.IsNew = false; //Set to true in Create methods
 
             return viewModel;

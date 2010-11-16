@@ -28,10 +28,15 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-        $("#BodyText2").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideShowPreview: 'preview', overridePlugin_preview_pageurl: '<%= Url.Content("~/Static/Preview.html") %>' });
+        $("#PaidText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideHeight: '250', overrideShowPreview: 'preview,', overridePlugin_preview_pageurl: '<%= Url.Content("~/Static/Preview.html") %>' });
             $(".add-token").click(function(event) {
                 var pasteValue = $(this).attr("name");
-                tinyMCE.execInstanceCommand("BodyText2", "mceInsertContent", false, pasteValue);
+                tinyMCE.execInstanceCommand("PaidText", "mceInsertContent", false, pasteValue);
+            });
+            $("#UnpaidText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideHeight: '250', overrideShowPreview: 'preview,', overridePlugin_preview_pageurl: '<%= Url.Content("~/Static/Preview.html") %>' });
+            $(".add-token-unpaid").click(function(event) {
+                var pasteValue = $(this).attr("name");
+                tinyMCE.execInstanceCommand("UnpaidText", "mceInsertContent", false, pasteValue);
             });
             $("#Item_Description").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>' });
             $("#Item_CheckPaymentInstructions").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideHeight: '255' });
@@ -39,9 +44,10 @@
    </script>
     <script type="text/javascript">
         function SaveTemplateText(){
-            var textbox = $("#BodyText2");
+            var textboxPaid = $("#PaidText");
+            var textboxUnpaid = $("#UnpaidText");
             var token = $($("input:hidden[name='__RequestVerificationToken']")[0]).val();
-            $.post(saveTemplateUrl, { id: id, text: textbox.val(), __RequestVerificationToken: token }
+            $.post(saveTemplateUrl, { id: id, textPaid: textboxPaid.val(), textUnpaid: textboxUnpaid.val(), __RequestVerificationToken: token }
                 , function(result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
         }    
     </script>
@@ -180,10 +186,13 @@
         <div id="<%= StaticValues.Tab_Templates %>">
             <fieldset>
             <% Html.RenderPartial(StaticValues.View_TemplateInstructions);%>
-            <p>
-                <%= Html.TextArea("BodyText2", Model.Item.Template != null ? Model.Item.Template.Text : string.Empty) %>
+            <div>
+                <h3>Paid Template</h3>
+                <%= Html.TextArea("PaidText", Model.Item.Template != null ? Model.PaidText : string.Empty) %> <br />
+                <h3>Unpaid Template</h3>
+                <%= Html.TextArea("UnpaidText", Model.Item.Template != null ? Model.UnpaidText : string.Empty) %>
                 <input type="button" value="Save" onclick="SaveTemplateText()" />
-            </p>
+            </div>
             </fieldset>
         </div>
         <div id="<%= StaticValues.Tab_Coupons %>">

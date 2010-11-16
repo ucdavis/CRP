@@ -145,7 +145,7 @@ fieldset {font-size:100%;border: 1px solid #0D548A;}
 
 #Confirmation_Word_Bank {
 margin-left:540px;
-margin-top:15px;
+margin-top:20px;
 background-color:#EFEFEF;
 border:1px solid #7F7F7F;
 float:right;
@@ -162,6 +162,26 @@ font-size:0.8em;
 	text-decoration:none;
 }
 #Confirmation_Word_Bank a:hover{color: #A50000}
+
+#Confirmation_Word_Bank_Unpaid {
+margin-left:540px;
+margin-top:330px;
+background-color:#EFEFEF;
+border:1px solid #7F7F7F;
+float:right;
+padding:5px;
+position:absolute;
+width:130px;
+font-family:Trebuchet MS,Arial,Georgia;
+font-size:0.8em;
+}
+#Confirmation_Word_Bank_Unpaid a:link
+{
+	color:#0B65C1;
+	font-weight:bold;
+	text-decoration:none;
+}
+#Confirmation_Word_Bank_Unpaid a:hover{color: #A50000}
 
 #versionInformation 
 {

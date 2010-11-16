@@ -431,16 +431,16 @@ namespace CRP.Controllers
         /// <returns></returns>
         [AcceptPost]
         [ValidateInput(false)]
-        public JsonNetResult SaveTemplate(int id, string text)
+        public JsonNetResult SaveTemplate(int id, string textPaid, string textUnpaid)
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
-            
-            if (item == null || string.IsNullOrEmpty(text) || !Access.HasItemAccess(CurrentUser, item))
+
+            if (item == null || string.IsNullOrEmpty(textPaid) || !Access.HasItemAccess(CurrentUser, item))
             {
                 return new JsonNetResult(null);
             }
 
-            var template = new Template(text);
+            var template = new Template(textPaid + "{PaidTextAbove}" + textUnpaid);
             template.Default = false;
             template.Item = item;
             item.Template = template;

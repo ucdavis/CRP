@@ -44,10 +44,42 @@ namespace CRP.Core.Abstractions
             {
                 body = repository.OfType<Template>().Queryable.Where(a => a.Default).FirstOrDefault().Text ?? string.Empty;
             }
-            var subject = "Payment confirmed";
+
+            if(body.Contains("{PaidTextAbove}"))
+            {
+                var delimiter = new string[] { "{PaidTextAbove}" };
+                var parse = body.Split(delimiter, StringSplitOptions.None);
+                //if(transaction.Paid && transaction.TotalPaid > 0)
+                if (transaction.TotalPaid > 0)
+                {
+                    body = parse[0];
+                }
+                else
+                {
+                    body = parse[1];
+                }
+            }
+            string extraSubject;
+            if(transaction.TotalPaid > 0)
+            {
+                if (transaction.Paid)
+                {
+                    extraSubject = "Payment confirmed";
+                }
+                else
+                {
+                    extraSubject = "Payment pending";
+                }
+            }
+            else
+            {
+                extraSubject = "Order confirmed";
+            }
+
+            var subject = extraSubject;
             if (transaction.Item != null && transaction.Item.Name != null)
             {
-                subject = transaction.Item.Name.Trim() + ": Payment confirmed";
+                subject = transaction.Item.Name.Trim() + ": " + extraSubject;
             }
             //Things to replace in the body:
             //Contact Info:

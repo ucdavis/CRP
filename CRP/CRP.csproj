@@ -231,6 +231,7 @@
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\ConfirmationTemplateViewModel.cs" />
     <Compile Include="Controllers\ViewModels\CouponViewModel.cs" />
     <Compile Include="Controllers\ViewModels\DisplayProfileViewModel.cs" />
     <Compile Include="Controllers\ViewModels\EditTransactionViewModel.cs" />

@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Core.Domain.Template>" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ConfirmationTemplateViewModel>" %>
 <%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 
@@ -50,28 +50,38 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-        $("#Text").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideShowPreview: 'preview', overridePlugin_preview_pageurl: '<%= Url.Content("~/Static/Preview.html") %>'});
+        $("#PaidText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideHeight: '250' ,overrideShowPreview: 'preview,', overridePlugin_preview_pageurl: '<%= Url.Content("~/Static/Preview.html") %>'});
             $(".add-token").click(function(event) {
                 var pasteValue = $(this).attr("name");
-                tinyMCE.execInstanceCommand("Text", "mceInsertContent", false, pasteValue);
+                tinyMCE.execInstanceCommand("PaidText", "mceInsertContent", false, pasteValue);
+            });
+            $("#UnpaidText").enableTinyMce({ script_location: '<%= Url.Content("~/Scripts/tiny_mce/tiny_mce.js") %>', overrideWidth: '500', overrideHeight: '250', overrideShowPreview: 'preview,', overridePlugin_preview_pageurl: '<%= Url.Content("~/Static/Preview.html") %>' });
+            $(".add-token-unpaid").click(function(event) {
+                var pasteValue = $(this).attr("name");
+                tinyMCE.execInstanceCommand("UnpaidText", "mceInsertContent", false, pasteValue);
             });
         });
+        
+
+        
    </script>
 
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2>Edit</h2>
+    <h2>Edit System Confirmation Template</h2>
 
     <% using (Html.BeginForm()) { %>
     
         <%= Html.AntiForgeryToken() %>
-        <%= Html.Hidden("id", Model.Id) %>
+        <%= Html.Hidden("id", Model.Template.Id) %>
         
         <% Html.RenderPartial(StaticValues.View_TemplateInstructions);%>
-        
-        <%= Html.TextArea("Text", Model.Text) %>
+        <h3>Paid Template</h3>
+        <%= Html.TextArea("PaidText", Model.PaidText) %><br/>
+        <h3>Unpaid Template</h3>
+        <%= Html.TextArea("UnpaidText", Model.UnpaidText) %>
         
         <%= Html.SubmitButton("Submit", "Save") %>
     
