@@ -379,4 +379,9 @@
         }
     </script>
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("input#quantity").focus();
+        });
+    </script>
 </asp:Content>
