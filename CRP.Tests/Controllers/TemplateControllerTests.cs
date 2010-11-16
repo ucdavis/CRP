@@ -6,6 +6,7 @@ using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -149,18 +150,46 @@ namespace CRP.Tests.Controllers
             #region Act
             var result = Controller.Edit("Updated Template Text", string.Empty)
                 .AssertViewRendered()
-                .WithViewData<Template>();
+                .WithViewData<ConfirmationTemplateViewModel>();
             #endregion Act
 
             #region Assert
             TemplateRepository.AssertWasCalled(a => a.EnsurePersistent(Templates[3]));
             Assert.AreEqual("Template has been created successfully.", Controller.Message);
             Assert.IsNotNull(result);
-            Assert.AreEqual(4, result.Id);
-            Assert.AreEqual(Templates[3].Text, result.Text);
-            Assert.AreSame(Templates[3], result);
-            Assert.AreEqual("Updated Template Text", result.Text);
+            Assert.AreEqual(4, result.Template.Id);
+            Assert.AreEqual(Templates[3].Text, result.PaidText + StaticValues.ConfirmationTemplateDelimiter);
+            Assert.AreSame(Templates[3], result.Template);
+            Assert.AreEqual("Updated Template Text", result.PaidText);
             #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestEditPostWhenADefaultTemplateIsFoundAndTextIsValidTemplateIsUpdated2()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeTemplates(Templates, 5);
+            Templates[3].Default = true;
+            Templates[4].Default = true;
+            TemplateRepository.Expect(a => a.Queryable).Return(Templates.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Edit("Updated Template Text", "Updated Unpaid Text")
+                .AssertViewRendered()
+                .WithViewData<ConfirmationTemplateViewModel>();
+            #endregion Act
+
+            #region Assert
+            TemplateRepository.AssertWasCalled(a => a.EnsurePersistent(Templates[3]));
+            Assert.AreEqual("Template has been created successfully.", Controller.Message);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(4, result.Template.Id);
+            Assert.AreEqual(Templates[3].Text, "Updated Template Text" + StaticValues.ConfirmationTemplateDelimiter + "Updated Unpaid Text");
+            Assert.AreSame(Templates[3], result.Template);
+            Assert.AreEqual("Updated Template Text", result.PaidText);
+            Assert.AreEqual("Updated Unpaid Text", result.UnpaidText);
+            #endregion Assert
         }
 
         /// <summary>
@@ -177,19 +206,20 @@ namespace CRP.Tests.Controllers
             #region Act
             var result = Controller.Edit("New Template Text", string.Empty)
                 .AssertViewRendered()
-                .WithViewData<Template>();
+                .WithViewData<ConfirmationTemplateViewModel>();
             #endregion Act
 
             #region Assert
             TemplateRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Template>.Is.Anything));
             Assert.AreEqual("Template has been created successfully.", Controller.Message);
             Assert.IsNotNull(result);
-            Assert.AreEqual("New Template Text", result.Text);
-            Assert.IsTrue(result.Default);
+            Assert.AreEqual("New Template Text", result.PaidText);
+            Assert.IsTrue(result.Template.Default);
             foreach (var template in Templates)
             {
                 Assert.IsFalse(template.Default, "An existing template was updated in error.");
                 Assert.AreNotEqual("New Template Text", template.Text, "An existing template was updated in error.");
+                Assert.AreNotEqual("New Template Text" + StaticValues.ConfirmationTemplateDelimiter, template.Text, "An existing template was updated in error.");
             }
             #endregion Assert		
         }

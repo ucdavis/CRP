@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -62,7 +63,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
             Assert.IsNull(result.Data);
-            Controller.ModelState.AssertErrorsAre("Text: may not be null or empty");
+            Controller.ModelState.AssertErrorsAre("text may not be null or empty");
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
 
@@ -81,7 +82,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
             Assert.IsNull(result.Data);
-            Controller.ModelState.AssertErrorsAre("Text: may not be null or empty"
+            Controller.ModelState.AssertErrorsAre("text may not be null or empty"
                                                   , "Name: may not be null or empty");
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
         }
@@ -121,7 +122,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.IsTrue((bool)result.Data);
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
             Assert.AreEqual(1, Items[0].Templates.Count);
-            Assert.AreEqual("test", Items[0].Templates.ToList()[0].Text);
+            Assert.AreEqual("test" + StaticValues.ConfirmationTemplateDelimiter + "test2", Items[0].Templates.ToList()[0].Text);
         }
 
 
@@ -180,7 +181,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.IsTrue((bool)result.Data);
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(Items[0]));
             Assert.AreEqual(1, Items[0].Templates.Count);
-            Assert.AreEqual("test", Items[0].Templates.ToList()[0].Text);
+            Assert.AreEqual("test" + StaticValues.ConfirmationTemplateDelimiter + "test2", Items[0].Templates.ToList()[0].Text);
             #endregion Assert
         }
 

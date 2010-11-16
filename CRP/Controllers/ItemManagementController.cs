@@ -445,6 +445,11 @@ namespace CRP.Controllers
             template.Item = item;
             item.Template = template;
 
+            if (template.Text.Trim() == StaticValues.ConfirmationTemplateDelimiter)
+            {
+                ModelState.AddModelError("Text", "text may not be null or empty");
+            }
+
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, template.ValidationResults());
 
