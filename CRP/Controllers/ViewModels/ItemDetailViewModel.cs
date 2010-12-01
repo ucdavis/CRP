@@ -21,6 +21,7 @@ namespace CRP.Controllers.ViewModels
         public decimal TotalAmountToRedisplay { get; set; }
         public decimal CouponAmountToDisplay { get; set; }
         public decimal CouponTotalDiscountToDisplay { get; set; }
+        public bool HasMapPins { get; set; }
 
         /// <summary>
         /// Creates the specified View Model.
@@ -51,6 +52,14 @@ namespace CRP.Controllers.ViewModels
             if (!string.IsNullOrEmpty(openIdUser))
             {
                 viewModel.OpenIdUser = openIdRepository.GetNullableByID(openIdUser);
+            }
+            if (viewModel.Item != null && viewModel.Item.MapPins != null && viewModel.Item.MapPins.Count > 0)
+            {
+                viewModel.HasMapPins = true;
+            }
+            else
+            {
+                viewModel.HasMapPins = false;
             }
 
             return viewModel;

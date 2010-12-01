@@ -111,5 +111,15 @@
             $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, height:"450px", width:"450px" });
         });        
     </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.coordinate-title').append('  <%=Html.Image("~/images/question_blue.png", new { @id = "MapPinHelp" })%>');
+            <%if(Model.HasMapPins) {%>                        
+                $("#MapPinHelp").bt("To view Locations on the map, click on the tabs below", {positions: 'top'});
+            <% } else {%>
+                $("#MapPinHelp").bt("No specific locations have been set for this map", {positions: 'top'});
+            <%} %>
+        });
+    </script>
 </asp:Content>
 
