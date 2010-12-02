@@ -94,7 +94,6 @@
             <div id="logindisplay">
                 <ul class="top_head_empty"><li></li></ul>
                 <ul>
-                <li><%= Html.ActionLink<HomeController>(a => a.AdminHome(), "Admin Tools") %></li>
                 <li><%= Html.ActionLink<TransactionController>(a => a.Lookup(), "Lookup Order") %></li>
                 <% Html.RenderPartial(StaticValues.Partial_LogOnUserControl); %>
                 <li><%= Html.ActionLink<HelpController>(a => a.Index(), "Help") %></li>
@@ -117,10 +116,17 @@
 
         <div id="main">
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-
-            <div id="footer">
-            </div>
         </div>
     </div>
+
+<div id="footer">
+<div id="footer_text">
+<p>
+<strong>Home</strong> | <strong><%= Html.ActionLink<HomeController>(a => a.AdminHome(), "Admin Tools") %></strong> | <strong><%= Html.ActionLink<HelpController>(a => a.Index(), "Help") %></strong><br />
+<span id="ByLine">Developed By The College Of Agricultural And Environmental Science Dean's Office [a br goes at the end of this span tag] </span><br />
+Copyright The Regents of the University of California, Davis campus, 2005-10. All Rights Reserved.</p>
+<p id="VersionNumber">Version 1.2010.11.16</p>
+</div>
+</div>
 </body>
 </html>

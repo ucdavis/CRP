@@ -1,6 +1,6 @@
 ﻿/* */
 body, h3, h1 {margin:0; padding:0;}
-#brand_bar_content, .page, #main {max-width:1000px; margin:0 auto;}
+#brand_bar_content, .page, #main, #footer_text {max-width:1000px; margin:0 auto;}
 .page {text-align:right;}
 #main {margin-top:-1em;}
 .itembrowsetable td a img {float:left; margin-right:1em; width:200px;}
@@ -16,6 +16,7 @@ a img {border:none;}
 
 /* top bar */
 #brand_bar {height:56px; padding:4px 0 0; border-bottom:1px solid #000000;}
+#footer {padding:4px 0 0; border-top:1px solid #000000;}
 .brand_bar_caes_h1 {display:none;}
 .brand_bar_caes_img {float:left;}
 .search_box {float:right;}
@@ -37,7 +38,7 @@ h1, h1 a {font: 40px/48px 'QuicksandLight', Arial, sans-serif; letter-spacing:5p
 
 /* colors */
 h1, h1 a {color:#32322d;}
-#brand_bar {background-color:#0d548a;}
+#brand_bar, #footer {background-color:#0d548a;}
 body {color:#1c1f22; background-color:#f8f8f8;}
 h3, h1 {color:#1c1f22;}
 
@@ -193,4 +194,27 @@ font-size:0.8em;
 	text-align:center;			
 }
 
+#footer 
+{
+    font-size:0.8em;
+    text-align:center;
+    padding-bottom:1em;
+    color:#F8F8F8;
+}
+#footer a, #footer a:link
+{
+    color:#F8F8F8;
+}
+#footer a:hover
+{
+    text-decoration:underline;
+}
+#footer strong
+{
+    padding:0 1em;
+}
 
+#VersionNumber
+{
+    text-align:right;
+}
