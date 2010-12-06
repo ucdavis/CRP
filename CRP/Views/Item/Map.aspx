@@ -31,7 +31,7 @@
 </head>
 <body>
 
-<h1>Nut Conference</h1>
+<h1><%=Html.Encode(Model.Name) %></h1>
     <div>
     
     <div id="map">
@@ -53,9 +53,11 @@
     
     </div>
 <p>
-<strong>Date:</strong> 12/1/10<br />
-<strong>Time:</strong> 5:00 AM<br />
-<strong>Location:</strong> My house<br />
+<% foreach (var ep in Model.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty)){%>    
+    <strong><%= Html.Encode(ep.ExtendedProperty.Name) %>:</strong>
+    <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
+                                ? ep.Answer : Convert.ToDateTime(ep.Answer).ToString("D")) %>      
+<% } %>
 </p>
 </body>
 </html>
