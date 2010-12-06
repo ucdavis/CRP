@@ -7,6 +7,7 @@
     <title><%= Html.Encode(Model.Name) + " - Map" %></title>
     
     <style type="text/css" media="print">
+        * {font-family:Arial;}
         .coordinate-container, #MSVE_navAction_container {display:none;}
         .map MSVE_MapContainer {width:100%;}
     </style>
@@ -23,7 +24,7 @@
         
     <script type="text/javascript">
         $(function() {
-            $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, height: "850px", width: "700px" });
+            $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, height: "700px", width: "700px" });
         });        
     </script>
 
@@ -51,5 +52,10 @@
         
     
     </div>
+<p>
+<strong>Date:</strong> 12/1/10<br />
+<strong>Time:</strong> 5:00 AM<br />
+<strong>Location:</strong> My house<br />
+</p>
 </body>
 </html>
