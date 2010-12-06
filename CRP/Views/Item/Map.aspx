@@ -56,7 +56,8 @@
 <% foreach (var ep in Model.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty)){%>    
     <strong><%= Html.Encode(ep.ExtendedProperty.Name) %>:</strong>
     <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
-                                ? ep.Answer : Convert.ToDateTime(ep.Answer).ToString("D")) %>      
+                                ? ep.Answer : Convert.ToDateTime(ep.Answer).ToString("D")) %>
+                                <br />      
 <% } %>
 </p>
 </body>
