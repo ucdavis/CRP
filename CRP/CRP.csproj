@@ -685,6 +685,7 @@
     <Content Include="Views\Help\WatchVideo.aspx" />
     <Content Include="Views\ItemManagement\ItemMapPinsView.ascx" />
     <Content Include="Views\ItemManagement\Map.aspx" />
+    <Content Include="Views\Item\Map.aspx" />
     <Content Include="Views\MapPin\Create.aspx" />
     <Content Include="Views\MapPin\Edit.aspx" />
     <Content Include="Views\MapPin\MapPinView.ascx" />

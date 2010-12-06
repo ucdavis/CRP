@@ -76,5 +76,17 @@ namespace CRP.Controllers
                 return File(new byte[0], "image/jpg");
             }
         }
+
+        public ActionResult Map(int id)
+        {
+            var item = Repository.OfType<Item>().GetNullableByID(id);
+
+            if (item == null || !item.Available)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+            return View(item);
+        }   
     }
 }
