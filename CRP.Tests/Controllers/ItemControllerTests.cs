@@ -104,6 +104,12 @@ namespace CRP.Tests.Controllers
             "~/Item/GetImage/5".ShouldMapTo<ItemController>(a => a.GetImage(5));
         }
 
+        [TestMethod]
+        public void TestMapMapping()
+        {
+            "~/Item/Map/5".ShouldMapTo<ItemController>(a => a.Map(5));
+        }
+
 
         #endregion Route Tests
 
@@ -341,6 +347,68 @@ namespace CRP.Tests.Controllers
         }
         #endregion GetImage Tests
 
+        #region Map Tests
+
+        [TestMethod]
+        public void TestMapRedirectsToHomeIfItemNotFound()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeItems(3, ItemRepository);
+            #endregion Arrange
+
+            #region Act
+            Controller.Map(4).AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestMapRedirectsToHomeIfItemNotAvailable()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = false;
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            Controller.Map(1).AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapReturnsViewWhenItemAvailable()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = true;
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Map(1)
+                .AssertViewRendered()
+                .WithViewData<Item>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.AreEqual("Name1", result.Name);
+            #endregion Assert
+        }
+        #endregion Map Tests
+
         #region Reflection Tests
 
         #region Controller Class Tests
@@ -439,7 +507,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(2, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(3, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -473,6 +541,23 @@ namespace CRP.Tests.Controllers
             #region Arrange
             var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethod("GetImage");
+            #endregion Arrange
+
+            #region Act
+            var result = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, result.Count());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestControllerMethodMapContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("Map");
             #endregion Arrange
 
             #region Act
