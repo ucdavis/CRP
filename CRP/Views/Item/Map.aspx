@@ -1,14 +1,15 @@
-<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<CRP.Core.Domain.Item>" %>
+<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.BigMapViewModel>" %>
+<%@ Import Namespace="CRP.Controllers" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head runat="server">
-    <title><%= Html.Encode(Model.Name) + " - Map" %></title>
+    <title><%= Html.Encode(Model.Item.Name) + " - Map" %></title>
     
     <style type="text/css" media="print">
         * {font-family:Arial;}
-        .coordinate-container, #MSVE_navAction_container {display:none;}
+        .coordinate-container, #MSVE_navAction_container, .pinToggle {display:none;}
         .map MSVE_MapContainer {width:100%;}
     </style>
 
@@ -21,29 +22,46 @@
     <link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>
+    <script src="<%= Url.Content("~/Scripts/jquery.bt.min.js") %>" type="text/javascript"></script>
         
     <script type="text/javascript">
 
         var icon = "<div style='background-color: #235087; border: 2px solid #FFFFFF; font-size: 12px; font-weight: bold; opacity: 0.7; padding: 0.5em 0; text-align: center; width: 100px;'>title</div>";
-    
+        var pins = '<%=Model.UsePins %>'.toLowerCase();
+        var xpin = false;
+        if (pins == 'true') {
+            xpin = true;
+        }
+        
         $(function() {
             $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, displaySearch: false
-                               , loadAllPins: true, usePushPins: false, customShape: icon, allowShapeDragging: true
+                               , loadAllPins: true, usePushPins: xpin, customShape: icon, allowShapeDragging: !xpin
                                , height: "700px", width: "700px"});
         });        
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.coordinate-title').append('  <%=Html.Image("~/images/question_blue.png", new { @id = "MapPinHelp" })%>');
+            <%if(Model.HasMapPins) {%>                        
+                $("#MapPinHelp").bt("To view Locations on the map, click on the tabs below", {positions: 'top'});
+            <% } else {%>
+                $("#MapPinHelp").bt("No specific locations have been set for this map", {positions: 'top'});
+            <%} %>
+        });
     </script>
 
 </head>
 <body>
 
-<h1><%=Html.Encode(Model.Name) %></h1>
+<h1><%=Html.Encode(Model.Item.Name) %></h1>
+    <div class="pinToggle"><%= Html.ActionLink<ItemController>(a=>a.Map(Model.Item.Id, !Model.UsePins), "Toggle Pins-Labels") %></div>
     <div>
     
     <div id="map">
 	    <div >
 	    
 	    <dl>
-	        <% foreach(var a in Model.MapPins) { %>
+	        <% foreach(var a in Model.Item.MapPins) { %>
 	            <div class="<%= a.IsPrimary ? "default-location" : string.Empty %>" lat="<%= a.Latitude %>" lng="<%= a.Longitude %>">
 	                <dt><%= Html.Encode(a.Title) %></dt>
 	                <% if (!string.IsNullOrEmpty(a.Description)) { %>
@@ -58,7 +76,7 @@
     
     </div>
 <p>
-<% foreach (var ep in Model.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty)){%>    
+<% foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty)){%>    
     <strong><%= Html.Encode(ep.ExtendedProperty.Name) %>:</strong>
     <%= Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
                                 ? ep.Answer : Convert.ToDateTime(ep.Answer).ToString("D")) %>

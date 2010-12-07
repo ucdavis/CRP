@@ -40,7 +40,7 @@
             <a href="<%= Model.Item.LinkLink %>" style="color:#0000FF;text-align:left">View Larger Map</a>
         </small>--%>
         
-        <%= Html.ActionLink<ItemController>(a=>a.Map(Model.Item.Id), "Full Screen Map") %>
+        <%= Html.ActionLink<ItemController>(a=>a.Map(Model.Item.Id, true), "Full Screen Map") %>
         <div id="map">
 		    <div >
 		    

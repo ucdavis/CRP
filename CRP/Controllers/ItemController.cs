@@ -77,7 +77,7 @@ namespace CRP.Controllers
             }
         }
 
-        public ActionResult Map(int id)
+        public ActionResult Map(int id, bool usePins)
         {
             var item = Repository.OfType<Item>().GetNullableByID(id);
 
@@ -86,7 +86,9 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
-            return View(item);
+            var viewModel = BigMapViewModel.Create(item);
+            viewModel.UsePins = usePins;
+            return View(viewModel);
         }   
     }
 }
