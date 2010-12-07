@@ -107,7 +107,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestMapMapping()
         {
-            "~/Item/Map/5".ShouldMapTo<ItemController>(a => a.Map(5));
+            "~/Item/Map/5".ShouldMapTo<ItemController>(a => a.Map(5, false), true);
         }
 
 
@@ -357,7 +357,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Map(4).AssertActionRedirect()
+            Controller.Map(4, false).AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
             #endregion Act
 
@@ -377,7 +377,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            Controller.Map(1).AssertActionRedirect()
+            Controller.Map(1, false).AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
             #endregion Act
 
@@ -397,14 +397,91 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = Controller.Map(1)
+            var result = Controller.Map(1, true)
                 .AssertViewRendered()
-                .WithViewData<Item>();
+                .WithViewData<BigMapViewModel>();
             #endregion Act
 
             #region Assert
             Assert.IsNull(Controller.Message);
-            Assert.AreEqual("Name1", result.Name);
+            Assert.AreEqual("Name1", result.Item.Name);
+            Assert.IsTrue(result.UsePins);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapReturnsViewWithHasPinsWhenPinsExist()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = true;
+            Items[0].MapPins.Add(CreateValidEntities.MapPin(1));
+            Items[0].MapPins.Add(CreateValidEntities.MapPin(2));
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Map(1, true)
+                .AssertViewRendered()
+                .WithViewData<BigMapViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.AreEqual("Name1", result.Item.Name);
+            Assert.IsTrue(result.UsePins);
+            Assert.IsTrue(result.HasMapPins);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapReturnsViewWithHasPinsFalseWhenPinsDoNotExist1()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = true;
+            Items[0].MapPins = new List<MapPin>();
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Map(1, true)
+                .AssertViewRendered()
+                .WithViewData<BigMapViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.AreEqual("Name1", result.Item.Name);
+            Assert.IsTrue(result.UsePins);
+            Assert.IsFalse(result.HasMapPins);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapReturnsViewWithHasPinsFalseWhenPinsDoNotExist2()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = true;
+            Items[0].MapPins = null;
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Map(1, true)
+                .AssertViewRendered()
+                .WithViewData<BigMapViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.AreEqual("Name1", result.Item.Name);
+            Assert.IsTrue(result.UsePins);
+            Assert.IsFalse(result.HasMapPins);
             #endregion Assert
         }
         #endregion Map Tests
