@@ -23,8 +23,13 @@
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>
         
     <script type="text/javascript">
+
+        var icon = "<div style='background-color: #235087; border: 2px solid #FFFFFF; font-size: 12px; font-weight: bold; opacity: 0.7; padding: 0.5em 0; text-align: center; width: 100px;'>title</div>";
+    
         $(function() {
-            $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, height: "700px", width: "700px" });
+            $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, displaySearch: false
+                               , loadAllPins: true, usePushPins: false, customShape: icon, allowShapeDragging: true
+                               , height: "700px", width: "700px"});
         });        
     </script>
 
