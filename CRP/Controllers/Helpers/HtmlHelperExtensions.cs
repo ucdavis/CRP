@@ -99,6 +99,7 @@ namespace CRP.Controllers.Helpers
 
             formattedEncodedText = formattedEncodedText.Replace(@"&amp;nbsp;", @"&nbsp;");
             formattedEncodedText = formattedEncodedText.Replace(@"&amp;mdash;", @"&mdash;");
+            
 
             // <span style="text-decoration:underline;">
             ReplaceComplexTag(formattedEncodedText, Span,
@@ -139,6 +140,8 @@ namespace CRP.Controllers.Helpers
             ReplaceComplexTag(formattedEncodedText, Span,
                               string.Format(SpanEncodedStyled, XXLargeText),
                               string.Format(SpanStyled, XXLargeText));
+
+            formattedEncodedText = formattedEncodedText.Replace(@"&amp;", @"&"); //Last thing so it doesn't break complex tags.
 
             return formattedEncodedText.ToString();
         }
