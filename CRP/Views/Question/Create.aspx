@@ -61,7 +61,6 @@
     <div>
         <%= Html.ActionLink<QuestionSetController>(a => a.Edit(Model.QuestionSet.Id), "Back to Question Set") %>
     </div>
-    
     <div class="two_col_float two_col_float_left">
         <div class="QuantityContainer">
             <fieldset>
@@ -126,7 +125,7 @@
             </fieldset>
         </div>
     </div>
-
+    <br /><br /><br /><br /><br /><br />
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
