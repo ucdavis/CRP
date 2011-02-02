@@ -466,6 +466,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TransactionGuid.
+        /// </summary>
+        public static string Report_TransactionGuid {
+            get {
+                return ResourceManager.GetString("Report_TransactionGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TransactionNumber.
         /// </summary>
         public static string Report_TransactionNumber {

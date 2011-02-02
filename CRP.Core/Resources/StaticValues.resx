@@ -295,6 +295,10 @@
     <value>TransactionDate</value>
     <comment>Report View Model static value column name</comment>
   </data>
+  <data name="Report_TransactionGuid" xml:space="preserve">
+    <value>TransactionGuid</value>
+    <comment>Report View Model static value column name</comment>
+  </data>
   <data name="Report_TransactionNumber" xml:space="preserve">
     <value>TransactionNumber</value>
     <comment>Report View Model static value column name</comment>

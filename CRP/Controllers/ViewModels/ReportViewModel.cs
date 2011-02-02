@@ -209,6 +209,11 @@ namespace CRP.Controllers.ViewModels
                 {
                     result = transaction.NotifiedDate == null ? string.Empty : transaction.NotifiedDate.ToString();
                 }
+                else if (itemReportColumn.Name == StaticValues.Report_TransactionGuid)
+                {
+                    if (transaction.Credit) result = string.Format("{0} FID={1}", transaction.TransactionGuid, transaction.Item.TouchnetFID);
+                    else result = "n/a";
+                }
             }
 
             return result;

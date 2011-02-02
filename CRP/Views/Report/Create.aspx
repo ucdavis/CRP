@@ -283,6 +283,13 @@
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
                 <%= Html.Hidden("_PropertyName", StaticValues.Report_NotifiedDate, new { @class = StaticValues.Class_indexedControl })%>                
             </span>
+
+            <span id="propertyTransactionGuid" class="property">
+                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Credit Card Id") %></label>
+                <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_TransactionGuid, new { @class = StaticValues.Class_indexedControl })%>                
+            </span>
             
         </fieldset>
 
