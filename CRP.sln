@@ -1,12 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP", "CRP\CRP.csproj", "{176A7FB7-9299-4CD0-9962-931C697BB023}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Tests", "CRP.Tests\CRP.Tests.csproj", "{CAED0EA2-2F95-4548-9477-4508D48F6BD5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Core", "CRP.Core\CRP.Core.csproj", "{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-6570-4E51-850E-E2097240851C}"
 	ProjectSection(SolutionItems) = preProject
 		Bin\Castle.Core.dll = Bin\Castle.Core.dll
@@ -65,7 +59,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-657
 		Bin\xVal.dll = Bin\xVal.dll
 	EndProjectSection
 EndProject
-Project("{4F174C21-8C12-11D0-8340-0000F80270F8}") = "CRP.DB", "CRP.DB\CRP.DB.dbp", "{56839976-E154-430C-BAC7-881DC42BF754}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP", "CRP\CRP.csproj", "{176A7FB7-9299-4CD0-9962-931C697BB023}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Tests", "CRP.Tests\CRP.Tests.csproj", "{CAED0EA2-2F95-4548-9477-4508D48F6BD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Core", "CRP.Core\CRP.Core.csproj", "{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}"
+EndProject
+Project("{C8D11400-126E-41CD-887F-60BD40844F9E}") = "CRP.DB", "CRP.DB\CRP.DB.dbproj", "{67CBC824-A49E-4E9B-A947-360F3DFE65C3}"
 EndProject
 Project("{2CFEAB61-6A3B-4EB8-B523-560B4BEEF521}") = "CRP.Deploy", "CRP.Deploy\CRP.Deploy.wdproj", "{1BA8D426-2727-4133-B98F-1D583A913C72}"
 EndProject
@@ -73,7 +73,7 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.caes.ucdavis.edu:8088/tfs
+		SccTeamFoundationServer = https://tfs.caes.ucdavis.edu:8088/tfs/defaultcollection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = CRP.Core\\CRP.Core.csproj
 		SccProjectName1 = CRP.Core
@@ -84,12 +84,12 @@ Global
 		SccProjectUniqueName3 = CRP\\CRP.csproj
 		SccProjectName3 = CRP
 		SccLocalPath3 = CRP
-		SccProjectUniqueName4 = CRP.DB\\CRP.DB.dbp
-		SccProjectName4 = CRP.DB
-		SccLocalPath4 = CRP.DB
-		SccProjectUniqueName5 = CRP.Deploy\\CRP.Deploy.wdproj
-		SccProjectName5 = CRP.Deploy
-		SccLocalPath5 = CRP.Deploy
+		SccProjectUniqueName4 = CRP.Deploy\\CRP.Deploy.wdproj
+		SccProjectName4 = CRP.Deploy
+		SccLocalPath4 = CRP.Deploy
+		SccProjectUniqueName5 = CRP.DB\\CRP.DB.dbproj
+		SccProjectName5 = CRP.DB
+		SccLocalPath5 = CRP.DB
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +113,9 @@ Global
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.Build.0 = Test|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.Build.0 = Release|Any CPU

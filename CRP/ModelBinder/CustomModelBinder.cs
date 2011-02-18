@@ -162,7 +162,8 @@ namespace CRP.ModelBinder
                 propertyType.IsGenericType &&
                 (propertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
                  propertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
-                 propertyType.GetGenericTypeDefinition() == typeof(ISet<>));
+                 propertyType.GetGenericTypeDefinition() == typeof(System.Collections.Generic.ISet<>) ||
+                 propertyType.GetGenericTypeDefinition() == typeof(Iesi.Collections.Generic.ISet<>));
 
             bool isSimpleGenericBindableEntityCollection =
                 isSimpleGenericBindableCollection && IsEntityType(propertyType.GetGenericArguments().First());
