@@ -44,7 +44,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Checkout(int id)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
 
             if (item == null)
             {
@@ -93,7 +93,7 @@ namespace CRP.Controllers
         /// <param name="captchaValid">if set to <c>true</c> [captcha valid].</param>
         /// <returns></returns>
         [CaptchaValidator]
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Checkout(int id, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
         {
             // if the arrays are null create new blank ones
@@ -102,7 +102,7 @@ namespace CRP.Controllers
 
             #region DB Queries
             // get the item
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
 
             // get all the questions in 1 queries
             var allQuestions = (from a in Repository.OfType<Question>().Queryable
@@ -155,7 +155,7 @@ namespace CRP.Controllers
             if (HttpContext.Request.IsOpenId())
             {
                 // doesn't matter if it's null, just assign what we have
-                transaction.OpenIDUser = _openIdUserRepository.GetNullableByID(CurrentUser.Identity.Name);
+                transaction.OpenIDUser = _openIdUserRepository.GetNullableById(CurrentUser.Identity.Name);
             }
 
             // deal with selected payment type
@@ -323,7 +323,7 @@ namespace CRP.Controllers
                             //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
                             var saveId = transaction.Id;
                             NHibernateSessionManager.Instance.GetSession().Evict(transaction);
-                            transaction = Repository.OfType<Transaction>().GetNullableByID(saveId);
+                            transaction = Repository.OfType<Transaction>().GetNullableById(saveId);
                             // attempt to get the contact information question set and retrieve email address
                             var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
                             if (question != null)
@@ -340,7 +340,7 @@ namespace CRP.Controllers
                     }
                 }
 
-                var updatedItem = Repository.OfType<Item>().GetNullableByID(transaction.Item.Id);
+                var updatedItem = Repository.OfType<Item>().GetNullableById(transaction.Item.Id);
                 if (updatedItem != null)
                 {
                     //For whatever reason, if you are logged in with your CAES user, the item is updated, 
@@ -439,7 +439,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Confirmation(int id)
         {
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);            
+            var transaction = Repository.OfType<Transaction>().GetNullableById(id);            
 
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
 
@@ -519,7 +519,7 @@ namespace CRP.Controllers
         [AnyoneWithRole]
         public ActionResult Edit(int id, string sort, string page)
         {
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if(transaction == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
@@ -568,11 +568,11 @@ namespace CRP.Controllers
         /// <param name="checkSort"></param>
         /// <param name="checkPage"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [AnyoneWithRole]
         public ActionResult Edit(Transaction transaction, string checkSort, string checkPage)
         {
-            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(transaction.Id);
+            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(transaction.Id);
             if (transactionToUpdate == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
@@ -665,7 +665,7 @@ namespace CRP.Controllers
         public ActionResult Refund(int id, string sort, string page)
         {
             var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if (transaction == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
@@ -725,10 +725,10 @@ namespace CRP.Controllers
         /// <param name="refundPage">The refund page.</param>
         /// <returns></returns>
         [RefunderOnly]
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Refund(Transaction transaction, string refundSort, string refundPage)
         {
-            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(transaction.Id);
+            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(transaction.Id);
             if (transactionToUpdate == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
@@ -811,11 +811,11 @@ namespace CRP.Controllers
         }
 
         [RefunderOnly]
-        [AcceptPost]
+        [HttpPost]
         public ActionResult RemoveRefund(int id, string sort, string page)
         {
             var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(id);
+            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToUpdate == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
@@ -861,7 +861,7 @@ namespace CRP.Controllers
         public ActionResult SendNotification(int id, string sort, string page)
         {
             var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableByID(id);
+            var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToUpdate == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
@@ -907,7 +907,7 @@ namespace CRP.Controllers
         public ActionResult DetailsRefund(int id, string sort, string page)
         {
             var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-            var transactionToView = Repository.OfType<Transaction>().GetNullableByID(id);
+            var transactionToView = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToView == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
@@ -971,7 +971,7 @@ namespace CRP.Controllers
         /// Description:
         ///     Deals with the return result from the payment gateway.
         /// </remarks>
-        [AcceptPost]
+        [HttpPost]
         [BypassAntiForgeryToken]
         public ActionResult PaymentResult(PaymentResultParameters touchNetValues)
         {
@@ -985,7 +985,7 @@ namespace CRP.Controllers
                 var transaction = Repository.OfType<Transaction>()
                     .Queryable.Where(a => a.TransactionGuid == new Guid(parsedTransaction))
                     .SingleOrDefault();
-                //var transaction = Repository.OfType<Transaction>().GetNullableByID(touchNetValues.EXT_TRANS_ID.Value);
+                //var transaction = Repository.OfType<Transaction>().GetNullableById(touchNetValues.EXT_TRANS_ID.Value);
 
                 if(transaction == null)
                 {
@@ -1258,7 +1258,7 @@ namespace CRP.Controllers
 
             foreach (var qap in transactionAnswers)
             {
-                var question = Repository.OfType<Question>().GetNullableByID(qap.QuestionId);
+                var question = Repository.OfType<Question>().GetNullableById(qap.QuestionId);
                 var answer = qap.Answer;
 
                 if (question != null)
@@ -1280,7 +1280,7 @@ namespace CRP.Controllers
 
             foreach (var qap in quantityAnswers)
             {
-                var question = Repository.OfType<Question>().GetNullableByID(qap.QuestionId);
+                var question = Repository.OfType<Question>().GetNullableById(qap.QuestionId);
                 var answer = qap.Answer;
 
                 if (question != null)
@@ -1310,7 +1310,7 @@ namespace CRP.Controllers
             return View(LookupViewModel.Create(Repository));
         }
 
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Lookup(string orderNumber, string email)
         {
             var transaction = Repository.OfType<Transaction>().Queryable.Where(a => a.TransactionNumber == orderNumber).FirstOrDefault();

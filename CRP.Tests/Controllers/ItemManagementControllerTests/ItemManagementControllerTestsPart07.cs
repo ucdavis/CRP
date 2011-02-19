@@ -38,8 +38,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             ControllerRecordFakes.FakeItems(Items, 1);
             ControllerRecordFakes.FakeUsers(Users, 1);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
-            UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableById(1)).Return(Users[0]).Repeat.Any();
             Controller.AddEditor(1, 1)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
@@ -51,8 +51,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         {
             ControllerRecordFakes.FakeItems(Items, 1);
             ControllerRecordFakes.FakeUsers(Users, 1);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            UserRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             Controller.AddEditor(1, 1)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
@@ -73,8 +73,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[1].User = Users[1];
             Editors[1].Item = Items[0];
             Items[0].Editors.Add(Editors[1]);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableById(1)).Return(Users[0]).Repeat.Any();
 
             Assert.AreEqual(1, Items[0].Editors.Count);
 
@@ -100,8 +100,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[1].Item = Items[0];
             Items[0].Editors.Add(Editors[1]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableById(1)).Return(Users[0]).Repeat.Any();
 
             Items[0].Name = " ";
 
@@ -129,8 +129,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[1].Item = Items[0];
             Items[0].Editors.Add(Editors[1]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            UserRepository.Expect(a => a.GetNullableByID(1)).Return(Users[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableById(1)).Return(Users[0]).Repeat.Any();
 
             Assert.AreEqual(1, Items[0].Editors.Count);
 
@@ -158,8 +158,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[1].User = Users[1];
             Editors[1].Item = Items[0];
             Items[0].Editors.Add(Editors[1]);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            UserRepository.Expect(a => a.GetNullableByID(2)).Return(Users[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            UserRepository.Expect(a => a.GetNullableById(2)).Return(Users[1]).Repeat.Any();
 
             Assert.AreEqual(1, Items[0].Editors.Count);
             #endregion Arrange

@@ -91,7 +91,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="openid_identifier"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Authenticate(string openid_identifier)
         {
             return OpenIdHelper.Login(openid_identifier, OpenIdHelper.CreateClaimsRequest(OpenIdHelper.RequestInformation.Email));
@@ -111,7 +111,7 @@ namespace CRP.Controllers
             if (OpenIdHelper.ValidateResponse(out openIdUser, out message))
             {
                 // check to see if we need to create an account in the system
-                var user = _openIdUserRepository.GetNullableByID(openIdUser.ClaimedIdentifier);
+                var user = _openIdUserRepository.GetNullableById(openIdUser.ClaimedIdentifier);
 
                 // does not exist create a new one
                 if (user == null)
@@ -153,7 +153,7 @@ namespace CRP.Controllers
         [RequireOpenId]
         public ActionResult OpenIdAccount()
         {
-            var openIdUser = _openIdUserRepository.GetNullableByID(CurrentUser.Identity.Name);
+            var openIdUser = _openIdUserRepository.GetNullableById(CurrentUser.Identity.Name);
 
             if (openIdUser == null)
             {
@@ -164,10 +164,10 @@ namespace CRP.Controllers
         }
 
         [RequireOpenId]
-        [AcceptPost]
+        [HttpPost]
         public ActionResult OpenIdAccount(OpenIdUser openIDUser)
         {
-            var destOpenIdUser = _openIdUserRepository.GetNullableByID(CurrentUser.Identity.Name);
+            var destOpenIdUser = _openIdUserRepository.GetNullableById(CurrentUser.Identity.Name);
 
             if (destOpenIdUser == null)
             {

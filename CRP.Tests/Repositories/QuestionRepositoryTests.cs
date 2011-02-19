@@ -33,8 +33,8 @@ namespace CRP.Tests.Repositories
         protected override Question GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.Question(counter);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
-            var questionType = Repository.OfType<QuestionType>().GetByID(1);
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+            var questionType = Repository.OfType<QuestionType>().GetById(1);
             rtValue.QuestionType = questionType;
 
             return rtValue;
@@ -367,7 +367,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionTypes(3);
             Repository.OfType<QuestionType>().DbContext.CommitTransaction();
             var question = GetValid(9);
-            var questionType = Repository.OfType<QuestionType>().GetNullableByID(3);
+            var questionType = Repository.OfType<QuestionType>().GetNullableById(3);
             question.QuestionType = questionType;
             #endregion Arrange
 
@@ -396,7 +396,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionTypes(3);
             Repository.OfType<QuestionType>().DbContext.CommitTransaction();
             var question = GetValid(9);
-            var questionType = Repository.OfType<QuestionType>().GetNullableByID(3);
+            var questionType = Repository.OfType<QuestionType>().GetNullableById(3);
             question.QuestionType = questionType;
 
             QuestionRepository.DbContext.BeginTransaction();
@@ -502,7 +502,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionSets(3);
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
             var question = GetValid(9);
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(3);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(3);
             question.QuestionSet = questionSet;
             #endregion Arrange
 
@@ -531,7 +531,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionSets(3);
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
             var question = GetValid(9);
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(3);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(3);
             question.QuestionSet = questionSet;
 
             QuestionRepository.DbContext.BeginTransaction();
@@ -753,7 +753,7 @@ namespace CRP.Tests.Repositories
             QuestionRepository.DbContext.BeginTransaction();
             QuestionRepository.EnsurePersistent(question);
             QuestionRepository.DbContext.CommitTransaction();
-            Assert.AreEqual("Name2", Repository.OfType<QuestionOption>().GetByID(2).Name);
+            Assert.AreEqual("Name2", Repository.OfType<QuestionOption>().GetById(2).Name);
             #endregion Arrange
 
             #region Act
@@ -765,7 +765,7 @@ namespace CRP.Tests.Repositories
 
             #region Assert
             
-            Assert.AreEqual("Updated", Repository.OfType<QuestionOption>().GetByID(2).Name);
+            Assert.AreEqual("Updated", Repository.OfType<QuestionOption>().GetById(2).Name);
             Assert.IsFalse(question.IsTransient());
             Assert.IsTrue(question.IsValid());
             #endregion Assert
@@ -847,7 +847,7 @@ namespace CRP.Tests.Repositories
 
             var question = GetValid(null);
             question.Validators = new List<Validator>();
-            question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(2));
+            question.Validators.Add(Repository.OfType<Validator>().GetNullableById(2));
             #endregion Arrange
 
             #region Act
@@ -881,8 +881,8 @@ namespace CRP.Tests.Repositories
 
             var question = GetValid(null);
             question.Validators = new List<Validator>();
-            question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(2));
-            question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(1));
+            question.Validators.Add(Repository.OfType<Validator>().GetNullableById(2));
+            question.Validators.Add(Repository.OfType<Validator>().GetNullableById(1));
             #endregion Arrange
 
             #region Act
@@ -913,8 +913,8 @@ namespace CRP.Tests.Repositories
 
             var question = GetValid(null);
             question.Validators = new List<Validator>();
-            question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(2));
-            question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(1));
+            question.Validators.Add(Repository.OfType<Validator>().GetNullableById(2));
+            question.Validators.Add(Repository.OfType<Validator>().GetNullableById(1));
 
             QuestionRepository.DbContext.BeginTransaction();
             QuestionRepository.EnsurePersistent(question);
@@ -956,8 +956,8 @@ namespace CRP.Tests.Repositories
 
             var question = GetValid(null);
             question.Validators = new List<Validator>();
-            question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(2));
-            question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(1));
+            question.Validators.Add(Repository.OfType<Validator>().GetNullableById(2));
+            question.Validators.Add(Repository.OfType<Validator>().GetNullableById(1));
             #endregion Arrange
 
             #region Act
@@ -979,8 +979,8 @@ namespace CRP.Tests.Repositories
 
             var question = GetValid(null);
             question.Validators = new List<Validator>();
-            //question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(2));
-            //question.Validators.Add(Repository.OfType<Validator>().GetNullableByID(1));
+            //question.Validators.Add(Repository.OfType<Validator>().GetNullableById(2));
+            //question.Validators.Add(Repository.OfType<Validator>().GetNullableById(1));
             #endregion Arrange
 
             #region Act
@@ -1368,7 +1368,7 @@ namespace CRP.Tests.Repositories
         private void SetOptions(bool hasOptions)
         {
             Repository.OfType<QuestionType>().DbContext.BeginTransaction();
-            var questionType = Repository.OfType<QuestionType>().GetByID(1);
+            var questionType = Repository.OfType<QuestionType>().GetById(1);
             questionType.HasOptions = hasOptions;
             Repository.OfType<QuestionType>().EnsurePersistent(questionType);
             Repository.OfType<QuestionType>().DbContext.CommitTransaction();

@@ -766,12 +766,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(3, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
@@ -859,12 +859,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(3, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }

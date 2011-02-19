@@ -353,8 +353,8 @@ namespace CRP.Tests.Repositories
             var itemType = CreateValidEntities.ItemType(null);
             itemType.AddExtendedProperty(CreateValidEntities.ExtendedProperty(1));
             itemType.AddExtendedProperty(CreateValidEntities.ExtendedProperty(2));
-            itemType.ExtendedProperties.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetByID(1);
-            itemType.ExtendedProperties.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetByID(1);
+            itemType.ExtendedProperties.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetById(1);
+            itemType.ExtendedProperties.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetById(1);
             Assert.AreEqual(0, Repository.OfType<ExtendedProperty>().GetAll().Count());
             #endregion Arrange
 
@@ -380,8 +380,8 @@ namespace CRP.Tests.Repositories
             var itemType = CreateValidEntities.ItemType(null);
             itemType.AddExtendedProperty(CreateValidEntities.ExtendedProperty(1));
             itemType.AddExtendedProperty(CreateValidEntities.ExtendedProperty(2));
-            itemType.ExtendedProperties.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetByID(1);
-            itemType.ExtendedProperties.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetByID(1);
+            itemType.ExtendedProperties.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetById(1);
+            itemType.ExtendedProperties.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetById(1);
 
             ItemTypeRepository.DbContext.BeginTransaction();
             ItemTypeRepository.EnsurePersistent(itemType);
@@ -414,8 +414,8 @@ namespace CRP.Tests.Repositories
             var itemType = CreateValidEntities.ItemType(null);
             itemType.AddExtendedProperty(CreateValidEntities.ExtendedProperty(1));
             itemType.AddExtendedProperty(CreateValidEntities.ExtendedProperty(2));
-            itemType.ExtendedProperties.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetByID(1);
-            itemType.ExtendedProperties.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetByID(1);
+            itemType.ExtendedProperties.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetById(1);
+            itemType.ExtendedProperties.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetById(1);
 
             ItemTypeRepository.DbContext.BeginTransaction();
             ItemTypeRepository.EnsurePersistent(itemType);
@@ -765,8 +765,8 @@ namespace CRP.Tests.Repositories
             Repository.OfType<Item>().DbContext.CommitTransaction();
 
             var itemType = CreateValidEntities.ItemType(null);
-            itemType.Items.Add(Repository.OfType<Item>().GetByID(1));
-            itemType.Items.Add(Repository.OfType<Item>().GetByID(2));
+            itemType.Items.Add(Repository.OfType<Item>().GetById(1));
+            itemType.Items.Add(Repository.OfType<Item>().GetById(2));
 
             ItemTypeRepository.DbContext.BeginTransaction();
             ItemTypeRepository.EnsurePersistent(itemType);
@@ -791,9 +791,9 @@ namespace CRP.Tests.Repositories
             Repository.OfType<Item>().DbContext.CommitTransaction();
 
             var itemType = CreateValidEntities.ItemType(null);
-            itemType.Items.Add(Repository.OfType<Item>().GetByID(1));
-            itemType.Items.Add(Repository.OfType<Item>().GetByID(2));
-            itemType.Items.Add(Repository.OfType<Item>().GetByID(4));
+            itemType.Items.Add(Repository.OfType<Item>().GetById(1));
+            itemType.Items.Add(Repository.OfType<Item>().GetById(2));
+            itemType.Items.Add(Repository.OfType<Item>().GetById(4));
 
             ItemTypeRepository.DbContext.BeginTransaction();
             ItemTypeRepository.EnsurePersistent(itemType);
@@ -803,7 +803,7 @@ namespace CRP.Tests.Repositories
             #endregion Arrange
 
             #region Act
-            itemType.Items.Remove(Repository.OfType<Item>().GetByID(2));
+            itemType.Items.Remove(Repository.OfType<Item>().GetById(2));
             ItemTypeRepository.DbContext.BeginTransaction();
             ItemTypeRepository.EnsurePersistent(itemType);
             ItemTypeRepository.DbContext.CommitTransaction();
@@ -832,8 +832,8 @@ namespace CRP.Tests.Repositories
                 itemType = CreateValidEntities.ItemType(null);
                 itemType.AddExtendedProperty(CreateValidEntities.ExtendedProperty(1));
                 itemType.AddExtendedProperty(CreateValidEntities.ExtendedProperty(2));
-                itemType.ExtendedProperties.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetByID(1);
-                itemType.ExtendedProperties.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetByID(1);
+                itemType.ExtendedProperties.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetById(1);
+                itemType.ExtendedProperties.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetById(1);
 
                 itemType.ExtendedProperties.ElementAt(0).Name = " ";
 

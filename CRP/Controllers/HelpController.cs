@@ -31,7 +31,7 @@ namespace CRP.Controllers
 
         public ActionResult Details(int id)
         {
-            var helpTopic = Repository.OfType<HelpTopic>().GetNullableByID(id);
+            var helpTopic = Repository.OfType<HelpTopic>().GetNullableById(id);
             if (helpTopic == null)
             {
                 return this.RedirectToAction(a => a.Index());
@@ -53,7 +53,7 @@ namespace CRP.Controllers
         // POST: /Help/Create
 
         [AdminOnly]
-        [AcceptPost]
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult Create(HelpTopic helpTopic)
         {
@@ -84,7 +84,7 @@ namespace CRP.Controllers
         [AdminOnly]
         public ActionResult Edit(int id)
         {
-            var helpTopic = Repository.OfType<HelpTopic>().GetNullableByID(id);
+            var helpTopic = Repository.OfType<HelpTopic>().GetNullableById(id);
             if (helpTopic == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,
@@ -98,11 +98,11 @@ namespace CRP.Controllers
         // POST: /Help/Edit/5
 
         [AdminOnly]
-        [AcceptPost]
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, HelpTopic helpTopic)
         {
-            var topic = Repository.OfType<HelpTopic>().GetNullableByID(id);
+            var topic = Repository.OfType<HelpTopic>().GetNullableById(id);
             if (helpTopic == null)
             {
                 return this.RedirectToAction(a => a.Index());
@@ -145,7 +145,7 @@ namespace CRP.Controllers
 
         public ActionResult WatchVideo(int id)
         {
-            var helpTopic = Repository.OfType<HelpTopic>().GetNullableByID(id);
+            var helpTopic = Repository.OfType<HelpTopic>().GetNullableById(id);
             if (helpTopic == null)
             {
                 return this.RedirectToAction(a => a.Index());

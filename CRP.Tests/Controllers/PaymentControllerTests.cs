@@ -108,7 +108,7 @@ namespace CRP.Tests.Controllers
         public void TestLinkToTransactionWhereTransactionIdNotFoundRedirectsToItemManagementControllerList()
         {
             #region Arrange
-            TransactionRepository.Expect(a => a.GetNullableByID(5)).Return(null).Repeat.Any();            
+            TransactionRepository.Expect(a => a.GetNullableById(5)).Return(null).Repeat.Any();            
             #endregion Arrange
 
             #region Act/Assert
@@ -128,7 +128,7 @@ namespace CRP.Tests.Controllers
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             FakeTransactions(3);
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -163,7 +163,7 @@ namespace CRP.Tests.Controllers
             Items[0].AddEditor(Editors[0]);
             Items[0].AddEditor(Editors[1]);
             Transactions[1].Item = Items[0];
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -189,7 +189,7 @@ namespace CRP.Tests.Controllers
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             FakeTransactions(3);
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
             var paymentLogs = new List<PaymentLog>();
             for (int i = 0; i < 3; i++)
             {
@@ -226,7 +226,7 @@ namespace CRP.Tests.Controllers
         public void TestLinkToTransactionPostWhereIdNotFoundRedirectsToItemManagementControllerList()
         {
             #region Arrange
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             var payments = new PaymentLog[1];
             payments[0] = CreateValidEntities.PaymentLog(1);
             #endregion Arrange
@@ -253,7 +253,7 @@ namespace CRP.Tests.Controllers
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);            
             FakeTransactions(3);
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
             var payments = new PaymentLog[0];
             #endregion Arrange
 
@@ -279,7 +279,7 @@ namespace CRP.Tests.Controllers
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             FakeTransactions(3);
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
             Transactions[1].Amount = 20.00m;
             var payments = new PaymentLog[2];
             payments[0] = CreateValidEntities.PaymentLog(1);
@@ -312,7 +312,7 @@ namespace CRP.Tests.Controllers
             var dbContext = MockRepository.GenerateMock<IDbContext>();
             TransactionRepository.Expect(a => a.DbContext).Return(dbContext).Repeat.Any();
             FakeTransactions(3);
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
             Transactions[1].Amount = 20.00m;
             var payments = new PaymentLog[2];
             payments[0] = CreateValidEntities.PaymentLog(1);
@@ -346,7 +346,7 @@ namespace CRP.Tests.Controllers
             var dbContext = MockRepository.GenerateMock<IDbContext>();
             TransactionRepository.Expect(a => a.DbContext).Return(dbContext).Repeat.Any();
             FakeTransactions(3);
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
             Transactions[1].Amount = 20.00m;
             var payments = new PaymentLog[2];
             payments[0] = CreateValidEntities.PaymentLog(1);
@@ -380,7 +380,7 @@ namespace CRP.Tests.Controllers
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
             FakeTransactions(3);
             Transactions[1].Amount = 20;
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
             var payments = new PaymentLog[2];
             payments[0] = CreateValidEntities.PaymentLog(1);
             payments[1] = CreateValidEntities.PaymentLog(2);
@@ -578,12 +578,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }

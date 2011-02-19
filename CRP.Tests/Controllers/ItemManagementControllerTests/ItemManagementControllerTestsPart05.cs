@@ -23,7 +23,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestEditWithOneParameterRedirectsToListWhenIdNotFound()
         {
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             Controller.Edit(2)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
@@ -44,7 +44,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             FakeEditors(1);
             Editors[0].User = Users[2]; //Different User is editor
             Items[1].AddEditor(Editors[0]);
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
 
             #endregion Arrange
 
@@ -70,7 +70,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             FakeEditors(1);
             Editors[0].User = Users[2]; //Different User is editor
             Items[1].AddEditor(Editors[0]);
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             #endregion Arrange
@@ -111,7 +111,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Users[1].Units.Add(Units[3]);
             Users[1].Units.Add(Units[4]);
             
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
@@ -154,7 +154,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Users[1].Units.Add(Units[3]);
             Users[1].Units.Add(Units[4]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             UnitRepository.Expect(a => a.GetAll()).Return(Units).Repeat.Any();
@@ -195,7 +195,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemTypes[1].IsActive = false;
             ItemTypes[3].IsActive = false;
 
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             ControllerRecordFakes.FakeTouchnetFID(3, TouchnetFIDRepository);
@@ -238,7 +238,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Items[1].AddEditor(Editors[0]);
 
 
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
 
@@ -262,7 +262,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestEditWhenIdNotFoundDoesNotSave()
         {
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
 
             var epp = new ExtendedPropertyParameter[2];
             epp[0] = new ExtendedPropertyParameter();
@@ -296,7 +296,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Items[0].AddEditor(new Editor(Items[0], Users[1]));
             Items[0].AddEditor(new Editor(Items[0], Users[2]));
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
 
             var epp = new ExtendedPropertyParameter[2];
             epp[0] = new ExtendedPropertyParameter();
@@ -336,7 +336,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
 
             var epp = new ExtendedPropertyParameter[2];
             epp[0] = new ExtendedPropertyParameter();
@@ -376,7 +376,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
 
             var epp = new ExtendedPropertyParameter[2];
             epp[0] = new ExtendedPropertyParameter();
@@ -416,7 +416,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
 
             var epp = new ExtendedPropertyParameter[2];
             epp[0] = new ExtendedPropertyParameter();
@@ -461,7 +461,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
 
             var epp = new ExtendedPropertyParameter[2];
             epp[0] = new ExtendedPropertyParameter();

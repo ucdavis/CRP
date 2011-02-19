@@ -35,7 +35,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult LinkToTransaction(int transactionId, string sort, string page)
         {
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
             if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List(null));
 
             if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
@@ -52,11 +52,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        [AcceptPost]
+        [HttpPost]
         public ActionResult LinkToTransaction(int transactionId, PaymentLog[] Checks, string checkSort, string checkPage)
         {
             // get the transaction
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(transactionId);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
             if (transaction == null)
             {
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
@@ -103,7 +103,7 @@ namespace CRP.Controllers
                 // update an existing one
                 else if (check.Id > 0)
                 {
-                    var tempCheck = Repository.OfType<PaymentLog>().GetNullableByID(check.Id);
+                    var tempCheck = Repository.OfType<PaymentLog>().GetNullableById(check.Id);
                     paymentLog = Copiers.CopyCheckValues(check, tempCheck);
                     if (paymentLog.Id > 0 && paymentLog.Accepted)// && (string.IsNullOrEmpty(paymentLog.Name) || string.IsNullOrEmpty(paymentLog.Name.Trim()) || paymentLog.Amount <= 0.0m))
                     {

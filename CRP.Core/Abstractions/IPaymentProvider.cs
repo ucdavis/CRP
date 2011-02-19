@@ -67,7 +67,7 @@
 //        /// <param name="trackingId"></param>
 //        public void CompletePayment(string status, int reference, int transactionId, decimal paymentAmount, int trackingId)
 //        {
-//            var transaction = _transactionRepository.GetNullableByID(transactionId);
+//            var transaction = _transactionRepository.GetNullableById(transactionId);
 
 //            // not sure what to do if this is null, because that means touchnet returned something we shouldn't have gotten back
 //            if (transaction == null || transaction.Paid)

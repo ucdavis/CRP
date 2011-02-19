@@ -32,7 +32,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         protected override Transaction GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.Transaction(counter);
-            rtValue.Item = Repository.OfType<Item>().GetByID(1);
+            rtValue.Item = Repository.OfType<Item>().GetById(1);
             if (counter != null && counter == 3)
             {
                 rtValue.Check = true;

@@ -71,7 +71,7 @@ namespace CRP.Controllers
 
         public ActionResult Details(int id)
         {
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(id);
 
             if (questionSet == null)
             {
@@ -88,7 +88,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Edit(int id)
         {
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(id);
             if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
                 Message = "You do not have access to the requested Question Set.";
@@ -132,10 +132,10 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="questionSet"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Edit(int id, QuestionSet questionSet)
         {
-            var existingQs = Repository.OfType<QuestionSet>().GetNullableByID(id);
+            var existingQs = Repository.OfType<QuestionSet>().GetNullableById(id);
 
             // check for valid question set and access
             if (existingQs == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, existingQs))
@@ -209,7 +209,7 @@ namespace CRP.Controllers
             // set the item or item type as needed
             if (itemId.HasValue)
             {
-                viewModel.Item = Repository.OfType<Item>().GetNullableByID(itemId.Value);
+                viewModel.Item = Repository.OfType<Item>().GetNullableById(itemId.Value);
                 if (viewModel.Item == null)
                 {
                     Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
@@ -218,7 +218,7 @@ namespace CRP.Controllers
             }
             if (itemTypeId.HasValue)
             {
-                viewModel.ItemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId.Value);
+                viewModel.ItemType = Repository.OfType<ItemType>().GetNullableById(itemTypeId.Value);
                 if(viewModel.ItemType == null)
                 {
                     Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemType");
@@ -265,14 +265,14 @@ namespace CRP.Controllers
         /// <param name="transaction"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [HandleTransactionsManually]
         public ActionResult Create(int? itemId, int? itemTypeId, [Bind(Exclude="Id")]QuestionSet questionSet, string school, bool? transaction, bool? quantity)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
             questionSet.User = user;
 
-            if (questionSet.CollegeReusable) questionSet.School = _schoolRepository.GetNullableByID(school);
+            if (questionSet.CollegeReusable) questionSet.School = _schoolRepository.GetNullableById(school);
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, questionSet.ValidationResults());
 
@@ -295,7 +295,7 @@ namespace CRP.Controllers
             //Validation check before we persist, shouldn't really be needed
             if (itemId.HasValue)
             {
-                var item = Repository.OfType<Item>().GetNullableByID(itemId.Value);
+                var item = Repository.OfType<Item>().GetNullableById(itemId.Value);
                 if (item == null)
                 {
                     Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
@@ -305,7 +305,7 @@ namespace CRP.Controllers
             }
             else if (itemTypeId.HasValue)
             {
-                var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId.Value);
+                var itemType = Repository.OfType<ItemType>().GetNullableById(itemTypeId.Value);
                 if (itemType == null)
                 {
                     Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemType");
@@ -318,7 +318,7 @@ namespace CRP.Controllers
                 if (itemId.HasValue)
                 {
                     // has an item to automatically associate to
-                    var item = Repository.OfType<Item>().GetByID(itemId.Value);
+                    var item = Repository.OfType<Item>().GetById(itemId.Value);
                     
                     if (transaction.Value)
                     {
@@ -340,7 +340,7 @@ namespace CRP.Controllers
                 }
                 else if (itemTypeId.HasValue)
                 {
-                    var itemType = Repository.OfType<ItemType>().GetByID(itemTypeId.Value);
+                    var itemType = Repository.OfType<ItemType>().GetById(itemTypeId.Value);
 
                     if (transaction.Value)
                     {
@@ -390,8 +390,8 @@ namespace CRP.Controllers
             var viewModel = QuestionSetViewModel.Create(Repository, CurrentUser, _schoolRepository);
             viewModel.QuestionSet = questionSet;
 
-            if (itemId.HasValue) viewModel.Item = Repository.OfType<Item>().GetNullableByID(itemId.Value);
-            if (itemTypeId.HasValue) viewModel.ItemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId.Value);
+            if (itemId.HasValue) viewModel.Item = Repository.OfType<Item>().GetNullableById(itemId.Value);
+            if (itemTypeId.HasValue) viewModel.ItemType = Repository.OfType<ItemType>().GetNullableById(itemTypeId.Value);
 
             viewModel.Transaction = transaction.HasValue ? transaction.Value : false;
             viewModel.Quantity = quantity.HasValue ? quantity.Value : false;
@@ -422,7 +422,7 @@ namespace CRP.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult LinkToItemType(int itemTypeId, bool transaction, bool quantity)
         {
-            var item = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
+            var item = Repository.OfType<ItemType>().GetNullableById(itemTypeId);
 
             if (item == null || transaction == quantity)
             {
@@ -464,13 +464,13 @@ namespace CRP.Controllers
         /// <param name="transaction">if set to <c>true</c> [transaction].</param>
         /// <param name="quantity">if set to <c>true</c> [quantity].</param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [AdminOnly]
         public ActionResult LinkToItemType(int id, int itemTypeId, bool transaction, bool quantity)
         {
             // get the question set
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
-            var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(id);
+            var itemType = Repository.OfType<ItemType>().GetNullableById(itemTypeId);
 
             if (questionSet == null || itemType == null || transaction == quantity)
             {
@@ -537,7 +537,7 @@ namespace CRP.Controllers
         [UserOnly]
         public ActionResult LinkToItem(int itemId, bool transaction, bool quantity)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
 
             if (item == null || transaction == quantity)
             {
@@ -581,13 +581,13 @@ namespace CRP.Controllers
         /// <param name="transaction"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [UserOnly]
         public ActionResult LinkToItem(int id, int itemId, bool transaction, bool quantity)
         {
             // get teh question set
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(id);
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(id);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
 
             if (questionSet == null || item == null || transaction == quantity)
             {
@@ -674,11 +674,11 @@ namespace CRP.Controllers
         /// <param name="id">Item Question Set Id</param>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [UserOnly]
         public ActionResult UnlinkFromItem(int id)
         {
-            var itemQuestionSet = Repository.OfType<ItemQuestionSet>().GetNullableByID(id);
+            var itemQuestionSet = Repository.OfType<ItemQuestionSet>().GetNullableById(id);
             if (itemQuestionSet == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemQuestionSet");
@@ -697,7 +697,7 @@ namespace CRP.Controllers
             //MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemQuestionSet.ValidationResults());
 
             // check to make sure it isn't the system's default contact information set
-            var ciQuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(itemQuestionSet.QuestionSet.Id);
+            var ciQuestionSet = Repository.OfType<QuestionSet>().GetNullableById(itemQuestionSet.QuestionSet.Id);
             if (ciQuestionSet != null)
             {
                 if (ciQuestionSet.Name == StaticValues.QuestionSet_ContactInformation && ciQuestionSet.SystemReusable)

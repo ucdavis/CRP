@@ -443,15 +443,15 @@ namespace CRP.Tests.Controllers
             ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
 
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
 
-            ItemReportRepository.Expect(a => a.GetNullableByID(2)).Return(ItemReports[1]).Repeat.Any();
-            ItemReportRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemReportRepository.Expect(a => a.GetNullableById(2)).Return(ItemReports[1]).Repeat.Any();
+            ItemReportRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
 
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
-            QuestionRepository.Expect(a => a.GetNullableByID(0)).Return(null).Repeat.Any();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(0)).Return(null).Repeat.Any();
+            QuestionRepository.Expect(a => a.GetNullableById(0)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(0)).Return(null).Repeat.Any();
 
             var questionTypes = new List<QuestionType>();
             ControllerRecordFakes.FakeQuestionTypes(questionTypes);
@@ -799,12 +799,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }

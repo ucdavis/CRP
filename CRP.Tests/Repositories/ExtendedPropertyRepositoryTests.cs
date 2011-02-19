@@ -31,8 +31,8 @@ namespace CRP.Tests.Repositories
         protected override ExtendedProperty GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.ExtendedProperty(counter);
-            rtValue.ItemType = Repository.OfType<ItemType>().GetByID(1);
-            rtValue.QuestionType = Repository.OfType<QuestionType>().GetByID(1);
+            rtValue.ItemType = Repository.OfType<ItemType>().GetById(1);
+            rtValue.QuestionType = Repository.OfType<QuestionType>().GetById(1);
             return rtValue;
         }
 
@@ -169,7 +169,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadItemTypes(3);
             var extendedProperty = GetValid(9);
-            extendedProperty.ItemType = Repository.OfType<ItemType>().GetNullableByID(3);
+            extendedProperty.ItemType = Repository.OfType<ItemType>().GetNullableById(3);
             #endregion Arrange
 
             #region Act
@@ -441,7 +441,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadQuestionTypes(3);
             var extendedProperty = GetValid(9);
-            extendedProperty.QuestionType = Repository.OfType<QuestionType>().GetNullableByID(3);
+            extendedProperty.QuestionType = Repository.OfType<QuestionType>().GetNullableById(3);
             #endregion Arrange
 
             #region Act

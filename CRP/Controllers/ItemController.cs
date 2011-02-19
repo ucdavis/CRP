@@ -31,7 +31,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Details(int id)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
 
             if (item == null || !item.Available)
             {
@@ -59,7 +59,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult GetImage(int id)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
 
             //TODO: Review if this is what you want to happpen, or if it is possible.
             if(item == null)
@@ -79,7 +79,7 @@ namespace CRP.Controllers
 
         public ActionResult Map(int id, bool usePins)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
 
             if (item == null || !item.Available)
             {

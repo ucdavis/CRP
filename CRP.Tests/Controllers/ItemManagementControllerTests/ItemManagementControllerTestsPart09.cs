@@ -15,7 +15,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestDetailsRedirectToListWhenIdNotFound()
         {
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             Controller.Details(1)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
@@ -27,7 +27,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, true);
             ControllerRecordFakes.FakeItems(Items, 1);
             FakeItemReports(1);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             ItemReportRepository.Expect(a => a.Queryable).Return(ItemReports.AsQueryable()).Repeat.Any();
             Controller.Details(1)
                 .AssertViewRendered()
@@ -48,7 +48,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[0].User = Users[1]; //User is editor
             Items[0].AddEditor(Editors[0]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             ItemReportRepository.Expect(a => a.Queryable).Return(ItemReports.AsQueryable()).Repeat.Any();
             #endregion Arrange
 
@@ -73,7 +73,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, false);
             ControllerRecordFakes.FakeItems(Items, 1);
             FakeItemReports(1);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             ItemReportRepository.Expect(a => a.Queryable).Return(ItemReports.AsQueryable()).Repeat.Any();
             #endregion Arrange
 

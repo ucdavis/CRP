@@ -132,7 +132,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithOneParameterRedirectedToListWhenIdNotFound()
         {
-            ItemRepository.Expect(a => a.GetNullableByID(5)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(5)).Return(null).Repeat.Any();
             Controller.Create(5)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
@@ -145,7 +145,7 @@ namespace CRP.Tests.Controllers
         public void TestCreateWithOneParameterReturnsViewWhenIdFound()
         {
             FakeItems(3);
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             var result = Controller.Create(2)
                 .AssertViewRendered()
                 .WithViewData<CouponViewModel>();
@@ -159,7 +159,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithTwoParametersRedirectsToListWhenIdNotFound()
         {
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             Controller.Create(2, new Coupon())
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
@@ -178,7 +178,7 @@ namespace CRP.Tests.Controllers
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
             FakeItems(3);
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             var newCoupon = CreateValidEntities.Coupon(1);
             newCoupon.Code = null;
             newCoupon.UserId = null;
@@ -204,7 +204,7 @@ namespace CRP.Tests.Controllers
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
             FakeItems(3);
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             var newCoupon = CreateValidEntities.Coupon(1);
             newCoupon.Code = null;
             newCoupon.UserId = null;
@@ -236,7 +236,7 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Item = Items[i];
                 Coupons[i].Code = "FAKECCODES";
             }
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
             var result = Controller.Validate(2, "FAKECCODES")
@@ -258,7 +258,7 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Item = Items[i];
                 Coupons[i].Code = "FAKECCODES";
             }
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
             var result = Controller.Validate(2, "NOTFOUND")
@@ -280,7 +280,7 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Item = Items[i];
                 Coupons[i].Code = "FAKECCODE"+ (i+1);
             }
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
             var result = Controller.Validate(2, "FAKECCODE1")
@@ -303,7 +303,7 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);                
             }
             Coupons[1].IsActive = false;
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
             var result = Controller.Validate(2, "FAKECCODE2")
@@ -327,7 +327,7 @@ namespace CRP.Tests.Controllers
             }
             Coupons[1].IsActive = true;
             Coupons[1].Used = true;
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
             var result = Controller.Validate(2, "FAKECCODE2")
@@ -350,7 +350,7 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].DiscountAmount = 10.77m;
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
             var result = Controller.Validate(2, "FAKECCODE2")
@@ -376,7 +376,7 @@ namespace CRP.Tests.Controllers
             Coupons[1].DiscountAmount = 10.77m;
             Coupons[1].Used = true;
             Coupons[1].Unlimited = true;
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
             var result = Controller.Validate(2, "FAKECCODE2")
@@ -408,7 +408,7 @@ namespace CRP.Tests.Controllers
             Items[1].Quantity = 2;
             Items[1].CostPerItem = 9.00m; 
 
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
             #endregion Arrange
 
@@ -434,7 +434,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestDeactivateWhenCouponIdNotFoundDoesNotSave()
         {
-            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            CouponRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             Controller.Deactivate(1)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
@@ -454,7 +454,7 @@ namespace CRP.Tests.Controllers
 
             FakeCoupons(1);
             Coupons[0].IsActive = false;
-            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            CouponRepository.Expect(a => a.GetNullableById(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
             Assert.IsNotNull(result);
@@ -475,7 +475,7 @@ namespace CRP.Tests.Controllers
 
             FakeCoupons(1);
             Coupons[0].Used = true;
-            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            CouponRepository.Expect(a => a.GetNullableById(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
             Assert.IsNotNull(result);
@@ -499,7 +499,7 @@ namespace CRP.Tests.Controllers
             Coupons[0].Unlimited = true;
             FakeItems(1);
             Items[0].AddCoupon(Coupons[0]);
-            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            CouponRepository.Expect(a => a.GetNullableById(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
             Assert.IsNotNull(result);
@@ -523,7 +523,7 @@ namespace CRP.Tests.Controllers
             FakeCoupons(1);
             FakeItems(1);
             Items[0].AddCoupon(Coupons[0]);
-            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            CouponRepository.Expect(a => a.GetNullableById(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
             Assert.IsNotNull(result);
@@ -549,7 +549,7 @@ namespace CRP.Tests.Controllers
             Coupons[0].Code = " "; //Invalid.
             FakeItems(1);
             Items[0].AddCoupon(Coupons[0]);
-            CouponRepository.Expect(a => a.GetNullableByID(1)).Return(Coupons[0]).Repeat.Any();
+            CouponRepository.Expect(a => a.GetNullableById(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
             Assert.IsNotNull(result);
@@ -836,12 +836,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
@@ -900,12 +900,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }

@@ -43,7 +43,7 @@ namespace CRP.Tests.Repositories
         protected override MapPin GetValid(int? counter)
         {
             var rtValue =  CreateValidEntities.MapPin(counter);
-            rtValue.Item = Repository.OfType<Item>().GetByID(1);
+            rtValue.Item = Repository.OfType<Item>().GetById(1);
 
             return rtValue;
         }
@@ -997,7 +997,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadItems(3);
             var mapPin = GetValid(9);
-            mapPin.Item = Repository.OfType<Item>().GetNullableByID(3);
+            mapPin.Item = Repository.OfType<Item>().GetNullableById(3);
             #endregion Arrange
 
             #region Act
@@ -1068,7 +1068,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             var itemCount = Repository.OfType<Item>().Queryable.Count();
             Assert.IsTrue(itemCount > 1);
-            var mapPin = Repository.OfType<MapPin>().GetByID(2);
+            var mapPin = Repository.OfType<MapPin>().GetById(2);
             Assert.IsNotNull(mapPin);
             #endregion Arrange
 
@@ -1079,7 +1079,7 @@ namespace CRP.Tests.Repositories
             #endregion Act
 
             #region Assert
-            Assert.IsNull(Repository.OfType<MapPin>().GetNullableByID(2));
+            Assert.IsNull(Repository.OfType<MapPin>().GetNullableById(2));
             Assert.AreEqual(itemCount, Repository.OfType<Item>().GetAll().Count());
             #endregion Assert		
         }

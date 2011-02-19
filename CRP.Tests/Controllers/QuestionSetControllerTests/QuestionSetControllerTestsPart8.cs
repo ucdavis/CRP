@@ -22,7 +22,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -147,7 +147,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -170,7 +170,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
 
             #endregion Arrange
 
@@ -195,7 +195,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
 
             #endregion Arrange
 
@@ -219,7 +219,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act

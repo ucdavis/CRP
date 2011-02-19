@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
@@ -131,7 +132,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateWithOneParameterWithItemTypeIdNotFoundRedirectsToIndex()
         {
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
 
             Controller.Create(1)
                 .AssertActionRedirect()
@@ -148,7 +149,7 @@ namespace CRP.Tests.Controllers
             FakeQuestionTypes(3);
             QuestionTypes[1].ExtendedProperty = true;
 
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(ItemTypes[0]).Repeat.Any();
             QuestionTypeRepository.Expect(a => a.Queryable).Return(QuestionTypes.AsQueryable()).Repeat.Any();
 
             var result = Controller.Create(1)
@@ -166,7 +167,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateRedirectsToIndexWhenItemTypeIdNotFound()
         {
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             Controller.Create(1, new ExtendedProperty())
                 .AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
@@ -179,7 +180,7 @@ namespace CRP.Tests.Controllers
         public void TestCreateWithValidDataSaves1()
         {
             FakeItemTypes(3);
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
 
             var extendedProperty = CreateValidEntities.ExtendedProperty(1);
             Controller.Create(2, extendedProperty)
@@ -196,7 +197,7 @@ namespace CRP.Tests.Controllers
         public void TestCreateWithValidDataSaves2()
         {
             FakeItemTypes(3);
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
             FakeExtendedProperties(3);
             foreach (var list in ExtendedProperties)
             {
@@ -222,7 +223,7 @@ namespace CRP.Tests.Controllers
         {
             FakeQuestionTypes(1);
             FakeItemTypes(3);
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
             QuestionTypeRepository.Expect(a => a.Queryable).Return(QuestionTypes.AsQueryable()).Repeat.Any();
 
             var extendedProperty = CreateValidEntities.ExtendedProperty(1);
@@ -244,7 +245,7 @@ namespace CRP.Tests.Controllers
         {
             FakeQuestionTypes(1);
             FakeItemTypes(3);
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
             QuestionTypeRepository.Expect(a => a.Queryable).Return(QuestionTypes.AsQueryable()).Repeat.Any();
 
             FakeExtendedProperties(3);
@@ -274,7 +275,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestDeleteWhereIdIsNotFoundRedirectsToListItemTypes()
         {
-            ExtendedPropertyRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ExtendedPropertyRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             Controller.Delete(1)
                 .AssertActionRedirect()
                 .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
@@ -290,7 +291,7 @@ namespace CRP.Tests.Controllers
             FakeExtendedPropertyAnswers(3);
             ExtendedPropertyAnswerRepository.Expect(a => a.Queryable).Return(ExtendedPropertyAnswers.AsQueryable());
             FakeExtendedProperties(4);
-            ExtendedPropertyRepository.Expect(a => a.GetNullableByID(2)).Return(ExtendedProperties[1]).Repeat.Any();
+            ExtendedPropertyRepository.Expect(a => a.GetNullableById(2)).Return(ExtendedProperties[1]).Repeat.Any();
 
             ExtendedPropertyAnswers[0].ExtendedProperty = ExtendedProperties[0];
             ExtendedPropertyAnswers[1].ExtendedProperty = ExtendedProperties[2]; //Skipped 1 so it will delete
@@ -318,7 +319,7 @@ namespace CRP.Tests.Controllers
             FakeExtendedPropertyAnswers(3);
             ExtendedPropertyAnswerRepository.Expect(a => a.Queryable).Return(ExtendedPropertyAnswers.AsQueryable());
             FakeExtendedProperties(4);
-            ExtendedPropertyRepository.Expect(a => a.GetNullableByID(2)).Return(ExtendedProperties[1]).Repeat.Any();
+            ExtendedPropertyRepository.Expect(a => a.GetNullableById(2)).Return(ExtendedProperties[1]).Repeat.Any();
 
             ExtendedPropertyAnswers[0].ExtendedProperty = ExtendedProperties[0];
             ExtendedPropertyAnswers[1].ExtendedProperty = ExtendedProperties[1]; //Did NOT skipped 1 so it will NOT delete
@@ -513,12 +514,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
@@ -535,12 +536,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }

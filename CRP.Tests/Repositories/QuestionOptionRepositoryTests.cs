@@ -30,7 +30,7 @@ namespace CRP.Tests.Repositories
         protected override QuestionOption GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.QuestionOption(counter);
-            rtValue.Question = Repository.OfType<Question>().GetByID(1);
+            rtValue.Question = Repository.OfType<Question>().GetById(1);
 
             return rtValue;
         }
@@ -362,7 +362,7 @@ namespace CRP.Tests.Repositories
             LoadQuestions(3);
             Repository.OfType<Question>().DbContext.CommitTransaction();
             var questionOption = GetValid(9);
-            var question = Repository.OfType<Question>().GetNullableByID(3);
+            var question = Repository.OfType<Question>().GetNullableById(3);
             questionOption.Question = question;
             #endregion Arrange
 
@@ -391,7 +391,7 @@ namespace CRP.Tests.Repositories
             LoadQuestions(3);
             Repository.OfType<Question>().DbContext.CommitTransaction();
             var questionOption = GetValid(9);
-            var question = Repository.OfType<Question>().GetNullableByID(3);
+            var question = Repository.OfType<Question>().GetNullableById(3);
             questionOption.Question = question;
 
             QuestionOptionRepository.DbContext.BeginTransaction();

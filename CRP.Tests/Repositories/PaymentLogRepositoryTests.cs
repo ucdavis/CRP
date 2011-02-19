@@ -43,7 +43,7 @@ namespace CRP.Tests.Repositories
         protected override PaymentLog GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.PaymentLog(counter);
-            rtValue.Transaction = Repository.OfType<Transaction>().GetNullableByID(1);
+            rtValue.Transaction = Repository.OfType<Transaction>().GetNullableById(1);
 
             return rtValue;
         }
@@ -546,7 +546,7 @@ namespace CRP.Tests.Repositories
             LoadTransactions(3);
             Repository.OfType<Transaction>().DbContext.CommitTransaction();
             var paymentLog = GetValid(9);
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(3);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(3);
             transaction.AddPaymentLog(paymentLog);
             #endregion Arrange
 
@@ -581,14 +581,14 @@ namespace CRP.Tests.Repositories
                 LoadTransactions(3);
                 Repository.OfType<Transaction>().DbContext.CommitTransaction();
                 paymentLog = GetValid(9);
-                var transaction = Repository.OfType<Transaction>().GetNullableByID(3);
+                var transaction = Repository.OfType<Transaction>().GetNullableById(3);
                 transaction.AddPaymentLog(paymentLog);
                 Repository.OfType<Transaction>().DbContext.BeginTransaction();
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
                 Repository.OfType<Transaction>().DbContext.CommitTransaction();
 
                 Assert.AreEqual(4, Repository.OfType<Transaction>().GetAll().Count); //because we load 1 in init
-                Assert.AreSame(paymentLog, Repository.OfType<Transaction>().GetNullableByID(3).PaymentLogs.ElementAt(0));
+                Assert.AreSame(paymentLog, Repository.OfType<Transaction>().GetNullableById(3).PaymentLogs.ElementAt(0));
 
                 #endregion Arrange
 

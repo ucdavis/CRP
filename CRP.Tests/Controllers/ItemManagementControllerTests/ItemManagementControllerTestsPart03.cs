@@ -116,7 +116,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestGetExtendedPropertiesReturnJsonFalseWhenIdNotFound()
         {
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             var result = Controller.GetExtendedProperties(2)
                 .AssertResultIs<JsonNetResult>();
             Assert.AreEqual(false, result.Data);
@@ -134,7 +134,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             ItemTypes[1].AddExtendedProperty(ExtendedProperties[0]);
             ItemTypes[1].AddExtendedProperty(ExtendedProperties[2]);
 
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
 
             var result = Controller.GetExtendedProperties(2)
                 .AssertResultIs<JsonNetResult>();

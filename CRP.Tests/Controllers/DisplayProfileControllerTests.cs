@@ -403,7 +403,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestEditWithOneParameterAndIdNotFoundRedirectsToList()
         {
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             Controller.Edit(1)
                 .AssertActionRedirect()
                 .ToAction<DisplayProfileController>(a => a.List());
@@ -416,7 +416,7 @@ namespace CRP.Tests.Controllers
         public void TestEditWithOneParameterAndIdFoundReturnsView()
         {
             FakeDisplayProfiles(1);
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(1)).Return(DisplayProfiles[0]).Repeat.Any();
             var result = Controller.Edit(1)
                 .AssertViewRendered()
                 .WithViewData<DisplayProfile>();
@@ -431,7 +431,7 @@ namespace CRP.Tests.Controllers
         public void TestEditWhenIdNotFound()
         {
             FakeDisplayProfiles(1);
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             Controller.Edit(1, DisplayProfiles[0])
                 .AssertActionRedirect()
                 .ToAction<DisplayProfileController>(a => a.List());
@@ -447,7 +447,7 @@ namespace CRP.Tests.Controllers
             Controller.ControllerContext.HttpContext = new MockHttpContext(1);
             var updateDisplayProfile = CreateValidEntities.DisplayProfile(99);
             FakeDisplayProfiles(3);
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(2)).Return(DisplayProfiles[1]).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(2)).Return(DisplayProfiles[1]).Repeat.Any();
 
             Controller.Edit(2, updateDisplayProfile)
                 .AssertActionRedirect()
@@ -469,7 +469,7 @@ namespace CRP.Tests.Controllers
             FakeUnits(2);
             FakeDisplayProfiles(1);
             var updateDisplayProfile = CreateValidEntities.DisplayProfile(99);
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(1)).Return(DisplayProfiles[0]).Repeat.Any();
             DisplayProfiles[0].Unit = Units[0];
             updateDisplayProfile.Unit = Units[1];
             Assert.AreNotSame(DisplayProfiles[0].Unit, updateDisplayProfile.Unit);
@@ -498,7 +498,7 @@ namespace CRP.Tests.Controllers
             FakeSchools(2);
             FakeDisplayProfiles(1);
             var updateDisplayProfile = CreateValidEntities.DisplayProfile(99);
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(1)).Return(DisplayProfiles[0]).Repeat.Any();
             DisplayProfiles[0].School = Schools[0];
             DisplayProfiles[0].Unit = null;
             DisplayProfiles[0].SchoolMaster = true;
@@ -530,7 +530,7 @@ namespace CRP.Tests.Controllers
         [TestMethod, Ignore]
         public void TestGetLogoDoesNotThrowExceptionWhenIdNotFound()
         {
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             Controller.GetLogo(1);
             Assert.Inconclusive("Once GetLogo test gets to here, assert what is returned and remove this line.");
         }
@@ -542,7 +542,7 @@ namespace CRP.Tests.Controllers
         public void TestGetLogoWhenIdFoundButLogoIsNull()
         {
             FakeDisplayProfiles(1);
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(1)).Return(DisplayProfiles[0]).Repeat.Any();
             DisplayProfiles[0].Logo = null;
             var result = Controller.GetLogo(1);
             Assert.IsNotNull(result);
@@ -556,7 +556,7 @@ namespace CRP.Tests.Controllers
         {
             FakeDisplayProfiles(1);
             DisplayProfiles[0].Logo = new byte[]{0,5,3,2};
-            DisplayProfileRepository.Expect(a => a.GetNullableByID(1)).Return(DisplayProfiles[0]).Repeat.Any();
+            DisplayProfileRepository.Expect(a => a.GetNullableById(1)).Return(DisplayProfiles[0]).Repeat.Any();
             var result = Controller.GetLogo(1).AssertResultIs<FileContentResult>();
             Assert.IsNotNull(result);
             Assert.AreEqual("image/jpg", result.ContentType);
@@ -743,12 +743,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
@@ -832,12 +832,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }

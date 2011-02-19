@@ -31,8 +31,8 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
         protected override Item GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.Item(counter);
-            rtValue.Unit = Repository.OfType<Unit>().GetByID(1);
-            rtValue.ItemType = Repository.OfType<ItemType>().GetByID(1);
+            rtValue.Unit = Repository.OfType<Unit>().GetById(1);
+            rtValue.ItemType = Repository.OfType<ItemType>().GetById(1);
             return rtValue;
         }
 

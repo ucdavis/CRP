@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
@@ -379,7 +380,7 @@ namespace CRP.Tests.Controllers
         public void TestEditItemTypeReturnsViewWhenIdFound()
         {
             FakeItemTypes(1);
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Once();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(ItemTypes[0]).Repeat.Once();
             var result = Controller.EditItemType(1)
                 .AssertViewRendered()
                 .WithViewData<ItemType>();
@@ -393,7 +394,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestEditItemTypeRedirectsToListWhenIdNotFound()
         {
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Once();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Once();
             Controller.EditItemType(1)
                 .AssertActionRedirect()
                 .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
@@ -408,7 +409,7 @@ namespace CRP.Tests.Controllers
             FakeItemTypes(3);
             
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
 
             var itemTypeToUpdate = ItemTypes[1];
             itemTypeToUpdate.Name = "SomeNewName";
@@ -431,7 +432,7 @@ namespace CRP.Tests.Controllers
             FakeItemTypes(3);
 
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
 
             var itemTypeToUpdate = ItemTypes[1];
             itemTypeToUpdate.Name = ItemTypes[0].Name;
@@ -457,7 +458,7 @@ namespace CRP.Tests.Controllers
             ItemTypes[1].AddQuantityQuestionSet(CreateValidEntities.QuestionSet(1));
 
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
 
             var itemTypeToUpdateWithSameId = CreateValidEntities.ItemType(2);
             itemTypeToUpdateWithSameId.SetIdTo(ItemTypes[1].Id);
@@ -492,7 +493,7 @@ namespace CRP.Tests.Controllers
             FakeItemTypes(3);
 
             ItemTypeRepository.Expect(a => a.Queryable).Return(ItemTypes.AsQueryable()).Repeat.Any();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any(); //So It Is Not Found
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any(); //So It Is Not Found
 
             Controller.EditItemType(2, ItemTypes[1])
                 .AssertActionRedirect()
@@ -509,7 +510,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestToggleActiveRedirectsToListWhenIdNotFound()
         {
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any(); //So It Is Not Found
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any(); //So It Is Not Found
             Controller.ToggleActive(2)
                 .AssertActionRedirect()
                 .ToAction<ApplicationManagementController>(a => a.ListItemTypes());
@@ -520,7 +521,7 @@ namespace CRP.Tests.Controllers
         public void TestToggleActiveToFalseWithFoundId()
         {
             FakeItemTypes(1);
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(ItemTypes[0]).Repeat.Any();
             ItemTypes[0].IsActive = true;
             Controller.ToggleActive(1)
                 .AssertActionRedirect()
@@ -534,7 +535,7 @@ namespace CRP.Tests.Controllers
         public void TestToggleActiveToTrueWithFoundId()
         {
             FakeItemTypes(1);
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(ItemTypes[0]).Repeat.Any();
             ItemTypes[0].IsActive = false;
             Controller.ToggleActive(1)
                 .AssertActionRedirect()
@@ -553,7 +554,7 @@ namespace CRP.Tests.Controllers
             #region Arrange
             FakeItemTypes(1);
             ItemTypes[0].Name = " "; //Should never happen, but good to test for
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(ItemTypes[0]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(ItemTypes[0]).Repeat.Any();
             ItemTypes[0].IsActive = false;
             #endregion Arrange
 
@@ -794,7 +795,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var result = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
 
             #endregion Act
 
@@ -835,7 +836,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var result = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
 
             #endregion Act
 
@@ -856,7 +857,7 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var result = controllerMethod.GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var result = controllerMethod.GetCustomAttributes(true).OfType<HttpPostAttribute>();
 
             #endregion Act
 

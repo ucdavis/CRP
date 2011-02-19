@@ -353,7 +353,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         public void TestTransactionGuidIsInitializedWithItemToo()
         {
             #region Arrange
-            var item = Repository.OfType<Item>().GetByID(1);
+            var item = Repository.OfType<Item>().GetById(1);
             Transaction transaction;
             #endregion Arrange
 
@@ -372,7 +372,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         public void TestTransactionGuidAsQueryableReturnsExpectedRecord()
         {
             #region Arrange
-            var transaction1 = TransactionRepository.GetByID(2);
+            var transaction1 = TransactionRepository.GetById(2);
             Assert.IsNotNull(transaction1);
             #endregion Arrange
 

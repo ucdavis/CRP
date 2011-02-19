@@ -1438,8 +1438,8 @@ namespace CRP.Tests.Repositories
             LoadTransactions(3);
             var openIdUser = GetValid(9);
             openIdUser.Transactions = new List<Transaction>();
-            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetByID(1));
-            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetByID(3));
+            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetById(1));
+            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetById(3));
             openIdUser.Transactions.ElementAt(0).OpenIDUser = openIdUser;
             openIdUser.Transactions.ElementAt(1).OpenIDUser = openIdUser;
             #endregion Arrange
@@ -1476,9 +1476,9 @@ namespace CRP.Tests.Repositories
             OpenIdUserRepository.DbContext.CommitTransaction();
             var openIdUser = GetValid(9);
             openIdUser.Transactions = new List<Transaction>();
-            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetByID(1));
-            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetByID(2));
-            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetByID(3));
+            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetById(1));
+            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetById(2));
+            openIdUser.Transactions.Add(Repository.OfType<Transaction>().GetById(3));
             openIdUser.Transactions.ElementAt(0).OpenIDUser = openIdUser;
             openIdUser.Transactions.ElementAt(1).OpenIDUser = openIdUser;
             openIdUser.Transactions.ElementAt(2).OpenIDUser = openIdUser;

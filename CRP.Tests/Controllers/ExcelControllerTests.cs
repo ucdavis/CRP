@@ -334,11 +334,11 @@ namespace CRP.Tests.Controllers
             Items[1].AddEditor(Editors[1]);
             Items[1].AddEditor(Editors[2]);
 
-            ItemReportRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
-            ItemReportRepository.Expect(a => a.GetNullableByID(2)).Return(ItemReports[1]).Repeat.Any();
+            ItemReportRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
+            ItemReportRepository.Expect(a => a.GetNullableById(2)).Return(ItemReports[1]).Repeat.Any();
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
         }
 
         #region mocks

@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-6570-4E51-850E-E2097240851C}"
 	ProjectSection(SolutionItems) = preProject
+		Bin\AutoMapper.dll = Bin\AutoMapper.dll
 		Bin\Castle.Core.dll = Bin\Castle.Core.dll
 		Bin\Castle.DynamicProxy2.dll = Bin\Castle.DynamicProxy2.dll
 		Bin\Castle.MicroKernel.dll = Bin\Castle.MicroKernel.dll
@@ -14,7 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-657
 		Bin\DotNetOpenAuth.pdb = Bin\DotNetOpenAuth.pdb
 		Bin\DotNetOpenAuth.xml = Bin\DotNetOpenAuth.xml
 		Bin\Elmah.dll = Bin\Elmah.dll
-		Bin\HibernatingRhinos.NHibernate.Profiler.Appender.dll = Bin\HibernatingRhinos.NHibernate.Profiler.Appender.dll
+		Bin\FluentNHibernate.dll = Bin\FluentNHibernate.dll
+		Bin\HibernatingRhinos.Profiler.Appender.dll = Bin\HibernatingRhinos.Profiler.Appender.dll
 		Bin\ICSharpCode.SharpZipLib.dll = Bin\ICSharpCode.SharpZipLib.dll
 		Bin\Iesi.Collections.dll = Bin\Iesi.Collections.dll
 		Bin\log4net.dll = Bin\log4net.dll
@@ -50,12 +52,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-657
 		Bin\System.Data.SQLite.DLL = Bin\System.Data.SQLite.DLL
 		Bin\Telerik.Web.Mvc.dll = Bin\Telerik.Web.Mvc.dll
 		Bin\Telerik.Web.Mvc.xml = Bin\Telerik.Web.Mvc.xml
-		Bin\UCDArch.Core.dll = Bin\UCDArch.Core.dll
-		Bin\UCDArch.Core.NHibernateValidator.dll = Bin\UCDArch.Core.NHibernateValidator.dll
-		Bin\UCDArch.Data.dll = Bin\UCDArch.Data.dll
-		Bin\UCDArch.Testing.dll = Bin\UCDArch.Testing.dll
-		Bin\UCDArch.Web.dll = Bin\UCDArch.Web.dll
-		Bin\UCDArch.Web.Providers.dll = Bin\UCDArch.Web.Providers.dll
+		Bin\UCDArch.dll = Bin\UCDArch.dll
 		Bin\xVal.dll = Bin\xVal.dll
 	EndProjectSection
 EndProject

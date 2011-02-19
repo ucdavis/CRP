@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Services;
@@ -127,7 +128,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(4));
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             #endregion Assert		
@@ -203,7 +204,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(4));
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
             #endregion Assert
@@ -444,7 +445,7 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             MapPinRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<MapPin>.Is.Anything));
             AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(4));
             #endregion Assert
         }
 
@@ -468,7 +469,7 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             MapPinRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<MapPin>.Is.Anything));
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             var args = (Item)AccessControlService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
             Assert.IsNotNull(args);
             Assert.AreEqual(args.Name, "Name3");
@@ -491,7 +492,7 @@ namespace CRP.Tests.Controllers
             var mapPin = CreateValidEntities.MapPin(1);
             mapPin.SetIdTo(1);
             items[0].AddMapPin(mapPin);
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(mapPin).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(mapPin).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -503,7 +504,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
             #endregion Assert
@@ -525,7 +526,7 @@ namespace CRP.Tests.Controllers
             var mapPin = CreateValidEntities.MapPin(1);
             mapPin.SetIdTo(1);
             items[2].AddMapPin(mapPin);
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(mapPin).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(mapPin).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -538,7 +539,7 @@ namespace CRP.Tests.Controllers
             Assert.IsNull(Controller.Message);
 
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             Assert.IsNotNull(result);
             Assert.AreEqual("Name3", result.Item.Name);
             Assert.AreEqual("Description1", result.MapPin.Description);
@@ -566,7 +567,7 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             MapPinRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<MapPin>.Is.Anything));
             AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(4));
             #endregion Assert
         }
 
@@ -591,7 +592,7 @@ namespace CRP.Tests.Controllers
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             MapPinRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<MapPin>.Is.Anything));
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             var args = (Item)AccessControlService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
             Assert.IsNotNull(args);
             Assert.AreEqual(args.Name, "Name3");
@@ -614,7 +615,7 @@ namespace CRP.Tests.Controllers
             var mapPin = CreateValidEntities.MapPin(1);
             mapPin.SetIdTo(1);
             items[0].AddMapPin(mapPin);
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(mapPin).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(mapPin).Repeat.Any();
             var mapPinToUpdate = CreateValidEntities.MapPin(4);
             #endregion Arrange
 
@@ -627,7 +628,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
             #endregion Assert
@@ -649,7 +650,7 @@ namespace CRP.Tests.Controllers
             var mapPin = CreateValidEntities.MapPin(1);
             mapPin.SetIdTo(1);
             items[0].AddMapPin(mapPin);
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             var mapPinToUpdate = CreateValidEntities.MapPin(4);
             #endregion Arrange
 
@@ -662,7 +663,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
             #endregion Assert
@@ -685,7 +686,7 @@ namespace CRP.Tests.Controllers
             mapPin.SetIdTo(1);
             items[2].AddMapPin(mapPin);
             items[2].Summary = null; //Invalid 
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(mapPin).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(mapPin).Repeat.Any();
             var mapPinToUpdate = CreateValidEntities.MapPin(4);
             mapPinToUpdate.Latitude = "Latitude4";
             mapPinToUpdate.Longitude = "Longitude4";
@@ -700,8 +701,8 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("Unable to save Map Pin changes.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
-            MapPinRepository.AssertWasCalled(a => a.GetNullableByID(1));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
+            MapPinRepository.AssertWasCalled(a => a.GetNullableById(1));
             Assert.IsNotNull(result);
             Assert.AreEqual("Name3", result.Item.Name);
             Assert.AreEqual("Description4", result.MapPin.Description);
@@ -730,7 +731,7 @@ namespace CRP.Tests.Controllers
             var mapPin = CreateValidEntities.MapPin(1);
             mapPin.SetIdTo(1);
             items[2].AddMapPin(mapPin);
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(mapPin).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(mapPin).Repeat.Any();
             var mapPinToUpdate = CreateValidEntities.MapPin(4);
             mapPinToUpdate.Latitude = "";
             mapPinToUpdate.Longitude = "Longitude4";
@@ -745,8 +746,8 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("Unable to save Map Pin changes.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
-            MapPinRepository.AssertWasCalled(a => a.GetNullableByID(1));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
+            MapPinRepository.AssertWasCalled(a => a.GetNullableById(1));
             Assert.IsNotNull(result);
             Assert.AreEqual("Name3", result.Item.Name);
             Assert.AreEqual("Description4", result.MapPin.Description);
@@ -770,7 +771,7 @@ namespace CRP.Tests.Controllers
             var mapPin = CreateValidEntities.MapPin(1);
             mapPin.SetIdTo(1);
             items[2].AddMapPin(mapPin);
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(mapPin).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(mapPin).Repeat.Any();
             var mapPinToUpdate = CreateValidEntities.MapPin(4);
             mapPinToUpdate.Latitude = "Latitude4";
             mapPinToUpdate.Longitude = "Longitude4";
@@ -786,8 +787,8 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("Map Pin has been saved successfully.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
-            MapPinRepository.AssertWasCalled(a => a.GetNullableByID(1));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
+            MapPinRepository.AssertWasCalled(a => a.GetNullableById(1));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
 
@@ -820,7 +821,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             AccessControlService.AssertWasNotCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(4));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(4));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             #endregion Assert
         }
@@ -844,7 +845,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             var args = (Item)AccessControlService.GetArgumentsForCallsMadeOn(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything))[0][1];
             Assert.IsNotNull(args);
@@ -868,7 +869,7 @@ namespace CRP.Tests.Controllers
             var mapPin = CreateValidEntities.MapPin(1);
             mapPin.SetIdTo(1);
             items[0].AddMapPin(mapPin);
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(mapPin).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(mapPin).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -880,7 +881,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
@@ -903,7 +904,7 @@ namespace CRP.Tests.Controllers
             var mapPin = CreateValidEntities.MapPin(1);
             mapPin.SetIdTo(1);
             items[0].AddMapPin(mapPin);
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -915,7 +916,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("MapPin not found.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
@@ -941,7 +942,7 @@ namespace CRP.Tests.Controllers
                 mapPins.Add(CreateValidEntities.MapPin(i+1));
                 mapPins[i].SetIdTo(i + 1);                
             }
-            MapPinRepository.Expect(a => a.GetNullableByID(1)).Return(mapPins[0]).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(1)).Return(mapPins[0]).Repeat.Any();
             mapPins[0].IsPrimary = true;
             items[2].MapPins = mapPins;
             #endregion Arrange
@@ -955,7 +956,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("Can't remove the primary pin when there are still other pins.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
@@ -981,7 +982,7 @@ namespace CRP.Tests.Controllers
                 mapPins.Add(CreateValidEntities.MapPin(i + 1));
                 mapPins[i].SetIdTo(i + 1);
             }
-            MapPinRepository.Expect(a => a.GetNullableByID(2)).Return(mapPins[1]).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(2)).Return(mapPins[1]).Repeat.Any();
             mapPins[0].IsPrimary = true;
             items[2].MapPins = mapPins;
             items[2].Summary = null; //Invalid
@@ -996,7 +997,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("Unable to save item/remove map pin.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             ItemRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Item>.Is.Anything));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
@@ -1022,7 +1023,7 @@ namespace CRP.Tests.Controllers
                 mapPins.Add(CreateValidEntities.MapPin(i + 1));
                 mapPins[i].SetIdTo(i + 1);
             }
-            MapPinRepository.Expect(a => a.GetNullableByID(2)).Return(mapPins[1]).Repeat.Any();
+            MapPinRepository.Expect(a => a.GetNullableById(2)).Return(mapPins[1]).Repeat.Any();
             mapPins[0].IsPrimary = true;
             items[2].MapPins = mapPins;
             #endregion Arrange
@@ -1036,7 +1037,7 @@ namespace CRP.Tests.Controllers
             #region Assert
             Assert.AreEqual("MapPin has been removed successfully.", Controller.Message);
             AccessControlService.AssertWasCalled(a => a.HasItemAccess(Arg<IPrincipal>.Is.Anything, Arg<Item>.Is.Anything));
-            ItemRepository.AssertWasCalled(a => a.GetNullableByID(3));
+            ItemRepository.AssertWasCalled(a => a.GetNullableById(3));
             ItemRepository.AssertWasCalled(a => a.EnsurePersistent(items[2]));
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.RouteValues["id"]);
@@ -1202,12 +1203,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
@@ -1248,12 +1249,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
@@ -1271,12 +1272,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            //var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            //var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            //Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            //Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(0, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }

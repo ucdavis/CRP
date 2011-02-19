@@ -65,7 +65,7 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="displayProfile"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [Authorize(Roles = "Admin")]
         public ActionResult Create(DisplayProfile displayProfile)
         {
@@ -122,7 +122,7 @@ namespace CRP.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id)
         {
-            var displayProfile = Repository.OfType<DisplayProfile>().GetNullableByID(id);
+            var displayProfile = Repository.OfType<DisplayProfile>().GetNullableById(id);
 
             if (displayProfile == null)
             {
@@ -132,12 +132,12 @@ namespace CRP.Controllers
             return View(displayProfile);
         }
 
-        [AcceptPost]
+        [HttpPost]
         [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id, [Bind(Exclude = "Id")]DisplayProfile displayProfile)
         {
             // get the original item out
-            var destProfile = Repository.OfType<DisplayProfile>().GetNullableByID(id);
+            var destProfile = Repository.OfType<DisplayProfile>().GetNullableById(id);
 
             //Done: Suggest fix for when a passed Id is not found.
             if (destProfile == null)
@@ -179,7 +179,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult GetLogo(int id)
         {
-            var displayProfile = Repository.OfType<DisplayProfile>().GetNullableByID(id);
+            var displayProfile = Repository.OfType<DisplayProfile>().GetNullableById(id);
             //if(displayProfile == null)
             //{
             //    return null;

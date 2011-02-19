@@ -55,7 +55,7 @@ namespace CRP.Controllers.Helpers
                 foreach (var exp in extendedProperties)
                 {
                     // check to see if the extended property answer has already been created
-                    var extendedProperty = repository.OfType<ExtendedProperty>().GetNullableByID(exp.propertyId);
+                    var extendedProperty = repository.OfType<ExtendedProperty>().GetNullableById(exp.propertyId);
                     var epa =
                         item.ExtendedPropertyAnswers.Where(a => a.ExtendedProperty == extendedProperty).FirstOrDefault();
 

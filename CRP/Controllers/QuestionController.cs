@@ -1,11 +1,9 @@
-using System;
 using System.Linq;
 using System.Web.Mvc;
 //using CRP.App_GlobalResources;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
-using MvcContrib.Attributes;
 using CRP.Core.Resources;
 using UCDArch.Web.Controller;
 using MvcContrib;
@@ -24,7 +22,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Create(int questionSetId)
         {
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(questionSetId);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(questionSetId);
             if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
                 // go back to the question set edit view
@@ -56,10 +54,10 @@ namespace CRP.Controllers
         /// <param name="question"></param>
         /// <param name="questionOptions"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions)//, string[] validators)
         {
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(questionSetId);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(questionSetId);
             if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
                 // go back to the question set edit view
@@ -95,7 +93,7 @@ namespace CRP.Controllers
             //        int id;
             //        if (int.TryParse(s, out id))
             //        {
-            //            var validator = Repository.OfType<Validator>().GetNullableByID(id);
+            //            var validator = Repository.OfType<Validator>().GetNullableById(id);
 
             //            if (validator != null)
             //            {
@@ -205,10 +203,10 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Delete(int id)
         {
-            var question = Repository.OfType<Question>().GetNullableByID(id);
+            var question = Repository.OfType<Question>().GetNullableById(id);
 
             if (question == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, question.QuestionSet))
             {

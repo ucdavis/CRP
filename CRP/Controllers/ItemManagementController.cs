@@ -98,7 +98,7 @@ namespace CRP.Controllers
         /// <param name="tags">The tags.</param>
         /// <param name="mapLink">The map link.</param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
@@ -187,7 +187,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public JsonNetResult GetExtendedProperties(int id)
         {
-            var itemType = Repository.OfType<ItemType>().GetNullableByID(id);
+            var itemType = Repository.OfType<ItemType>().GetNullableById(id);
 
             if (itemType == null)
             {
@@ -199,7 +199,7 @@ namespace CRP.Controllers
 
         public ActionResult Map(int id)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
             if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
                 return this.RedirectToAction(a => a.List(null));
@@ -220,7 +220,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Edit(int id)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
             if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
                 return this.RedirectToAction(a => a.List(null));
@@ -250,11 +250,11 @@ namespace CRP.Controllers
         /// <param name="tags">The tags.</param>
         /// <param name="mapLink">The map link.</param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
-            var destinationItem = Repository.OfType<Item>().GetNullableByID(id);
+            var destinationItem = Repository.OfType<Item>().GetNullableById(id);
             
             // check rights to edit
             if(destinationItem == null || !Access.HasItemAccess(CurrentUser, destinationItem))
@@ -306,11 +306,11 @@ namespace CRP.Controllers
         /// <param name="id"></param>
         /// <param name="editorId"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult RemoveEditor(int id, int editorId)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
-            var editor = Repository.OfType<Editor>().GetNullableByID(editorId);
+            var item = Repository.OfType<Item>().GetNullableById(id);
+            var editor = Repository.OfType<Editor>().GetNullableById(editorId);
 
             if (item == null || editor == null)
             {
@@ -362,7 +362,7 @@ namespace CRP.Controllers
         /// <param name="id"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult AddEditor(int id, int? userId)
         {
             if (!userId.HasValue)
@@ -371,8 +371,8 @@ namespace CRP.Controllers
                 return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
             }
 
-            var item = Repository.OfType<Item>().GetNullableByID(id);
-            var user = Repository.OfType<User>().GetNullableByID(userId.Value);
+            var item = Repository.OfType<Item>().GetNullableById(id);
+            var user = Repository.OfType<User>().GetNullableById(userId.Value);
             
             if (item == null || user == null)
             {
@@ -429,11 +429,11 @@ namespace CRP.Controllers
         /// <param name="id"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [ValidateInput(false)]
         public JsonNetResult SaveTemplate(int id, string textPaid, string textUnpaid)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
 
             if (item == null || string.IsNullOrEmpty(textPaid) || !Access.HasItemAccess(CurrentUser, item))
             {
@@ -469,7 +469,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Details(int id)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
             if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
@@ -489,13 +489,13 @@ namespace CRP.Controllers
         /// <param name="sort">The sort.</param>
         /// <param name="page">The page.</param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult ToggleTransactionIsActive(int id, string sort, string page)
         {
             var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
 
 
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(id);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if (transaction == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");

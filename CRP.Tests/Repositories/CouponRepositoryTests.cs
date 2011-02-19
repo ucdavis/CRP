@@ -36,7 +36,7 @@ namespace CRP.Tests.Repositories
         protected override Coupon GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.Coupon(counter);
-            rtValue.Item = Repository.OfType<Item>().GetByID(1);
+            rtValue.Item = Repository.OfType<Item>().GetById(1);
             rtValue.Item.CostPerItem = 10000.00m;
             return rtValue;
         }
@@ -435,7 +435,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadItems(3);
             var coupon = GetValid(9);
-            coupon.Item = Repository.OfType<Item>().GetNullableByID(3);
+            coupon.Item = Repository.OfType<Item>().GetNullableById(3);
             coupon.Item.CostPerItem = coupon.DiscountAmount + 1;
             #endregion Arrange
 

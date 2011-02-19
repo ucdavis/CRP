@@ -77,8 +77,8 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             LoadQuestionTypes(1);
             LoadQuestions(1);
             var transactionAnswer = CreateValidEntities.TransactionAnswer(9);
-            transactionAnswer.QuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(1);
-            transactionAnswer.Question = Repository.OfType<Question>().GetNullableByID(1);
+            transactionAnswer.QuestionSet = Repository.OfType<QuestionSet>().GetNullableById(1);
+            transactionAnswer.Question = Repository.OfType<Question>().GetNullableById(1);
             var transaction = GetValid(9);
             transaction.AddTransactionAnswer(transactionAnswer);
             #endregion Arrange
@@ -111,8 +111,8 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 transactionAnswers.Add(CreateValidEntities.TransactionAnswer(i + 1));
-                transactionAnswers[i].QuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(1);
-                transactionAnswers[i].Question = Repository.OfType<Question>().GetNullableByID(1);
+                transactionAnswers[i].QuestionSet = Repository.OfType<QuestionSet>().GetNullableById(1);
+                transactionAnswers[i].Question = Repository.OfType<Question>().GetNullableById(1);
             }
             var transaction = GetValid(9);
             transaction.AddTransactionAnswer(transactionAnswers[1]);
@@ -157,8 +157,8 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
                 for (int i = 0; i < 5; i++)
                 {
                     transactionAnswers.Add(CreateValidEntities.TransactionAnswer(i + 1));
-                    transactionAnswers[i].QuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(1);
-                    transactionAnswers[i].Question = Repository.OfType<Question>().GetNullableByID(1);
+                    transactionAnswers[i].QuestionSet = Repository.OfType<QuestionSet>().GetNullableById(1);
+                    transactionAnswers[i].Question = Repository.OfType<Question>().GetNullableById(1);
                 }
                 var transaction = GetValid(9);
                 transaction.AddTransactionAnswer(transactionAnswers[1]);
@@ -205,8 +205,8 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
                 for (int i = 0; i < 5; i++)
                 {
                     transactionAnswers.Add(CreateValidEntities.TransactionAnswer(i + 1));
-                    transactionAnswers[i].QuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(1);
-                    transactionAnswers[i].Question = Repository.OfType<Question>().GetNullableByID(1);
+                    transactionAnswers[i].QuestionSet = Repository.OfType<QuestionSet>().GetNullableById(1);
+                    transactionAnswers[i].Question = Repository.OfType<Question>().GetNullableById(1);
                 }
                 var transaction = GetValid(9);
                 transaction.AddTransactionAnswer(transactionAnswers[1]);

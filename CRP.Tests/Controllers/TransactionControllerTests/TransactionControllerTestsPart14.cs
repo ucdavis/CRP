@@ -145,7 +145,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             parameters.EXT_TRANS_ID = Transactions[1].TransactionGuid.ToString() + " FID=001";
             parameters.PMT_AMT = Transactions[1].Total;
             TransactionRepository.Expect(a => a.Queryable).Return(Transactions.AsQueryable()).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(1)).Return(Transactions[1]).Repeat.Any();
             #endregion Arrange
 
             #region Act

@@ -30,7 +30,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Create(int itemTypeId)
         {
-            var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
+            var itemType = Repository.OfType<ItemType>().GetNullableById(itemTypeId);
 
             if (itemType != null)
             {
@@ -57,10 +57,10 @@ namespace CRP.Controllers
         /// <param name="itemTypeId"></param>
         /// <param name="extendedProperty"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Create(int itemTypeId, [Bind(Exclude="Id")] ExtendedProperty extendedProperty)
         {
-            var itemType = Repository.OfType<ItemType>().GetNullableByID(itemTypeId);
+            var itemType = Repository.OfType<ItemType>().GetNullableById(itemTypeId);
 
             if (itemType != null)
             {
@@ -110,11 +110,11 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Delete(int id)
         {
             // get the extended property itself
-            var extendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(id);
+            var extendedProperty = Repository.OfType<ExtendedProperty>().GetNullableById(id);
 
             // check to make sure it's valid
             if(extendedProperty == null)

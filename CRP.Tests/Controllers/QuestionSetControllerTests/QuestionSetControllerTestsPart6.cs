@@ -139,7 +139,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
             SetupDataForCreateTests();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -162,7 +162,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
             SetupDataForCreateTests();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act

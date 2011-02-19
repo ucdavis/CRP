@@ -116,7 +116,7 @@ namespace CRP.Tests.Repositories
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
             //NHibernateSessionManager.Instance.GetSession().Evict(questionSetToDelete); //Don't think I need this
 
-            Assert.IsNull(Repository.OfType<QuestionSet>().GetNullableByID(6));
+            Assert.IsNull(Repository.OfType<QuestionSet>().GetNullableById(6));
             Assert.AreEqual(5, Repository.OfType<QuestionSet>().GetAll().Count());
             Assert.AreEqual(2, Repository.OfType<Question>().GetAll().Count());
             Assert.AreEqual(2, Repository.OfType<QuestionType>().GetAll().Count());
@@ -148,7 +148,7 @@ namespace CRP.Tests.Repositories
                 SetupDataToTestCascadeDelete(questionSetToDelete);
 
                 Repository.OfType<Item>().DbContext.BeginTransaction();
-                var item = Repository.OfType<Item>().GetByID(1);
+                var item = Repository.OfType<Item>().GetById(1);
                 item.AddTransactionQuestionSet(questionSetToDelete);
                 Repository.OfType<Item>().DbContext.CommitTransaction();
 
@@ -366,7 +366,7 @@ namespace CRP.Tests.Repositories
             questionSet.CollegeReusable = true;
             questionSet.SystemReusable = false;
             questionSet.UserReusable = false;
-            questionSet.School = SchoolRepository.GetNullableByID("1");
+            questionSet.School = SchoolRepository.GetNullableById("1");
             #endregion Arrange
 
             #region Act
@@ -597,7 +597,7 @@ namespace CRP.Tests.Repositories
             questionSet.CollegeReusable = true;
             questionSet.SystemReusable = false;
             questionSet.UserReusable = false;
-            questionSet.School = SchoolRepository.GetNullableByID("1");
+            questionSet.School = SchoolRepository.GetNullableById("1");
             #endregion Arrange
 
             #region Act
@@ -627,7 +627,7 @@ namespace CRP.Tests.Repositories
             questionSet.CollegeReusable = true;
             questionSet.SystemReusable = false;
             questionSet.UserReusable = false;
-            questionSet.School = SchoolRepository.GetNullableByID("1");
+            questionSet.School = SchoolRepository.GetNullableById("1");
 
             QuestionSetRepository.DbContext.BeginTransaction();
             QuestionSetRepository.EnsurePersistent(questionSet);
@@ -713,7 +713,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadUsers(1);
             var questionSet = GetValid(9);
-            questionSet.User = Repository.OfType<User>().GetNullableByID(1);
+            questionSet.User = Repository.OfType<User>().GetNullableById(1);
             #endregion Arrange
 
             #region Act
@@ -738,7 +738,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadUsers(3);
             var questionSet = GetValid(9);
-            questionSet.User = Repository.OfType<User>().GetNullableByID(1);
+            questionSet.User = Repository.OfType<User>().GetNullableById(1);
             #endregion Arrange
 
             #region Act
@@ -879,7 +879,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionTypes(1);
             LoadQuestions(1);
             var questionSet = GetValid(9);
-            questionSet.AddQuestion(Repository.OfType<Question>().GetNullableByID(1));
+            questionSet.AddQuestion(Repository.OfType<Question>().GetNullableById(1));
             #endregion Arrange
 
             #region Act
@@ -905,8 +905,8 @@ namespace CRP.Tests.Repositories
             var questionSet = GetValid(9);
             questionSet.AddQuestion(CreateValidEntities.Question(1));
             questionSet.AddQuestion(CreateValidEntities.Question(2));
-            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
-            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableById(1);
+            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableById(1);
             Assert.AreEqual(0, Repository.OfType<Question>().GetAll().Count);
             #endregion Arrange
 
@@ -933,9 +933,9 @@ namespace CRP.Tests.Repositories
             questionSet.AddQuestion(CreateValidEntities.Question(1));
             questionSet.AddQuestion(CreateValidEntities.Question(2));
             questionSet.AddQuestion(CreateValidEntities.Question(3));
-            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
-            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
-            questionSet.Questions.ElementAt(2).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableById(1);
+            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableById(1);
+            questionSet.Questions.ElementAt(2).QuestionType = Repository.OfType<QuestionType>().GetNullableById(1);
 
             QuestionSetRepository.DbContext.BeginTransaction();
             QuestionSetRepository.EnsurePersistent(questionSet);
@@ -966,9 +966,9 @@ namespace CRP.Tests.Repositories
             questionSet.AddQuestion(CreateValidEntities.Question(1));
             questionSet.AddQuestion(CreateValidEntities.Question(2));
             questionSet.AddQuestion(CreateValidEntities.Question(3));
-            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
-            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
-            questionSet.Questions.ElementAt(2).QuestionType = Repository.OfType<QuestionType>().GetNullableByID(1);
+            questionSet.Questions.ElementAt(0).QuestionType = Repository.OfType<QuestionType>().GetNullableById(1);
+            questionSet.Questions.ElementAt(1).QuestionType = Repository.OfType<QuestionType>().GetNullableById(1);
+            questionSet.Questions.ElementAt(2).QuestionType = Repository.OfType<QuestionType>().GetNullableById(1);
 
             QuestionSetRepository.DbContext.BeginTransaction();
             QuestionSetRepository.EnsurePersistent(questionSet);
@@ -1059,7 +1059,7 @@ namespace CRP.Tests.Repositories
             LoadItems(1);
             var questionSet = GetValid(9);
             questionSet.AddItems(CreateValidEntities.ItemQuestionSet(1));
-            questionSet.Items.ElementAt(0).Item = Repository.OfType<Item>().GetNullableByID(1);
+            questionSet.Items.ElementAt(0).Item = Repository.OfType<Item>().GetNullableById(1);
             #endregion Arrange
 
             #region Act
@@ -1089,7 +1089,7 @@ namespace CRP.Tests.Repositories
             questionSet.AddItems(CreateValidEntities.ItemQuestionSet(2));
             foreach (var itemQuestionSet in questionSet.Items)
             {
-                itemQuestionSet.Item = Repository.OfType<Item>().GetNullableByID(1);
+                itemQuestionSet.Item = Repository.OfType<Item>().GetNullableById(1);
             }
             Assert.AreEqual(0, Repository.OfType<ItemQuestionSet>().GetAll().Count);
             #endregion Arrange
@@ -1121,7 +1121,7 @@ namespace CRP.Tests.Repositories
             questionSet.AddItems(CreateValidEntities.ItemQuestionSet(3));
             foreach (var itemQuestionSet in questionSet.Items)
             {
-                itemQuestionSet.Item = Repository.OfType<Item>().GetNullableByID(1);
+                itemQuestionSet.Item = Repository.OfType<Item>().GetNullableById(1);
             }
 
             QuestionSetRepository.DbContext.BeginTransaction();
@@ -1218,7 +1218,7 @@ namespace CRP.Tests.Repositories
             foreach (var itemTypeQuestionSet in questionSet.ItemTypes)
             {
                 itemTypeQuestionSet.QuestionSet = questionSet;
-                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableById(1);
             }
             #endregion Arrange
 
@@ -1249,7 +1249,7 @@ namespace CRP.Tests.Repositories
             foreach (var itemTypeQuestionSet in questionSet.ItemTypes)
             {
                 itemTypeQuestionSet.QuestionSet = questionSet;
-                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableById(1);
             }
             Assert.AreEqual(0, Repository.OfType<ItemTypeQuestionSet>().GetAll().Count);
             #endregion Arrange
@@ -1281,7 +1281,7 @@ namespace CRP.Tests.Repositories
             foreach (var itemTypeQuestionSet in questionSet.ItemTypes)
             {
                 itemTypeQuestionSet.QuestionSet = questionSet;
-                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+                itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableById(1);
             }
             QuestionSetRepository.DbContext.BeginTransaction();
             QuestionSetRepository.EnsurePersistent(questionSet);
@@ -1313,7 +1313,7 @@ namespace CRP.Tests.Repositories
             validEntity.ItemTypes = new List<ItemTypeQuestionSet>();
             validEntity.ItemTypes.Add(itemTypeQuestionSet);
             itemTypeQuestionSet.QuestionSet = validEntity;
-            itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableByID(1);
+            itemTypeQuestionSet.ItemType = Repository.OfType<ItemType>().GetNullableById(1);
 
             Repository.OfType<QuestionSet>().DbContext.BeginTransaction();
             Repository.OfType<QuestionSet>().EnsurePersistent(validEntity);
@@ -1457,7 +1457,7 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
                 questionSet.CollegeReusable = true;
                 questionSet.SystemReusable = true;
                 questionSet.UserReusable = true;
-                questionSet.School = SchoolRepository.GetNullableByID("1");
+                questionSet.School = SchoolRepository.GetNullableById("1");
                 #endregion Arrange
 
                 #region Act
@@ -1492,7 +1492,7 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
                 questionSet.CollegeReusable = false;
                 questionSet.SystemReusable = true;
                 questionSet.UserReusable = true;
-                questionSet.School = SchoolRepository.GetNullableByID("1");
+                questionSet.School = SchoolRepository.GetNullableById("1");
                 #endregion Arrange
 
                 #region Act
@@ -1526,7 +1526,7 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
                 questionSet.CollegeReusable = true;
                 questionSet.SystemReusable = false;
                 questionSet.UserReusable = true;
-                questionSet.School = SchoolRepository.GetNullableByID("1");
+                questionSet.School = SchoolRepository.GetNullableById("1");
                 #endregion Arrange
 
                 #region Act
@@ -1560,7 +1560,7 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
                 questionSet.CollegeReusable = true;
                 questionSet.SystemReusable = true;
                 questionSet.UserReusable = false;
-                questionSet.School = SchoolRepository.GetNullableByID("1");
+                questionSet.School = SchoolRepository.GetNullableById("1");
                 #endregion Arrange
 
                 #region Act
@@ -1661,7 +1661,7 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
             Assert.AreEqual(2, Repository.OfType<QuestionType>().GetAll().Count(), "Setup Data Error in test");
 
             Repository.OfType<Question>().DbContext.BeginTransaction();
-            var questionToAddQuestionOption = Repository.OfType<Question>().GetByID(1);
+            var questionToAddQuestionOption = Repository.OfType<Question>().GetById(1);
             questionToAddQuestionOption.QuestionType.HasOptions = true;
             questionToAddQuestionOption.AddOption(CreateValidEntities.QuestionOption(10));
             questionToAddQuestionOption.AddOption(CreateValidEntities.QuestionOption(11));
@@ -1676,9 +1676,9 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
             Repository.OfType<QuestionSet>().DbContext.BeginTransaction();
             var questions = new Question[2];
             questions[0] = CreateValidEntities.Question(10);
-            questions[0].QuestionType = Repository.OfType<QuestionType>().GetByID(1); //This should not be deleted
+            questions[0].QuestionType = Repository.OfType<QuestionType>().GetById(1); //This should not be deleted
             questions[1] = CreateValidEntities.Question(11);
-            questions[1].QuestionType = Repository.OfType<QuestionType>().GetByID(1); //This should not be deleted
+            questions[1].QuestionType = Repository.OfType<QuestionType>().GetById(1); //This should not be deleted
 
             questions[0].AddOption(CreateValidEntities.QuestionOption(20));
             questions[0].AddOption(CreateValidEntities.QuestionOption(21));
@@ -1694,7 +1694,7 @@ at CRP.Tests.Repositories.QuestionSetRepositoryTests.TestItemTypesMappingProblem
 
             Assert.AreEqual(6, Repository.OfType<QuestionSet>().GetAll().Count(), "Setup Data Error in test");
             Assert.AreEqual(4, Repository.OfType<Question>().GetAll().Count(), "Setup Data Error in test");
-            Assert.IsNotNull(Repository.OfType<QuestionSet>().GetNullableByID(6), "Setup Data Error in test");
+            Assert.IsNotNull(Repository.OfType<QuestionSet>().GetNullableById(6), "Setup Data Error in test");
             Assert.AreEqual(5, Repository.OfType<QuestionOption>().GetAll().Count(), "Setup Data Error in test");
             Assert.AreEqual(2, Repository.OfType<QuestionType>().GetAll().Count(), "Setup Data Error in test");
             #endregion Setup QuestionSet with linked Questions

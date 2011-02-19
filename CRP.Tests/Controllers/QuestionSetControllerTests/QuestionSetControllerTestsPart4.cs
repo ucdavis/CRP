@@ -18,7 +18,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         public void TestDetailsRedirectsToListWhenIdNotFound()
         {
             #region Arrange
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act/Assert
@@ -36,7 +36,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             ControllerRecordFakes.FakeQuestionSets(QuestionSets, 3);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(QuestionSets[1]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(QuestionSets[1]).Repeat.Any();
             #endregion Arrange
 
             #region Act

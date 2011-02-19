@@ -31,9 +31,9 @@ namespace CRP.Tests.Repositories
         protected override QuantityAnswer GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.QuantityAnswer(counter);
-            rtValue.Transaction = Repository.OfType<Transaction>().GetByID(1);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
-            rtValue.Question = Repository.OfType<Question>().GetByID(1);
+            rtValue.Transaction = Repository.OfType<Transaction>().GetById(1);
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+            rtValue.Question = Repository.OfType<Question>().GetById(1);
             return rtValue;
         }
 
@@ -194,7 +194,7 @@ namespace CRP.Tests.Repositories
             LoadTransactions(3);
             Repository.OfType<Transaction>().DbContext.CommitTransaction();
             var quantityAnswer = GetValid(9);
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(3);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(3);
             transaction.AddQuantityAnswer(quantityAnswer);
             #endregion Arrange
 
@@ -229,14 +229,14 @@ namespace CRP.Tests.Repositories
                 LoadTransactions(3);
                 Repository.OfType<Transaction>().DbContext.CommitTransaction();
                 quantityAnswer = GetValid(9);
-                var transaction = Repository.OfType<Transaction>().GetNullableByID(3);
+                var transaction = Repository.OfType<Transaction>().GetNullableById(3);
                 transaction.AddQuantityAnswer(quantityAnswer);
                 Repository.OfType<Transaction>().DbContext.BeginTransaction();
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
                 Repository.OfType<Transaction>().DbContext.CommitTransaction();
 
                 Assert.AreEqual(4, Repository.OfType<Transaction>().GetAll().Count); //because we load 1 in init
-                Assert.AreSame(quantityAnswer, Repository.OfType<Transaction>().GetNullableByID(3).QuantityAnswers.ElementAt(0));
+                Assert.AreSame(quantityAnswer, Repository.OfType<Transaction>().GetNullableById(3).QuantityAnswers.ElementAt(0));
 
                 #endregion Arrange
 
@@ -345,7 +345,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionSets(3);
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
             var quantityAnswer = GetValid(9);
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(3);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(3);
             quantityAnswer.QuestionSet = questionSet;
             #endregion Arrange
 
@@ -371,7 +371,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionSets(3);
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
             var quantityAnswer = GetValid(9);
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(3);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(3);
             quantityAnswer.QuestionSet = questionSet;
 
             QuantityAnswerRepository.DbContext.BeginTransaction();
@@ -478,7 +478,7 @@ namespace CRP.Tests.Repositories
             LoadQuestions(3);
             Repository.OfType<Question>().DbContext.CommitTransaction();
             var quantityAnswer = GetValid(9);
-            var question = Repository.OfType<Question>().GetNullableByID(3);
+            var question = Repository.OfType<Question>().GetNullableById(3);
             quantityAnswer.Question = question;
             #endregion Arrange
 
@@ -507,7 +507,7 @@ namespace CRP.Tests.Repositories
             LoadQuestions(3);
             Repository.OfType<Question>().DbContext.CommitTransaction();
             var quantityAnswer = GetValid(9);
-            var question = Repository.OfType<Question>().GetNullableByID(3);
+            var question = Repository.OfType<Question>().GetNullableById(3);
             quantityAnswer.Question = question;
 
             QuantityAnswerRepository.DbContext.BeginTransaction();

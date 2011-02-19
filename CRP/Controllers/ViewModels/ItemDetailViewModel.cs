@@ -51,7 +51,7 @@ namespace CRP.Controllers.ViewModels
 
             if (!string.IsNullOrEmpty(openIdUser))
             {
-                viewModel.OpenIdUser = openIdRepository.GetNullableByID(openIdUser);
+                viewModel.OpenIdUser = openIdRepository.GetNullableById(openIdUser);
             }
             if (viewModel.Item != null && viewModel.Item.MapPins != null && viewModel.Item.MapPins.Count > 0)
             {

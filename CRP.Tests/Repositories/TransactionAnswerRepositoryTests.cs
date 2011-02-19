@@ -33,9 +33,9 @@ namespace CRP.Tests.Repositories
         protected override TransactionAnswer GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.TransactionAnswer(counter);
-            rtValue.Transaction = Repository.OfType<Transaction>().GetByID(1);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
-            rtValue.Question = Repository.OfType<Question>().GetByID(1);
+            rtValue.Transaction = Repository.OfType<Transaction>().GetById(1);
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
+            rtValue.Question = Repository.OfType<Question>().GetById(1);
 
             return rtValue;
         }
@@ -194,7 +194,7 @@ namespace CRP.Tests.Repositories
             LoadTransactions(3);
             Repository.OfType<Transaction>().DbContext.CommitTransaction();
             var transactionAnswer = GetValid(9);
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(3);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(3);
             transaction.AddTransactionAnswer(transactionAnswer);
             #endregion Arrange
 
@@ -229,14 +229,14 @@ namespace CRP.Tests.Repositories
                 LoadTransactions(3);
                 Repository.OfType<Transaction>().DbContext.CommitTransaction();
                 transactionAnswer = GetValid(9);
-                var transaction = Repository.OfType<Transaction>().GetNullableByID(3);
+                var transaction = Repository.OfType<Transaction>().GetNullableById(3);
                 transaction.AddTransactionAnswer(transactionAnswer);
                 Repository.OfType<Transaction>().DbContext.BeginTransaction();
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
                 Repository.OfType<Transaction>().DbContext.CommitTransaction();
 
                 Assert.AreEqual(4, Repository.OfType<Transaction>().GetAll().Count); //because we load 1 in init
-                Assert.AreSame(transactionAnswer, Repository.OfType<Transaction>().GetNullableByID(3).TransactionAnswers.ElementAt(0));
+                Assert.AreSame(transactionAnswer, Repository.OfType<Transaction>().GetNullableById(3).TransactionAnswers.ElementAt(0));
 
                 #endregion Arrange
 
@@ -348,7 +348,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionSets(3);
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
             var transactionAnswer = GetValid(9);
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(3);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(3);
             transactionAnswer.QuestionSet = questionSet;
             #endregion Arrange
 
@@ -378,7 +378,7 @@ namespace CRP.Tests.Repositories
             LoadQuestionSets(3);
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
             var transactionAnswer = GetValid(9);
-            var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(3);
+            var questionSet = Repository.OfType<QuestionSet>().GetNullableById(3);
             transactionAnswer.QuestionSet = questionSet;
 
             TransactionAnswerRepository.DbContext.BeginTransaction();
@@ -485,7 +485,7 @@ namespace CRP.Tests.Repositories
             LoadQuestions(3);
             Repository.OfType<QuestionSet>().DbContext.CommitTransaction();
             var transactionAnswer = GetValid(9);
-            var question = Repository.OfType<Question>().GetNullableByID(3);
+            var question = Repository.OfType<Question>().GetNullableById(3);
             transactionAnswer.Question = question;
             #endregion Arrange
 
@@ -515,7 +515,7 @@ namespace CRP.Tests.Repositories
             LoadQuestions(3);
             Repository.OfType<Question>().DbContext.CommitTransaction();
             var transactionAnswer = GetValid(9);
-            var question = Repository.OfType<Question>().GetNullableByID(3);
+            var question = Repository.OfType<Question>().GetNullableById(3);
             transactionAnswer.Question = question;
 
             TransactionAnswerRepository.DbContext.BeginTransaction();

@@ -28,7 +28,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             LoadItems(1);
             LoadTransactions(1);
 
-            var transaction = Repository.OfType<Transaction>().GetNullableByID(1);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(1);
             var item = GetValid(null);
             item.Transactions = new List<Transaction>();
             item.Transactions.Add(transaction);
@@ -65,7 +65,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             LoadItems(1);
             LoadItemReport(1);
 
-            var itemReport = Repository.OfType<ItemReport>().GetNullableByID(1);
+            var itemReport = Repository.OfType<ItemReport>().GetNullableById(1);
             var item = GetValid(null);
             item.Reports = new List<ItemReport>();
             item.Reports.Add(itemReport);

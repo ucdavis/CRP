@@ -30,7 +30,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Create(int itemId)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
@@ -50,10 +50,10 @@ namespace CRP.Controllers
         /// <param name="itemId"></param>
         /// <param name="mapPin"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Create(int itemId, [Bind(Exclude = "Id")]MapPin mapPin)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
@@ -88,14 +88,14 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Edit(int itemId, int mapPinId)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-            var mapPin = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
+            var mapPin = Repository.OfType<MapPin>().GetNullableById(mapPinId);
             if (mapPin == null || !item.MapPins.Contains(mapPin))
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
@@ -115,17 +115,17 @@ namespace CRP.Controllers
         /// <param name="mapPinId"></param>
         /// <param name="mapPin"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Edit(int itemId, int mapPinId, MapPin mapPin)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-            var mapPinToUpdate = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
+            var mapPinToUpdate = Repository.OfType<MapPin>().GetNullableById(mapPinId);
             if (mapPinToUpdate == null || !item.MapPins.Contains(mapPinToUpdate))
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
@@ -167,14 +167,14 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult RemoveMapPin(int itemId, int mapPinId)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-            var mapPin = Repository.OfType<MapPin>().GetNullableByID(mapPinId);
+            var mapPin = Repository.OfType<MapPin>().GetNullableById(mapPinId);
             if(mapPin == null || !item.MapPins.Contains(mapPin))
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");

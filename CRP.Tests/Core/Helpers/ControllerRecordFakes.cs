@@ -282,12 +282,12 @@ GO
                 items[i].SetIdTo(i + 1);
                 int i1 = i;
                 itemRepository
-                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Expect(a => a.GetNullableById(i1 + 1))
                     .Return(items[i])
                     .Repeat
                     .Any();
             }
-            itemRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            itemRepository.Expect(a => a.GetNullableById(totalCount + 1)).Return(null).Repeat.Any();
             itemRepository.Expect(a => a.Queryable).Return(items.AsQueryable()).Repeat.Any();
             itemRepository.Expect(a => a.GetAll()).Return(items).Repeat.Any();
         }
@@ -565,12 +565,12 @@ GO
                 helpTopics[i].SetIdTo(i + 1);
                 int i1 = i;
                 helpTopicRepository
-                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Expect(a => a.GetNullableById(i1 + 1))
                     .Return(helpTopics[i])
                     .Repeat
                     .Any();
             }
-            helpTopicRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            helpTopicRepository.Expect(a => a.GetNullableById(totalCount + 1)).Return(null).Repeat.Any();
             helpTopicRepository.Expect(a => a.Queryable).Return(helpTopics.AsQueryable()).Repeat.Any();
             helpTopicRepository.Expect(a => a.GetAll()).Return(helpTopics).Repeat.Any();
         }
@@ -605,12 +605,12 @@ GO
                 fids[i].SetIdTo(i + 1);
                 int i1 = i;
                 touchnetFIDRepository
-                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Expect(a => a.GetNullableById(i1 + 1))
                     .Return(fids[i])
                     .Repeat
                     .Any();
             }
-            touchnetFIDRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            touchnetFIDRepository.Expect(a => a.GetNullableById(totalCount + 1)).Return(null).Repeat.Any();
             touchnetFIDRepository.Expect(a => a.Queryable).Return(fids.AsQueryable()).Repeat.Any();
             touchnetFIDRepository.Expect(a => a.GetAll()).Return(fids).Repeat.Any();
         }
@@ -656,12 +656,12 @@ GO
                 transactions[i].SetIdTo(i + 1);
                 int i1 = i;
                 transactionRepository
-                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Expect(a => a.GetNullableById(i1 + 1))
                     .Return(transactions[i])
                     .Repeat
                     .Any();
             }
-            transactionRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            transactionRepository.Expect(a => a.GetNullableById(totalCount + 1)).Return(null).Repeat.Any();
             transactionRepository.Expect(a => a.Queryable).Return(transactions.AsQueryable()).Repeat.Any();
             transactionRepository.Expect(a => a.GetAll()).Return(transactions).Repeat.Any();
         }
@@ -703,12 +703,12 @@ GO
                 transactionAnswers[i].SetIdTo(i + 1);
                 int i1 = i;
                 transactionAnswerRepository
-                    .Expect(a => a.GetNullableByID(i1 + 1))
+                    .Expect(a => a.GetNullableById(i1 + 1))
                     .Return(transactionAnswers[i])
                     .Repeat
                     .Any();
             }
-            transactionAnswerRepository.Expect(a => a.GetNullableByID(totalCount + 1)).Return(null).Repeat.Any();
+            transactionAnswerRepository.Expect(a => a.GetNullableById(totalCount + 1)).Return(null).Repeat.Any();
             transactionAnswerRepository.Expect(a => a.Queryable).Return(transactionAnswers.AsQueryable()).Repeat.Any();
             transactionAnswerRepository.Expect(a => a.GetAll()).Return(transactionAnswers).Repeat.Any();
         }

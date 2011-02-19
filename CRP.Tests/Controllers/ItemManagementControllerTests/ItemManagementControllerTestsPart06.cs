@@ -37,10 +37,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[2].Item = Items[0];
             Items[0].Editors.Add(Editors[2]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(1)).Return(Editors[0]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(2)).Return(Editors[1]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(3)).Return(Editors[2]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(1)).Return(Editors[0]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(2)).Return(Editors[1]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(3)).Return(Editors[2]).Repeat.Any();
 
             var result = Controller.RemoveEditor(1, 1)
                 .AssertHttpRedirect();
@@ -76,10 +76,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[2].Item = Items[0];
             Items[0].Editors.Add(Editors[2]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(1)).Return(Editors[0]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(2)).Return(Editors[1]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(3)).Return(Editors[2]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(1)).Return(Editors[0]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(2)).Return(Editors[1]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(3)).Return(Editors[2]).Repeat.Any();
 
             var result = Controller.RemoveEditor(1, 1)
                 .AssertHttpRedirect();
@@ -115,10 +115,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[2].Item = Items[0];
             Items[0].Editors.Add(Editors[2]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(1)).Return(Editors[0]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(2)).Return(Editors[1]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(3)).Return(Editors[2]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(1)).Return(Editors[0]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(2)).Return(Editors[1]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(3)).Return(Editors[2]).Repeat.Any();
 
             Controller.RemoveEditor(1, 1)
                 .AssertActionRedirect()
@@ -154,10 +154,10 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[2].Item = Items[0];
             Items[0].Editors.Add(Editors[2]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(1)).Return(Editors[0]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(2)).Return(Editors[1]).Repeat.Any();
-            EditorRepository.Expect(a => a.GetNullableByID(3)).Return(Editors[2]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(1)).Return(Editors[0]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(2)).Return(Editors[1]).Repeat.Any();
+            EditorRepository.Expect(a => a.GetNullableById(3)).Return(Editors[2]).Repeat.Any();
 
             Items[0].Name = " "; //Invalid
 

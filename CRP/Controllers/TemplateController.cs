@@ -29,7 +29,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        [AcceptPost]
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(string paidText, string unpaidText)
         {

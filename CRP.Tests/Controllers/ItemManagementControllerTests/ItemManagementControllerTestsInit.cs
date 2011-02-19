@@ -255,7 +255,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
                 ExtendedProperties.Add(CreateValidEntities.ExtendedProperty(i + 1 + offSet));
                 ExtendedProperties[i + offSet].SetIdTo(i + 1 + offSet);
                 var i1 = i;
-                ExtendedPropertyRepository.Expect(a => a.GetNullableByID(i1 + 1 + offSet))
+                ExtendedPropertyRepository.Expect(a => a.GetNullableById(i1 + 1 + offSet))
                     .Return(ExtendedProperties[i1 + offSet]).Repeat.Any();
             }
         }

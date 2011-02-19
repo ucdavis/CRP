@@ -59,7 +59,7 @@ namespace CRP.Controllers
         /// <param name="itemType"></param>
         /// <param name="extendedProperties"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult CreateItemType(ItemType itemType, ExtendedProperty[] extendedProperties)
         {
 
@@ -132,7 +132,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult EditItemType(int id)
         {
-            var itemType = Repository.OfType<ItemType>().GetNullableByID(id);
+            var itemType = Repository.OfType<ItemType>().GetNullableById(id);
 
             if (itemType != null)
             {
@@ -158,10 +158,10 @@ namespace CRP.Controllers
         /// <param name="id"></param>
         /// <param name="itemType"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult EditItemType(int id, [Bind(Exclude="Id")]ItemType itemType)
         {
-            var it = Repository.OfType<ItemType>().GetNullableByID(id);
+            var it = Repository.OfType<ItemType>().GetNullableById(id);
             if (it == null)
             {
                 return this.RedirectToAction(a => a.ListItemTypes());
@@ -192,10 +192,10 @@ namespace CRP.Controllers
             }
         }
 
-        [AcceptPost]
+        [HttpPost]
         public ActionResult ToggleActive(int id)
         {
-            var itemType = Repository.OfType<ItemType>().GetNullableByID(id);
+            var itemType = Repository.OfType<ItemType>().GetNullableById(id);
 
             if (itemType == null)
             {

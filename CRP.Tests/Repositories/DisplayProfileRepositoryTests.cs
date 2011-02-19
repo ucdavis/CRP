@@ -34,7 +34,7 @@ namespace CRP.Tests.Repositories
         protected override DisplayProfile GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.DisplayProfile(counter);
-            rtValue.Unit = Repository.OfType<Unit>().GetByID(1);
+            rtValue.Unit = Repository.OfType<Unit>().GetById(1);
             return rtValue;
         }
 
@@ -308,7 +308,7 @@ namespace CRP.Tests.Repositories
             LoadUnits(3);
             #region Arrange
             var displayProfile = GetValid(9);
-            displayProfile.Unit = Repository.OfType<Unit>().GetNullableByID(3);
+            displayProfile.Unit = Repository.OfType<Unit>().GetNullableById(3);
             displayProfile.School = null;
             #endregion Arrange
 
@@ -377,7 +377,7 @@ namespace CRP.Tests.Repositories
             LoadSchools(3);
             #region Arrange
             var displayProfile = GetValid(9);
-            displayProfile.School = SchoolRepository.GetNullableByID("3");
+            displayProfile.School = SchoolRepository.GetNullableById("3");
             displayProfile.Unit = null;
             #endregion Arrange
 
@@ -479,7 +479,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadSchools(1);
             var displayProfile = GetValid(9);
-            displayProfile.School = SchoolRepository.GetNullableByID("1");
+            displayProfile.School = SchoolRepository.GetNullableById("1");
             displayProfile.Unit = null;
             displayProfile.SchoolMaster = true;
             #endregion Arrange
@@ -506,7 +506,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadSchools(1);
             var displayProfile = GetValid(9);
-            displayProfile.School = SchoolRepository.GetNullableByID("1");
+            displayProfile.School = SchoolRepository.GetNullableById("1");
             displayProfile.Unit = null;
             displayProfile.SchoolMaster = false;
             #endregion Arrange
@@ -546,8 +546,8 @@ namespace CRP.Tests.Repositories
 
                 Repository.OfType<DisplayProfile>().DbContext.BeginTransaction();
                 displayProfileRecord = CreateValidEntities.DisplayProfile(1);
-                displayProfileRecord.Unit = Repository.OfType<Unit>().GetByID(1);
-                displayProfileRecord.School = SchoolRepository.GetByID("1");
+                displayProfileRecord.Unit = Repository.OfType<Unit>().GetById(1);
+                displayProfileRecord.School = SchoolRepository.GetById("1");
                 Repository.OfType<DisplayProfile>().EnsurePersistent(displayProfileRecord);
                 Repository.OfType<DisplayProfile>().DbContext.CommitTransaction();
             }
@@ -606,7 +606,7 @@ namespace CRP.Tests.Repositories
                 #region Arrange
                 displayProfile = GetValid(9);
                 displayProfile.School = null;
-                displayProfile.Unit = Repository.OfType<Unit>().GetNullableByID(1);
+                displayProfile.Unit = Repository.OfType<Unit>().GetNullableById(1);
                 displayProfile.SchoolMaster = true;
                 #endregion Arrange
 

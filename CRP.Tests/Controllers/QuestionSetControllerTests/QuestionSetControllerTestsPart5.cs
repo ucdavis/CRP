@@ -23,7 +23,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             ControllerRecordFakes.FakeQuestionSets(QuestionSets, 3);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -48,7 +48,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(7)).Return(QuestionSets[6]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(7)).Return(QuestionSets[6]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -71,7 +71,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(4)).Return(QuestionSets[3]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(4)).Return(QuestionSets[3]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -96,7 +96,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
             SetupDataForTests();
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(5)).Return(QuestionSets[4]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(5)).Return(QuestionSets[4]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -120,7 +120,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.SchoolAdmin });
             SetupDataForTests();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(5)).Return(QuestionSets[4]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(5)).Return(QuestionSets[4]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -143,7 +143,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(QuestionSets[1]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(QuestionSets[1]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -166,7 +166,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Arrange
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(8)).Return(QuestionSets[7]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(8)).Return(QuestionSets[7]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -187,7 +187,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(9)).Return(QuestionSets[8]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(9)).Return(QuestionSets[8]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -212,7 +212,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(10)).Return(QuestionSets[9]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(10)).Return(QuestionSets[9]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -241,7 +241,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             #region Arrange
             ControllerRecordFakes.FakeQuestionSets(QuestionSets, 3);
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -267,7 +267,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(7)).Return(QuestionSets[6]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(7)).Return(QuestionSets[6]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -291,7 +291,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(4)).Return(QuestionSets[3]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(4)).Return(QuestionSets[3]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -316,7 +316,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.Admin });
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(5)).Return(QuestionSets[4]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(5)).Return(QuestionSets[4]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -341,7 +341,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.SchoolAdmin });
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(5)).Return(QuestionSets[4]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(5)).Return(QuestionSets[4]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -365,7 +365,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(QuestionSets[1]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(QuestionSets[1]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -389,7 +389,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(8)).Return(QuestionSets[7]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(8)).Return(QuestionSets[7]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -410,7 +410,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Controller.ControllerContext.HttpContext = new MockHttpContext(1, new[] { RoleNames.User });
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
-            QuestionSetRepository.Expect(a => a.GetNullableByID(9)).Return(QuestionSets[8]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(9)).Return(QuestionSets[8]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -446,7 +446,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             questionSetToUpdate.User = null;
             questionSetToUpdate.UserReusable = true;
             questionSetToUpdate.CollegeReusable = true;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(10)).Return(QuestionSets[9]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(10)).Return(QuestionSets[9]).Repeat.Any();
 
             //Verify that fields are different
             Assert.AreNotEqual(QuestionSets[9].Name, questionSetToUpdate.Name);
@@ -499,7 +499,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
             questionSetToUpdate.Name = string.Empty;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(10)).Return(QuestionSets[9]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(10)).Return(QuestionSets[9]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -531,7 +531,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             QuestionSets[9].SystemReusable = true;
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
             questionSetToUpdate.Name = StaticValues.QuestionSet_ContactInformation + "oops";
-            QuestionSetRepository.Expect(a => a.GetNullableByID(10)).Return(QuestionSets[9]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(10)).Return(QuestionSets[9]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -560,7 +560,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             SetupDataForTests();
             var questionSetToUpdate = CreateValidEntities.QuestionSet(null);
             questionSetToUpdate.Name = StaticValues.QuestionSet_ContactInformation.ToUpper();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(10)).Return(QuestionSets[9]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(10)).Return(QuestionSets[9]).Repeat.Any();
             #endregion Arrange
 
             #region Act

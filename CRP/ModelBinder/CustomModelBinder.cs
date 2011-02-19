@@ -16,6 +16,7 @@ using UCDArch.Web.Validator;
 
 namespace CRP.ModelBinder
 {
+    /*
     public class CustomModelBinder : DefaultModelBinder
     {
         private readonly bool _autoValidate;
@@ -458,4 +459,5 @@ namespace CRP.ModelBinder
             return repository;
         }
     }
+     */
 }

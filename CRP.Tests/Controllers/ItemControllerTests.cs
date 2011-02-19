@@ -122,7 +122,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestDetailsWhenIdNotFoundRedirectsToHomeIndex()
         {
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             Controller.Details(2)
                 .AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
@@ -138,7 +138,7 @@ namespace CRP.Tests.Controllers
             #region Arrange
             FakeItems(1);
             Items[0].Available = false;
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();            
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();            
             #endregion Arrange
 
             #region Act
@@ -172,7 +172,7 @@ namespace CRP.Tests.Controllers
             DisplayProfiles[2].Unit = Units[1];
             DisplayProfiles[3].School = Schools[1];
             DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -206,7 +206,7 @@ namespace CRP.Tests.Controllers
             DisplayProfiles[2].Unit = Units[1];
             DisplayProfiles[3].School = Schools[1];
             DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -238,7 +238,7 @@ namespace CRP.Tests.Controllers
             DisplayProfiles[2].Unit = Units[1];
             DisplayProfiles[3].School = Schools[1];
             DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -259,7 +259,7 @@ namespace CRP.Tests.Controllers
             FakeUnits(3);
             FakeItems(2);
             FakeSchools(2);
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             Items[1].Available = true;
             Items[1].Unit = Units[1];
             Items[0].Unit = Units[2];
@@ -284,7 +284,7 @@ namespace CRP.Tests.Controllers
             FakeUnits(3);
             FakeItems(2);
             FakeSchools(2);
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             Items[1].Available = true;
             Items[1].Unit = Units[1];
             Items[0].Unit = Units[2];
@@ -312,7 +312,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestGetImageWhenIdNotFoundDoesNotThrowException()
         {
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
             var result = Controller.GetImage(2)
                 .AssertResultIs<FileContentResult>();
             Assert.IsNotNull(result);
@@ -325,7 +325,7 @@ namespace CRP.Tests.Controllers
         {
             FakeItems(1);
             Items[0].Image = null;
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.GetImage(1)
                 .AssertResultIs<FileContentResult>();
             Assert.IsNotNull(result);
@@ -338,7 +338,7 @@ namespace CRP.Tests.Controllers
         {
             FakeItems(1);
             Items[0].Image = new byte[]{4,5,6,7};
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.GetImage(1)
                 .AssertResultIs<FileContentResult>();
             Assert.IsNotNull(result);

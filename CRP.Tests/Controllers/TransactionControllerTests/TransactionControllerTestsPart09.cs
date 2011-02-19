@@ -408,7 +408,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Coupons[1].Used = true; //And used
             Coupons[1].MaxQuantity = 2;
             Coupons[1].Email = string.Empty;
-            TransactionRepository.Expect(a => a.GetNullableByID(0)).Return(Transactions[0]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(0)).Return(Transactions[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -439,7 +439,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Coupons[1].Used = true; //And used
             Coupons[1].MaxQuantity = 2;
             Coupons[1].Email = string.Empty;
-            TransactionRepository.Expect(a => a.GetNullableByID(0)).Return(Transactions[0]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(0)).Return(Transactions[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act

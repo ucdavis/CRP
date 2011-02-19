@@ -19,13 +19,13 @@ namespace CRP.Controllers
 
         public ActionResult CreateExcelReport(int id, int itemId)
         {
-            var itemReport = Repository.OfType<ItemReport>().GetNullableByID(id);
+            var itemReport = Repository.OfType<ItemReport>().GetNullableById(id);
             if (itemReport == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemReport");
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");

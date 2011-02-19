@@ -144,7 +144,7 @@ namespace CRP.Tests.Controllers
         {
             #region Arrange
             SetUpDataForCreateGetTests();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -171,7 +171,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].SystemReusable = true;
             QuestionSets[0].CollegeReusable = false;
             QuestionSets[0].UserReusable = false;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -196,7 +196,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].SystemReusable = true;
             QuestionSets[0].CollegeReusable = false;
             QuestionSets[0].UserReusable = false;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -223,7 +223,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].SystemReusable = false;
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -248,7 +248,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].SystemReusable = false;
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -276,7 +276,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].SystemReusable = false;
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -304,7 +304,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].School = Schools[2];
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -330,7 +330,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].School = Schools[2];
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -357,7 +357,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = false;
             QuestionSets[0].UserReusable = true;
             QuestionSets[0].User = Users[0]; //Not the owner
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -383,7 +383,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = false;
             QuestionSets[0].UserReusable = true;
             //QuestionSets[0].User = Users[0]; //Not the owner
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -413,7 +413,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -441,7 +441,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -472,7 +472,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             //QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -500,7 +500,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             //QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             Items[0].AddEditor(Editors[1]);
             #endregion Arrange
 
@@ -531,7 +531,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             //QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             //Items[0].AddEditor(Editors[1]); //Not an editor
             #endregion Arrange
 
@@ -556,7 +556,7 @@ namespace CRP.Tests.Controllers
         public void TestCreatePostRedirectsToListIfTheQuestionsSetIsNotFound()
         {
             #region Arrange
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -580,7 +580,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].SystemReusable = true;
             QuestionSets[0].CollegeReusable = false;
             QuestionSets[0].UserReusable = false;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -607,7 +607,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].SystemReusable = false;
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -635,7 +635,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].School = Schools[2];
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -663,7 +663,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].School = Schools[2];
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -691,7 +691,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = false;
             QuestionSets[0].UserReusable = true;
             QuestionSets[0].User = Users[0]; //Not the owner
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -720,7 +720,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -746,7 +746,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             //QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -776,7 +776,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = true;
             QuestionSets[0].Items.Add(ItemQuestionSets[0]);
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -806,7 +806,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].Items.Add(ItemQuestionSets[0]);
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -835,7 +835,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].Items.Add(ItemQuestionSets[0]);
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -872,7 +872,7 @@ namespace CRP.Tests.Controllers
             questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
             questionToAdd.QuestionType.HasOptions = false; //Not testing this part here.
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();            
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();            
             #endregion Arrange
 
             #region Act
@@ -909,7 +909,7 @@ namespace CRP.Tests.Controllers
 
             questionToAdd.Name = string.Empty;
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -947,7 +947,7 @@ namespace CRP.Tests.Controllers
             questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
             questionToAdd.QuestionType.HasOptions = false; //Not testing this part here.
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -979,7 +979,7 @@ namespace CRP.Tests.Controllers
             questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
             questionToAdd.QuestionType.HasOptions = true; 
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -1014,7 +1014,7 @@ namespace CRP.Tests.Controllers
             questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
             questionToAdd.QuestionType.HasOptions = true;
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -1049,7 +1049,7 @@ namespace CRP.Tests.Controllers
             questionToAdd.QuestionType = CreateValidEntities.QuestionType(null);
             questionToAdd.QuestionType.HasOptions = true;
 
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -3088,7 +3088,7 @@ namespace CRP.Tests.Controllers
         public void TestDeleteRedirectsToListIfTheQuestionIsNotFound()
         {
             #region Arrange
-            QuestionRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            QuestionRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -3138,7 +3138,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].SystemReusable = false;
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -3166,7 +3166,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].School = Schools[2];
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -3194,7 +3194,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = true;
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].School = Schools[2];
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -3222,7 +3222,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = false;
             QuestionSets[0].UserReusable = true;
             QuestionSets[0].User = Users[0]; //Not the owner
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -3251,7 +3251,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -3277,7 +3277,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].UserReusable = false;
             QuestionSets[0].User = Users[0]; //Not the owner
             //QuestionSets[0].ItemTypes.Add(CreateValidEntities.ItemTypeQuestionSet(null));
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -3702,12 +3702,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
@@ -3725,12 +3725,12 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<AcceptPostAttribute>();
+            var expectedAttribute = controllerMethod.GetCustomAttributes(true).OfType<HttpPostAttribute>();
             var allAttributes = controllerMethod.GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(1, expectedAttribute.Count(), "AcceptPostAttribute not found");
+            Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
             Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
@@ -3756,7 +3756,7 @@ namespace CRP.Tests.Controllers
             QuestionSets[0].CollegeReusable = false;
             QuestionSets[0].UserReusable = false;
             
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(QuestionSets[0]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(QuestionSets[0]).Repeat.Any();
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
         }
 
@@ -3817,9 +3817,9 @@ namespace CRP.Tests.Controllers
 
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
 
-            QuestionRepository.Expect(a => a.GetNullableByID(1)).Return(Questions[0]).Repeat.Any();
-            QuestionRepository.Expect(a => a.GetNullableByID(2)).Return(Questions[1]).Repeat.Any();
-            QuestionRepository.Expect(a => a.GetNullableByID(3)).Return(Questions[2]).Repeat.Any();
+            QuestionRepository.Expect(a => a.GetNullableById(1)).Return(Questions[0]).Repeat.Any();
+            QuestionRepository.Expect(a => a.GetNullableById(2)).Return(Questions[1]).Repeat.Any();
+            QuestionRepository.Expect(a => a.GetNullableById(3)).Return(Questions[2]).Repeat.Any();
         }
 
 

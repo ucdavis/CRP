@@ -17,7 +17,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestSaveTemplateDoesNotSaveIfIdNotFound()
         {
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             var result = Controller.SaveTemplate(1, "Test", "Test2")
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
@@ -29,7 +29,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestSaveTemplateDoesNotSaveIfTextIsNull()
         {
             ControllerRecordFakes.FakeItems(Items, 1);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.SaveTemplate(1, null, null)
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
@@ -41,7 +41,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestSaveTemplateDoesNotSaveIfTextIsEmpty()
         {
             ControllerRecordFakes.FakeItems(Items, 1);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.SaveTemplate(1, string.Empty, string.Empty)
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
@@ -58,7 +58,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Editors[0].User = Users[1];
             Items[0].AddEditor(Editors[0]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             var result = Controller.SaveTemplate(1, " ", " ")
                 .AssertResultIs<JsonNetResult>();
             //Assert.IsFalse((bool)result.Data);
@@ -76,7 +76,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             FakeEditors(1);
             Editors[0].User = Users[1];
             Items[0].AddEditor(Editors[0]);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             Items[0].Name = " "; //Also invalid
             var result = Controller.SaveTemplate(1, " ", " ")
                 .AssertResultIs<JsonNetResult>();
@@ -91,7 +91,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         public void TestSaveTemplateDoesNotSaveIfTextIsValidAndItemIsInvalid()
         {
             ControllerRecordFakes.FakeItems(Items, 1);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             Items[0].Name = " "; //Also invalid
             ControllerRecordFakes.FakeUsers(Users, 3);
             Users[1].LoginID = "UserName";
@@ -115,7 +115,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             FakeEditors(1);
             Editors[0].User = Users[1];
             Items[0].AddEditor(Editors[0]);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             Assert.AreEqual(0, Items[0].Templates.Count);
             var result = Controller.SaveTemplate(1, "test", "test2")
                 .AssertResultIs<JsonNetResult>();
@@ -139,7 +139,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             FakeEditors(1);
             Editors[0].User = Users[2]; //Current user is not an editor.
             Items[0].AddEditor(Editors[0]);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -169,7 +169,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             FakeEditors(1);
             Editors[0].User = Users[2]; //Current user is not an editor.
             Items[0].AddEditor(Editors[0]);
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(Items[0]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(Items[0]).Repeat.Any();
             #endregion Arrange
 
             #region Act

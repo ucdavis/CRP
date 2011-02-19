@@ -317,11 +317,11 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             }
 
 
-            TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(3)).Return(Transactions[2]).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(4)).Return(Transactions[3]).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(5)).Return(Transactions[4]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(3)).Return(Transactions[2]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(4)).Return(Transactions[3]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(5)).Return(Transactions[4]).Repeat.Any();
         }
     }
 }

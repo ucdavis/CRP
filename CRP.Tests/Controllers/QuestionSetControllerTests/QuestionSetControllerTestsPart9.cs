@@ -25,7 +25,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -47,7 +47,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -69,7 +69,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -151,7 +151,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -174,7 +174,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -197,7 +197,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -220,7 +220,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForLinkToTests();
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -422,7 +422,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
         {
             #region Arrange
             SetupDataForUnlinkFromTests();
-            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
+            ItemQuestionSetRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
 
             #endregion Arrange
 
@@ -454,8 +454,8 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Items[1].QuestionSets.ElementAt(0).QuestionSet.Name = StaticValues.QuestionSet_ContactInformation;
             Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
             Items[1].QuestionSets.ElementAt(0).QuestionSet.SystemReusable = true;
-            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(1))
+            ItemQuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(1))
                 .Return(Items[1].QuestionSets.ElementAt(0).QuestionSet).Repeat.Any();
             
             #endregion Arrange
@@ -486,7 +486,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             SetupDataForUnlinkFromTests();
             Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
             TransactionAnswers[1].QuestionSet = QuestionSets[0];
-            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            ItemQuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -516,7 +516,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
 
             Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
 
-            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            ItemQuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -547,7 +547,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Items[1].AddEditor(Editors[1]);
             var copyOfItemQuestionSet = Items[1].QuestionSets.ElementAt((0));
 
-            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            ItemQuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
             #endregion Arrange
 
             #region Act
@@ -572,7 +572,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             SetupDataForUnlinkFromTests();
             Items[1].QuestionSets.ElementAt(0).QuestionSet.SetIdTo(1);
             //TransactionAnswers[1].QuestionSet = QuestionSets[0]; //Commented out so it doesn't have an answer
-            ItemQuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
+            ItemQuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(Items[1].QuestionSets.ElementAt(0)).Repeat.Any();
             #endregion Arrange
 
             #region Act

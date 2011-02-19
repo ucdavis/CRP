@@ -31,8 +31,8 @@ namespace CRP.Tests.Repositories
         protected override ItemQuestionSet GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.ItemQuestionSet(counter);
-            rtValue.Item = Repository.OfType<Item>().GetByID(1);
-            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetByID(1);
+            rtValue.Item = Repository.OfType<Item>().GetById(1);
+            rtValue.QuestionSet = Repository.OfType<QuestionSet>().GetById(1);
             if (counter != null && counter == 3)
             {
                 rtValue.TransactionLevel = true;
@@ -181,7 +181,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadItems(3);
             var itemQuestionSet = GetValid(9);
-            itemQuestionSet.Item = Repository.OfType<Item>().GetNullableByID(3);
+            itemQuestionSet.Item = Repository.OfType<Item>().GetNullableById(3);
             #endregion Arrange
 
             #region Act
@@ -276,7 +276,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadQuestionSets(3);
             var itemQuestionSet = GetValid(9);
-            itemQuestionSet.QuestionSet = Repository.OfType<QuestionSet>().GetNullableByID(3);
+            itemQuestionSet.QuestionSet = Repository.OfType<QuestionSet>().GetNullableById(3);
             #endregion Arrange
 
             #region Act

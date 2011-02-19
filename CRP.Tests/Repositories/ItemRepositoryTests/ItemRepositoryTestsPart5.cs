@@ -86,7 +86,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             #region Arrange
             LoadUnits(3);
             var item = GetValid(9);
-            item.Unit = Repository.OfType<Unit>().GetNullableByID(3);
+            item.Unit = Repository.OfType<Unit>().GetNullableById(3);
             #endregion Arrange
 
             #region Act

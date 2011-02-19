@@ -32,7 +32,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Details(int id)
         {
-            var touchnetFID = Repository.OfType<TouchnetFID>().GetNullableByID(id);
+            var touchnetFID = Repository.OfType<TouchnetFID>().GetNullableById(id);
             if (touchnetFID == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,
@@ -57,7 +57,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="touchnetFID">The touchnet FID.</param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Create(TouchnetFID touchnetFID)
         {
             var fid = new TouchnetFID();
@@ -96,7 +96,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult Edit(int id)
         {
-            var touchnetFID = Repository.OfType<TouchnetFID>().GetNullableByID(id);
+            var touchnetFID = Repository.OfType<TouchnetFID>().GetNullableById(id);
             if (touchnetFID == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,
@@ -114,10 +114,10 @@ namespace CRP.Controllers
         /// <param name="id">The id.</param>
         /// <param name="touchnetFID">The touchnet FID.</param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         public ActionResult Edit(int id, TouchnetFID touchnetFID)
         {
-            var fid = Repository.OfType<TouchnetFID>().GetNullableByID(id);
+            var fid = Repository.OfType<TouchnetFID>().GetNullableById(id);
             if (fid == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,

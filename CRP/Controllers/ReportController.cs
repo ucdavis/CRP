@@ -37,13 +37,13 @@ namespace CRP.Controllers
         [UserOnly]
         public ActionResult ViewReport(int id, int itemId)
         {
-            var itemReport = Repository.OfType<ItemReport>().GetNullableByID(id);
+            var itemReport = Repository.OfType<ItemReport>().GetNullableById(id);
             if(itemReport == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemReport");
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
@@ -69,7 +69,7 @@ namespace CRP.Controllers
         [UserOnly]
         public ActionResult Create(int itemId)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
 
             if (item == null)
             {
@@ -101,11 +101,11 @@ namespace CRP.Controllers
         /// <param name="name"></param>
         /// <param name="createReportParameters"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [UserOnly]
         public ActionResult Create(int itemId, string name, CreateReportParameter[] createReportParameters)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
 
             if (item == null)
             {
@@ -126,8 +126,8 @@ namespace CRP.Controllers
             }
             foreach(var crp in createReportParameters)
             {
-                var questionSet = Repository.OfType<QuestionSet>().GetNullableByID(crp.QuestionSetId);
-                var question = Repository.OfType<Question>().GetNullableByID(crp.QuestionId);
+                var questionSet = Repository.OfType<QuestionSet>().GetNullableById(crp.QuestionSetId);
+                var question = Repository.OfType<Question>().GetNullableById(crp.QuestionId);
 
                 ItemReportColumn itemReportColumn = crp.Property ? new ItemReportColumn(crp.PropertyName, report) 
                     : new ItemReportColumn(question.Name, report);
@@ -218,7 +218,6 @@ namespace CRP.Controllers
                                        yParameter.ToArray(), "Departmental Money Collected YTD",
                                        SeriesChartType.Pie);
                     return File(chart2, ImageType);
-                    break;
             };
 
             return File(new byte[0], ImageType);

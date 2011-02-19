@@ -34,7 +34,7 @@ namespace CRP.Tests.Repositories
         protected override ItemReportColumn GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.ItemReportColumn(counter);
-            rtValue.ItemReport = Repository.OfType<ItemReport>().GetByID(1);
+            rtValue.ItemReport = Repository.OfType<ItemReport>().GetById(1);
             return rtValue;
         }
 
@@ -488,7 +488,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadItemReport(3);
             var itemReportColumn = GetValid(9);
-            itemReportColumn.ItemReport = Repository.OfType<ItemReport>().GetNullableByID(3);
+            itemReportColumn.ItemReport = Repository.OfType<ItemReport>().GetNullableById(3);
             #endregion Arrange
 
             #region Act

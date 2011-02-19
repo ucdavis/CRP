@@ -136,7 +136,7 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             Items[1].AddQuantityQuestionSet(QuestionSets[1]);
             Items[1].AddQuantityQuestionSet(QuestionSets[3]);
 
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             TransactionAnswerRepository.Expect(a => a.Queryable).Return(TransactionAnswers.AsQueryable()).Repeat.Any();
         }
         /// <summary>
@@ -183,10 +183,10 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             QuestionSets[7].Name = StaticValues.QuestionSet_ContactInformation;
 
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
             QuestionSetRepository.Expect(a => a.Queryable).Return(QuestionSets.AsQueryable()).Repeat.Any();
-            QuestionSetRepository.Expect(a => a.GetNullableByID(2)).Return(QuestionSets[1]).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            QuestionSetRepository.Expect(a => a.GetNullableById(2)).Return(QuestionSets[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
         }
         /// <summary>
         /// Setups the data for create tests.
@@ -212,10 +212,10 @@ namespace CRP.Tests.Controllers.QuestionSetControllerTests
             
             UserRepository.Expect(a => a.Queryable).Return(Users.AsQueryable()).Repeat.Any();
             QuestionTypeRepository.Expect(a => a.GetAll()).Return(QuestionTypes).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
-            ItemTypeRepository.Expect(a => a.GetNullableByID(2)).Return(ItemTypes[1]).Repeat.Any();
-            ItemRepository.Expect(a => a.GetByID(2)).Return(Items[1]).Repeat.Any();
-            ItemTypeRepository.Expect(a => a.GetByID(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetNullableById(2)).Return(ItemTypes[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetById(2)).Return(Items[1]).Repeat.Any();
+            ItemTypeRepository.Expect(a => a.GetById(2)).Return(ItemTypes[1]).Repeat.Any();
         }
 
         /// <summary>

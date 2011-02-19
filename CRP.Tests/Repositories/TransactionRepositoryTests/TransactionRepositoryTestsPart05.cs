@@ -78,7 +78,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             LoadOpenIDUsers(3);
             OpenIDUserRepository.DbContext.CommitTransaction();
             var transaction = GetValid(9);
-            transaction.OpenIDUser = OpenIDUserRepository.GetNullableByID("2");
+            transaction.OpenIDUser = OpenIDUserRepository.GetNullableById("2");
             #endregion Arrange
 
             #region Act
@@ -88,7 +88,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             #endregion Act
 
             #region Assert
-            Assert.AreSame(OpenIDUserRepository.GetNullableByID("2"), transaction.OpenIDUser);
+            Assert.AreSame(OpenIDUserRepository.GetNullableById("2"), transaction.OpenIDUser);
             Assert.IsNotNull(transaction.OpenIDUser);
             Assert.IsFalse(transaction.IsTransient());
             Assert.IsTrue(transaction.IsValid());

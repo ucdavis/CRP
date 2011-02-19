@@ -599,8 +599,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             DisplayProfiles[0].Unit = Units[1];
 
             DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
         }
 
         private void SetupDataForEditTests()
@@ -625,9 +625,9 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             LoadTransactionAnswers(Transactions[2], QuestionSets[0], OpenIdUsers[1]);
             
 
-            TransactionRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(2)).Return(Transactions[1]).Repeat.Any();
-            TransactionRepository.Expect(a => a.GetNullableByID(3)).Return(Transactions[2]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(2)).Return(Transactions[1]).Repeat.Any();
+            TransactionRepository.Expect(a => a.GetNullableById(3)).Return(Transactions[2]).Repeat.Any();
         }
 
         private void LoadTransactionAnswers(Transaction transaction, QuestionSet questionSet, OpenIdUser openIdUser)

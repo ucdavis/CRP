@@ -373,7 +373,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             #region Arrange
             LoadItemTypes(3);
             var item = GetValid(9);
-            item.ItemType = Repository.OfType<ItemType>().GetNullableByID(3);
+            item.ItemType = Repository.OfType<ItemType>().GetNullableById(3);
             #endregion Arrange
 
             #region Act

@@ -138,8 +138,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Items[1].Unit = Units[0];
             DisplayProfiles[1].Unit = Units[0];
 
-            ItemRepository.Expect(a => a.GetNullableByID(1)).Return(null).Repeat.Any();
-            ItemRepository.Expect(a => a.GetNullableByID(2)).Return(Items[1]).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(1)).Return(null).Repeat.Any();
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             DisplayProfileRepository.Expect(a => a.Queryable).Return(DisplayProfiles.AsQueryable()).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
         }
@@ -173,7 +173,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             OpenIdUsers[1].StreetAddress = "Address1";
             OpenIdUsers[1].Zip = "95616";
 
-            OpenIdUserRepository.Expect(a => a.GetNullableByID("UserName")).Return(OpenIdUsers[1]).Repeat.Any();
+            OpenIdUserRepository.Expect(a => a.GetNullableById("UserName")).Return(OpenIdUsers[1]).Repeat.Any();
             QuestionRepository.Expect(a => a.Queryable).Return(Questions.AsQueryable()).Repeat.Any();
         }
 

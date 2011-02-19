@@ -31,7 +31,7 @@ namespace CRP.Controllers
         [UserOnlyAttribute]
         public ActionResult Create(int itemId)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
 
             if (item == null)
             {
@@ -60,11 +60,11 @@ namespace CRP.Controllers
         /// <param name="itemId"></param>
         /// <param name="coupon"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [Authorize(Roles = "User")]
         public ActionResult Create(int itemId, [Bind(Exclude="Id")]Coupon coupon)
         {
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
 
             if (item == null)
             {
@@ -105,7 +105,7 @@ namespace CRP.Controllers
             {
                 return new JsonNetResult(new { discountAmount = 0, maxQuantity = 0, message = "" });
             }
-            var item = Repository.OfType<Item>().GetNullableByID(itemId);
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
             var coupon = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == couponCode && a.Item == item && a.IsActive).FirstOrDefault();
 
             if (item == null || coupon == null)
@@ -138,11 +138,11 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="couponId"></param>
         /// <returns></returns>
-        [AcceptPost]
+        [HttpPost]
         [Authorize(Roles = "User")]
         public ActionResult Deactivate(int couponId)
         {            
-            var coupon = Repository.OfType<Coupon>().GetNullableByID(couponId);
+            var coupon = Repository.OfType<Coupon>().GetNullableById(couponId);
 
             if (coupon == null)
             {

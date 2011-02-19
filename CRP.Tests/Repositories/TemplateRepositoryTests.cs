@@ -31,7 +31,7 @@ namespace CRP.Tests.Repositories
         protected override Template GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.Template(counter);
-            rtValue.Item = Repository.OfType<Item>().GetByID(1);
+            rtValue.Item = Repository.OfType<Item>().GetById(1);
 
             return rtValue;
         }
@@ -295,7 +295,7 @@ namespace CRP.Tests.Repositories
             LoadUnits(1);
             LoadItems(3);
             var template = GetValid(9);
-            template.Item = Repository.OfType<Item>().GetNullableByID(3);
+            template.Item = Repository.OfType<Item>().GetNullableById(3);
             #endregion Arrange
 
             #region Act
@@ -305,7 +305,7 @@ namespace CRP.Tests.Repositories
             #endregion Act
 
             #region Assert
-            Assert.AreSame(Repository.OfType<Item>().GetNullableByID(3), template.Item);
+            Assert.AreSame(Repository.OfType<Item>().GetNullableById(3), template.Item);
             Assert.IsFalse(template.IsTransient());
             Assert.IsTrue(template.IsValid());
             #endregion Assert

@@ -91,7 +91,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             LoadItems(3);
             Repository.OfType<Item>().DbContext.CommitTransaction();
             var transaction = GetValid(9);
-            transaction.Item = Repository.OfType<Item>().GetNullableByID(3);
+            transaction.Item = Repository.OfType<Item>().GetNullableById(3);
             #endregion Arrange
 
             #region Act
@@ -101,7 +101,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             #endregion Act
 
             #region Assert
-            Assert.AreSame(Repository.OfType<Item>().GetNullableByID(3), transaction.Item);
+            Assert.AreSame(Repository.OfType<Item>().GetNullableById(3), transaction.Item);
             Assert.IsFalse(transaction.IsTransient());
             Assert.IsTrue(transaction.IsValid());
             #endregion Assert
@@ -120,7 +120,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             LoadItems(3);
             Repository.OfType<Item>().DbContext.CommitTransaction();
             var transaction = GetValid(9);
-            transaction.Item = Repository.OfType<Item>().GetNullableByID(3);
+            transaction.Item = Repository.OfType<Item>().GetNullableById(3);
 
             TransactionRepository.DbContext.BeginTransaction();
             TransactionRepository.EnsurePersistent(transaction);

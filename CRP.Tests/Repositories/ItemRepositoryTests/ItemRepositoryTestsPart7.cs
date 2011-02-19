@@ -85,7 +85,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             LoadExtendedProperty(1);
 
             var extendedPropertyAnswer = CreateValidEntities.ExtendedPropertyAnswer(1);
-            extendedPropertyAnswer.ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(1);
+            extendedPropertyAnswer.ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableById(1);
             var item = GetValid(9);
             item.ExtendedPropertyAnswers = new List<ExtendedPropertyAnswer>();
             item.AddExtendedPropertyAnswer(extendedPropertyAnswer);
@@ -121,7 +121,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 extendedPropertyAnswers.Add(CreateValidEntities.ExtendedPropertyAnswer(i + 1));
-                extendedPropertyAnswers[i].ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(1);
+                extendedPropertyAnswers[i].ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableById(1);
                 extendedPropertyAnswers[i].Item = null;
             }
 
@@ -167,7 +167,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 extendedPropertyAnswers.Add(CreateValidEntities.ExtendedPropertyAnswer(i + 1));
-                extendedPropertyAnswers[i].ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(1);
+                extendedPropertyAnswers[i].ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableById(1);
                 extendedPropertyAnswers[i].Item = null;
             }
             extendedPropertyAnswers[2].Answer = " "; //Invalid but we don't have the [Valid] attribute on it so it will save anyway.
@@ -214,7 +214,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 extendedPropertyAnswers.Add(CreateValidEntities.ExtendedPropertyAnswer(i + 1));
-                extendedPropertyAnswers[i].ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(1);
+                extendedPropertyAnswers[i].ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableById(1);
                 extendedPropertyAnswers[i].Item = null;
             }
 
@@ -268,7 +268,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 extendedPropertyAnswers.Add(CreateValidEntities.ExtendedPropertyAnswer(i + 1));
-                extendedPropertyAnswers[i].ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableByID(1);
+                extendedPropertyAnswers[i].ExtendedProperty = Repository.OfType<ExtendedProperty>().GetNullableById(1);
                 extendedPropertyAnswers[i].Item = null;
             }
 
@@ -591,7 +591,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             #region Arrange
             LoadUsers(1);
             var editor = CreateValidEntities.Editor(1);
-            editor.User = Repository.OfType<User>().GetByID(1);
+            editor.User = Repository.OfType<User>().GetById(1);
             var item = GetValid(9);
             item.Editors = new List<Editor>();
             item.AddEditor(editor);
@@ -624,7 +624,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 editors.Add(CreateValidEntities.Editor(i + 1));
-                editors[i].User = Repository.OfType<User>().GetByID(1);
+                editors[i].User = Repository.OfType<User>().GetById(1);
                 editors[i].Item = null;
             }
 
@@ -667,7 +667,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 editors.Add(CreateValidEntities.Editor(i + 1));
-                editors[i].User = Repository.OfType<User>().GetByID(1);
+                editors[i].User = Repository.OfType<User>().GetById(1);
                 editors[i].Item = null;
             }
 
@@ -718,7 +718,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             for (int i = 0; i < 5; i++)
             {
                 editors.Add(CreateValidEntities.Editor(i + 1));
-                editors[i].User = Repository.OfType<User>().GetByID(1);
+                editors[i].User = Repository.OfType<User>().GetById(1);
                 editors[i].Item = null;
             }
 

@@ -33,13 +33,13 @@ namespace CRP.Tests.Repositories
         protected override Editor GetValid(int? counter)
         {
             var rtValue = CreateValidEntities.Editor(counter);
-            rtValue.Item = Repository.OfType<Item>().GetByID(1);
+            rtValue.Item = Repository.OfType<Item>().GetById(1);
             var notNullCounter = 0;
             if(counter != null)
             {
                 notNullCounter = (int)counter;
             }
-            rtValue.User = Repository.OfType<User>().GetByID(notNullCounter);
+            rtValue.User = Repository.OfType<User>().GetById(notNullCounter);
             if(counter!=null && counter == 3)
             {
                 rtValue.Owner = true;
@@ -190,7 +190,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadItems(3);
             var editor   = GetValid(9);
-            editor.Item = Repository.OfType<Item>().GetNullableByID(3);
+            editor.Item = Repository.OfType<Item>().GetNullableById(3);
             #endregion Arrange
 
             #region Act
@@ -283,7 +283,7 @@ namespace CRP.Tests.Repositories
             #region Arrange
             LoadUsers(3);
             var editor = GetValid(9);
-            editor.User = Repository.OfType<User>().GetNullableByID(3);
+            editor.User = Repository.OfType<User>().GetNullableById(3);
             #endregion Arrange
 
             #region Act
