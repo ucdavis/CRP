@@ -216,7 +216,7 @@ namespace CRP.Tests.Controllers
             CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
             Assert.AreNotEqual("Coupon has been created successfully.", Controller.Message);
             Assert.AreSame(newCoupon, result.Coupon);
-            Controller.ModelState.AssertErrorsAre("DiscountAmount: must be more than 0.00");
+            Controller.ModelState.AssertErrorsAre("DiscountAmount: must be more than $0.00");
         }
 
         #endregion Create Tests

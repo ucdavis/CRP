@@ -171,7 +171,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(editor);
                 var results = editor.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Item: may not be empty");
+                results.AssertErrorsAre("Item: may not be null");
                 Assert.IsTrue(editor.IsTransient());
                 Assert.IsFalse(editor.IsValid());
                 #endregion Assert
@@ -264,7 +264,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(editor);
                 var results = editor.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("User: may not be empty");
+                results.AssertErrorsAre("User: may not be null");
                 Assert.IsTrue(editor.IsTransient());
                 Assert.IsFalse(editor.IsValid());
                 #endregion Assert

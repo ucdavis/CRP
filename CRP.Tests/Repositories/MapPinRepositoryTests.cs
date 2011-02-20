@@ -978,7 +978,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(mapPin);
                 var results = mapPin.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Item: may not be empty");
+                results.AssertErrorsAre("Item: may not be null");
                 Assert.IsTrue(mapPin.IsTransient());
                 Assert.IsFalse(mapPin.IsValid());
                 #endregion Assert

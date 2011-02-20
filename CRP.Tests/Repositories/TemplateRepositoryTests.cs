@@ -428,7 +428,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(template);
                 var results = template.ValidationResults().AsMessageList();
-                //results.AssertErrorsAre("Item: may not be empty");
+                //results.AssertErrorsAre("Item: may not be null");
                 results.AssertErrorsAre("ItemAndDefault: Item may not be empty when default not selected");
                 Assert.IsTrue(template.IsTransient());
                 Assert.IsFalse(template.IsValid());

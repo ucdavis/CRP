@@ -313,7 +313,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(question);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuestionType: may not be empty");
+                results.AssertErrorsAre("QuestionType: may not be null");
                 Assert.IsFalse(question.IsValid());
                 Assert.IsTrue(question.IsTransient());
                 #endregion Assert
@@ -448,7 +448,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(question);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuestionSet: may not be empty");
+                results.AssertErrorsAre("QuestionSet: may not be null");
                 Assert.IsFalse(question.IsValid());
                 Assert.IsTrue(question.IsTransient());
                 #endregion Assert
@@ -584,7 +584,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(question);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Options: may not be empty");
+                results.AssertErrorsAre("Options: may not be null");
                 Assert.IsTrue(question.IsTransient());
                 Assert.IsFalse(question.IsValid());
                 throw;
@@ -802,7 +802,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(question);
                 var results = question.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Validators: may not be empty");
+                results.AssertErrorsAre("Validators: may not be null");
                 Assert.IsTrue(question.IsTransient());
                 Assert.IsFalse(question.IsValid());
                 throw;

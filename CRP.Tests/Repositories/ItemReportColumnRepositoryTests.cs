@@ -442,7 +442,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(itemReportColumn);
                 var results = itemReportColumn.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("ItemReport: may not be empty");
+                results.AssertErrorsAre("ItemReport: may not be null");
                 Assert.IsTrue(itemReportColumn.IsTransient());
                 Assert.IsFalse(itemReportColumn.IsValid());
                 throw;

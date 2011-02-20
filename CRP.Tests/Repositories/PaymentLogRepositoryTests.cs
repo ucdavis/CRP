@@ -491,7 +491,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(paymentLog);
                 var results = paymentLog.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Transaction: may not be empty");
+                results.AssertErrorsAre("Transaction: may not be null");
                 Assert.IsFalse(paymentLog.IsValid());
                 Assert.IsTrue(paymentLog.IsTransient());
                 #endregion Assert

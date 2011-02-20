@@ -153,7 +153,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(itemTypeQuestionSet);
                 var results = itemTypeQuestionSet.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("ItemType: may not be empty");
+                results.AssertErrorsAre("ItemType: may not be null");
                 Assert.IsTrue(itemTypeQuestionSet.IsTransient());
                 Assert.IsFalse(itemTypeQuestionSet.IsValid());
                 #endregion Assert
@@ -243,7 +243,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(itemTypeQuestionSet);
                 var results = itemTypeQuestionSet.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuestionSet: may not be empty");
+                results.AssertErrorsAre("QuestionSet: may not be null");
                 Assert.IsTrue(itemTypeQuestionSet.IsTransient());
                 Assert.IsFalse(itemTypeQuestionSet.IsValid());
                 #endregion Assert

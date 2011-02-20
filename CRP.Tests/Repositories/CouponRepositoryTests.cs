@@ -379,7 +379,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(coupon);
                 var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Item: may not be empty");
+                results.AssertErrorsAre("Item: may not be null");
                 Assert.IsTrue(coupon.IsTransient());
                 Assert.IsFalse(coupon.IsValid());
                 #endregion Assert
@@ -786,7 +786,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(coupon);
                 var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("DiscountAmount: must be more than 0.00");
+                results.AssertErrorsAre("DiscountAmount: must be more than $0.00");
                 Assert.IsTrue(coupon.IsTransient());
                 Assert.IsFalse(coupon.IsValid());
                 #endregion Assert
@@ -821,7 +821,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(coupon);
                 var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("DiscountAmount: must be more than 0.00");
+                results.AssertErrorsAre("DiscountAmount: must be more than $0.00");
                 Assert.IsTrue(coupon.IsTransient());
                 Assert.IsFalse(coupon.IsValid());
                 #endregion Assert
@@ -856,7 +856,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(coupon);
                 var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("DiscountAmount: must be more than 0.00");
+                results.AssertErrorsAre("DiscountAmount: must be more than $0.00");
                 Assert.IsTrue(coupon.IsTransient());
                 Assert.IsFalse(coupon.IsValid());
                 #endregion Assert
@@ -892,7 +892,7 @@ namespace CRP.Tests.Repositories
                 Assert.IsNotNull(coupon);
                 var results = coupon.ValidationResults().AsMessageList();
                 results.AssertErrorsAre(
-                    "DiscountAmount: must be more than 0.00", 
+                    "DiscountAmount: must be more than $0.00", 
                     "DiscountAmountCostPerItem: The discount amount must not be greater than the cost per item.");
                 Assert.IsTrue(coupon.IsTransient());
                 Assert.IsFalse(coupon.IsValid());

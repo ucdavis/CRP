@@ -39,7 +39,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("MapPins: may not be empty");
+                results.AssertErrorsAre("MapPins: may not be null");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;

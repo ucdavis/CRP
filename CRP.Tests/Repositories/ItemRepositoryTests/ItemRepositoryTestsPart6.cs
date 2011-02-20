@@ -409,7 +409,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Tags: may not be empty");
+                results.AssertErrorsAre("Tags: may not be null");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;

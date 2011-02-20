@@ -1393,7 +1393,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(openIdUser);
                 var results = openIdUser.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Transactions: may not be empty");
+                results.AssertErrorsAre("Transactions: may not be null");
                 Assert.IsFalse(openIdUser.IsTransient()); //Because we assign it directly.
                 Assert.IsFalse(openIdUser.IsValid());
                 #endregion Assert

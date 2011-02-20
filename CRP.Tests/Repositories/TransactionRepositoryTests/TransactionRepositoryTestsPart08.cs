@@ -37,7 +37,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             {
                 Assert.IsNotNull(transaction);
                 var results = transaction.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuantityAnswers: may not be empty");
+                results.AssertErrorsAre("QuantityAnswers: may not be null");
                 Assert.IsTrue(transaction.IsTransient());
                 Assert.IsFalse(transaction.IsValid());
                 throw;

@@ -244,7 +244,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(extendedPropertyAnswer);
                 var results = extendedPropertyAnswer.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Item: may not be empty");
+                results.AssertErrorsAre("Item: may not be null");
                 Assert.IsTrue(extendedPropertyAnswer.IsTransient());
                 Assert.IsFalse(extendedPropertyAnswer.IsValid());
                 #endregion Assert
@@ -337,7 +337,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(extendedPropertyAnswer);
                 var results = extendedPropertyAnswer.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("ExtendedProperty: may not be empty");
+                results.AssertErrorsAre("ExtendedProperty: may not be null");
                 Assert.IsTrue(extendedPropertyAnswer.IsTransient());
                 Assert.IsFalse(extendedPropertyAnswer.IsValid());
                 #endregion Assert

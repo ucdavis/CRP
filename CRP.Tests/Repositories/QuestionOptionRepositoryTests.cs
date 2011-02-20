@@ -309,7 +309,7 @@ namespace CRP.Tests.Repositories
                 #region Assert
                 Assert.IsNotNull(questionOption);
                 var results = questionOption.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Question: may not be empty");
+                results.AssertErrorsAre("Question: may not be null");
                 Assert.IsFalse(questionOption.IsValid());
                 Assert.IsTrue(questionOption.IsTransient());
                 #endregion Assert

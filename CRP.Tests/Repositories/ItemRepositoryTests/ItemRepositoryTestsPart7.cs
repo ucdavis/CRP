@@ -39,7 +39,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("ExtendedPropertyAnswers: may not be empty");
+                results.AssertErrorsAre("ExtendedPropertyAnswers: may not be null");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;
@@ -329,7 +329,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Coupons: may not be empty");
+                results.AssertErrorsAre("Coupons: may not be null");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;
@@ -549,7 +549,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Editors: may not be empty");
+                results.AssertErrorsAre("Editors: may not be null");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;
@@ -781,7 +781,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuestionSets: may not be empty");
+                results.AssertErrorsAre("QuestionSets: may not be null");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;

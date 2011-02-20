@@ -36,7 +36,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
                 #region Assert
                 Assert.IsNotNull(transaction);
                 var results = transaction.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Item: may not be empty");
+                results.AssertErrorsAre("Item: may not be null");
                 Assert.IsFalse(transaction.IsValid());
                 Assert.IsTrue(transaction.IsTransient());
                 #endregion Assert

@@ -314,7 +314,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(itemType);
                 var results = itemType.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("ExtendedProperties: may not be empty");
+                results.AssertErrorsAre("ExtendedProperties: may not be null");
                 Assert.IsTrue(itemType.IsTransient());
                 Assert.IsFalse(itemType.IsValid());
                 throw;
@@ -464,7 +464,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(itemType);
                 var results = itemType.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("QuestionSets: may not be empty");
+                results.AssertErrorsAre("QuestionSets: may not be null");
                 Assert.IsTrue(itemType.IsTransient());
                 Assert.IsFalse(itemType.IsValid());
                 throw;
@@ -727,7 +727,7 @@ namespace CRP.Tests.Repositories
             {
                 Assert.IsNotNull(itemType);
                 var results = itemType.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("Items: may not be empty");
+                results.AssertErrorsAre("Items: may not be null");
                 Assert.IsTrue(itemType.IsTransient());
                 Assert.IsFalse(itemType.IsValid());
                 throw;
