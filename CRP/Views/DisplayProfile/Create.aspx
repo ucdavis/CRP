@@ -46,6 +46,10 @@
                 <input type="file" name="file" id="file" />
             </p>
             <p>
+                <label for="HeaderColor">Header Color:</label>
+                <%= Html.TextBox("HeaderColor") %>
+            </p>
+            <p>
                 <input type="submit" value="Create" />
             </p>
         </fieldset>

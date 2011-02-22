@@ -56,6 +56,9 @@ namespace CRP.Core.Domain
 
         public virtual bool SchoolMaster { get; set; }
 
+        [Length(50)]
+        public virtual string HeaderColor { get; set; }
+
         public override bool IsValid()
         {
             PopulateComplexLogicFields();                   
