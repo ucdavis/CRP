@@ -28,18 +28,16 @@
             <%= Html.HtmlEncode(Model.Item.Description) %>
         </p>
         
+        <!-- Only display link if one has been provided -->
+        <% if (!string.IsNullOrEmpty(Model.Item.Link)) { %>
         <p>
             <strong>Link:</strong>
             <a href="<%= Html.Encode(Model.Item.Link)%>"><%= Html.Encode(Model.Item.Link) %></a>
         </p>
-        
-<%--        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" 
-            marginwidth="0" 
-            src="<%= Model.Item.MapLink %>"></iframe><br />
-        <small>
-            <a href="<%= Model.Item.LinkLink %>" style="color:#0000FF;text-align:left">View Larger Map</a>
-        </small>--%>
-        
+        <% } %>
+
+        <!-- Only display the map if there are one or more map pins -->
+        <% if (Model.HasMapPins) { %>
         <%= Html.ActionLink<ItemController>(a=>a.Map(Model.Item.Id, true), "Full Screen Map") %>
         <div id="map">
 		    <div >
@@ -56,7 +54,8 @@
 		    </dl>
 		    </div>
 	    </div>
-        
+        <% } %>
+
         </li>
         
         <li class="two_col_float_uneven_right">
@@ -107,13 +106,12 @@
     <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>
         
+    <!-- Only display the map if there are one or more map pins -->
+    <% if (Model.HasMapPins) { %>
     <script type="text/javascript">
         $(function() {
             $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, height:"450px", width:"450px" });
-        });        
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
+
             $('.coordinate-title').append('  <%=Html.Image("~/images/question_blue.png", new { @id = "MapPinHelp" })%>');
             <%if(Model.HasMapPins) {%>                        
                 $("#MapPinHelp").bt("To view Locations on the map, click on the tabs below", {positions: 'top'});
@@ -122,5 +120,6 @@
             <%} %>
         });
     </script>
+    <% } %>
 </asp:Content>
 
