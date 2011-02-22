@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CRP.Core.Domain;
 using CRP.Tests.Core;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
+
 
 namespace CRP.Tests.Repositories
 {
@@ -107,6 +109,23 @@ namespace CRP.Tests.Repositories
         public override void CanUpdateEntity()
         {
             CanUpdateEntity(false); //Mutable is false for this table
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.HibernateException))]
+        public override void CanDeleteEntity()
+        {
+            try
+            {
+                base.CanDeleteEntity();
+            }
+            catch (Exception ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("Attempted to delete an object of immutable class: [CRP.Core.Domain.School]", ex.Message);
+                throw;
+            }
+            
         }
 
         //public override void CanGetEntityUsingGetByIdWhereIdIsInt()

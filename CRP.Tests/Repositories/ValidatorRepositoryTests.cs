@@ -93,6 +93,23 @@ namespace CRP.Tests.Repositories
         {
             CanUpdateEntity(false); //Mutable is false for this table
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(NHibernate.HibernateException))]
+        public override void CanDeleteEntity()
+        {
+            try
+            {
+                base.CanDeleteEntity();
+            }
+            catch (Exception ex)
+            {
+                Assert.IsNotNull(ex);
+                Assert.AreEqual("Attempted to delete an object of immutable class: [CRP.Core.Domain.Validator]", ex.Message);
+                throw;
+            }
+
+        }
         /// <summary>
         /// Loads the data.
         /// </summary>
