@@ -47,6 +47,11 @@
                 <label for="MaxQuantity">Maximum Quantity per Transaction:</label>
                 <%= Html.TextBox("MaxQuantity", Model.Coupon != null ? Model.Coupon.MaxQuantity.ToString() : string.Empty) %>
             </p>
+
+            <p>
+                <label for="MaxUsage">Maximum Usage:</label>
+                <%= Html.TextBox("MaxUsage", Model.Coupon != null ? Model.Coupon.MaxUsage.ToString() : string.Empty) %>
+            </p>
             
             <p>
                 <input type="submit" value="Create" />

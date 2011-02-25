@@ -172,11 +172,12 @@ namespace CRP.Controllers
             
             // deal with the amount
             var amount = item.CostPerItem*quantity; // get the initial amount
-            decimal discount = 0.0m;
-            decimal couponAmount = 0.0m;
+            decimal discount = 0.0m;                // used to calculate total discount
+            decimal couponAmount = 0.0m;            // used to display individual discount of one coupon
             // get the email
             if (coup != null)
             {
+                // calculate the coupon discount
                 var emailQ = allQuestions.Where(a => a.Name == StaticValues.Question_Email && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).FirstOrDefault();
                 if (emailQ != null)
                 {
@@ -188,7 +189,8 @@ namespace CRP.Controllers
                 {
                     discount = coup.UseCoupon(null, quantity);
                 }
-                //Well, if we passed and found a coupon
+                
+                // if coupon is used set display value
                 if(discount == 0)
                 {
                     ModelState.AddModelError("Coupon", NotificationMessages.STR_Coupon_could_not_be_used);
@@ -197,6 +199,9 @@ namespace CRP.Controllers
                 {
                     couponAmount = coup.DiscountAmount;
                 }
+
+                // record the coupon usage to this transaction
+                transaction.Coupon = coup;
             }
             transaction.Amount = amount - discount;
             transaction.Quantity = quantity;

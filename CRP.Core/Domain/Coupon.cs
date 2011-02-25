@@ -78,7 +78,7 @@ namespace CRP.Core.Domain
         /// <summary>
         /// The maximum number of times it can be used
         /// </summary>
-        public virtual int MaxUsage { get; set; }
+        public virtual int? MaxUsage { get; set; }
 
         /// <summary>
         /// Transactions that have used the coupons
@@ -183,13 +183,19 @@ namespace CRP.Core.Domain
             {
                 DiscountAmountCostPerItem = false;
             }
+
+            UnlimitedAndMaxUage = true;
+            if (Unlimited != (MaxUsage == null))
+            {
+                UnlimitedAndMaxUage = false;
+            }
         }
 
         /// <summary>
         /// Calculates # of times the coupon has been used
         /// </summary>
         /// <returns></returns>
-        public int CalculateUsage()
+        public virtual int CalculateUsage()
         {
             return 0;
         }
@@ -201,6 +207,9 @@ namespace CRP.Core.Domain
 
         [AssertTrue(Message = "The discount amount must not be greater than the cost per item.")]
         private bool DiscountAmountCostPerItem { get; set; }
+
+        [AssertTrue(Message="Cannot have unlimited and a max usage defined, one or the other.")]
+        private bool UnlimitedAndMaxUage { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

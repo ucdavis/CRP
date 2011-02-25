@@ -13,7 +13,7 @@
     <property name="IsActive" column="IsActive"/>
     <property name="Credit" column="Credit" />
     <property name="Check" column="[Check]" />
-    <many-to-one name="Item" class="CRP.Core.Domain.Coupon, CRP.Core" column="ItemId" fetch="join" not-null="true" />
+    <many-to-one name="Coupon" class="CRP.Core.Domain.Coupon, CRP.Core" column="CouponId" fetch="join" />
     
     <property name="Refunded" column="Refunded" />
     <property name="Notified" column="Notified"/>

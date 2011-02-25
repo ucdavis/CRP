@@ -226,13 +226,14 @@
                                                     <% } %>
                                                 <%});
                                     col.Bound(a => a.Code);
-                                    col.Bound(a => a.DiscountAmount).Format("{0:C}").Title("Discount Amount");
+                                    col.Bound(a => a.DiscountAmount).Format("{0:C}").Title("Discount");
                                     col.Bound(a => a.Email);
                                     col.Bound(a => a.Expiration).Title("Expiration");
                                     col.Bound(a => a.Used);
                                     col.Bound(a => a.Unlimited);
                                     col.Bound(a => a.MaxQuantity);
                                     col.Bound(a => a.IsActive);
+                                    col.Bound(a => a.MaxUsage);
                                 })
                    .Render();
                     %>
