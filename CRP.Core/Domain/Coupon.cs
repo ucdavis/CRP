@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
@@ -114,8 +115,15 @@ namespace CRP.Core.Domain
         /// <returns></returns>
         public virtual decimal? ValidateCoupon(string email, int quantity, bool ignoreEmail)
         {
-            // coupon has been used but isn't unlimied, is inactive or has passed expiration
-            if ((Used && !Unlimited) || (!IsActive) || (Expiration.HasValue && Expiration.Value < DateTime.Now))
+            // coupon has been used but isn't unlimied or has max usage defined, is inactive or has passed expiration
+            if (((Used && !Unlimited) && (Used && !MaxUsage.HasValue)) || (!IsActive) || (Expiration.HasValue && Expiration.Value < DateTime.Now))
+            {
+                return null;
+            }
+
+            // check against the max number of usages if other valid conditions pass
+            // usages has already surpassed max usage
+            if (MaxUsage.HasValue && CalculateUsage() > MaxUsage.Value)
             {
                 return null;
             }
@@ -139,23 +147,33 @@ namespace CRP.Core.Domain
 
         private decimal CalculateDiscount(int quantity)
         {
+            // calculate availabe left, if a max usage is defined
+            var quantityAvailable = int.MaxValue;
+            if (MaxUsage.HasValue)
+            {
+                quantityAvailable = MaxUsage.Value - CalculateUsage();
+            }
+
             // we need to consider a max quantity
             if (MaxQuantity.HasValue)
             {
+                // take the lower of the two values, to restrict
+                var maxDiscountQuantity = quantityAvailable < MaxQuantity ? quantityAvailable : MaxQuantity.Value;
+
                 // quantity is less than max, so take discount on all quantity
-                if (MaxQuantity > quantity)
+                if (maxDiscountQuantity > quantity)
                 {
                     return quantity*DiscountAmount;
                 }
                 // quantity if greater than max, discount only max number
                 else
                 {
-                    return MaxQuantity.Value*DiscountAmount;
+                    return maxDiscountQuantity*DiscountAmount;
                 }
             }
             
             // just take the discount off all attendees
-            return quantity*DiscountAmount;   
+            return quantityAvailable > quantity ? quantity*DiscountAmount : quantityAvailable*DiscountAmount;   
         }
 
         public override bool IsValid()
@@ -197,7 +215,14 @@ namespace CRP.Core.Domain
         /// <returns></returns>
         public virtual int CalculateUsage()
         {
-            return 0;
+            // determine what the max quantitty per transaction is
+            var maxq = MaxQuantity.HasValue ? MaxQuantity.Value : int.MaxValue;
+
+            // count the number used for each transaction
+            // if max quantity is higher than the transaction quantity, then return the transaction quantity
+            // but if the quantity is greater than the max, only return the max becuase that is the most that should
+            // have been allowed.
+            return Transactions.Sum(a => maxq > a.Quantity ? a.Quantity : maxq);
         }
         #endregion
 

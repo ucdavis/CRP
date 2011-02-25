@@ -239,10 +239,11 @@
             $("input#Coupon").blur(function(event) {
                 var url = '<%= Url.Action("Validate", "Coupon") %>';//<%= Html.Encode(Model.Item.Id) %>';
                 var couponCode = $("input#Coupon").val();
-                
+                var quantity = $("#quantity").val();
+
                 $("img#CouponValidateImage").show();
                 
-                $.getJSON(url, {itemId: <%= Html.Encode(Model.Item.Id) %>, couponCode: couponCode}, function(result) { 
+                $.getJSON(url, {itemId: <%= Html.Encode(Model.Item.Id) %>, couponCode: couponCode, quantity: quantity}, function(result) { 
                 
                     var message = result.message;
                 

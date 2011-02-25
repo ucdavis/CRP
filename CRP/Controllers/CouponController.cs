@@ -98,6 +98,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="itemId">The item id.</param>
         /// <param name="couponCode">The coupon code.</param>
+        /// <param name="quantity">Quantity to calculate</param>
         /// <returns></returns>
         public JsonNetResult Validate(int itemId, string couponCode)
         {            
@@ -121,7 +122,23 @@ namespace CRP.Controllers
                 return new JsonNetResult(new { discountAmount = 0, maxQuantity = 0, message = "Coupon has already been redeemed." });
             }
 
-            return new JsonNetResult(new {discountAmount = discountAmount.Value, maxQuantity = coupon.MaxQuantity.HasValue ? coupon.MaxQuantity.Value : -1});
+            // determine the max quantity
+            var maxAllowed = -1;
+            if (coupon.MaxQuantity.HasValue && coupon.MaxUsage.HasValue)
+            {
+                // set maxQuantity to the lowest value between the two
+                maxAllowed = coupon.MaxQuantity.Value > coupon.MaxUsage.Value - coupon.CalculateUsage() ? coupon.MaxUsage.Value - coupon.CalculateUsage() : coupon.MaxQuantity.Value;
+            }
+            else if (coupon.MaxUsage.HasValue && !coupon.MaxQuantity.HasValue)
+            {
+                maxAllowed = coupon.MaxUsage.Value - coupon.CalculateUsage();
+            }
+            else if (!coupon.MaxUsage.HasValue && coupon.MaxQuantity.HasValue)
+            {
+                maxAllowed = coupon.MaxQuantity.Value;
+            }
+
+            return new JsonNetResult(new {discountAmount = coupon.DiscountAmount, maxQuantity = maxAllowed, totalDiscount = discountAmount});
         }
 
         /// <summary>
