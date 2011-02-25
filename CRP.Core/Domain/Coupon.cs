@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
@@ -7,6 +8,7 @@ namespace CRP.Core.Domain
 {
     public class Coupon : DomainObject
     {
+        #region Constructors
         public Coupon()
         {
             SetDefaults();
@@ -29,7 +31,9 @@ namespace CRP.Core.Domain
             DiscountAmountCostPerItem = false;
             UnlimitedAndEmail = false;
         }
+        #endregion
 
+        #region Mapped Fields
         [Required]
         [Length(Min = 10, Max = 10)]
         public virtual string Code { get; set; }
@@ -71,6 +75,18 @@ namespace CRP.Core.Domain
         /// </summary>
         public virtual bool IsActive { get; set; }
 
+        /// <summary>
+        /// The maximum number of times it can be used
+        /// </summary>
+        public virtual int MaxUsage { get; set; }
+
+        /// <summary>
+        /// Transactions that have used the coupons
+        /// </summary>
+        public virtual IList<Transaction> Transactions { get; set; }
+        #endregion
+
+        #region Methods
         public virtual decimal UseCoupon(string email, int quantity)
         {
             // call the validate coupon
@@ -168,6 +184,16 @@ namespace CRP.Core.Domain
                 DiscountAmountCostPerItem = false;
             }
         }
+
+        /// <summary>
+        /// Calculates # of times the coupon has been used
+        /// </summary>
+        /// <returns></returns>
+        public int CalculateUsage()
+        {
+            return 0;
+        }
+        #endregion
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "When not unlimited a coupon requires an email")]

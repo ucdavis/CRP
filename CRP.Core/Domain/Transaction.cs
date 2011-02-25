@@ -9,6 +9,7 @@ namespace CRP.Core.Domain
 {
     public class Transaction : DomainObject
     {
+        #region Constructors
         public Transaction()
         {
             SetDefaults();
@@ -45,13 +46,16 @@ namespace CRP.Core.Domain
 
             TransactionGuid = Guid.NewGuid();
         }
-         
+        #endregion
+
+        #region Mapped Fields
         [NotNull]
         public virtual Item Item { get; set; }
         public virtual DateTime TransactionDate { get; set; }
         public virtual bool IsActive { get; set; }
         public virtual bool Credit { get; set; }
         public virtual bool Check { get; set; }
+        public virtual Coupon Coupon { get; set; }
 
         public virtual bool Refunded { get; set; }
         public virtual bool Notified { get; set; }
@@ -87,8 +91,9 @@ namespace CRP.Core.Domain
         public virtual ICollection<QuantityAnswer> QuantityAnswers { get; set; }
         [NotNull]
         public virtual ICollection<Transaction> ChildTransactions { get; set; }
+        #endregion
 
-
+        #region Methods
         public virtual void AddPaymentLog(PaymentLog paymentLog)
         {
             paymentLog.Transaction = this;
@@ -291,6 +296,7 @@ namespace CRP.Core.Domain
             //    CorrectionTotalAmountPaid = false;
             //}
         }
+        #endregion
 
         #region Fields ONLY used for complex validation, not in database
         [AssertTrue(Message = "Payment type was not selected.")]

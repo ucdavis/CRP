@@ -18,6 +18,12 @@
     <property name="UserId" column="UserId" />
     <property name="IsActive" column="IsActive" />
     <property name="MaxQuantity" column="MaxQuantity" />
-    
+    <property name="MaxUsage" column="MaxUsage" />
+
+    <bag name="Transactions" table="Transactions" cascade="none" inverse="true" >
+      <key column="CouponId" />
+      <one-to-many class="CRP.Core.Domain.Transaction, CRP.Core"/>
+    </bag>
+
   </class>
 </hibernate-mapping>
