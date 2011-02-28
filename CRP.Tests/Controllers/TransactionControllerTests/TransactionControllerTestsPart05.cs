@@ -39,6 +39,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(49.98m, args.Amount);
+            Assert.AreEqual("COUPON", args.Coupon.Code);
             #endregion Assert
         }
 

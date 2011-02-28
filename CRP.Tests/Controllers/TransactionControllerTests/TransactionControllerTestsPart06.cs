@@ -46,7 +46,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         /// Tests the checkout calculates amount correctly with coupon.
         /// </summary>
         [TestMethod]
-        public void TestCheckoutCalculatesAmountCorrectlyWithCoupon()
+        public void TestCheckoutCalculatesAmountCorrectlyWithCoupon1()
         {
             #region Arrange
             SetupDataForCheckoutTests();
@@ -64,6 +64,50 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual((6.01m * 3) - (5.01m * 2), args.Amount);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutCalculatesAmountCorrectlyWithCoupon2()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 6.01m;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 5, null, (6.01m * 5) - (5.01m * 3), StaticValues.CreditCard, string.Empty, "MAXCOUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual((6.01m * 5) - (5.01m * 3), args.Amount);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCheckoutCalculatesAmountCorrectlyWithCoupon3()
+        {
+            #region Arrange
+            SetupDataForCheckoutTests();
+            Items[1].CostPerItem = 6.01m;
+            #endregion Arrange
+
+            #region Act
+            Controller.Checkout(2, 2, null, (6.01m * 2) - (5.01m * 2), StaticValues.CreditCard, string.Empty, "MAXCOUPON", TransactionAnswerParameters, null, true)
+                .AssertActionRedirect()
+                .ToAction<TransactionController>(a => a.Confirmation(1));
+            #endregion Act
+
+            #region Assert
+            TransactionRepository.AssertWasCalled(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything));
+            var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
+            Assert.IsNotNull(args);
+            Assert.AreEqual((6.01m * 2) - (5.01m * 2), args.Amount);
             #endregion Assert
         }
 

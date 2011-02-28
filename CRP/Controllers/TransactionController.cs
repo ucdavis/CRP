@@ -194,14 +194,16 @@ namespace CRP.Controllers
                 if(discount == 0)
                 {
                     ModelState.AddModelError("Coupon", NotificationMessages.STR_Coupon_could_not_be_used);
+                    transaction.Coupon = null;
                 }
                 else
                 {
                     couponAmount = coup.DiscountAmount;
+                    // record the coupon usage to this transaction
+                    transaction.Coupon = coup;
                 }
 
-                // record the coupon usage to this transaction
-                transaction.Coupon = coup;
+
             }
             transaction.Amount = amount - discount;
             transaction.Quantity = quantity;

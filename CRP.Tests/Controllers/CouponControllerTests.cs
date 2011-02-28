@@ -356,7 +356,7 @@ namespace CRP.Tests.Controllers
             var result = Controller.Validate(2, "FAKECCODE2")
                 .AssertResultIs<JsonNetResult>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("{ discountAmount = 10.77, maxQuantity = -1 }", result.Data.ToString());
+            Assert.AreEqual("{ discountAmount = 10.77, maxQuantity = -1, totalDiscount = 10.77 }", result.Data.ToString());
         }
 
         /// <summary>
@@ -382,7 +382,7 @@ namespace CRP.Tests.Controllers
             var result = Controller.Validate(2, "FAKECCODE2")
                 .AssertResultIs<JsonNetResult>();
             Assert.IsNotNull(result);
-            Assert.AreEqual("{ discountAmount = 10.77, maxQuantity = -1 }", result.Data.ToString(), "Controller should check unlimited coupons.");
+            Assert.AreEqual("{ discountAmount = 10.77, maxQuantity = -1, totalDiscount = 10.77 }", result.Data.ToString(), "Controller should check unlimited coupons.");
         }
 
 
@@ -390,7 +390,7 @@ namespace CRP.Tests.Controllers
         /// Tests the validate calculates discount amount with max quantity.
         /// </summary>
         [TestMethod]
-        public void TestValidateCalculatesDiscountAmountWithMaxQuantity()
+        public void TestValidateCalculatesDiscountAmountWithMaxQuantity1()
         {
             #region Arrange
             FakeCoupons(3);
@@ -419,10 +419,184 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("{ discountAmount = 5.00, maxQuantity = 3 }", result.Data.ToString());
+            Assert.AreEqual("{ discountAmount = 5.00, maxQuantity = 3, totalDiscount = 5.00 }", result.Data.ToString());
             #endregion Assert		
         }
 
+        [TestMethod]
+        public void TestValidateCalculatesDiscountAmountWithMaxQuantity2()
+        {
+            #region Arrange
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].DiscountAmount = 5.00m;
+            Coupons[1].Used = false;
+            Coupons[1].Unlimited = false;
+            Coupons[1].MaxQuantity = 3;
+            Coupons[1].MaxUsage = 2;
+
+            Items[1].Quantity = 2;
+            Items[1].CostPerItem = 9.00m;
+
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("{ discountAmount = 5.00, maxQuantity = 2, totalDiscount = 5.00 }", result.Data.ToString());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestValidateCalculatesDiscountAmountWithMaxQuantity3()
+        {
+            #region Arrange
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].DiscountAmount = 5.00m;
+            Coupons[1].Used = false;
+            Coupons[1].Unlimited = false;
+            Coupons[1].MaxQuantity = 7;
+            Coupons[1].MaxUsage = 2;
+
+            Items[1].Quantity = 2;
+            Items[1].CostPerItem = 9.00m;
+
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("{ discountAmount = 5.00, maxQuantity = 2, totalDiscount = 5.00 }", result.Data.ToString());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestValidateCalculatesDiscountAmountWithMaxQuantity4()
+        {
+            #region Arrange
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].DiscountAmount = 5.00m;
+            Coupons[1].Used = false;
+            Coupons[1].Unlimited = false;
+            Coupons[1].MaxQuantity = 3;
+            Coupons[1].MaxUsage = 7;
+
+            Items[1].Quantity = 2;
+            Items[1].CostPerItem = 9.00m;
+
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("{ discountAmount = 5.00, maxQuantity = 3, totalDiscount = 5.00 }", result.Data.ToString());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestValidateCalculatesDiscountAmountWithMaxQuantity5()
+        {
+            #region Arrange
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].DiscountAmount = 5.00m;
+            Coupons[1].Used = false;
+            Coupons[1].Unlimited = false;
+            Coupons[1].MaxQuantity = null;
+            Coupons[1].MaxUsage = 2;
+
+            Items[1].Quantity = 2;
+            Items[1].CostPerItem = 9.00m;
+
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("{ discountAmount = 5.00, maxQuantity = 2, totalDiscount = 5.00 }", result.Data.ToString());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestValidateCalculatesDiscountAmountWithMaxQuantity6()
+        {
+            #region Arrange
+            FakeCoupons(3);
+            FakeItems(3);
+            for (int i = 0; i < 3; i++)
+            {
+                Coupons[i].Item = Items[i];
+                Coupons[i].Code = "FAKECCODE" + (i + 1);
+            }
+            Coupons[1].DiscountAmount = 5.00m;
+            Coupons[1].Used = false;
+            Coupons[1].Unlimited = false;
+            Coupons[1].MaxQuantity = 3;
+            Coupons[1].MaxUsage = null;
+
+            Items[1].Quantity = 2;
+            Items[1].CostPerItem = 9.00m;
+
+            ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
+            CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.Validate(2, "FAKECCODE2")
+                .AssertResultIs<JsonNetResult>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("{ discountAmount = 5.00, maxQuantity = 3, totalDiscount = 5.00 }", result.Data.ToString());
+            #endregion Assert
+        }
 
         #endregion Validate Tests
 
