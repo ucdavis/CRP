@@ -524,6 +524,165 @@ namespace CRP.Tests.Repositories
         }
         #endregion SchoolMaster Tests
 
+        #region HeaderColor Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the HeaderColor with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestHeaderColorWithTooLongValueDoesNotSave()
+        {
+            DisplayProfile displayProfile = null;
+            try
+            {
+                #region Arrange
+                displayProfile = GetValid(9);
+                displayProfile.HeaderColor = "x".RepeatTimes((50 + 1));
+                #endregion Arrange
+
+                #region Act
+                DisplayProfileRepository.DbContext.BeginTransaction();
+                DisplayProfileRepository.EnsurePersistent(displayProfile);
+                DisplayProfileRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(displayProfile);
+                Assert.AreEqual(50 + 1, displayProfile.HeaderColor.Length);
+                var results = displayProfile.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("HeaderColor: length must be between 0 and 50");
+                Assert.IsTrue(displayProfile.IsTransient());
+                Assert.IsFalse(displayProfile.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the HeaderColor with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestHeaderColorWithNullValueSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.HeaderColor = null;
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the HeaderColor with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestHeaderColorWithEmptyStringSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.HeaderColor = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the HeaderColor with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestHeaderColorWithOneSpaceSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.HeaderColor = " ";
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the HeaderColor with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestHeaderColorWithOneCharacterSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.HeaderColor = "x";
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the HeaderColor with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestHeaderColorWithLongValueSaves()
+        {
+            #region Arrange
+            var displayProfile = GetValid(9);
+            displayProfile.HeaderColor = "x".RepeatTimes(50);
+            #endregion Arrange
+
+            #region Act
+            DisplayProfileRepository.DbContext.BeginTransaction();
+            DisplayProfileRepository.EnsurePersistent(displayProfile);
+            DisplayProfileRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(50, displayProfile.HeaderColor.Length);
+            Assert.IsFalse(displayProfile.IsTransient());
+            Assert.IsTrue(displayProfile.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion HeaderColor Tests
+
+
 
 
         //TODO: Other tests
@@ -651,6 +810,10 @@ namespace CRP.Tests.Repositories
             expectedFields.Add(new NameAndType("DepartmentOrSchool", "System.Boolean", new List<string>
             {
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"A Department or School must be specified.\")]"
+            }));
+            expectedFields.Add(new NameAndType("HeaderColor", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
             }));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
