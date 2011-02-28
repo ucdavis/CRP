@@ -139,6 +139,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             {
                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"The total of all correction amounts must not exceed the donation amounts\")]"
             }));
+            expectedFields.Add(new NameAndType("Coupon", "CRP.Core.Domain.Coupon", new List<string>()));
             expectedFields.Add(new NameAndType("CreatedBy", "System.String", new List<string>()));
             expectedFields.Add(new NameAndType("Credit", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Donation", "System.Boolean", new List<string>()));

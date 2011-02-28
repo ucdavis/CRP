@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 using CRP.Core.Domain;
-using CRP.Tests.Core.Extensions;
-using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UCDArch.Testing.Extensions;
-using System.Linq;
 
 namespace CRP.Tests.Repositories.TransactionRepositoryTests
 {
@@ -160,7 +154,6 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         public void TestNotifiedDateWithNullDateDateWillSave()
         {
             #region Arrange
-            var compareDate = DateTime.Now.AddDays(15);
             var record = GetValid(99);
             record.NotifiedDate = null;
             #endregion Arrange
