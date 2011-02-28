@@ -203,7 +203,7 @@ namespace CRP.Core.Domain
             }
 
             UnlimitedAndMaxUage = true;
-            if (Unlimited != (MaxUsage == null))
+            if (Unlimited && MaxUsage != null)
             {
                 UnlimitedAndMaxUage = false;
             }
