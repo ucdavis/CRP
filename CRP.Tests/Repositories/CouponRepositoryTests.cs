@@ -1586,6 +1586,550 @@ namespace CRP.Tests.Repositories
         }
         #endregion DiscountAmountCostPerItem Tests
 
+        #region MaxUsage Tests
+
+        /// <summary>
+        /// Tests the MaxUsage with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestMaxUsageWithNullValueSaves()
+        {
+            #region Arrange
+            Coupon record = GetValid(9);
+            record.MaxUsage = null;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(record);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(record.MaxUsage);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert		
+        }
+
+        /// <summary>
+        /// Tests the MaxUsage with max int value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestMaxUsageWithMaxIntValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.MaxUsage = int.MaxValue;
+            record.Unlimited = false;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(record);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(int.MaxValue, record.MaxUsage);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the MaxUsage with 0 value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestMaxUsageWithZeroValueSaves()
+        {
+            #region Arrange
+            var record = GetValid(9);
+            record.MaxUsage = 0;
+            record.Unlimited = false;
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(record);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, record.MaxUsage);
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestMaxUsageWithNegativeOneDoesNotSave()
+        {
+            Coupon coupon = null;
+            try
+            {
+                #region Arrange
+                coupon = GetValid(9);
+                coupon.MaxUsage = -1;
+                coupon.Unlimited = false;
+                #endregion Arrange
+
+                #region Act
+                CouponRepository.DbContext.BeginTransaction();
+                CouponRepository.EnsurePersistent(coupon);
+                CouponRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                #region Assert
+                Assert.IsNotNull(coupon);
+                var results = coupon.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("MaxUsage: must be greater than or equal to 0");
+                Assert.IsTrue(coupon.IsTransient());
+                Assert.IsFalse(coupon.IsValid());
+                #endregion Assert
+
+                throw;
+            }
+        }
+
+        #endregion MaxUsage Tests
+
+        #region Transactions Tests
+        #region Invalid Tests
+        /// <summary>
+        /// Tests the Transactions with A value of Null does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestTransactionsWithAValueOfNullDoesNotSave()
+        {
+            Coupon coupon = null;
+            try
+            {
+                #region Arrange
+                coupon = GetValid(9);
+                coupon.Transactions = null;
+                #endregion Arrange
+
+                #region Act
+                CouponRepository.DbContext.BeginTransaction();
+                CouponRepository.EnsurePersistent(coupon);
+                CouponRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(coupon);
+                Assert.AreEqual(coupon.Transactions, null);
+                var results = coupon.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("Transactions: may not be null");
+                Assert.IsTrue(coupon.IsTransient());
+                Assert.IsFalse(coupon.IsValid());
+                throw;
+            }
+        }
+
+        #endregion Invalid Tests
+        #region Valid Tests
+
+        [TestMethod]
+        public void TestTransactionsWithEmptyListSaves()
+        {
+            #region Arrange
+            Coupon record = GetValid(9);
+            record.Transactions = new List<Transaction>();
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(record);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, record.Transactions.Count());
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestTransactionsWithPopulatedListSaves()
+        {
+            #region Arrange
+            Coupon record = GetValid(9);
+            record.Transactions = new List<Transaction>();
+            record.Transactions.Add(CreateValidEntities.Transaction(90));
+            record.Transactions.Add(CreateValidEntities.Transaction(91));
+            record.Transactions.Add(CreateValidEntities.Transaction(92));
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(record);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, record.Transactions.Count());
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            #endregion Assert
+        }
+        #endregion Valid Tests
+        #region Cascade Tests
+
+        [TestMethod]
+        public void TestTransactionsWithNewValuesDoesNotCascadeInsertTransactions()
+        {
+            #region Arrange
+            Repository.OfType<Transaction>().DbContext.BeginTransaction();
+            LoadUnits(3);
+            LoadItemTypes(3);
+            LoadItems(3);
+            LoadTransactions(2);
+            Repository.OfType<Transaction>().DbContext.CommitTransaction();
+
+            var transaction = Repository.OfType<Transaction>().Queryable.First();
+            var transactionCount = Repository.OfType<Transaction>().Queryable.Count();
+            Assert.AreEqual(2, transactionCount);
+
+            Coupon record = GetValid(9);
+            record.Transactions = new List<Transaction>();
+            record.Transactions.Add(CreateValidEntities.Transaction(90));
+            record.Transactions.Add(transaction);
+            record.Transactions.Add(CreateValidEntities.Transaction(92));
+            #endregion Arrange
+
+            #region Act
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(record);
+            CouponRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, record.Transactions.Count());
+            Assert.IsFalse(record.IsTransient());
+            Assert.IsTrue(record.IsValid());
+            var saveCouponId = record.Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(record);
+            NHibernateSessionManager.Instance.GetSession().Evict(transaction);
+
+            #endregion Assert
+
+            #region Cascade Checks
+            Assert.AreEqual(transactionCount, Repository.OfType<Transaction>().Queryable.Count());
+            record = Repository.OfType<Coupon>().GetNullableById(saveCouponId);
+            Assert.IsNotNull(record);
+            Assert.AreEqual(0, record.Transactions.Count);            
+
+            #endregion Cascade Checks
+
+        }
+
+
+        [TestMethod]
+        public void TestTransactionsWithExistingValuesAreRead()
+        {
+            #region Arrange
+            Repository.OfType<Transaction>().DbContext.BeginTransaction();
+            LoadUnits(3);
+            LoadItemTypes(3);
+            LoadItems(3);
+            LoadTransactions(4);
+            Repository.OfType<Transaction>().DbContext.CommitTransaction();
+            var coupon = GetValid(9);
+            CouponRepository.DbContext.BeginTransaction();
+            CouponRepository.EnsurePersistent(coupon);
+            CouponRepository.DbContext.CommitTransaction();
+
+            var transaction1 = Repository.OfType<Transaction>().Queryable.Where(a => a.Id == 1).Single();
+            var transaction2 = Repository.OfType<Transaction>().Queryable.Where(a => a.Id == 3).Single();
+
+            transaction1.Coupon = coupon;
+            transaction2.Coupon = coupon;
+
+            Repository.OfType<Transaction>().DbContext.BeginTransaction();
+            Repository.OfType<Transaction>().EnsurePersistent(transaction1);
+            Repository.OfType<Transaction>().EnsurePersistent(transaction2);
+            Repository.OfType<Transaction>().DbContext.CommitTransaction();
+
+            var saveCouponId = coupon.Id;
+            NHibernateSessionManager.Instance.GetSession().Evict(transaction1);
+            NHibernateSessionManager.Instance.GetSession().Evict(transaction2);
+            NHibernateSessionManager.Instance.GetSession().Evict(coupon);
+
+            #endregion Arrange
+
+            #region Act
+            coupon = CouponRepository.GetNullableById(saveCouponId);
+            #endregion Act
+
+            #region Assert
+            Assert.IsNotNull(coupon);
+            Assert.AreEqual(2, coupon.Transactions.Count);
+            #endregion Assert		
+        }
+
+        #endregion Cascade Tests
+        #endregion Transactions Tests
+
+        #region CalculateUsage Tests
+
+
+        [TestMethod]
+        public void TestCalculateUsageReturnsExpectedValues1()
+        {
+            #region Arrange
+            var transaction1 = CreateValidEntities.Transaction(1);
+            var transaction2 = CreateValidEntities.Transaction(1);
+            var transaction3 = CreateValidEntities.Transaction(1);
+
+            transaction1.Quantity = 1;
+            transaction2.Quantity = 3;
+            transaction3.Quantity = 5;
+
+            var coupon = CreateValidEntities.Coupon(1);
+            coupon.Transactions.Add(transaction1);
+            coupon.Transactions.Add(transaction2);
+            coupon.Transactions.Add(transaction3);
+
+            coupon.MaxQuantity = null;
+
+            #endregion Arrange
+
+            #region Act
+            var max = coupon.CalculateUsage();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(9, max);
+            #endregion Assert		
+        }
+
+        [TestMethod]
+        public void TestCalculateUsageReturnsExpectedValues2()
+        {
+            #region Arrange
+            var transaction1 = CreateValidEntities.Transaction(1);
+            var transaction2 = CreateValidEntities.Transaction(1);
+            var transaction3 = CreateValidEntities.Transaction(1);
+
+            transaction1.Quantity = 1;
+            transaction2.Quantity = 3;
+            transaction3.Quantity = 5;
+
+            var coupon = CreateValidEntities.Coupon(1);
+            coupon.Transactions.Add(transaction1);
+            coupon.Transactions.Add(transaction2);
+            coupon.Transactions.Add(transaction3);
+
+            coupon.MaxQuantity = 5;
+
+            #endregion Arrange
+
+            #region Act
+            var max = coupon.CalculateUsage();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(9, max);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCalculateUsageReturnsExpectedValues3()
+        {
+            #region Arrange
+            var transaction1 = CreateValidEntities.Transaction(1);
+            var transaction2 = CreateValidEntities.Transaction(1);
+            var transaction3 = CreateValidEntities.Transaction(1);
+
+            transaction1.Quantity = 1;
+            transaction2.Quantity = 3;
+            transaction3.Quantity = 5;
+
+            var coupon = CreateValidEntities.Coupon(1);
+            coupon.Transactions.Add(transaction1);
+            coupon.Transactions.Add(transaction2);
+            coupon.Transactions.Add(transaction3);
+
+            coupon.MaxQuantity = 4;
+
+            #endregion Arrange
+
+            #region Act
+            var max = coupon.CalculateUsage();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(8, max);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCalculateUsageReturnsExpectedValues4()
+        {
+            #region Arrange
+            var transaction1 = CreateValidEntities.Transaction(1);
+            var transaction2 = CreateValidEntities.Transaction(1);
+            var transaction3 = CreateValidEntities.Transaction(1);
+
+            transaction1.Quantity = 1;
+            transaction2.Quantity = 3;
+            transaction3.Quantity = 5;
+
+            var coupon = CreateValidEntities.Coupon(1);
+            coupon.Transactions.Add(transaction1);
+            coupon.Transactions.Add(transaction2);
+            coupon.Transactions.Add(transaction3);
+
+            coupon.MaxQuantity = 3;
+
+            #endregion Arrange
+
+            #region Act
+            var max = coupon.CalculateUsage();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(7, max);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCalculateUsageReturnsExpectedValues5()
+        {
+            #region Arrange
+            var transaction1 = CreateValidEntities.Transaction(1);
+            var transaction2 = CreateValidEntities.Transaction(1);
+            var transaction3 = CreateValidEntities.Transaction(1);
+
+            transaction1.Quantity = 1;
+            transaction2.Quantity = 3;
+            transaction3.Quantity = 5;
+
+            var coupon = CreateValidEntities.Coupon(1);
+            coupon.Transactions.Add(transaction1);
+            coupon.Transactions.Add(transaction2);
+            coupon.Transactions.Add(transaction3);
+
+            coupon.MaxQuantity = 2;
+
+            #endregion Arrange
+
+            #region Act
+            var max = coupon.CalculateUsage();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(5, max);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestCalculateUsageReturnsExpectedValues6()
+        {
+            #region Arrange
+            var transaction1 = CreateValidEntities.Transaction(1);
+            var transaction2 = CreateValidEntities.Transaction(1);
+            var transaction3 = CreateValidEntities.Transaction(1);
+
+            transaction1.Quantity = 1;
+            transaction2.Quantity = 3;
+            transaction3.Quantity = 5;
+
+            var coupon = CreateValidEntities.Coupon(1);
+            coupon.Transactions.Add(transaction1);
+            coupon.Transactions.Add(transaction2);
+            coupon.Transactions.Add(transaction3);
+
+            coupon.MaxQuantity = 1;
+
+            #endregion Arrange
+
+            #region Act
+            var max = coupon.CalculateUsage();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, max);
+            #endregion Assert
+        }
+
+        #endregion CalculateUsage Tests
+
+        #region UnlimitedAndMaxUage Tests
+        /// <summary>
+        /// Tests the MaxUsage with A value of 5 does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestMaxUsageWithAValueOf5ValueDoesNotSave()
+        {
+            Coupon coupon = null;
+            try
+            {
+                #region Arrange
+                coupon = GetValid(9);
+                coupon.MaxUsage = 5;
+                coupon.Unlimited = true;
+                #endregion Arrange
+
+                #region Act
+                CouponRepository.DbContext.BeginTransaction();
+                CouponRepository.EnsurePersistent(coupon);
+                CouponRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(coupon);
+                Assert.AreEqual(coupon.MaxUsage, 5);
+                var results = coupon.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("UnlimitedAndMaxUsage: Cannot have unlimited and a max usage defined, one or the other.");
+                Assert.IsTrue(coupon.IsTransient());
+                Assert.IsFalse(coupon.IsValid());
+                throw;
+            }	
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestMaxUsageWithAValueOf0ValueDoesNotSave()
+        {
+            Coupon coupon = null;
+            try
+            {
+                #region Arrange
+                coupon = GetValid(9);
+                coupon.MaxUsage = 0;
+                coupon.Unlimited = true;
+                #endregion Arrange
+
+                #region Act
+                CouponRepository.DbContext.BeginTransaction();
+                CouponRepository.EnsurePersistent(coupon);
+                CouponRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(coupon);
+                Assert.AreEqual(coupon.MaxUsage, 0);
+                var results = coupon.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("UnlimitedAndMaxUsage: Cannot have unlimited and a max usage defined, one or the other.");
+                Assert.IsTrue(coupon.IsTransient());
+                Assert.IsFalse(coupon.IsValid());
+                throw;
+            }
+        }
+
+        #endregion UnlimitedAndMaxUage Tests
+
         #region Reflection of Database.
 
         /// <summary>
@@ -1643,10 +2187,22 @@ namespace CRP.Tests.Repositories
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
             expectedFields.Add(new NameAndType("MaxQuantity", "System.Nullable`1[System.Int32]", new List<string>()));
+            expectedFields.Add(new NameAndType("MaxUsage", "System.Nullable`1[System.Int32]", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.MinAttribute((Int64)0)]"
+            }));
+            expectedFields.Add(new NameAndType("Transactions", "System.Collections.Generic.IList`1[CRP.Core.Domain.Transaction]", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.NotNullAttribute()]"
+            }));
             expectedFields.Add(new NameAndType("Unlimited", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("UnlimitedAndEmail", "System.Boolean", new List<string>
             {
                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"When not unlimited a coupon requires an email\")]"
+            }));
+            expectedFields.Add(new NameAndType("UnlimitedAndMaxUsage", "System.Boolean", new List<string>
+            {
+                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Cannot have unlimited and a max usage defined, one or the other.\")]"
             }));
             expectedFields.Add(new NameAndType("Used", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("UserId", "System.String", new List<string>

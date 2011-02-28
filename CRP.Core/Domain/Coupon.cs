@@ -31,6 +31,7 @@ namespace CRP.Core.Domain
             IsActive = true;
             DiscountAmountCostPerItem = false;
             UnlimitedAndEmail = false;
+            Transactions = new List<Transaction>();
         }
         #endregion
 
@@ -79,11 +80,13 @@ namespace CRP.Core.Domain
         /// <summary>
         /// The maximum number of times it can be used
         /// </summary>
+        [Min(0)]
         public virtual int? MaxUsage { get; set; }
 
         /// <summary>
         /// Transactions that have used the coupons
         /// </summary>
+        [NotNull]
         public virtual IList<Transaction> Transactions { get; set; }
         #endregion
 
@@ -202,10 +205,10 @@ namespace CRP.Core.Domain
                 DiscountAmountCostPerItem = false;
             }
 
-            UnlimitedAndMaxUage = true;
+            UnlimitedAndMaxUsage = true;
             if (Unlimited && MaxUsage != null)
             {
-                UnlimitedAndMaxUage = false;
+                UnlimitedAndMaxUsage = false;
             }
         }
 
@@ -234,7 +237,7 @@ namespace CRP.Core.Domain
         private bool DiscountAmountCostPerItem { get; set; }
 
         [AssertTrue(Message="Cannot have unlimited and a max usage defined, one or the other.")]
-        private bool UnlimitedAndMaxUage { get; set; }
+        private bool UnlimitedAndMaxUsage { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }
