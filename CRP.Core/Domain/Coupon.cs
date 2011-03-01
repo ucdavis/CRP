@@ -227,6 +227,31 @@ namespace CRP.Core.Domain
             // have been allowed.
             return Transactions.Sum(a => maxq > a.Quantity ? a.Quantity : maxq);
         }
+
+        /// <summary>
+        /// Calculates the most that this coupon can apply to.
+        /// </summary>
+        /// <remarks>
+        /// Takes the lowest of max quantity or the max overall usage.
+        /// </remarks>
+        /// <returns></returns>
+        public virtual int MaxAvailableForUsage()
+        {
+            if (MaxQuantity.HasValue && MaxUsage.HasValue)
+            {
+                return MaxQuantity.Value > MaxUsage.Value - CalculateUsage() ? MaxUsage.Value - CalculateUsage() : MaxQuantity.Value;
+            }
+            if (MaxUsage.HasValue && !MaxQuantity.HasValue)
+            {
+                return MaxUsage.Value - CalculateUsage();
+            }
+            if (!MaxUsage.HasValue && MaxQuantity.HasValue)
+            {
+                return MaxQuantity.Value;
+            }
+
+            return -1;
+        }
         #endregion
 
         #region Fields ONLY used for complex validation, not in database

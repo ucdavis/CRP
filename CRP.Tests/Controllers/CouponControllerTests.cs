@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Services;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
@@ -31,19 +32,20 @@ namespace CRP.Tests.Controllers
         protected IRepository<Coupon> CouponRepository { get; set; }
         protected List<Coupon> Coupons { get; set; }
         private readonly Type _controllerClass = typeof(CouponController);
+        protected ICouponService CouponService { get; set; }
 
         #region Init
 
         public CouponControllerTests()
         {
             Controller.ControllerContext.HttpContext.User = Principal;
-
-            Items = new List<Item>();
-            ItemRepository = FakeRepository<Item>();
+            //ItemRepository = FakeRepository<Item>();
             Controller.Repository.Expect(a => a.OfType<Item>()).Return(ItemRepository).Repeat.Any();
 
             Coupons = new List<Coupon>();
-            CouponRepository = FakeRepository<Coupon>();
+            //CouponRepository = FakeRepository<Coupon>();
+            Items = new List<Item>();
+
             Controller.Repository.Expect(a => a.OfType<Coupon>()).Return(CouponRepository).Repeat.Any();
         }
         /// <summary>
@@ -59,7 +61,11 @@ namespace CRP.Tests.Controllers
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<CouponController>();
+            ItemRepository = FakeRepository<Item>();
+            CouponRepository = FakeRepository<Coupon>();
+
+            CouponService = new CouponService(ItemRepository, CouponRepository);
+            Controller = new TestControllerBuilder().CreateController<CouponController>(CouponService);
         }
 
         #endregion Init

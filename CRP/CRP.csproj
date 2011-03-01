@@ -219,6 +219,7 @@
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\Services\IAccessControlService.cs" />
+    <Compile Include="Controllers\Services\ICouponService.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />

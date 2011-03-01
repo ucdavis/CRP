@@ -2,6 +2,7 @@ using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
+using CRP.Controllers.Services;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
@@ -15,6 +16,13 @@ namespace CRP.Controllers
 {
     public class CouponController : SuperController
     {
+        private readonly ICouponService _couponService;
+
+        public CouponController(ICouponService couponService)
+        {
+            _couponService = couponService;
+        }
+
         //
         // GET: /Coupon/
 
@@ -71,18 +79,12 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
-            coupon.Code = CouponGenerator.GenerateCouponCode();
-            coupon.UserId = CurrentUser.Identity.Name;
-            coupon.Item = item;
-
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, coupon.ValidationResults());
-
+            // validate and create the coupon
+            _couponService.Create(item, coupon, CurrentUser.Identity.Name, ModelState);
 
             if (ModelState.IsValid)
             {
-                Repository.OfType<Coupon>().EnsurePersistent(coupon);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Coupon");
-                //return Redirect(ReturnUrlGenerator.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
                 return Redirect(Url.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
             }
 
@@ -114,31 +116,16 @@ namespace CRP.Controllers
                 return new JsonNetResult(new { discountAmount = 0, maxQuantity = 0, message = "Invalid code." });
             }
 
-            var discountAmount = coupon.ValidateCoupon(null, 1, true);
+            decimal discountAmt = 0m;
+            int maxQty = 0;
+            string msg = string.Empty;
 
-            //Done: This needs to work with Coupons that are unlimited.
-            if (!discountAmount.HasValue) //Suggestion to fix failing test            
-            {
-                return new JsonNetResult(new { discountAmount = 0, maxQuantity = 0, message = "Coupon has already been redeemed." });
-            }
+            // validate the coupon, if true, then give the information so it can be displayed
+            if (_couponService.Validate(item, coupon, ref discountAmt, ref maxQty, ref msg))
+                return new JsonNetResult(new {discountAmount = discountAmt, maxQuantity = maxQty, totalDiscount = discountAmt});
 
-            // determine the max quantity
-            var maxAllowed = -1;
-            if (coupon.MaxQuantity.HasValue && coupon.MaxUsage.HasValue)
-            {
-                // set maxQuantity to the lowest value between the two
-                maxAllowed = coupon.MaxQuantity.Value > coupon.MaxUsage.Value - coupon.CalculateUsage() ? coupon.MaxUsage.Value - coupon.CalculateUsage() : coupon.MaxQuantity.Value;
-            }
-            else if (coupon.MaxUsage.HasValue && !coupon.MaxQuantity.HasValue)
-            {
-                maxAllowed = coupon.MaxUsage.Value - coupon.CalculateUsage();
-            }
-            else if (!coupon.MaxUsage.HasValue && coupon.MaxQuantity.HasValue)
-            {
-                maxAllowed = coupon.MaxQuantity.Value;
-            }
-
-            return new JsonNetResult(new {discountAmount = coupon.DiscountAmount, maxQuantity = maxAllowed, totalDiscount = discountAmount});
+            // there was a problem, return the values with the message
+            return new JsonNetResult(new {discountAmount = discountAmt, maxQuantity = maxQty, message = msg });
         }
 
         /// <summary>
@@ -166,20 +153,10 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
-            //Done: This needs to work with Coupons that are unlimited.
-            if (!coupon.IsActive || (coupon.Used && !coupon.Unlimited)) 
-            {
-                //return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
-                return Redirect(Url.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
-            }
-
-            coupon.IsActive = false;
-
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, coupon.ValidationResults());
+            _couponService.Deactivate(coupon, ModelState);
 
             if (ModelState.IsValid)
             {
-                Repository.OfType<Coupon>().EnsurePersistent(coupon);
                 Message = NotificationMessages.STR_Deactivated.Replace(NotificationMessages.ObjectType, "Coupon");
             }
             else
@@ -188,7 +165,6 @@ namespace CRP.Controllers
             }
 
             // redirect to edit with the anchor to coupon
-            //return Redirect(ReturnUrlGenerator.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
             return Redirect(Url.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
         }
     }
