@@ -186,6 +186,7 @@
   <ItemGroup>
     <Compile Include="ComponentRegistrar.asax.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApplicationKeyController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
@@ -560,6 +561,10 @@
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Services\ItemService.svc" />
     <Content Include="Views\Account\LogOn.aspx" />
+    <Content Include="Views\ApplicationKey\ApplicationKeyForm.ascx" />
+    <Content Include="Views\ApplicationKey\Create.aspx" />
+    <Content Include="Views\ApplicationKey\Edit.aspx" />
+    <Content Include="Views\ApplicationKey\Index.aspx" />
     <Content Include="Views\DisplayProfile\Create.aspx" />
     <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
     <Content Include="Views\DisplayProfile\Edit.aspx" />
@@ -720,6 +725,15 @@
     <None Include="Images\fonts\Quicksand_Light.ttf" />
     <None Include="Images\fonts\Quicksand_Light_Oblique.eot" />
     <None Include="Images\fonts\Quicksand_Light_Oblique.ttf" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Test.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

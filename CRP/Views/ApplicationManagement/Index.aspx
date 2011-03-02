@@ -23,6 +23,7 @@
         <li><%= Html.ActionLink<DisplayProfileController>(a => a.List(), "Display Profiles") %></li>
         <li><%= Html.ActionLink<TemplateController>(a => a.Edit(), "Edit System Confirmation Template") %></li>
         <li><%=Html.ActionLink<FIDController>(a => a.Index(), "FID management") %></li>
+        <li><%=Html.ActionLink<ApplicationKeyController>(a => a.Index(), "Application Key management") %></li>
     </ul>
 </div>
 
