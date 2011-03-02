@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="ApplicationKey"
+    table="ApplicationKeys" >
+    <id name="Id" column="id">
+      <generator class="identity" />
+    </id>
+
+    <property name="Application" column="Application" />
+    <property name="Key" column="[Key]" />
+    <property name="IsActive" column="IsActive" />
+
+  </class>
+</hibernate-mapping>

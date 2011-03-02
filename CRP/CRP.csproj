@@ -153,6 +153,7 @@
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DataVisualization" />
@@ -256,6 +257,7 @@
     <Compile Include="RouteConfigurator.asax.cs" />
     <Compile Include="Services\Wcf\IItemService.cs" />
     <Compile Include="Services\Wcf\ItemService.cs" />
+    <Compile Include="Services\Wcf\ServiceAuthorizationValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\2009.3.1103.0\Black\loading.gif" />

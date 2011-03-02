@@ -115,6 +115,11 @@ namespace CRP.Services.Wcf
             public static readonly IRepository<Transaction> Instance = ServiceLocator.Current.GetInstance<IRepository<Transaction>>();
         }
 
+        private static class ApplicationKeySingletonHolder
+        {
+            public static readonly IRepository<ApplicationKey> Instance = ServiceLocator.Current.GetInstance<IRepository<ApplicationKey>>();
+        }
+
         public static IRepository<Coupon> CouponRepository
         {
             get { return CouponSingletonHolder.Instance; }
@@ -133,6 +138,11 @@ namespace CRP.Services.Wcf
         public static IRepository<Transaction> TransactionRepository
         {
             get { return TransactionSingletonHolder.Instance; }
+        }
+
+        public static IRepository<ApplicationKey> ApplicationKeyRepository
+        {
+            get { return ApplicationKeySingletonHolder.Instance; }
         }
     }
 }
