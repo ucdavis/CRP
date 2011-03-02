@@ -13,8 +13,8 @@ namespace CRP.Controllers.Services
 {
     public interface ICouponService
     {
-        bool Create(Item item, string email, bool unlimited, DateTime? expiration, decimal discountAmount, string userId, int? maxUsage, int? maxQuantity, ModelStateDictionary modelState = null);
-        bool Create(Item item, Coupon coupon, string userId, ModelStateDictionary modelState = null);
+        string Create(Item item, string email, bool unlimited, DateTime? expiration, decimal discountAmount, string userId, int? maxUsage, int? maxQuantity, ModelStateDictionary modelState = null);
+        string Create(Item item, Coupon coupon, string userId, ModelStateDictionary modelState = null);
         bool Deactivate(Coupon coupon, ModelStateDictionary modelState = null);
         bool Validate(Item item, Coupon coupon, ref decimal discountAmount, ref int maxQuantity, ref string message);
     }
@@ -30,7 +30,7 @@ namespace CRP.Controllers.Services
             _couponRepository = couponRepository;
         }
 
-        public bool Create(Item item, Coupon coupon, string userId, ModelStateDictionary modelState = null)
+        public string Create(Item item, Coupon coupon, string userId, ModelStateDictionary modelState = null)
         {
             Check.Require(item != null, "item is required.");
             Check.Require(coupon != null, "coupon is required.");
@@ -51,11 +51,11 @@ namespace CRP.Controllers.Services
                 _couponRepository.EnsurePersistent(coupon);
             }
 
-            // return the validity of the object, if it's valid it should have saved
-            return modelState.IsValid;            
+            // return the coupon code if it's valid, otherwise return an empty string
+            return modelState.IsValid ? coupon.Code : string.Empty;
         }
 
-        public bool Create(Item item, string email, bool unlimited, DateTime? expiration, decimal discountAmount, string userId, int? maxUsage, int? maxQuantity, ModelStateDictionary modelState = null)
+        public string Create(Item item, string email, bool unlimited, DateTime? expiration, decimal discountAmount, string userId, int? maxUsage, int? maxQuantity, ModelStateDictionary modelState = null)
         {
             Check.Require(item != null, "item is required.");
             Check.Require(modelState != null, "modelState is required.");
