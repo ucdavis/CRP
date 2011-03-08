@@ -123,12 +123,9 @@
     <% } %>
 
     <!-- Should a header color have been specified, then throw it in -->
-    <% if (!string.IsNullOrEmpty(Model.DisplayProfile.HeaderColor)) { %>
+    <% if (!string.IsNullOrEmpty(Model.DisplayProfile.CustomCss)) { %>
         <style type="text/css">
-        #brand_bar, #footer
-        {
-            background-color: <%= Model.DisplayProfile.HeaderColor %>;
-        }
+            <%= Model.DisplayProfile.CustomCss %>
         </style>
     <% } %>
 </asp:Content>

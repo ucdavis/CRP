@@ -116,7 +116,7 @@ namespace CRP.Controllers.Helpers
         public static DisplayProfile CopyDisplayProfile(DisplayProfile src, DisplayProfile dest)
         {
             dest.Name = src.Name;
-            dest.HeaderColor = src.HeaderColor;
+            dest.CustomCss = src.CustomCss;
 
             return dest;
         }

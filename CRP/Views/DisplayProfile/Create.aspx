@@ -46,8 +46,8 @@
                 <input type="file" name="file" id="file" />
             </p>
             <p>
-                <label for="HeaderColor">Header Color:</label>
-                <%= Html.TextBox("HeaderColor") %>
+                <label for="CustomCss">Custom Css:</label>
+                <%= Html.TextArea("CustomCss", Model.DisplayProfile != null ? Model.DisplayProfile.CustomCss : string.Empty) %>
             </p>
             <p>
                 <input type="submit" value="Create" />
@@ -63,5 +63,10 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+
+    <style type="text/css">
+        textarea { width: 600px; height: 10em; }
+    </style>
+
 </asp:Content>
 

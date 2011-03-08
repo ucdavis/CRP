@@ -524,22 +524,22 @@ namespace CRP.Tests.Repositories
         }
         #endregion SchoolMaster Tests
 
-        #region HeaderColor Tests
+        #region CustomCss Tests
         #region Invalid Tests
 
         /// <summary>
-        /// Tests the HeaderColor with too long value does not save.
+        /// Tests the CustomCss with too long value does not save.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ApplicationException))]
-        public void TestHeaderColorWithTooLongValueDoesNotSave()
+        public void TestCustomCssWithTooLongValueDoesNotSave()
         {
             DisplayProfile displayProfile = null;
             try
             {
                 #region Arrange
                 displayProfile = GetValid(9);
-                displayProfile.HeaderColor = "x".RepeatTimes((50 + 1));
+                displayProfile.CustomCss = "x".RepeatTimes((50 + 1));
                 #endregion Arrange
 
                 #region Act
@@ -551,9 +551,9 @@ namespace CRP.Tests.Repositories
             catch (Exception)
             {
                 Assert.IsNotNull(displayProfile);
-                Assert.AreEqual(50 + 1, displayProfile.HeaderColor.Length);
+                Assert.AreEqual(50 + 1, displayProfile.CustomCss.Length);
                 var results = displayProfile.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("HeaderColor: length must be between 0 and 50");
+                results.AssertErrorsAre("CustomCss: length must be between 0 and 50");
                 Assert.IsTrue(displayProfile.IsTransient());
                 Assert.IsFalse(displayProfile.IsValid());
                 throw;
@@ -564,14 +564,14 @@ namespace CRP.Tests.Repositories
         #region Valid Tests
 
         /// <summary>
-        /// Tests the HeaderColor with null value saves.
+        /// Tests the CustomCss with null value saves.
         /// </summary>
         [TestMethod]
-        public void TestHeaderColorWithNullValueSaves()
+        public void TestCustomCssWithNullValueSaves()
         {
             #region Arrange
             var displayProfile = GetValid(9);
-            displayProfile.HeaderColor = null;
+            displayProfile.CustomCss = null;
             #endregion Arrange
 
             #region Act
@@ -587,14 +587,14 @@ namespace CRP.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests the HeaderColor with empty string saves.
+        /// Tests the CustomCss with empty string saves.
         /// </summary>
         [TestMethod]
-        public void TestHeaderColorWithEmptyStringSaves()
+        public void TestCustomCssWithEmptyStringSaves()
         {
             #region Arrange
             var displayProfile = GetValid(9);
-            displayProfile.HeaderColor = string.Empty;
+            displayProfile.CustomCss = string.Empty;
             #endregion Arrange
 
             #region Act
@@ -610,14 +610,14 @@ namespace CRP.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests the HeaderColor with one space saves.
+        /// Tests the CustomCss with one space saves.
         /// </summary>
         [TestMethod]
-        public void TestHeaderColorWithOneSpaceSaves()
+        public void TestCustomCssWithOneSpaceSaves()
         {
             #region Arrange
             var displayProfile = GetValid(9);
-            displayProfile.HeaderColor = " ";
+            displayProfile.CustomCss = " ";
             #endregion Arrange
 
             #region Act
@@ -633,14 +633,14 @@ namespace CRP.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests the HeaderColor with one character saves.
+        /// Tests the CustomCss with one character saves.
         /// </summary>
         [TestMethod]
-        public void TestHeaderColorWithOneCharacterSaves()
+        public void TestCustomCssWithOneCharacterSaves()
         {
             #region Arrange
             var displayProfile = GetValid(9);
-            displayProfile.HeaderColor = "x";
+            displayProfile.CustomCss = "x";
             #endregion Arrange
 
             #region Act
@@ -656,14 +656,14 @@ namespace CRP.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests the HeaderColor with long value saves.
+        /// Tests the CustomCss with long value saves.
         /// </summary>
         [TestMethod]
-        public void TestHeaderColorWithLongValueSaves()
+        public void TestCustomCssWithLongValueSaves()
         {
             #region Arrange
             var displayProfile = GetValid(9);
-            displayProfile.HeaderColor = "x".RepeatTimes(50);
+            displayProfile.CustomCss = "x".RepeatTimes(50);
             #endregion Arrange
 
             #region Act
@@ -673,14 +673,14 @@ namespace CRP.Tests.Repositories
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(50, displayProfile.HeaderColor.Length);
+            Assert.AreEqual(50, displayProfile.CustomCss.Length);
             Assert.IsFalse(displayProfile.IsTransient());
             Assert.IsTrue(displayProfile.IsValid());
             #endregion Assert
         }
 
         #endregion Valid Tests
-        #endregion HeaderColor Tests
+        #endregion CustomCss Tests
 
 
 
@@ -811,7 +811,7 @@ namespace CRP.Tests.Repositories
             {
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"A Department or School must be specified.\")]"
             }));
-            expectedFields.Add(new NameAndType("HeaderColor", "System.String", new List<string>
+            expectedFields.Add(new NameAndType("CustomCss", "System.String", new List<string>
             {
                  "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
             }));
