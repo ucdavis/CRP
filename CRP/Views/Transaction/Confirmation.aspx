@@ -13,8 +13,6 @@
             $("form#PaymentForm").submit();
 
         });
-        
-        
     </script>
 
         <!-- Should a header color have been specified, then throw it in -->
