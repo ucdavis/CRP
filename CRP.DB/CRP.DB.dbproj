@@ -149,6 +149,9 @@
     <NotInBuild Include="Change Scripts\WipeDB.sql" />
     <NotInBuild Include="Create Scripts\CreateDB.sql" />
     <NotInBuild Include="Create Scripts\InsertLookups.sql" />
+    <NotInBuild Include="Schema Comparisons\SchemaComparison1.scmp">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
   </ItemGroup>
   <ItemGroup>
     <BuildContributorArgument Include="OutDir=$(OutDir)" />
