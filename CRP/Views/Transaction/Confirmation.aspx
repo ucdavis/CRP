@@ -16,6 +16,14 @@
         
         
     </script>
+
+        <!-- Should a header color have been specified, then throw it in -->
+    <% if (!string.IsNullOrEmpty(Model.DisplayProfile.CustomCss)) { %>
+        <style type="text/css">
+            <%= Model.DisplayProfile.CustomCss %>
+        </style>
+    <% } %>
+
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
