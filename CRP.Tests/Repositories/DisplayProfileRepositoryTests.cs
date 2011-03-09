@@ -525,41 +525,6 @@ namespace CRP.Tests.Repositories
         #endregion SchoolMaster Tests
 
         #region CustomCss Tests
-        #region Invalid Tests
-
-        /// <summary>
-        /// Tests the CustomCss with too long value does not save.
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void TestCustomCssWithTooLongValueDoesNotSave()
-        {
-            DisplayProfile displayProfile = null;
-            try
-            {
-                #region Arrange
-                displayProfile = GetValid(9);
-                displayProfile.CustomCss = "x".RepeatTimes((50 + 1));
-                #endregion Arrange
-
-                #region Act
-                DisplayProfileRepository.DbContext.BeginTransaction();
-                DisplayProfileRepository.EnsurePersistent(displayProfile);
-                DisplayProfileRepository.DbContext.CommitTransaction();
-                #endregion Act
-            }
-            catch (Exception)
-            {
-                Assert.IsNotNull(displayProfile);
-                Assert.AreEqual(50 + 1, displayProfile.CustomCss.Length);
-                var results = displayProfile.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("CustomCss: length must be between 0 and 50");
-                Assert.IsTrue(displayProfile.IsTransient());
-                Assert.IsFalse(displayProfile.IsValid());
-                throw;
-            }
-        }
-        #endregion Invalid Tests
 
         #region Valid Tests
 
@@ -663,7 +628,7 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
             var displayProfile = GetValid(9);
-            displayProfile.CustomCss = "x".RepeatTimes(50);
+            displayProfile.CustomCss = "x".RepeatTimes(500);
             #endregion Arrange
 
             #region Act
@@ -673,7 +638,7 @@ namespace CRP.Tests.Repositories
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(50, displayProfile.CustomCss.Length);
+            Assert.AreEqual(500, displayProfile.CustomCss.Length);
             Assert.IsFalse(displayProfile.IsTransient());
             Assert.IsTrue(displayProfile.IsValid());
             #endregion Assert
@@ -802,7 +767,8 @@ namespace CRP.Tests.Repositories
         {
             #region Arrange
 
-            var expectedFields = new List<NameAndType>();            
+            var expectedFields = new List<NameAndType>();
+            expectedFields.Add(new NameAndType("CustomCss", "System.String", new List<string>()));
             expectedFields.Add(new NameAndType("DepartmentAndSchool", "System.Boolean", new List<string>
             {
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Department and School cannot be selected together.\")]"
@@ -811,10 +777,7 @@ namespace CRP.Tests.Repositories
             {
                  "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"A Department or School must be specified.\")]"
             }));
-            expectedFields.Add(new NameAndType("CustomCss", "System.String", new List<string>
-            {
-                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
-            }));
+            
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 
