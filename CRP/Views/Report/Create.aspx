@@ -156,13 +156,22 @@
                     
                     <% foreach (var q in qs.QuestionSet.Questions.Where(a => a.QuestionType != Model.QuestionTypeNoAnswer)) {%>
                         <span id='<%= q.Id %>'>
-                        <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                        <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                         <label for="Selected" class="indexedControl"><%= Html.Encode(q.Name + " (" + q.QuestionSet.Name + ")")%></label>
                         <%= Html.Hidden("_Transaction", true, new { @class = StaticValues.Class_indexedControl })%>
                         <%= Html.Hidden("_QuestionId", q.Id, new { @class = StaticValues.Class_indexedControl })%>
-                        <%= Html.Hidden("_QuestionSetId", q.QuestionSet.Id, new {@class = StaticValues.Class_indexedControl}) %>
+                        <%= Html.Hidden("_QuestionSetId", q.QuestionSet.Id, new {@class = StaticValues.Class_indexedControl}) %>--%>
+
+
+                        <input type="checkbox" id="_Selected" name=".Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                        <label for="Selected" class="indexedControl"><%: string.Format("{0} ({1})", q.Name, q.QuestionSet.Name) %></label>
+                        <input type="hidden" id="_Transaction" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                        <input type="hidden" id="_QuestionId" class="<%: StaticValues.Class_indexedControl %>" value="<%: q.Id %>" />
+                        <input type="hidden" id="_QuestionSetId" class="<%: StaticValues.Class_indexedControl %>" value="<%: q.QuestionSet.Id%>" />
+
                         </span>
-                    <% } %>
+                    <%
+} %>
                     
             <% } %>
             
@@ -173,11 +182,18 @@
             <% foreach(var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order)) {%>                    
                     <% foreach (var q in qs.QuestionSet.Questions.Where(a => a.QuestionType != Model.QuestionTypeNoAnswer)) {%>
                         <span id='<%= q.Id %>'>
-                        <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+<%--                        <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                         <label for="Selected" class="indexedControl"><%= Html.Encode(q.Name + " (" + q.QuestionSet.Name + ")")%></label>
                         <%= Html.Hidden("_Quantity", true, new { @class = StaticValues.Class_indexedControl })%>
                         <%= Html.Hidden("_QuestionId", q.Id, new { @class = StaticValues.Class_indexedControl })%>
-                        <%= Html.Hidden("_QuestionSetId", q.QuestionSet.Id, new {@class = StaticValues.Class_indexedControl}) %>
+                        <%= Html.Hidden("_QuestionSetId", q.QuestionSet.Id, new {@class = StaticValues.Class_indexedControl}) %>--%>
+
+                        <input type="checkbox" id="_Selected" name=".Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                        <label for="Selected" class="indexedControl"><%: string.Format("{0} ({1})", q.Name, q.QuestionSet.Name) %></label>
+                        <input type="hidden" id="_Quantity" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                        <input type="hidden" id="_QuestionId" class="<%: StaticValues.Class_indexedControl %>" value="<%: q.Id %>" />
+                        <input type="hidden" id="_QuestionSetId" class="<%: StaticValues.Class_indexedControl %>" value="<%: q.QuestionSet.Id%>" />
+
                         </span>
                     <% } %>                    
             <% } %>
@@ -187,108 +203,183 @@
             <legend>Properties</legend>
             
             <span id="propertyTransactionNumber" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  --%>
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Transaction Number") %></label>
-                <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_TransactionNumber, new { @class = StaticValues.Class_indexedControl })%>                
+                <%--<%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_TransactionNumber, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_TransactionNumber %>" />
+
             </span>
             
             <span id="propertyTransactionDate" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  --%>
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Transaction Date") %></label>
-                <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_TransactionDate, new { @class = StaticValues.Class_indexedControl })%>                
+                <%--<%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_TransactionDate, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_TransactionDate %>" />
             </span>
             
             <span id="propertyActive" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  --%>
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Active")%></label>
-                <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_Active, new { @class = StaticValues.Class_indexedControl })%>                
+                <%--<%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_Active, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_Active %>" />
             </span>  
             
             <span id="propertyDonationTotal" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Donation Total") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_DonationTotal, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_DonationTotal, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Donation Total") %></label>
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_DonationTotal %>" />
             </span>
             
             <span id="propertyAmountTotal" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Amount Total") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_AmountTotal, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_AmountTotal, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Amount Total") %></label>
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_AmountTotal %>" />
             </span>
             
             <span id="propertyTotal" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Total") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_Total, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_Total, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Total") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_Total %>" />
             </span>
             
             <span id="propertyPaymentType" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+<%--                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Payment Type") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_PaymentType, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_PaymentType, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="_Selected"><%= Html.Encode("Payment Type") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_PaymentType %>" />
             </span>
             
             <span id="propertyQuantity" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Quantity") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_Quantity, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_Quantity, new { @class = StaticValues.Class_indexedControl })%>  --%>              
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Quantity") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_Quantity %>" />
             </span>                                                
             
             <span id="propertyPaid" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+<%--                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Paid") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_Paid, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_Paid, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Paid") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_Paid %>" />
             </span>   
             
             <span id="propertyTotalPaid" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+<%--                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Total Paid")%></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_TotalPaid, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_TotalPaid, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Total Paid") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_TotalPaid %>" />
             </span>
             
             <span id="propertyRefundIssued" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Refund Issued")%></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_RefundIssued, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_RefundIssued, new { @class = StaticValues.Class_indexedControl })%>  --%>              
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Refund Issued") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_RefundIssued %>" />
             </span>  
             
             <span id="propertyRefundAmount" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Refund Amount") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_RefundAmount, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_RefundAmount, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Refund Amount") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_RefundAmount %>" />
             </span>
             
             <span id="propertyNotified" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+<%--                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Notified") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_Notified, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_Notified, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Notified") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_Notified %>" />
+
             </span>
             
             <span id="propertyNotifiedDate" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Notified Date") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_NotifiedDate, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_NotifiedDate, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Notified Date") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_NotifiedDate %>" />
             </span>
 
             <span id="propertyTransactionGuid" class="property">
-                <%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
+                <%--<%= Html.CheckBox("_Selected", new { @class = StaticValues.Class_indexedControl })%>  
                 <label for="Selected" class="indexedControl"><%= Html.Encode("Credit Card Id") %></label>
                 <%= Html.Hidden("_Property", true, new { @class = StaticValues.Class_indexedControl })%>
-                <%= Html.Hidden("_PropertyName", StaticValues.Report_TransactionGuid, new { @class = StaticValues.Class_indexedControl })%>                
+                <%= Html.Hidden("_PropertyName", StaticValues.Report_TransactionGuid, new { @class = StaticValues.Class_indexedControl })%>                --%>
+
+                <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Credit Card Id") %></label>
+                <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
+                <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_TransactionGuid %>" />
             </span>
             
         </fieldset>
