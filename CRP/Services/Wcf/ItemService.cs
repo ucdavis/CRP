@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using CRP.Controllers.Services;
-using CRP.Core.Domain;
 using CRP.Core.Resources;
-using Microsoft.Practices.ServiceLocation;
-using UCDArch.Core.PersistanceSupport;
 
 namespace CRP.Services.Wcf
 {
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class ItemService : IItemService
     {
         private readonly ICouponService _couponService;
@@ -35,7 +34,7 @@ namespace CRP.Services.Wcf
             return _couponService.Deactivate(coupon);
         }
 
-        public ServiceTransaction GetRegistration(string registrationId)
+        public ServiceTransaction GetRegistrationByReference(string registrationId)
         {
             // find the transaction
             var transaction = RepositoryFactory.TransactionAnswerRepository.Queryable
@@ -44,10 +43,10 @@ namespace CRP.Services.Wcf
 
             if (transaction == null) throw new ArgumentException("Transaction", string.Format("Unable to load transaction with registration id ({0})", registrationId));
 
-            return GetRegistration(transaction.Id);
+            return GetRegistrationById(transaction.Id);
         }
 
-        public ServiceTransaction GetRegistration(int transactionId)
+        public ServiceTransaction GetRegistrationById(int transactionId)
         {
             var transaction = RepositoryFactory.TransactionRepository.GetNullableById(transactionId);
 
@@ -83,66 +82,10 @@ namespace CRP.Services.Wcf
 
             foreach (var a in item.Transactions)
             {
-                serviceTransactions.Add(GetRegistration(a.Id));
+                serviceTransactions.Add(GetRegistrationById(a.Id));
             }
 
             return serviceTransactions.ToArray();
-        }
-    }
-
-    public class RepositoryFactory
-    {
-        // Private constructor prevents instantiation from other classes
-        private RepositoryFactory() { }
-
-        private static class CouponSingletonHolder
-        {
-            public static readonly IRepository<Coupon> Instance = ServiceLocator.Current.GetInstance<IRepository<Coupon>>();
-        }
-
-        private static class ItemSingletonHolder
-        {
-            public static readonly IRepository<Item> Instance = ServiceLocator.Current.GetInstance<IRepository<Item>>();
-        }
-
-        private static class TransactionAnswerSingletonHolder
-        {
-            public static readonly IRepository<TransactionAnswer> Instance = ServiceLocator.Current.GetInstance<IRepository<TransactionAnswer>>();
-        }
-
-        private static class TransactionSingletonHolder
-        {
-            public static readonly IRepository<Transaction> Instance = ServiceLocator.Current.GetInstance<IRepository<Transaction>>();
-        }
-
-        private static class ApplicationKeySingletonHolder
-        {
-            public static readonly IRepository<ApplicationKey> Instance = ServiceLocator.Current.GetInstance<IRepository<ApplicationKey>>();
-        }
-
-        public static IRepository<Coupon> CouponRepository
-        {
-            get { return CouponSingletonHolder.Instance; }
-        }
-
-        public static IRepository<Item> ItemRepository
-        {
-            get { return ItemSingletonHolder.Instance; }
-        }
-
-        public static IRepository<TransactionAnswer> TransactionAnswerRepository
-        {
-            get { return TransactionAnswerSingletonHolder.Instance; }
-        }
-
-        public static IRepository<Transaction> TransactionRepository
-        {
-            get { return TransactionSingletonHolder.Instance; }
-        }
-
-        public static IRepository<ApplicationKey> ApplicationKeyRepository
-        {
-            get { return ApplicationKeySingletonHolder.Instance; }
         }
     }
 }

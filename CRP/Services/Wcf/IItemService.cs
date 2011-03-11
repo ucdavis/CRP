@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.ServiceModel;
 
 namespace CRP.Services.Wcf
@@ -14,26 +15,32 @@ namespace CRP.Services.Wcf
         bool CancelCoupon(string couponCode);
 
         [OperationContract]
-        ServiceTransaction GetRegistration(string registrationId);
+        ServiceTransaction GetRegistrationByReference(string registrationId);
 
         [OperationContract]
-        ServiceTransaction GetRegistration(int transactionId);
+        ServiceTransaction GetRegistrationById(int transactionId);
 
         [OperationContract]
         ServiceTransaction[] GetRegistrations(int itemId);
     }
 
+    [DataContract]
     public class ServiceTransaction
     {
         // extract the fields that we can
+        [DataMember]
         public string LastName { get; set; }
+        [DataMember]
         public string FirstName { get; set; }
+        [DataMember]
         public DateTime DateRegistered { get; set; }
+        [DataMember]
         public bool Paid { get; set; }
-
+        [DataMember]
         public IEnumerable<ServiceQuestion> ServiceQuestions { get; set; }
     }
 
+    [DataContract]
     public class ServiceQuestion
     {
         public ServiceQuestion(string question, string answer, Guid? quantityIndex = null)
@@ -43,8 +50,11 @@ namespace CRP.Services.Wcf
             QuantityIndex = quantityIndex;
         }
 
+        [DataMember]
         public string Question { get; set; }
+        [DataMember]
         public string Answer { get; set; }
+        [DataMember]
         public Guid? QuantityIndex { get; set; }
     }
 }
