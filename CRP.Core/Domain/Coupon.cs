@@ -26,8 +26,6 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
-            Unlimited = false;
-            Used = false;
             IsActive = true;
             DiscountAmountCostPerItem = false;
             Transactions = new List<Transaction>();
@@ -83,18 +81,18 @@ namespace CRP.Core.Domain
         public virtual IList<Transaction> Transactions { get; set; }
 
 
-        /// <summary>
-        /// The coupon can be used for an unlimited number of transactions
-        /// 
-        /// phasing this field out
-        /// </summary>
-        public virtual bool Unlimited { get; set; }
-        /// <summary>
-        /// If the coupon has been used at least once
-        /// 
-        /// phasing this field out, switching to calculated field
-        /// </summary>
-        public virtual bool Used { get; set; }
+        ///// <summary>
+        ///// The coupon can be used for an unlimited number of transactions
+        ///// 
+        ///// phasing this field out
+        ///// </summary>
+        //public virtual bool Unlimited { get; set; }
+        ///// <summary>
+        ///// If the coupon has been used at least once
+        ///// 
+        ///// phasing this field out, switching to calculated field
+        ///// </summary>
+        //public virtual bool Used { get; set; }
         #endregion
 
         #region Methods
@@ -106,9 +104,6 @@ namespace CRP.Core.Domain
             // coupon is valid and usable
             if (discount.HasValue)
             {
-                // set the coupon as used
-                Used = true;
-
                 return discount.Value;
             }
 
@@ -154,7 +149,7 @@ namespace CRP.Core.Domain
         /// Does not take into account availablility of quantity
         /// </summary>
         /// <returns></returns>
-        private bool IsAvailabeForUsage()
+        public virtual bool IsAvailabeForUsage()
         {
             // coupon is not active
             if (!IsActive || (Expiration.HasValue && Expiration.Value < DateTime.Now))

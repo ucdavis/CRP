@@ -63,7 +63,6 @@ namespace CRP.Controllers.Services
 
             // create the coupon and set the fields
             var coupon = new Coupon();
-            coupon.Unlimited = unlimited;
             coupon.Expiration = expiration;
             coupon.Email = email;
             coupon.DiscountAmount = discountAmount;
@@ -85,7 +84,8 @@ namespace CRP.Controllers.Services
             Check.Require(coupon != null, "coupon is required.");
 
             // check if coupon is available for deactivation
-            if (!coupon.IsActive || (coupon.Used && !coupon.Unlimited)) return false;
+            //if (!coupon.IsActive || (coupon.Used && !coupon.Unlimited)) return false;
+            if (!coupon.IsAvailabeForUsage() && coupon.MaxAvailableForUsage() <= 0) return false;
 
             // deactivate the coupon
             coupon.IsActive = false;

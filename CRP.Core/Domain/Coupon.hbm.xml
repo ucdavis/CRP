@@ -10,10 +10,10 @@
 
     <property name="Code" column="Code" />
     <many-to-one name="Item" class="CRP.Core.Domain.Item, CRP.Core" column="ItemId" cascade="none" fetch="join" not-null="true" />
-    <property name="Unlimited" column="Unlimited" />
+    <!--<property name="Unlimited" column="Unlimited" />-->
     <property name="Expiration" column="Expiration" />
     <property name="Email" column="Email" />
-    <property name="Used" column="Used" />
+    <!--<property name="Used" column="Used" />-->
     <property name="DiscountAmount" column="DiscountAmount" />
     <property name="UserId" column="UserId" />
     <property name="IsActive" column="IsActive" />
