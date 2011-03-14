@@ -212,6 +212,9 @@
                            case "Expiration":
                                cell.Text = cell.DataItem.Expiration.HasValue ? cell.DataItem.Expiration.Value.ToString("d") : string.Empty;
                                break;
+                           case "MaxUsage":
+                               cell.Text = cell.DataItem.MaxUsage == int.MaxValue ? "Unlimited" : cell.DataItem.MaxUsage.ToString();
+                               break;
                        }
                    }) 
                    .Columns(col =>
@@ -229,8 +232,8 @@
                                     col.Bound(a => a.DiscountAmount).Format("{0:C}").Title("Discount");
                                     col.Bound(a => a.Email);
                                     col.Bound(a => a.Expiration).Title("Expiration");
-                                    col.Bound(a => a.Used);
-                                    col.Bound(a => a.Unlimited);
+                                    //col.Bound(a => a.Used);
+                                    //col.Bound(a => a.Unlimited);
                                     col.Bound(a => a.MaxQuantity);
                                     col.Bound(a => a.IsActive);
                                     col.Bound(a => a.MaxUsage);
