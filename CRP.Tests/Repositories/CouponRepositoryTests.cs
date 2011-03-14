@@ -1205,219 +1205,6 @@ namespace CRP.Tests.Repositories
 
         #endregion IsActive Tests
 
-        #region UnlimitedAndEmail Tests
-
-        #region Invalid Tests
-
-        /// <summary>
-        /// Tests the unlimited and email are invalid does not save.
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void TestUnlimitedAndEmailAreInvalidDoesNotSave1()
-        {
-            Coupon coupon = null;
-            try
-            {
-                #region Arrange
-                coupon = GetValid(9);
-                coupon.Email = null;
-                //coupon.Unlimited = false;
-                #endregion Arrange
-
-                #region Act
-                CouponRepository.DbContext.BeginTransaction();
-                CouponRepository.EnsurePersistent(coupon);
-                CouponRepository.DbContext.CommitTransaction();
-                #endregion Act
-            }
-            catch (Exception)
-            {
-                #region Assert
-                Assert.IsNotNull(coupon);
-                var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnlimitedAndEmail: When not unlimited a coupon requires an email");
-                Assert.IsTrue(coupon.IsTransient());
-                Assert.IsFalse(coupon.IsValid());
-                #endregion Assert
-
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Tests the unlimited and email are invalid does not save.
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void TestUnlimitedAndEmailAreInvalidDoesNotSave2()
-        {
-            Coupon coupon = null;
-            try
-            {
-                #region Arrange
-                coupon = GetValid(9);
-                coupon.Email = string.Empty;
-                //coupon.Unlimited = false;
-                #endregion Arrange
-
-                #region Act
-                CouponRepository.DbContext.BeginTransaction();
-                CouponRepository.EnsurePersistent(coupon);
-                CouponRepository.DbContext.CommitTransaction();
-                #endregion Act
-            }
-            catch (Exception)
-            {
-                #region Assert
-                Assert.IsNotNull(coupon);
-                var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnlimitedAndEmail: When not unlimited a coupon requires an email");
-                Assert.IsTrue(coupon.IsTransient());
-                Assert.IsFalse(coupon.IsValid());
-                #endregion Assert
-
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Tests the unlimited and email are invalid does not save.
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void TestUnlimitedAndEmailAreInvalidDoesNotSave3()
-        {
-            Coupon coupon = null;
-            try
-            {
-                #region Arrange
-                coupon = GetValid(9);
-                coupon.Email = " ";
-                //coupon.Unlimited = false;
-                #endregion Arrange
-
-                #region Act
-                CouponRepository.DbContext.BeginTransaction();
-                CouponRepository.EnsurePersistent(coupon);
-                CouponRepository.DbContext.CommitTransaction();
-                #endregion Act
-            }
-            catch (Exception)
-            {
-                #region Assert
-                Assert.IsNotNull(coupon);
-                var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnlimitedAndEmail: When not unlimited a coupon requires an email");
-                Assert.IsTrue(coupon.IsTransient());
-                Assert.IsFalse(coupon.IsValid());
-                #endregion Assert
-
-                throw;
-            }
-        }
-        #endregion Invalid Tests
-
-        #region Valid Tests
-
-        /// <summary>
-        /// Tests the unlimited and email with valid data saves.
-        /// </summary>
-        [TestMethod]
-        public void TestUnlimitedAndEmailWithValidDataSaves1()
-        {
-            #region Arrange
-            var coupon = GetValid(9);
-            //coupon.Unlimited = true;
-            coupon.Email = null;
-            #endregion Arrange
-
-            #region Act
-            CouponRepository.DbContext.BeginTransaction();
-            CouponRepository.EnsurePersistent(coupon);
-            CouponRepository.DbContext.CommitTransaction();
-            #endregion Act
-
-            #region Assert
-            Assert.IsFalse(coupon.IsTransient());
-            Assert.IsTrue(coupon.IsValid());
-            #endregion Assert		
-        }
-
-        /// <summary>
-        /// Tests the unlimited and email with valid data saves.
-        /// </summary>
-        [TestMethod]
-        public void TestUnlimitedAndEmailWithValidDataSaves2()
-        {
-            #region Arrange
-            var coupon = GetValid(9);
-            //coupon.Unlimited = true;
-            coupon.Email = string.Empty;
-            #endregion Arrange
-
-            #region Act
-            CouponRepository.DbContext.BeginTransaction();
-            CouponRepository.EnsurePersistent(coupon);
-            CouponRepository.DbContext.CommitTransaction();
-            #endregion Act
-
-            #region Assert
-            Assert.IsFalse(coupon.IsTransient());
-            Assert.IsTrue(coupon.IsValid());
-            #endregion Assert
-        }
-
-        /// <summary>
-        /// Tests the unlimited and email with valid data saves.
-        /// </summary>
-        [TestMethod]
-        public void TestUnlimitedAndEmailWithValidDataSaves3()
-        {
-            #region Arrange
-            var coupon = GetValid(9);
-            //coupon.Unlimited = true;
-            coupon.Email = " ";
-            #endregion Arrange
-
-            #region Act
-            CouponRepository.DbContext.BeginTransaction();
-            CouponRepository.EnsurePersistent(coupon);
-            CouponRepository.DbContext.CommitTransaction();
-            #endregion Act
-
-            #region Assert
-            Assert.IsFalse(coupon.IsTransient());
-            Assert.IsTrue(coupon.IsValid());
-            #endregion Assert
-        }
-
-        /// <summary>
-        /// Tests the unlimited and email with valid data saves.
-        /// </summary>
-        [TestMethod]
-        public void TestUnlimitedAndEmailWithValidDataSaves4()
-        {
-            #region Arrange
-            var coupon = GetValid(9);
-            //coupon.Unlimited = false;
-            coupon.Email = "SomeEmail@test.edu";
-            #endregion Arrange
-
-            #region Act
-            CouponRepository.DbContext.BeginTransaction();
-            CouponRepository.EnsurePersistent(coupon);
-            CouponRepository.DbContext.CommitTransaction();
-            #endregion Act
-
-            #region Assert
-            Assert.IsFalse(coupon.IsTransient());
-            Assert.IsTrue(coupon.IsValid());
-            #endregion Assert
-        }
-        #endregion Valid Tests
-
-        #endregion UnlimitedAndEmail Tests
 
         #region MaxQuantity Tests
 
@@ -1588,29 +1375,6 @@ namespace CRP.Tests.Repositories
 
         #region MaxUsage Tests
 
-        /// <summary>
-        /// Tests the MaxUsage with null value saves.
-        /// </summary>
-        [TestMethod]
-        public void TestMaxUsageWithNullValueSaves()
-        {
-            #region Arrange
-            Coupon record = GetValid(9);
-            //record.MaxUsage = null;
-            #endregion Arrange
-
-            #region Act
-            CouponRepository.DbContext.BeginTransaction();
-            CouponRepository.EnsurePersistent(record);
-            CouponRepository.DbContext.CommitTransaction();
-            #endregion Act
-
-            #region Assert
-            Assert.IsNull(record.MaxUsage);
-            Assert.IsFalse(record.IsTransient());
-            Assert.IsTrue(record.IsValid());
-            #endregion Assert		
-        }
 
         /// <summary>
         /// Tests the MaxUsage with max int value saves.
@@ -2063,70 +1827,8 @@ namespace CRP.Tests.Repositories
         #endregion CalculateUsage Tests
 
         #region UnlimitedAndMaxUage Tests
-        /// <summary>
-        /// Tests the MaxUsage with A value of 5 does not save.
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void TestMaxUsageWithAValueOf5ValueDoesNotSave()
-        {
-            Coupon coupon = null;
-            try
-            {
-                #region Arrange
-                coupon = GetValid(9);
-                coupon.MaxUsage = 5;
-                //coupon.Unlimited = true;
-                #endregion Arrange
 
-                #region Act
-                CouponRepository.DbContext.BeginTransaction();
-                CouponRepository.EnsurePersistent(coupon);
-                CouponRepository.DbContext.CommitTransaction();
-                #endregion Act
-            }
-            catch (Exception)
-            {
-                Assert.IsNotNull(coupon);
-                Assert.AreEqual(coupon.MaxUsage, 5);
-                var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnlimitedAndMaxUsage: Cannot have unlimited and a max usage defined, one or the other.");
-                Assert.IsTrue(coupon.IsTransient());
-                Assert.IsFalse(coupon.IsValid());
-                throw;
-            }	
-        }
 
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void TestMaxUsageWithAValueOf0ValueDoesNotSave()
-        {
-            Coupon coupon = null;
-            try
-            {
-                #region Arrange
-                coupon = GetValid(9);
-                coupon.MaxUsage = 0;
-                //coupon.Unlimited = true;
-                #endregion Arrange
-
-                #region Act
-                CouponRepository.DbContext.BeginTransaction();
-                CouponRepository.EnsurePersistent(coupon);
-                CouponRepository.DbContext.CommitTransaction();
-                #endregion Act
-            }
-            catch (Exception)
-            {
-                Assert.IsNotNull(coupon);
-                Assert.AreEqual(coupon.MaxUsage, 0);
-                var results = coupon.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("UnlimitedAndMaxUsage: Cannot have unlimited and a max usage defined, one or the other.");
-                Assert.IsTrue(coupon.IsTransient());
-                Assert.IsFalse(coupon.IsValid());
-                throw;
-            }
-        }
 
         #endregion UnlimitedAndMaxUage Tests
 
@@ -2150,11 +1852,7 @@ namespace CRP.Tests.Repositories
             }));
             attributeList.Add(new AttributeList("[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute(", new List<string>()));
             expectedFields.Add(new NameAndType("Code", "System.String", new List<AttributeList>(attributeList)));
-            //expectedFields.Add(new NameAndType("Code", "System.String", new List<string>
-            //{
-            //    "[NHibernate.Validator.Constraints.LengthAttribute(Min = 10, Max = 10)]",
-            //    "[UCDArch.Core.NHibernateValidator.Extensions.RequiredAttribute()]"
-            //}));
+
             attributeList = new List<AttributeList>();
             attributeList.Add(new AttributeList("[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(", new List<string>
             {
@@ -2163,10 +1861,7 @@ namespace CRP.Tests.Repositories
                 "Max = 922337203685477"                                                           
             }));
             expectedFields.Add(new NameAndType("DiscountAmount", "System.Decimal", new List<AttributeList>(attributeList)));
-            //expectedFields.Add(new NameAndType("DiscountAmount", "System.Decimal", new List<string>
-            //{
-            //    "[UCDArch.Core.NHibernateValidator.Extensions.RangeDoubleAttribute(Min = 0.01, Max = 922337203685477, Message = \"must be more than $0.00\")]"
-            //}));
+
             expectedFields.Add(new NameAndType("DiscountAmountCostPerItem", "System.Boolean", new List<string>
             {
                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"The discount amount must not be greater than the cost per item.\")]"
@@ -2187,7 +1882,7 @@ namespace CRP.Tests.Repositories
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
             expectedFields.Add(new NameAndType("MaxQuantity", "System.Nullable`1[System.Int32]", new List<string>()));
-            expectedFields.Add(new NameAndType("MaxUsage", "System.Nullable`1[System.Int32]", new List<string>
+            expectedFields.Add(new NameAndType("MaxUsage", "System.Int32", new List<string>
             {
                 "[NHibernate.Validator.Constraints.MinAttribute((Int64)0)]"
             }));
@@ -2195,16 +1890,6 @@ namespace CRP.Tests.Repositories
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
             }));
-            expectedFields.Add(new NameAndType("Unlimited", "System.Boolean", new List<string>()));
-            expectedFields.Add(new NameAndType("UnlimitedAndEmail", "System.Boolean", new List<string>
-            {
-                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"When not unlimited a coupon requires an email\")]"
-            }));
-            expectedFields.Add(new NameAndType("UnlimitedAndMaxUsage", "System.Boolean", new List<string>
-            {
-                "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Cannot have unlimited and a max usage defined, one or the other.\")]"
-            }));
-            expectedFields.Add(new NameAndType("Used", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("UserId", "System.String", new List<string>
             {
                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]",
