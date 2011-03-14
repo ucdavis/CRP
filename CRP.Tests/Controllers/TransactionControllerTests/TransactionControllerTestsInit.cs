@@ -130,8 +130,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Coupons[1].Code = "COUPON";
             Coupons[1].IsActive = true;
             Coupons[1].DiscountAmount = 5.01m;
-            Coupons[1].Unlimited = true;
-            Coupons[1].Used = true; //And used
+            //Coupons[1].Unlimited = true;
+            //Coupons[1].Used = true; //And used
             Coupons[1].MaxQuantity = 2;
             Coupons[1].Email = string.Empty;
 
@@ -139,8 +139,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Coupons[2].Code = "MAXCOUPON";
             Coupons[2].IsActive = true;
             Coupons[2].DiscountAmount = 5.01m;
-            Coupons[2].Unlimited = false;
-            Coupons[2].Used = true; //And used
+            //Coupons[2].Unlimited = false;
+            //Coupons[2].Used = true; //And used
             Coupons[2].MaxQuantity = 20;
             Coupons[2].Email = string.Empty;
             Coupons[2].MaxUsage = 3;

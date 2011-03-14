@@ -182,8 +182,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #region Arrange
             SetupDataForCheckoutTests();
             Items[1].CostPerItem = 20m;
-            Coupons[1].Unlimited = false; //Not unlimited
-            Coupons[1].Used = true; //And used
+            //Coupons[1].Unlimited = false; //Not unlimited
+            //Coupons[1].Used = true; //And used
             #endregion Arrange
 
             #region Act
@@ -314,8 +314,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             SetupDataForCheckoutTests();
             Items[1].CostPerItem = 20m;
             Coupons[1].Email = "bob@TEST.com";
-            Coupons[1].Unlimited = false;
-            Coupons[1].Used = false;
+            //Coupons[1].Unlimited = false;
+            //Coupons[1].Used = false;
             #endregion Arrange
 
             #region Act
@@ -329,7 +329,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             var args = (Transaction)TransactionRepository.GetArgumentsForCallsMadeOn(a => a.EnsurePersistent(Arg<Transaction>.Is.Anything))[0][0];
             Assert.IsNotNull(args);
             Assert.AreEqual(49.98m, args.Amount);
-            Assert.IsTrue(Coupons[1].Used);
+            //Assert.IsTrue(Coupons[1].Used);
             #endregion Assert
         }
         #endregion Coupon Tests

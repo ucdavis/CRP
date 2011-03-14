@@ -376,8 +376,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Coupons[1].Code = "COUPON";
             Coupons[1].IsActive = true;
             Coupons[1].DiscountAmount = Items[1].CostPerItem;
-            Coupons[1].Unlimited = true;
-            Coupons[1].Used = true; //And used
+            //Coupons[1].Unlimited = true;
+            //Coupons[1].Used = true; //And used
             Coupons[1].MaxQuantity = 2;
             Coupons[1].Email = string.Empty;
             #endregion Arrange
@@ -404,8 +404,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Coupons[1].Code = "COUPON";
             Coupons[1].IsActive = true;
             Coupons[1].DiscountAmount = Items[1].CostPerItem;
-            Coupons[1].Unlimited = true;
-            Coupons[1].Used = true; //And used
+            //Coupons[1].Unlimited = true;
+            //Coupons[1].Used = true; //And used
             Coupons[1].MaxQuantity = 2;
             Coupons[1].Email = string.Empty;
             TransactionRepository.Expect(a => a.GetNullableById(0)).Return(Transactions[0]).Repeat.Any();
@@ -435,8 +435,8 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             Coupons[1].Code = "COUPON";
             Coupons[1].IsActive = true;
             Coupons[1].DiscountAmount = Items[1].CostPerItem;
-            Coupons[1].Unlimited = true;
-            Coupons[1].Used = true; //And used
+            //Coupons[1].Unlimited = true;
+            //Coupons[1].Used = true; //And used
             Coupons[1].MaxQuantity = 2;
             Coupons[1].Email = string.Empty;
             TransactionRepository.Expect(a => a.GetNullableById(0)).Return(Transactions[0]).Repeat.Any();

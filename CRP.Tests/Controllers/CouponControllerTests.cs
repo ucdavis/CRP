@@ -93,7 +93,7 @@ namespace CRP.Tests.Controllers
         [TestMethod]
         public void TestCreateMappingIgnoreParameters2()
         {
-            "~/Coupon/Create/5".ShouldMapTo<CouponController>(a => a.Create(5, new Coupon()), true);
+            "~/Coupon/Create/5".ShouldMapTo<CouponController>(a => a.Create(5, new Coupon(), "type"), true);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace CRP.Tests.Controllers
         public void TestCreateWithTwoParametersRedirectsToListWhenIdNotFound()
         {
             ItemRepository.Expect(a => a.GetNullableById(2)).Return(null).Repeat.Any();
-            Controller.Create(2, new Coupon())
+            Controller.Create(2, new Coupon(), "type")
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
             CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
@@ -189,7 +189,7 @@ namespace CRP.Tests.Controllers
             newCoupon.Code = null;
             newCoupon.UserId = null;
 
-            var result = Controller.Create(2, newCoupon)
+            var result = Controller.Create(2, newCoupon, "type")
                 .AssertHttpRedirect();
             Assert.AreEqual("http://sample.com/ItemManagement/Edit/2#Coupons", result.Url);
             CouponRepository.AssertWasCalled(a => a.EnsurePersistent(newCoupon));
@@ -216,7 +216,7 @@ namespace CRP.Tests.Controllers
             newCoupon.UserId = null;
             newCoupon.DiscountAmount = 0;
 
-            var result = Controller.Create(2, newCoupon)
+            var result = Controller.Create(2, newCoupon, "type")
                 .AssertViewRendered()
                 .WithViewData<CouponViewModel>();
             CouponRepository.AssertWasNotCalled(a => a.EnsurePersistent(Arg<Coupon>.Is.Anything));
@@ -332,7 +332,7 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].IsActive = true;
-            Coupons[1].Used = true;
+            //Coupons[1].Used = true;
             ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
@@ -380,8 +380,8 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].DiscountAmount = 10.77m;
-            Coupons[1].Used = true;
-            Coupons[1].Unlimited = true;
+            //Coupons[1].Used = true;
+            //Coupons[1].Unlimited = true;
             ItemRepository.Expect(a => a.GetNullableById(2)).Return(Items[1]).Repeat.Any();
             CouponRepository.Expect(a => a.Queryable).Return(Coupons.AsQueryable()).Repeat.Any();
 
@@ -407,8 +407,8 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].DiscountAmount = 5.00m;
-            Coupons[1].Used = false;
-            Coupons[1].Unlimited = true;
+            //Coupons[1].Used = false;
+            //Coupons[1].Unlimited = true;
             Coupons[1].MaxQuantity = 3;
 
             Items[1].Quantity = 2;
@@ -441,8 +441,8 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].DiscountAmount = 5.00m;
-            Coupons[1].Used = false;
-            Coupons[1].Unlimited = false;
+            //Coupons[1].Used = false;
+            //Coupons[1].Unlimited = false;
             Coupons[1].MaxQuantity = 3;
             Coupons[1].MaxUsage = 2;
 
@@ -476,8 +476,8 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].DiscountAmount = 5.00m;
-            Coupons[1].Used = false;
-            Coupons[1].Unlimited = false;
+            //Coupons[1].Used = false;
+            //Coupons[1].Unlimited = false;
             Coupons[1].MaxQuantity = 7;
             Coupons[1].MaxUsage = 2;
 
@@ -511,8 +511,8 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].DiscountAmount = 5.00m;
-            Coupons[1].Used = false;
-            Coupons[1].Unlimited = false;
+            //Coupons[1].Used = false;
+            //Coupons[1].Unlimited = false;
             Coupons[1].MaxQuantity = 3;
             Coupons[1].MaxUsage = 7;
 
@@ -546,8 +546,8 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].DiscountAmount = 5.00m;
-            Coupons[1].Used = false;
-            Coupons[1].Unlimited = false;
+            //Coupons[1].Used = false;
+            //Coupons[1].Unlimited = false;
             Coupons[1].MaxQuantity = null;
             Coupons[1].MaxUsage = 2;
 
@@ -581,8 +581,8 @@ namespace CRP.Tests.Controllers
                 Coupons[i].Code = "FAKECCODE" + (i + 1);
             }
             Coupons[1].DiscountAmount = 5.00m;
-            Coupons[1].Used = false;
-            Coupons[1].Unlimited = false;
+            //Coupons[1].Used = false;
+            //Coupons[1].Unlimited = false;
             Coupons[1].MaxQuantity = 3;
             Coupons[1].MaxUsage = -1;
 
@@ -654,7 +654,7 @@ namespace CRP.Tests.Controllers
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
 
             FakeCoupons(1);
-            Coupons[0].Used = true;
+            //Coupons[0].Used = true;
             CouponRepository.Expect(a => a.GetNullableById(1)).Return(Coupons[0]).Repeat.Any();
             var result = Controller.Deactivate(1)
                 .AssertHttpRedirect();
@@ -675,8 +675,8 @@ namespace CRP.Tests.Controllers
             Controller.Url = MockRepository.GenerateStub<UrlHelper>(Controller.ControllerContext.RequestContext);
    
             FakeCoupons(1);
-            Coupons[0].Used = true;
-            Coupons[0].Unlimited = true;
+            //Coupons[0].Used = true;
+            //Coupons[0].Unlimited = true;
             FakeItems(1);
             Items[0].AddCoupon(Coupons[0]);
             CouponRepository.Expect(a => a.GetNullableById(1)).Return(Coupons[0]).Repeat.Any();
@@ -771,7 +771,7 @@ namespace CRP.Tests.Controllers
                 Coupons.Add(CreateValidEntities.Coupon(i + 1 + offSet));
                 Coupons[i + offSet].SetIdTo(i + 1 + offSet);
                 Coupons[i + offSet].IsActive = true;
-                Coupons[i + offSet].Used = false;
+                //Coupons[i + offSet].Used = false;
             }
         }
 
