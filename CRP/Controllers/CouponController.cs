@@ -6,6 +6,7 @@ using CRP.Controllers.Services;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
+using CRP.Services.Wcf;
 using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Web.ActionResults;
@@ -70,7 +71,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "User")]
-        public ActionResult Create(int itemId, [Bind(Exclude="Id")]Coupon coupon)
+        public ActionResult Create(int itemId, [Bind(Exclude="Id")]Coupon coupon, string couponType)
         {
             var item = Repository.OfType<Item>().GetNullableById(itemId);
 
@@ -80,7 +81,7 @@ namespace CRP.Controllers
             }
 
             // validate and create the coupon
-            _couponService.Create(item, coupon, CurrentUser.Identity.Name, ModelState);
+            _couponService.Create(item, coupon, CurrentUser.Identity.Name, couponType, ModelState);
 
             if (ModelState.IsValid)
             {
@@ -88,7 +89,7 @@ namespace CRP.Controllers
                 return Redirect(Url.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
             }
 
-            var viewModel = CouponViewModel.Create(Repository, item);
+            var viewModel = CouponViewModel.Create(Repository, item, couponType);
             viewModel.Coupon = coupon;
             return View(viewModel);
         }

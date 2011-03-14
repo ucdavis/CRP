@@ -584,7 +584,7 @@ namespace CRP.Tests.Controllers
             Coupons[1].Used = false;
             Coupons[1].Unlimited = false;
             Coupons[1].MaxQuantity = 3;
-            Coupons[1].MaxUsage = null;
+            Coupons[1].MaxUsage = -1;
 
             Items[1].Quantity = 2;
             Items[1].CostPerItem = 9.00m;

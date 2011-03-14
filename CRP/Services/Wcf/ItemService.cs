@@ -18,12 +18,26 @@ namespace CRP.Services.Wcf
             _couponService = new CouponService(RepositoryFactory.ItemRepository, RepositoryFactory.CouponRepository);
         }
 
-        public string CreateCoupon(int itemId, string email, bool unlimited, DateTime? expiration, decimal discountAmount, int? maxUsage, int? maxQuantity)
+        public string CreateCoupon(int itemId, string email, bool unlimited, DateTime? expiration, decimal discountAmount, int maxUsage, int? maxQuantity, CouponTypes couponTypes)
         {
             var item = RepositoryFactory.ItemRepository.GetNullableById(itemId);
             if (item == null) throw new ArgumentException("Item", string.Format("Unable to load item with item id ({0})", itemId));
 
-            return _couponService.Create(item, email, unlimited, expiration, discountAmount, "web service", maxUsage, maxQuantity);
+            string couponType = string.Empty;
+            switch(couponTypes)
+            {
+                case CouponTypes.Unlimited:
+                    couponType = "Unlimited";
+                    break;
+                case CouponTypes.LimitedUsage:
+                    couponType = "LimitedUsage";
+                    break;
+                case CouponTypes.SingleUsage:
+                    couponType = "SingleUsage";
+                    break;
+            }
+
+            return _couponService.Create(item, email, unlimited, expiration, discountAmount, "web service", maxUsage, maxQuantity, couponType);
         }
 
         public bool CancelCoupon(string couponCode)

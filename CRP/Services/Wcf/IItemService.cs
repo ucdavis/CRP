@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using CRP.Core.Domain;
 
 namespace CRP.Services.Wcf
 {
@@ -9,7 +10,7 @@ namespace CRP.Services.Wcf
     public interface IItemService
     {
         [OperationContract]
-        string CreateCoupon(int itemId, string email, bool unlimited, DateTime? expiration, decimal discountAmount, int? maxUsage, int? maxQuantity);
+        string CreateCoupon(int itemId, string email, bool unlimited, DateTime? expiration, decimal discountAmount, int maxUsage, int? maxQuantity, CouponTypes couponTypes);
 
         [OperationContract]
         bool CancelCoupon(string couponCode);
@@ -57,4 +58,15 @@ namespace CRP.Services.Wcf
         [DataMember]
         public Guid? QuantityIndex { get; set; }
     }
+
+    [DataContract]
+    public enum CouponTypes {Unlimited, LimitedUsage, SingleUsage};
+
+    //[DataContract]
+    //public class CouponTypes
+    //{
+    //    public static string Unlimited { get { return "Unlimited"; } }
+    //    public static string LimitedUsage { get { return "LimitedUsage"; } }
+    //    public static string SingleUsage { get { return "SingleUsage"; } }
+    //}
 }

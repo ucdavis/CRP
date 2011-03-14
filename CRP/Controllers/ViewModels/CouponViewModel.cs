@@ -8,12 +8,13 @@ namespace CRP.Controllers.ViewModels
     {
         public Coupon Coupon { get; set; }
         public Item Item { get; set; }
+        public string CouponType { get; set; }
 
-        public static CouponViewModel Create(IRepository repository, Item item)
+        public static CouponViewModel Create(IRepository repository, Item item, string couponType = null)
         {
             Check.Require(repository != null, "Repository is required.");
 
-            var viewModel = new CouponViewModel() {Item = item};
+            var viewModel = new CouponViewModel() {Item = item, CouponType = couponType};
 
             return viewModel;
         }

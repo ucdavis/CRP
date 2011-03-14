@@ -22,18 +22,33 @@
         <fieldset>
             <legend>Fields</legend>
             
-            <p>
+            <p>Coupon Type:</p>
+            <ul>
+                <li><input type="radio" name="couponType" class="couponType" value="Unlimited" />Unlimited</li>
+                <li><input type="radio" name="couponType" class="couponType" value="LimitedUsage" />Limited Usage
+                
+                    <span id="maxUsageContainer" style="display:inline-block; display:none; margin-left: 2em;">
+                        <label>Maximum # of times this coupon can be used: </label>
+                        <%= Html.TextBox("MaxUsage", Model.Coupon != null ? Model.Coupon.MaxUsage.ToString() : string.Empty) %>    
+                    </span>
+
+                </li>
+                <li><input type="radio" name="couponType" class="couponType" value="SingleUsage" />Single Usage</li>
+            </ul>
+
+<%--            <p>
                 <label for="Unlimited">Unlimited Usage: </label>
                 <%= Html.CheckBox("Unlimited", Model.Coupon != null ? Model.Coupon.Unlimited : false) %>
                 <%= Html.ValidationMessage("Unlimited") %>
-            </p>  
+            </p>  --%>
+
             <p>
                 <label for="Expiration">Expiration Date: </label>
                 <%= Html.TextBox("Expiration", Model.Coupon == null ? string.Empty : (Model.Coupon.Expiration.HasValue ? Model.Coupon.Expiration.Value.ToString("D") : string.Empty)) %>
                 <%= Html.ValidationMessage("Expiration") %>
             </p>
             <p>
-                <label for="Email">E-Mail:</label>
+                <label for="Email">E-Mail (Optional):</label>
                 <%= Html.TextBox("Email", Model.Coupon != null ? Model.Coupon.Email : string.Empty) %>
                 <%= Html.ValidationMessage("Email") %>
             </p>
@@ -44,14 +59,14 @@
             </p>
             
             <p>
-                <label for="MaxQuantity">Maximum Quantity per Transaction:</label>
+                <label for="MaxQuantity">Maximum Quantity per Transaction (Optional):</label>
                 <%= Html.TextBox("MaxQuantity", Model.Coupon != null ? Model.Coupon.MaxQuantity.ToString() : string.Empty) %>
             </p>
 
-            <p>
+<%--            <p>
                 <label for="MaxUsage">Maximum Usage:</label>
-                <%= Html.TextBox("MaxUsage", Model.Coupon != null ? Model.Coupon.MaxUsage.ToString() : string.Empty) %>
-            </p>
+                
+            </p>--%>
             
             <p>
                 <input type="submit" value="Create" />
@@ -65,10 +80,28 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("input#Expiration").datepicker();
+
+            $(".couponType").click(function () {
+                if ($(this).val() == "LimitedUsage") {
+                    $("#maxUsageContainer").show();
+                }
+                else {
+                    $("#MaxUsage").val(0);
+                    $("#maxUsageContainer").hide(); 
+                }
+            });
         });
     </script>
+
+    <style type="text/css">
+        label  
+        {
+            display: inline-block;
+            min-width: 200px;
+        }
+    </style>
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="PageHeader" runat="server">
