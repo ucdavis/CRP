@@ -117,7 +117,6 @@ Global
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1BA8D426-2727-4133-B98F-1D583A913C72}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{1BA8D426-2727-4133-B98F-1D583A913C72}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
