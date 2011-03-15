@@ -712,20 +712,20 @@
     <Content Include="Views\Transaction\Edit.aspx" />
     <Content Include="Views\Transaction\Refund.aspx" />
     <None Include="Content\NPOITemplate.xls" />
-    <None Include="Images\fonts\Quicksand_Bold.eot" />
-    <None Include="Images\fonts\Quicksand_Bold.ttf" />
-    <None Include="Images\fonts\Quicksand_Bold_Oblique.eot" />
-    <None Include="Images\fonts\Quicksand_Bold_Oblique.ttf" />
-    <None Include="Images\fonts\Quicksand_Book.eot" />
-    <None Include="Images\fonts\Quicksand_Book.ttf" />
-    <None Include="Images\fonts\Quicksand_Book_Oblique.eot" />
-    <None Include="Images\fonts\Quicksand_Book_Oblique.ttf" />
-    <None Include="Images\fonts\Quicksand_Dash.eot" />
-    <None Include="Images\fonts\Quicksand_Dash.ttf" />
-    <None Include="Images\fonts\Quicksand_Light.eot" />
-    <None Include="Images\fonts\Quicksand_Light.ttf" />
-    <None Include="Images\fonts\Quicksand_Light_Oblique.eot" />
-    <None Include="Images\fonts\Quicksand_Light_Oblique.ttf" />
+    <Content Include="Images\fonts\Quicksand_Bold.eot" />
+    <Content Include="Images\fonts\Quicksand_Bold.ttf" />
+    <Content Include="Images\fonts\Quicksand_Bold_Oblique.eot" />
+    <Content Include="Images\fonts\Quicksand_Bold_Oblique.ttf" />
+    <Content Include="Images\fonts\Quicksand_Book.eot" />
+    <Content Include="Images\fonts\Quicksand_Book.ttf" />
+    <Content Include="Images\fonts\Quicksand_Book_Oblique.eot" />
+    <Content Include="Images\fonts\Quicksand_Book_Oblique.ttf" />
+    <Content Include="Images\fonts\Quicksand_Dash.eot" />
+    <Content Include="Images\fonts\Quicksand_Dash.ttf" />
+    <Content Include="Images\fonts\Quicksand_Light.eot" />
+    <Content Include="Images\fonts\Quicksand_Light.ttf" />
+    <Content Include="Images\fonts\Quicksand_Light_Oblique.eot" />
+    <Content Include="Images\fonts\Quicksand_Light_Oblique.ttf" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
