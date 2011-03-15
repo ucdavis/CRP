@@ -64,11 +64,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Core", "CRP.Core\CRP.Co
 EndProject
 Project("{C8D11400-126E-41CD-887F-60BD40844F9E}") = "CRP.DB", "CRP.DB\CRP.DB.dbproj", "{67CBC824-A49E-4E9B-A947-360F3DFE65C3}"
 EndProject
-Project("{2CFEAB61-6A3B-4EB8-B523-560B4BEEF521}") = "CRP.Deploy", "CRP.Deploy\CRP.Deploy.wdproj", "{1BA8D426-2727-4133-B98F-1D583A913C72}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.caes.ucdavis.edu:8088/tfs/defaultcollection
 		SccLocalPath0 = .
@@ -81,12 +79,9 @@ Global
 		SccProjectUniqueName3 = CRP\\CRP.csproj
 		SccProjectName3 = CRP
 		SccLocalPath3 = CRP
-		SccProjectUniqueName4 = CRP.Deploy\\CRP.Deploy.wdproj
-		SccProjectName4 = CRP.Deploy
-		SccLocalPath4 = CRP.Deploy
-		SccProjectUniqueName5 = CRP.DB\\CRP.DB.dbproj
-		SccProjectName5 = CRP.DB
-		SccLocalPath5 = CRP.DB
+		SccProjectUniqueName4 = CRP.DB\\CRP.DB.dbproj
+		SccProjectName4 = CRP.DB
+		SccLocalPath4 = CRP.DB
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,13 +105,10 @@ Global
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.Build.0 = Test|Any CPU
+		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.Deploy.0 = Test|Any CPU
 		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{1BA8D426-2727-4133-B98F-1D583A913C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1BA8D426-2727-4133-B98F-1D583A913C72}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1BA8D426-2727-4133-B98F-1D583A913C72}.Test|Any CPU.ActiveCfg = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

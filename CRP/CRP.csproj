@@ -41,6 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PublishDatabases>false</PublishDatabases>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +53,7 @@
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PublishDatabases>false</PublishDatabases>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -302,6 +304,7 @@
     <Content Include="Content\2009.3.1103.0\Web20\sprite.png" />
     <Content Include="Content\2009.3.1103.0\WebBlue\loading.gif" />
     <Content Include="Content\2009.3.1103.0\WebBlue\sprite.png" />
+    <Content Include="CRP.Publish.xml" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\minus.png" />
@@ -663,10 +666,6 @@
     <Content Include="Views\Transaction\PaymentResult.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AppSettingsProd.config" />
-    <Content Include="AppSettingsTest.config" />
-    <Content Include="ConnectionStringProd.config" />
-    <Content Include="ConnectionStringTest.config" />
     <Content Include="Content\ui.BingMaps.css" />
     <Content Include="Content\Windows7\loading.gif" />
     <Content Include="Content\Windows7\sprite.png" />
