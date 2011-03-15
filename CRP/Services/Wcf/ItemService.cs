@@ -18,7 +18,7 @@ namespace CRP.Services.Wcf
             _couponService = new CouponService(RepositoryFactory.ItemRepository, RepositoryFactory.CouponRepository);
         }
 
-        public string CreateCoupon(int itemId, string email, bool unlimited, DateTime? expiration, decimal discountAmount, int maxUsage, int? maxQuantity, CouponTypes couponTypes)
+        public string CreateCoupon(int itemId, string email, DateTime? expiration, decimal discountAmount, int? maxUsage, int? maxQuantity, CouponTypes couponTypes)
         {
             var item = RepositoryFactory.ItemRepository.GetNullableById(itemId);
             if (item == null) throw new ArgumentException("Item", string.Format("Unable to load item with item id ({0})", itemId));
@@ -37,12 +37,12 @@ namespace CRP.Services.Wcf
                     break;
             }
 
-            return _couponService.Create(item, email, unlimited, expiration, discountAmount, "web service", maxUsage, maxQuantity, couponType);
+            return _couponService.Create(item, email, expiration, discountAmount, "web service", maxUsage, maxQuantity, couponType);
         }
 
-        public bool CancelCoupon(string couponCode)
+        public bool CancelCoupon(int itemId, string couponCode)
         {
-            var coupon = RepositoryFactory.CouponRepository.Queryable.Where(a => a.Code == couponCode).FirstOrDefault();
+            var coupon = RepositoryFactory.CouponRepository.Queryable.Where(a => a.Item.Id == itemId && a.Code == couponCode).FirstOrDefault();
             if (coupon == null) throw new ArgumentException("Coupon", string.Format("Unable to load item with coupon code ({0})", couponCode));
 
             return _couponService.Deactivate(coupon);

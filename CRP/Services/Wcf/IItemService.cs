@@ -10,10 +10,10 @@ namespace CRP.Services.Wcf
     public interface IItemService
     {
         [OperationContract]
-        string CreateCoupon(int itemId, string email, bool unlimited, DateTime? expiration, decimal discountAmount, int maxUsage, int? maxQuantity, CouponTypes couponTypes);
+        string CreateCoupon(int itemId, string email, DateTime? expiration, decimal discountAmount, int? maxUsage, int? maxQuantity, CouponTypes couponTypes);
 
         [OperationContract]
-        bool CancelCoupon(string couponCode);
+        bool CancelCoupon(int itemId, string couponCode);
 
         [OperationContract]
         ServiceTransaction GetRegistrationByReference(string registrationId);
@@ -60,7 +60,14 @@ namespace CRP.Services.Wcf
     }
 
     [DataContract]
-    public enum CouponTypes {Unlimited, LimitedUsage, SingleUsage};
+    public enum CouponTypes
+    {   [EnumMember]
+        Unlimited, 
+        [EnumMember]
+        LimitedUsage, 
+        [EnumMember]
+        SingleUsage
+    };
 
     //[DataContract]
     //public class CouponTypes

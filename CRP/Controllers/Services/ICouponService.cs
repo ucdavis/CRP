@@ -13,7 +13,7 @@ namespace CRP.Controllers.Services
 {
     public interface ICouponService
     {
-        string Create(Item item, string email, bool unlimited, DateTime? expiration, decimal discountAmount, string userId, int maxUsage, int? maxQuantity, string couponType, ModelStateDictionary modelState = null);
+        string Create(Item item, string email, DateTime? expiration, decimal discountAmount, string userId, int? maxUsage, int? maxQuantity, string couponType, ModelStateDictionary modelState = null);
         string Create(Item item, Coupon coupon, string userId, string couponType, ModelStateDictionary modelState = null);
         bool Deactivate(Coupon coupon, ModelStateDictionary modelState = null);
         bool Validate(Item item, Coupon coupon, ref decimal discountAmount, ref int maxQuantity, ref string message);
@@ -60,7 +60,7 @@ namespace CRP.Controllers.Services
             return modelState.IsValid ? coupon.Code : string.Empty;
         }
 
-        public string Create(Item item, string email, bool unlimited, DateTime? expiration, decimal discountAmount, string userId, int maxUsage, int? maxQuantity, string couponType, ModelStateDictionary modelState = null)
+        public string Create(Item item, string email, DateTime? expiration, decimal discountAmount, string userId, int? maxUsage, int? maxQuantity, string couponType, ModelStateDictionary modelState = null)
         {
             Check.Require(item != null, "item is required.");
             Check.Require(modelState != null, "modelState is required.");
@@ -71,7 +71,7 @@ namespace CRP.Controllers.Services
             coupon.Email = email;
             coupon.DiscountAmount = discountAmount;
             coupon.MaxQuantity = maxQuantity;
-            coupon.MaxUsage = maxUsage;
+            coupon.MaxUsage = maxUsage.HasValue ? maxUsage.Value : -1;
 
             coupon.MaxUsage = CalculateMaxUsage(couponType, coupon);
 
