@@ -16,10 +16,10 @@ namespace CRP.Services.Wcf
         bool CancelCoupon(int itemId, string couponCode);
 
         [OperationContract]
-        ServiceTransaction GetRegistrationByReference(string registrationId);
+        ServiceTransaction GetRegistrationByReference(int itemId, string registrationId);
 
         [OperationContract]
-        ServiceTransaction GetRegistrationById(int transactionId);
+        ServiceTransaction GetRegistrationById(int transactionId, Transaction transaction = null);
 
         [OperationContract]
         ServiceTransaction[] GetRegistrations(int itemId);
@@ -30,6 +30,8 @@ namespace CRP.Services.Wcf
     {
         // extract the fields that we can
         [DataMember]
+        public string TransactionNumber { get; set; }
+        [DataMember]
         public string LastName { get; set; }
         [DataMember]
         public string FirstName { get; set; }
@@ -38,7 +40,7 @@ namespace CRP.Services.Wcf
         [DataMember]
         public bool Paid { get; set; }
         [DataMember]
-        public IEnumerable<ServiceQuestion> ServiceQuestions { get; set; }
+        public ICollection<ServiceQuestion> ServiceQuestions { get; set; }
     }
 
     [DataContract]

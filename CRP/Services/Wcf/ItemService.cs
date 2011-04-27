@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Web;
 using CRP.Controllers.Services;
+using CRP.Core.Domain;
 using CRP.Core.Resources;
 
 namespace CRP.Services.Wcf
@@ -48,21 +49,41 @@ namespace CRP.Services.Wcf
             return _couponService.Deactivate(coupon);
         }
 
-        public ServiceTransaction GetRegistrationByReference(string registrationId)
+        public ServiceTransaction GetRegistrationByReference(int itemId, string registrationId)
         {
-            // find the transaction
-            var transaction = RepositoryFactory.TransactionAnswerRepository.Queryable
-                                    .Where(a => a.Question.Name == "Registration Id" && a.Answer.Trim() == registrationId.Trim())
-                                    .Select(a => a.Transaction).FirstOrDefault();
+            var answers = RepositoryFactory.TransactionAnswerRepository.Queryable.Where(a => a.Transaction.Item.Id == itemId && a.Question.Name == "Registration Id").ToList();
+            var answer = answers.Where(a => a.Answer.Trim() == registrationId).FirstOrDefault();
 
-            if (transaction == null) throw new ArgumentException("Transaction", string.Format("Unable to load transaction with registration id ({0})", registrationId));
+            if (answer == null)
+            {
+                return null;
+            }
 
-            return GetRegistrationById(transaction.Id);
+            var serviceTransaction = GetRegistrationById(answer.Transaction.Id, answer.Transaction);
+
+            return serviceTransaction;
+
+            //// find the transaction
+            //var answer = RepositoryFactory.TransactionAnswerRepository.Queryable
+            //    .Where(a => a.Transaction.Item.Id == itemId && a.Question.Name == "Registration Id"
+            //                && a.Answer.Trim() == registrationId.Trim()).FirstOrDefault();
+
+            //var transaction = answer.Transaction;
+
+            ////var transaction = RepositoryFactory.TransactionAnswerRepository.Queryable
+            ////                        .Where(a => a.Question.Name == "Registration Id" && a.Answer.Trim() == registrationId.Trim())
+            ////                        .Select(a => a.Transaction).FirstOrDefault();
+
+            //if (transaction == null) throw new ArgumentException("Transaction", string.Format("Unable to load transaction with registration id ({0})", registrationId));
+
+            //return GetRegistrationById(transaction.Id);
         }
 
-        public ServiceTransaction GetRegistrationById(int transactionId)
+        public ServiceTransaction GetRegistrationById(int transactionId, Transaction transaction)
         {
-            var transaction = RepositoryFactory.TransactionRepository.GetNullableById(transactionId);
+            //var transaction = RepositoryFactory.TransactionRepository.GetNullableById(transactionId);
+
+            transaction = transaction ?? RepositoryFactory.TransactionRepository.GetNullableById(transactionId);
 
             // check transaction is valid)
             if (transaction == null) throw new ArgumentException("Transaction", string.Format("Unable to load transaction with transaction id ({0})", transactionId));
@@ -81,8 +102,8 @@ namespace CRP.Services.Wcf
             };
 
             // load all the questions
-            serviceTransaction.ServiceQuestions = transaction.TransactionAnswers.Select(a => new ServiceQuestion(a.Question.Name, a.Answer));
-            serviceTransaction.ServiceQuestions = transaction.QuantityAnswers.Select(a => new ServiceQuestion(a.Question.Name, a.Answer, a.QuantityId));
+            serviceTransaction.ServiceQuestions = transaction.TransactionAnswers.Select(a => new ServiceQuestion(a.Question.Name, a.Answer)).ToList();
+            serviceTransaction.ServiceQuestions = transaction.QuantityAnswers.Select(a => new ServiceQuestion(a.Question.Name, a.Answer, a.QuantityId)).ToList();
 
             return serviceTransaction;
         }
@@ -96,7 +117,7 @@ namespace CRP.Services.Wcf
 
             foreach (var a in item.Transactions)
             {
-                serviceTransactions.Add(GetRegistrationById(a.Id));
+                serviceTransactions.Add(GetRegistrationById(a.Id, a));
             }
 
             return serviceTransactions.ToArray();

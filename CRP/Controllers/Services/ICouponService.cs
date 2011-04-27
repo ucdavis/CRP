@@ -63,7 +63,8 @@ namespace CRP.Controllers.Services
         public string Create(Item item, string email, DateTime? expiration, decimal discountAmount, string userId, int? maxUsage, int? maxQuantity, string couponType, ModelStateDictionary modelState = null)
         {
             Check.Require(item != null, "item is required.");
-            Check.Require(modelState != null, "modelState is required.");
+
+            modelState = modelState ?? new ModelStateDictionary();
 
             // create the coupon and set the fields
             var coupon = new Coupon();
