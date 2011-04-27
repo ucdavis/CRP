@@ -62,27 +62,10 @@ namespace CRP.Services.Wcf
             var serviceTransaction = GetRegistrationById(answer.Transaction.Id, answer.Transaction);
 
             return serviceTransaction;
-
-            //// find the transaction
-            //var answer = RepositoryFactory.TransactionAnswerRepository.Queryable
-            //    .Where(a => a.Transaction.Item.Id == itemId && a.Question.Name == "Registration Id"
-            //                && a.Answer.Trim() == registrationId.Trim()).FirstOrDefault();
-
-            //var transaction = answer.Transaction;
-
-            ////var transaction = RepositoryFactory.TransactionAnswerRepository.Queryable
-            ////                        .Where(a => a.Question.Name == "Registration Id" && a.Answer.Trim() == registrationId.Trim())
-            ////                        .Select(a => a.Transaction).FirstOrDefault();
-
-            //if (transaction == null) throw new ArgumentException("Transaction", string.Format("Unable to load transaction with registration id ({0})", registrationId));
-
-            //return GetRegistrationById(transaction.Id);
         }
 
         public ServiceTransaction GetRegistrationById(int transactionId, Transaction transaction)
         {
-            //var transaction = RepositoryFactory.TransactionRepository.GetNullableById(transactionId);
-
             transaction = transaction ?? RepositoryFactory.TransactionRepository.GetNullableById(transactionId);
 
             // check transaction is valid)
