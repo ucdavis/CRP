@@ -59,14 +59,14 @@ namespace CRP.Services.Wcf
                 return null;
             }
 
-            var serviceTransaction = GetRegistrationById(answer.Transaction.Id, answer.Transaction);
+            var serviceTransaction = GetRegistrationById(answer.Transaction.Id);
 
             return serviceTransaction;
         }
 
-        public ServiceTransaction GetRegistrationById(int transactionId, Transaction transaction)
+        public ServiceTransaction GetRegistrationById(int transactionId)
         {
-            transaction = transaction ?? RepositoryFactory.TransactionRepository.GetNullableById(transactionId);
+            var transaction = RepositoryFactory.TransactionRepository.GetNullableById(transactionId);
 
             // check transaction is valid)
             if (transaction == null) throw new ArgumentException("Transaction", string.Format("Unable to load transaction with transaction id ({0})", transactionId));
@@ -81,7 +81,8 @@ namespace CRP.Services.Wcf
                 DateRegistered = transaction.TransactionDate,
                 FirstName = firstNameQ != null ? firstNameQ.Answer : string.Empty,
                 LastName = lastNameQ != null ? lastNameQ.Answer : string.Empty,
-                Paid = transaction.Paid
+                Paid = transaction.Paid,
+                TransactionNumber = transaction.TransactionNumber
             };
 
             // load all the questions
@@ -100,7 +101,7 @@ namespace CRP.Services.Wcf
 
             foreach (var a in item.Transactions)
             {
-                serviceTransactions.Add(GetRegistrationById(a.Id, a));
+                serviceTransactions.Add(GetRegistrationById(a.Id));
             }
 
             return serviceTransactions.ToArray();

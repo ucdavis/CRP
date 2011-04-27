@@ -19,7 +19,7 @@ namespace CRP.Services.Wcf
         ServiceTransaction GetRegistrationByReference(int itemId, string registrationId);
 
         [OperationContract]
-        ServiceTransaction GetRegistrationById(int transactionId, Transaction transaction = null);
+        ServiceTransaction GetRegistrationById(int transactionId);
 
         [OperationContract]
         ServiceTransaction[] GetRegistrations(int itemId);
@@ -70,12 +70,4 @@ namespace CRP.Services.Wcf
         [EnumMember]
         SingleUsage
     };
-
-    //[DataContract]
-    //public class CouponTypes
-    //{
-    //    public static string Unlimited { get { return "Unlimited"; } }
-    //    public static string LimitedUsage { get { return "LimitedUsage"; } }
-    //    public static string SingleUsage { get { return "SingleUsage"; } }
-    //}
 }
