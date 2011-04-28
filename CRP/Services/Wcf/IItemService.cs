@@ -16,7 +16,7 @@ namespace CRP.Services.Wcf
         bool CancelCoupon(int itemId, string couponCode);
 
         [OperationContract]
-        ServiceTransaction GetRegistrationByReference(int itemId, string registrationId);
+        ServiceTransaction GetRegistrationByReference(int itemId, string referenceId);
 
         [OperationContract]
         ServiceTransaction[] GetRegistrations(int itemId);
@@ -25,6 +25,9 @@ namespace CRP.Services.Wcf
     [DataContract]
     public class ServiceTransaction
     {
+        [DataMember]
+        public string ReferenceId { get; set; }
+
         // extract the fields that we can
         [DataMember]
         public string TransactionNumber { get; set; }

@@ -49,10 +49,10 @@ namespace CRP.Services.Wcf
             return _couponService.Deactivate(coupon);
         }
 
-        public ServiceTransaction GetRegistrationByReference(int itemId, string registrationId)
+        public ServiceTransaction GetRegistrationByReference(int itemId, string referenceId)
         {
             var answers = RepositoryFactory.TransactionAnswerRepository.Queryable.Where(a => a.Transaction.Item.Id == itemId && a.Question.Name == "Reference Id").ToList();
-            var answer = answers.Where(a => a.Answer.Trim() == registrationId).FirstOrDefault();
+            var answer = answers.Where(a => a.Answer.Trim() == referenceId).FirstOrDefault();
 
             if (answer == null)
             {
@@ -60,7 +60,6 @@ namespace CRP.Services.Wcf
             }
 
             var serviceTransaction = GetRegistrationById(answer.Transaction.Id);
-
             return serviceTransaction;
         }
 
@@ -90,6 +89,8 @@ namespace CRP.Services.Wcf
             var lastNameQ = transaction.TransactionAnswers.Where(a => a.Question.Name == StaticValues.Question_LastName).FirstOrDefault();
             var firstNameQ = transaction.TransactionAnswers.Where(a => a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault();
 
+            var referenceQ = transaction.TransactionAnswers.Where(a => a.Question.Name == "Reference Id").FirstOrDefault();
+
             // populate the service objects
             var serviceTransaction = new ServiceTransaction()
             {
@@ -97,7 +98,8 @@ namespace CRP.Services.Wcf
                 FirstName = firstNameQ != null ? firstNameQ.Answer : string.Empty,
                 LastName = lastNameQ != null ? lastNameQ.Answer : string.Empty,
                 Paid = transaction.Paid,
-                TransactionNumber = transaction.TransactionNumber
+                TransactionNumber = transaction.TransactionNumber,
+                ReferenceId = referenceQ != null ? referenceQ.Answer : string.Empty
             };
 
             // load all the questions
