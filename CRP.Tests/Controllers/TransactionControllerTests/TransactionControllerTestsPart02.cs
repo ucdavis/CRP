@@ -22,7 +22,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         [TestMethod]
         public void TestCheckoutGetMapping()
         {
-            "~/Transaction/Checkout/5".ShouldMapTo<TransactionController>(a => a.Checkout(5));
+            "~/Transaction/Checkout/5".ShouldMapTo<TransactionController>(a => a.Checkout(5, null));
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         [TestMethod]
         public void TestCheckoutPostMapping()
         {
-            "~/Transaction/Checkout/5".ShouldMapTo<TransactionController>(a => a.Checkout(5, 1, null, null, "test", string.Empty, string.Empty, new QuestionAnswerParameter[1], new QuestionAnswerParameter[1], true), true);
+            "~/Transaction/Checkout/5".ShouldMapTo<TransactionController>(a => a.Checkout(5, null, 1, null, null, "test", string.Empty, string.Empty, new QuestionAnswerParameter[1], new QuestionAnswerParameter[1], true), true);
         }
 
         /// <summary>

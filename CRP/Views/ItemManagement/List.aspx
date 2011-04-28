@@ -49,7 +49,7 @@
                             col.Bound(a => a.Available);     
                             col.Template(a => 
                                         {%>
-                                            <%= Html.ActionLink<TransactionController>(b => b.Checkout(a.Id ), "Register") %>
+                                            <%= Html.ActionLink<TransactionController>(b => b.Checkout(a.Id, null), "Register") %>
                                         <%});                      
                         })
             .Sortable()

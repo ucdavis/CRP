@@ -39,7 +39,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, null);
             
             if (!item.IsAvailableForReg)
             {

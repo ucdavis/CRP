@@ -19,9 +19,6 @@ namespace CRP.Services.Wcf
         ServiceTransaction GetRegistrationByReference(int itemId, string registrationId);
 
         [OperationContract]
-        ServiceTransaction GetRegistrationById(int transactionId);
-
-        [OperationContract]
         ServiceTransaction[] GetRegistrations(int itemId);
     }
 

@@ -16,7 +16,7 @@
         <!-- Render the controls now -->
         <% switch(Model.Question.QuestionType.Name) { %>
             <% case "Text Box" : %>
-                 <%= Html.TextBox(".Answer", Model.Answer, new {@class="indexedControl " + Model.Question.ValidationClasses}) %>
+                 <%= Html.TextBox(".Answer", Model.Answer, new {@class="indexedControl " + Model.Question.ValidationClasses, disabled = Model.Disable}) %>
             <% break; %>
             <% case "Text Area" : %>
                 <%= Html.TextArea(".Answer", Model.Answer, new { @class = StaticValues.Class_indexedControl })%>

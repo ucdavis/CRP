@@ -25,7 +25,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(1)
+            Controller.Checkout(1, null)
                 .AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
             #endregion Act
@@ -46,7 +46,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.Checkout(2)
+            var result = Controller.Checkout(2, null)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -69,7 +69,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.Checkout(2)
+            var result = Controller.Checkout(2, null)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -103,7 +103,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2);
+            Controller.Checkout(2, null);
             #endregion Act
         }
 
@@ -118,7 +118,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            var result = Controller.Checkout(2)
+            var result = Controller.Checkout(2, null)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act

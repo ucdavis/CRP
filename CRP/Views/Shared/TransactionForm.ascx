@@ -21,9 +21,17 @@
         <ul>
         <% foreach (var q in qs.QuestionSet.Questions) {
                 var answer = Model.Answers.Where(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id).FirstOrDefault();
+                var disable = false;
+               
+                if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                {
+                    disable = true;
+                    answer = new ItemTransactionAnswer() {Answer = Model.ReferenceId};
+                }
+               
                %>
         
-            <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty)); %>
+            <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty, disable)); %>
         
         <% } %></ul>
         
@@ -54,11 +62,18 @@
                 <%}%>
                 <ul>
                 <% foreach (var q in qs.QuestionSet.Questions) {
-    int i1 = i;
-    var answer = Model.Answers.Where(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i1).FirstOrDefault();
+                        int i1 = i;
+                        var answer = Model.Answers.Where(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i1).FirstOrDefault();
+                        var disable = false;
+
+                        if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                        {
+                            disable = true;
+                            answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                        }
                    %>
                 
-                    <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty)); %>
+                    <% Html.RenderPartial(StaticValues.Partial_QuestionForm, new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty, disable)); %>
                 
                 <% } %>
             </ul>    

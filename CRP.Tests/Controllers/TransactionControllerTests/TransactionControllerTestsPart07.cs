@@ -36,7 +36,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -65,7 +65,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -96,7 +96,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -127,7 +127,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -158,7 +158,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -187,7 +187,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -216,7 +216,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -243,7 +243,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -274,7 +274,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -303,7 +303,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -331,7 +331,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -369,7 +369,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -407,7 +407,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -434,7 +434,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -466,7 +466,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -495,7 +495,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -522,7 +522,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -560,7 +560,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -598,7 +598,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -625,7 +625,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -652,7 +652,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -682,7 +682,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -711,7 +711,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -740,7 +740,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -769,7 +769,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -798,7 +798,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -827,7 +827,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -865,7 +865,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -903,7 +903,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -930,7 +930,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -957,7 +957,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -984,7 +984,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -1011,7 +1011,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -1041,7 +1041,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -1070,7 +1070,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -1099,7 +1099,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -1128,7 +1128,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -1157,7 +1157,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -1184,7 +1184,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -1222,7 +1222,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertActionRedirect()
                 .ToAction<TransactionController>(a => a.Confirmation(1));
             #endregion Act
@@ -1260,7 +1260,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act
@@ -1287,7 +1287,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(2, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
+            Controller.Checkout(2, null, 3, null, (Items[1].CostPerItem * 3), StaticValues.CreditCard, string.Empty, null, TransactionAnswerParameters, null, true)
                 .AssertViewRendered()
                 .WithViewData<ItemDetailViewModel>();
             #endregion Act

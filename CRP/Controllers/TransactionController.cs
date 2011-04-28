@@ -41,8 +41,9 @@ namespace CRP.Controllers
         /// GET: /Transaction/Checkout/{id}
         /// </summary>
         /// <param name="id">Item id</param>
+        /// <param name="referenceId">Reference Number for external applications</param>
         /// <returns></returns>
-        public ActionResult Checkout(int id)
+        public ActionResult Checkout(int id, string referenceId)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -52,7 +53,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId);
             viewModel.Quantity = 1;
             viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
             viewModel.TotalAmountToRedisplay = viewModel.Quantity*item.CostPerItem;
@@ -94,7 +95,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [CaptchaValidator]
         [HttpPost]
-        public ActionResult Checkout(int id, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
+        public ActionResult Checkout(int id, string referenceId, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
         {
             // if the arrays are null create new blank ones
             if (transactionAnswers==null) transactionAnswers = new QuestionAnswerParameter[0];
@@ -368,7 +369,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.Confirmation(transaction.Id));
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId);
             viewModel.Quantity = quantity;
             viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
             viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);

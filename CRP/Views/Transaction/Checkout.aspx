@@ -112,7 +112,7 @@
         </p>
     </div>
     
-    <% Html.RenderPartial(StaticValues.Partial_TransactionForm, new ItemTransactionViewModel(Model.Item, Model.OpenIdUser, Model.Quantity, Model.Answers)); %>
+    <% Html.RenderPartial(StaticValues.Partial_TransactionForm, new ItemTransactionViewModel(Model.Item, Model.OpenIdUser, Model.Quantity, Model.Answers, Model.ReferenceId)); %>
 
     <p>
         <%= Html.GenerateCaptcha() %>

@@ -23,6 +23,8 @@ namespace CRP.Controllers.ViewModels
         public decimal CouponTotalDiscountToDisplay { get; set; }
         public bool HasMapPins { get; set; }
 
+        public string ReferenceId { get; set; }
+
         /// <summary>
         /// Creates the specified View Model.
         /// </summary>
@@ -31,12 +33,12 @@ namespace CRP.Controllers.ViewModels
         /// <param name="item">The item.</param>
         /// <param name="openIdUser">The open id user.</param>
         /// <returns></returns>
-        public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser)
+        public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser, string referenceId)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(openIdRepository != null, "Repository is required.");
 
-            var viewModel = new ItemDetailViewModel() {Item = item};
+            var viewModel = new ItemDetailViewModel() {Item = item, ReferenceId = referenceId};
 
             // get the proper display profile
             var unit = item.Unit;
@@ -95,32 +97,38 @@ namespace CRP.Controllers.ViewModels
 
     public class ItemTransactionViewModel
     {
-        public ItemTransactionViewModel(Item item, OpenIdUser openIDUser, int quantity, IEnumerable<ItemTransactionAnswer> answers)
+        public ItemTransactionViewModel(Item item, OpenIdUser openIDUser, int quantity, IEnumerable<ItemTransactionAnswer> answers, string referenceId)
         {
             Item  = item;
             OpenIDUser = openIDUser;
             Quantity = quantity;
             Answers = answers;
+            ReferenceId = referenceId;
         }
 
         public Item Item{ get; set; }
         public OpenIdUser OpenIDUser { get; set; }
         public int Quantity { get; set; }
         public IEnumerable<ItemTransactionAnswer> Answers { get; set; }
+
+        public string ReferenceId { get; set; }
     }
 
     public class ItemQuestionViewModel
     {
-        public ItemQuestionViewModel(Question question, OpenIdUser openIDUser, string answer)
+        public ItemQuestionViewModel(Question question, OpenIdUser openIDUser, string answer, bool disable)
         {
             Question = question;
             OpenIDUser = openIDUser;
             Answer = answer;
+            Disable = disable;
         }
 
         public Question Question { get; set; }
         public OpenIdUser OpenIDUser { get; set; }
         public string Answer { get; set; }
+
+        public bool Disable { get; set; }
     }
 
     public class ItemTransactionAnswer
