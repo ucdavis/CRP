@@ -1,0 +1,4 @@
+﻿# robots.txt for Registrations
+User-agent: *
+Disallow:
+

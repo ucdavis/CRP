@@ -307,10 +307,12 @@
     <Content Include="Content\2009.3.1103.0\WebBlue\sprite.png" />
     <Content Include="CRP.Publish.xml" />
     <Content Include="Default.aspx" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\minus.png" />
     <Content Include="Images\plus.png" />
     <Content Include="Images\register.png" />
+    <Content Include="Robots.txt" />
     <Content Include="Scripts\ItemEdit.js" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
