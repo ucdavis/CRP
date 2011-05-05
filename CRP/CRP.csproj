@@ -711,7 +711,7 @@
     <Content Include="Views\Transaction\DetailsRefund.aspx" />
     <Content Include="Views\Transaction\Edit.aspx" />
     <Content Include="Views\Transaction\Refund.aspx" />
-    <None Include="Content\NPOITemplate.xls" />
+    <Content Include="Content\NPOITemplate.xls" />
     <Content Include="Images\fonts\Quicksand_Bold.eot" />
     <Content Include="Images\fonts\Quicksand_Bold.ttf" />
     <Content Include="Images\fonts\Quicksand_Bold_Oblique.eot" />
