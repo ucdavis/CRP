@@ -280,7 +280,7 @@
                 <%= Html.Hidden("_PropertyName", StaticValues.Report_PaymentType, new { @class = StaticValues.Class_indexedControl })%>                --%>
 
                 <input type="checkbox" id="_Selected" class="<%: StaticValues.Class_indexedControl %>" />
-                <label for="Selected" class="_Selected"><%= Html.Encode("Payment Type") %></label>
+                <label for="Selected" class="indexedControl"><%= Html.Encode("Payment Type") %></label>
                 <input type="hidden" id="_Property" class="<%: StaticValues.Class_indexedControl %>" value="true" />
                 <input type="hidden" id="_PropertyName" class="<%: StaticValues.Class_indexedControl %>" value="<%: StaticValues.Report_PaymentType %>" />
             </span>
