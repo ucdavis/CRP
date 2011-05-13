@@ -114,7 +114,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         /// Tests the checkout transaction answers text Area.
         /// </summary>
         [TestMethod]
-        public void TestCheckoutTransactionAnswersTextArea4()
+        public void TestCheckoutTransactionAnswersTextArea4() //Note Change on May 13, 2011 caused this to fail. The only reason I can think it passed before was a database change to the answers table - JCS
         {
             #region Arrange
             SetupDataForCheckoutTests();
@@ -355,7 +355,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         }
 
         [TestMethod]
-        public void TestCheckoutTransactionAnswersTextAreaEmailValidators4()
+        public void TestCheckoutTransactionAnswersTextAreaEmailValidators4() //Note Change on May 13, 2011 caused this to fail. The only reason I can think it passed before was a database change to the answers table - JCS
         {
             #region Arrange
             SetupDataForCheckoutTests();
@@ -546,7 +546,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         }
 
         [TestMethod]
-        public void TestCheckoutTransactionAnswersTextAreaUrlValidators4()
+        public void TestCheckoutTransactionAnswersTextAreaUrlValidators4() //Note Change on May 13, 2011 caused this to fail. The only reason I can think it passed before was a database change to the answers table - JCS
         {
             #region Arrange
             SetupDataForCheckoutTests();
@@ -813,7 +813,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         }
 
         [TestMethod]
-        public void TestCheckoutTransactionAnswersTextAreaDateValidators7()
+        public void TestCheckoutTransactionAnswersTextAreaDateValidators7() //Note Change on May 13, 2011 caused this to fail. The only reason I can think it passed before was a database change to the answers table - JCS
         {
             #region Arrange
             SetupDataForCheckoutTests();
@@ -1170,7 +1170,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         }
 
         [TestMethod]
-        public void TestCheckoutTransactionAnswersTextAreaPhoneNumberValidators6()
+        public void TestCheckoutTransactionAnswersTextAreaPhoneNumberValidators6() //Note Change on May 13, 2011 caused this to fail. The only reason I can think it passed before was a database change to the answers table - JCS
         {
             #region Arrange
             SetupDataForCheckoutTests();
