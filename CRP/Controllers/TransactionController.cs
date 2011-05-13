@@ -432,7 +432,7 @@ namespace CRP.Controllers
                     answer = string.Empty;
                 }
             }
-            return answer;
+            return answer ?? (string.Empty);  //Something seems to have changed in the view where an empty text area now has null instead of an empty string
         }
 
 
