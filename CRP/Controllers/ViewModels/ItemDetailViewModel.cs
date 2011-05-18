@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
+using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
 
@@ -73,6 +74,7 @@ namespace CRP.Controllers.ViewModels
         public Item Item { get; set; }
         public IEnumerable<ItemReport> Reports { get; set; }
         public string Fid { get; set; }
+        public IList<CheckName> CheckName { get; set; }
 
         public static UserItemDetailViewModel Create(IRepository repository, Item item)
         {
@@ -80,7 +82,8 @@ namespace CRP.Controllers.ViewModels
 
             var viewModel = new UserItemDetailViewModel()
                                 {
-                                    Item = item//,
+                                    Item = item,
+                                    CheckName = new List<CheckName>()//,
                                     //SystemReports = repository.OfType<ItemReport>().Queryable.Where(a => a.SystemReusable).Union(repository.OfType<ItemReport>().Queryable.Where(b => !b.SystemReusable && b.Item == item).ToList()).ToList()
                                 };
 
@@ -91,7 +94,32 @@ namespace CRP.Controllers.ViewModels
             //viewModel.Fid = string.Format(" FID={0}", ConfigurationManager.AppSettings["TouchNetFid"]);
             viewModel.Fid = string.Format(" FID={0}", string.IsNullOrEmpty(item.TouchnetFID) ? string.Empty : item.TouchnetFID);
 
+            foreach (var transaction in viewModel.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null && a.IsActive))
+            {
+                var checkName = new CheckName();
+                checkName.TransactionNumber = transaction.TransactionNumber;
+                checkName.LastName = transaction.TransactionAnswers.Where(a =>
+                        a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                        a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
+                checkName.FirstName = transaction.TransactionAnswers.Where(a =>
+                        a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                        a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
+
+                viewModel.CheckName.Add(checkName);
+            }
+
             return viewModel;
+        }
+    }
+
+    public class CheckName
+    {
+        public string TransactionNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName
+        {
+            get { return string.Format("{0}, {1}", LastName, FirstName); }
         }
     }
 

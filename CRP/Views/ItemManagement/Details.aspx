@@ -125,6 +125,10 @@
                                                 
                                                 <%});
                                     col.Bound(a => a.TransactionNumber).Title("Transaction Number");
+                                    col.Bound(
+                                        a =>
+                                        Model.CheckName.Where(z => z.TransactionNumber == a.TransactionNumber).
+                                            FirstOrDefault().FullName).Sortable(false).Title("Contact Name");
                                     col.Bound(a => a.Quantity);
                                     col.Bound(a => a.Total).Format("{0:C}").Title("Amount");
                                     col.Bound(a => a.Paid);
