@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.Services;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
@@ -882,10 +883,10 @@ namespace CRP.Tests.Controllers
         }
         
         /// <summary>
-        /// Tests the controller has only two attributes.
+        /// Tests the controller has three attributes.
         /// </summary>
         [TestMethod]
-        public void TestControllerHasOnlyTwoAttributes()
+        public void TestControllerHasThreeAttributes()
         {
             #region Arrange
             var controllerClass = _controllerClass;
@@ -896,7 +897,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(3, result.Count());
             #endregion Assert
         }
                 
@@ -935,6 +936,22 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsTrue(result.Count() > 0, "UseAntiForgeryTokenOnPostByDefault not found.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestControllerHasLocServiceMessageAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<LocServiceMessageAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "LocServiceMessageAttribute not found.");
             #endregion Assert
         }
         #endregion Controller Class Tests

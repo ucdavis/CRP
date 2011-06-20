@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
@@ -24,6 +26,7 @@ namespace CRP.Tests.Controllers
         protected List<ItemType> ItemTypes { get; set; }
         protected List<QuestionType> QuestionTypes { get; set; }
         protected IRepository<QuestionType> QuestionTypeRepository { get; set; }
+        private readonly Type _controllerClass = typeof(ApplicationManagementController);
 
         #region Init
 
@@ -615,7 +618,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerInheritsFromSuperController()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             #endregion Arrange
 
             #region Act
@@ -628,13 +631,13 @@ namespace CRP.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests the controller has only three attributes.
+        /// Tests the controller has four attributes.
         /// </summary>
         [TestMethod]
-        public void TestControllerHasOnlyThreeAttributes()
+        public void TestControllerHasFourAttributes()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             #endregion Arrange
 
             #region Act
@@ -642,7 +645,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(3, result.Count());
+            Assert.AreEqual(4, result.Count());
             #endregion Assert		
         }
         /// <summary>
@@ -652,7 +655,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerHasAdminOnlyAttribute()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             #endregion Arrange
 
             #region Act
@@ -671,7 +674,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerHasTransactionAttribute()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             #endregion Arrange
 
             #region Act
@@ -690,7 +693,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerHasAntiForgeryTokenAttribute()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             #endregion Arrange
 
             #region Act
@@ -699,6 +702,23 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.IsTrue(result.Count() > 0, "UseAntiForgeryTokenOnPostByDefault not found.");
+            #endregion Assert
+        }
+
+
+        [TestMethod]
+        public void TestControllerHasLocServiceMessageAttribute()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<LocServiceMessageAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "LocServiceMessageAttribute not found.");
             #endregion Assert
         }
         #endregion Controller Class Tests
@@ -712,7 +732,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerContainsExpectedNumberOfPublicMethods()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);            
+            var controllerClass = _controllerClass;            
             #endregion Arrange
 
             #region Act
@@ -732,7 +752,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerMethodListContainsExpectedAttributes()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethod("Index");
             #endregion Arrange
 
@@ -752,7 +772,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerMethodListItemTypesContainsExpectedAttributes()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethod("ListItemTypes");
             #endregion Arrange
 
@@ -771,7 +791,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerMethodCreateItemTypeContainsExpectedAttributes()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "CreateItemType");
             #endregion Arrange
 
@@ -790,7 +810,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerMethodCreateItemTypeContainsExpectedAttributes2()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "CreateItemType");
             #endregion Arrange
 
@@ -811,7 +831,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerMethodEditItemTypeContainsExpectedAttributes()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "EditItemType");
             #endregion Arrange
 
@@ -831,7 +851,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerMethodEditItemTypeContainsExpectedAttributes2()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "EditItemType");
             #endregion Arrange
 
@@ -852,7 +872,7 @@ namespace CRP.Tests.Controllers
         public void TestControllerMethodToggleActiveContainsExpectedAttributes()
         {
             #region Arrange
-            var controllerClass = typeof(ApplicationManagementController);
+            var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethod("ToggleActive");
             #endregion Arrange
 

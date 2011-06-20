@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.Attributes;
 using UCDArch.Web.Attributes;
@@ -35,10 +36,10 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
         }
 
         /// <summary>
-        /// Tests the controller has only two attributes.
+        /// Tests the controller has 3 attributes.
         /// </summary>
         [TestMethod]
-        public void TestControllerHasOnlyTwoAttributes()
+        public void TestControllerHasThreeAttributes()
         {
             #region Arrange
             var controllerClass = ControllerClass;
@@ -49,7 +50,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(3, result.Count());
             #endregion Assert
         }
 
@@ -88,6 +89,22 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
 
             #region Assert
             Assert.IsTrue(result.Count() > 0, "UseAntiForgeryTokenOnPostByDefault not found.");
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestControllerHasLocServiceMessageAttribute()
+        {
+            #region Arrange
+            var controllerClass = ControllerClass;
+            #endregion Arrange
+
+            #region Act
+            var result = controllerClass.GetCustomAttributes(true).OfType<LocServiceMessageAttribute>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsTrue(result.Count() > 0, "LocServiceMessageAttribute not found.");
             #endregion Assert
         }
 
