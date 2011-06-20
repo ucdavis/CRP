@@ -4,11 +4,12 @@ using CRP.Controllers.ViewModels;
 using Elmah;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Attributes;
+using MvcContrib;
 
 namespace CRP.Controllers
 {
     [HandleTransactionsManually]
-    public class HomeController : SuperController
+    public class HomeController : ApplicationController
     {
         public ActionResult Index()
         {
@@ -33,6 +34,14 @@ namespace CRP.Controllers
         public ActionResult TestException()
         {
             throw new ApplicationException("Exception successfully thrown.");
+        }
+
+        [AdminOnly]
+        public ActionResult ResetCache()
+        {
+            HttpContext.Cache.Remove("ServiceMessages");
+
+            return this.RedirectToAction(a => a.Index());
         }
     }
 }

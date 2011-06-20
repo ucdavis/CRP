@@ -11,7 +11,7 @@ using UCDArch.Web.Helpers;
 namespace CRP.Controllers
 {
     [AdminOnly]
-    public class FIDController : SuperController
+    public class FIDController : ApplicationController
     {
 
         /// <summary>

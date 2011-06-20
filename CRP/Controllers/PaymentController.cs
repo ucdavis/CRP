@@ -15,7 +15,7 @@ using UCDArch.Web.Validator;
 namespace CRP.Controllers
 {
     [UserOnly]
-    public class PaymentController : SuperController
+    public class PaymentController : ApplicationController
     {
         private readonly INotificationProvider _notificationProvider;
 

@@ -15,7 +15,7 @@ using MvcContrib;
 namespace CRP.Controllers
 {
     [AdminOnly]
-    public class ApplicationKeyController : SuperController
+    public class ApplicationKeyController : ApplicationController
     {
         private readonly IRepository<ApplicationKey> _applicationKeyRepository;
 

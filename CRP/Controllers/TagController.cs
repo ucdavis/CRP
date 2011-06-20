@@ -7,7 +7,7 @@ using UCDArch.Web.Controller;
 
 namespace CRP.Controllers
 {
-    public class TagController : SuperController
+    public class TagController : ApplicationController
     {
         //
         // GET: /Tag/

@@ -17,7 +17,7 @@ using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
-    public class ReportController : SuperController
+    public class ReportController : ApplicationController
     {
         const string ImageType = @"image/png";
 

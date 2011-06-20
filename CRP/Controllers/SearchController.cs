@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace CRP.Controllers
 {
-    public class SearchController : SuperController
+    public class SearchController : ApplicationController
     {
         private readonly ISearchTermProvider _searchTermProvider;
 

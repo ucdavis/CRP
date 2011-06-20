@@ -14,7 +14,7 @@ using UCDArch.Web.Validator;
 namespace CRP.Controllers
 {
     [AnyoneWithRole]
-    public class MapPinController : SuperController
+    public class MapPinController : ApplicationController
     {
         private readonly IAccessControlService _accessControlService;
         public MapPinController(IAccessControlService AccessControlService)

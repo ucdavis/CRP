@@ -18,7 +18,7 @@ using UCDArch.Web.Validator;
 namespace CRP.Controllers
 {
     [UserOnly]
-    public class ItemManagementController : SuperController
+    public class ItemManagementController : ApplicationController
     {
         //
         // GET: /ItemManagement/

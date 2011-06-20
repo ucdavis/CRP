@@ -27,7 +27,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual("SuperController", result);
+            Assert.AreEqual("ApplicationController", result);
             #endregion Assert
         }
 

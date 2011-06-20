@@ -191,10 +191,12 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationKeyController.cs" />
     <Compile Include="Controllers\ApplicationManagementController.cs" />
+    <Compile Include="Controllers\ApplicatonController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\FIDController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\Helpers\ServiceMessages.cs" />
     <Compile Include="Controllers\Helpers\StringExtension.cs" />
     <Compile Include="Controllers\Helpers\ValidateParameters.cs" />
     <Compile Include="Controllers\MapPinController.cs" />
@@ -593,6 +595,7 @@
     <Content Include="Views\QuestionSet\LinkToItemType.aspx" />
     <Content Include="Views\QuestionSet\List.aspx" />
     <Content Include="Views\Question\Create.aspx" />
+    <Content Include="Views\Shared\SystemMessage.ascx" />
     <Content Include="Views\Shared\TagView.ascx" />
     <Content Include="Views\Shared\TransactionForm.ascx" />
     <Content Include="Views\Tag\Index.aspx" />

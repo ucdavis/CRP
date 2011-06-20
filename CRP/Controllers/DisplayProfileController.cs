@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace CRP.Controllers
 {
-    public class DisplayProfileController : SuperController
+    public class DisplayProfileController : ApplicationController
     {
         private readonly IRepositoryWithTypedId<School, string> _schoolRepository;
 

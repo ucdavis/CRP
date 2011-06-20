@@ -30,7 +30,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Act
 
             #region Assert
-            Assert.AreEqual("SuperController", result);
+            Assert.AreEqual("ApplicationController", result);
             #endregion Assert
         }
 

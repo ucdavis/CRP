@@ -4,7 +4,7 @@ using UCDArch.Web.Controller;
 
 namespace CRP.Controllers
 {
-    public class ErrorController : SuperController
+    public class ErrorController : ApplicationController
     {
         //
         // GET: /Error/

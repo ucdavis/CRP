@@ -15,7 +15,7 @@ using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
-    public class CouponController : SuperController
+    public class CouponController : ApplicationController
     {
         private readonly ICouponService _couponService;
 

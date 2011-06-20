@@ -15,7 +15,7 @@ using MvcContrib;
 
 namespace CRP.Controllers
 {
-    public class HelpController : SuperController
+    public class HelpController : ApplicationController
     {
         //
         // GET: /Help/

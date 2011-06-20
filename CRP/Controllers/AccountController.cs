@@ -16,7 +16,7 @@ using OpenIdUser=CRP.Core.Domain.OpenIdUser;
 
 namespace CRP.Controllers
 {
-    public class AccountController : SuperController
+    public class AccountController : ApplicationController
     {
         private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
 

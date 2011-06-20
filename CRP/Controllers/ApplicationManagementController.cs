@@ -14,7 +14,7 @@ using MvcContrib;
 namespace CRP.Controllers
 {
     [AdminOnlyAttribute]
-    public class ApplicationManagementController : SuperController
+    public class ApplicationManagementController : ApplicationController
     {
         //
         // GET: /ApplicationManagement/

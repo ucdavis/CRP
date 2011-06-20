@@ -11,7 +11,7 @@ using UCDArch.Web.Helpers;
 namespace CRP.Controllers
 {
     [AdminOnly]
-    public class TemplateController : SuperController
+    public class TemplateController : ApplicationController
     {
         /// <summary>
         /// GET: /Template/Edit

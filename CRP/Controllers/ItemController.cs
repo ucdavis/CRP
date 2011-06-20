@@ -9,7 +9,7 @@ using MvcContrib;
 
 namespace CRP.Controllers
 {
-    public class ItemController : SuperController
+    public class ItemController : ApplicationController
     {
         private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
         private readonly ISearchTermProvider _searchTermProvider;

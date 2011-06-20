@@ -14,7 +14,7 @@ using CRP.Core.Resources;
 namespace CRP.Controllers
 {
     [AdminOnlyAttribute]
-    public class ExtendedPropertyController : SuperController
+    public class ExtendedPropertyController : ApplicationController
     {
         //
         // GET: /ExtendedProperty/

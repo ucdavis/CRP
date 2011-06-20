@@ -12,7 +12,7 @@ using UCDArch.Web.Validator;
 namespace CRP.Controllers
 {
     [Authorize]
-    public class QuestionController : SuperController
+    public class QuestionController : ApplicationController
     {
 
         /// <summary>

@@ -14,7 +14,7 @@ using UCDArch.Web.Controller;
 namespace CRP.Controllers
 {
     [UserOnly]
-    public class ExcelController : SuperController
+    public class ExcelController : ApplicationController
     {
 
         public ActionResult CreateExcelReport(int id, int itemId)

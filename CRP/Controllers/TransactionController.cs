@@ -26,7 +26,7 @@ using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
-    public class TransactionController : SuperController
+    public class TransactionController : ApplicationController
     {
         private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
         private readonly INotificationProvider _notificationProvider;
