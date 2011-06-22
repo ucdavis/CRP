@@ -32,6 +32,7 @@ namespace CRP.Core.Domain
         public virtual string EmployeeID { get; set; }
         public virtual string SID { get; set; }
         public virtual Guid UserKey { get; set; }
+        public virtual int? ActiveUserId { get; set; }
 
         public virtual string FullName { 
             get

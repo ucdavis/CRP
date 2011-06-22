@@ -32,7 +32,7 @@
 
   <class
     name="User"
-    table="vUsers" mutable="false" >
+    table="vUsers2" mutable="false" >
     <id name="Id" column="id">
       <generator class="identity" />
     </id>
@@ -45,6 +45,7 @@
     <property name="EmployeeID" column="EmployeeID" />
     <property name="SID" column="SID" />
     <property name="UserKey" column="UserKey" />
+    <property name="ActiveUserId" column="ActiveUserId"/>
 
     <bag name="Units" table="vUnitAssociations" cascade="all-delete-orphan">
       <key column="UserId" />

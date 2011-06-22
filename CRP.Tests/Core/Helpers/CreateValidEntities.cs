@@ -41,6 +41,7 @@ namespace CRP.Tests.Core.Helpers
             var rtValue = new User();
             rtValue.FirstName = "FirstName" + counter.Extra();
             rtValue.Units = new List<Unit>();
+            rtValue.ActiveUserId = counter;
 
             return rtValue;
         }

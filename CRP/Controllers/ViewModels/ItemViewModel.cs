@@ -25,7 +25,7 @@ namespace CRP.Controllers.ViewModels
 
             var viewModel = new ItemViewModel(){
                 ItemTypes = repository.OfType<ItemType>().Queryable.Where(a => a.IsActive).ToList(),
-                Users = repository.OfType<User>().Queryable,
+                Users = repository.OfType<User>().Queryable.Where(a => a.ActiveUserId != null),
                 CurrentUser = repository.OfType<User>().Queryable.Where(a => a.LoginID == principal.Identity.Name).FirstOrDefault(),
                 TouchnetFIDs = repository.OfType<TouchnetFID>().GetAll()
             };
