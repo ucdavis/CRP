@@ -328,7 +328,8 @@
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "li");
             addQuantityIndex($("div.QuantityContainer"));
             $.each($("input.dateForm"), function(index, item){    
-                //$(item).watermark("mm/dd/yyyy", { className: "watermark" });  
+                //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
+                $(item).attr("title", "");  
                 $(item).bt('mm/dd/yyyy format');  
                 if(!$(item).hasClass("hasDatepicker")){
                     $(item).datepicker();
@@ -336,14 +337,17 @@
             });
             $.each($("input.date"), function(index, item){
                 //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
+                $(item).attr("title", ""); 
                 $(item).bt('mm/dd/yyyy format');
             });
             $.each($("input.url"), function(index, item){
                 //$(item).watermark("Example: http://www.ucdavis.edu/index.html", { className: "watermark" });
+                $(item).attr("title", ""); 
                 $(item).bt('You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html');
             });
             $.each($("input.phoneUS"), function(index, item){
                 //$(item).watermark("(###) ###-####", { className: "watermark" });
+                $(item).attr("title", ""); 
                 $(item).bt('(###) ###-#### format');
             });          
 //            $("input.dateForm").filter().datepicker();

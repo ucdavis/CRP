@@ -60,6 +60,7 @@
 
         $(function () {
             $("#map").gPositions({ helpIcon: '<%= Url.Content("~/Images/question_blue.png") %>' });
+            $(".gp-sidecontainer-title img").attr("title", "");
             $(".gp-sidecontainer-title img").bt("To view Locations on the map, click on the tabs below"); //, { positions: 'bottom' });
         });
 
