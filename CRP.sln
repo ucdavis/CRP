@@ -65,24 +65,6 @@ EndProject
 Project("{C8D11400-126E-41CD-887F-60BD40844F9E}") = "CRP.DB", "CRP.DB\CRP.DB.dbproj", "{67CBC824-A49E-4E9B-A947-360F3DFE65C3}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.caes.ucdavis.edu:8088/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = CRP.Core\\CRP.Core.csproj
-		SccProjectName1 = CRP.Core
-		SccLocalPath1 = CRP.Core
-		SccProjectUniqueName2 = CRP.Tests\\CRP.Tests.csproj
-		SccProjectName2 = CRP.Tests
-		SccLocalPath2 = CRP.Tests
-		SccProjectUniqueName3 = CRP\\CRP.csproj
-		SccProjectName3 = CRP
-		SccLocalPath3 = CRP
-		SccProjectUniqueName4 = CRP.DB\\CRP.DB.dbproj
-		SccProjectName4 = CRP.DB
-		SccLocalPath4 = CRP.DB
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
