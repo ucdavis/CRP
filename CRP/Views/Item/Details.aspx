@@ -37,6 +37,8 @@
         <% } %>
 
         <!-- Only display the map if there are one or more map pins -->
+        <%-- Bing Maps Control, Replaced below with Google Maps
+            
         <% if (Model.HasMapPins) { %>
         <%= Html.ActionLink<ItemController>(a=>a.Map(Model.Item.Id, true), "Full Screen Map") %>
         <div id="map">
@@ -54,7 +56,28 @@
 		    </dl>
 		    </div>
 	    </div>
+        <% } %>--%>
+
+        <% if (Model.HasMapPins) { %>
+            <%= Html.ActionLink<ItemController>(a=>a.Map(Model.Item.Id, true), "Full Screen Map") %>
+
+            <div id="map" style="margin: 0px 0px 20px;">
+            
+                <div class="gp-map" style="height: 450px; width: 450px;"></div>
+
+                <% foreach (var a in Model.Item.MapPins) { %>
+                    <div class="gp-coordinate <%= a.IsPrimary ? "default-location" : string.Empty %>" data-lat="<%= a.Latitude %>" data-lng="<%= a.Longitude %>">
+                        <dt><%= Html.Encode(a.Title) %></dt>
+                        <% if (!string.IsNullOrWhiteSpace(a.Description)) { %>
+                            <dd><%= Html.Encode(a.Description ?? string.Empty) %></dd>
+                        <% } %>
+                    </div>
+                <% } %>
+
+            </div>
+
         <% } %>
+
 
         </li>
         
@@ -102,12 +125,12 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
-    <link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
+    <%--<link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
-    <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>--%>
         
     <!-- Only display the map if there are one or more map pins -->
-    <% if (Model.HasMapPins) { %>
+<%--    <% if (Model.HasMapPins) { %>
     <script type="text/javascript">
         $(function() {
             $("#map").bingmaps({ enableRouting: false, displayCurrentLocation: false, height:"450px", width:"450px" });
@@ -120,6 +143,21 @@
             <%} %>
         });
     </script>
+    <% } %>--%>
+
+    <% if (Model.HasMapPins) { %>
+
+        <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false" type="text/javascript"></script>
+        <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
+        <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
+
+        <script type="text/javascript">
+            $(function () {
+                $("#map").gPositions({ helpIcon: '<%= Url.Content("~/Images/question_blue.png") %>' });
+                $(".gp-sidecontainer-title img").attr("title", "");
+                $(".gp-sidecontainer-title img").bt("To view Locations on the map, click on the tabs below", { positions: 'top' });
+            });
+        </script>
     <% } %>
 
     <!-- Should a header color have been specified, then throw it in -->

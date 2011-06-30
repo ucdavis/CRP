@@ -1,23 +1,14 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Controllers.ViewModels.MapPinViewModel>" %>
+   
+    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false" type="text/javascript"></script>
+    <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
 
-    <link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
-    <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>    
     <script type="text/javascript">
-        $(function() {
-        $("#map").bingmaps({ enableRouting: false
-            , displayCurrentLocation: true
-            , crosshairLocation: '<%= Url.Content("~/Images/crosshair.gif") %>'
-            , displayLongitudeControl : $("#Longitude")
-            , displayLatitudeControl: $("#Latitude")
-            , defaultLat: <%= Model.MapPin.Id > 0 ? Model.MapPin.Latitude : (38.539438402158495).ToString() %>
-            , defaultLng: <%= Model.MapPin.Id > 0 ? Model.MapPin.Longitude : (-121.75701141357422).ToString() %>
-            , defaultZoom : <%= Model.MapPin.Id > 0 ? 16 : 14 %>
-            , displaySearch: true
-            });
-        });        
-    </script> 
-    
+        $(function () {
+            $("#map").gPositions({mode: MapMode.SELECTINGPOINT, showLocations: false});
+        });
+    </script>
     
     
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
@@ -30,13 +21,17 @@
             <legend>Fields</legend>
             
             <div id="map">
+                <div class="gp-map" style="height: 300px; width: 500px;"></div>
+
+                <% if (Model != null && Model.MapPin != null) { %>
+                    <div class="gp-coordinate gp-default" data-lat="<%= Model.MapPin.Latitude %>" data-lng="<%= Model.MapPin.Longitude %>">
+                        <dt class="gp-name">n/a</dt>
+                    </div>
+                <% } %>
+                
             </div>
-            <%--<input id="Latitude" type="hidden" name="Latitude" value="<%= Model != null && Model.MapPin != null ? Model.MapPin.Latitude : string.Empty %>" />
-            <input id="Longitude" type="hidden" name="Longitude" value="<%= Model != null && Model.MapPin != null ? Model.MapPin.Longitude : string.Empty %>" />--%>
-            <%= Html.Hidden("Latitude", Model != null && Model.MapPin != null ? Model.MapPin.Latitude : string.Empty) %>
-            <%= Html.Hidden("Longitude", Model != null && Model.MapPin != null ? Model.MapPin.Longitude : string.Empty)%>
-            
-           <ul>
+                        
+           <ul style="float:left; margin-top: 1em;">
             <li>
                 <label for="Title">Title:</label>
                 <%= Html.TextBox("Title", Model != null && Model.MapPin != null ? Model.MapPin.Title : string.Empty) %>
@@ -47,10 +42,10 @@
                 <%= Html.TextArea("Description", Model != null && Model.MapPin != null ? Model.MapPin.Description : string.Empty)%>
                 <%= Html.ValidationMessage("MapPinDescription")%>
             </li>
-            </ul>
-            <p>
+            <li>
                 <input type="submit" value="Save" />
-            </p>
+            </li>
+            </ul>
         </fieldset>
 
     <% } %>

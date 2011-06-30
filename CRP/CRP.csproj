@@ -286,6 +286,7 @@
     <Content Include="Content\2009.3.1103.0\Sunset\loading.gif" />
     <Content Include="Content\2009.3.1103.0\Sunset\sprite.png" />
     <Content Include="Content\2009.3.1103.0\telerik.black.min.css" />
+    <Content Include="Content\jquery.gPositions.css" />
     <Content Include="Content\telerik.common.min.css" />
     <Content Include="Content\2009.3.1103.0\telerik.default.min.css" />
     <Content Include="Content\2009.3.1103.0\telerik.forest.min.css" />
@@ -320,6 +321,7 @@
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="Scripts\jquery.gPositions.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

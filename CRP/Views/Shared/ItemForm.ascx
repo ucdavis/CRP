@@ -56,11 +56,11 @@
                                                         )%>
             </li>
             <li>
-                <label for="Item.TouchnetFID">FID:</label><span id="TouchnetFidExtraLable"><%=Html.Encode(Model.Item != null && Model.Item.TouchnetFID != null ? " " + Model.Item.TouchnetFID : string.Empty)%></span> <br />
+                <label for="Item.TouchnetFID">Account Number:</label><span id="TouchnetFidExtraLable"><%=Html.Encode(Model.Item != null && Model.Item.TouchnetFID != null ? " " + Model.Item.TouchnetFID : string.Empty)%></span> <br />
                 <% if (Model.Item == null || Model.IsNew || Model.CanChangeFID){%> 
                     <%=this.Select("Item.TouchnetFID")
                         .Options(Model.TouchnetFIDs, x=>x.FID, x=>x.Description)
-                        .FirstOption("--Select a Touchnet FID--")
+                        .FirstOption("--Select an Account Number--")
                         .Selected(Model.Item != null && Model.Item.TouchnetFID != null ? Model.Item.TouchnetFID : null)%>
                 <%} else {%>
                     <%=this.Select("Item.TouchnetFID")
@@ -68,11 +68,11 @@
                             .FirstOption("--Select a Touchnet FID--")
                             .Selected(Model.Item != null && Model.Item.TouchnetFID != null ? Model.Item.TouchnetFID : null).Disabled(true)%>
                 <% } %>
-                <%=Html.Encode("*Note: If you choose the wrong FID, you may not recieve your payments made by Credit Card.") %>                
+                <%=Html.Encode("*Note: If you choose the wrong Account Number, you may not recieve your payments made by Credit Card.") %>                
             </li>
             <li>
                 <label for="Item.Summary">Summary:</label><br />
-                <%= Html.TextArea("Item.Summary", new { style="height:175px; width: 750px" })%>
+                <%= Html.TextArea("Item.Summary", new { style="height:175px; width: 750px" , @title=' '})%>
                 <%= Html.ValidationMessage("Item.Summary", "*")%> 
             </li>
             <li>
@@ -116,12 +116,12 @@
             </li>
             <li>
                 <label for="Item.Expiration">Last Day To Register Online:</label> <br />
-                <%= Html.TextBox("Item.Expiration", Model.Item != null && Model.Item.Expiration.HasValue ? Model.Item.Expiration.Value.ToString("d") : string.Empty)%>
+                <%= Html.TextBox("Item.Expiration", Model.Item != null && Model.Item.Expiration.HasValue ? Model.Item.Expiration.Value.ToString("d") : string.Empty, new { @title = "" })%>
                 <%= Html.ValidationMessage("Item.Expiration", "*")%>
             </li>
             <li>
                 <label for="Item.Link">Link:</label><br />
-                <%= Html.TextBox("Item.Link", Model.Item != null ? Model.Item.Link : string.Empty, new { @class = "validateLink" })%>
+                <%= Html.TextBox("Item.Link", Model.Item != null ? Model.Item.Link : string.Empty, new { @class = "validateLink", @title = ""})%>
                 <%= Html.ValidationMessage("Item.Link", "*")%>
             </li>
             <li><table><tbody><tr><td>
@@ -193,7 +193,8 @@
                                         <input type="text" id='<%=Html.Encode("ExtendedProperties[" + i + "]_value")%>' 
                                                 name='<%=Html.Encode("ExtendedProperties[" + i + "].value")%>' 
                                                 value='<%=Html.Encode(ans != null ? ans.Answer : string.Empty)%>'
-                                                class='<%=Html.Encode(isDate)%>'
+                                                class='<%=Html.Encode(isDate) %>'
+                                                title=''
                                                 />
                                         <input type="hidden" id='<%=Html.Encode("ExtendedProperties[" + i + "]_propertyId")%>' 
                                                 name='<%=Html.Encode("ExtendedProperties[" + i + "].propertyId")%>' 
@@ -218,7 +219,7 @@
             <li>
                 <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item != null ? Model.Item.Id : -1}) %>' /> <br />
             
-            <input type="file" id="file" name="file" />
+            <input type="file" id="file" name="file" title=''/>
             </li></ul>
         </fieldset>
         
@@ -227,7 +228,7 @@
             <ul>
             <!-- NEEDS BALLOON-->
             <li>
-            <input type="text" id="tagInput" />  <img id="tagAddButton" src="<%= Url.Content("~/Images/plus.png") %>" style="height:24px; width: 24px" />
+            <input type="text" id="tagInput" title=''/>  <img id="tagAddButton" src="<%= Url.Content("~/Images/plus.png") %>" style="height:24px; width: 24px" />
             </li>
             <li>
             <div id="tagContainer">
@@ -236,7 +237,7 @@
                    {
                        foreach (var tag in Model.Item.Tags)
                        { %>
-                    <input type="text" id="tags" name="tags" style="cursor:pointer" value='<%= tag.Name %>' />
+                    <input type="text" id="tags" name="tags" title='' style="cursor:pointer" value='<%= tag.Name %>' />
                 <% }
                    } %>
             

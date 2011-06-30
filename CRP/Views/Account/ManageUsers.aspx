@@ -8,7 +8,7 @@
 
     <h2>ManageUsers</h2>
 
-    <a id="emailList" title=""Manage User Email List" href='https://lists.ucdavis.edu/sympa/review/registration-users' target="_blank"><img alt="Manage User Emal List" src="<%=Url.Image("envelopes.png")%>"/></a>
+    <a id="emailList" title="Manage User Email List" href='https://lists.ucdavis.edu/sympa/review/registration-users' target="_blank"><img alt="Manage User Emal List" src="<%=Url.Image("envelopes.png")%>"/></a>
 
     
     <iframe id="frame" frameborder="0" src='<%= ConfigurationManager.AppSettings["AdminPageUrl"] %>'

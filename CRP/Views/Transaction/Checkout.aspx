@@ -242,29 +242,29 @@
                 var quantity = $("#quantity").val();
 
                 $("img#CouponValidateImage").show();
-                
+
                 $.getJSON(url, {itemId: <%= Html.Encode(Model.Item.Id) %>, couponCode: couponCode, quantity: quantity}, function(result) { 
+                        var message = result.message;
                 
-                    var message = result.message;
-                
-                    // if the message is undefined, we have a valid coupon
+                        // if the message is undefined, we have a valid coupon
                     
-                    var discountAmount = result.discountAmount;
-                    var maxQuantity = result.maxQuantity;
+                        var discountAmount = result.discountAmount;
+                        var maxQuantity = result.maxQuantity;
                     
-                    $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
-                    $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
+                        $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
+                        $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
                     
-                    $("span#CouponMessage").html("Coupon accepted.");
+                        $("span#CouponMessage").html("Coupon accepted.");
                     
-                    CalculateTotal();
+                        CalculateTotal();
                   
-                    // display error message
-                    $("span#CouponMessage").html(message);
+                        // display error message
+                        $("span#CouponMessage").html(message);
                     
-                    // hide the loading image
-                    $("img#CouponValidateImage").hide();
-                });
+                        // hide the loading image
+                        $("img#CouponValidateImage").hide();
+                    }
+                );
             });
             
             

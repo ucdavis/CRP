@@ -1,7 +1,7 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Core.Domain.Item>" %>
 <%@ Import Namespace="CRP.Controllers" %>
 
-    <link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
+    <%--<link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>    
     <script type="text/javascript">
@@ -12,12 +12,38 @@
                 hideCoordinates: true                
             });
         });        
-    </script> 
+    </script> --%>
+
+    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false" type="text/javascript"></script>
+    <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
     
+    <script type="text/javascript">
+        $(function () {
+            $("#map").gPositions({loadAll:true});
+        });
+    </script>
 
 <fieldset>
     
-    <div id="map">
+    <div id="map" style="margin: 0px 0px 20px;" >
+    
+        <div class="gp-map" style="height: 300px; width: 500px;"></div>
+
+          <% foreach (var a in Model.MapPins) { %>
+            <div class="gp-coordinate <%= a.IsPrimary ? "default-location" : string.Empty %>" data-lat="<%= a.Latitude %>" data-lng="<%= a.Longitude %>">
+                <dt><%= Html.Encode(a.Title) %></dt>
+                <% if (!string.IsNullOrWhiteSpace(a.Description)) { %>
+                    <dd><%= Html.Encode(a.Description ?? string.Empty) %></dd>
+                <% } %>
+            </div>
+        <% } %>
+            
+    </div>
+
+    <div style="clear:both;"></div>
+
+    <%--<div id="map">
 	    <div >
 	    
 	    <dl>
@@ -31,9 +57,9 @@
 	        <% } %>
 	    </dl>
 	    </div>
-    </div>
+    </div>--%>
 
-    <fieldset>
+    <fieldset style="margin-top: 1em;">
     <div id = "mapGrid">
         <p>
         <%= Html.ActionLink<MapPinController>(a => a.Create(Model.Id), "Add Map Pin") %>
