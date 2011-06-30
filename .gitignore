@@ -1,8 +1,12 @@
+
 #ignore sql dbmdl files
 *.dbmdl
 *.schemaview
 #ignore AppSettings.config file
 AppSettings.config
+AppDebugSettings.config
+AppTestSettings.config
+AppReleaseSettings.config
 #ignore thumbnails created by windows
 Thumbs.db
 #Ignore files build by Visual Studio
