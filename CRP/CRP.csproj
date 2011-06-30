@@ -748,6 +748,15 @@
     <Folder Include="App_Data\" />
     <Folder Include="Partials\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="AppSettings.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AppTestSettings.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AppReleaseSettings.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
