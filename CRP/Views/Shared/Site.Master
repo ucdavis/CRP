@@ -129,5 +129,16 @@ Copyright The Regents of the University of California, Davis campus, 2005-10. Al
 <p id="VersionNumber">Version <%=Html.Encode(System.Reflection.Assembly.GetAssembly(ViewContext.Controller.GetType()).GetName().Version.ToString())%></p>
 </div>
 </div>
+
+<% if (HttpContext.Current.User.IsInRole(RoleNames.Admin) || HttpContext.Current.User.IsInRole(RoleNames.User)) { %>
+<script type="text/javascript">
+    var uvOptions = {};
+    (function () {
+        var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+        uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/1ODWeyIw2uBP6S0gBs1TZw.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+    })();
+</script>
+<% } %>
 </body>
 </html>
