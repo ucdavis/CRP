@@ -111,6 +111,12 @@ namespace CRP.Tests.Controllers
             "~/Item/Map/5".ShouldMapTo<ItemController>(a => a.Map(5, false), true);
         }
 
+        [TestMethod]
+        public void TestMapDirectionsMapping()
+        {
+            "~/Item/MapDirections/5".ShouldMapTo<ItemController>(a => a.MapDirections(5, false), true);
+        }
+
 
         #endregion Route Tests
 
@@ -487,6 +493,145 @@ namespace CRP.Tests.Controllers
         }
         #endregion Map Tests
 
+        #region MapDirections Tests
+
+        [TestMethod]
+        public void TestMapDirectionsRedirectsToHomeIfItemNotFound()
+        {
+            #region Arrange
+            ControllerRecordFakes.FakeItems(3, ItemRepository);
+            #endregion Arrange
+
+            #region Act
+            Controller.MapDirections(4, false).AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapDirectionsRedirectsToHomeIfItemNotAvailable()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = false;
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            Controller.MapDirections(1, false).AssertActionRedirect()
+                .ToAction<HomeController>(a => a.Index());
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual("Item not found.", Controller.Message);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapDirectionsReturnsViewWhenItemAvailable()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = true;
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.MapDirections(1, true)
+                .AssertViewRendered()
+                .WithViewData<BigMapViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.AreEqual("Name1", result.Item.Name);
+            Assert.IsTrue(result.UsePins);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapDirectionsReturnsViewWithHasPinsWhenPinsExist()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = true;
+            Items[0].MapPins.Add(CreateValidEntities.MapPin(1));
+            Items[0].MapPins.Add(CreateValidEntities.MapPin(2));
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.MapDirections(1, true)
+                .AssertViewRendered()
+                .WithViewData<BigMapViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.AreEqual("Name1", result.Item.Name);
+            Assert.IsTrue(result.UsePins);
+            Assert.IsTrue(result.HasMapPins);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapDirectionsReturnsViewWithHasPinsFalseWhenPinsDoNotExist1()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = true;
+            Items[0].MapPins = new List<MapPin>();
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.MapDirections(1, true)
+                .AssertViewRendered()
+                .WithViewData<BigMapViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.AreEqual("Name1", result.Item.Name);
+            Assert.IsTrue(result.UsePins);
+            Assert.IsFalse(result.HasMapPins);
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestMapDirectionsReturnsViewWithHasPinsFalseWhenPinsDoNotExist2()
+        {
+            #region Arrange
+            Items = new List<Item>();
+            Items.Add(CreateValidEntities.Item(1));
+            Items[0].Available = true;
+            Items[0].MapPins = null;
+            ControllerRecordFakes.FakeItems(3, ItemRepository, Items);
+            #endregion Arrange
+
+            #region Act
+            var result = Controller.MapDirections(1, true)
+                .AssertViewRendered()
+                .WithViewData<BigMapViewModel>();
+            #endregion Act
+
+            #region Assert
+            Assert.IsNull(Controller.Message);
+            Assert.AreEqual("Name1", result.Item.Name);
+            Assert.IsTrue(result.UsePins);
+            Assert.IsFalse(result.HasMapPins);
+            #endregion Assert
+        }
+        #endregion MapDirections Tests
+
         #region Reflection Tests
 
         #region Controller Class Tests
@@ -601,7 +746,7 @@ namespace CRP.Tests.Controllers
             #endregion Act
 
             #region Assert
-            Assert.AreEqual(3, result.Count(), "It looks like a method was added or removed from the controller.");
+            Assert.AreEqual(4, result.Count(), "It looks like a method was added or removed from the controller.");
             #endregion Assert
         }
 
@@ -652,6 +797,23 @@ namespace CRP.Tests.Controllers
             #region Arrange
             var controllerClass = _controllerClass;
             var controllerMethod = controllerClass.GetMethod("Map");
+            #endregion Arrange
+
+            #region Act
+            var result = controllerMethod.GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(0, result.Count());
+            #endregion Assert
+        }
+
+        [TestMethod]
+        public void TestControllerMethodMapDirectionsContainsExpectedAttributes()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethod("MapDirections");
             #endregion Arrange
 
             #region Act
