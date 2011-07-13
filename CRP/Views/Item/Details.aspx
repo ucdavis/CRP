@@ -59,7 +59,8 @@
         <% } %>--%>
 
         <% if (Model.HasMapPins) { %>
-            <%= Html.ActionLink<ItemController>(a=>a.Map(Model.Item.Id, true), "Full Screen Map") %>
+            <%= Html.ActionLink<ItemController>(a=>a.Map(Model.Item.Id, true), "Full Screen Map", new {target="_blank"}) %> &nbsp;&nbsp;&nbsp;
+            <%= Html.ActionLink<ItemController>(a => a.MapDirections(Model.Item.Id, true), "Full Screen Map With Directions", new { target = "_blank" })%>
 
             <div id="map" style="margin: 0px 0px 20px;">
             

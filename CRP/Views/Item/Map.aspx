@@ -68,7 +68,7 @@
 
 </head>
 <body>
-
+    <%= Html.ActionLink<ItemController>(a => a.MapDirections(Model.Item.Id, true), "Full Screen Map With Directions")%>
     <div id="map" style="margin: 0px 0px 20px;">
     
         <div class="gp-map" style="height: 700px; width: 700px;"></div>
