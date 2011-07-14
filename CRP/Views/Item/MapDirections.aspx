@@ -21,7 +21,7 @@
     <script type="text/javascript">
 
         $(function () {
-            $("#map").gPositions({ helpIcon: '<%= Url.Content("~/Images/question_blue.png") %>', mode: MapMode.ROUTING });
+            $("#map").gPositions({ helpIcon: '<%= Url.Content("~/Images/question_blue.png") %>', mode: MapMode.ROUTING, displayDirections: true });
             $(".gp-sidecontainer-title img").attr("title", "");
             $(".gp-sidecontainer-title img").bt("To view Locations/Directions on the map, click on the tabs below"); //, { positions: 'bottom' });
         });
@@ -37,14 +37,16 @@
 
         <% foreach (var a in Model.Item.MapPins) { %>
             <div class="gp-coordinate <%= a.IsPrimary ? "default-location" : string.Empty %>" data-lat="<%= a.Latitude %>" data-lng="<%= a.Longitude %>">
-                <dt><%= Html.Encode(a.Title) %></dt>
+                <dt class="gp-name"><%= Html.Encode(a.Title) %></dt>
                 <% if (!string.IsNullOrWhiteSpace(a.Description)) { %>
-                    <dd><%= Html.Encode(a.Description ?? string.Empty) %></dd>
+                    <dd class="gp-description"><%= Html.Encode(a.Description ?? string.Empty) %></dd>
                 <% } %>
             </div>
         <% } %>
 
     </div>
 
+
+    
 </body>
 </html>

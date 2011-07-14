@@ -99,7 +99,16 @@ var MapMode = { STANDARD: 0, ROUTING: 1, SELECTINGPOINT: 2 };
 				var $sideContainer = $("<div>").addClass("gp-sidecontainer");
 				$gpContainer.append($sideContainer);
 			
-				$sideContainer.append($("<div>").addClass("gp-sidecontainer-title").html("Locations").append($("<img>").attr("src", settings.helpIcon)));
+				if (settings.mode == MapMode.STANDARD || settings.mode == MapMode.ROUTING)
+				{
+					$sideContainer.append($("<div>").addClass("gp-sidecontainer-title").html("Locations").append($("<img>").attr("src", settings.helpIcon)));
+				}
+				else if (settings.mode == MapMode.SELECTINGPOINT)
+				{
+					$sideContainer.append($("<div>").addClass("gp-sidecontainer-title").html("Search Location").append($("<img>").attr("src", settings.helpIcon)));
+				}
+			
+				
 			
                 // put all the coordinates into the container
 				$sideContainer.append($gpContainer.find(".gp-coordinate"));
@@ -118,7 +127,13 @@ var MapMode = { STANDARD: 0, ROUTING: 1, SELECTINGPOINT: 2 };
 					
 						if(settings.displayDirections)
 						{
-							$gpContainer.append($("<div>").addClass("gp-directions"));
+							var $directions = $("<div>").addClass("gp-directions");
+							var $title = $("<div>").addClass("gp-sidecontainer-title").html("Directions");
+							$title.append($("<img>").attr("src", settings.helpIcon));
+							
+							var $dlist = $("<ul>").addClass("gp-directionlist");
+							
+							$gpContainer.append($directions.append($title).append($dlist));
 						}
 					
 						break;
@@ -386,17 +401,19 @@ var MapMode = { STANDARD: 0, ROUTING: 1, SELECTINGPOINT: 2 };
 						wayPts.push({location: markers[i].position, stopover: true});
 					}
 				}
+				if(src != undefined)
+                {
+				    var request = {origin: src.position, destination: dest.position, waypoints: wayPts, travelMode: settings.routeType};
 				
-				var request = {origin: src.position, destination: dest.position, waypoints: wayPts, travelMode: settings.routeType};
-				
-				directionsService.route(request, function(result, status)
-					{				
-						if (status == google.maps.DirectionsStatus.OK)
-						{
-							if (settings.displayDirections) {DisplayDirections($gpContainer, result)};
-							directionDisplay.setDirections(result);
-						}
-					});
+				    directionsService.route(request, function(result, status)
+					    {				
+						    if (status == google.maps.DirectionsStatus.OK)
+						    {
+							    if (settings.displayDirections) {DisplayDirections($gpContainer, result)};
+							    directionDisplay.setDirections(result);
+						    }
+					    });
+                }
 			}
 		
 			/*
@@ -404,17 +421,31 @@ var MapMode = { STANDARD: 0, ROUTING: 1, SELECTINGPOINT: 2 };
 			*/
 			function DisplayDirections($gpContainer, results)
 			{			
-				var $directions = $gpContainer.find(".gp-directions");
+				var $directions = $gpContainer.find(".gp-directionlist");
 				$directions.empty();
-				var $list = $("<ul>");
+								
+				$.each(results.routes[0].legs, function(index,item){
 				
-				for(i = 0; i < markers.length; i++)
-				{
-					// split in the mark icon here too
-					$list.append($("<li>").html(markers[i].title));
-				}
+					// add in the actual marker location
+					$directions.append($("<li>").html(markers[index].title).addClass("gp-waypt").prepend($("<span>").html(alpha[index]).addClass("marker")));
+					
+					var $steps = $("<ol>").addClass("gp-steps");
+					
+					// add in the directions
+					$.each(item.steps, function(index2, item2){
+						$steps.append($("<li>").html(item2.instructions).addClass("gp-step"));
+					});
 				
-				$directions.append($list);
+					$directions.append($steps);
+				
+					//debugger;
+					// add in the marker for the last location
+					if (index == markers.length - 2)
+					{
+						$directions.append($("<li>").html(markers[index+1].title).addClass("gp-waypt").prepend($("<span>").html(alpha[index+1]).addClass("marker")));	
+					}
+				
+				});
 			}
 		
 			/*****************************************************************
@@ -437,7 +468,7 @@ var MapMode = { STANDARD: 0, ROUTING: 1, SELECTINGPOINT: 2 };
 				
 					var defaultcoord = $gpContainer.find(".gp-sidecontainer .gp-default");
 					
-					if (defaultcoord[0] != undefined && $(defaultcoord[0]).data("lat") != "" && $(defaultcoord[0]).data("lng") != "")
+					if (defaultcoord[0] != undefined)
 					{
 						if (settings.mode == MapMode.STANDARD || settings.mode == MapMode.ROUTING)
 						{					

@@ -23,11 +23,13 @@
             <div id="map">
                 <div class="gp-map" style="height: 300px; width: 500px;"></div>
 
-                <% if (Model != null && Model.MapPin != null) { %>
+                <% if (Model != null && Model.MapPin != null && !string.IsNullOrWhiteSpace(Model.MapPin.Latitude) )
+                   { %>
                     <div class="gp-coordinate gp-default" data-lat="<%= Model.MapPin.Latitude %>" data-lng="<%= Model.MapPin.Longitude %>">
                         <dt class="gp-name">n/a</dt>
                     </div>
                 <% } %>
+
                 
             </div>
                         
