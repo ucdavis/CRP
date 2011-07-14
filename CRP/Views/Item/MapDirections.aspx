@@ -17,6 +17,7 @@
     <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.bt.min.js") %>" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="<%=Url.Content("~/Content/print.css")%>" media="print" />
 
     <script type="text/javascript">
 

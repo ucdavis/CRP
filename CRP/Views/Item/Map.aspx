@@ -55,6 +55,9 @@
     <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.bt.min.js") %>" type="text/javascript"></script>
+    <style type="text/css" media="print">
+        a {display: none;}
+    </style>
 
     <script type="text/javascript">
 

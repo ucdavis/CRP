@@ -291,6 +291,7 @@
     <Content Include="Content\2009.3.1103.0\Sunset\sprite.png" />
     <Content Include="Content\2009.3.1103.0\telerik.black.min.css" />
     <Content Include="Content\jquery.gPositions.css" />
+    <Content Include="Content\print.css" />
     <Content Include="Content\telerik.common.min.css" />
     <Content Include="Content\2009.3.1103.0\telerik.default.min.css" />
     <Content Include="Content\2009.3.1103.0\telerik.forest.min.css" />
