@@ -6,7 +6,7 @@
 
     <script type="text/javascript">
         $(function () {
-            $("#map").gPositions({mode: MapMode.SELECTINGPOINT, showLocations: false});
+            $("#map").gPositions({mode: MapMode.SELECTINGPOINT, showLocations: false });
         });
     </script>
     
