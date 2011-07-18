@@ -1,6 +1,7 @@
 using Castle.Windsor;
 using CRP.Controllers.Services;
 using CRP.Core.Abstractions;
+using CRP.Services;
 using UCDArch.Core.CommonValidator;
 using UCDArch.Core.NHibernateValidator.CommonValidatorAdapter;
 using UCDArch.Core.PersistanceSupport;
@@ -25,6 +26,7 @@ namespace CRP
             container.AddComponent("accessControlService", typeof (IAccessControlService), typeof(AccessControlService));
 
             container.AddComponent("couponService", typeof (ICouponService), typeof (CouponService));
+            container.AddComponent("copyService", typeof (ICopyItemService), typeof (CopyItemService));
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)

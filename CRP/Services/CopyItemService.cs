@@ -26,15 +26,20 @@ namespace CRP.Services
             CopyTags(sourceItem, rtItem);
             CopyExtendedPropertyAnswers(sourceItem, rtItem);
             CopyCoupons(sourceItem, rtItem);
-            CopyEditors(sourceItem, rtItem, repository, currentUserName);
-            CopyQuestionSets(sourceItem, rtItem, repository, questionSetDict);
+            CopyEditors(sourceItem, rtItem, repository, currentUserName);            
             CopyTemplates(sourceItem, rtItem);
-
-
-            //May need to save before reports can be saved because of the QuestionSet...
-            CopyReports(sourceItem, rtItem, repository, currentUserName, questionSetDict);
-
             CopyMapPins(sourceItem, rtItem);
+            CopyQuestionSets(sourceItem, rtItem, repository, questionSetDict);
+
+            if (rtItem.IsValid())
+            {
+                repository.OfType<Item>().EnsurePersistent(rtItem);
+
+                CopyReports(sourceItem, rtItem, repository, currentUserName, questionSetDict);
+
+                
+            }
+
 
             return rtItem;
         }
@@ -51,11 +56,20 @@ namespace CRP.Services
                     rtColumn.Order = itemReportColumn.Order;
                     rtColumn.Property = itemReportColumn.Property;
                     rtColumn.Quantity = itemReportColumn.Quantity;
-                    rtColumn.QuestionSet = questionSetDict[itemReportColumn.QuestionSet.Id];
+                    if (itemReportColumn.QuestionSet != null)
+                    {
+                        rtColumn.QuestionSet = questionSetDict[itemReportColumn.QuestionSet.Id];
+                    }
                     rtColumn.Transaction = itemReportColumn.Transaction;
                     rtColumn.Format = itemReportColumn.Format;
                     rtItemReport.AddReportColumn(rtColumn);
                 }
+                if (rtItemReport.IsValid())
+                {
+                    repository.OfType<ItemReport>().EnsurePersistent(rtItemReport);
+                    rtItem.Reports.Add(rtItemReport);
+                }
+                
             }
         }
 
@@ -69,7 +83,7 @@ namespace CRP.Services
         {
             // add the required question set
             var questionSet = repository.OfType<QuestionSet>().Queryable
-                .Where(a => a.Name == StaticValues.QuestionSet_ContactInformation).Single();
+                .Where(a => a.Name == StaticValues.QuestionSet_ContactInformation).FirstOrDefault();
             rtItem.AddTransactionQuestionSet(questionSet);
             questionSetDict.Add(questionSet.Id, questionSet);
 
@@ -84,7 +98,7 @@ namespace CRP.Services
                     continue;
                 }
                 var qSet = new QuestionSet(itemQuestionSet.QuestionSet.Name);                
-                foreach (var question in itemQuestionSet.QuestionSet.Questions)
+                foreach (var question in itemQuestionSet.QuestionSet.Questions.OrderBy(a => a.Order))
                 {
                     var rtQuestion = new Question(question.Name, question.QuestionType);
                     rtQuestion.Order = question.Order;
@@ -94,7 +108,12 @@ namespace CRP.Services
                         var rtQuestionOption = new QuestionOption(questionOption.Name);
                         rtQuestion.AddOption(rtQuestionOption);
                     }
-                    rtQuestion.Validators = question.Validators;
+                    foreach (var validator in question.Validators)
+                    {
+                        rtQuestion.Validators.Add(validator);
+                    }
+
+                    qSet.AddQuestion(rtQuestion);
                 }
                 questionSetDict.Add(itemQuestionSet.QuestionSet.Id, qSet);
                 var iQSet = new ItemQuestionSet(rtItem, qSet, itemQuestionSet.Order);

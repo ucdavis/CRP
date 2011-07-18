@@ -9,6 +9,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
+using CRP.Services;
 using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Web.ActionResults;
@@ -20,6 +21,14 @@ namespace CRP.Controllers
     [UserOnly]
     public class ItemManagementController : ApplicationController
     {
+        private readonly ICopyItemService _copyItemService;
+
+
+        public ItemManagementController(ICopyItemService copyItemService)
+        {
+            _copyItemService = copyItemService;
+        }
+
         //
         // GET: /ItemManagement/
 
@@ -546,7 +555,21 @@ namespace CRP.Controllers
 
         public ActionResult Copy(int id)
         {
-            return this.RedirectToAction(a => a.Edit(id)); //TODO: Replace with copied and saved item
+            var item = Repository.OfType<Item>().GetById(id);
+            if (item == null || !Access.HasItemAccess(CurrentUser, item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction(a => a.List(null));
+            }
+
+            var newItem = _copyItemService.Copy(item, Repository, CurrentUser.Identity.Name);
+            if (!newItem.IsValid())
+            {
+                Message = "The copy was not able to save because of Invalid Data";
+                return this.RedirectToAction<ErrorController>(a => a.Index(ErrorController.ErrorType.UnknownError));
+            }
+
+            return this.RedirectToAction(a => a.Edit(newItem.Id)); //TODO: Replace with copied and saved item
         }
 
         ///// <summary>
