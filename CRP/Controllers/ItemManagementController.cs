@@ -544,6 +544,11 @@ namespace CRP.Controllers
             //return this.RedirectToAction(a => a.Details(transaction.Item.Id));
         }
 
+        public ActionResult Copy(int id)
+        {
+            return this.RedirectToAction(a => a.Edit(id)); //TODO: Replace with copied and saved item
+        }
+
         ///// <summary>
         ///// Validates the parameters.
         ///// </summary>
