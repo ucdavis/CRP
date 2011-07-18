@@ -20,7 +20,7 @@
     
     <script type="text/javascript">
         $(function () {
-            $("#map").gPositions({loadAll:true});
+            $("#map").gPositions({ loadAll: true, helpIcon: '<%= Url.Content("~/Images/question_blue.png") %>', mode: MapMode.Standard });
         });
     </script>
 
