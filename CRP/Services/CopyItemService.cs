@@ -151,6 +151,7 @@ namespace CRP.Services
                     coup.MaxUsage = coupon.MaxUsage;
                     coup.DiscountAmount = coupon.DiscountAmount;
                     coup.Email = coupon.Email;
+                    coup.IsActive = coupon.IsActive;
 
                     rtItem.AddCoupon(coup);
                 }
