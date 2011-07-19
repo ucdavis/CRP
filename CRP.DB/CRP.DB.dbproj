@@ -156,6 +156,9 @@
     <NotInBuild Include="Schema Comparisons\SchemaComparison1.scmp">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
+    <NotInBuild Include="Change Scripts\DeleteItemWithNoTransactions.sql">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
   </ItemGroup>
   <ItemGroup>
     <BuildContributorArgument Include="OutDir=$(OutDir)" />

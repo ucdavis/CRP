@@ -20,7 +20,7 @@ namespace CRP.Services
         {
             var questionSetDict = new Dictionary<int, QuestionSet>();
 
-            var rtItem = new Item(sourceItem.Name, sourceItem.Quantity);
+            var rtItem = new Item(string.Format("{0} (copy)",sourceItem.Name), sourceItem.Quantity);
 
             CopyItemFields(sourceItem, rtItem);
             CopyTags(sourceItem, rtItem);

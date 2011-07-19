@@ -35,7 +35,8 @@
                                         {%>
                                             <%= Html.ActionLink<ItemManagementController>(b => b.Details(a.Id), "Details") %> | 
                                             <%= Html.ActionLink<ItemManagementController>(b => b.Edit(a.Id), "Edit") %> |
-                                            <%= Html.ActionLink<ItemManagementController>(b => b.Map(a.Id), "Map") %>
+                                            <%= Html.ActionLink<ItemManagementController>(b => b.Map(a.Id), "Map") %> |
+                                            <%= Html.ActionLink<ItemManagementController>(b => b.Copy(a.Id), "Copy") %>
                                         <%});
                             col.Bound(a => a.Name);
                             col.Bound(a => a.CostPerItem).Format("{0:C}");
