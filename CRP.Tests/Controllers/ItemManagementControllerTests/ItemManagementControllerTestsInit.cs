@@ -7,6 +7,7 @@ using System.Web;
 using CRP.Controllers;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
+using CRP.Services;
 using CRP.Tests.Core.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcContrib.TestHelper;
@@ -50,6 +51,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         protected List<Template> Templates { get; set; }
         protected IRepository<Template> TemplateRepository { get; set; }
         protected IRepository<TouchnetFID> TouchnetFIDRepository { get; set; }
+
+        protected ICopyItemService CopyItemService { get; set; }
 
         protected Type _controllerClass = typeof(ItemManagementController);
 
@@ -133,7 +136,8 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         /// </summary>
         protected override void SetupController()
         {
-            Controller = new TestControllerBuilder().CreateController<ItemManagementController>();
+            CopyItemService = MockRepository.GenerateStub<ICopyItemService>();
+            Controller = new TestControllerBuilder().CreateController<ItemManagementController>(CopyItemService);
         }
 
         #endregion Init
