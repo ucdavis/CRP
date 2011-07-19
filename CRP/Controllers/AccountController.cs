@@ -5,6 +5,7 @@ using System.Web.Security;
 using CRP.Authentication;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
+using CRP.Controllers.Helpers.Filter;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
@@ -70,6 +71,7 @@ namespace CRP.Controllers
             return this.RedirectToAction<HomeController>(a => a.Index());
         }
 
+        [PageTracker]
         public ActionResult CasLogon(string returnUrl)
         {
             string resultUrl = CASHelper.Login(); //Do the CAS Login

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
+using CRP.Controllers.Helpers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
@@ -81,6 +82,7 @@ namespace CRP.Controllers
         /// GET: /ItemManagement/Create
         /// </summary>
         /// <returns></returns>
+        [PageTracker]
         public ActionResult Create()
         {
             var viewModel = ItemViewModel.Create(Repository, CurrentUser, null);
@@ -109,6 +111,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
+        [PageTracker]
         public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             // get the file and add it into the item
@@ -227,6 +230,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [PageTracker]
         public ActionResult Edit(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
@@ -261,6 +265,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
+        [PageTracker]
         public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             var destinationItem = Repository.OfType<Item>().GetNullableById(id);
@@ -552,7 +557,7 @@ namespace CRP.Controllers
             return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Transactions, pageAndSort["sort"], pageAndSort["page"]));              
             //return this.RedirectToAction(a => a.Details(transaction.Item.Id));
         }
-
+        [PageTracker]
         public ActionResult Copy(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);

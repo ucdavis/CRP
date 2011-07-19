@@ -5,7 +5,7 @@ using UCDArch.Core.PersistanceSupport;
 
 namespace CRP.Controllers.Helpers.Filter
 {
-    public class PageTrackingAttribute : ActionFilterAttribute
+    public class PageTrackerAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
