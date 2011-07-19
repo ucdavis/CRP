@@ -95,7 +95,7 @@ namespace CRP.Services
                 }
                 //if (!itemQuestionSet.QuestionSet.IsActive)
                 //{
-                //    continue;
+                //    continue; 
                 //}
                 var qSet = new QuestionSet(itemQuestionSet.QuestionSet.Name);
                 qSet.IsActive = itemQuestionSet.QuestionSet.IsActive;
