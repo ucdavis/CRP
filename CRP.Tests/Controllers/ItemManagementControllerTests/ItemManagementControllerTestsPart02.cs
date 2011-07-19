@@ -128,6 +128,11 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             "~/ItemManagement/Map/5".ShouldMapTo<ItemManagementController>(a => a.Map(5));
         }
 
+        [TestMethod]
+        public void TestCopyMapping()
+        {
+            "~/ItemManagement/Copy/5".ShouldMapTo<ItemManagementController>(a => a.Copy(5));
+        }
 
         #endregion Route Tests
     }

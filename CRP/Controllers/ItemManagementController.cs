@@ -555,7 +555,7 @@ namespace CRP.Controllers
 
         public ActionResult Copy(int id)
         {
-            var item = Repository.OfType<Item>().GetById(id);
+            var item = Repository.OfType<Item>().GetNullableById(id);
             if (item == null || !Access.HasItemAccess(CurrentUser, item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
@@ -569,7 +569,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ErrorController>(a => a.Index(ErrorController.ErrorType.UnknownError));
             }
 
-            return this.RedirectToAction(a => a.Edit(newItem.Id)); //TODO: Replace with copied and saved item
+            return this.RedirectToAction(a => a.Edit(newItem.Id)); 
         }
 
         ///// <summary>
