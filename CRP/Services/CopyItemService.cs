@@ -93,11 +93,12 @@ namespace CRP.Services
                 {
                     continue;
                 }
-                if (!itemQuestionSet.QuestionSet.IsActive)
-                {
-                    continue;
-                }
-                var qSet = new QuestionSet(itemQuestionSet.QuestionSet.Name);                
+                //if (!itemQuestionSet.QuestionSet.IsActive)
+                //{
+                //    continue;
+                //}
+                var qSet = new QuestionSet(itemQuestionSet.QuestionSet.Name);
+                qSet.IsActive = itemQuestionSet.QuestionSet.IsActive;
                 foreach (var question in itemQuestionSet.QuestionSet.Questions.OrderBy(a => a.Order))
                 {
                     var rtQuestion = new Question(question.Name, question.QuestionType);
@@ -113,7 +114,7 @@ namespace CRP.Services
                         rtQuestion.Validators.Add(validator);
                     }
 
-                    qSet.AddQuestion(rtQuestion);
+                    qSet.AddQuestion(rtQuestion);                  
                 }
                 questionSetDict.Add(itemQuestionSet.QuestionSet.Id, qSet);
                 var iQSet = new ItemQuestionSet(rtItem, qSet, itemQuestionSet.Order);
@@ -151,7 +152,6 @@ namespace CRP.Services
                     coup.MaxUsage = coupon.MaxUsage;
                     coup.DiscountAmount = coupon.DiscountAmount;
                     coup.Email = coupon.Email;
-                    coup.IsActive = coupon.IsActive;
 
                     rtItem.AddCoupon(coup);
                 }
