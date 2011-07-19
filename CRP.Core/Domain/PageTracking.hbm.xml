@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    assembly="CRP.Core" namespace="CRP.Core.Domain">
+  <class
+    name="PageTracking"
+    table="PageTracking" >
+    <id name="Id" column="id" unsaved-value="0">
+      <generator class="identity" />
+    </id>
+
+    <property name="LoginId" column="LoginId" />
+    <property name="Location" column="Location" />
+    <property name="IPAddress" column="IPAddress" />
+    <property name="DateTime" column="DateTime" />
+
+  </class>
+</hibernate-mapping>

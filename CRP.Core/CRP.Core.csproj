@@ -124,6 +124,7 @@
     <Compile Include="Domain\ItemTypeQuestionSet.cs" />
     <Compile Include="Domain\MapPin.cs" />
     <Compile Include="Domain\OpenIdUser.cs" />
+    <Compile Include="Domain\PageTracking.cs" />
     <Compile Include="Domain\PaymentLog.cs" />
     <Compile Include="Domain\QuantityAnswer.cs" />
     <Compile Include="Domain\Question.cs" />
@@ -273,6 +274,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Domain\ApplicationKey.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Domain\PageTracking.hbm.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -200,6 +200,7 @@
     <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\FIDController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\Helpers\Filter\PageTrackingAttribute.cs" />
     <Compile Include="Controllers\Helpers\ServiceMessages.cs" />
     <Compile Include="Controllers\Helpers\StringExtension.cs" />
     <Compile Include="Controllers\Helpers\ValidateParameters.cs" />
