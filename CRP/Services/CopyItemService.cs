@@ -98,7 +98,7 @@ namespace CRP.Services
                 //    continue; 
                 //}
                 var qSet = new QuestionSet(itemQuestionSet.QuestionSet.Name);
-                qSet.IsActive = itemQuestionSet.QuestionSet.IsActive;
+                qSet.IsActive = itemQuestionSet.QuestionSet.IsActive; 
                 foreach (var question in itemQuestionSet.QuestionSet.Questions.OrderBy(a => a.Order))
                 {
                     var rtQuestion = new Question(question.Name, question.QuestionType);
