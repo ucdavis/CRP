@@ -70,8 +70,7 @@ namespace CRP.Controllers
 
             return this.RedirectToAction<HomeController>(a => a.Index());
         }
-
-        [PageTracker]
+        
         public ActionResult CasLogon(string returnUrl)
         {
             string resultUrl = CASHelper.Login(); //Do the CAS Login
@@ -192,6 +191,7 @@ namespace CRP.Controllers
         #endregion
 
         [UserAdminOnly]
+        [PageTracker]
         public ActionResult ManageUsers()
         {
             //var adminPageUrl = ConfigurationManager.AppSettings["AdminPageUrl"];

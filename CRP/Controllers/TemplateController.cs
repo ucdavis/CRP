@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
@@ -11,6 +12,7 @@ using UCDArch.Web.Helpers;
 namespace CRP.Controllers
 {
     [AdminOnly]
+    [PageTracker]
     public class TemplateController : ApplicationController
     {
         /// <summary>

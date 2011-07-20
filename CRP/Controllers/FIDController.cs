@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers.Filter;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using MvcContrib;
@@ -47,6 +48,7 @@ namespace CRP.Controllers
         /// Create New FID Value.
         /// </summary>
         /// <returns></returns>
+        [PageTracker]
         public ActionResult Create()
         {
             return View(new TouchnetFID());
@@ -58,6 +60,7 @@ namespace CRP.Controllers
         /// <param name="touchnetFID">The touchnet FID.</param>
         /// <returns></returns>
         [HttpPost]
+        [PageTracker]
         public ActionResult Create(TouchnetFID touchnetFID)
         {
             var fid = new TouchnetFID();
@@ -94,6 +97,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns></returns>
+        [PageTracker]
         public ActionResult Edit(int id)
         {
             var touchnetFID = Repository.OfType<TouchnetFID>().GetNullableById(id);
@@ -115,6 +119,7 @@ namespace CRP.Controllers
         /// <param name="touchnetFID">The touchnet FID.</param>
         /// <returns></returns>
         [HttpPost]
+        [PageTracker]
         public ActionResult Edit(int id, TouchnetFID touchnetFID)
         {
             var fid = Repository.OfType<TouchnetFID>().GetNullableById(id);

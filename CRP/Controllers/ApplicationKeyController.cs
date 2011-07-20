@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
+using CRP.Controllers.Helpers.Filter;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
@@ -15,6 +16,7 @@ using MvcContrib;
 namespace CRP.Controllers
 {
     [AdminOnly]
+    [PageTracker]
     public class ApplicationKeyController : ApplicationController
     {
         private readonly IRepository<ApplicationKey> _applicationKeyRepository;
