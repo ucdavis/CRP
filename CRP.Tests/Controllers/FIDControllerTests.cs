@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
+using CRP.Controllers.Helpers.Filter;
 using CRP.Core.Domain;
 using CRP.Tests.Core.Extensions;
 using CRP.Tests.Core.Helpers;
@@ -738,13 +739,13 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            //var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AdminOnlyAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<PageTrackerAttribute>();
             var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            //Assert.AreEqual(1, expectedAttribute.Count(), "AdminOnlyAttribute not found");
-            Assert.AreEqual(0, allAttributes.Count(), "More than expected custom attributes found.");
+            Assert.AreEqual(1, expectedAttribute.Count(), "PageTrackerAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
 
@@ -753,7 +754,7 @@ namespace CRP.Tests.Controllers
         /// 4
         /// </summary>
         [TestMethod]
-        public void TestControllerMethodCreatePostContainsExpectedAttributes()
+        public void TestControllerMethodCreatePostContainsExpectedAttributes1()
         {
             #region Arrange
             var controllerClass = _controllerClass;
@@ -767,7 +768,30 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method create contains expected attributes.
+        /// 4
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodCreatePostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Create");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<PageTrackerAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "PageTrackerAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
 
@@ -784,13 +808,13 @@ namespace CRP.Tests.Controllers
             #endregion Arrange
 
             #region Act
-            //var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<AdminOnlyAttribute>();
+            var expectedAttribute = controllerMethod.ElementAt(0).GetCustomAttributes(true).OfType<PageTrackerAttribute>();
             var allAttributes = controllerMethod.ElementAt(0).GetCustomAttributes(true);
             #endregion Act
 
             #region Assert
-            //Assert.AreEqual(1, expectedAttribute.Count(), "AdminOnlyAttribute not found");
-            Assert.AreEqual(0, allAttributes.Count(), "More than expected custom attributes found.");
+            Assert.AreEqual(1, expectedAttribute.Count(), "PageTrackerAttribute not found");
+            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
 
@@ -813,7 +837,30 @@ namespace CRP.Tests.Controllers
 
             #region Assert
             Assert.AreEqual(1, expectedAttribute.Count(), "HttpPostAttribute not found");
-            Assert.AreEqual(1, allAttributes.Count(), "More than expected custom attributes found.");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the controller method Edit contains expected attributes.
+        /// 6
+        /// </summary>
+        [TestMethod]
+        public void TestControllerMethodEditPostContainsExpectedAttributes2()
+        {
+            #region Arrange
+            var controllerClass = _controllerClass;
+            var controllerMethod = controllerClass.GetMethods().Where(a => a.Name == "Edit");
+            #endregion Arrange
+
+            #region Act
+            var expectedAttribute = controllerMethod.ElementAt(1).GetCustomAttributes(true).OfType<PageTrackerAttribute>();
+            var allAttributes = controllerMethod.ElementAt(1).GetCustomAttributes(true);
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(1, expectedAttribute.Count(), "PageTrackerAttribute not found");
+            Assert.AreEqual(2, allAttributes.Count(), "More than expected custom attributes found.");
             #endregion Assert
         }
 
