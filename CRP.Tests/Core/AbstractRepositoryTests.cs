@@ -89,6 +89,12 @@ namespace CRP.Tests.Core
             }
         }
 
+        [TestCleanup]
+        public void TearDown()
+        {
+            NHibernateSessionManager.Instance.CloseSession();
+        }
+
         #endregion Init
 
         #region CRUD Tests
