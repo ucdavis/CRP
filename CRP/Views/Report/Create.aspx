@@ -59,7 +59,7 @@
 
                 tr.append(cell1);
                 tr.append($("<td>").html($(span).find("label.indexedControl").html()));
-                tr.append($("<td>").html($("<input>").attr("type", "textbox").attr("id", "_Format").attr("name", "_Format")));
+                tr.append($("<td>").html($("<input>").addClass("indexedControl").attr("type", "textbox").attr("id", "_Format").attr("name", ".Format")));
 
                 tbody.append(tr);
             }

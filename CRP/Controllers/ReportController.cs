@@ -136,6 +136,7 @@ namespace CRP.Controllers
                 itemReportColumn.Quantity = crp.Quantity;
                 itemReportColumn.Property = crp.Property;
                 itemReportColumn.QuestionSet = questionSet;
+                itemReportColumn.Format = crp.Format;
 
                 report.AddReportColumn(itemReportColumn);
             }
@@ -245,5 +246,6 @@ namespace CRP.Controllers
         public int QuestionId { get; set; }
         public string PropertyName { get; set; }
         public int QuestionSetId { get; set; }
+        public string Format { get; set; }
     }
 }
