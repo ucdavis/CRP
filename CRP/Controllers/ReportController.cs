@@ -56,7 +56,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
-            var viewModel = ReportViewModel.Create(Repository, itemReport, item);
+            var viewModel = ReportViewModel.Create(Repository, itemReport, item, false);
 
             return View(viewModel);
         }

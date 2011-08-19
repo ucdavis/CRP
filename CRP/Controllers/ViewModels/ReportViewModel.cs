@@ -23,7 +23,7 @@ namespace CRP.Controllers.ViewModels
         public string ReportName { get; set; }
         public int ItemReportId { get; set; }
 
-        public static ReportViewModel Create(IRepository repository, ItemReport itemReport, Item item)
+        public static ReportViewModel Create(IRepository repository, ItemReport itemReport, Item item, bool fromExcel = true)
         {
             Check.Require(repository != null, "Repository is required.");
 
@@ -39,15 +39,17 @@ namespace CRP.Controllers.ViewModels
                 return GenerateChecks(viewModel, itemReport, item);
             }
 
-            return GenerateGeneric(viewModel, itemReport, item);
+            return GenerateGeneric(viewModel, itemReport, item, fromExcel);
         }
 
-        private static ReportViewModel GenerateGeneric (ReportViewModel viewModel, ItemReport itemReport, Item item)
+        private static ReportViewModel GenerateGeneric (ReportViewModel viewModel, ItemReport itemReport, Item item, bool fromExcel)
         {
             //deal with the column names
             foreach (var ir in itemReport.Columns)
             {
-                viewModel.ColumnNames.Add(ir.Name);
+                viewModel.ColumnNames.Add(!string.IsNullOrWhiteSpace(ir.Format) && !fromExcel
+                                              ? string.Format("{0} ({1})", ir.Name, ir.Format)
+                                              : ir.Name);
             }
 
             // deal with the row values, if there are any quantity properties, we need to go through the quantity values
@@ -216,6 +218,11 @@ namespace CRP.Controllers.ViewModels
                 }
             }
 
+
+            if (result != null && itemReportColumn.Format == StaticValues.FormatCapitalize)
+            {
+                result = UCDArch.Core.Utils.Inflector.Capitalize(result);
+            }
             return result;
         }
         /// <summary>
