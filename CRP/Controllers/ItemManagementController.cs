@@ -129,6 +129,18 @@ namespace CRP.Controllers
             //item = PopulateObject.Item(Repository, item, extendedProperties, tags);
             item = Copiers.PopulateItem(Repository, item, extendedProperties, tags, mapLink);
 
+            if(item.ExtendedPropertyAnswers != null && item.ExtendedPropertyAnswers.Count > 0)
+            {
+                foreach (var extendedPropertyAnswer in item.ExtendedPropertyAnswers)
+                {
+                    if(string.IsNullOrWhiteSpace(extendedPropertyAnswer.Answer))
+                    {
+                        ModelState.AddModelError("Extended Properties", "All Extended Properties are required");
+                        break;
+                    }
+                }
+            }
+
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
             // add permissions
@@ -279,6 +291,18 @@ namespace CRP.Controllers
             }
 
             destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);//PopulateObject.Item(Repository, item, extendedProperties, tags);
+
+            if(destinationItem.ExtendedPropertyAnswers != null && destinationItem.ExtendedPropertyAnswers.Count > 0)
+            {
+                foreach(var extendedPropertyAnswer in destinationItem.ExtendedPropertyAnswers)
+                {
+                    if(string.IsNullOrWhiteSpace(extendedPropertyAnswer.Answer))
+                    {
+                        ModelState.AddModelError("Extended Properties", "All Extended Properties are required");
+                        break;
+                    }
+                }
+            }
 
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)

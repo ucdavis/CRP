@@ -193,7 +193,7 @@
                                         <input type="text" id='<%=Html.Encode("ExtendedProperties[" + i + "]_value")%>' 
                                                 name='<%=Html.Encode("ExtendedProperties[" + i + "].value")%>' 
                                                 value='<%=Html.Encode(ans != null ? ans.Answer : string.Empty)%>'
-                                                class='<%=Html.Encode(isDate) %>'
+                                                class='required <%=Html.Encode(isDate) %>'
                                                 title=''
                                                 />
                                         <input type="hidden" id='<%=Html.Encode("ExtendedProperties[" + i + "]_propertyId")%>' 

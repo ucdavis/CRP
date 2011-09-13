@@ -1,32 +1,37 @@
-﻿$(document).ready(function() {
+﻿$(document).ready(function () {
     $("input#Item_Expiration").datepicker();
 
 
-    $("select#Item_ItemType").change(function(event) {
+    $("select#Item_ItemType").change(function (event) {
+
         var url = getExtendedPropertyUrl;
         $.getJSON(url + '/' + $(this).val(), {},
-                    function(result) {
+                    function (result) {
 
                         $("div#ExtendedProperties").children().remove();
 
                         var length = result.length;
 
+
                         if (length > 0) {
-                            $.each(result, function(index, item) {
+                            $.each(result, function (index, item) {
 
                                 var name = item.Name.replace(/ /g, "");
 
                                 // create the label
                                 var label = $("<label>").attr("for", "item." + name).html(item.Name);
+                                // must have a title, or bt breaks all of this.
                                 var textBox = $("<input>").attr("id", "ExtendedProperties[" + index + "]_value")
                                                           .attr("name", "ExtendedProperties[" + index + "].value")
-                                                          .attr("type", "text");
+                                                          .attr("title", "")
+                                                          .attr("class", "required")
+                                                          .attr("type", "text");                                                          
                                 // create hidden field to store the extended property id
                                 var hidden = $("<input>").attr("type", "hidden")
                                                          .attr("id", "ExtendedProperties[" + index + "]_propertyId")
                                                          .attr("name", "ExtendedProperties[" + index + "].propertyId")
                                                          .val(item.Id);
-
+                                //debugger;
                                 if (item.QuestionType.Name == "Date") {
                                     //textBox.datepicker().watermark("mm/dd/yyyy", { className: "watermark" });
                                     textBox.datepicker().bt('mm/dd/yyyy format');
@@ -40,22 +45,22 @@
     });
 
 
-    $("img#tagAddButton").click(function(event) {
+    $("img#tagAddButton").click(function (event) {
         var input = $("<input>").attr("id", "tags").attr("name", "tags").val($("input#tagInput").val());
         input.attr("type", "text");
         input.css("cursor", "pointer");
-        input.click(function(event) { $(this).remove(); });
+        input.click(function (event) { $(this).remove(); });
         $("div#tagContainer").append(input);
 
         // blank the input
         $("input#tagInput").val("");
     });
 
-    $("input#tags").click(function(event) {
+    $("input#tags").click(function (event) {
         $(this).remove();
     });
 
-    $("a.FormSubmit").click(function(event) {
+    $("a.FormSubmit").click(function (event) {
         //$(this).parents("form#RemoveForm").submit();
 
         $(this).parent().submit();
@@ -154,13 +159,13 @@
     //        media_external_list_url: "js/media_list.js"
     //    });
 
-    $("input#Item_QuantityName").change(function(event) {
+    $("input#Item_QuantityName").change(function (event) {
         var quantityName = $(this).val();
         $("#CostPerItemLabel").text("Cost Per " + quantityName + ":");
         $("#QuantityLabel").text("Number of " + quantityName + "(s) Available:");
     });
 
-    $("#Item_TouchnetFID").change(function(event) {
-        $("#TouchnetFidExtraLable").text(" " + $(this).val());    
+    $("#Item_TouchnetFID").change(function (event) {
+        $("#TouchnetFidExtraLable").text(" " + $(this).val());
     });
 });
