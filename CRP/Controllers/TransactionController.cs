@@ -42,8 +42,9 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="id">Item id</param>
         /// <param name="referenceId">Reference Number for external applications</param>
+        /// <param name="coupon"></param>
         /// <returns></returns>
-        public ActionResult Checkout(int id, string referenceId)
+        public ActionResult Checkout(int id, string referenceId, string coupon)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -53,7 +54,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon);
             viewModel.Quantity = 1;
             viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
             viewModel.TotalAmountToRedisplay = viewModel.Quantity*item.CostPerItem;
@@ -370,7 +371,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.Confirmation(transaction.Id));
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden, null);
             viewModel.Quantity = quantity;
             viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
             viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);

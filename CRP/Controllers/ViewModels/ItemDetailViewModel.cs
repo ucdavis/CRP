@@ -25,6 +25,7 @@ namespace CRP.Controllers.ViewModels
         public bool HasMapPins { get; set; }
 
         public string ReferenceId { get; set; }
+        public string Coupon { get; set; }
 
         /// <summary>
         /// Creates the specified View Model.
@@ -33,13 +34,15 @@ namespace CRP.Controllers.ViewModels
         /// <param name="openIdRepository">The open id repository.</param>
         /// <param name="item">The item.</param>
         /// <param name="openIdUser">The open id user.</param>
+        /// <param name="referenceId"></param>
+        /// <param name="coupon"></param>
         /// <returns></returns>
-        public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser, string referenceId)
+        public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser, string referenceId, string coupon)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(openIdRepository != null, "Repository is required.");
 
-            var viewModel = new ItemDetailViewModel() {Item = item, ReferenceId = referenceId};
+            var viewModel = new ItemDetailViewModel() {Item = item, ReferenceId = referenceId, Coupon = coupon};
 
             // get the proper display profile
             var unit = item.Unit;

@@ -63,7 +63,7 @@
                 <tr>
                     <td colspan="2">
                         <label for="Coupon">Coupon Code:</label>
-                        <%= Html.TextBox("Coupon") %>
+                        <%= Html.TextBox("Coupon", !string.IsNullOrWhiteSpace(Model.Coupon) ? Model.Coupon : string.Empty) %>
                         <img src='<%= Url.Content("~/Images/ajax-loader.gif") %>' id="CouponValidateImage" style="display:none;" />
                         <span id="CouponMessage"></span>
                         
