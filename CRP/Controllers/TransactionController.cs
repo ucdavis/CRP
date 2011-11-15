@@ -83,6 +83,7 @@ namespace CRP.Controllers
         ///         Donation field is marked true
         /// </remarks>
         /// <param name="id"></param>
+        /// <param name="referenceId"></param>
         /// <param name="quantity">The quantity.</param>
         /// <param name="donation">The donation.</param>
         /// <param name="displayAmount">total amount calculated on the form</param>
@@ -95,7 +96,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [CaptchaValidator]
         [HttpPost]
-        public ActionResult Checkout(int id, string referenceId, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
+        public ActionResult Checkout(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
         {
             // if the arrays are null create new blank ones
             if (transactionAnswers==null) transactionAnswers = new QuestionAnswerParameter[0];
@@ -369,7 +370,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.Confirmation(transaction.Id));
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden);
             viewModel.Quantity = quantity;
             viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
             viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);

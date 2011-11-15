@@ -18,6 +18,7 @@
     
     <%= Html.AntiForgeryToken() %>
     <%= Html.Hidden("displayAmount", Model.Item.CostPerItem)%>
+    <%= Html.Hidden("referenceIdHidden", Model.ReferenceId)%>
     
     <!-- t-widget t-grid -->   
     <div id="Items" class="t-widget t-grid">
