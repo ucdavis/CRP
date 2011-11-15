@@ -180,6 +180,8 @@
                 }
                     
             });
+
+           
             
 
             $("input#quantity").blur(function(event) {
@@ -236,36 +238,13 @@
                 CalculateTotal();
             });
 
+            if ($("input#Coupon").val() != "") {
+                processCoupon();
+            }
+
             // update the coupon values and validate the coupon
             $("input#Coupon").blur(function(event) {
-                var url = '<%= Url.Action("Validate", "Coupon") %>';//<%= Html.Encode(Model.Item.Id) %>';
-                var couponCode = $("input#Coupon").val();
-                var quantity = $("#quantity").val();
-
-                $("img#CouponValidateImage").show();
-
-                $.getJSON(url, {itemId: <%= Html.Encode(Model.Item.Id) %>, couponCode: couponCode, quantity: quantity}, function(result) { 
-                        var message = result.message;
-                
-                        // if the message is undefined, we have a valid coupon
-                    
-                        var discountAmount = result.discountAmount;
-                        var maxQuantity = result.maxQuantity;
-                    
-                        $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
-                        $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
-                    
-                        $("span#CouponMessage").html("Coupon accepted.");
-                    
-                        CalculateTotal();
-                  
-                        // display error message
-                        $("span#CouponMessage").html(message);
-                    
-                        // hide the loading image
-                        $("img#CouponValidateImage").hide();
-                    }
-                );
+                processCoupon(event);
             });
             
             
@@ -273,6 +252,36 @@
             InitializeQuestions();
             RepopulateRadioButtonAnswers();
         });
+
+        function processCoupon(event) {
+            var url = '<%= Url.Action("Validate", "Coupon") %>';//<%= Html.Encode(Model.Item.Id) %>';
+            var couponCode = $("input#Coupon").val();
+            var quantity = $("#quantity").val();
+            
+            $("img#CouponValidateImage").show();
+
+            $.getJSON(url, { itemId: <%= Html.Encode(Model.Item.Id) %>, couponCode: couponCode, quantity: quantity }, function(result) {
+                var message = result.message;
+
+                // if the message is undefined, we have a valid coupon
+
+                var discountAmount = result.discountAmount;
+                var maxQuantity = result.maxQuantity;
+
+                $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
+                $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
+
+                $("span#CouponMessage").html("Coupon accepted.");
+
+                CalculateTotal();
+
+                // display error message
+                $("span#CouponMessage").html(message);
+
+                // hide the loading image
+                $("img#CouponValidateImage").hide();
+            });                        
+        }
 
         function CalculateTotal() {
             // get the item price, quantity and discount per item prices
