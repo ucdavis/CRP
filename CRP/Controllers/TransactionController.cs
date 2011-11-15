@@ -84,7 +84,7 @@ namespace CRP.Controllers
         ///         Donation field is marked true
         /// </remarks>
         /// <param name="id"></param>
-        /// <param name="referenceId"></param>
+        /// <param name="referenceIdHidden"></param>
         /// <param name="quantity">The quantity.</param>
         /// <param name="donation">The donation.</param>
         /// <param name="displayAmount">total amount calculated on the form</param>
@@ -103,6 +103,7 @@ namespace CRP.Controllers
             if (transactionAnswers==null) transactionAnswers = new QuestionAnswerParameter[0];
             if (quantityAnswers==null) quantityAnswers = new QuestionAnswerParameter[0];
 
+
             #region DB Queries
             // get the item
             var item = Repository.OfType<Item>().GetNullableById(id);
@@ -112,6 +113,18 @@ namespace CRP.Controllers
                                 where transactionAnswers.Select(b => b.QuestionId).ToArray().Contains(a.Id)
                                     || quantityAnswers.Select(b => b.QuestionId).ToArray().Contains(a.Id)
                                 select a).ToList();
+
+            if(!string.IsNullOrWhiteSpace(referenceIdHidden))
+            {
+                var refId = allQuestions.FirstOrDefault(a => a.Name == "Reference Id");
+                if(refId != null)
+                {
+                    if(transactionAnswers.Any(a => a.QuestionId == refId.Id && string.IsNullOrWhiteSpace(a.Answer)))
+                    {
+                        transactionAnswers.First(a => a.QuestionId == refId.Id && string.IsNullOrWhiteSpace(a.Answer)).Answer = referenceIdHidden;
+                    }
+                }
+            }
 
             // get the coupon
             var coup = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == coupon && a.Item == item && a.IsActive).FirstOrDefault();
