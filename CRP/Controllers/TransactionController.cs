@@ -43,8 +43,9 @@ namespace CRP.Controllers
         /// <param name="id">Item id</param>
         /// <param name="referenceId">Reference Number for external applications</param>
         /// <param name="coupon"></param>
+        /// <param name="agribusinessExtraParams"></param>
         /// <returns></returns>
-        public ActionResult Checkout(int id, string referenceId, string coupon)
+        public ActionResult Checkout(int id, string referenceId, string coupon, AgribusinessExtraParams agribusinessExtraParams = null)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -57,11 +58,16 @@ namespace CRP.Controllers
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon);
             viewModel.Quantity = 1;
             viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
+            if(!viewModel.Answers.Any())
+            {
+                viewModel.Answers = PopulateItemTransactionAnswer(agribusinessExtraParams, item.QuestionSets);
+            }
             viewModel.TotalAmountToRedisplay = viewModel.Quantity*item.CostPerItem;
             viewModel.CouponAmountToDisplay = 0.0m; //They have not entered a coupon yet
             viewModel.CouponTotalDiscountToDisplay = 0.0m;
             return View(viewModel);
         }
+
 
 
         /// <summary>
@@ -1178,6 +1184,57 @@ namespace CRP.Controllers
             return false;
         }
 
+        /// <summary>
+        /// This one is used for Agribusiness to pass thes values.
+        /// </summary>
+        /// <param name="agribusinessExtraParams"></param>
+        /// <param name="questionSets"></param>
+        /// <returns></returns>
+        private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(AgribusinessExtraParams agribusinessExtraParams, ICollection<ItemQuestionSet> questionSets)
+        {
+            var answers = new List<ItemTransactionAnswer>();
+
+            // if anything is null, just return no answers
+            if(agribusinessExtraParams == null || questionSets == null)
+                return answers;
+
+            // find the contact information question set
+            var questionSet = questionSets.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).Select(a => a.QuestionSet).FirstOrDefault();
+
+            // if it exists, fill in the questions
+            if(questionSet != null)
+            {
+                var questionAnswer = new Dictionary<string, string>();
+                questionAnswer.Add(StaticValues.Question_FirstName, agribusinessExtraParams.FN);
+                questionAnswer.Add(StaticValues.Question_LastName, agribusinessExtraParams.LN);
+                questionAnswer.Add(StaticValues.Question_StreetAddress, agribusinessExtraParams.Address);
+                questionAnswer.Add(StaticValues.Question_AddressLine2, agribusinessExtraParams.Address2);
+                questionAnswer.Add(StaticValues.Question_City, agribusinessExtraParams.City);
+                questionAnswer.Add(StaticValues.Question_State, agribusinessExtraParams.State);
+                questionAnswer.Add(StaticValues.Question_Zip, agribusinessExtraParams.Zip);
+                questionAnswer.Add(StaticValues.Question_PhoneNumber, agribusinessExtraParams.Phone);
+                questionAnswer.Add(StaticValues.Question_Email, agribusinessExtraParams.Email);
+                foreach(var question in questionSet.Questions)
+                {
+                    //If it doesn't find the question, it will throw an exception. (a good thing.)
+                    var ans = questionAnswer[question.Name];
+                    // create the answer object
+                    var answer = new ItemTransactionAnswer()
+                    {
+                        Answer = ans,
+                        QuestionId = question.Id,
+                        QuestionSetId = question.QuestionSet.Id,
+                        Transaction = true
+                    };
+
+                    answers.Add(answer);
+                }
+
+            }
+
+            return answers;
+        }
+
         private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(OpenIdUser openIdUser, ICollection<ItemQuestionSet> questionSets)
         {
             var answers = new List<ItemTransactionAnswer>();
@@ -1203,7 +1260,7 @@ namespace CRP.Controllers
                 questionAnswer.Add(StaticValues.Question_Email, openIdUser.Email);   
                 foreach (var question in questionSet.Questions)
                 {
-                    //If it doesn't find the question, it will thow an exception. (a good thing.)
+                    //If it doesn't find the question, it will throw an exception. (a good thing.)
                     var ans = questionAnswer[question.Name];
                     // create the answer object
                     var answer = new ItemTransactionAnswer()
@@ -1421,5 +1478,27 @@ namespace CRP.Controllers
         public string Answer { get; set; }
 
         public string[] CblAnswer { get; set; }
+    }
+
+    public class AgribusinessExtraParams
+    {
+        /// <summary>
+        /// FirstName
+        /// </summary>
+        public string FN { get; set; }
+        /// <summary>
+        /// LastName
+        /// </summary>
+        public string LN { get; set; }
+        public string Address { get; set; }
+        public string Address2 { get; set; }
+        public string City { get; set; }
+        /// <summary>
+        /// State (2 Character)
+        /// </summary>
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }   
     }
 }
