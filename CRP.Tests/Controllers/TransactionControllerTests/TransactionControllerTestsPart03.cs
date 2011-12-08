@@ -25,7 +25,7 @@ namespace CRP.Tests.Controllers.TransactionControllerTests
             #endregion Arrange
 
             #region Act
-            Controller.Checkout(1, null, null)
+            Controller.Checkout(1, null, null, null)
                 .AssertActionRedirect()
                 .ToAction<HomeController>(a => a.Index());
             #endregion Act

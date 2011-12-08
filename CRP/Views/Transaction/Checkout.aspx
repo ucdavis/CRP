@@ -99,7 +99,7 @@
                 <tr>
                     <td colspan="4" style="background-color: #D5D5D5">
                         <label for="restrictedKey">Passphrase to purchase: </label>
-                        <%= Html.TextBox("restrictedKey") %>
+                        <%= Html.TextBox("restrictedKey", !string.IsNullOrWhiteSpace(Model.Password) ? Model.Password : string.Empty)%>
                     </td>
                 </tr>
                 <% } %>

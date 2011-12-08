@@ -26,6 +26,7 @@ namespace CRP.Controllers.ViewModels
 
         public string ReferenceId { get; set; }
         public string Coupon { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
         /// Creates the specified View Model.
@@ -37,12 +38,12 @@ namespace CRP.Controllers.ViewModels
         /// <param name="referenceId"></param>
         /// <param name="coupon"></param>
         /// <returns></returns>
-        public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser, string referenceId, string coupon)
+        public static ItemDetailViewModel Create(IRepository repository, IRepositoryWithTypedId<OpenIdUser, string> openIdRepository, Item item, string openIdUser, string referenceId, string coupon, string password)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(openIdRepository != null, "Repository is required.");
 
-            var viewModel = new ItemDetailViewModel() {Item = item, ReferenceId = referenceId, Coupon = coupon};
+            var viewModel = new ItemDetailViewModel() {Item = item, ReferenceId = referenceId, Coupon = coupon, Password = password};
 
             // get the proper display profile
             var unit = item.Unit;

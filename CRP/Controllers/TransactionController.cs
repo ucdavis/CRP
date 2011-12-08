@@ -43,9 +43,10 @@ namespace CRP.Controllers
         /// <param name="id">Item id</param>
         /// <param name="referenceId">Reference Number for external applications</param>
         /// <param name="coupon"></param>
+        /// <param name="password"> </param>
         /// <param name="agribusinessExtraParams"></param>
         /// <returns></returns>
-        public ActionResult Checkout(int id, string referenceId, string coupon, AgribusinessExtraParams agribusinessExtraParams = null)
+        public ActionResult Checkout(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -55,7 +56,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon, password);
             viewModel.Quantity = 1;
             viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
             if(!viewModel.Answers.Any())
@@ -390,7 +391,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.Confirmation(transaction.Id));
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden, null);
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden, null, null);
             viewModel.Quantity = quantity;
             viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
             viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);
@@ -1499,6 +1500,6 @@ namespace CRP.Controllers
         public string State { get; set; }
         public string Zip { get; set; }
         public string Phone { get; set; }
-        public string Email { get; set; }   
+        public string Email { get; set; }
     }
 }
