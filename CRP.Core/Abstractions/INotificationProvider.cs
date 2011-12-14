@@ -150,10 +150,11 @@ Your Transaction number is: {TransactionNumber}
                                                   body);
             message.IsBodyHtml = true;
             SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
-            client.Send(message);
+            
 
             try
             {
+                client.Send(message);
                 transaction.Notified = true;
                 transaction.NotifiedDate = SystemTime.Now();
                 repository.OfType<Transaction>().EnsurePersistent(transaction);
