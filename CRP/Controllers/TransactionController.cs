@@ -1186,7 +1186,7 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// This one is used for Agribusiness to pass thes values.
+        /// This one is used for Agribusiness to pass these values.
         /// </summary>
         /// <param name="agribusinessExtraParams"></param>
         /// <param name="questionSets"></param>
@@ -1211,9 +1211,9 @@ namespace CRP.Controllers
                 questionAnswer.Add(StaticValues.Question_StreetAddress, agribusinessExtraParams.Address);
                 questionAnswer.Add(StaticValues.Question_AddressLine2, agribusinessExtraParams.Address2);
                 questionAnswer.Add(StaticValues.Question_City, agribusinessExtraParams.City);
-                questionAnswer.Add(StaticValues.Question_State, agribusinessExtraParams.State);
+                questionAnswer.Add(StaticValues.Question_State, agribusinessExtraParams.State != null ? agribusinessExtraParams.State.Trim().ToUpper() : string.Empty);
                 questionAnswer.Add(StaticValues.Question_Zip, agribusinessExtraParams.Zip);
-                questionAnswer.Add(StaticValues.Question_PhoneNumber, agribusinessExtraParams.Phone);
+                questionAnswer.Add(StaticValues.Question_PhoneNumber, agribusinessExtraParams.Phone != null ? agribusinessExtraParams.Phone.Replace('.', '-') : string.Empty);
                 questionAnswer.Add(StaticValues.Question_Email, agribusinessExtraParams.Email);
                 foreach(var question in questionSet.Questions)
                 {
