@@ -77,7 +77,7 @@
         <div class="gp-map" style="height: 700px; width: 700px;"></div>
 
         <% foreach (var a in Model.Item.MapPins) { %>
-            <div class="gp-coordinate <%= a.IsPrimary ? "default-location" : string.Empty %>" data-lat="<%= a.Latitude %>" data-lng="<%= a.Longitude %>">
+            <div class="gp-coordinate <%= a.IsPrimary ? "gp-default" : string.Empty %>" data-lat="<%= a.Latitude %>" data-lng="<%= a.Longitude %>">
                 <dt class="gp-name"><%= Html.Encode(a.Title) %></dt>
                 <% if (!string.IsNullOrWhiteSpace(a.Description)) { %>
                     <dd class="gp-description"><%= Html.Encode(a.Description ?? string.Empty) %></dd>
