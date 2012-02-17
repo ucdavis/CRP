@@ -51,7 +51,7 @@ namespace CRP.Services.Wcf
 
         public ServiceTransaction GetRegistrationByReference(int itemId, string referenceId)
         {
-            var answers = RepositoryFactory.TransactionAnswerRepository.Queryable.Where(a => a.Transaction.Item.Id == itemId && a.Question.Name == "Reference Id").ToList();
+            var answers = RepositoryFactory.TransactionAnswerRepository.Queryable.Where(a => a.Transaction.Item.Id == itemId && a.Question.Name == "Reference Id" && a.Transaction.IsActive).ToList();
             var answer = answers.Where(a => a.Answer.Trim() == referenceId).FirstOrDefault();
 
             if (answer == null)
