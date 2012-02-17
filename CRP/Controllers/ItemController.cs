@@ -1,4 +1,5 @@
 using System.Web.Mvc;
+using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
@@ -33,18 +34,35 @@ namespace CRP.Controllers
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
-            if (item == null || !item.Available)
+            if (item == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, null, null, null);
-            
-            if (!item.IsAvailableForReg)
+            if(!item.Available)
             {
-                Message = "Online registration for this event has passed.";
+                if(!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                    return this.RedirectToAction<HomeController>(a => a.Index());
+                }
+                else
+                {
+                    Message = "Event is not available to public";
+                }
             }
+
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, null, null, null);
+
+            if(!item.IsAvailableForReg)
+            {
+                if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
+                {
+                    Message = "Online registration for this event has passed.";
+                }
+            }
+
 
             return View(viewModel);
         }
