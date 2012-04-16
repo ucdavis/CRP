@@ -802,8 +802,12 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transactionToUpdate);
-                return
-                    Redirect(Url.DetailItemUrl
+                if(transactionToUpdate.Credit)
+                {
+                    var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
+                    _notificationProvider.SendRefundNotification(user, refundTransaction, false);
+                }
+                return Redirect(Url.DetailItemUrl
                     (
                         transactionToUpdate.Item.Id,
                         StaticValues.Tab_Refunds,
@@ -879,6 +883,11 @@ namespace CRP.Controllers
 
             childTransaction.IsActive = false;
             Repository.OfType<Transaction>().EnsurePersistent(transactionToUpdate);
+            if(transactionToUpdate.Credit)
+            {
+                var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
+                _notificationProvider.SendRefundNotification(user, childTransaction, true);
+            }
             return Redirect(Url.DetailItemUrl
                 (
                     transactionToUpdate.Item.Id,
