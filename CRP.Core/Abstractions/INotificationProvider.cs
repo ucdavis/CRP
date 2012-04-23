@@ -333,6 +333,24 @@ Your Transaction number is: {TransactionNumber}
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Transaction", refundTransaction.ParentTransaction.TransactionNumber));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Reason For Refund", refundTransaction.CorrectionReason));
 
+            try
+            {
+                var contactFirstName = refundTransaction.ParentTransaction.TransactionAnswers.FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                                                                                                                  a.Question.Name == StaticValues.Question_FirstName).Answer;
+                var contactLastName = refundTransaction.ParentTransaction.TransactionAnswers.FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                                                                                                                 a.Question.Name == StaticValues.Question_LastName).Answer;
+                var contactEmail = refundTransaction.ParentTransaction.TransactionAnswers.FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                                                                                                              a.Question.Name == StaticValues.Question_Email).Answer;
+                body.Append("<br/>");
+                body.Append("<b>Billing Contact</b><br/>");
+                body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "First Name", contactFirstName));
+                body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Last Name", contactLastName));
+                body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Email", contactEmail));
+            }
+            catch(Exception ex)
+            {
+                
+            }
             message.Body = body.ToString();
 
             client.Send(message);
