@@ -94,11 +94,16 @@
                 <label for="Item.AllowCheckPayment">Allow Check Payment:</label></td><td>
                 <%= Html.CheckBox("Item.AllowCheckPayment", Model.Item != null ? Model.Item.AllowCheckPayment : true)%>
                 <%= Html.ValidationMessage("Item.AllowCheckPayment", "*")%></td>
-                <tr><td>
-                <label for="Item.HideDonation">Hide Donation Column:</label></td><td>
-                <%= Html.CheckBox("Item.HideDonation")%>
-                <%= Html.ValidationMessage("Item.HideDonation", "*")%></td>
-            </tr></tbody></table></li>
+<%--                <tr>
+                    <td>
+                        <label for="Item.HideDonation">Hide Donation Column:</label>
+                    </td>
+                    <td>
+                        <%= Html.CheckBox("Item.HideDonation")%>
+                        <%= Html.ValidationMessage("Item.HideDonation", "*")%>
+                    </td>
+                </tr>--%>
+            </tbody></table></li>
             <li>
                 <label for="Item.QuantityName">Name Of Item:</label><br />
                 <%= Html.TextBox("Item.QuantityName", Model.Item != null ? Model.Item.QuantityName : "Ticket") %>

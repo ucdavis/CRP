@@ -30,7 +30,7 @@
     <property name="CheckPaymentInstructions" column="CheckPaymentInstructions" />
     <property name="AllowCheckPayment" column="AllowCheckPayment"/>
     <property name="AllowCreditPayment" column="AllowCreditPayment" />
-    <property name="HideDonation" column="HideDonation" />
+    <!--<property name="HideDonation" column="HideDonation" />-->
     <property name="TouchnetFID" column="TouchnetFID"/>
 
     <bag name="Templates" table="Templates" cascade="all-delete-orphan" inverse="true" >

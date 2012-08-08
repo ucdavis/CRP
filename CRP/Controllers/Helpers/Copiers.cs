@@ -31,7 +31,7 @@ namespace CRP.Controllers.Helpers
             dest.AllowCheckPayment = src.AllowCheckPayment;
             dest.AllowCreditPayment = src.AllowCreditPayment;
             dest.Summary = src.Summary;
-            dest.HideDonation = src.HideDonation;
+            //dest.HideDonation = src.HideDonation;
             if(string.IsNullOrEmpty(src.TouchnetFID))
             {
                 dest.TouchnetFID = null;

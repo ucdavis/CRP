@@ -161,69 +161,6 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
         #endregion Valid Tests
         #endregion CheckPaymentInstructions Tests
 
-        #region HideDonation Tests
-
-        /// <summary>
-        /// Tests the HideDonation is false saves.
-        /// </summary>
-        [TestMethod]
-        public void TestHideDonationIsFalseSaves()
-        {
-            #region Arrange
-
-            Item item = GetValid(9);
-            item.HideDonation = false;
-
-            #endregion Arrange
-
-            #region Act
-
-            ItemRepository.DbContext.BeginTransaction();
-            ItemRepository.EnsurePersistent(item);
-            ItemRepository.DbContext.CommitTransaction();
-
-            #endregion Act
-
-            #region Assert
-
-            Assert.IsFalse(item.HideDonation);
-            Assert.IsFalse(item.IsTransient());
-            Assert.IsTrue(item.IsValid());
-
-            #endregion Assert
-        }
-
-        /// <summary>
-        /// Tests the HideDonation is true saves.
-        /// </summary>
-        [TestMethod]
-        public void TestHideDonationIsTrueSaves()
-        {
-            #region Arrange
-
-            var item = GetValid(9);
-            item.HideDonation = true;
-
-            #endregion Arrange
-
-            #region Act
-
-            ItemRepository.DbContext.BeginTransaction();
-            ItemRepository.EnsurePersistent(item);
-            ItemRepository.DbContext.CommitTransaction();
-
-            #endregion Act
-
-            #region Assert
-
-            Assert.IsTrue(item.HideDonation);
-            Assert.IsFalse(item.IsTransient());
-            Assert.IsTrue(item.IsValid());
-
-            #endregion Assert
-        }
-
-        #endregion HideDonation Tests
 
         #region TouchnetFID Tests
         #region Invalid Tests

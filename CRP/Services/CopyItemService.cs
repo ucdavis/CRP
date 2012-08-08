@@ -206,7 +206,7 @@ namespace CRP.Services
             rtItem.Link = sourceItem.Link;
             rtItem.AllowCheckPayment = sourceItem.AllowCheckPayment;
             rtItem.AllowCreditPayment = sourceItem.AllowCreditPayment;
-            rtItem.HideDonation = sourceItem.HideDonation;
+            //rtItem.HideDonation = sourceItem.HideDonation;
             rtItem.ItemType = sourceItem.ItemType;
             rtItem.Unit = sourceItem.Unit;
             rtItem.Private = sourceItem.Private;
