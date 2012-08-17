@@ -581,5 +581,638 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
         #endregion Valid Tests
         #endregion Summary Tests
 
+        #region DonationLinkLegend Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the DonationLinkLegend with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestDonationLinkLegendWithTooLongValueDoesNotSave()
+        {
+            Item item = null;
+            try
+            {
+                #region Arrange
+                item = GetValid(9);
+                item.DonationLinkLegend = "x".RepeatTimes((50 + 1));
+                #endregion Arrange
+
+                #region Act
+                ItemRepository.DbContext.BeginTransaction();
+                ItemRepository.EnsurePersistent(item);
+                ItemRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(item);
+                Assert.AreEqual(50 + 1, item.DonationLinkLegend.Length);
+                var results = item.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("DonationLinkLegend: length must be between 0 and 50");
+                Assert.IsTrue(item.IsTransient());
+                Assert.IsFalse(item.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the DonationLinkLegend with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLegendWithNullValueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLegend = null;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkLegend with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLegendWithEmptyStringSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLegend = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkLegend with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLegendWithOneSpaceSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLegend = " ";
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkLegend with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLegendWithOneCharacterSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLegend = "x";
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkLegend with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLegendWithLongValueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLegend = "x".RepeatTimes(50);
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(50, item.DonationLinkLegend.Length);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion DonationLinkLegend Tests
+
+        #region DonationLinkInformation Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the DonationLinkInformation with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestDonationLinkInformationWithTooLongValueDoesNotSave()
+        {
+            Item item = null;
+            try
+            {
+                #region Arrange
+                item = GetValid(9);
+                item.DonationLinkInformation = "x".RepeatTimes((500 + 1));
+                #endregion Arrange
+
+                #region Act
+                ItemRepository.DbContext.BeginTransaction();
+                ItemRepository.EnsurePersistent(item);
+                ItemRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(item);
+                Assert.AreEqual(500 + 1, item.DonationLinkInformation.Length);
+                var results = item.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("DonationLinkInformation: length must be between 0 and 500");
+                Assert.IsTrue(item.IsTransient());
+                Assert.IsFalse(item.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the DonationLinkInformation with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkInformationWithNullValueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkInformation = null;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkInformation with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkInformationWithEmptyStringSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkInformation = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkInformation with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkInformationWithOneSpaceSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkInformation = " ";
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkInformation with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkInformationWithOneCharacterSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkInformation = "x";
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkInformation with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkInformationWithLongValueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkInformation = "x".RepeatTimes(500);
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(500, item.DonationLinkInformation.Length);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion DonationLinkInformation Tests
+
+        #region DonationLinkText Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the DonationLinkText with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestDonationLinkTextWithTooLongValueDoesNotSave()
+        {
+            Item item = null;
+            try
+            {
+                #region Arrange
+                item = GetValid(9);
+                item.DonationLinkText = "x".RepeatTimes((50 + 1));
+                #endregion Arrange
+
+                #region Act
+                ItemRepository.DbContext.BeginTransaction();
+                ItemRepository.EnsurePersistent(item);
+                ItemRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(item);
+                Assert.AreEqual(50 + 1, item.DonationLinkText.Length);
+                var results = item.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("DonationLinkText: length must be between 0 and 50");
+                Assert.IsTrue(item.IsTransient());
+                Assert.IsFalse(item.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the DonationLinkText with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkTextWithNullValueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkText = null;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkText with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkTextWithEmptyStringSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkText = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkText with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkTextWithOneSpaceSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkText = " ";
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkText with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkTextWithOneCharacterSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkText = "x";
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkText with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkTextWithLongValueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkText = "x".RepeatTimes(50);
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(50, item.DonationLinkText.Length);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion DonationLinkText Tests
+
+        #region DonationLinkLink Tests
+        #region Invalid Tests
+
+        /// <summary>
+        /// Tests the DonationLinkLink with too long value does not save.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void TestDonationLinkLinkWithTooLongValueDoesNotSave()
+        {
+            Item item = null;
+            try
+            {
+                #region Arrange
+                item = GetValid(9);
+                item.DonationLinkLink = "x".RepeatTimes((200 + 1));
+                #endregion Arrange
+
+                #region Act
+                ItemRepository.DbContext.BeginTransaction();
+                ItemRepository.EnsurePersistent(item);
+                ItemRepository.DbContext.CommitTransaction();
+                #endregion Act
+            }
+            catch (Exception)
+            {
+                Assert.IsNotNull(item);
+                Assert.AreEqual(200 + 1, item.DonationLinkLink.Length);
+                var results = item.ValidationResults().AsMessageList();
+                results.AssertErrorsAre("DonationLinkLink: length must be between 0 and 200");
+                Assert.IsTrue(item.IsTransient());
+                Assert.IsFalse(item.IsValid());
+                throw;
+            }
+        }
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the DonationLinkLink with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLinkWithNullValueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLink = null;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkLink with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLinkWithEmptyStringSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLink = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkLink with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLinkWithOneSpaceSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLink = " ";
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkLink with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLinkWithOneCharacterSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLink = "x";
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the DonationLinkLink with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestDonationLinkLinkWithLongValueSaves()
+        {
+            #region Arrange
+            var item = GetValid(9);
+            item.DonationLinkLink = "x".RepeatTimes(200);
+            #endregion Arrange
+
+            #region Act
+            ItemRepository.DbContext.BeginTransaction();
+            ItemRepository.EnsurePersistent(item);
+            ItemRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(200, item.DonationLinkLink.Length);
+            Assert.IsFalse(item.IsTransient());
+            Assert.IsTrue(item.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion DonationLinkLink Tests
+ 
+
     }
 }

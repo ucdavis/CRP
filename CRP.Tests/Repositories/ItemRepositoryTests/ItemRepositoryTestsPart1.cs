@@ -137,6 +137,22 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             })); 
             expectedFields.Add(new NameAndType("DateCreated", "System.DateTime", new List<string>()));
             expectedFields.Add(new NameAndType("Description", "System.String", new List<string>()));
+            expectedFields.Add(new NameAndType("DonationLinkInformation", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)500)]"
+            }));
+            expectedFields.Add(new NameAndType("DonationLinkLegend", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
+            }));
+            expectedFields.Add(new NameAndType("DonationLinkLink", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)200)]"
+            }));
+            expectedFields.Add(new NameAndType("DonationLinkText", "System.String", new List<string>
+            {
+                 "[NHibernate.Validator.Constraints.LengthAttribute((Int32)50)]"
+            }));
             expectedFields.Add(new NameAndType("Editors", "System.Collections.Generic.ICollection`1[CRP.Core.Domain.Editor]", new List<string>
             {
                 "[NHibernate.Validator.Constraints.NotNullAttribute()]"
