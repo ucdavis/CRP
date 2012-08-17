@@ -204,6 +204,12 @@ namespace CRP.Services
             }
             rtItem.Image = sourceItem.Image;
             rtItem.Link = sourceItem.Link;
+
+            rtItem.DonationLinkInformation = sourceItem.DonationLinkInformation;
+            rtItem.DonationLinkLegend = sourceItem.DonationLinkLegend;
+            rtItem.DonationLinkLink = sourceItem.DonationLinkLink;
+            rtItem.DonationLinkText = sourceItem.DonationLinkText;
+
             rtItem.AllowCheckPayment = sourceItem.AllowCheckPayment;
             rtItem.AllowCreditPayment = sourceItem.AllowCreditPayment;
             //rtItem.HideDonation = sourceItem.HideDonation;

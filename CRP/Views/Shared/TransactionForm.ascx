@@ -6,6 +6,8 @@
 <%--<h2 class="two_col_float_for_h2">Transaction Level</h2>--%>
 
 <div id="TransactionContainer">
+    
+<% var showDonationLink = false; %>
 
 <% foreach(var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order)) {%>
     <fieldset id='<%= Html.Encode(qs.Id) %>'>
@@ -14,6 +16,11 @@
             if(questionSetName == "Contact Information")
             {
                 questionSetName = questionSetName + " / Billing Information";
+                showDonationLink = true;
+            }
+            else
+            {
+                showDonationLink = false;
             }
         %>
         <legend><%= Html.Encode(questionSetName) %></legend>
@@ -36,6 +43,21 @@
         <% } %></ul>
         
     </fieldset>
+    <% if (showDonationLink && !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink))
+       {%>
+        <fieldset id="DonationLink">
+            <legend><%= Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information") %></legend>
+            <ul>
+                <li>
+                    <%= Html.Encode(Model.Item.DonationLinkInformation) %>
+                </li>
+            <li>
+                <a href="<%= Html.Encode(Model.Item.DonationLinkLink)%>" target="_blank"><%= Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here")%></a>
+            </li>
+            </ul>
+        </fieldset>           
+       
+    <%} %>
 <% } %>
 
 </div>

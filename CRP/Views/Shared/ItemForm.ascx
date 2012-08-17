@@ -16,6 +16,9 @@
             $("#Item_Summary").bt('A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters.');
             $("#tagInput").bt('You must click on the plus button to add the tag you have entered here.', { positions: 'top' });
             $("#tags").bt('Click on the tag to remove it.', { positions: 'bottom' });
+            $("#Item_DonationLinkLink").bt('If this is blank, it will not show up to the user. You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html');
+            $("#Item_DonationLinkText").bt('This is the text that will appear in the clickable link.');
+            
         });
     </script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>
@@ -129,6 +132,37 @@
                 <%= Html.TextBox("Item.Link", Model.Item != null ? Model.Item.Link : string.Empty, new { @class = "validateLink", @title = ""})%>
                 <%= Html.ValidationMessage("Item.Link", "*")%>
             </li>
+            
+            <li>
+                <fieldset>
+                    <legend>Optional Donation Link</legend>
+                    <ul>
+                        <li>
+                            <label for="Item.DonationLinkLegend">Donation Legend:</label><br />
+                            <%= Html.TextBox("Item.DonationLinkLegend", Model.Item != null ? Model.Item.DonationLinkLegend : string.Empty)%>
+                            <%= Html.ValidationMessage("Item.DonationLinkLegend", "*")%>
+                        </li>
+
+                        <li>
+                            <label for="Item.DonationLinkInformation">Donation Information:</label><br />
+                            <%= Html.TextArea("Item.DonationLinkInformation", Model.Item != null ? Model.Item.DonationLinkInformation : string.Empty, new { style = "height:60px; width: 750px", @title = ' ' })%>
+                            <%= Html.ValidationMessage("Item.DonationLinkInformation", "*")%>
+                        </li>
+
+                        <li>
+                            <label for="Item.DonationLinkLink">Donation Link:</label><br />
+                            <%= Html.TextBox("Item.DonationLinkLink", Model.Item != null ? Model.Item.DonationLinkLink : string.Empty, new { @class = "validateLink", @title = "" })%>
+                            <%= Html.ValidationMessage("Item.DonationLinkLink", "*")%>
+                        </li>
+                        <li>
+                            <label for="Item.DonationLinkText">Donation Link Text:</label><br />
+                            <%= Html.TextBox("Item.DonationLinkText", Model.Item != null ? Model.Item.DonationLinkText : "Click here", new { @title = "" })%>
+                            <%= Html.ValidationMessage("Item.DonationLinkText", "*")%>
+                        </li>
+                    </ul>
+                </fieldset>
+            </li>
+
             <li><table><tbody><tr><td>
             <!-- NEEDS BALLOON-->
                 <label for="Item.Available">Available to public:</label></td><td>

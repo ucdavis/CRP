@@ -77,6 +77,16 @@ namespace CRP.Core.Domain
 
         public virtual bool HideDonation { get { return true; } } //We now no longer allow donations. Always hide it.
 
+        [Length(50)]
+        public virtual string DonationLinkLegend { get; set; }
+        [Length(500)]
+        public virtual string DonationLinkInformation { get; set; }
+        [Length(50)]
+        public virtual string DonationLinkText { get; set; }
+        [Length(200)]
+        public virtual string DonationLinkLink { get; set; }
+
+
         [NotNull]
         public virtual ItemType ItemType { get; set; }
 

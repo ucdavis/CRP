@@ -24,6 +24,12 @@ namespace CRP.Controllers.Helpers
             dest.QuantityName = src.QuantityName; //Was missing this JCS 2010/06/29
             dest.Expiration = src.Expiration;
             dest.Link = src.Link;
+
+            dest.DonationLinkInformation = src.DonationLinkInformation;
+            dest.DonationLinkLegend = src.DonationLinkLegend;
+            dest.DonationLinkLink = src.DonationLinkLink;
+            dest.DonationLinkText = src.DonationLinkText;
+
             dest.Available = src.Available;
             dest.Private = src.Private;
             dest.Unit = src.Unit;

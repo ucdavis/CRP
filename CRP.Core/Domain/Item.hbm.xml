@@ -31,6 +31,12 @@
     <property name="AllowCheckPayment" column="AllowCheckPayment"/>
     <property name="AllowCreditPayment" column="AllowCreditPayment" />
     <!--<property name="HideDonation" column="HideDonation" />-->
+
+    <property name="DonationLinkLegend" column="DonationLinkLegend" />
+    <property name="DonationLinkInformation" column="DonationLinkInformation" />
+    <property name="DonationLinkText" column="DonationLinkText" />
+    <property name="DonationLinkLink" column="DonationLinkLink" />
+    
     <property name="TouchnetFID" column="TouchnetFID"/>
 
     <bag name="Templates" table="Templates" cascade="all-delete-orphan" inverse="true" >
