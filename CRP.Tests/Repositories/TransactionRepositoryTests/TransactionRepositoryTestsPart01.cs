@@ -144,6 +144,7 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
             expectedFields.Add(new NameAndType("Credit", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("Donation", "System.Boolean", new List<string>()));
             expectedFields.Add(new NameAndType("DonationTotal", "System.Decimal", new List<string>()));
+            expectedFields.Add(new NameAndType("FidUsed", "System.String", new List<string>()));
             expectedFields.Add(new NameAndType("Id", "System.Int32", new List<string>
             {
                  "[Newtonsoft.Json.JsonPropertyAttribute()]", 

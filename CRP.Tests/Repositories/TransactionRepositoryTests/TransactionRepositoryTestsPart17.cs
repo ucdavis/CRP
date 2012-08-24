@@ -169,5 +169,132 @@ namespace CRP.Tests.Repositories.TransactionRepositoryTests
         }
         #endregion Cascade Tests
         #endregion Coupon Tests
+
+        #region FidUsed Tests
+        #region Invalid Tests
+
+        #endregion Invalid Tests
+
+        #region Valid Tests
+
+        /// <summary>
+        /// Tests the FidUsed with null value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestFidUsedWithNullValueSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.FidUsed = null;
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the FidUsed with empty string saves.
+        /// </summary>
+        [TestMethod]
+        public void TestFidUsedWithEmptyStringSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.FidUsed = string.Empty;
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the FidUsed with one space saves.
+        /// </summary>
+        [TestMethod]
+        public void TestFidUsedWithOneSpaceSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.FidUsed = " ";
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the FidUsed with one character saves.
+        /// </summary>
+        [TestMethod]
+        public void TestFidUsedWithOneCharacterSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.FidUsed = "x";
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert
+        }
+
+        /// <summary>
+        /// Tests the FidUsed with long value saves.
+        /// </summary>
+        [TestMethod]
+        public void TestFidUsedWithLongValueSaves()
+        {
+            #region Arrange
+            var transaction = GetValid(9);
+            transaction.FidUsed = "x".RepeatTimes(3);
+            #endregion Arrange
+
+            #region Act
+            TransactionRepository.DbContext.BeginTransaction();
+            TransactionRepository.EnsurePersistent(transaction);
+            TransactionRepository.DbContext.CommitTransaction();
+            #endregion Act
+
+            #region Assert
+            Assert.AreEqual(3, transaction.FidUsed.Length);
+            Assert.IsFalse(transaction.IsTransient());
+            Assert.IsTrue(transaction.IsValid());
+            #endregion Assert
+        }
+
+        #endregion Valid Tests
+        #endregion FidUsed Tests
+
     }
 }
