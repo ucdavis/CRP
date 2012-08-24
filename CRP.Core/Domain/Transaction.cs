@@ -45,6 +45,11 @@ namespace CRP.Core.Domain
             PaymentType = false;
 
             TransactionGuid = Guid.NewGuid();
+
+            if (Item != null && FidUsed == null)
+            {
+                FidUsed = Item.TouchnetFID;
+            }
         }
         #endregion
 
@@ -82,6 +87,8 @@ namespace CRP.Core.Domain
         public virtual string CorrectionReason { get; set; }
 
         public virtual Guid TransactionGuid { get; set; }
+        
+        public virtual string FidUsed { get; set; }
 
         [NotNull]
         public virtual ICollection<PaymentLog> PaymentLogs { get; set; }

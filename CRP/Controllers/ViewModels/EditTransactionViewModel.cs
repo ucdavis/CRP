@@ -31,9 +31,20 @@ namespace CRP.Controllers.ViewModels
 
             var viewModel = new EditTransactionViewModel() { };
             viewModel.TransactionValue = transaction;
+            var fid = string.Empty;
+            if (viewModel.TransactionValue.FidUsed != null)
+            {
+                fid = viewModel.TransactionValue.FidUsed;
+            }
+            else
+            {
+                fid = string.IsNullOrEmpty(viewModel.TransactionValue.Item.TouchnetFID)
+                          ? string.Empty
+                          : viewModel.TransactionValue.Item.TouchnetFID;
+            }
 
             //viewModel.Fid = string.Format(" FID={0}", ConfigurationManager.AppSettings["TouchNetFid"]);
-            viewModel.Fid = string.Format(" FID={0}", string.IsNullOrEmpty(viewModel.TransactionValue.Item.TouchnetFID)? string.Empty:viewModel.TransactionValue.Item.TouchnetFID);
+            viewModel.Fid = string.Format(" FID={0}", fid);
             
             return viewModel;
         }

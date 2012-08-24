@@ -201,7 +201,7 @@
                                     col.Template(a => 
                                         {%> 
                                             <%if (a.Credit){%>
-                                                <%= Html.Image("~/images/technorati.ico",new {@class="CreditIdImage", title=Html.Encode(a.TransactionGuid) + Model.Fid})%> 
+                                                <%= Html.Image("~/images/technorati.ico",new {@class="CreditIdImage", title=Html.Encode(a.TransactionGuid) + (a.FidUsed != null ? Html.Encode(string.Format(" FID={0}", a.FidUsed)) : Model.Fid)})%> 
                                             <%}%>
                                         <%}).Title("Credit Card Id");
                                     //col.Bound(a => a.TransactionGuid).Title("Refund Identifier");

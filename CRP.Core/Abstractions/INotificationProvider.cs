@@ -318,6 +318,16 @@ Your Transaction number is: {TransactionNumber}
                 message.Subject = "Registration Refund";
             }
 
+            var fid = string.Empty;
+            if (refundTransaction.ParentTransaction.FidUsed != null)
+            {
+                fid = refundTransaction.ParentTransaction.FidUsed;
+            }
+            else
+            {
+                fid = refundTransaction.ParentTransaction.Item.TouchnetFID ?? string.Empty;
+            }
+
             var body = new StringBuilder("Refund Information<br/><br/>");
             body.Append("<b>Refunder</b><br/>");
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Name", user.FullName));
@@ -325,7 +335,7 @@ Your Transaction number is: {TransactionNumber}
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Kerb", user.LoginID));
             body.Append("<br/>");
             body.Append("<b>Details</b><br/>");
-            body.Append(string.Format("  <b>{0} :</b> {1} FID={2}<br/>", "Touchnet Id", refundTransaction.ParentTransaction.TransactionGuid, refundTransaction.ParentTransaction.Item.TouchnetFID ?? string.Empty));
+            body.Append(string.Format("  <b>{0} :</b> {1} FID={2}<br/>", "Touchnet Id", refundTransaction.ParentTransaction.TransactionGuid, fid));
             body.Append(string.Format("  <b>{0} :</b> ${1}<br/>", "Refund Amount", refundTransaction.Amount));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Date", refundTransaction.TransactionDate));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Event Name", refundTransaction.Item.Name));
