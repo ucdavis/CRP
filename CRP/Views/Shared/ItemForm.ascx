@@ -16,7 +16,7 @@
             $("#Item_Summary").bt('A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters.');
             $("#tagInput").bt('You must click on the plus button to add the tag you have entered here.', { positions: 'top' });
             $("#tags").bt('Click on the tag to remove it.', { positions: 'bottom' });
-            $("#Item_DonationLinkLink").bt('If this is blank, it will not show up to the user. You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html');
+            $("#Item_DonationLinkLink").bt('If this is blank, it will not show up to the user. Validation Has been removed for this field. You need to test it before making this available to the public.');
             $("#Item_DonationLinkText").bt('This is the text that will appear in the clickable link.');
             
         });
@@ -151,7 +151,7 @@
 
                         <li>
                             <label for="Item.DonationLinkLink">Donation Link:</label><br />
-                            <%= Html.TextBox("Item.DonationLinkLink", Model.Item != null ? Model.Item.DonationLinkLink : string.Empty, new { @class = "validateLink", @title = "" })%>
+                            <%= Html.TextBox("Item.DonationLinkLink", Model.Item != null ? Model.Item.DonationLinkLink : string.Empty, new { @title = "" })%>
                             <%= Html.ValidationMessage("Item.DonationLinkLink", "*")%>
                         </li>
                         <li>
