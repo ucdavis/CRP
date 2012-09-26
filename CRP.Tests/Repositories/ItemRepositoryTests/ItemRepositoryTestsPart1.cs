@@ -164,7 +164,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             }));
             expectedFields.Add(new NameAndType("FID", "System.Boolean", new List<string>
             {
-                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Must select a FID when available to public is checked and credit payment is allowed\")]"
+                 "[NHibernate.Validator.Constraints.AssertTrueAttribute(Message = \"Must select an Account Number when available to public is checked and credit payment is allowed\")]"
             }));
             expectedFields.Add(new NameAndType("FID_Length", "System.Boolean", new List<string>
             {

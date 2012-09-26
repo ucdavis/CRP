@@ -190,7 +190,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("FID: Must select a FID when available to public is checked and credit payment is allowed");
+                results.AssertErrorsAre("FID: Must select an Account Number when available to public is checked and credit payment is allowed");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;
@@ -222,7 +222,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("FID: Must select a FID when available to public is checked and credit payment is allowed");
+                results.AssertErrorsAre("FID: Must select an Account Number when available to public is checked and credit payment is allowed");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;
@@ -410,7 +410,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("FID: Must select a FID when available to public is checked and credit payment is allowed");
+                results.AssertErrorsAre("FID: Must select an Account Number when available to public is checked and credit payment is allowed");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;
@@ -444,7 +444,7 @@ namespace CRP.Tests.Repositories.ItemRepositoryTests
             {
                 Assert.IsNotNull(item);
                 var results = item.ValidationResults().AsMessageList();
-                results.AssertErrorsAre("FID: Must select a FID when available to public is checked and credit payment is allowed");
+                results.AssertErrorsAre("FID: Must select an Account Number when available to public is checked and credit payment is allowed");
                 Assert.IsTrue(item.IsTransient());
                 Assert.IsFalse(item.IsValid());
                 throw;

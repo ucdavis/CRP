@@ -70,7 +70,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
         [TestMethod]
         public void TestEditWithParametersMapping()
         {
-            "~/ItemManagement/Edit/5".ShouldMapTo<ItemManagementController>(a => a.Edit(5, new Item(), new ExtendedPropertyParameter[1], new string[1], string.Empty), true);
+            "~/ItemManagement/Edit/5".ShouldMapTo<ItemManagementController>(a => a.Edit(5, new Item(), new ExtendedPropertyParameter[1], new string[1], string.Empty, false), true);
         }
 
         /// <summary>

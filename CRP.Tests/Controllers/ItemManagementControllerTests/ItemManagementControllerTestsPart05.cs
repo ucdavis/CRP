@@ -272,7 +272,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             epp[1].propertyId = 3;
             epp[1].value = "Answer3";
 
-            Controller.Edit(2, new Item(), epp, new[] { "Test" }, null)
+            Controller.Edit(2, new Item(), epp, new[] { "Test" }, null, false)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
@@ -306,7 +306,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             epp[1].propertyId = 3;
             epp[1].value = "Answer3";
 
-            Controller.Edit(1, Items[0], epp, new[] { "NewTag" }, null)
+            Controller.Edit(1, Items[0], epp, new[] { "NewTag" }, null, false)
                 .AssertActionRedirect()
                 .ToAction<ItemManagementController>(a => a.List(null));
             Assert.AreEqual("You do not have editor rights to that item.", Controller.Message);
@@ -346,7 +346,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             epp[1].propertyId = 3;
             epp[1].value = "Answer3";
 
-            Controller.Edit(1, Items[0], epp, new[] { Tags[0].Name }, null)
+            Controller.Edit(1, Items[0], epp, new[] { Tags[0].Name }, null, false)
                 .AssertViewRendered()
                 .WithViewData<ItemViewModel>();
             Assert.AreEqual("Item has been saved successfully.", Controller.Message);
@@ -386,7 +386,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             epp[1].propertyId = 3;
             epp[1].value = "Answer3";
 
-            Controller.Edit(1, Items[0], epp, new[] { Tags[0].Name }, null)
+            Controller.Edit(1, Items[0], epp, new[] { Tags[0].Name }, null, false)
                 .AssertViewRendered()
                 .WithViewData<ItemViewModel>();
             Assert.AreEqual("Item has been saved successfully.", Controller.Message);
@@ -428,7 +428,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
 
             Items[0].Name = " "; //Invalid
 
-            Controller.Edit(1, Items[0], epp, new[] { Tags[0].Name }, null)
+            Controller.Edit(1, Items[0], epp, new[] { Tags[0].Name }, null, false)
                 .AssertViewRendered()
                 .WithViewData<ItemViewModel>();
             Assert.AreNotEqual("Item has been saved successfully.", Controller.Message);
@@ -503,7 +503,7 @@ namespace CRP.Tests.Controllers.ItemManagementControllerTests
             Assert.AreNotEqual(Items[0].LinkLink, itemToUpdate.LinkLink);
             Assert.AreNotEqual(Items[0].MapLink, itemToUpdate.MapLink);
 
-            Controller.Edit(1, itemToUpdate, epp, new[] { Tags[0].Name }, mapLinkText)
+            Controller.Edit(1, itemToUpdate, epp, new[] { Tags[0].Name }, mapLinkText, false)
                 .AssertViewRendered()
                 .WithViewData<ItemViewModel>();
             Assert.AreEqual("Item has been saved successfully.", Controller.Message);
