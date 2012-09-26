@@ -11,6 +11,7 @@ using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Services;
+using Elmah;
 using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Web.ActionResults;
@@ -278,7 +279,7 @@ namespace CRP.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [PageTracker]
-        public ActionResult Edit(int id, [Bind(Exclude="Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
+        public ActionResult Edit(int id, [Bind(Exclude = "Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool fidIsDisabled)
         {
             var destinationItem = Repository.OfType<Item>().GetNullableById(id);
             
@@ -290,7 +291,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List(null));
             }
 
-            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);//PopulateObject.Item(Repository, item, extendedProperties, tags);
+            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink, fidIsDisabled);//PopulateObject.Item(Repository, item, extendedProperties, tags);
 
             if(destinationItem.ExtendedPropertyAnswers != null && destinationItem.ExtendedPropertyAnswers.Count > 0)
             {
@@ -323,7 +324,6 @@ namespace CRP.Controllers
                 Repository.OfType<Item>().EnsurePersistent(destinationItem);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item");
             }
-
             var viewModel = ItemViewModel.Create(Repository, CurrentUser, destinationItem);
             //viewModel.Item = destinationItem;
             return View(viewModel);

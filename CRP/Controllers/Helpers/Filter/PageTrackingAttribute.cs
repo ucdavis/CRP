@@ -19,7 +19,7 @@ namespace CRP.Controllers.Helpers.Filter
 
                 var repository = SmartServiceLocator<IRepository>.GetService();
 
-                repository.OfType<PageTracking>().EnsurePersistent(pageTracking);
+                //repository.OfType<PageTracking>().EnsurePersistent(pageTracking); //This was saving an item, even though the item had validation errors and ensurepersistent was *NOT* called
             }
             catch
             {

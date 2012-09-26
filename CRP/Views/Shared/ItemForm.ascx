@@ -28,6 +28,7 @@
     <%= Html.ClientSideValidation<Item>("Item") %>
 
         <%= Html.AntiForgeryToken() %>
+         <%= Html.Hidden("FidIsDisabled", !Model.CanChangeFID) %>
         <fieldset>
             <ul>
             <li><%= Html.ActionLink<HelpController>(a => a.CreateItem(), "Watch Demo") %></li>

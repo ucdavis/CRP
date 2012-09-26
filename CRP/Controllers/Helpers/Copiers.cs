@@ -9,7 +9,7 @@ namespace CRP.Controllers.Helpers
 {
     public class Copiers
     {
-        public static Item CopyItem(IRepository repository, Item src, Item dest, ExtendedPropertyParameter[] extendedProperties, string[] tags,string mapLink)
+        public static Item CopyItem(IRepository repository, Item src, Item dest, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool fidIsDisabled)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(src != null, "Source item is required.");
@@ -38,15 +38,17 @@ namespace CRP.Controllers.Helpers
             dest.AllowCreditPayment = src.AllowCreditPayment;
             dest.Summary = src.Summary;
             //dest.HideDonation = src.HideDonation;
-            if(string.IsNullOrEmpty(src.TouchnetFID))
+            if (!fidIsDisabled) //Well, if the FID is disabled (only allow owner to change), then the fid would be cleared out.
             {
-                dest.TouchnetFID = null;
+                if (string.IsNullOrEmpty(src.TouchnetFID))                    
+                {
+                    dest.TouchnetFID = null;
+                }
+                else
+                {
+                    dest.TouchnetFID = src.TouchnetFID;
+                }
             }
-            else
-            {
-                dest.TouchnetFID = src.TouchnetFID;
-            }
-
 
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 

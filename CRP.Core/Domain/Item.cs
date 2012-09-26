@@ -402,7 +402,7 @@ namespace CRP.Core.Domain
             }
         }
 
-        [AssertTrue(Message = "Must select a FID when available to public is checked and credit payment is allowed")]
+        [AssertTrue(Message = "Must select an Account Number when available to public is checked and credit payment is allowed")]
         private bool FID
         {
             get
