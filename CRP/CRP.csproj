@@ -273,6 +273,7 @@
     <Compile Include="Services\Wcf\ServiceAuthorizationValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="apple-touch-icon.png" />
     <Content Include="Content\2009.3.1103.0\Black\loading.gif" />
     <Content Include="Content\2009.3.1103.0\Black\sprite.png" />
     <Content Include="Content\2009.3.1103.0\Default\loading.gif" />
