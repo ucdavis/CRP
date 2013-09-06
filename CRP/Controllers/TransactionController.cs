@@ -1217,6 +1217,7 @@ namespace CRP.Controllers
                 var questionAnswer = new Dictionary<string, string>();
                 questionAnswer.Add(StaticValues.Question_FirstName, agribusinessExtraParams.FN);
                 questionAnswer.Add(StaticValues.Question_LastName, agribusinessExtraParams.LN);
+                questionAnswer.Add(StaticValues.Question_Title, agribusinessExtraParams.Title);
                 questionAnswer.Add(StaticValues.Question_StreetAddress, agribusinessExtraParams.Address);
                 questionAnswer.Add(StaticValues.Question_AddressLine2, agribusinessExtraParams.Address2);
                 questionAnswer.Add(StaticValues.Question_City, agribusinessExtraParams.City);
@@ -1500,6 +1501,8 @@ namespace CRP.Controllers
         /// LastName
         /// </summary>
         public string LN { get; set; }
+
+        public string Title { get; set; }
         public string Address { get; set; }
         public string Address2 { get; set; }
         public string City { get; set; }

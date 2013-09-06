@@ -316,7 +316,9 @@
     <Content Include="Content\2009.3.1103.0\Web20\sprite.png" />
     <Content Include="Content\2009.3.1103.0\WebBlue\loading.gif" />
     <Content Include="Content\2009.3.1103.0\WebBlue\sprite.png" />
-    <Content Include="CRP.Publish.xml" />
+    <Content Include="CRP.Publish.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
