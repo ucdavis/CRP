@@ -4,7 +4,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             //$("#Item_Link").watermark("Example: http://www.ucdavis.edu/index.html", { className: 'watermark' });
-            $("#Item_Link").bt('You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html');
+            $("#Item_Link").bt('If this is blank, it will not show up to the user. Validation Has been removed for this field. You need to test it before making this available to the public.');
             //$("#Item_Expiration").watermark("mm/dd/yyyy", { className: "watermark" });
             $("#Item_Expiration").bt('mm/dd/yyyy format');
             $.each($("input.isDate"), function(index, item) {
@@ -130,7 +130,7 @@
             </li>
             <li>
                 <label for="Item.Link">Link:</label><br />
-                <%= Html.TextBox("Item.Link", Model.Item != null ? Model.Item.Link : string.Empty, new { @class = "validateLink", @title = ""})%>
+                <%= Html.TextBox("Item.Link", Model.Item != null ? Model.Item.Link : string.Empty, new {  @title = ""})%>
                 <%= Html.ValidationMessage("Item.Link", "*")%>
             </li>
             
