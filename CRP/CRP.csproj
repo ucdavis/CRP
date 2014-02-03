@@ -229,6 +229,7 @@
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\SDKController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\Services\IAccessControlService.cs" />
     <Compile Include="Controllers\Services\ICouponService.cs" />
@@ -601,6 +602,7 @@
     <Content Include="Views\Item\Details.aspx" />
     <Content Include="Views\Item\MapDirections.aspx" />
     <Content Include="Views\QuestionSet\Details.aspx" />
+    <Content Include="Views\SDK\Index.aspx" />
     <Content Include="Views\Shared\ItemForm.ascx" />
     <Content Include="Views\ItemManagement\List.aspx" />
     <Content Include="Views\Shared\ItemBrowse.ascx" />
