@@ -9,7 +9,6 @@ using CRP.Controllers.Helpers.Filter;
 using MvcContrib.Attributes;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
-using UCDArch.Web.Authentication;
 using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Validator;
