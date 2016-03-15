@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Abstractions;
+using FluentNHibernate.Mapping;
 using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
 using UCDArch.Core.NHibernateValidator.Extensions;
