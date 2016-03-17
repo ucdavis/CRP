@@ -1,8 +1,8 @@
 using System.Web.Mvc;
 using Castle.Windsor;
+using CRP.Controllers;
 using Microsoft.Practices.ServiceLocation;
 using CRP.Mvc.App_Start;
-using CRP.Mvc.Controllers;
 using UCDArch.Data.NHibernate;
 using UCDArch.Web.IoC;
 using UCDArch.Web.ModelBinder;

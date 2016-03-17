@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Web;
 using System.Web.Caching;
@@ -121,7 +122,7 @@ namespace CRP.Controllers.Helpers
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name = "ServiceMessage", Namespace = "http://schemas.datacontract.org/2004/07/Catbert4.Services.Wcf")]
     [System.SerializableAttribute()]
-    public partial class ServiceMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged
+    public partial class ServiceMessage : object, IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged
     {
 
         [System.NonSerializedAttribute()]
