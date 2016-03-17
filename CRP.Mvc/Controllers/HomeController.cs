@@ -1,32 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using CRP.Core.Domain;
+﻿using System.Web.Mvc;
+using CRP.Controllers.Filter;
+using CRP.Controllers.ViewModels;
+using Elmah;
 using UCDArch.Web.Controller;
+using UCDArch.Web.Attributes;
+using MvcContrib;
 
-namespace CRP.Mvc.Controllers
+namespace CRP.Controllers
 {
-    public class HomeController : SuperController
+    [HandleTransactionsManually]
+    public class HomeController : ApplicationController
     {
         public ActionResult Index()
+        {
+            //return View();
+
+            var viewModel = BrowseItemsViewModel.Create(Repository);
+            return View(viewModel);
+        }
+
+        [AnyoneWithRoleAttribute]
+        public ActionResult AdminHome()
         {
             return View();
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-        public ActionResult Contact()
+        [AdminOnly]
+        public ActionResult TestException()
         {
-            ViewBag.Message = "Your contact page.";
+            throw new ApplicationException("Exception successfully thrown.");
+        }
 
-            return View();
+        [AdminOnly]
+        public ActionResult ResetCache()
+        {
+            HttpContext.Cache.Remove("ServiceMessages");
+
+            return this.RedirectToAction(a => a.Index());
         }
     }
 }
