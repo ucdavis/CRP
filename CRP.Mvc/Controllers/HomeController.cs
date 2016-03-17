@@ -8,7 +8,7 @@ using UCDArch.Web.Controller;
 
 namespace CRP.Mvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : SuperController
     {
         public ActionResult Index()
         {

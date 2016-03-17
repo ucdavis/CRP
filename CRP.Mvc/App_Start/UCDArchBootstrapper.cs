@@ -1,6 +1,5 @@
 using System.Web.Mvc;
 using Castle.Windsor;
-using CRP.Core.Domain;
 using Microsoft.Practices.ServiceLocation;
 using CRP.Mvc.App_Start;
 using CRP.Mvc.Controllers;
@@ -21,7 +20,7 @@ namespace CRP.Mvc.App_Start
             ModelBinders.Binders.DefaultBinder = new UCDArchModelBinder();
 
             NHibernateSessionConfiguration.Mappings.UseHbmMappings();
-
+            
             IWindsorContainer container = InitializeServiceLocator();
         }
 
