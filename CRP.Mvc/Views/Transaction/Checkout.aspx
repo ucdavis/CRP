@@ -2,6 +2,7 @@
 <%@ Import Namespace="CRP.Controllers.ViewModels"%>
 
 <%@ Import Namespace="CRP.Core.Resources" %>
+<%@ Import Namespace="CRP.Controllers.Helpers" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Register
 </asp:Content>

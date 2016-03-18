@@ -1,8 +1,9 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ItemQuestionViewModel>" %>
 <%@ Import Namespace="CRP.Controllers.ViewModels"%>
 <%@ Import Namespace="CRP.Core.Resources"%>
+<%@ Import Namespace="MvcContrib.FluentHtml" %>
 
-    <li>
+<li>
         <% if (Model.Question.QuestionType.Name != "Boolean"){%>
         <%=Html.Encode(Model.Question.Name)%>
         <%}%>
