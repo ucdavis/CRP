@@ -2,6 +2,7 @@
 <%@ Import Namespace="CRP.Core.Resources"%>
 
 <%@ Import Namespace="CRP.Controllers"%>
+<%@ Import Namespace="System.Web.Mvc.Html" %>
 
 <asp:Content ID="indexTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Home Page

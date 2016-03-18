@@ -1,4 +1,5 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<dynamic>" %>
+<%@ Import Namespace="CRP.Controllers.Helpers" %>
 
 <%
     var messages = ViewData["ServiceMessages"] as ServiceMessage[];
