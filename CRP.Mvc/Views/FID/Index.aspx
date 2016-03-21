@@ -15,7 +15,7 @@
     <% using (Html.BeginForm()) { %>
                 <% Html.Grid(Model)
                    .Transactional()
-                   .Name("FID Values")
+                   .Name("FIDValues")
                    .PrefixUrlParameters(false)                                   
                    .Columns(col =>
                                 {
