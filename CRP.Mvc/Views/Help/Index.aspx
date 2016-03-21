@@ -17,7 +17,7 @@
     <% using (Html.BeginForm()) { %>
                 <% Html.Grid(Model.HelpTopics)
                    .Transactional()
-                   .Name("Help Topics")
+                   .Name("HelpTopics")
                    .PrefixUrlParameters(false) 
                    .CellAction(cell =>
                     {
