@@ -1,6 +1,8 @@
-﻿using NHibernate.Validator.Constraints;
+﻿//using NHibernate.Validator.Constraints;
+
+using System.ComponentModel.DataAnnotations;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+//using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
@@ -16,12 +18,12 @@ namespace CRP.Core.Domain
             Description = description;
         }
 
-        [Required]
-        [Length(3,3)]
+        [Required]       
+        [StringLength(3, MinimumLength = 3)]
         public virtual string FID { get; set; }
 
         [Required]
-        [Length(100)]
+        [StringLength(100)]
         public virtual string Description { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Core.Domain.TouchnetFID>" %>
 
     <%= Html.AntiForgeryToken() %>
-    <%= Html.ClientSideValidation<TouchnetFID>("TouchnetFID")%>
+   
 
     <fieldset>
         <legend>Fields</legend>
