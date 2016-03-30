@@ -1,4 +1,4 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel.DataAnnotations;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
@@ -20,9 +20,9 @@ namespace CRP.Core.Domain
         {
             Owner = false;
         }
-        [NotNull]
+        [Required]
         public virtual Item Item { get; set; }
-        [NotNull]
+        [Required]
         public virtual User User { get; set; }
         public virtual bool Owner { get; set; }
     }

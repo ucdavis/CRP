@@ -1,6 +1,7 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel.DataAnnotations;
+using NHibernate.Validator.Constraints;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -21,6 +22,9 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             SchoolMaster = false;
+            DepartmentAndSchool = true;
+            DepartmentOrSchool = true;
+            SchoolMasterAndSchool = true;
         }
 
         /// <summary>
@@ -71,16 +75,16 @@ namespace CRP.Core.Domain
         }
 
 
-        #region Fields ONLY used for complex validation, not in database
+        #region Fields ONLY used for complex validation, not in database (note, have to be public and inited in constructor)
         
         [AssertTrue(Message = "Department and School cannot be selected together.")]
-        private bool DepartmentAndSchool { get; set; }
+        public virtual bool DepartmentAndSchool { get; set; }
 
         [AssertTrue(Message = "A Department or School must be specified.")]
-        private bool DepartmentOrSchool { get; set; }
+        public virtual bool DepartmentOrSchool { get; set; }
         
         [AssertTrue(Message = "SchoolMaster may only be true when School is selected.")]
-        private bool SchoolMasterAndSchool { get; set; }
+        public virtual bool SchoolMasterAndSchool { get; set; }
 
         #endregion Fields ONLY used for complex validation, not in database
     }

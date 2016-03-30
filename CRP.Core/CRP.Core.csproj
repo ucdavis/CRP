@@ -191,6 +191,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StaticValues.resx</DependentUpon>
     </Compile>
+    <Compile Include="Validation\Extensions\AssertTrueAttribute.cs" />
     <Compile Include="Validation\Extensions\RangeDoubleValidator.cs" />
     <Compile Include="Validation\Extensions\RangeDoubleAttribute.cs" />
     <Compile Include="Validation\Extensions\RequiredAttribute.cs" />

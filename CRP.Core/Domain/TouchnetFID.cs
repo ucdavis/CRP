@@ -1,8 +1,7 @@
-﻿//using NHibernate.Validator.Constraints;
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
-//using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
@@ -10,7 +9,6 @@ namespace CRP.Core.Domain
     {
         public TouchnetFID()
         {
-            
         }
         public TouchnetFID(string fid, string description)
         {
@@ -20,10 +18,12 @@ namespace CRP.Core.Domain
 
         [Required]       
         [StringLength(3, MinimumLength = 3)]
+        //[StringLengthRange(Minimum = 10, ErrorMessage = "Custom Error")]
         public virtual string FID { get; set; }
 
         [Required]
         [StringLength(100)]
         public virtual string Description { get; set; }
+
     }
 }
