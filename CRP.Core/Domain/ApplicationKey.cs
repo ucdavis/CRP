@@ -1,7 +1,7 @@
 ﻿using System;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -14,10 +14,10 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(100)]
+        [StringLength(100)]
         public virtual string Application { get; set; }
         [Required]
-        [Length(50)]
+        [StringLength(50)]
         public virtual string Key { get; set; }
         public virtual bool IsActive { get; set; }
 
