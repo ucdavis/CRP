@@ -28,9 +28,7 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             IsActive = true;
-            DiscountAmountCostPerItem = false;
             Transactions = new List<Transaction>();
-            DiscountAmountCostPerItem = true;
         }
         #endregion
 
@@ -247,14 +245,14 @@ namespace CRP.Core.Domain
 
         private void PopulateComplexLogicFields()
         {
-            DiscountAmountCostPerItem = true;
+            DiscountAmountCostPerItem = false;
             if(Item != null && Item.CostPerItem < DiscountAmount)
             {
-                DiscountAmountCostPerItem = false;
+                DiscountAmountCostPerItem = true;
             }
         }
 
-        [AssertTrue(ErrorMessage = "The discount amount must not be greater than the cost per item.")]
+        [AssertFalse(ErrorMessage = "The discount amount must not be greater than the cost per item.")]
         public virtual bool DiscountAmountCostPerItem { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }

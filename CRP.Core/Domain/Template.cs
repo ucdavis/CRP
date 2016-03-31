@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {

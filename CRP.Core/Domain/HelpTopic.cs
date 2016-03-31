@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
@@ -12,7 +13,6 @@ namespace CRP.Core.Domain
 
         public virtual void SetDefaults()
         {
-            AvailableToPublic = false;
             IsActive = true;
             NumberOfReads = 0;
         }
@@ -28,7 +28,7 @@ namespace CRP.Core.Domain
 
         #region Complex Validation. Fields not in database
 
-        [AssertTrue(Message = "VideoName required when IsVideo selected")]
+        [AssertFalse(ErrorMessage = "VideoName required when IsVideo selected")]
         public virtual bool IsVideoNeedsVideoName
         {
             get
@@ -37,10 +37,10 @@ namespace CRP.Core.Domain
                 {
                     if(string.IsNullOrEmpty(VideoName) || VideoName.Trim() == string.Empty)
                     {
-                        return false;
+                        return true;
                     }
                 }
-                return true;
+                return false;
             }
         }
 

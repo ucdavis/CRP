@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using CRP.Core.Helpers;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -30,14 +31,14 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(50)]
+        [StringLength(50)]
         public virtual string Name{ get; set; }
-        [NotNull]
+        [Required]
         public virtual Item Item { get; set; }
-        [NotNull]
+        [Required]
         public virtual User User { get; set; }
         public virtual bool SystemReusable { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<ItemReportColumn> Columns { get; set; }      
 
         public virtual void AddReportColumn(ItemReportColumn itemReportColumn)
@@ -76,14 +77,14 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            ReportColumns = true;
+            ReportColumns = false;
             if (Columns != null && Columns.Count > 0)
             {
                 foreach (var column in Columns)
                 {
                     if (!column.IsValid())
                     {
-                        ReportColumns = false;
+                        ReportColumns = true;
                         break;
                     }
                 }
@@ -91,8 +92,8 @@ namespace CRP.Core.Domain
         }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "One or more Report Columns is not valid")]
-        private bool ReportColumns { get; set; }
+        [AssertFalse(ErrorMessage = "One or more Report Columns is not valid")]
+        public virtual bool ReportColumns { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 
@@ -121,11 +122,11 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(200)]
+        [StringLength(200)]
         public virtual string Name { get; set; }
-        [Length(50)]
+        [StringLength(50)]
         public virtual string Format { get; set; }
-        [NotNull]
+        [Required]
         public virtual ItemReport ItemReport { get; set; }
         public virtual int Order { get; set; }
         public virtual bool Quantity { get; set; }
@@ -147,16 +148,16 @@ namespace CRP.Core.Domain
 
         private void PopulateComplexLogicFields()
         {
-            QuantityAndTransactionAndProperty = true;
+            QuantityAndTransactionAndProperty = false;
             if(Quantity.ToInt() + Transaction.ToInt() + Property.ToInt() != 1)
             {
-                QuantityAndTransactionAndProperty = false;
+                QuantityAndTransactionAndProperty = true;
             }
         }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "One and only one of these must be selected: Quantity, Transaction, Property")]
-        private bool QuantityAndTransactionAndProperty { get; set; }      
+        [AssertFalse(ErrorMessage = "One and only one of these must be selected: Quantity, Transaction, Property")]
+        public virtual bool QuantityAndTransactionAndProperty { get; set; }      
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

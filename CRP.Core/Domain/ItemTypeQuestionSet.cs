@@ -1,4 +1,4 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel.DataAnnotations;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
