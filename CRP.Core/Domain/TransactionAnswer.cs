@@ -20,11 +20,11 @@ namespace CRP.Core.Domain
             Answer = answer;
         }
 
-        [NotNull]
+        [Required]
         public virtual Transaction Transaction { get; set; }
-        [NotNull]
+        [Required]
         public virtual QuestionSet QuestionSet { get; set; }
-        [NotNull]
+        [Required]
         public virtual Question Question { get; set; }
         [Required]
         public virtual string Answer { get; set; }

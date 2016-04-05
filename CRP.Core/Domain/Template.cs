@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
 
@@ -61,16 +62,16 @@ namespace CRP.Core.Domain
         //}
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "Item may not be empty when default not selected")]
-        private bool ItemAndDefault
+        [AssertFalse(ErrorMessage = "Item may not be empty when default not selected")]
+        public virtual bool ItemAndDefault
         {
             get
             {
                 if (Default == false && Item == null)
                 {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
 

@@ -12,25 +12,25 @@ namespace CRP.Core.Domain
             Transactions = new List<Transaction>();
         }
 
-        [Length(255)]
+        [StringLength(255)]
         public virtual string Email { get; set; }
-        [Length(255)]
+        [StringLength(255)]
         public virtual string FirstName { get; set; }
-        [Length(255)]
+        [StringLength(255)]
         public virtual string LastName { get; set; }
-        [Length(255)]
+        [StringLength(255)]
         public virtual string StreetAddress { get; set; }
-        [Length(255)]
+        [StringLength(255)]
         public virtual string Address2 { get; set; }
-        [Length(255)]
+        [StringLength(255)]
         public virtual string City { get; set; }
-        [Length(50)]
+        [StringLength(50)]
         public virtual string State { get; set; }
-        [Length(10)]
+        [StringLength(10)]
         public virtual string Zip { get; set; }
-        [Length(20)]
+        [StringLength(20)]
         public virtual string PhoneNumber { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<Transaction> Transactions { get; set; }
         [Required]
         public virtual string UserId { 

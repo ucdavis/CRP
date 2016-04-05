@@ -16,9 +16,9 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(200)]
+        [StringLength(200)]
         public virtual string Name { get; set; }
-        [NotNull]
+        [Required]
         public virtual Question Question { get; set; }
     }
 }

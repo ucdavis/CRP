@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
 
@@ -26,30 +27,30 @@ namespace CRP.Core.Domain
         }
 
 
-        [NotNull]
+        [Required]
         public virtual Item Item { get; set; }
 
         public virtual bool IsPrimary { get; set; }
-        [Length(50)]
+        [StringLength(50)]
         public virtual string Latitude { get; set; }
-        [Length(50)]
+        [StringLength(50)]
         public virtual string Longitude { get; set; }
         [Required]
-        [Length(50)]
+        [StringLength(50)]
         public virtual string Title { get; set; }
-        [Length(100)]
+        [StringLength(100)]
         public virtual string Description { get; set; }
 
-        [AssertTrue(Message = "Select map to position the pointer.")]
+        [AssertFalse(ErrorMessage = "Select map to position the pointer.")]
         public virtual bool MapPosition
         {
             get
             {
                 if (string.IsNullOrEmpty(Latitude) || string.IsNullOrEmpty(Latitude.Trim()) || string.IsNullOrEmpty(Longitude) || string.IsNullOrEmpty(Longitude.Trim()))
                 {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
     }

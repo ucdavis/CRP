@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
 
@@ -35,26 +36,26 @@ namespace CRP.Core.Domain
         /// <summary>
         /// Payee's name
         /// </summary>         
-        [Length(200)]
+        [StringLength(200)]
         public virtual string Name { get; set; }
         /// <summary>
         /// Amount paid
         /// </summary>
         public virtual decimal Amount { get; set; }
         public virtual DateTime DatePayment { get; set; }
-        [NotNull]
+        [Required]
         public virtual Transaction Transaction { get; set; }
 
         public virtual int? CheckNumber { get; set; }
         /// <summary>
         /// Payment gateway transaction id
         /// </summary>
-        [Length(16)]
+        [StringLength(16)]
         public virtual string GatewayTransactionId { get; set; }
         /// <summary>
         /// Card type that was used to pay
         /// </summary>
-        [Length(20)]
+        [StringLength(20)]
         public virtual string CardType { get; set; }
         /// <summary>
         /// Whether or not the payment has been accepted, example where this might be false is if a check bounces
@@ -112,15 +113,15 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            CheckNumberRequired = true;
-            NameRequired = true;
-            AmountRequired = true;
+            CheckNumberRequired = false;
+            NameRequired = false;
+            AmountRequired = false;
             GatewayTransactionIdRequired = true;
             CardTypeRequired = true;
-            CheckOrCredit = true;
+            CheckOrCredit = false;
             if (Check == Credit)
             {
-                CheckOrCredit = false;
+                CheckOrCredit = true;
             }
             else
             {
@@ -144,7 +145,7 @@ namespace CRP.Core.Domain
                     CommonChecksForComplexLogicFields();
                     if (CheckNumber == null || CheckNumber <= 0)
                     {
-                        CheckNumberRequired = false;
+                        CheckNumberRequired = true;
                     }
                 }
             }
@@ -158,11 +159,11 @@ namespace CRP.Core.Domain
         {
             if (Name == null || string.IsNullOrEmpty(Name.Trim()))
             {
-                NameRequired = false;
+                NameRequired = true;
             }
             if (Amount < 0.01m)
             {
-                AmountRequired = false;
+                AmountRequired = true;
             }
         }
 
@@ -176,23 +177,23 @@ namespace CRP.Core.Domain
         public virtual bool DisplayCheckInvalidMessage { get; set; }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "Check number required when credit card not used.")]
-        private bool CheckNumberRequired { get; set; }
+        [AssertFalse(ErrorMessage = "Check number required when credit card not used.")]
+        public virtual bool CheckNumberRequired { get; set; }
 
-        [AssertTrue(Message = "Payee name required.")]
-        private bool NameRequired { get; set; }
+        [AssertFalse(ErrorMessage = "Payee name required.")]
+        public virtual bool NameRequired { get; set; }
 
-        [AssertTrue(Message = "Amount must be more than 1 cent.")]
-        private bool AmountRequired { get; set; }
+        [AssertFalse(ErrorMessage = "Amount must be more than 1 cent.")]
+        public virtual bool AmountRequired { get; set; }
 
-        [AssertTrue(Message = "Gateway Transaction Id Required.")]
-        private bool GatewayTransactionIdRequired { get; set; }
+        [AssertFalse(ErrorMessage = "Gateway Transaction Id Required.")]
+        public virtual bool GatewayTransactionIdRequired { get; set; }
 
-        [AssertTrue(Message = "Card Type Required.")]
-        private bool CardTypeRequired { get; set; }
+        [AssertFalse(ErrorMessage = "Card Type Required.")]
+        public virtual bool CardTypeRequired { get; set; }
 
-        [AssertTrue(Message = "Check or Credit must be selected.")]
-        private bool CheckOrCredit { get; set; }
+        [AssertFalse(ErrorMessage = "Check or Credit must be selected.")]
+        public virtual bool CheckOrCredit { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

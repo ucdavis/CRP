@@ -26,7 +26,7 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(50)]
+        [StringLength(50)]
         [JsonProperty]
         public virtual string Name { get; set; }
         public virtual bool HasOptions { get; set; }

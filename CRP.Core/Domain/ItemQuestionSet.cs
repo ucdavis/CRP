@@ -30,6 +30,7 @@ namespace CRP.Core.Domain
         public virtual Item Item { get; set; }
         [Required]
         //[Valid] //I think what this does, is actually check each entity in the question set to make sure it is valid... Not sure how to do with DataAnnotations
+        [QuestionSetValid] //TODO: TEST!!!
         public virtual QuestionSet QuestionSet { get; set; } //TODO: Review if this should use [valid]
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
@@ -61,5 +62,15 @@ namespace CRP.Core.Domain
         public virtual bool TransactionLevelAndQuantityLevel { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
         
+    }
+
+    public class QuestionSetValidAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            var questionSet = value as QuestionSet;
+            return questionSet.IsValid();
+
+        }
     }
 }
