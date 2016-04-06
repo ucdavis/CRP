@@ -13,21 +13,21 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>EditDisplayProfile</h2>
+    
+    <%= Html.ValidationSummary(false, "Edit was unsuccessful. Please correct the errors and try again.") %>
 
-    <%= Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.") %>
 
     <% using (Html.BeginForm("Edit", "DisplayProfile", FormMethod.Post, new { @enctype = "multipart/form-data" }))
        {%>
 
         <%= Html.AntiForgeryToken() %>
-        <%= Html.ClientSideValidation<DisplayProfile>("") %>
 
         <fieldset>
             <legend>Fields</legend>
             <p>
                 <label for="Name">Name:</label>
                 <%= Html.TextBox("Name", Model.Name) %>
-                <%= Html.ValidationMessage("Name", "*") %>
+                <%= Html.ValidationMessageFor(x => x.Name) %>
             </p>
             
             <p>
