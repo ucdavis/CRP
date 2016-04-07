@@ -2,6 +2,7 @@
 <%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers.Helpers"%>
 <%@ Import Namespace="CRP.Controllers"%>
+<%@ Import Namespace="MvcContrib.FluentHtml" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -16,9 +17,7 @@
 
     <h2>Create</h2>
 
-    <%= Html.ClientSideValidation<QuestionSet>("") %>
-
-    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
+    <%= Html.ValidationSummary(false, "Create was unsuccessful. Please correct the errors and try again.") %>
 
     <% using (Html.BeginForm()) {%>
 
@@ -29,7 +28,7 @@
             <p>
                 <label for="Name">Name:</label>
                 <%= Html.TextBox("QuestionSet.Name", Model.QuestionSet != null? Model.QuestionSet.Name:string.Empty,new { style = "width: 300px" })%>
-                <%= Html.ValidationMessage("QuestionSet.Name", "*") %>
+                <%= Html.ValidationMessageFor(x => x.QuestionSet.Name) %>
             </p>
             
             <!-- Hide or display the transaction/quantity selector when already adding it to an item type -->
@@ -55,14 +54,16 @@
                     
                     <label for="SystemReusable">SystemReusable:</label>
                     <%= Html.CheckBox("QuestionSet.SystemReusable")%>
-                    <%= Html.ValidationMessage("QuestionSet.SystemReusable", "*")%>
+                    <%= Html.ValidationMessageFor(x => x.QuestionSet.SystemReusable) %>
+                    <%= Html.ValidationMessageFor(x => x.QuestionSet.Reusability) %>
                 </p>
                 <%} %>            
                 <% if (Model.IsAdmin || Model.IsSchoolAdmin) {%>
                 <p>
                     <label for="CollegeReusable">CollegeReusable: (This will be restricted to your college)</label>
                     <%= Html.CheckBox("QuestionSet.CollegeReusable")%>
-                    <%= Html.ValidationMessage("QuestionSet.CollegeReusable", "*")%>
+                    <%= Html.ValidationMessageFor(x => x.QuestionSet.CollegeReusable) %>
+                    <%= Html.ValidationMessageFor(x => x.QuestionSet.Reusability) %>
                     
                     <%= this.Select("school").Options(Model.Schools, x=>x.Id,x=>x.LongDescription) %>
                 </p>
@@ -71,7 +72,8 @@
                 <p>
                     <label for="UserReusable">UserReusable:</label>
                     <%= Html.CheckBox("QuestionSet.UserReusable")%>
-                    <%= Html.ValidationMessage("QuestionSet.UserReusable", "*")%>
+                    <%= Html.ValidationMessageFor(x => x.QuestionSet.UserReusable) %>
+                    <%= Html.ValidationMessageFor(x => x.QuestionSet.Reusability) %>
                 </p>
                 <%} %>            
             <% } %>

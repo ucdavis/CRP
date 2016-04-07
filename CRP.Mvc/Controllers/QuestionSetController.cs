@@ -135,6 +135,7 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult Edit(int id, QuestionSet questionSet)
         {
+            ModelState.Clear();
             var existingQs = Repository.OfType<QuestionSet>().GetNullableById(id);
 
             // check for valid question set and access
@@ -159,9 +160,9 @@ namespace CRP.Controllers
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, existingQs.ValidationResults());
 
             
-            if (questionSet.Name.ToLower() == StaticValues.QuestionSet_ContactInformation.ToLower())
+            if (questionSet.Name != null && questionSet.Name.ToLower() == StaticValues.QuestionSet_ContactInformation.ToLower())
             {
-                ModelState.AddModelError("Name", StaticValues.QuestionSet_ContactInformation + " is reserved for internal system use only.");
+                ModelState.AddModelError("QuestionSet.Name", StaticValues.QuestionSet_ContactInformation + " is reserved for internal system use only.");
                 Message = StaticValues.QuestionSet_ContactInformation + " is reserved for internal system use only.";
             }
 
@@ -269,6 +270,7 @@ namespace CRP.Controllers
         [HandleTransactionsManually]
         public ActionResult Create(int? itemId, int? itemTypeId, [Bind(Exclude="Id")]QuestionSet questionSet, string school, bool? transaction, bool? quantity)
         {
+            ModelState.Clear();
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
             questionSet.User = user;
 
@@ -287,9 +289,9 @@ namespace CRP.Controllers
                     ModelState.AddModelError("Transaction/Quantity", "Transaction and Quantity cannot be the same.");
                 }
             }
-            if (questionSet.Name.ToLower() == "Contact Information".ToLower())
+            if (questionSet.Name != null && questionSet.Name.ToLower() == "Contact Information".ToLower())
             {
-                ModelState.AddModelError("Name", "Contact Information is reserved for internal system use only.");
+                ModelState.AddModelError("QuestionSet.Name", "Contact Information is reserved for internal system use only.");
             }
 
             //Validation check before we persist, shouldn't really be needed

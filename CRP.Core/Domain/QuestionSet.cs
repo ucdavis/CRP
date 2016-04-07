@@ -36,6 +36,7 @@ namespace CRP.Core.Domain
         [StringLength(50)]
         public virtual string Name { get; set; }
         public virtual bool CollegeReusable { get; set; }
+
         public virtual bool SystemReusable { get; set; }
         public virtual bool UserReusable { get; set; }
         public virtual School School { get; set; }
@@ -136,4 +137,5 @@ namespace CRP.Core.Domain
         public virtual bool Reusability { get; set; }
 
     }
+
 }
