@@ -1,6 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ItemTypeViewModel>" %>
 <%@ Import Namespace="CRP.Core.Resources"%>
-
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -38,7 +37,6 @@
 
     <h2>CreateItemType</h2>
 
-        <%= Html.ClientSideValidation<ItemType>("") %>
 
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
