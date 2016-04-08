@@ -33,7 +33,7 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            TransactionLevelQuantityLevel = TransactionLevel != QuantityLevel;
+            TransactionLevelQuantityLevel = TransactionLevel == QuantityLevel; //checking for false being the valid value now...
             ItemTypeQuestionSetQuestionSet = false;
             if (QuestionSet != null)
             {
@@ -44,6 +44,8 @@ namespace CRP.Core.Domain
         public override bool IsValid()
         {
             PopulateComplexLogicFields();
+            //var xxx = base.IsValid();
+            //var yyy = base.ValidationResults();
             return base.IsValid();
         }
 
