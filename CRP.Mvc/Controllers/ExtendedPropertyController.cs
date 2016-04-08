@@ -60,6 +60,7 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult Create(int itemTypeId, [Bind(Exclude="Id")] ExtendedProperty extendedProperty)
         {
+            ModelState.Clear();
             var itemType = Repository.OfType<ItemType>().GetNullableById(itemTypeId);
 
             if (itemType != null)
