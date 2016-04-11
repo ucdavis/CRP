@@ -115,6 +115,7 @@ namespace CRP.Controllers
         [PageTracker]
         public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
+            ModelState.Clear();
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {

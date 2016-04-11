@@ -23,9 +23,7 @@
     </script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>
 
-    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
-
-    <%= Html.ClientSideValidation<Item>("Item") %>
+    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>    
 
         <%= Html.AntiForgeryToken() %>
          <%= Html.Hidden("FidIsDisabled", !Model.CanChangeFID) %>
@@ -35,8 +33,9 @@
             <li><label for="ItemType">Item Type:</label><br /> 
             <% if (Model.Item == null || Model.IsNew) {%>                               
                 <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
-                        .Selected(Model.Item != null ? Model.Item.ItemType.Id : 0)                         
+                        .Selected(Model.Item != null && Model.Item != null && Model.Item.ItemType != null ? Model.Item.ItemType.Id : 0)                         
                     %>
+                <%= Html.ValidationMessageFor(x => x.Item.ItemType) %>
             
             <%} else {%>
             <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
@@ -50,7 +49,7 @@
             <li>
                 <label for="Item.Name">Name:</label><br />
                 <%= Html.TextBox("Item.Name") %>
-                <%= Html.ValidationMessage("Item.Name", "*")%>
+                <%= Html.ValidationMessageFor(x => x.Item.Name)%>
             </li>
             <li>
             <label for="Item.Unit">Unit:</label><br />
@@ -77,12 +76,12 @@
             <li>
                 <label for="Item.Summary">Summary:</label><br />
                 <%= Html.TextArea("Item.Summary", new { style="height:175px; width: 750px" , @title=' '})%>
-                <%= Html.ValidationMessage("Item.Summary", "*")%> 
+                <%= Html.ValidationMessageFor(x => x.Item.Summary)%> 
             </li>
             <li>
                 <label for="Item.Description">Description:</label><br />
                 <%= Html.TextArea("Item.Description")%>
-                <%= Html.ValidationMessage("Item.Description", "*")%> 
+                <%= Html.ValidationMessageFor(x => x.Item.Description)%> 
             </li>
             <li>
                 <label for="Item.CheckPaymentInstructions">Check Payment Instructions:</label><br />
@@ -213,10 +212,11 @@
                 
         <fieldset>
             <legend>Extended Properties</legend>
+            <%= Html.ValidationMessage("Extended Properties") %>
             <ul>
             
             <div id="ExtendedProperties">            
-                <%  if (Model.Item != null)
+                <%  if (Model.Item != null && Model.Item != null && Model.Item.ItemType != null && Model.Item.ItemType.ExtendedProperties != null)
                     {
                         for (int i = 0; i < Model.Item.ItemType.ExtendedProperties.Count; i++)
                         {
@@ -257,9 +257,10 @@
             
             <ul>
             <li>
-                <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item != null ? Model.Item.Id : -1}) %>' /> <br />
+                <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item != null ? Model.Item.Id : -1}) %>' /> <br />                
             
             <input type="file" id="file" name="file" title=''/>
+                <%= Html.ValidationMessage("Image") %>
             </li></ul>
         </fieldset>
         
