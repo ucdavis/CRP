@@ -325,8 +325,10 @@ namespace CRP.Controllers
             {
                 Repository.OfType<Item>().EnsurePersistent(destinationItem);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction(a => a.Edit(id));
             }
             var viewModel = ItemViewModel.Create(Repository, CurrentUser, destinationItem);
+            
             //viewModel.Item = destinationItem;
             return View(viewModel);
         }
