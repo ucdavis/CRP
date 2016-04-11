@@ -282,6 +282,7 @@ namespace CRP.Controllers
         [PageTracker]
         public ActionResult Edit(int id, [Bind(Exclude = "Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool fidIsDisabled)
         {
+            ModelState.Clear();
             var destinationItem = Repository.OfType<Item>().GetNullableById(id);
             
             // check rights to edit
