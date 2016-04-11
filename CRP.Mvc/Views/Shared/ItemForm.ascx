@@ -21,9 +21,7 @@
             
         });
     </script>
-    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>
-
-    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>    
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>        
 
         <%= Html.AntiForgeryToken() %>
          <%= Html.Hidden("FidIsDisabled", !Model.CanChangeFID) %>

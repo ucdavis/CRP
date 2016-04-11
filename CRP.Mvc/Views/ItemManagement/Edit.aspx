@@ -57,6 +57,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Edit</h2>
+    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
     <div id="tabs">
     
