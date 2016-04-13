@@ -43,11 +43,10 @@
 	    });
 	</script>--%>
 
-    <%= Html.ValidationSummary("Save was unsuccessful. Please correct the errors and try again.") %>
+    <%= Html.ValidationSummary(true, "Save was unsuccessful. Please correct the errors and try again.") %>
 
     
         <%= Html.AntiForgeryToken() %>
-        <%= Html.ClientSideValidation<HelpTopic>("") %>
         
         <fieldset>
             <legend>Fields</legend>
@@ -55,7 +54,7 @@
             <li>
                 <label for="Question">Frequently Asked Question:</label>
                 <%= Html.TextBox("Question")%>
-                <%= Html.ValidationMessage("Question", "*")%>
+                <%= Html.ValidationMessageFor(x => x.Question)%>
             </li>
             <li>
                 <label for="IsActive">Is Active: </label>
@@ -70,12 +69,12 @@
             <li>
                 <label for="IsVideo">Video:</label>
                 <%= Html.CheckBox("IsVideo", Model != null ? Model.IsVideo : false)%>
-                <%= Html.ValidationMessage("IsVideo")%>
+                <%= Html.ValidationMessageFor(x => x.IsVideoNeedsVideoName)%>
             </li>
             <li>
                 <label for="VideoName">Name of video:</label>
                 <%= Html.TextBox("VideoName")%>
-                <%= Html.ValidationMessage("VideoName")%>
+                <%= Html.ValidationMessageFor(x => x.VideoName)%>
             </li>
             <li>
                 <label for="NumberOfReads">Number Of Reads:</label>
@@ -85,7 +84,7 @@
             <li>
                 <label for="Answer">Answer:</label>
                 <%= Html.TextArea("Answer")%>
-                <%= Html.ValidationMessage("Answer", "*")%>
+                <%= Html.ValidationMessageFor(x => x.IsNotVideoNeedsAnswer)%>
             </li>
             </ul>
             <p>

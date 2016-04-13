@@ -26,6 +26,7 @@ namespace CRP.Core.Domain
         [StringLength(50)]
         public virtual string VideoName { get; set; }
 
+
         #region Complex Validation. Fields not in database
 
         [AssertFalse(ErrorMessage = "VideoName required when IsVideo selected")]
@@ -36,6 +37,22 @@ namespace CRP.Core.Domain
                 if (IsVideo)
                 {
                     if(string.IsNullOrEmpty(VideoName) || VideoName.Trim() == string.Empty)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        [AssertFalse(ErrorMessage = "Answer required when IsVideo not selected")]
+        public virtual bool IsNotVideoNeedsAnswer
+        {
+            get
+            {
+                if (!IsVideo)
+                {
+                    if (string.IsNullOrWhiteSpace(Answer))
                     {
                         return true;
                     }
