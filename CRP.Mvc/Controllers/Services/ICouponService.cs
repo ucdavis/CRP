@@ -45,6 +45,10 @@ namespace CRP.Controllers.Services
             // validate the coupon
             modelState = modelState ?? new ModelStateDictionary();
             MvcValidationAdapter.TransferValidationMessagesTo(modelState, coupon.ValidationResults());
+            if (string.IsNullOrWhiteSpace(couponType))
+            {
+                modelState.AddModelError("CouponType", "Must select a coupon type");
+            }
             if (coupon.MaxUsage == 0)
             {
                 modelState.AddModelError("Coupon.MaxUsage", "When Limited Usage, maximum must be at least 1");
