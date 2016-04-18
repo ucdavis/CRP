@@ -53,6 +53,7 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult Create(int itemId, [Bind(Exclude = "Id")]MapPin mapPin)
         {
+            ModelState.Clear();
             var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
@@ -118,6 +119,7 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult Edit(int itemId, int mapPinId, MapPin mapPin)
         {
+            ModelState.Clear();
             var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
             {
