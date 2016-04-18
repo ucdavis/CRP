@@ -116,8 +116,8 @@ namespace CRP.Core.Domain
             CheckNumberRequired = false;
             NameRequired = false;
             AmountRequired = false;
-            GatewayTransactionIdRequired = true;
-            CardTypeRequired = true;
+            GatewayTransactionIdRequired = false;
+            CardTypeRequired = false;
             CheckOrCredit = false;
             if (Check == Credit)
             {
@@ -132,11 +132,11 @@ namespace CRP.Core.Domain
                         CommonChecksForComplexLogicFields();
                         if (GatewayTransactionId == null || string.IsNullOrEmpty(GatewayTransactionId.Trim()))
                         {
-                            GatewayTransactionIdRequired = false;
+                            GatewayTransactionIdRequired = true;
                         }
                         if (CardType == null || string.IsNullOrEmpty(CardType.Trim()))
                         {
-                            CardTypeRequired = false;
+                            CardTypeRequired = true;
                         }
                     }
                 }
