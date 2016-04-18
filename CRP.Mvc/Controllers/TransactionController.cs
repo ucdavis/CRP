@@ -115,11 +115,11 @@ namespace CRP.Controllers
             // get the item
             var item = Repository.OfType<Item>().GetNullableById(id);
 
+
+
             // get all the questions in 1 queries
-            var allQuestions = (from a in Repository.OfType<Question>().Queryable
-                                where transactionAnswers.Select(b => b.QuestionId).ToArray().Contains(a.Id)
-                                    || quantityAnswers.Select(b => b.QuestionId).ToArray().Contains(a.Id)
-                                select a).ToList();
+            var questionIds = transactionAnswers.Select(b => b.QuestionId).ToList().Union(quantityAnswers.Select(c => c.QuestionId).ToList()).ToArray();
+            var allQuestions = Repository.OfType<Question>().Queryable.Where(a => questionIds.Contains(a.Id)).ToList();
 
             if(!string.IsNullOrWhiteSpace(referenceIdHidden))
             {
