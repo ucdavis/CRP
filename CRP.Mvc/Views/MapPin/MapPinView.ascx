@@ -6,7 +6,7 @@
 
     <script type="text/javascript">
         $(function () {
-            $("#map").gPositions({ mode: MapMode.SELECTINGPOINT, showLocations: false });
+            $("#map").gPositions({ mode: MapMode.SELECTINGPOINT, showLocations: false, helpIcon: '<%= Url.Content("~/Images/question_blue.png") %>' });
         });
     </script>
     
@@ -16,7 +16,7 @@
     <% using (Html.BeginForm()) {%>
         <%= Html.AntiForgeryToken() %>
     
-        <%= Html.ClientSideValidation<MapPin>("") %>
+       
         <fieldset>
             <legend>Fields</legend>
             
