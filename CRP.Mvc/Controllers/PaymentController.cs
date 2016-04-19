@@ -55,6 +55,7 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult LinkToTransaction(int transactionId, PaymentLog[] Checks, string checkSort, string checkPage)
         {
+            ModelState.Clear();
             // get the transaction
             var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
             if (transaction == null)
@@ -95,6 +96,7 @@ namespace CRP.Controllers
                         if (!paymentLog.IsValid())
                         {
                             //var test = paymentLog.ValidationResults();
+                            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, paymentLog.ValidationResults());
                             paymentLog.DisplayCheckInvalidMessage = true;
                             checkErrorFound = true;
                         }
