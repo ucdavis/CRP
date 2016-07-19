@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using CRP.Core.Abstractions;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -33,11 +34,11 @@ namespace CRP.Core.Domain
             QuantityIdNotEmpty = false;
         }
 
-        [NotNull]
+        [Required]
         public virtual Transaction Transaction { get; set; }
-        [NotNull]
+        [Required]
         public virtual QuestionSet QuestionSet { get; set; }
-        [NotNull]
+        [Required]
         public virtual Question Question { get; set; }
         public virtual Guid QuantityId { get; set; }
         [Required]
@@ -66,16 +67,16 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            QuantityIdNotEmpty = true;
+            QuantityIdNotEmpty = false;
             if (QuantityId == Guid.Empty)
             {
-                QuantityIdNotEmpty = false;
+                QuantityIdNotEmpty = true;
             }
         }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "QuantityId may not be empty.")]
-        private bool QuantityIdNotEmpty { get; set; }
+        [AssertFalse(ErrorMessage = "QuantityId may not be empty.")]
+        public virtual bool QuantityIdNotEmpty { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

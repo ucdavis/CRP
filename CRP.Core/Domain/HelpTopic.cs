@@ -1,6 +1,6 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
 
 namespace CRP.Core.Domain
 {
@@ -13,7 +13,6 @@ namespace CRP.Core.Domain
 
         public virtual void SetDefaults()
         {
-            AvailableToPublic = false;
             IsActive = true;
             NumberOfReads = 0;
         }
@@ -24,12 +23,13 @@ namespace CRP.Core.Domain
         public virtual bool IsActive { get; set; }
         public virtual int NumberOfReads { get; set; }
         public virtual bool IsVideo { get; set; }
-        [Length(50)]
+        [StringLength(50)]
         public virtual string VideoName { get; set; }
+
 
         #region Complex Validation. Fields not in database
 
-        [AssertTrue(Message = "VideoName required when IsVideo selected")]
+        [AssertFalse(ErrorMessage = "VideoName required when IsVideo selected")]
         public virtual bool IsVideoNeedsVideoName
         {
             get
@@ -38,10 +38,26 @@ namespace CRP.Core.Domain
                 {
                     if(string.IsNullOrEmpty(VideoName) || VideoName.Trim() == string.Empty)
                     {
-                        return false;
+                        return true;
                     }
                 }
-                return true;
+                return false;
+            }
+        }
+
+        [AssertFalse(ErrorMessage = "Answer required when IsVideo not selected")]
+        public virtual bool IsNotVideoNeedsAnswer
+        {
+            get
+            {
+                if (!IsVideo)
+                {
+                    if (string.IsNullOrWhiteSpace(Answer))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
 

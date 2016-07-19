@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using NHibernate.Validator.Constraints;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -27,16 +28,15 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             IsActive = true;
-            DiscountAmountCostPerItem = false;
             Transactions = new List<Transaction>();
         }
         #endregion
 
         #region Mapped Fields
         [Required]
-        [Length(Min = 10, Max = 10)]
+        [StringLength(10, MinimumLength = 10)]
         public virtual string Code { get; set; }
-        [NotNull]
+        [Required]
         public virtual Item Item { get; set; }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace CRP.Core.Domain
         /// <summary>
         /// The maximum number of times it can be used
         /// </summary>
-        [Min(0)]
+        [Range(0, Int32.MaxValue)]
         public virtual int MaxUsage { get; set; }
 
         /// <summary>
@@ -56,16 +56,16 @@ namespace CRP.Core.Domain
         /// <summary>
         /// If specified, the coupon can only be used for transactions with a matching contact info's email
         /// </summary>
-        [Length(100)]
+        [StringLength(100)]
         public virtual string Email { get; set; }
 
-        [RangeDouble(Min = 0.01, Max = 922337203685477.00, Message = "must be more than $0.00")]
+        [Range(0.01, 922337203685477.00, ErrorMessage = "must be more than $0.00")]
         public virtual decimal DiscountAmount { get; set; }
         /// <summary>
         /// User login id of the user creating the coupon
         /// </summary>
         [Required]
-        [Length(50)]
+        [StringLength(50)]
         public virtual string UserId { get; set; }
         /// <summary>
         /// If the coupon has not been deactivated
@@ -77,7 +77,7 @@ namespace CRP.Core.Domain
         /// <summary>
         /// Transactions that have used the coupons
         /// </summary>
-        [NotNull]
+        [Required]
         public virtual IList<Transaction> Transactions { get; set; }
 
 
@@ -245,15 +245,17 @@ namespace CRP.Core.Domain
 
         private void PopulateComplexLogicFields()
         {
-            DiscountAmountCostPerItem = true;
+            DiscountAmountCostPerItem = false;
             if(Item != null && Item.CostPerItem < DiscountAmount)
             {
-                DiscountAmountCostPerItem = false;
+                DiscountAmountCostPerItem = true;
             }
         }
 
-        [AssertTrue(Message = "The discount amount must not be greater than the cost per item.")]
-        private bool DiscountAmountCostPerItem { get; set; }
+        [AssertFalse(ErrorMessage = "The discount amount must not be greater than the cost per item.")]
+        public virtual bool DiscountAmountCostPerItem { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
+
+
 }

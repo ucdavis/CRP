@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-6570-4E51-850E-E2097240851C}"
 	ProjectSection(SolutionItems) = preProject
 		Bin\AutoMapper.dll = Bin\AutoMapper.dll
@@ -56,13 +58,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bin", "Bin", "{BFF03EDA-657
 		Bin\xVal.dll = Bin\xVal.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP", "CRP\CRP.csproj", "{176A7FB7-9299-4CD0-9962-931C697BB023}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Tests", "CRP.Tests\CRP.Tests.csproj", "{CAED0EA2-2F95-4548-9477-4508D48F6BD5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Core", "CRP.Core\CRP.Core.csproj", "{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}"
 EndProject
-Project("{C8D11400-126E-41CD-887F-60BD40844F9E}") = "CRP.DB", "CRP.DB\CRP.DB.dbproj", "{67CBC824-A49E-4E9B-A947-360F3DFE65C3}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CRP.DB", "CRP.DB\CRP.DB.sqlproj", "{55957B51-DF36-4E9C-A3FA-637BBD05AE53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRP.Mvc", "CRP.Mvc\CRP.Mvc.csproj", "{F6D142FB-3C41-481F-89D1-1E5718D45A2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,26 +71,21 @@ Global
 		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{176A7FB7-9299-4CD0-9962-931C697BB023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{176A7FB7-9299-4CD0-9962-931C697BB023}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{176A7FB7-9299-4CD0-9962-931C697BB023}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{176A7FB7-9299-4CD0-9962-931C697BB023}.Release|Any CPU.Build.0 = Release|Any CPU
-		{176A7FB7-9299-4CD0-9962-931C697BB023}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{176A7FB7-9299-4CD0-9962-931C697BB023}.Test|Any CPU.Build.0 = Test|Any CPU
-		{176A7FB7-9299-4CD0-9962-931C697BB023}.Test|Any CPU.Deploy.0 = Test|Any CPU
-		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAED0EA2-2F95-4548-9477-4508D48F6BD5}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{FDBE8EB8-DA17-475C-83C1-682BE9BDD922}.Test|Any CPU.Build.0 = Test|Any CPU
-		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{55957B51-DF36-4E9C-A3FA-637BBD05AE53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55957B51-DF36-4E9C-A3FA-637BBD05AE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55957B51-DF36-4E9C-A3FA-637BBD05AE53}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6D142FB-3C41-481F-89D1-1E5718D45A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6D142FB-3C41-481F-89D1-1E5718D45A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6D142FB-3C41-481F-89D1-1E5718D45A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6D142FB-3C41-481F-89D1-1E5718D45A2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6D142FB-3C41-481F-89D1-1E5718D45A2C}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{F6D142FB-3C41-481F-89D1-1E5718D45A2C}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -31,16 +32,16 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(200)]
+        [StringLength(200)]
         public virtual string Name { get; set; }
-        [NotNull]
+        [Required]
         public virtual QuestionType QuestionType { get; set; }
-        [NotNull]
+        [Required]
         public virtual QuestionSet QuestionSet { get; set; }
         public virtual int Order { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<QuestionOption> Options { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<Validator> Validators { get; set; }
 
         public virtual void AddOption(QuestionOption questionOption)
@@ -87,9 +88,9 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            OptionsNames = true;
-            OptionsRequired = true;
-            OptionsNotAllowed = true;
+            OptionsNames = false;
+            OptionsRequired = false;
+            OptionsNotAllowed = false;
 
             if (QuestionType != null && QuestionType.HasOptions)
             {
@@ -99,35 +100,35 @@ namespace CRP.Core.Domain
                     {
                         if (o.Name == null || string.IsNullOrEmpty(o.Name.Trim()))
                         {
-                            OptionsNames = false;
+                            OptionsNames = true;
                             break;
                         }
                     }
                 }
                 else
                 {
-                    OptionsRequired = false; //Fail it, they are required
+                    OptionsRequired = true; //Fail it, they are required
                 }
             }
             else
             {
                 if (Options != null && Options.Count > 0)
                 {
-                    OptionsNotAllowed = false; //Fail it, they are not allowed
+                    OptionsNotAllowed = true; //Fail it, they are not allowed
                 }
             }
 
         }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "One or more options is invalid")]
-        private bool OptionsNames { get; set; }
+        [AssertFalse(ErrorMessage = "One or more options is invalid")]
+        public virtual bool OptionsNames { get; set; }
 
-        [AssertTrue(Message = "The question type requires at least one option.")]
-        private bool OptionsRequired { get; set; }
+        [AssertFalse(ErrorMessage = "The question type requires at least one option.")]
+        public virtual bool OptionsRequired { get; set; }
 
-        [AssertTrue(Message = "Options not allowed")]
-        private bool OptionsNotAllowed { get; set; }
+        [AssertFalse(ErrorMessage = "Options not allowed")]
+        public virtual bool OptionsNotAllowed { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
 
     }

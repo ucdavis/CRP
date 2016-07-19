@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using CRP.Core.Abstractions;
-using NHibernate.Validator.Constraints;
+using CRP.Core.Validation.Extensions;
+using FluentNHibernate.Mapping;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -48,22 +50,22 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(100)]
+        [StringLength(100)]
         public virtual string Name { get; set; }
 
         [Required]
-        [Length(750)]
+        [StringLength(750)]
         public virtual string Summary { get; set; }
 
         public virtual string Description { get; set; }
-        [RangeDouble(Min = 0.00, Max = 922337203685477.00, Message = "must be zero or more")]
+        [Range(0.00, 922337203685477.00, ErrorMessage = "must be zero or more")]
         public virtual decimal CostPerItem { get; set; }
         /// <summary>
         /// # items available for sale
         /// </summary>
-        [Min(0)]
+        [Range(0, Int32.MaxValue)]
         public virtual int Quantity { get; set; }
-        [Length(50)]
+        [StringLength(50)]
         public virtual string QuantityName { get; set; }
         /// <summary>
         /// This is now called Last Date to Register Online, so it needs to be available of that date
@@ -77,20 +79,20 @@ namespace CRP.Core.Domain
 
         public virtual bool HideDonation { get { return true; } } //We now no longer allow donations. Always hide it.
 
-        [Length(50)]
+        [StringLength(50)]
         public virtual string DonationLinkLegend { get; set; }
-        [Length(500)]
+        [StringLength(500)]
         public virtual string DonationLinkInformation { get; set; }
-        [Length(50)]
+        [StringLength(50)]
         public virtual string DonationLinkText { get; set; }
-        [Length(200)]
+        [StringLength(200)]
         public virtual string DonationLinkLink { get; set; }
 
 
-        [NotNull]
+        [Required]
         public virtual ItemType ItemType { get; set; }
 
-        [NotNull]
+        [Required]
         public virtual Unit Unit { get; set; }
 
         public virtual DateTime DateCreated { get; set; }
@@ -105,7 +107,7 @@ namespace CRP.Core.Domain
         /// <summary>
         /// Whether or not this item is a restricted item.  Not Null or Empty means restricted.
         /// </summary>
-        [Length(10)]
+        [StringLength(10)]
         public virtual string RestrictedKey { get; set; }
 
         /// <summary>
@@ -128,25 +130,25 @@ namespace CRP.Core.Domain
         public virtual string TouchnetFID { get; set; }
         
 
-        [NotNull]
+        [Required]
         public virtual ICollection<Tag> Tags { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<ExtendedPropertyAnswer> ExtendedPropertyAnswers { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<Coupon> Coupons { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<Editor> Editors { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<ItemQuestionSet> QuestionSets { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<Transaction> Transactions { get; set; }
-        [NotNull]
-        [Size(Max=1)]
+
+        [RangeCollection(required: true, minElements: 0, maxElements: 1)]
         public virtual ICollection<Template> Templates { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<ItemReport> Reports { get; set; }
 
-        [NotNull]
+        [Required]
         public virtual ICollection<MapPin> MapPins { get; set; }
 
         public virtual Template Template
@@ -154,7 +156,7 @@ namespace CRP.Core.Domain
             get
             {
                 if (Templates != null && Templates.Count > 0)
-                {
+                {                    
                     return Templates.FirstOrDefault();
                 }
 
@@ -325,33 +327,33 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            ItemTags = true;
+            ItemTags = false;
             if (Tags != null && Tags.Count > 0)
             {
                 foreach (var tag in Tags)
                 {
                     if (!tag.IsValid())
                     {
-                        ItemTags = false;
+                        ItemTags = true;
                         break;
                     }
                 }
             }
-            ItemCoupons = true;
+            ItemCoupons = false;
             if(Coupons != null && Coupons.Count > 0)
             {
                 foreach (Coupon coupon in Coupons)
                 {
                     if(coupon.IsActive && coupon.DiscountAmount > CostPerItem)
                     {
-                        ItemCoupons = false;
+                        ItemCoupons = true;
                         break;
                     }
                 }
             }
 
-            TransactionQuestionSet = true;
-            QuantityQuestionSet = true;
+            TransactionQuestionSet = false;
+            QuantityQuestionSet = false;
             if (QuestionSets != null)
             {
                 foreach (var questionSet in QuestionSets)
@@ -363,13 +365,13 @@ namespace CRP.Core.Domain
                         QuestionSets.Where(a => a.QuestionSet == set.QuestionSet).Where(a => a.QuantityLevel).Count();
                     if (transactionCount > 1)
                     {
-                        TransactionQuestionSet = false;
+                        TransactionQuestionSet = true;
                     }
                     if (quantityCount > 1)
                     {
-                        QuantityQuestionSet = false;
+                        QuantityQuestionSet = true;
                     }
-                    if (TransactionQuestionSet == false && QuantityQuestionSet == false)
+                    if (TransactionQuestionSet == true && QuantityQuestionSet == true)
                     {
                         break;
                     }
@@ -378,58 +380,58 @@ namespace CRP.Core.Domain
         }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "One or more tags is not valid")]
-        private bool ItemTags { get; set; }
+        [AssertFalse(ErrorMessage = "One or more tags is not valid")]
+        public virtual bool ItemTags { get; set; }
 
-        [AssertTrue(Message = "One or more active coupons has a discount amount greater than the cost per item")]
-        private bool ItemCoupons { get; set; }
+        [AssertFalse(ErrorMessage = "One or more active coupons has a discount amount greater than the cost per item")]
+        public virtual bool ItemCoupons { get; set; }
 
-        [AssertTrue(Message = "Transaction Question is already added")]
-        private bool TransactionQuestionSet { get; set; }
-        [AssertTrue(Message = "Quantity Question is already added")]
-        private bool QuantityQuestionSet { get; set; }
+        [AssertFalse(ErrorMessage = "Transaction Question is already added")]
+        public virtual bool TransactionQuestionSet { get; set; }
+        [AssertFalse(ErrorMessage = "Quantity Question is already added")]
+        public virtual bool QuantityQuestionSet { get; set; }
 
-        [AssertTrue(Message = "Must check at least one payment method")]
-        private bool AllowedPaymentMethods
+        [AssertFalse(ErrorMessage = "Must check at least one payment method")]
+        public virtual bool AllowedPaymentMethods
         {
             get
             {
                 if(AllowCheckPayment == false && AllowCreditPayment == false)
                 {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
 
-        [AssertTrue(Message = "Must select an Account Number when available to public is checked and credit payment is allowed")]
-        private bool FID
+        [AssertFalse(ErrorMessage = "Must select an Account Number when available to public is checked and credit payment is allowed")]
+        public virtual bool FID
         {
             get
             {
                 if(string.IsNullOrEmpty(TouchnetFID) && Available && AllowCreditPayment)
                 {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
 
-        [AssertTrue(Message = "FID must be 3 characters long when selected")]
-        private bool FID_Length
+        [AssertFalse(ErrorMessage = "FID must be 3 characters long when selected")]
+        public virtual bool FID_Length
         {
             get
             {
                 if (!string.IsNullOrEmpty(TouchnetFID) && TouchnetFID.Trim().Length != 3)
                 {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
 
-        [AssertTrue(Message = "Only 1 MapPin can be Primary")]
-        private bool MapPinPrimary
+        [AssertFalse(ErrorMessage = "Only 1 MapPin can be Primary")]
+        public virtual bool MapPinPrimary
         {
             get { 
                 var count = 0;
@@ -445,9 +447,9 @@ namespace CRP.Core.Domain
                 }
                 if(count > 1)
                 {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
         #endregion Fields ONLY used for complex validation, not in database

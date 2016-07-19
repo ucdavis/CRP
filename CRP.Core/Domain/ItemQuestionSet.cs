@@ -1,4 +1,5 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
@@ -25,10 +26,11 @@ namespace CRP.Core.Domain
             QuantityLevel = false;
         }
 
-        [NotNull]
+        [Required]
         public virtual Item Item { get; set; }
-        [NotNull]
-        [Valid]
+        [Required]
+        //[Valid] //I think what this does, is actually check each entity in the question set to make sure it is valid... Not sure how to do with DataAnnotations
+        [QuestionSetValid] //TODO: TEST!!!
         public virtual QuestionSet QuestionSet { get; set; } //TODO: Review if this should use [valid]
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
@@ -48,17 +50,27 @@ namespace CRP.Core.Domain
 
         private void PopulateComplexLogicFields()
         {
-            TransactionLevelAndQuantityLevel = true;
+            TransactionLevelAndQuantityLevel = false;
             if (TransactionLevel == QuantityLevel)
             {
-                TransactionLevelAndQuantityLevel = false;
+                TransactionLevelAndQuantityLevel = true;
             }
         }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "TransactionLevel or QuantityLevel must be set but not both.")]
-        private bool TransactionLevelAndQuantityLevel { get; set; }
+        [AssertFalse(ErrorMessage = "TransactionLevel or QuantityLevel must be set but not both.")]
+        public virtual bool TransactionLevelAndQuantityLevel { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
         
+    }
+
+    public class QuestionSetValidAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            var questionSet = value as QuestionSet;
+            return questionSet.IsValid();
+
+        }
     }
 }

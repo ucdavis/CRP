@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -32,9 +33,10 @@ namespace CRP.Core.Domain
         }
             
         [Required]
-        [Length(50)]
+        [StringLength(50)]
         public virtual string Name { get; set; }
         public virtual bool CollegeReusable { get; set; }
+
         public virtual bool SystemReusable { get; set; }
         public virtual bool UserReusable { get; set; }
         public virtual School School { get; set; }
@@ -45,11 +47,11 @@ namespace CRP.Core.Domain
         public virtual bool IsActive { get; set; }
 
         //public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<Question> Questions { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<ItemQuestionSet> Items { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<ItemTypeQuestionSet> ItemTypes { get; set; }
 
         public virtual void AddQuestion(Question question)
@@ -102,19 +104,19 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            CollegeReusableSchool = true;
-            Reusability = true;
+            CollegeReusableSchool = false;
+            Reusability = false;
             if (CollegeReusable)
             {
                 if (School == null)
                 {
-                    CollegeReusableSchool = false;
+                    CollegeReusableSchool = true;
                 }
             }
             // should really only be reusable at one level
             if (SystemReusable && CollegeReusable || SystemReusable && UserReusable || CollegeReusable && UserReusable)
             {
-                Reusability = false;
+                Reusability = true;
             } 
         }
 
@@ -129,10 +131,11 @@ namespace CRP.Core.Domain
             return base.ValidationResults();
         }
 
-        [AssertTrue(Message = "Must have school if college reusable")]
-        private bool CollegeReusableSchool { get; set; }
-        [AssertTrue(Message = "Only one reusable flag may be set to true")]
-        private bool Reusability { get; set; }
+        [AssertFalse(ErrorMessage = "Must have school if college reusable")]
+        public virtual bool CollegeReusableSchool { get; set; }
+        [AssertFalse(ErrorMessage = "Only one reusable flag may be set to true")]
+        public virtual bool Reusability { get; set; }
 
     }
+
 }

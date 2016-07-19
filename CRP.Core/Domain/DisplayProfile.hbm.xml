@@ -11,7 +11,7 @@
     <property name="Name" column="Name" />
     <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" fetch="join" />
     <many-to-one name="School" class="CRP.Core.Domain.School, CRP.Core" column="SchoolId" cascade="none" fetch="join" />
-    <property name="Logo" column="Logo" />
+    <property name="Logo" column="Logo" length="2147483647"  />
 
     <property name="SchoolMaster" column="SchoolMaster" />
     <property name="CustomCss" column="CustomCss" />

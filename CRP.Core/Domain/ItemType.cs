@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 
 namespace CRP.Core.Domain
@@ -31,15 +32,15 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(50)]
+        [StringLength(50)]
         public virtual string Name { get; set; }
         public virtual bool IsActive { get; set; }
 
-        [NotNull]
+        [Required] //TODO: Check that required works... May need my custom validation for collections.
         public virtual ICollection<ExtendedProperty> ExtendedProperties { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<ItemTypeQuestionSet> QuestionSets { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<Item> Items { get; set; }
 
         public virtual void AddExtendedProperty(ExtendedProperty extendedProperty)
@@ -95,15 +96,15 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            ItemTypeExtendedProperties = true;
-            ItemTypeQuestionSets = true;
+            ItemTypeExtendedProperties = false;
+            ItemTypeQuestionSets = false;
             if (ExtendedProperties != null && ExtendedProperties.Count > 0)
             {
                 foreach (var extendedProperty in ExtendedProperties)
                 {
                     if (!extendedProperty.IsValid())
                     {
-                        ItemTypeExtendedProperties = false;
+                        ItemTypeExtendedProperties = true;
                         break;
                     }
                 }
@@ -114,7 +115,7 @@ namespace CRP.Core.Domain
                 {
                     if (!questionSet.IsValid())
                     {
-                        ItemTypeQuestionSets = false;
+                        ItemTypeQuestionSets = true;
                         break;
                     }
                 }
@@ -122,10 +123,10 @@ namespace CRP.Core.Domain
         }
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "One or more Extended Properties is not valid")]
-        private bool ItemTypeExtendedProperties { get; set; }
-        [AssertTrue(Message = "One or more Question Sets is not valid")]
-        private bool ItemTypeQuestionSets { get; set; }
+        [AssertFalse(ErrorMessage = "One or more Extended Properties is not valid")]
+        public virtual bool ItemTypeExtendedProperties { get; set; }
+        [AssertFalse(ErrorMessage = "One or more Question Sets is not valid")]
+        public virtual bool ItemTypeQuestionSets { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

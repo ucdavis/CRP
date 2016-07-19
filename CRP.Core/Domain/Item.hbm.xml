@@ -15,7 +15,7 @@
     <property name="Quantity" column="Quantity" />
     <property name="QuantityName" column="QuantityName" />
     <property name="Expiration" column="Expiration" />
-    <property name="Image" column="Image" />
+    <property name="Image" column="Image" length="2147483647" />
     <property name="Link" column="Link" />
 
     <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" fetch="join" />

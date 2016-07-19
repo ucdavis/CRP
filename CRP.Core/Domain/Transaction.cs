@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Abstractions;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
@@ -54,7 +55,7 @@ namespace CRP.Core.Domain
         #endregion
 
         #region Mapped Fields
-        [NotNull]
+        [Required]
         public virtual Item Item { get; set; }
         public virtual DateTime TransactionDate { get; set; }
         public virtual bool IsActive { get; set; }
@@ -90,13 +91,13 @@ namespace CRP.Core.Domain
         
         public virtual string FidUsed { get; set; }
 
-        [NotNull]
+        [Required]
         public virtual ICollection<PaymentLog> PaymentLogs { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<TransactionAnswer> TransactionAnswers { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<QuantityAnswer> QuantityAnswers { get; set; }
-        [NotNull]
+        [Required]
         public virtual ICollection<Transaction> ChildTransactions { get; set; }
         #endregion
 
@@ -272,29 +273,29 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            PaymentType = true;
+            PaymentType = false;
             if (Credit == Check)
             {
-                PaymentType = false;
+                PaymentType = true;
             }
 
             //We only allow amount to be negative for corrections (CreatedBy is Populated)
-            RegularAmount = true;
+            RegularAmount = false;
             if(Amount < 0 && (CreatedBy == null || Donation))
             {
-                RegularAmount = false;
+                RegularAmount = true;
             }
             //We don't want corrections to have a positive value
-            CorrectionAmount = true;
+            CorrectionAmount = false;
             if(Amount >= 0 && CreatedBy != null && !Donation && !Refunded)
             {
-                CorrectionAmount = false;
+                CorrectionAmount = true;
             }
             //We only want corrections to be ale to reduce the donation amount
-            CorrectionTotalAmount = true;
+            CorrectionTotalAmount = false;
             if(ChildTransactions != null && UncorrectedDonationTotal + CorrectionTotal < 0)
             {
-                CorrectionTotalAmount = false;
+                CorrectionTotalAmount = true;
             }
             ////We don't want a "refund" situation.
             //CorrectionTotalAmountPaid = true;
@@ -306,17 +307,17 @@ namespace CRP.Core.Domain
         #endregion
 
         #region Fields ONLY used for complex validation, not in database
-        [AssertTrue(Message = "Payment type was not selected.")]
-        private bool PaymentType { get; set; }
+        [AssertFalse(ErrorMessage = "Payment type was not selected.")]
+        public virtual bool PaymentType { get; set; }
 
-        [AssertTrue(Message = "Amount must be zero or more.")]
-        private bool RegularAmount { get; set; }
+        [AssertFalse(ErrorMessage = "Amount must be zero or more.")]
+        public virtual bool RegularAmount { get; set; }
 
-        [AssertTrue(Message = "Amount must be less than zero.")]
-        private bool CorrectionAmount { get; set; }
+        [AssertFalse(ErrorMessage = "Amount must be less than zero.")]
+        public virtual bool CorrectionAmount { get; set; }
 
-        [AssertTrue(Message = "The total of all correction amounts must not exceed the donation amounts")]
-        private bool CorrectionTotalAmount { get; set; }
+        [AssertFalse(ErrorMessage = "The total of all correction amounts must not exceed the donation amounts")]
+        public virtual bool CorrectionTotalAmount { get; set; }
 
         //[AssertTrue(Message = "The total of all correction amounts must not exceed the amount already paid")]
         //private bool CorrectionTotalAmountPaid { get; set; }

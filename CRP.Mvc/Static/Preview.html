@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript" src="../Scripts/tiny_mce/tiny_mce_popup.js"></script>
+<script type="text/javascript" src="../Scripts/tiny_mce/plugins/preview/jscripts/embed.js"></script>
+
+
+<script type="text/javascript"><!--
+document.write('<base href="' + tinyMCEPopup.getWindowArg("base") + '">');
+// -->
+</script>
+<title>{#preview.preview_desc}</title>
+</head>
+<body id="content">
+<script type="text/javascript">
+    var contents = tinyMCEPopup.editor.getContent();
+    var breaker = 0;
+    while (contents.indexOf("{FirstName}") != -1) {
+        contents = contents.replace("{FirstName}", "Jonny");
+        breaker++;
+        if (breaker > 10) {
+            break;
+        }
+    }
+    breaker = 0;
+    while (contents.indexOf("{LastName}") != -1) {
+        contents = contents.replace("{LastName}", "Appleseed");
+        breaker++;
+        if (breaker > 10) {
+            break;
+        }
+    }
+    breaker = 0;
+    while (contents.indexOf("{TotalPaid}") != -1) {
+        contents = contents.replace("{TotalPaid}", "$15.01");
+        breaker++;
+        if (breaker > 10) {
+            break;
+        }
+    }
+    breaker = 0;
+    while (contents.indexOf("{Quantity}") != -1) {
+        contents = contents.replace("{Quantity}", "1");
+        breaker++;
+        if (breaker > 10) {
+            break;
+        }
+    }
+    breaker = 0;
+    while (contents.indexOf("{QuantityName}") != -1) {
+        contents = contents.replace("{QuantityName}", "Ticket");
+        breaker++;
+        if (breaker > 10) {
+            break;
+        }
+    }
+    breaker = 0;
+    while (contents.indexOf("{TransactionNumber}") != -1) {
+        contents = contents.replace("{TransactionNumber}", "2010-000234");
+        breaker++;
+        if (breaker > 10) {
+            break;
+        }
+    }
+    breaker = 0;
+    while (contents.indexOf("{PaymentMethod}") != -1) {
+        contents = contents.replace("{PaymentMethod}", "Credit Card");
+        breaker++;
+        if (breaker > 10) {
+            break;
+        }
+    }
+    breaker = 0;
+    while (contents.indexOf("{DonationThanks}") != -1) {
+        contents = contents.replace("{DonationThanks}", "Thank you for your donation of $5.01. Your in-kind contribution will be tax deductible to the fullest extent allowable by law.");
+        breaker++;
+        if (breaker > 10) {
+            break;
+        }
+    }
+
+    document.write(contents);
+	
+</script>
+</body>
+</html>
