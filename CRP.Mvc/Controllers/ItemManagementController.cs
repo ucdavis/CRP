@@ -115,6 +115,7 @@ namespace CRP.Controllers
         [PageTracker]
         public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
+            ModelState.Clear();
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
@@ -281,6 +282,7 @@ namespace CRP.Controllers
         [PageTracker]
         public ActionResult Edit(int id, [Bind(Exclude = "Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool fidIsDisabled)
         {
+            ModelState.Clear();
             var destinationItem = Repository.OfType<Item>().GetNullableById(id);
             
             // check rights to edit
@@ -323,8 +325,10 @@ namespace CRP.Controllers
             {
                 Repository.OfType<Item>().EnsurePersistent(destinationItem);
                 Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction(a => a.Edit(id));
             }
             var viewModel = ItemViewModel.Create(Repository, CurrentUser, destinationItem);
+            
             //viewModel.Item = destinationItem;
             return View(viewModel);
         }

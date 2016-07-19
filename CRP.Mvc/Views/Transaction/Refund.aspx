@@ -63,13 +63,14 @@
                 <li>
                     <label for="Amount">Refund Amount:</label>
                     <%= Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new {@class="amount"}) %>
-                    <%= Html.ValidationMessage("Amount", "*") %>
+                    <%= Html.ValidationMessage("Amount") %>
+                    <%= Html.ValidationMessage("TotalPaid") %>
                 </li>
                 
                 <li>
                     <label for="CorrectionReason">Refund Reason:</label>
                     <%= Html.TextArea("CorrectionReason", Model.CorrectionReason)%>
-                    <%= Html.ValidationMessage("CorrectionReason", "*")%>
+                    <%= Html.ValidationMessage("Transaction.CorrectionReason")%>
                 </li>
             <li><input type="submit" value="Refund" /></li>   
             </ul>

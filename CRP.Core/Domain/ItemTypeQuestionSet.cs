@@ -1,4 +1,5 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel.DataAnnotations;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
@@ -32,17 +33,19 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            TransactionLevelQuantityLevel = TransactionLevel != QuantityLevel;
-            ItemTypeQuestionSetQuestionSet = true;
+            TransactionLevelQuantityLevel = TransactionLevel == QuantityLevel; //checking for false being the valid value now...
+            ItemTypeQuestionSetQuestionSet = false;
             if (QuestionSet != null)
             {
-                ItemTypeQuestionSetQuestionSet = QuestionSet.IsValid();
+                ItemTypeQuestionSetQuestionSet = !QuestionSet.IsValid();
             }
         }
 
         public override bool IsValid()
         {
             PopulateComplexLogicFields();
+            //var xxx = base.IsValid();
+            //var yyy = base.ValidationResults();
             return base.IsValid();
         }
 
@@ -52,17 +55,17 @@ namespace CRP.Core.Domain
             return base.ValidationResults();
         }
 
-        [NotNull]
+        [Required]
         public virtual ItemType ItemType { get; set; }
-        [NotNull]
+        [Required]
         public virtual QuestionSet QuestionSet { get; set; }
         public virtual bool TransactionLevel { get; set; }
         public virtual bool QuantityLevel { get; set; }
 
-        [AssertTrue(Message = "TransactionLevel must be different from QuantityLevel")]
-        private bool TransactionLevelQuantityLevel { get; set; }
-        [AssertTrue(Message = "QuestionSet not valid")]
-        private bool ItemTypeQuestionSetQuestionSet { get; set; }
+        [AssertFalse(ErrorMessage = "TransactionLevel must be different from QuantityLevel")]
+        public virtual bool TransactionLevelQuantityLevel { get; set; }
+        [AssertFalse(ErrorMessage = "QuestionSet not valid")]
+        public virtual bool ItemTypeQuestionSetQuestionSet { get; set; }
         
     }
 }

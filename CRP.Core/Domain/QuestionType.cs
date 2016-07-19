@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
+
 
 namespace CRP.Core.Domain
 {
@@ -25,7 +26,7 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(50)]
+        [StringLength(50)]
         [JsonProperty]
         public virtual string Name { get; set; }
         public virtual bool HasOptions { get; set; }

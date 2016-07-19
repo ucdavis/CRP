@@ -63,13 +63,13 @@
                 <li>
                     <label for="Amount">Correction:</label>
                     <%= Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new {@class="amount"}) %>
-                    <%= Html.ValidationMessage("Amount", "*") %>
+                    <%= Html.ValidationMessageFor(x => x.Amount) %>                        
                 </li>
                 
                 <li>
                     <label for="CorrectionReason">Correction Reason:</label>
                     <%= Html.TextArea("CorrectionReason", Model.CorrectionReason) %>
-                    <%= Html.ValidationMessage("CorrectionReason", "*")%>
+                    <%= Html.ValidationMessageFor(x => x.CorrectionReason)%>
                 </li>
             <li><input type="submit" value="Add Correction" /></li>   
             </ul>

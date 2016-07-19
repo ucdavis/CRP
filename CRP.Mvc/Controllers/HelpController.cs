@@ -12,6 +12,7 @@ using UCDArch.Web.Controller;
 using MvcContrib.Attributes;
 using UCDArch.Web.Helpers;
 using MvcContrib;
+using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
@@ -68,6 +69,7 @@ namespace CRP.Controllers
 
             topic.TransferValidationMessagesTo(ModelState);
 
+
             if (ModelState.IsValid)
             {
                 Repository.OfType<HelpTopic>().EnsurePersistent(topic);
@@ -102,6 +104,7 @@ namespace CRP.Controllers
         [ValidateInput(false)]
         public ActionResult Edit(int id, HelpTopic helpTopic)
         {
+            
             var topic = Repository.OfType<HelpTopic>().GetNullableById(id);
             if (helpTopic == null)
             {
@@ -124,7 +127,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction<HelpController>(a => a.Index());
             }
 
-            return View(helpTopic);
+            return View(topic);
         }
 
         /// <summary>

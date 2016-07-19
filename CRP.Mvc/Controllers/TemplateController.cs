@@ -46,6 +46,9 @@ namespace CRP.Controllers
             if(template.Text.Trim() == StaticValues.ConfirmationTemplateDelimiter)
             {
                 ModelState.AddModelError("Text", "text may not be null or empty");
+            } else if (string.IsNullOrWhiteSpace(paidText))
+            {
+                ModelState.AddModelError("Text", "text may not be null or empty");
             }
 
             // ensure the default value

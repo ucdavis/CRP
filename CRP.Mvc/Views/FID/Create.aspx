@@ -10,7 +10,7 @@
 
     <h2>Create</h2>
 
-    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
+    <%= Html.ValidationSummary(true, "Create was unsuccessful. Please correct the errors and try again.") %>
 
     <% using (Html.BeginForm()) {%>
             

@@ -64,8 +64,8 @@ namespace CRP.Controllers
         public ActionResult Create(TouchnetFID touchnetFID)
         {
             var fid = new TouchnetFID();
-            fid.FID = touchnetFID.FID.Trim();
-            fid.Description = touchnetFID.Description.Trim();
+            fid.FID = touchnetFID.FID != null ? touchnetFID.FID.Trim() : null;
+            fid.Description = touchnetFID.Description != null ? touchnetFID.Description.Trim() : null;
 
             fid.TransferValidationMessagesTo(ModelState);
 
@@ -129,8 +129,8 @@ namespace CRP.Controllers
                                                                        "Touchnet FID");
                 return this.RedirectToAction(a => a.Index());
             }
-            fid.FID = touchnetFID.FID.Trim();
-            fid.Description = touchnetFID.Description.Trim();
+            fid.FID = touchnetFID.FID != null ? touchnetFID.FID.Trim() : null;
+            fid.Description = touchnetFID.Description != null ? touchnetFID.Description.Trim() : null;
 
             fid.TransferValidationMessagesTo(ModelState);
 

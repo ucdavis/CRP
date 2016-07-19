@@ -17,19 +17,21 @@
     
         <%= Html.AntiForgeryToken() %>
     
-        <%= Html.ClientSideValidation<Coupon>("") %>
+
     
         <fieldset>
             <legend>Fields</legend>
             
             <p>Coupon Type:</p>
+            <%= Html.ValidationMessage("CouponType") %>
             <ul>
                 <li><input type="radio" name="couponType" class="couponType" value="Unlimited" />Unlimited</li>
                 <li><input type="radio" name="couponType" class="couponType" value="LimitedUsage" />Limited Usage
                 
                     <span id="maxUsageContainer" style="display:inline-block; display:none; margin-left: 2em;">
                         <label>Maximum # of times this coupon can be used: </label>
-                        <%= Html.TextBox("MaxUsage", Model.Coupon != null ? Model.Coupon.MaxUsage.ToString() : string.Empty) %>    
+                        <%= Html.TextBox("MaxUsage", Model.Coupon != null ? Model.Coupon.MaxUsage.ToString() : string.Empty) %> 
+                        <%= Html.ValidationMessageFor(x => x.Coupon.MaxUsage) %>   
                     </span>
 
                 </li>
@@ -50,12 +52,12 @@
             <p>
                 <label for="Email">E-Mail (Optional):</label>
                 <%= Html.TextBox("Email", Model.Coupon != null ? Model.Coupon.Email : string.Empty) %>
-                <%= Html.ValidationMessage("Email") %>
+                <%= Html.ValidationMessageFor(x => x.Coupon.Email) %>
             </p>
             <p>
                 <label for="DiscountAmount">Discount Amount:</label>
                 <%= Html.TextBox("DiscountAmount", Model.Coupon != null ? string.Format("{0:0.00}", Model.Coupon.DiscountAmount) : string.Empty) %>
-                <%= Html.ValidationMessage("DiscountAmount") %>
+                <%= Html.ValidationMessageFor(x => x.Coupon.DiscountAmount) %>
             </p>
             
             <p>

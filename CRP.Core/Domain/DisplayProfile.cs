@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using NHibernate.Validator.Constraints;
+using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
 
@@ -22,9 +22,7 @@ namespace CRP.Core.Domain
         private void SetDefaults()
         {
             SchoolMaster = false;
-            DepartmentAndSchool = true;
-            DepartmentOrSchool = true;
-            SchoolMasterAndSchool = true;
+
         }
 
         /// <summary>
@@ -35,20 +33,20 @@ namespace CRP.Core.Domain
         /// </summary>
         private void PopulateComplexLogicFields()
         {
-            DepartmentAndSchool = true;
-            DepartmentOrSchool = true;
-            SchoolMasterAndSchool = true;
+            DepartmentAndSchool = false;
+            DepartmentOrSchool = false;
+            SchoolMasterAndSchool = false;
             if (Unit != null && School != null)
             {
-                DepartmentAndSchool = false;
+                DepartmentAndSchool = true;
             }
             if (Unit == null && School == null)
             {
-                DepartmentOrSchool = false;
+                DepartmentOrSchool = true;
             }     
             if(School == null && SchoolMaster)
             {
-                SchoolMasterAndSchool = false;
+                SchoolMasterAndSchool = true;
             }
         }
 
@@ -77,13 +75,13 @@ namespace CRP.Core.Domain
 
         #region Fields ONLY used for complex validation, not in database (note, have to be public and inited in constructor)
         
-        [AssertTrue(Message = "Department and School cannot be selected together.")]
+        [AssertFalse(ErrorMessage = "Department and School cannot be selected together.")]
         public virtual bool DepartmentAndSchool { get; set; }
 
-        [AssertTrue(Message = "A Department or School must be specified.")]
+        [AssertFalse(ErrorMessage = "A Department or School must be specified.")]
         public virtual bool DepartmentOrSchool { get; set; }
-        
-        [AssertTrue(Message = "SchoolMaster may only be true when School is selected.")]
+
+        [AssertFalse(ErrorMessage = "SchoolMaster may only be true when School is selected.")]
         public virtual bool SchoolMasterAndSchool { get; set; }
 
         #endregion Fields ONLY used for complex validation, not in database

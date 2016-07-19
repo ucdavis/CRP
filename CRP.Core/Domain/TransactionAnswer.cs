@@ -1,7 +1,7 @@
 ﻿using CRP.Core.Abstractions;
-using NHibernate.Validator.Constraints;
+using System.ComponentModel.DataAnnotations;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -20,11 +20,11 @@ namespace CRP.Core.Domain
             Answer = answer;
         }
 
-        [NotNull]
+        [Required]
         public virtual Transaction Transaction { get; set; }
-        [NotNull]
+        [Required]
         public virtual QuestionSet QuestionSet { get; set; }
-        [NotNull]
+        [Required]
         public virtual Question Question { get; set; }
         [Required]
         public virtual string Answer { get; set; }

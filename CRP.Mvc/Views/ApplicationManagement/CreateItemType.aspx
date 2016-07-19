@@ -1,6 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.ItemTypeViewModel>" %>
 <%@ Import Namespace="CRP.Core.Resources"%>
-
 <%@ Import Namespace="CRP.Controllers"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -38,7 +37,6 @@
 
     <h2>CreateItemType</h2>
 
-        <%= Html.ClientSideValidation<ItemType>("") %>
 
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
@@ -50,11 +48,12 @@
             <legend>Name</legend>
             <p>
                 <%= Html.TextBox("ItemType.Name") %>
-                <%= Html.ValidationMessage("ItemType.Name", "*") %>
+                <%= Html.ValidationMessageFor(x => x.ItemType.Name) %>
             </p>
         </fieldset>
         <fieldset>
             <legend>Extended Properties</legend>
+            <%= Html.ValidationMessageFor(x => x.ItemType.ItemTypeExtendedProperties) %>
                        
             <!-- This is the container for the extended properties -->
             <div id="ExtendedProperties">
@@ -67,7 +66,7 @@
                             var prop = Model.ItemType.ExtendedProperties.ElementAt(i);
                             %>
                             <div>
-                           <label>Property Name:</label>
+                           <label>Property Name:</label>                                
                            <input id='<%= Html.Encode("ExtendedProperties[" + i + "]_Name") %>' name='<%= Html.Encode("ExtendedProperties[" + i + "].Name") %>' value='<%= Html.Encode(prop.Name) %>' />
                            <span id='<%= Html.Encode("ExtendedProperties[" + i + "]_QuestionType") %>' style="display:block">
                                <label>Question Type:</label>

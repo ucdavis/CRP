@@ -62,7 +62,7 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult CreateItemType(ItemType itemType, ExtendedProperty[] extendedProperties)
         {
-
+            ModelState.Clear();
             //foreach (var ep in extendedProperties)
             //{
             //    ep.ItemType = itemType;
@@ -161,6 +161,7 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult EditItemType(int id, [Bind(Exclude="Id")]ItemType itemType)
         {
+            ModelState.Clear();
             var it = Repository.OfType<ItemType>().GetNullableById(id);
             if (it == null)
             {

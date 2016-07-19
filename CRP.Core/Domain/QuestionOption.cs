@@ -1,6 +1,6 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel.DataAnnotations;
 using UCDArch.Core.DomainModel;
-using UCDArch.Core.NHibernateValidator.Extensions;
+
 
 namespace CRP.Core.Domain
 {
@@ -16,9 +16,9 @@ namespace CRP.Core.Domain
         }
 
         [Required]
-        [Length(200)]
+        [StringLength(200)]
         public virtual string Name { get; set; }
-        [NotNull]
+        [Required]
         public virtual Question Question { get; set; }
     }
 }

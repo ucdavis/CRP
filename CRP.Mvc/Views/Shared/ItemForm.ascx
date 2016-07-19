@@ -21,11 +21,7 @@
             
         });
     </script>
-    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>
-
-    <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
-
-    <%= Html.ClientSideValidation<Item>("Item") %>
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>        
 
         <%= Html.AntiForgeryToken() %>
          <%= Html.Hidden("FidIsDisabled", !Model.CanChangeFID) %>
@@ -35,8 +31,9 @@
             <li><label for="ItemType">Item Type:</label><br /> 
             <% if (Model.Item == null || Model.IsNew) {%>                               
                 <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
-                        .Selected(Model.Item != null ? Model.Item.ItemType.Id : 0)                         
+                        .Selected(Model.Item != null && Model.Item != null && Model.Item.ItemType != null ? Model.Item.ItemType.Id : 0)                         
                     %>
+                <%= Html.ValidationMessageFor(x => x.Item.ItemType) %>
             
             <%} else {%>
             <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
@@ -50,7 +47,7 @@
             <li>
                 <label for="Item.Name">Name:</label><br />
                 <%= Html.TextBox("Item.Name") %>
-                <%= Html.ValidationMessage("Item.Name", "*")%>
+                <%= Html.ValidationMessageFor(x => x.Item.Name)%>
             </li>
             <li>
             <label for="Item.Unit">Unit:</label><br />
@@ -77,27 +74,27 @@
             <li>
                 <label for="Item.Summary">Summary:</label><br />
                 <%= Html.TextArea("Item.Summary", new { style="height:175px; width: 750px" , @title=' '})%>
-                <%= Html.ValidationMessage("Item.Summary", "*")%> 
+                <%= Html.ValidationMessageFor(x => x.Item.Summary)%> 
             </li>
             <li>
                 <label for="Item.Description">Description:</label><br />
                 <%= Html.TextArea("Item.Description")%>
-                <%= Html.ValidationMessage("Item.Description", "*")%> 
+                <%= Html.ValidationMessageFor(x => x.Item.Description)%> 
             </li>
             <li>
                 <label for="Item.CheckPaymentInstructions">Check Payment Instructions:</label><br />
                 <%= Html.TextArea("Item.CheckPaymentInstructions", Model.Item == null || Model.Item.CheckPaymentInstructions == null ? Html.HtmlEncode("<h1>Thank you for your purchase!</h1> <h2>Please mail your RSVP card and payment to:</h2> <address>College of Agricultural and Environmental Sciences<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 95616<br /></address><h2>Please make checks payable to UC Regents.</h2>") : Html.HtmlEncode(Model.Item.CheckPaymentInstructions))%>
-                <%= Html.ValidationMessage("Item.CheckPaymentInstructions", "*")%> 
+                <%= Html.ValidationMessageFor(x => x.Item.CheckPaymentInstructions)%> 
             </li>
             <li><table><tbody>
             <tr><td>
                 <label for="Item.AllowCreditPayment">Allow Credit Payment:</label></td><td>
                 <%= Html.CheckBox("Item.AllowCreditPayment", Model.Item != null ? Model.Item.AllowCreditPayment : true)%>
-                <%= Html.ValidationMessage("Item.AllowCreditPayment", "*")%></td></tr>
+                <%= Html.ValidationMessageFor(x => x.Item.AllowCreditPayment)%></td></tr>
                 <tr><td>
                 <label for="Item.AllowCheckPayment">Allow Check Payment:</label></td><td>
                 <%= Html.CheckBox("Item.AllowCheckPayment", Model.Item != null ? Model.Item.AllowCheckPayment : true)%>
-                <%= Html.ValidationMessage("Item.AllowCheckPayment", "*")%></td>
+                <%= Html.ValidationMessageFor(x => x.Item.AllowCheckPayment)%></td>
 <%--                <tr>
                     <td>
                         <label for="Item.HideDonation">Hide Donation Column:</label>
@@ -111,27 +108,27 @@
             <li>
                 <label for="Item.QuantityName">Name Of Item:</label><br />
                 <%= Html.TextBox("Item.QuantityName", Model.Item != null ? Model.Item.QuantityName : "Ticket") %>
-                <%= Html.ValidationMessage("Item.QuantityName", "*") %>
+                <%= Html.ValidationMessageFor(x => x.Item.QuantityName) %>
             </li>
             <li>
                 <label id="CostPerItemLabel" for="Item.CostPerItem">Cost Per <%= Html.Encode(Model.Item != null ? Model.Item.QuantityName : "Ticket") %>:</label><br />
                 <%= Html.TextBox("Item.CostPerItem", Model.Item != null ? string.Format("{0:0.00}", Model.Item.CostPerItem) : string.Empty)  %>
-                <%= Html.ValidationMessage("Item.CostPerItem", "*")%>
+                <%= Html.ValidationMessageFor(x => x.Item.CostPerItem)%>
             </li>
             <li>
                 <label id="QuantityLabel" for="Item.Quantity">Number of <%= Html.Encode(Model.Item != null ? Model.Item.QuantityName : "Ticket") %>(s) Available:</label><br />
                 <%= Html.TextBox("Item.Quantity") %>
-                <%= Html.ValidationMessage("Item.Quantity", "*")%>
+                <%= Html.ValidationMessageFor(x => x.Item.Quantity)%>
             </li>
             <li>
                 <label for="Item.Expiration">Last Day To Register Online:</label> <br />
                 <%= Html.TextBox("Item.Expiration", Model.Item != null && Model.Item.Expiration.HasValue ? Model.Item.Expiration.Value.ToString("d") : string.Empty, new { @title = "" })%>
-                <%= Html.ValidationMessage("Item.Expiration", "*")%>
+                <%= Html.ValidationMessageFor(x => x.Item.Expiration)%>
             </li>
             <li>
                 <label for="Item.Link">Link:</label><br />
                 <%= Html.TextBox("Item.Link", Model.Item != null ? Model.Item.Link : string.Empty, new { @class = "validateLink", @title = ""})%>
-                <%= Html.ValidationMessage("Item.Link", "*")%>
+                <%= Html.ValidationMessageFor(x => x.Item.Link)%>
             </li>
             
             <li>
@@ -141,24 +138,24 @@
                         <li>
                             <label for="Item.DonationLinkLegend">Donation Legend:</label><br />
                             <%= Html.TextBox("Item.DonationLinkLegend", Model.Item != null ? Model.Item.DonationLinkLegend : string.Empty)%>
-                            <%= Html.ValidationMessage("Item.DonationLinkLegend", "*")%>
+                            <%= Html.ValidationMessageFor(x => x.Item.DonationLinkLegend)%>
                         </li>
 
                         <li>
                             <label for="Item.DonationLinkInformation">Donation Information:</label><br />
                             <%= Html.TextArea("Item.DonationLinkInformation", Model.Item != null ? Model.Item.DonationLinkInformation : string.Empty, new { style = "height:60px; width: 750px", @title = ' ' })%>
-                            <%= Html.ValidationMessage("Item.DonationLinkInformation", "*")%>
+                            <%= Html.ValidationMessageFor(x => x.Item.DonationLinkInformation)%>
                         </li>
 
                         <li>
                             <label for="Item.DonationLinkLink">Donation Link:</label><br />
                             <%= Html.TextBox("Item.DonationLinkLink", Model.Item != null ? Model.Item.DonationLinkLink : string.Empty, new { @title = "" })%>
-                            <%= Html.ValidationMessage("Item.DonationLinkLink", "*")%>
+                            <%= Html.ValidationMessageFor(x => x.Item.DonationLinkLink)%>
                         </li>
                         <li>
                             <label for="Item.DonationLinkText">Donation Link Text:</label><br />
                             <%= Html.TextBox("Item.DonationLinkText", Model.Item != null ? Model.Item.DonationLinkText : "Click here", new { @title = "" })%>
-                            <%= Html.ValidationMessage("Item.DonationLinkText", "*")%>
+                            <%= Html.ValidationMessageFor(x => x.Item.DonationLinkText)%>
                         </li>
                     </ul>
                 </fieldset>
@@ -168,17 +165,17 @@
             <!-- NEEDS BALLOON-->
                 <label for="Item.Available">Available to public:</label></td><td>
                 <%= Html.CheckBox("Item.Available") %>
-                <%= Html.ValidationMessage("Item.Available", "*") %></td></tr>
+                <%= Html.ValidationMessageFor(x => x.Item.Available) %></td></tr>
                 <tr><td>
                 <!-- NEEDS BALLOON-->
                 <label for="Item.Private">Private Conference:</label></td><td>
                 <%= Html.CheckBox("Item.Private") %>
-                <%= Html.ValidationMessage("Item.Private", "*") %>
+                <%= Html.ValidationMessageFor(x => x.Item.Private) %>
             </td></tr></tbody></table></li>
             <li>
                 <label for="Item.RestrictedKey">Restricted Password:</label><br />
                 <%= Html.TextBox("Item.RestrictedKey") %>
-                <%= Html.ValidationMessage("Item.RestrictedKey", "*") %>
+                <%= Html.ValidationMessageFor(x => x.Item.RestrictedKey) %>
             </li>
             <li>
                 Direct Link to Register: 
@@ -213,10 +210,11 @@
                 
         <fieldset>
             <legend>Extended Properties</legend>
+            <%= Html.ValidationMessage("Extended Properties") %>
             <ul>
             
             <div id="ExtendedProperties">            
-                <%  if (Model.Item != null)
+                <%  if (Model.Item != null && Model.Item != null && Model.Item.ItemType != null && Model.Item.ItemType.ExtendedProperties != null)
                     {
                         for (int i = 0; i < Model.Item.ItemType.ExtendedProperties.Count; i++)
                         {
@@ -257,9 +255,10 @@
             
             <ul>
             <li>
-                <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item != null ? Model.Item.Id : -1}) %>' /> <br />
+                <img src='<%= Url.Action("GetImage", "Item", new {id = Model.Item != null ? Model.Item.Id : -1}) %>' /> <br />                
             
             <input type="file" id="file" name="file" title=''/>
+                <%= Html.ValidationMessage("Image") %>
             </li></ul>
         </fieldset>
         
@@ -286,4 +285,5 @@
         </ul>    
         </fieldset>
             <input type="submit" value="Save" class="save_btn"/>
-            <input type="submit" value="Clear" class="clear_btn"/>
+            <%--<input type="submit" value="Clear" class="clear_btn"/>--%>
+

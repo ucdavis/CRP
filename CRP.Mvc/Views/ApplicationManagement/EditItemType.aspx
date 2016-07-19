@@ -26,11 +26,10 @@
             <% using (Html.BeginForm()) {%>
             
                 <%= Html.AntiForgeryToken() %>
-                <%= Html.ClientSideValidation<ItemType>("") %>
             
             <p>
                 <%= Html.TextBox("Name", Model.Name) %>
-                <%= Html.ValidationMessage("Name", "*") %>
+                <%= Html.ValidationMessageFor(x => x.Name) %>
             </p>
             
             <p>

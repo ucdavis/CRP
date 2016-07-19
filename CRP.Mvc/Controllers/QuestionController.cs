@@ -57,6 +57,7 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions)//, string[] validators)
         {
+            ModelState.Clear();
             var questionSet = Repository.OfType<QuestionSet>().GetNullableById(questionSetId);
             if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
@@ -111,49 +112,52 @@ namespace CRP.Controllers
             var validatorsSelected = question.Validators.Count(validator => validator.Class.ToLower().Trim() != "required");
 
             //Validator and Question type validation:
-            switch (question.QuestionType.Name)
+            if (question.QuestionType != null)
             {
-                case "Text Box":
-                    //All possible, but only a combination of required and others
-                    if(validatorsSelected > 1)
-                    {
-                        ModelState.AddModelError("Validators", "Cannot have Email, Url, Date, or Phone Number validators selected together.");
-                    }
-                    break;                
-                case "Boolean":
-                    if (question.Validators.Count > 0) //Count of all validators
-                    {
-                        ModelState.AddModelError("Validators", "Boolean Question Type should not have validators.");
-                    }
-                    break;
-                case "Radio Buttons":
-                case "Checkbox List":
-                case "Drop Down":                                
-                case "Text Area":
-                    if (validatorsSelected > 0) //count of all validators excluding required
-                    {
-                        ModelState.AddModelError("Validators", string.Format("The only validator allowed for a Question Type of {0} is Required.", question.QuestionType.Name));
-                    }
-                    break;
+                switch (question.QuestionType.Name)
+                {
+                    case "Text Box":
+                        //All possible, but only a combination of required and others
+                        if (validatorsSelected > 1)
+                        {
+                            ModelState.AddModelError("Validators", "Cannot have Email, Url, Date, or Phone Number validators selected together.");
+                        }
+                        break;
+                    case "Boolean":
+                        if (question.Validators.Count > 0) //Count of all validators
+                        {
+                            ModelState.AddModelError("Validators", "Boolean Question Type should not have validators.");
+                        }
+                        break;
+                    case "Radio Buttons":
+                    case "Checkbox List":
+                    case "Drop Down":
+                    case "Text Area":
+                        if (validatorsSelected > 0) //count of all validators excluding required
+                        {
+                            ModelState.AddModelError("Validators", string.Format("The only validator allowed for a Question Type of {0} is Required.", question.QuestionType.Name));
+                        }
+                        break;
 
-                case "Date":
-                    foreach (var validator in question.Validators)
-                    {
-                        if(validator.Class.ToLower().Trim() != "required" && validator.Class.ToLower().Trim() != "date")
+                    case "Date":
+                        foreach (var validator in question.Validators)
+                        {
+                            if (validator.Class.ToLower().Trim() != "required" && validator.Class.ToLower().Trim() != "date")
+                            {
+                                ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
+                            }
+                        }
+                        break;
+                    case "No Answer":
+                        foreach (var validator in question.Validators)
                         {
                             ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
                         }
-                    }
-                    break;
-                case "No Answer":
-                    foreach (var validator in question.Validators)
-                    {
-                        ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
-                    }
-                    break;
-                default:
-                    //No checks
-                    break;
+                        break;
+                    default:
+                        //No checks
+                        break;
+                }
             }
 
             // check to make sure it isn't the system's default contact information set

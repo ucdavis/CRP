@@ -6,7 +6,7 @@
 
     <script type="text/javascript">
         $(function () {
-            $("#map").gPositions({ mode: MapMode.SELECTINGPOINT, showLocations: false });
+            $("#map").gPositions({ mode: MapMode.SELECTINGPOINT, showLocations: false, helpIcon: '<%= Url.Content("~/Images/question_blue.png") %>' });
         });
     </script>
     
@@ -16,7 +16,7 @@
     <% using (Html.BeginForm()) {%>
         <%= Html.AntiForgeryToken() %>
     
-        <%= Html.ClientSideValidation<MapPin>("") %>
+       
         <fieldset>
             <legend>Fields</legend>
             
@@ -37,12 +37,12 @@
             <li>
                 <label for="Title">Title:</label>
                 <%= Html.TextBox("Title", Model != null && Model.MapPin != null ? Model.MapPin.Title : string.Empty) %>
-                <%= Html.ValidationMessage("MapPinTitle") %>
+                <%= Html.ValidationMessageFor(x => x.MapPin.Title) %>
             </li>
             <li>
                 <label for="Description">Description:</label>
                 <%= Html.TextArea("Description", Model != null && Model.MapPin != null ? Model.MapPin.Description : string.Empty)%>
-                <%= Html.ValidationMessage("MapPinDescription")%>
+                <%= Html.ValidationMessageFor(x => x.MapPin.Description)%>
             </li>
             <li>
                 <input type="submit" value="Save" />

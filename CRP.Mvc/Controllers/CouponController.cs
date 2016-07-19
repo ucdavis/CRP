@@ -72,6 +72,7 @@ namespace CRP.Controllers
         [Authorize(Roles = "User")]
         public ActionResult Create(int itemId, [Bind(Exclude="Id")]Coupon coupon, string couponType)
         {
+            ModelState.Clear();
             var item = Repository.OfType<Item>().GetNullableById(itemId);
 
             if (item == null)

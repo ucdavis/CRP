@@ -10,7 +10,7 @@
 
     <h2>Edit</h2>
 
-    <%= Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.") %>
+    <%= Html.ValidationSummary(true, "Edit was unsuccessful. Please correct the errors and try again.") %>
 
     <% using (Html.BeginForm()) {%>
         

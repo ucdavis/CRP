@@ -38,11 +38,11 @@
         
             <%= Html.AntiForgeryToken() %>
         
-            <%= Html.ClientSideValidation<QuestionSet>("QuestionSet") %>
         
             <p>
                 <label for="Name">Name:</label>
                 <%= Html.TextBox("QuestionSet.Name",Model.QuestionSet != null?Model.QuestionSet.Name:string.Empty ,new { style = "width: 300px" }) %>
+                <%= Html.ValidationMessageFor(x => x.QuestionSet.Name) %>
             </p>
             <p>
                 <label for="IsActive">Is Active:</label>

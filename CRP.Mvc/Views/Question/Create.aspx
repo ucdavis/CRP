@@ -1,6 +1,7 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.QuestionViewModel>" %>
 <%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
+<%@ Import Namespace="MvcContrib.FluentHtml" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
@@ -14,8 +15,6 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Create</h2>
-
-    <%= Html.ClientSideValidation<Question>("") %>
 
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
@@ -31,23 +30,28 @@
             <p>
                 <label for="Name">Name:</label>
                 <%= Html.TextBox("Name", Model.Question != null ? Model.Question.Name : string.Empty, new { style = "width: 700px" })%>
+                <%= Html.ValidationMessageFor(x => x.Question.Name) %>
             </p>
             
             <p>
                 <label for="Validators">Validators:</label>
                 
                 <%= this.CheckBoxList("Validators").Options(Model.Validators, x=>x.Id, x=>x.Name) %>
-                
+                <%= Html.ValidationMessage("Validators") %>
             </p>
             
             <p>
-                <%= this.Select("QuestionType").Options(Model.QuestionTypes, x=>x.Id, x=>x.Name).FirstOption("--Select a Type--").Label("Question Type:") %>
+                <%= this.Select("QuestionType").Options(Model.QuestionTypes, x=>x.Id, x=>x.Name).FirstOption("--Select a Type--").Selected(Model.Question != null && Model.Question.QuestionType != null ? Model.Question.QuestionType.Id : 0).Label("Question Type:") %>
+                <%= Html.ValidationMessageFor(x => x.Question.QuestionType) %>
             </p>
             
             <p id="Option" style="display:none;">
                 <span id="OptionsContainer">
                 </span>
                 <img id="AddOptions" src="<%= Url.Content("~/Images/plus.png") %>" style="width:24px; height:24px;" />
+                <%= Html.ValidationMessageFor(x => x.Question.OptionsRequired) %>
+                <%= Html.ValidationMessageFor(x => x.Question.OptionsNames) %>
+                <%= Html.ValidationMessageFor(x => x.Question.OptionsNotAllowed) %>
             </p>
             
             <p>
@@ -134,7 +138,9 @@
         $(document).ready(function() {
             // attach event handlers
             $("img#AddOptions").click(function() { AddOptionInput(); });
-            $("select#QuestionType").change(function(event) { QuestionTypeChange(this); });
+            $("select#QuestionType").change(function (event) { QuestionTypeChange(this); });
+            $("select#QuestionType").trigger("change");
+
         });
         
         function AddOptionInput() {

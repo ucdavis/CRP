@@ -15,7 +15,6 @@
 
     <h2>Create Extended Property for <%= Html.Encode(Model.ItemType.Name) %></h2>
 
-    <%= Html.ClientSideValidation<ExtendedProperty>("") %>
 
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
 
@@ -28,10 +27,11 @@
             <p>
                 <label for="Name">Name:</label>
                 <%= Html.TextBox("Name") %>
-                <%= Html.ValidationMessage("Name", "*") %>
+                <%= Html.ValidationMessage("ExtendedProperty.Name") %>
             </p>
             <p>
                 <%= this.Select("QuestionType").Options(Model.QuestionTypes, x=>x.Id, x=>x.Name).FirstOption("Select a Question Type").Label("Question Type: ") %>
+                <%= Html.ValidationMessage("ExtendedProperty.QuestionType") %>
             </p>
             <p>
                 <input type="submit" value="Create" />

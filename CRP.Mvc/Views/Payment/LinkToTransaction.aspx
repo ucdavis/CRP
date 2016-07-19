@@ -174,7 +174,7 @@
             <td style="width:60%">
                 <% for (var i = 0; i < Model.PaymentLogs.Count(); i++ ) { %> 
                     <fieldset class="check <%= Model.PaymentLogs.ElementAt(i).Accepted ? string.Empty:"deactivated" %>">
-                        <legend>Check <span class="checkIndex"><%= Html.Encode(i + 1) %></span></legend>
+                        <legend>Check <span class="checkIndex"><%= Html.Encode(i + 1) %></span></legend>                                      
                         <% Html.RenderPartial(StaticValues.Partial_CheckView, Model.PaymentLogs.ToList()[i]); %>
                     </fieldset>
                 <% } %>
