@@ -1,6 +1,0 @@
-﻿# robots.txt for Registrations
-User-agent: *
-Disallow: /admin/
-Disallow: /coupon/
-Disallow: /account/
-
