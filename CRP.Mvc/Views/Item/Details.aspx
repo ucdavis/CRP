@@ -2,6 +2,7 @@
 <%@ Import Namespace="CRP.Core.Resources"%>
 <%@ Import Namespace="CRP.Controllers"%>
 <%@ Import Namespace="CRP.Controllers.Helpers" %>
+<%@ Import Namespace="Microsoft.Azure" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Details
@@ -149,7 +150,7 @@
 
     <% if (Model.HasMapPins) { %>
 
-        <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false" type="text/javascript"></script>
+        <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=<%= CloudConfigurationManager.GetSetting("MapsApi")%>" type="text/javascript"></script>
         <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
         <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
 

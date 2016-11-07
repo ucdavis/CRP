@@ -1,6 +1,7 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Controllers.ViewModels.MapPinViewModel>" %>
-   
-    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false" type="text/javascript"></script>
+<%@ Import Namespace="Microsoft.Azure" %>
+
+    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=<%= CloudConfigurationManager.GetSetting("MapsApi")%>" type="text/javascript"></script>
     <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
 
