@@ -1,5 +1,6 @@
 <%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<CRP.Controllers.ViewModels.BigMapViewModel>" %>
 <%@ Import Namespace="CRP.Controllers" %>
+<%@ Import Namespace="Microsoft.Azure" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -51,7 +52,7 @@
         });
     </script>--%>
 
-    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false" type="text/javascript"></script>
+    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=<%= CloudConfigurationManager.GetSetting("MapsApi")%>" type="text/javascript"></script>
     <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
     <script src="<%= Url.Content("~/Scripts/jquery.bt.min.js") %>" type="text/javascript"></script>

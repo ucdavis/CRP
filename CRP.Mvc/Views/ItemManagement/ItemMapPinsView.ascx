@@ -1,7 +1,8 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<CRP.Core.Domain.Item>" %>
 <%@ Import Namespace="CRP.Controllers" %>
+<%@ Import Namespace="Microsoft.Azure" %>
 
-    <%--<link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
+<%--<link href="<%= Url.Content("~/Content/ui.BingMaps.css") %>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2"></script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/ui.BingMaps.js") %>"></script>    
     <script type="text/javascript">
@@ -14,7 +15,7 @@
         });        
     </script> --%>
 
-    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false" type="text/javascript"></script>
+    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=<%= CloudConfigurationManager.GetSetting("MapsApi")%>" type="text/javascript"></script>
     <link href="<%= Url.Content("~/Content/jquery.gPositions.css") %>" rel="Stylesheet" type="text/css" />
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.gPositions.js") %>"></script>
     
