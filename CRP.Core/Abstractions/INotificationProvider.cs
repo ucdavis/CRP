@@ -9,6 +9,7 @@ using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using System.Linq;
+using Microsoft.Azure;
 
 
 namespace CRP.Core.Abstractions
@@ -301,7 +302,7 @@ Your Transaction number is: {TransactionNumber}
 
         public void SendRefundNotification(User user, Transaction refundTransaction, bool canceled)
         {
-            var email = ConfigurationManager.AppSettings["EmailForRefunds"];
+            var email = CloudConfigurationManager.GetSetting("EmailForRefunds");
             if(string.IsNullOrWhiteSpace(email))
             {
                 email = "jsylvestre@ucdavis.edu";

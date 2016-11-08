@@ -43,7 +43,7 @@ namespace CRP.Controllers.ViewModels
                           : viewModel.TransactionValue.Item.TouchnetFID;
             }
 
-            //viewModel.Fid = string.Format(" FID={0}", ConfigurationManager.AppSettings["TouchNetFid"]);
+            //viewModel.Fid = string.Format(" FID={0}", CloudConfigurationManager.GetSetting("TouchNetFid"));
             viewModel.Fid = string.Format(" FID={0}", fid);
             
             return viewModel;

@@ -95,7 +95,7 @@ namespace CRP.Controllers.ViewModels
             var userReports = repository.OfType<ItemReport>().Queryable.Where(b => !b.SystemReusable && b.Item == item).ToList();
 
             viewModel.Reports = systemReports.Union(userReports);
-            //viewModel.Fid = string.Format(" FID={0}", ConfigurationManager.AppSettings["TouchNetFid"]);
+            //viewModel.Fid = string.Format(" FID={0}", CloudConfigurationManager.GetSetting("TouchNetFid"));
             viewModel.Fid = string.Format(" FID={0}", string.IsNullOrEmpty(item.TouchnetFID) ? string.Empty : item.TouchnetFID);
 
             foreach (var transaction in viewModel.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null && a.IsActive))

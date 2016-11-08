@@ -5,6 +5,7 @@ using System.Security.Policy;
 using System.Web;
 using System.Web.Mvc;
 using CRP.Core.Domain;
+using Microsoft.Azure;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
 
@@ -29,9 +30,9 @@ namespace CRP.Controllers.ViewModels
             Check.Require(request != null);
 
             var viewModel = new PaymentConfirmationViewModel() { Transaction = transaction
-                , PaymentGatewayUrl = ConfigurationManager.AppSettings["PaymentGateway"]
+                , PaymentGatewayUrl = CloudConfigurationManager.GetSetting("PaymentGateway")
                 , ValidationKey = validationKey
-                , SiteId = ConfigurationManager.AppSettings["TouchNetSiteId"]
+                , SiteId = CloudConfigurationManager.GetSetting("TouchNetSiteId")
                 , Fid = fid
             };
             

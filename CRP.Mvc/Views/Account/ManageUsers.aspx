@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Import Namespace="Microsoft.Azure" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	ManageUsers
@@ -11,7 +12,7 @@
     <a id="emailList" title="Manage User Email List" href='https://lists.ucdavis.edu/sympa/review/registration-users' target="_blank"><img alt="Manage User Emal List" src="<%=Url.Image("envelopes.png")%>"/></a>
 
     
-    <iframe id="frame" frameborder="0" src='<%= ConfigurationManager.AppSettings["AdminPageUrl"] %>'
+    <iframe id="frame" frameborder="0" src='<%= CloudConfigurationManager.GetSetting("AdminPageUrl") %>'
         scrolling="auto" name="frame" style="width:1200px; height:800px; margin-left: -90px; margin-right: 10px; border-right-width: 0px; border-left-width: 0px;">
     </iframe>
 </asp:Content>

@@ -68,7 +68,7 @@ namespace CRP.Controllers.Helpers
                     throw new InvalidOperationException(
                         "Either MessageServiceAppSettingsKey or MessageServiceAppSettingsKey must be set, but not both.");
 
-                return MessageServiceUrl ?? WebConfigurationManager.AppSettings[MessageServiceAppSettingsKey];
+                return MessageServiceUrl ?? WebConfigurationManager.AppSettings[MessageServiceAppSettingsKey]; //? Use CloudConfigurationManager.GetSetting() ??
             }
         }
 
