@@ -14,6 +14,7 @@ using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Core.Helpers;
 using CRP.Core.Resources;
+using Microsoft.Azure;
 using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Core.PersistanceSupport;
@@ -479,8 +480,8 @@ namespace CRP.Controllers
                 Check.Require(!string.IsNullOrEmpty(transaction.Item.TouchnetFID));
             }
 
-            string postingString = ConfigurationManager.AppSettings["TouchNetPostingKey"];
-            //string Fid = " FID=" + ConfigurationManager.AppSettings["TouchNetFid"]; 
+            string postingString = CloudConfigurationManager.GetSetting("TouchNetPostingKey");
+            //string Fid = " FID=" + CloudConfigurationManager.GetSetting("TouchNetFid"); 
             string Fid = " FID=" + transaction.Item.TouchnetFID; 
             var validationKey = CalculateValidationString(postingString, transaction.TransactionGuid.ToString() + Fid, transaction.Total.ToString());
             var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url, Fid);
@@ -1032,7 +1033,7 @@ namespace CRP.Controllers
                 if(transaction == null)
                 {
                     #region Email Error Results
-                    _notificationProvider.SendPaymentResultErrors(ConfigurationManager.AppSettings["EmailForErrors"], touchNetValues, Request.Params, null, PaymentResultType.TransactionNotFound);
+                    _notificationProvider.SendPaymentResultErrors(CloudConfigurationManager.GetSetting("EmailForErrors"), touchNetValues, Request.Params, null, PaymentResultType.TransactionNotFound);
                     #endregion Email Error Results
 
                     return View();
@@ -1083,12 +1084,12 @@ namespace CRP.Controllers
                         break;
                 }
 
-                if(touchNetValues.posting_key != ConfigurationManager.AppSettings["TouchNetPostingKey"])
+                if(touchNetValues.posting_key != CloudConfigurationManager.GetSetting("TouchNetPostingKey"))
                 {
                     ModelState.AddModelError("PostingKey", "Posting Key Error");
                     paymentLog.Accepted = false;
                 }
-                if (touchNetValues.UPAY_SITE_ID != ConfigurationManager.AppSettings["TouchNetSiteId"])
+                if (touchNetValues.UPAY_SITE_ID != CloudConfigurationManager.GetSetting("TouchNetSiteId"))
                 {
                     ModelState.AddModelError("SiteId", "TouchNet Site Id Error");
                     paymentLog.Accepted = false;
@@ -1131,7 +1132,7 @@ namespace CRP.Controllers
                         if (transaction.TotalPaid > transaction.Total)
                         {
                             _notificationProvider.SendPaymentResultErrors(
-                                ConfigurationManager.AppSettings["EmailForErrors"], touchNetValues, Request.Params, null,
+                                CloudConfigurationManager.GetSetting("EmailForErrors"), touchNetValues, Request.Params, null,
                                 PaymentResultType.OverPaid);
                         }
                     }
@@ -1163,7 +1164,7 @@ namespace CRP.Controllers
                     {
                         body.Append(ex.Message);
                     }
-                    _notificationProvider.SendPaymentResultErrors(ConfigurationManager.AppSettings["EmailForErrors"], touchNetValues, Request.Params, body.ToString(), PaymentResultType.InValidPaymentLog);
+                    _notificationProvider.SendPaymentResultErrors(CloudConfigurationManager.GetSetting("EmailForErrors"), touchNetValues, Request.Params, body.ToString(), PaymentResultType.InValidPaymentLog);
                     #endregion InValid PaymentLog -- Email Results
                 }
             }

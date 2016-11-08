@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Web.Mvc;
+using Microsoft.Azure;
 
 namespace CRP.Controllers.Filter
 {
@@ -20,7 +21,7 @@ namespace CRP.Controllers.Filter
             var captchaResponseValue = filterContext.HttpContext.Request.Form[RESPONSE_FIELD_KEY];
             var captchaValidtor = new Recaptcha.RecaptchaValidator
             {
-                PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"],
+                PrivateKey = CloudConfigurationManager.GetSetting("RecaptchaPrivateKey"),
                 RemoteIP = filterContext.HttpContext.Request.UserHostAddress,
                 Challenge = captchaChallengeValue,
                 Response = captchaResponseValue

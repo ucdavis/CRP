@@ -193,7 +193,7 @@ namespace CRP.Controllers
         [PageTracker]
         public ActionResult ManageUsers()
         {
-            //var adminPageUrl = ConfigurationManager.AppSettings["AdminPageUrl"];
+            //var adminPageUrl = CloudConfigurationManager.GetSetting("AdminPageUrl");
 
             return View();
         }

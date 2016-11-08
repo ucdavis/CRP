@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+using Microsoft.Azure;
 using Telerik.Web.Mvc.UI;
 
 namespace CRP.Controllers.Helpers
@@ -26,8 +27,8 @@ namespace CRP.Controllers.Helpers
             {
                 ID = "recaptcha",
                 Theme = "clean",
-                PublicKey = ConfigurationManager.AppSettings["RecaptchaPublicKey"],
-                PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"]
+                PublicKey = CloudConfigurationManager.GetSetting("RecaptchaPublicKey"),
+                PrivateKey = CloudConfigurationManager.GetSetting("RecaptchaPrivateKey")
             };
 
             var htmlWriter = new HtmlTextWriter(new StringWriter());
