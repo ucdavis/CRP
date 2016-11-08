@@ -487,6 +487,7 @@
     <Compile Include="Controllers\Services\ICouponService.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\ViewModels\BigMapViewModel.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
@@ -1238,6 +1239,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
