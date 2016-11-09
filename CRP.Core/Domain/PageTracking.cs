@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CRP.Core.Helpers;
 using UCDArch.Core.DomainModel;
 
 namespace CRP.Core.Domain
@@ -24,7 +25,7 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
-            DateTime = DateTime.Now;
+            DateTime = DateTime.UtcNow.ToPacificTime();
         }
 
         public virtual string LoginId { get; set; }

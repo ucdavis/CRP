@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
 
@@ -24,13 +25,13 @@ namespace CRP.Controllers.ViewModels
             var unexpiredItems =
                 repository.OfType<Item>()
                     .Queryable
-                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.Now.Date)
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
                     .OrderBy(a => a.Expiration)
                     .ToList();
 
             var expiredItems = repository.OfType<Item>()
                     .Queryable
-                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.Now.AddDays(-15).Date && a.Expiration < DateTime.Now.Date)
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().AddDays(-15).Date && a.Expiration < DateTime.UtcNow.ToPacificTime().Date)
                     .OrderByDescending(a => a.Expiration)
                     .ToList();
             

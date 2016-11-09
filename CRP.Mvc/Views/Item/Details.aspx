@@ -3,6 +3,7 @@
 <%@ Import Namespace="CRP.Controllers"%>
 <%@ Import Namespace="CRP.Controllers.Helpers" %>
 <%@ Import Namespace="Microsoft.Azure" %>
+<%@ Import Namespace="CRP.Core.Helpers" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Details
@@ -91,7 +92,7 @@
         </span>
         </li>
         <li>
-                <% if (Model.Item.Expiration >= DateTime.Now.Date) { %>
+                <% if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date) { %>
         <!-- <p>
             <% if (Model.Item.IsAvailableForReg) { %>
                 <a href='<%= Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} ) %>'><img src="<%= Url.Content("~/Images/register.png") %>" style="border:0;" /></a>

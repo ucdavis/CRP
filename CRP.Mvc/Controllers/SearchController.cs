@@ -6,6 +6,7 @@ using CRP.Core.Domain;
 using UCDArch.Web.Controller;
 using CRP.Core.Abstractions;
 using System.Linq;
+using CRP.Core.Helpers;
 
 namespace CRP.Controllers
 {
@@ -33,14 +34,14 @@ namespace CRP.Controllers
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                var itemList = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false && a.Available && a.Expiration != null && a.Expiration >= DateTime.Now.AddDays(-15)).AsQueryable(); //.OrderByDescending(a => a.Expiration >= DateTime.Now).ThenBy(a => a.Expiration);
+                var itemList = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false && a.Available && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().AddDays(-15)).AsQueryable(); //.OrderByDescending(a => a.Expiration >= DateTime.UtcNow.ToPacificTime()).ThenBy(a => a.Expiration);
                 var unexpiredItems = itemList
-                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.Now.Date)
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
                     .OrderBy(a => a.Expiration)
                     .ToList();
 
                 var expiredItems = itemList
-                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.Now.AddDays(-15).Date && a.Expiration < DateTime.Now.Date)
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().AddDays(-15).Date && a.Expiration < DateTime.UtcNow.ToPacificTime().Date)
                     .OrderByDescending(a => a.Expiration)
                     .ToList();
 

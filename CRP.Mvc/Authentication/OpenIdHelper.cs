@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using CRP.Core.Helpers;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
@@ -132,7 +133,7 @@ namespace CRP.Authentication
             // create authenication ticket
             var authTicket = new FormsAuthenticationTicket(1,
                                                            userId,
-                                                           DateTime.Now, DateTime.Now.AddMinutes(15), false, OpenIdHelper.OpenId,
+                                                           DateTime.UtcNow.ToPacificTime(), DateTime.UtcNow.ToPacificTime().AddMinutes(15), false, OpenIdHelper.OpenId,
                                                            FormsAuthentication.FormsCookiePath);
 
             string encTicket = FormsAuthentication.Encrypt(authTicket);

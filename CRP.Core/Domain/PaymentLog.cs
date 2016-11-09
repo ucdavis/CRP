@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CRP.Core.Helpers;
 using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
@@ -20,7 +21,7 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
-            DatePayment = DateTime.Now;
+            DatePayment = DateTime.UtcNow.ToPacificTime();
             Accepted = false;
             Check = false;
             Credit = false;
