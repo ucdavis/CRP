@@ -21,6 +21,8 @@ namespace CRP.Core.Abstractions
         void SendLowQuantityWarning(IRepository repository, Item item, int transactionQuantity);
         void SendPaymentResultErrors(string email, PaymentResultParameters touchNetValues, NameValueCollection requestAllParams, string extraBody, PaymentResultType paymentResultType);
         void SendRefundNotification(User user, Transaction refundTransaction, bool canceled);
+
+        void TestEmailFromService(MailMessage message);
     }
 
     public class NotificationProvider : INotificationProvider
@@ -368,6 +370,11 @@ Your Transaction number is: {TransactionNumber}
             }
             message.Body = body.ToString();
 
+            _emailService.SendEmail(message);
+        }
+
+        public void TestEmailFromService(MailMessage message)
+        {
             _emailService.SendEmail(message);
         }
     }

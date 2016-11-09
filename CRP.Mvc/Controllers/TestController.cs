@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
+using CRP.Core.Abstractions;
 using Microsoft.Azure;
 
 namespace CRP.Mvc.Controllers
@@ -14,18 +15,14 @@ namespace CRP.Mvc.Controllers
     [AdminOnly]
     public class TestController : ApplicationController
     {
+        private readonly INotificationProvider _notificationProvider;
+        public TestController(INotificationProvider notificationProvider)
+        {
+            _notificationProvider = notificationProvider;
+        }
         public ActionResult TestEmail()
         {
 
-            var client = new SmtpClient
-            {
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("CrpEmail"), CloudConfigurationManager.GetSetting("EmailToken")),
-                Port = 587,
-                Host = "smtp.ucdavis.edu",
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                EnableSsl = true
-            };
 
             var message2 = new MailMessage
             {
@@ -37,7 +34,7 @@ namespace CRP.Mvc.Controllers
 
             message2.To.Add(CloudConfigurationManager.GetSetting("TestSendEmail"));
 
-            client.Send(message2);
+            _notificationProvider.TestEmailFromService(message2);
 
             return null;
         }
