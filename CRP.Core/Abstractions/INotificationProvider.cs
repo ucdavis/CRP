@@ -9,6 +9,7 @@ using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using System.Linq;
+using System.Net;
 using Microsoft.Azure;
 
 
@@ -20,11 +21,18 @@ namespace CRP.Core.Abstractions
         void SendLowQuantityWarning(IRepository repository, Item item, int transactionQuantity);
         void SendPaymentResultErrors(string email, PaymentResultParameters touchNetValues, NameValueCollection requestAllParams, string extraBody, PaymentResultType paymentResultType);
         void SendRefundNotification(User user, Transaction refundTransaction, bool canceled);
+
+        void TestEmailFromService(MailMessage message);
     }
 
     public class NotificationProvider : INotificationProvider
     {
-        
+        private readonly IEmailService _emailService;
+
+        public NotificationProvider(IEmailService emailService)
+        {
+            _emailService = emailService;
+        }
 
         /// <summary>
         /// Sends the confirmation.
@@ -152,12 +160,11 @@ Your Transaction number is: {TransactionNumber}
                                                   subject,
                                                   body);
             message.IsBodyHtml = true;
-            SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
-            
+
 
             try
             {
-                client.Send(message);
+                _emailService.SendEmail(message);
                 transaction.Notified = true;
                 transaction.NotifiedDate = SystemTime.Now();
                 repository.OfType<Transaction>().EnsurePersistent(transaction);
@@ -224,8 +231,7 @@ Your Transaction number is: {TransactionNumber}
                                                   subject,
                                                   body);
             message.IsBodyHtml = true;
-            SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
-            client.Send(message);
+            _emailService.SendEmail(message);
         }
 
         public void SendPaymentResultErrors(string email, PaymentResultParameters touchNetValues, NameValueCollection requestAllParams, string extraBody, PaymentResultType paymentResultType)
@@ -236,7 +242,7 @@ Your Transaction number is: {TransactionNumber}
                 email = "jSylvestre@ucdavis.edu";
                 emailNotFound = true;
             }
-            var client = new SmtpClient("smtp.ucdavis.edu"); //Need for errors/debugging
+
             var message = new MailMessage("automatedemail@caes.ucdavis.edu", email) {IsBodyHtml = true};
 
             var body = new StringBuilder("TouchNet Results<br/><br/>");
@@ -297,7 +303,7 @@ Your Transaction number is: {TransactionNumber}
             {
                 message.Body = message.Body + extraBody;
             }
-            client.Send(message);
+            _emailService.SendEmail(message);
         }
 
         public void SendRefundNotification(User user, Transaction refundTransaction, bool canceled)
@@ -308,7 +314,7 @@ Your Transaction number is: {TransactionNumber}
                 email = "jsylvestre@ucdavis.edu";
             }
 
-            var client = new SmtpClient("smtp.ucdavis.edu"); //Need for errors/debugging
+          
             var message = new MailMessage("automatedemail@caes.ucdavis.edu", email) { IsBodyHtml = true };
             if(canceled)
             {
@@ -364,7 +370,12 @@ Your Transaction number is: {TransactionNumber}
             }
             message.Body = body.ToString();
 
-            client.Send(message);
+            _emailService.SendEmail(message);
+        }
+
+        public void TestEmailFromService(MailMessage message)
+        {
+            _emailService.SendEmail(message);
         }
     }
 

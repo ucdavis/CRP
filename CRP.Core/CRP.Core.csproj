@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstractions\IChartProvider.cs" />
+    <Compile Include="Abstractions\IEmailService.cs" />
     <Compile Include="Abstractions\INotificationProvider.cs" />
     <Compile Include="Abstractions\IPaymentProvider.cs" />
     <Compile Include="Abstractions\IQuestionAnswer.cs" />
