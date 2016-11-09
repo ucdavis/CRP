@@ -98,7 +98,7 @@
 //                                                          "payment confirmed",
 //                                                          "your payment of " + paymentAmount.ToString() +
 //                                                          " has been accepted.");
-//                    SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
+//                    SmtpClient client = new SmtpClient("smtp.ucdavis.edu"); //TODO, Fix if ever implemented
 //                    client.Send(message);
 //                }
 //                else
@@ -107,7 +107,7 @@
 //                                      "payment confirmed",
 //                                      "your payment of " + paymentAmount.ToString() +
 //                                      " has been accepted.");
-//                    SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
+//                    SmtpClient client = new SmtpClient("smtp.ucdavis.edu"); //TODO, Fix if ever implemented
 //                    client.Send(message);
 //                }
 //            }

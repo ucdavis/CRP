@@ -9,6 +9,7 @@ using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using System.Linq;
+using System.Net;
 using Microsoft.Azure;
 
 
@@ -152,8 +153,16 @@ Your Transaction number is: {TransactionNumber}
                                                   subject,
                                                   body);
             message.IsBodyHtml = true;
-            SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
-            
+            var client = new SmtpClient
+            {
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("CrpEmail"), CloudConfigurationManager.GetSetting("EmailToken")),
+                Port = 587,
+                Host = "smtp.ucdavis.edu",
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = true
+            };
+
 
             try
             {
@@ -224,7 +233,15 @@ Your Transaction number is: {TransactionNumber}
                                                   subject,
                                                   body);
             message.IsBodyHtml = true;
-            SmtpClient client = new SmtpClient("smtp.ucdavis.edu");
+            var client = new SmtpClient
+            {
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("CrpEmail"), CloudConfigurationManager.GetSetting("EmailToken")),
+                Port = 587,
+                Host = "smtp.ucdavis.edu",
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = true
+            };
             client.Send(message);
         }
 
@@ -236,7 +253,15 @@ Your Transaction number is: {TransactionNumber}
                 email = "jSylvestre@ucdavis.edu";
                 emailNotFound = true;
             }
-            var client = new SmtpClient("smtp.ucdavis.edu"); //Need for errors/debugging
+            var client = new SmtpClient
+            {
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("CrpEmail"), CloudConfigurationManager.GetSetting("EmailToken")),
+                Port = 587,
+                Host = "smtp.ucdavis.edu",
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = true
+            }; //Need for errors/debugging
             var message = new MailMessage("automatedemail@caes.ucdavis.edu", email) {IsBodyHtml = true};
 
             var body = new StringBuilder("TouchNet Results<br/><br/>");
@@ -308,7 +333,15 @@ Your Transaction number is: {TransactionNumber}
                 email = "jsylvestre@ucdavis.edu";
             }
 
-            var client = new SmtpClient("smtp.ucdavis.edu"); //Need for errors/debugging
+            var client = new SmtpClient
+            {
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(CloudConfigurationManager.GetSetting("CrpEmail"), CloudConfigurationManager.GetSetting("EmailToken")),
+                Port = 587,
+                Host = "smtp.ucdavis.edu",
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = true
+            }; //Need for errors/debugging
             var message = new MailMessage("automatedemail@caes.ucdavis.edu", email) { IsBodyHtml = true };
             if(canceled)
             {
