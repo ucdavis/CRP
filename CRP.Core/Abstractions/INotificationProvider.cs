@@ -246,7 +246,7 @@ Your Transaction number is: {TransactionNumber}
             var message = new MailMessage("automatedemail@caes.ucdavis.edu", email) {IsBodyHtml = true};
 
             var body = new StringBuilder("TouchNet Results<br/><br/>");
-            body.Append(DateTime.Now + "<br/>");
+            body.Append(DateTime.UtcNow.ToPacificTime() + "<br/>");
 
             switch (paymentResultType)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using CRP.Core.Helpers;
 using CRP.Core.Validation.Extensions;
 using UCDArch.Core.DomainModel;
 
@@ -152,7 +153,7 @@ namespace CRP.Core.Domain
         public virtual bool IsAvailabeForUsage()
         {
             // coupon is not active
-            if (!IsActive || (Expiration.HasValue && Expiration.Value < DateTime.Now))
+            if (!IsActive || (Expiration.HasValue && Expiration.Value < DateTime.UtcNow.ToPacificTime()))
             {
                 return false;
             }

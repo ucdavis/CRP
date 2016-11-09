@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using CRP.Core.Helpers;
 
 namespace CRP.Controllers.Helpers
 {
@@ -108,7 +109,7 @@ namespace CRP.Controllers.Helpers
                 var messages = client.EndGetMessages(ar);
 
                 // Insert into the cache
-                HttpRuntime.Cache.Insert(CacheKey, messages, null, DateTime.Now.Add(CacheExpiration), Cache.NoSlidingExpiration);
+                HttpRuntime.Cache.Insert(CacheKey, messages, null, DateTime.UtcNow.ToPacificTime().Add(CacheExpiration), Cache.NoSlidingExpiration);
             }
             finally
             {

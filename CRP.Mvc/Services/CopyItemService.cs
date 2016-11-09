@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
 
@@ -194,13 +195,13 @@ namespace CRP.Services
             rtItem.Description = sourceItem.Description;
             rtItem.CostPerItem = sourceItem.CostPerItem;
             rtItem.QuantityName = sourceItem.QuantityName;
-            if (sourceItem.Expiration != null && (DateTime)sourceItem.Expiration > DateTime.Now)
+            if (sourceItem.Expiration != null && (DateTime)sourceItem.Expiration > DateTime.UtcNow.ToPacificTime())
             {
                 rtItem.Expiration = sourceItem.Expiration;
             }
             else
             {
-                rtItem.Expiration = DateTime.Now.Date.AddMonths(1);
+                rtItem.Expiration = DateTime.UtcNow.ToPacificTime().Date.AddMonths(1);
             }
             rtItem.Image = sourceItem.Image;
             rtItem.Link = sourceItem.Link;

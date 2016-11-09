@@ -5,6 +5,7 @@
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="Microsoft.Web.Mvc" %>
 <%@ Import Namespace="CRP.Controllers.Helpers" %>
+<%@ Import Namespace="CRP.Core.Helpers" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml">
@@ -128,7 +129,7 @@
 <p>
 <strong><%= Html.ActionLink<HomeController>(a => a.Index(), "Home") %></strong> | <strong><%= Html.ActionLink<HomeController>(a => a.AdminHome(), "Admin Tools") %></strong> | <strong><%= Html.ActionLink<HelpController>(a => a.Index(), "Help") %></strong><br />
 <span id="ByLine">Developed By The College Of Agricultural And Environmental Science Dean's Office</span><br />
-Copyright The Regents of the University of California, Davis campus, 2005-<%=DateTime.Now.ToString("yy") %>. All Rights Reserved.</p>
+Copyright The Regents of the University of California, Davis campus, 2005-<%=DateTime.UtcNow.ToPacificTime().ToString("yy") %>. All Rights Reserved.</p>
 <p id="VersionNumber">Version <%=Html.Encode(System.Reflection.Assembly.GetAssembly(ViewContext.Controller.GetType()).GetName().Version.ToString())%></p>
 </div>
 </div>

@@ -6,6 +6,7 @@ using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using MvcContrib;
 using NPOI.HSSF.UserModel;
@@ -40,7 +41,7 @@ namespace CRP.Controllers
 
             var viewModel = ReportViewModel.Create(Repository, itemReport, item);
 
-            var fileName = string.Format("{0}-{1}.xls", itemReport.Name.Replace(" ", string.Empty), DateTime.Now.Date.ToString("MMddyyyy"));
+            var fileName = string.Format("{0}-{1}.xls", itemReport.Name.Replace(" ", string.Empty), DateTime.UtcNow.ToPacificTime().Date.ToString("MMddyyyy"));
 
             try
             {
