@@ -26,6 +26,7 @@ namespace CRP.Mvc
             container.Register(Component.For<IAccessControlService>().ImplementedBy<AccessControlService>().Named("AccessControlService"));
             container.Register(Component.For<ICouponService>().ImplementedBy<CouponService>().Named("CouponService"));
             container.Register(Component.For<ICopyItemService>().ImplementedBy<CopyItemService>().Named("CopyItemService"));
+            container.Register(Component.For<IEmailService>().ImplementedBy<EmailService>().Named("emailService"));
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)
