@@ -9,6 +9,7 @@ using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Core.Abstractions;
 using Microsoft.Azure;
+using Serilog;
 
 namespace CRP.Mvc.Controllers
 {
@@ -23,7 +24,7 @@ namespace CRP.Mvc.Controllers
         public ActionResult TestEmail()
         {
 
-
+            Log.Information("Testing Log. About to send test email");
             var message2 = new MailMessage
             {
                 From = new MailAddress(CloudConfigurationManager.GetSetting("NoReplyEmail"), "Online Registration (Do Not Reply)"),
@@ -35,7 +36,7 @@ namespace CRP.Mvc.Controllers
             message2.To.Add(CloudConfigurationManager.GetSetting("TestSendEmail"));
 
             _notificationProvider.TestEmailFromService(message2);
-
+            Log.Information("Testing Log. Sent test email");
             return null;
         }
     }
