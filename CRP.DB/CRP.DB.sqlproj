@@ -189,6 +189,7 @@
     <None Include="Change Scripts\DeleteItemWithNoTransactions.sql">
       <SubType>NotInBuild</SubType>
     </None>
+    <None Include="Change Scripts\UpdateViewsForCatbert.sql" />
   </ItemGroup>
   <ItemGroup>
     <BuildContributorArgument Include="OutDir=$(OutDir)" />
