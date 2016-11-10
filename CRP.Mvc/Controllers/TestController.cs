@@ -39,5 +39,10 @@ namespace CRP.Mvc.Controllers
             Log.Information("Testing Log. Sent test email");
             return null;
         }
+
+        public ActionResult TestException()
+        {
+            throw new Exception("Har Har har. We tested it.");
+        }
     }
 }
