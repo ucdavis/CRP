@@ -134,7 +134,7 @@ Copyright The Regents of the University of California, Davis campus, 2005-<%=Dat
 </div>
 </div>
 
-<% if (HttpContext.Current.User.IsInRole(RoleNames.Admin) || HttpContext.Current.User.IsInRole(RoleNames.User)) { %>
+<%--<% if (HttpContext.Current.User.IsInRole(RoleNames.Admin) || HttpContext.Current.User.IsInRole(RoleNames.User)) { %>
 <script type="text/javascript">
     var uvOptions = {};
     (function () {
@@ -143,6 +143,6 @@ Copyright The Regents of the University of California, Davis campus, 2005-<%=Dat
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
     })();
 </script>
-<% } %>
+<% } %>--%>
 </body>
 </html>
