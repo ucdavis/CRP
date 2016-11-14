@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using Serilog.Exceptions.Destructurers;
 using SerilogWeb.Classic.Enrichers;
 
 namespace CRP.Mvc
@@ -18,6 +19,7 @@ namespace CRP.Mvc
                 .WriteTo.Stackify()
                 .Enrich.With<HttpSessionIdEnricher>()
                 .Enrich.With<UserNameEnricher>()
+                .Enrich.With<ExceptionEnricher>()
                 .Enrich.FromLogContext()
                 .CreateLogger();
 
