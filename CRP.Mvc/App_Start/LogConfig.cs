@@ -1,4 +1,5 @@
-﻿using FluentNHibernate.Utils;
+﻿using System.Web;
+using FluentNHibernate.Utils;
 using Serilog;
 using Serilog.Exceptions.Destructurers;
 using SerilogWeb.Classic.Enrichers;
@@ -18,7 +19,7 @@ namespace CRP.Mvc
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Stackify()
-                .Filter.ByExcluding(a => a.Exception != null && a.Exception.Message.Contains("Server cannot modify cookies after HTTP headers have been sent"))
+                .Filter.ByExcluding(a => a.Exception != null && a.Exception.GetBaseException() is HttpUnhandledException)
                 .Enrich.With<HttpSessionIdEnricher>()
                 .Enrich.With<UserNameEnricher>()
                 .Enrich.With<ExceptionEnricher>()
