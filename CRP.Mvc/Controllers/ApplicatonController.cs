@@ -8,6 +8,6 @@ using UCDArch.Web.Controller;
 
 namespace CRP.Controllers
 {
-    [LocServiceMessage("ConferenceRegistrationAndPayments", ViewDataKey = "ServiceMessages", MessageServiceAppSettingsKey = "MessageServer")]
+    //[LocServiceMessage("ConferenceRegistrationAndPayments", ViewDataKey = "ServiceMessages", MessageServiceAppSettingsKey = "MessageServer")]
     public class ApplicationController : SuperController { }
 }
