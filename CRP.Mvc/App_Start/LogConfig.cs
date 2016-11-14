@@ -19,7 +19,7 @@ namespace CRP.Mvc
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Stackify()
-                .Filter.ByExcluding(a => a.Exception != null && (a.Exception.GetBaseException() is HttpUnhandledException || a.Exception.GetBaseException() is HttpException))
+                .Filter.ByExcluding(a => a.Exception != null && a.Exception.GetBaseException() is HttpException)
                 .Enrich.With<HttpSessionIdEnricher>()
                 .Enrich.With<UserNameEnricher>()
                 .Enrich.With<ExceptionEnricher>()
