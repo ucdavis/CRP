@@ -40,7 +40,7 @@ namespace CRP.Mvc.Controllers
             return null;
         }
 
-        public ActionResult TestException()
+        public ActionResult TestException(int id = 0)
         {
             throw new Exception("Har Har har. We tested it.");
         }
