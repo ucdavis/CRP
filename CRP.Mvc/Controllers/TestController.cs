@@ -43,7 +43,7 @@ namespace CRP.Mvc.Controllers
         public ActionResult TestException(int id = 0)
         {
             Log.Information("About to hit exception");
-            throw new Exception("Har Har har. We tested it.");
+            throw new NotImplementedException("Har Har har. We tested it.");
             Log.Information("Hit exception");
         }
     }
