@@ -10,11 +10,11 @@
         <%= Html.Encode(Page.User.Identity.Name) %>
     <% } %>
     
-    <% if (Request.IsOpenId()) { %> <%= Html.ActionLink<AccountController>(a => a.OpenIdAccount(), "My Account") %> <% } %>
+    <%--<% if (Request.IsOpenId()) { %> <%= Html.ActionLink<AccountController>(a => a.OpenIdAccount(), "My Account") %> <% } %>--%>
     
      [<%= Html.ActionLink<AccountController>(a => a.LogOut(), "Logout") %>]
      </li>
 <% } %>
-<% else { %>
+<%--<% else { %>
     <li><%= Html.ActionLink<AccountController>(a => a.OpenIdAccount(), "My Account") %> </li>
-<% } %>
+<% } %>--%>
