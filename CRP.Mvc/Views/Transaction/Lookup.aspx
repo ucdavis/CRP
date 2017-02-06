@@ -26,11 +26,11 @@
         </ul>
     <% } %>
     
-    <ul>
+<%--    <ul>
     <li>If you logged in using an openid account (such as google or yahoo accounts) please login to view your order history.
         <%= Html.ActionLink<AccountController>(a => a.OpenIdAccount(), "Here", new {style="Color:Blue"}) %>
     </li>
-    </ul>
+    </ul>--%>
     <% if (Model.Transaction != null) { %>
         <ul>
         <li>
