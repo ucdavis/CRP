@@ -788,6 +788,7 @@
     <Content Include="Content\jquery.gPositions.css" />
     <Content Include="Content\openid.css" />
     <Content Include="Content\print.css" />
+    <Content Include="Content\public-main.css" />
     <Content Include="Content\quicksandstylesheet.css" />
     <Content Include="Content\Site_old.css" />
     <Content Include="Content\telerik.common.css" />
