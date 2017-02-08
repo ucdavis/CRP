@@ -5,5 +5,10 @@
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
-<h2>IndexNew</h2>
-
+<div class="homepage bg-second">
+    <div class="boundary">
+        <h2>Search Results</h2>
+        <p>@Html.ActionLink("View All", "IndexNew", "Home")</p>
+        @Html.Partial("_ItemBrowseNew", Model.Items)
+    </div>
+</div>
