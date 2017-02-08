@@ -50,26 +50,55 @@
             <div class="header_item"><a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt="UC Davis"></a></div>
         </div>
     </div>
-    
-
     <div class="header_contents">
-        <div class="logo_wrapper">
-            @*<a href="/"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt=""></a>*@
+        <div class="header_item">
+            <!-- <h1><a href="/">Registration</a></h1> -->
+            <a href="/"><img src="@Url.Content("~/Images/Media/registrationlogo.svg")" alt="UC Davis CAES logo"></a>
         </div>
-        <div class="login_contents">
+        <div class="header_item">
+            <a href="http://www.caes.ucdavis.edu/"><img src="@Url.Content("~/Images/Media/caeslogo.svg")" alt="UC Davis CAES logo"></a>
+        </div>
+        <div class="login_contents"> <!-- May not want or need this -->
             @RenderSection("NavButtons", required: false)
         </div>
     </div>
+    
 </header>
     <div class="body-content">
         @RenderBody()
 
-        <footer id="footer">
+        <footer>
             <div class="footer_contents">
-                <hr />
-                
+                <div class="foot_top">
+                    <!-- <ul class="footer-list no-bullet">
+                    <li><a href="/">UC Davis Commencement</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/colophon">Site Information</a></li>
+                </ul> -->
+                </div>
+                <div class="foot_bottom">
+                    <ul class="footer-list no-bullet">
+                        <li>
+                            &copy; Copyright 2005-
+                            <script language="JavaScript" type="text/javascript">
+                                now = new Date;
+                                theYear = now.getYear();
+                                if (theYear < 1900)
+                                    theYear = theYear + 1900;
+                                document.write(theYear);
+                            </script>
+                            The Regents of the University of California, Davis campus. All rights reserved.
+                        </li>
+                        <!-- <li><a href="http://kb.sparknearby.com/legal">Contact</a></li>
+                    <li><a href="/posts/all">Recent</a></li> -->
+                    </ul>
+                    <ul class="footer-list no-bullet float-right">
+                        <li>@Html.ActionLink("Admin Home", "AdminHome", "Home")</li>
+                        @*<li>•</li>
+                        <li><a href="#">Help</a></li>*@ <!-- Don't think we want a link to help on the public side of things.-->
+                    </ul>
+                </div>
             </div>
-
         </footer>
     </div>
 

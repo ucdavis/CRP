@@ -828,8 +828,10 @@
     <Content Include="Images\Media\120-icon.jpg" />
     <Content Include="Images\Media\152-icon.jpg" />
     <Content Include="Images\Media\76-icon.jpg" />
+    <Content Include="Images\Media\caeslogo.svg" />
     <Content Include="Images\Media\favicon.ico" />
     <Content Include="Images\Media\thumbnail.jpg" />
+    <Content Include="Images\Media\ucdavislogo.svg" />
     <Content Include="Images\minus.png" />
     <Content Include="Images\myopenid.ico" />
     <Content Include="Images\openid-inputicon.gif" />
