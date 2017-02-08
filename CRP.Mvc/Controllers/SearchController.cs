@@ -55,5 +55,33 @@ namespace CRP.Controllers
 
             return View(viewModel);
         }
+
+        public ActionResult IndexNew(string searchTerm)
+        {
+            var viewModel = SearchViewModel.Create(Repository);
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                var itemList = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false && a.Available && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().AddDays(-15)).AsQueryable(); //.OrderByDescending(a => a.Expiration >= DateTime.UtcNow.ToPacificTime()).ThenBy(a => a.Expiration);
+                var unexpiredItems = itemList
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
+                    .OrderBy(a => a.Expiration)
+                    .ToList();
+
+                var expiredItems = itemList
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().AddDays(-15).Date && a.Expiration < DateTime.UtcNow.ToPacificTime().Date)
+                    .OrderByDescending(a => a.Expiration)
+                    .ToList();
+
+                viewModel.Items = new List<Item>(unexpiredItems);
+                foreach (var expiredItem in expiredItems)
+                {
+                    viewModel.Items.Add(expiredItem);
+                }
+            }
+
+
+            return View(viewModel);
+        }
     }
 }
