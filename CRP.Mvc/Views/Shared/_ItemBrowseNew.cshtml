@@ -21,7 +21,7 @@
                     @foreach (var ep in item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
                     {
                         <p>
-                            <strong>@ep.ExtendedProperty.Name</strong>
+                            <strong>@ep.ExtendedProperty.Name:</strong>
                             @Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
                                 ? ep.Answer : Convert.ToDateTime(ep.Answer).ToString("D"))
                         </p>
