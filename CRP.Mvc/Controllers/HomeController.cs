@@ -20,6 +20,14 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        public ActionResult IndexNew()
+        {
+            //return View();
+
+            var viewModel = BrowseItemsViewModel.Create(Repository);
+            return View(viewModel);
+        }
+
         [AnyoneWithRoleAttribute]
         public ActionResult AdminHome()
         {

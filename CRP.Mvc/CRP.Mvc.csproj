@@ -1271,6 +1271,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Shared\_PublicLayout.cshtml" />
+    <Content Include="Views\Home\IndexNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,1 +1,44 @@
-﻿
+﻿@using CRP.Core.Domain
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Registration</title>
+    <script src="https://use.typekit.net/vqy0brq.js"></script>
+    <script>try{Typekit.load();}catch(e){}</script>
+    @Styles.Render("~/Content/public-css")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/fontawesome")
+    @RenderSection("AdditionalStyles", required: false)
+</head>
+<body>
+
+    <header>
+        <div class="header_contents">
+            <div class="logo_wrapper">
+                <a href="/"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt=""></a>
+            </div>
+            <div class="login_contents">
+                @RenderSection("NavButtons", required: false)
+            </div>
+        </div>
+    </header>
+    <div class="body-content">
+        @RenderBody()
+
+        <footer id="footer">
+            <div class="footer_contents">
+                <hr />
+                
+            </div>
+
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("AdditionalScripts", required: false)
+</body>
+</html>
