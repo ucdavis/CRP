@@ -48,7 +48,18 @@
         <div class="topbanner">
             <div class="header_item">
             </div>
-            <div class="header_item"><a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt="UC Davis"></a></div>
+            <div class="header_item">
+                @using (Html.BeginForm("IndexNew", "Search"))
+                {
+                    @Html.AntiForgeryToken()
+                    <div id="search_box" class="search_box">
+                        @Html.TextBox("searchTerm", string.Empty, new { @maxlength = "20" })
+                        @Html.SubmitButton("Submit", "Search")
+                        <a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt="UC Davis"></a>
+                    </div>
+                }
+
+            </div>
         </div>
     </div>
     <div class="header_contents">
@@ -56,15 +67,8 @@
             <!-- <h1><a href="/">Registration</a></h1> -->
             <a href="/"><img src="@Url.Content("~/Images/Media/registrationlogo.svg")" alt="UC Davis CAES logo"></a>
         </div>
-        <span class="clear" />
-        @using (Html.BeginForm("IndexNew", "Search"))
-        {
-            @Html.AntiForgeryToken()
-            <p id = "search_box" class="search_box" >
-            @Html.TextBox("searchTerm", string.Empty, new {@maxlength = "20"})
-            @Html.SubmitButton("Submit", "Search") 
-            </p>
-        }
+
+
         <div class="header_item">
             <a href="http://www.caes.ucdavis.edu/"><img src="@Url.Content("~/Images/Media/caeslogo.svg")" alt="UC Davis CAES logo"></a>
         </div>
