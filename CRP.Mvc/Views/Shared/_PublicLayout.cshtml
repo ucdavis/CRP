@@ -2,11 +2,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Registration</title>
+    <!-- le Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="subject" content="UC Davis Starter template for CAES CRU and anyone else">
+    <meta name="classification" content="UC Davis Starter template for CAES CRU and anyone else">
+    <meta name="author" content="">
+    <meta name="designer" content="">
+    <meta name="reply-to" content="">
+    <meta name="theme-color" content="#">
+    <link rel="image_src" href="@Url.Content("~/Images/Media/thumbnail.jpg")" />
+    <meta property="og:image" content="@Url.Content("~/Images/Media/thumbnail.jpg")">
+    <link rel="shortcut icon" href="@Url.Content("~/Images/Media/favicon.ico")">
+
+    <!-- Typekit -->
     <script src="https://use.typekit.net/vqy0brq.js"></script>
-    <script>try{Typekit.load();}catch(e){}</script>
+    <script>
+        try {
+            Typekit.load();
+        } catch (e) {}
+    </script>
+
+    <title>UC Davis Registration</title>
+    <meta name="description" content="This is a Jekyll Starter template developed by cydoval.com.">
+    
+    <!-- le Apple -->
+    <link rel="apple-touch-icon" href="@Url.Content("~/Images/Media/thumbnail.jpg")">
+    <link rel="apple-touch-icon" sizes="76x76" href="@Url.Content("~/Images/Media/76-icon.jpg")">
+    <link rel="apple-touch-icon" sizes="120x120" href="@Url.Content("~/Images/Media/120-icon.jpg")">
+    <link rel="apple-touch-icon" sizes="152x152" href="@Url.Content("~/Images/Media/156-icon.jpg")">
+    
+    
     @Styles.Render("~/Content/public-css")
 
     @Scripts.Render("~/bundles/modernizr")
@@ -18,7 +45,7 @@
     <header>
         <div class="header_contents">
             <div class="logo_wrapper">
-                <a href="/"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt=""></a>
+                @*<a href="/"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt=""></a>*@
             </div>
             <div class="login_contents">
                 @RenderSection("NavButtons", required: false)
