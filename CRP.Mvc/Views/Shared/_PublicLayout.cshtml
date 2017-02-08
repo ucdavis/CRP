@@ -42,16 +42,25 @@
 </head>
 <body>
 
-    <header>
-        <div class="header_contents">
-            <div class="logo_wrapper">
-                @*<a href="/"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt=""></a>*@
+<header>
+    <div class="bleed">
+        <div class="topbanner">
+            <div class="header_item">
             </div>
-            <div class="login_contents">
-                @RenderSection("NavButtons", required: false)
-            </div>
+            <div class="header_item"><a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt="UC Davis"></a></div>
         </div>
-    </header>
+    </div>
+    
+
+    <div class="header_contents">
+        <div class="logo_wrapper">
+            @*<a href="/"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt=""></a>*@
+        </div>
+        <div class="login_contents">
+            @RenderSection("NavButtons", required: false)
+        </div>
+    </div>
+</header>
     <div class="body-content">
         @RenderBody()
 
