@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "UC Davis Registration";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";    
 }
 
 
@@ -20,9 +20,10 @@
             <div>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
             <div id="map" style="margin: 0px 0px 20px;">
                 <div class="gp-map" style="height: 450px; width: 450px;"></div>
-                @foreach (var a in Model.Item.MapPins)
+
+                @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
                 {
-                    <div class="gp-coordinate @(a.IsPrimary ? " gp-default" : string.Empty) " data-lat="@a.Latitude" data-lng="a.Longitude">
+                    <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude" >
                         <dt class="gp-name">@Html.Encode(a.Title)</dt>
                         @if (!string.IsNullOrWhiteSpace(a.Description))
                         {
@@ -38,7 +39,7 @@
 @section AdditionalScripts
 {
     <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=@CloudConfigurationManager.GetSetting("MapsApi")" type="text/javascript"></script>
-    
+    <link href="@Url.Content("~/Content/jquery.gPositions.css")" rel="Stylesheet" type="text/css" />
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.gPositions.js")"></script>
 
     <script type="text/javascript">
@@ -49,8 +50,3 @@
         });
     </script>
 }
-@section AdditionalStyles
-{
-    <link href="@Url.Content("~/Content/jquery.gPositions.css")" rel="Stylesheet" type="text/css" />
-}
-
