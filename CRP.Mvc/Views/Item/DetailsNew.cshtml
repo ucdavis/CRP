@@ -1,0 +1,54 @@
+﻿@using Microsoft.Azure
+@model CRP.Controllers.ViewModels.ItemDetailViewModel
+
+@{
+    ViewBag.Title = "UC Davis Registration";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+
+
+<div class="main">
+<div class="eventbanner">
+    <div class="eventbanner-image">
+        <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="x" />
+    </div>
+    <div class="eventbanner-map">
+        @if (Model.HasMapPins)
+        {
+            <div id="map" style="margin: 0px 0px 20px;">
+                <div class="gp-map" style="height: 450px; width: 450px;"></div>
+                @foreach (var a in Model.Item.MapPins)
+                {
+                    <div class="gp-coordinate @(a.IsPrimary ? " gp-default" : string.Empty) " data-lat="@a.Latitude" data-lng="a.Longitude">
+                        <dt class="gp-name">@Html.Encode(a.Title)</dt>
+                        @if (!string.IsNullOrWhiteSpace(a.Description))
+                        {
+                            <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section AdditionalScripts
+{
+    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=@CloudConfigurationManager.GetSetting(" MapsApi")" type="text/javascript"></script>
+    
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.gPositions.js")"></script>
+
+    <script type="text/javascript">
+            $(function () {
+                $("#map").gPositions({ helpIcon: '<%= Url.Content("~/Images/question_blue.png") %>' });
+                $(".gp-sidecontainer-title img").attr("title", "");
+                $(".gp-sidecontainer-title img").bt("To view Locations on the map, click on the tabs below", { positions: 'top' });
+            });
+    </script>
+}
+@section AdditionalStyles
+{
+    <link href="@Url.Content("~/Content/jquery.gPositions.css")" rel="Stylesheet" type="text/css" />
+}
+

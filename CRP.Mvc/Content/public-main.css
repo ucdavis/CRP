@@ -189,7 +189,7 @@ body {
   /* IE6-9 */ }
 
 header .topbanner {
-  background-image: url("../media/gunrock_banner_final.svg");
+  background-image: url("../Images/Media/gunrock_banner_final.svg");
   background-position: center;
   background-repeat: no-repeat;
   display: flex;
