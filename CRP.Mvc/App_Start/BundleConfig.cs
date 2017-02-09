@@ -23,9 +23,13 @@ namespace CRP.Mvc
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/tip-and-water").Include(
+                "~/Scripts/jquery.bt.min.js",
+                "~/Scripts/jquery.watermark.min.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                "~/Content/bootstrap.css",
+                "~/Content/site.css"));
             bundles.Add(new StyleBundle("~/Content/public-css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/font-awesome.css",

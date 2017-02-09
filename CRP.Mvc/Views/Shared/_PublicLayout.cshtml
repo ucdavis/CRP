@@ -114,10 +114,17 @@
         </div>
     </footer>
 </div>
-  
+    @*<script src="https://www.google.com/jsapi" type="text/javascript"></script>*@  
+
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
-<script src="@Url.Content("~/Scripts/jquery.bt.min.js")" type="text/javascript"></script>
+@Scripts.Render("~/bundles/tip-and-water")
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("input#searchTerm").watermark('Search     ', { className: 'watermark' });
+    });
+</script>
 @RenderSection("AdditionalScripts", required: false)
 </body>
 </html>
