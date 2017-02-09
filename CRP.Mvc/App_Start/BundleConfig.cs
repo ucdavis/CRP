@@ -28,6 +28,7 @@ namespace CRP.Mvc
                       "~/Content/site.css"));
             bundles.Add(new StyleBundle("~/Content/public-css").Include(
                 "~/Content/bootstrap.css",
+                "~/Content/font-awesome.css",
                 "~/Content/public-main.css"));
         }
     }
