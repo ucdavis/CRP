@@ -829,12 +829,16 @@
     <Content Include="Images\Media\152-icon.jpg" />
     <Content Include="Images\Media\76-icon.jpg" />
     <Content Include="Images\Media\caeslogo.svg" />
+    <Content Include="Images\Media\date_icon.svg" />
     <Content Include="Images\Media\favicon.ico" />
     <Content Include="Images\Media\gunrock_banner.svg" />
     <Content Include="Images\Media\gunrock_banner_final.svg" />
     <Content Include="Images\Media\gunrock_smaller.svg" />
+    <Content Include="Images\Media\location_icon.svg" />
+    <Content Include="Images\Media\payment_icon.svg" />
     <Content Include="Images\Media\registrationlogo.svg" />
     <Content Include="Images\Media\thumbnail.jpg" />
+    <Content Include="Images\Media\time_icon.svg" />
     <Content Include="Images\Media\ucdavislogo.svg" />
     <Content Include="Images\minus.png" />
     <Content Include="Images\myopenid.ico" />

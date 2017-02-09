@@ -1,4 +1,5 @@
-﻿@using Microsoft.Azure
+﻿@using CRP.Controllers.Helpers
+@using Microsoft.Azure
 @model CRP.Controllers.ViewModels.ItemDetailViewModel
 
 @{
@@ -9,37 +10,123 @@
 
 
 <div class="main">
-<div class="eventbanner">
-    <div class="eventbanner-image">
-        <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="x" />
-    </div>
-    <div class="eventbanner-map">
-        @if (Model.HasMapPins)
-        {
-            <div>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
-            <div>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
-            <div id="map" style="margin: 0px 0px 20px;">
-                <div class="gp-map" style="height: 450px; width: 450px;"></div>
+    <div class="eventbanner">
+        <div class="eventbanner-image">
+            <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="x" />
+        </div>
+        <div class="eventbanner-map">
+            @if (Model.HasMapPins)
+            {
+                <div>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
+                <div>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
+                <div id="map" style="margin: 0px 0px 20px;">
+                    <div class="gp-map" style="height: 450px; width: 450px;"></div>
 
-                @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
-                {
-                    <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude" >
-                        <dt class="gp-name">@Html.Encode(a.Title)</dt>
-                        @if (!string.IsNullOrWhiteSpace(a.Description))
-                        {
-                            <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
-                        }
+                    @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
+                    {
+                        <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
+                            <dt class="gp-name">@Html.Encode(a.Title)</dt>
+                            @if (!string.IsNullOrWhiteSpace(a.Description))
+                            {
+                                <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <div class="content_wrapper boundary">
+        <article>
+            <h1>@Model.Item.Name</h1>
+            @Html.Raw(Html.HtmlEncode(Model.Item.Description))
+        </article>
+        <aside>
+            @foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
+            {
+                <div class="eventinfo-item">
+                    <div class="eventinfo-icon">
+                        <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
                     </div>
-                }
+                    <div class="eventinfo-text">
+                        <h4>@Html.Encode(ep.ExtendedProperty.Name):</h4>
+                        <p>@Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box" ? ep.Answer : Convert.ToDateTime(ep.Answer).ToString("D"))</p>
+                    </div>
+                </div>
+            }
+            <div class="eventinfo-item">
+                <div class="eventinfo-icon">
+                    <img src="@Url.Content("~/Images/Media/payment_icon.svg")" alt="payment icon">
+                </div>
+                <div class="eventinfo-text">
+                    <h4>Price Per @Html.Encode(Model.Item.QuantityName):</h4>
+                    <p>@Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))</p>
+                </div>
+            </div><div class="eventinfo-item">
+                <div class="eventinfo-icon">
+                    <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
+                </div>
+                <div class="eventinfo-text">
+                    <h4>Last day to register online:</h4>
+                    <p>@Html.Encode(String.Format("{0:D}", Model.Item.Expiration))</p>
+                </div>
             </div>
-        }
+
+                    @*<div class="eventinfo-item">
+                        <div class="eventinfo-icon">
+                            <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
+                        </div>
+                        <div class="eventinfo-text">
+                            <h4>Date</h4>
+                            <p>Thurs Dec. 27th to Mon Dec. 30th</p>
+                        </div>
+                    </div>
+                    <div class="eventinfo-item">
+                        <div class="eventinfo-icon">
+                            <img src="@Url.Content("~/Images/Media/time_icon.svg")" alt="Clock icon">
+                        </div>
+                        <div class="eventinfo-text">
+                            <h4>Time</h4>
+                            <p>8:00am - 5:00pm</p>
+                        </div>
+                    </div>
+                    <div class="eventinfo-item">
+                        <div class="eventinfo-icon">
+                            <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
+                        </div>
+                        <div class="eventinfo-text">
+                            <h4>Location</h4>
+                            <p>
+                                One Shields Avenue,<br>
+                                Davis, CA 95616 <br>
+                                <a href="#">View on Map</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="eventinfo-item">
+                        <div class="eventinfo-icon">
+                            <img src="@Url.Content("~/Images/Media/payment_icon.svg")" alt="payment icon">
+                        </div>
+                        <div class="eventinfo-text">
+                            <h4>Price</h4>
+                            <p>
+                                $85.00 Senior <br>
+                                $95.00 General
+                            </p>
+                        </div>
+                    </div>*@
+                    <div class="registerbtn">
+                        <a class="btn btn-register" href="/register">Register</a>
+                        <p class="discreet t-center">Register by Dec. 20th</p>
+                    </div>
+</aside>
     </div>
 </div>
 
 @section AdditionalScripts
 {
     <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=@CloudConfigurationManager.GetSetting("MapsApi")" type="text/javascript"></script>
-    <link href="@Url.Content("~/Content/jquery.gPositions.css")" rel="Stylesheet" type="text/css" />
+    
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.gPositions.js")"></script>
 
     <script type="text/javascript">
@@ -49,4 +136,8 @@
             $(".gp-sidecontainer-title img").bt("To view Locations on the map, click on the tabs below", { positions: 'top' });
         });
     </script>
+}
+@section AdditionalStyles
+{
+    <link href="@Url.Content("~/Content/jquery.gPositions.css")" rel="Stylesheet" type="text/css" />
 }
