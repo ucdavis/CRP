@@ -52,7 +52,17 @@
             {
                 <div class="eventinfo-item">
                     <div class="eventinfo-icon">
-                        <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
+                        @if (ep.ExtendedProperty.QuestionType.Name == "Date")
+                        {
+                            <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
+                        }
+                        else
+                        {
+                            if (ep.ExtendedProperty.Name.ToLower().Contains("location"))
+                            {
+                                <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
+                            }                            
+                        }
                     </div>
                     <div class="eventinfo-text">
                         <h4>@Html.Encode(ep.ExtendedProperty.Name):</h4>
