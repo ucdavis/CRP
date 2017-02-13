@@ -12,7 +12,7 @@ namespace CRP.Mvc
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryCurrent").Include(
-            "~/Scripts/jquery-1.10.2.js"));
+                        "~/Scripts/jquery-1.10.2.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -29,6 +29,12 @@ namespace CRP.Mvc
             bundles.Add(new ScriptBundle("~/bundles/tip-and-water").Include(
                 "~/Scripts/jquery.bt.min.js",
                 "~/Scripts/jquery.watermark.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/qtip").Include(
+                "~/Scripts/qTip/jquery.qtip.min.js"));
+
+            bundles.Add(new StyleBundle("~/Content/qtipcss").Include(
+                "~/Scripts/qTip/jquery.qtip.min.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
