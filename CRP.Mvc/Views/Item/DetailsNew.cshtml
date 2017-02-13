@@ -1,4 +1,5 @@
 ﻿@using CRP.Controllers.Helpers
+@using CRP.Core.Helpers
 @using Microsoft.Azure
 @model CRP.Controllers.ViewModels.ItemDetailViewModel
 
@@ -40,6 +41,11 @@
         <article>
             <h1>@Model.Item.Name</h1>
             @Html.Raw(Html.HtmlEncode(Model.Item.Description))
+            @if (!string.IsNullOrEmpty(Model.Item.Link))
+            {
+                <h2>Link:</h2>
+                <a target="_blank" href="@Html.Encode(Model.Item.Link)">@Html.Encode(Model.Item.Link)</a>
+            }
         </article>
         <aside>
             @foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
@@ -72,54 +78,15 @@
                 </div>
             </div>
 
-                    @*<div class="eventinfo-item">
-                        <div class="eventinfo-icon">
-                            <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
-                        </div>
-                        <div class="eventinfo-text">
-                            <h4>Date</h4>
-                            <p>Thurs Dec. 27th to Mon Dec. 30th</p>
-                        </div>
-                    </div>
-                    <div class="eventinfo-item">
-                        <div class="eventinfo-icon">
-                            <img src="@Url.Content("~/Images/Media/time_icon.svg")" alt="Clock icon">
-                        </div>
-                        <div class="eventinfo-text">
-                            <h4>Time</h4>
-                            <p>8:00am - 5:00pm</p>
-                        </div>
-                    </div>
-                    <div class="eventinfo-item">
-                        <div class="eventinfo-icon">
-                            <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
-                        </div>
-                        <div class="eventinfo-text">
-                            <h4>Location</h4>
-                            <p>
-                                One Shields Avenue,<br>
-                                Davis, CA 95616 <br>
-                                <a href="#">View on Map</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="eventinfo-item">
-                        <div class="eventinfo-icon">
-                            <img src="@Url.Content("~/Images/Media/payment_icon.svg")" alt="payment icon">
-                        </div>
-                        <div class="eventinfo-text">
-                            <h4>Price</h4>
-                            <p>
-                                $85.00 Senior <br>
-                                $95.00 General
-                            </p>
-                        </div>
-                    </div>*@
-                    <div class="registerbtn">
-                        <a class="btn btn-register" href="/register">Register</a>
-                        <p class="discreet t-center">Register by Dec. 20th</p>
-                    </div>
-</aside>
+            @if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
+            {
+                <div class="registerbtn">
+                    <a class="btn btn-register" href="@Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} )">Register</a>
+                    <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
+                </div>
+            }
+
+        </aside>
     </div>
 </div>
 

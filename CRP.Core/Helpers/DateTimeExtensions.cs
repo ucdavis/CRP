@@ -25,6 +25,21 @@ namespace CRP.Core.Helpers
             return TimeZoneInfo.ConvertTimeToUtc(dateTime, Pacific);
         }
 
+        public static string DaySuffix(this DateTime? dateTime)
+        {
+            return dateTime.HasValue ? dateTime.Value.DaySuffix() : string.Empty;
+        }
+
+        public static string DaySuffix(this DateTime dateTime)
+        {
+            return (dateTime.Day % 10 == 1 && dateTime.Day != 11)
+                ? "st"
+                : (dateTime.Day % 10 == 2 && dateTime.Day != 12)
+                    ? "nd"
+                    : (dateTime.Day % 10 == 3 && dateTime.Day != 13)
+                        ? "rd"
+                        : "th";
+        }
         /// <summary>
         /// Compares the date against 1 (after) or 2 (between) dates.
         /// </summary>
