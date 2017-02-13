@@ -27,7 +27,7 @@ namespace CRP.Mvc
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/tip-and-water").Include(
-                "~/Scripts/jquery.bt.min.js",
+                //"~/Scripts/jquery.bt.min.js",
                 "~/Scripts/jquery.watermark.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/qtip").Include(

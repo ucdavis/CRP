@@ -104,11 +104,11 @@
 {
     @Scripts.Render("~/bundles/qtip")
     <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=@CloudConfigurationManager.GetSetting("MapsApi")" type="text/javascript"></script>
-    
+
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.gPositions.js")"></script>
 
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             $("#map").gPositions({ helpIcon: '@Url.Content("~/Images/question_blue.png")' });
             $(".gp-sidecontainer-title img").attr("title", "");
             //$(".gp-sidecontainer-title img").bt("To view Locations on the map, click on the tabs below", { positions: 'top' });
@@ -119,6 +119,9 @@
                 position: {
                     my: 'bottom left',
                     at: 'right top'
+                },
+                style: {
+                    classes: 'qtip-bootstrap'
                 }
             });
         });
