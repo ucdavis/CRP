@@ -1295,6 +1295,7 @@
     <Content Include="Views\Shared\_ItemBrowseNew.cshtml" />
     <Content Include="Views\Item\DetailsNew.cshtml" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
+    <Content Include="Views\Item\MapNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
