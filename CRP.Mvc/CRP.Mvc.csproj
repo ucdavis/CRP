@@ -1279,7 +1279,9 @@
     <Content Include="Views\Transaction\Lookup.aspx" />
     <Content Include="Views\Transaction\PaymentResult.aspx" />
     <Content Include="Views\Transaction\Refund.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -1296,6 +1298,7 @@
     <Content Include="Views\Item\DetailsNew.cshtml" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Item\MapNew.cshtml" />
+    <Content Include="Views\Item\MapDirectionsNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

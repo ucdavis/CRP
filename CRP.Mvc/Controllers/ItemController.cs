@@ -172,6 +172,20 @@ namespace CRP.Controllers
             var viewModel = BigMapViewModel.Create(item);
             viewModel.UsePins = usePins;
             return View(viewModel);
-        } 
+        }
+
+        public ActionResult MapDirectionsNew(int id, bool usePins)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(id);
+
+            if (item == null || !item.Available)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+            var viewModel = BigMapViewModel.Create(item);
+            viewModel.UsePins = usePins;
+            return View(viewModel);
+        }
     }
 }
