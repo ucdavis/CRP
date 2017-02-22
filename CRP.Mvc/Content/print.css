@@ -17,3 +17,8 @@ header {
     display: none;
 }
 
+@media print {
+  img {
+    max-width: none !important;
+  }
+}
