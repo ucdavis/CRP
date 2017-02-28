@@ -45,6 +45,9 @@ namespace CRP.Mvc
                 "~/Content/bootstrap.css",
                 "~/Content/font-awesome.css",
                 "~/Content/public-main.css"));
+
+            bundles.Add(new StyleBundle("~/Content/gPositions").Include(
+                "~/Content/jquery.gPositions.css"));
         }
     }
 }

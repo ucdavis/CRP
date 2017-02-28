@@ -64,8 +64,8 @@
     </script>
 }
 @section AdditionalStyles
-{
-    <link href="@Url.Content("~/Content/jquery.gPositions.css")" rel="Stylesheet" type="text/css" />
+{    
+    @Styles.Render("~/Content/gPositions")
     @Styles.Render("~/Content/qtipcss")
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/print.css")" media="print" />
 }
