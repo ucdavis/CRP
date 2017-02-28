@@ -38,6 +38,9 @@ namespace CRP.Controllers
             _notificationProvider = notificationProvider;
         }
 
+        #region Checkout current
+
+        
         /// <summary>
         /// GET: /Transaction/Checkout/{id}
         /// </summary>
@@ -403,6 +406,377 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        #endregion Checkout current
+
+        #region Checkout current
+
+
+        /// <summary>
+        /// GET: /Transaction/Checkout/{id}
+        /// </summary>
+        /// <param name="id">Item id</param>
+        /// <param name="referenceId">Reference Number for external applications</param>
+        /// <param name="coupon"></param>
+        /// <param name="password"> </param>
+        /// <param name="agribusinessExtraParams"></param>
+        /// <returns></returns>
+        public ActionResult CheckoutNew(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(id);
+
+            if (item == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon, password);
+            viewModel.Quantity = 1;
+            viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
+            if (!viewModel.Answers.Any())
+            {
+                viewModel.Answers = PopulateItemTransactionAnswer(agribusinessExtraParams, item.QuestionSets);
+            }
+            viewModel.TotalAmountToRedisplay = viewModel.Quantity * item.CostPerItem;
+            viewModel.CouponAmountToDisplay = 0.0m; //They have not entered a coupon yet
+            viewModel.CouponTotalDiscountToDisplay = 0.0m;
+            return View(viewModel);
+        }
+
+
+
+        /// <summary>
+        /// POST: /Transaction/Checkout/{id}
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Checks the shopper out for the item
+        /// Assumption:
+        ///     Item is valid (not expired, full and is available)
+        /// PreCondition:
+        ///     Item has not expired
+        ///     Item is not full and has enough quantity to accept the checkout
+        /// PostCondition:
+        ///     Transaction item is created and "paid" field is marked false
+        ///         At least Check or Credit field is true
+        ///         Quantity answers are populated
+        ///         Transaction answers are populated
+        ///     If donation is present, separate transaction record is created and linked to parent object
+        ///         Donation field is marked true
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="referenceIdHidden"></param>
+        /// <param name="quantity">The quantity.</param>
+        /// <param name="donation">The donation.</param>
+        /// <param name="displayAmount">total amount calculated on the form</param>
+        /// <param name="paymentType">Type of the payment.</param>
+        /// <param name="restrictedKey">The restricted key.</param>
+        /// <param name="coupon">The coupon.</param>
+        /// <param name="transactionAnswers">The transaction answers.</param>
+        /// <param name="quantityAnswers">The quantity answers.</param>
+        /// <param name="captchaValid">if set to <c>true</c> [captcha valid].</param>
+        /// <returns></returns>
+        [CaptchaValidator]
+        [HttpPost]
+        public ActionResult CheckoutNew(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
+        {
+            // if the arrays are null create new blank ones
+            if (transactionAnswers == null) transactionAnswers = new QuestionAnswerParameter[0];
+            if (quantityAnswers == null) quantityAnswers = new QuestionAnswerParameter[0];
+
+
+            #region DB Queries
+            // get the item
+            var item = Repository.OfType<Item>().GetNullableById(id);
+
+
+
+            // get all the questions in 1 queries
+            var questionIds = transactionAnswers.Select(b => b.QuestionId).ToList().Union(quantityAnswers.Select(c => c.QuestionId).ToList()).ToArray();
+            var allQuestions = Repository.OfType<Question>().Queryable.Where(a => questionIds.Contains(a.Id)).ToList();
+
+            if (!string.IsNullOrWhiteSpace(referenceIdHidden))
+            {
+                var refId = allQuestions.FirstOrDefault(a => a.Name == "Reference Id");
+                if (refId != null)
+                {
+                    if (transactionAnswers.Any(a => a.QuestionId == refId.Id && string.IsNullOrWhiteSpace(a.Answer)))
+                    {
+                        transactionAnswers.First(a => a.QuestionId == refId.Id && string.IsNullOrWhiteSpace(a.Answer)).Answer = referenceIdHidden;
+                    }
+                }
+            }
+
+            // get the coupon
+            var coup = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == coupon && a.Item == item && a.IsActive).FirstOrDefault();
+            #endregion
+
+            // invalid item, or not available for registration
+            if (item == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+            if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to over ride and register for things
+            {
+                if (!item.IsAvailableForReg)
+                {
+                    Message = NotificationMessages.STR_NotAvailable.Replace(NotificationMessages.ObjectType, "Item");
+                    return this.RedirectToAction<HomeController>(a => a.Index());
+                }
+            }
+
+            if (!captchaValid)
+            {
+                ModelState.AddModelError("Captcha", "Captcha values are not valid.");
+            }
+
+            if (quantity < 1)
+            {
+                ModelState.AddModelError("Quantity", "Quantity must be at least 1");
+            }
+
+            var transaction = new Transaction(item);
+
+            var questionCount = 0;
+            foreach (var itemQuestionSet in item.QuestionSets.Where(a => a.QuantityLevel))
+            {
+                questionCount += itemQuestionSet.QuestionSet.Questions.Count;
+            }
+            if (questionCount * quantity != quantityAnswers.Count())
+            {
+                ModelState.AddModelError("Quantity Level", "The number of answers does not match the number of Quantity Level questions.");
+            }
+
+            // fill the openid user if they are openid validated
+            if (HttpContext.Request.IsOpenId())
+            {
+                // doesn't matter if it's null, just assign what we have
+                transaction.OpenIDUser = _openIdUserRepository.GetNullableById(CurrentUser.Identity.Name);
+            }
+
+            // deal with selected payment type
+            if (paymentType == StaticValues.CreditCard)
+            {
+                transaction.Credit = true;
+                transaction.Check = false;
+            }
+            else if (paymentType == StaticValues.Check)
+            {
+                transaction.Check = true;
+                transaction.Credit = false;
+            }
+
+            // deal with the amount
+            var amount = item.CostPerItem * quantity; // get the initial amount
+            decimal discount = 0.0m;                // used to calculate total discount
+            decimal couponAmount = 0.0m;            // used to display individual discount of one coupon
+            // get the email
+            if (coup != null)
+            {
+                // calculate the coupon discount
+                var emailQ = allQuestions.Where(a => a.Name == StaticValues.Question_Email && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).FirstOrDefault();
+                if (emailQ != null)
+                {
+                    // get the answer
+                    var answer = transactionAnswers.Where(a => a.QuestionId == emailQ.Id).FirstOrDefault();
+                    discount = coup.UseCoupon(answer != null ? answer.Answer : null, quantity);
+                }
+                else
+                {
+                    discount = coup.UseCoupon(null, quantity);
+                }
+
+                // if coupon is used set display value
+                if (discount == 0)
+                {
+                    ModelState.AddModelError("Coupon", NotificationMessages.STR_Coupon_could_not_be_used);
+                    transaction.Coupon = null;
+                }
+                else
+                {
+                    couponAmount = coup.DiscountAmount;
+                    // record the coupon usage to this transaction
+                    transaction.Coupon = coup;
+                }
+
+
+            }
+            transaction.Amount = amount - discount;
+            transaction.Quantity = quantity;
+
+            // deal with the transaction answers
+            foreach (var qa in transactionAnswers)
+            {
+                var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
+
+                // if question is null just drop it
+                if (question != null)
+                {
+                    //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
+                    //                 ? qa.Answer
+                    //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
+                    var answer = CleanUpAnswer(question.QuestionType.Name, qa, question.ValidationClasses);
+
+                    // validate each of the validators
+                    foreach (var validator in question.Validators)
+                    {
+                        string message;
+                        if (!Validate(validator, answer, question.Name, out message))
+                        {
+                            ModelState.AddModelError("Transaction Question", message);
+                        }
+                    }
+
+                    var qanswer = new TransactionAnswer(transaction, question.QuestionSet, question, answer);
+                    transaction.AddTransactionAnswer(qanswer);
+                }
+                //TODO: consider writing this to a log or something
+            }
+
+            // deal with quantity level answers
+            for (var i = 0; i < quantity; i++)
+            {
+                // generate the unique id for each quantity
+                var quantityId = Guid.NewGuid();
+
+                foreach (var qa in quantityAnswers.Where(a => a.QuantityIndex == i))
+                {
+                    var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
+                    // if question is null just drop it
+                    if (question != null)
+                    {
+                        //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
+                        //                 ? qa.Answer
+                        //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
+
+                        var answer = CleanUpAnswer(question.QuestionType.Name, qa, question.ValidationClasses);
+
+                        var fieldName = string.Format("The answer for question \"{0}\" for {1} {2}", question.Name, item.QuantityName, (i + 1));
+
+                        // validate each of the validators
+                        foreach (var validator in question.Validators)
+                        {
+                            string message;
+                            if (!Validate(validator, answer, fieldName, out message))
+                            {
+                                ModelState.AddModelError("Quantity Question", message);
+                            }
+                        }
+
+                        var qanswer = new QuantityAnswer(transaction, question.QuestionSet, question, answer,
+                                                         quantityId);
+                        transaction.AddQuantityAnswer(qanswer);
+                    }
+                }
+            }
+
+
+            // deal with donation
+            if (donation.HasValue && donation.Value > 0.0m)
+            {
+                var donationTransaction = new Transaction(item);
+                donationTransaction.Donation = true;
+                donationTransaction.Amount = donation.Value;
+
+                transaction.AddChildTransaction(donationTransaction);
+            }
+
+            // check to see if it's a restricted item
+            if (!string.IsNullOrEmpty(item.RestrictedKey) && item.RestrictedKey != restrictedKey)
+            {
+                ModelState.AddModelError("Restricted Key", "The item is restricted please enter the passphrase.");
+            }
+
+            if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to over ride and register for things
+            {
+                // do a final check to make sure the inventory is there
+                if (item.Sold + quantity > item.Quantity)
+                {
+                    ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
+                }
+            }
+            //if (transaction.Total == 0 && transaction.Credit)
+            //{
+            //    ModelState.AddModelError("Payment Method", "Please select check payment type when amount is zero.");
+            //}
+            if (transaction.Total == 0)
+            {
+                transaction.Credit = false;
+                transaction.Check = true;
+            }
+            if (transaction.Total != displayAmount)
+            {
+                ModelState.AddModelError("Total", "We are sorry, the total amount displayed on the form did not match the total we calculated.");
+            }
+
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
+
+            if (ModelState.IsValid)
+            {
+                // create the new transaction
+                Repository.OfType<Transaction>().EnsurePersistent(transaction);
+
+                if (transaction.Paid && transaction.Check)
+                {
+                    if (transaction.Item.CostPerItem == 0.0m || couponAmount > 0.0m)
+                    {
+                        //Ok, it is paid because the amount is zero, and it is because a coupon was used or the cost was zero
+                        try
+                        {
+                            //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
+                            var saveId = transaction.Id;
+                            NHibernateSessionManager.Instance.GetSession().Evict(transaction);
+                            transaction = Repository.OfType<Transaction>().GetNullableById(saveId);
+                            // attempt to get the contact information question set and retrieve email address
+                            var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+                            if (question != null)
+                            {
+                                // send an email to the user
+                                _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+
+                        }
+                    }
+                }
+
+                var updatedItem = Repository.OfType<Item>().GetNullableById(transaction.Item.Id);
+                if (updatedItem != null)
+                {
+                    //For whatever reason, if you are logged in with your CAES user, the item is updated, 
+                    //if you are logged in with open id (google), item is not updated.
+                    var transactionQuantity = transaction.Quantity;
+                    if (updatedItem.Transactions.Contains(transaction))
+                    {
+                        transactionQuantity = 0;
+                    }
+                    if (updatedItem.Quantity - (updatedItem.Sold + transactionQuantity) <= 10)
+                    {
+                        _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transactionQuantity);
+                    }
+
+
+                }
+                // redirect to confirmation and let the user decide payment or not
+                return this.RedirectToAction(a => a.Confirmation(transaction.Id));
+            }
+
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden, null, null);
+            viewModel.Quantity = quantity;
+            viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
+            viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);
+            viewModel.CheckPayment = (paymentType == StaticValues.Check);
+            viewModel.TotalAmountToRedisplay = transaction.Total;
+            viewModel.CouponAmountToDisplay = couponAmount;
+            viewModel.CouponTotalDiscountToDisplay = discount;
+            return View(viewModel);
+        }
+
+        #endregion Checkout New
 
         /// <summary>
         /// Cleans up answer.
