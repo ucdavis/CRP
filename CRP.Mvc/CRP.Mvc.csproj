@@ -1299,6 +1299,7 @@
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Item\MapNew.cshtml" />
     <Content Include="Views\Item\MapDirectionsNew.cshtml" />
+    <Content Include="Views\Transaction\CheckoutNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,15 @@
+﻿@model CRP.Controllers.ViewModels.ItemDetailViewModel
+
+@{
+    ViewBag.Title = "CheckoutNew";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="boundary">
+    <h1>@Model.Item.Name</h1>
+    <p class="lead">
+        @Model.Item.Summary
+    </p>
+    <p><a href="@Url.Action("Details", "Item", new {id = Model.Item.Id})" class="return"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Return to event details</a></p>
+</div>
+

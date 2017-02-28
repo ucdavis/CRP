@@ -408,7 +408,7 @@ namespace CRP.Controllers
 
         #endregion Checkout current
 
-        #region Checkout current
+        #region Checkout New
 
 
         /// <summary>
