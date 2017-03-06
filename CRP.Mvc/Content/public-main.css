@@ -558,3 +558,41 @@ form.tickets {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px; }
+
+
+
+/* client side validation messages */
+.failed
+{
+    border: 1px solid #ff0000;    
+	color:Red;
+}
+.failed.passed
+{
+	border: none;    
+	color:inherit;
+}
+.field-validation-error
+{
+	border: 1px solid #ff0000;    
+	color:Red;
+}
+
+.warning
+{
+	background-color:Orange
+}
+
+
+
+.validation-summary-errors { border-bottom:1px #e6e6e6 solid; font-weight:bold;}
+
+/* ---------------- */
+/*system wide status*/
+/* ---------------- */
+#system_wide_status_text {margin:0.5em auto; text-align:center;}
+#system_wide_status_text .critical {font-weight:bolder; color:Red; font-size:1.5em;}
+#system_wide_status {border:3px solid #C83900; background-color:#fcf0f0;}
+.validation-summary-valid {
+    display: none
+}

@@ -1,15 +1,76 @@
-﻿@model CRP.Controllers.ViewModels.ItemDetailViewModel
+﻿@using CRP.Core.Resources
+@model CRP.Controllers.ViewModels.ItemDetailViewModel
 
 @{
     ViewBag.Title = "CheckoutNew";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
-<div class="boundary">
-    <h1>@Model.Item.Name</h1>
-    <p class="lead">
-        @Model.Item.Summary
-    </p>
-    <p><a href="@Url.Action("Details", "Item", new {id = Model.Item.Id})" class="return"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Return to event details</a></p>
-</div>
+@Html.ValidationSummary("Checkout was unsuccessful. Please correct the errors and try again.")
+@using (Html.BeginForm("CheckoutNew", "Transaction", FormMethod.Post, new {@id = "CheckoutForm"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("displayAmount", Model.Item.CostPerItem)
+    @Html.Hidden("referenceIdHidden", Model.ReferenceId)
 
+    <div class="boundary">
+        <h1>@Model.Item.Name</h1>
+        <p class="lead">
+            @Model.Item.Summary
+        </p>
+        <p><a href="@Url.Action("Details", "Item", new {id = Model.Item.Id})" class="return"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Return to event details</a>
+        </p>
+    </div>
+
+    <div class="event-checkout">
+        <div class="boundary">
+            <div class="table-flex border-bot">
+                <p class="table-header">Price per @(!String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName))</p>
+                <p class="table-header">Quantity</p>
+                <p class="table-header">Total</p>
+            </div>
+            <div class="table-flex">
+                <p class="table-item"><span class="perItemAmount">@Model.Item.CostPerItem.ToString("C")</span></p>
+                <p class="table-item">
+                    @Html.TextBox("quantity", Model.Quantity, new {@class = "quantityAmount qty form-control"})
+                </p>
+                <p class="table-item"><span class="totalItemAmount">@Html.Encode((Model.Item.CostPerItem * Model.Quantity).ToString("C"))</span>
+                </p>
+            </div>
+            <div class="table-flex">
+                <div class="discountcode">
+                    <form action="">
+                        <input class="form-control" placeholder="Discount Code">
+                        <button type="submit" class="btn btn-discountcode">Apply</button>
+                    </form>
+                </div>
+            </div>
+            <div class="table-flex border-top">
+                <p class="table-header">Total</p>
+                <p class="table-header"><span class="smallcaps">USD</span> $100.00
+                </p>
+            </div>
+
+        </div>
+    </div>
+}
+@section AdditionalScripts
+{
+    <script type="text/javascript" src="@Url.Content("~/Scripts/RenameForArray.js")"></script>
+    @*<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.PhoneValidator.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ZipValidator.js")"></script>*@
+    
+    <script type="text/javascript">
+        var class_quantityAmount = "quantityAmount";
+        var class_perItemAmount = "perItemAmount";
+        var class_totalItemAmount = "totalItemAmount";
+        var class_donationAmount = "donationAmount";
+        var class_discounterPerItemAmount = "discounterPerItemAmount";
+        var class_discounterMaxQuantity = "discounterMaxQuantity";
+        var class_discountAmount = "discountAmount";
+        var class_totalAmount = "totalAmount";
+        var questionSet_Count = '@Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count()';
+    </script>
+    
+
+}
