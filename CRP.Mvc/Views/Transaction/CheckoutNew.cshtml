@@ -30,24 +30,55 @@
                 <p class="table-header">Total</p>
             </div>
             <div class="table-flex">
-                <p class="table-item"><span class="perItemAmount">@Model.Item.CostPerItem.ToString("C")</span></p>
+                <p class="table-item">$<span class="perItemAmount">@Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem))</span></p>
                 <p class="table-item">
                     @Html.TextBox("quantity", Model.Quantity, new {@class = "quantityAmount qty form-control"})
                 </p>
-                <p class="table-item"><span class="totalItemAmount">@Html.Encode((Model.Item.CostPerItem * Model.Quantity).ToString("C"))</span>
+                <p class="table-item">$<span class="totalItemAmount">@Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem * Model.Quantity))</span>
                 </p>
             </div>
-            <div class="table-flex">
-                <div class="discountcode">
-                    <form action="">
-                        <input class="form-control" placeholder="Discount Code">
-                        <button type="submit" class="btn btn-discountcode">Apply</button>
-                    </form>
-                </div>
+            <div class="table-flex border-bot">
+                <p class="table-item">
+                    @Html.TextBox("Coupon", !string.IsNullOrWhiteSpace(Model.Coupon) ? Model.Coupon : string.Empty, new { @class = "form-control discountcode", placeholder = "Coupon Code" })
+                    <img src='@Url.Content("~/Images/ajax-loader.gif")' id="CouponValidateImage" style="display: none;" />
+                    <span id="CouponMessage"></span>
+                </p>
+                <p class="table-item">
+                    $<span class="discounterPerItemAmount">@Html.Encode(string.Format("{0:0.00}", Model.CouponAmountToDisplay))</span>
+
+                    <span class="discounterMaxQuantity" style="display:none;"></span>
+                </p>
+                <p class="table-item">
+                    $<span class="discountAmount">@Html.Encode(string.Format("{0:0.00}", Model.CouponTotalDiscountToDisplay))</span>
+                </p>
             </div>
-            <div class="table-flex border-top">
+            <div class="table-flex border-bot">
                 <p class="table-header">Total</p>
-                <p class="table-header"><span class="smallcaps">USD</span> $100.00
+                <p class="table-header"><span class="smallcaps">USD </span>$<span class="totalAmount">@Html.Encode(string.Format("{0:0.00}", Model.TotalAmountToRedisplay))</span></p>
+            </div>
+            <div class="table-flex">
+                <p class="table-item">
+                    @if (!String.IsNullOrEmpty(Model.Item.RestrictedKey))
+                    {
+                        @Html.TextBox("restrictedKey", !string.IsNullOrWhiteSpace(Model.Password) ? Model.Password : string.Empty, new { @class = "form-control", placeholder = "Pass phrase to purchase" })
+                    }
+                </p>
+                <p class="table-item">
+                    <span id="paymentTypeSpan">
+                        <label for="paymentType">Payment Method: </label>
+                        @{
+                            var creditCardChecked = Model.CreditPayment ? "checked='checked'" : string.Empty;
+                            var checkdChecked = Model.CheckPayment ? "checked='checked'" : string.Empty;
+                        }
+                        @if (Model.Item.AllowCreditPayment)
+                        {
+                            <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.CreditCard" @creditCardChecked/><label for="credit">Credit Card</label>
+                        }
+                        @if (Model.Item.AllowCheckPayment)
+                        {
+                            <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.Check" @checkdChecked/><label for="check">Check</label>
+                        }
+                    </span>
                 </p>
             </div>
 
@@ -59,7 +90,7 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/RenameForArray.js")"></script>
     @*<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.PhoneValidator.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ZipValidator.js")"></script>*@
-    
+
     <script type="text/javascript">
         var class_quantityAmount = "quantityAmount";
         var class_perItemAmount = "perItemAmount";
@@ -71,6 +102,105 @@
         var class_totalAmount = "totalAmount";
         var questionSet_Count = '@Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count()';
     </script>
-    
 
+    <script type="text/javascript">
+        //Temp script. This will be replaced once everything else has been added.
+
+        $(document).ready(function() {
+            $("input#quantity").blur(function (event) {
+
+                var quantity = $(this).val();
+                if (isNaN(quantity) || quantity <= 0) {
+                    alert("Please enter a valid number.");
+                    return false;
+                } else {
+
+                    CalculateTotal();
+                }
+
+
+            });
+
+            if ($("input#Coupon").val() != "") {
+                debugger;
+                processCoupon();
+            }
+
+            // update the coupon values and validate the coupon
+            $("input#Coupon").blur(function (event) {
+                processCoupon(event);
+            });
+
+        });
+
+        function processCoupon(event) {
+            var url = '@Url.Action("Validate", "Coupon")';//<%= Html.Encode(Model.Item.Id) %>';
+            var couponCode = $("input#Coupon").val();
+            var quantity = $("#quantity").val();
+
+            $("img#CouponValidateImage").show();
+
+            $.getJSON(url, { itemId: @Html.Encode(Model.Item.Id), couponCode: couponCode, quantity: quantity }, function(result) {
+                var message = result.message;
+
+                // if the message is undefined, we have a valid coupon
+
+                var discountAmount = result.discountAmount;
+                var maxQuantity = result.maxQuantity;
+
+                $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
+                $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
+
+                $("span#CouponMessage").html("Coupon accepted.");
+
+                CalculateTotal();
+
+                // display error message
+                $("span#CouponMessage").html(message);
+
+                // hide the loading image
+                $("img#CouponValidateImage").hide();
+            });
+        }
+
+        function CalculateTotal() {
+            // get the item price, quantity and discount per item prices
+            var costPerItem = parseFloat($("span." + class_perItemAmount).html());
+            var quantity = parseInt($("input." + class_quantityAmount).val());
+            var discountAmountPerItem = parseFloat($("span." + class_discounterPerItemAmount).html());
+            var maxQuantity = parseInt($("span." + class_discounterMaxQuantity).html());
+
+
+            // calculate the totals
+            var itemTotal = quantity * costPerItem;
+            var discountTotal = 0;
+            if (maxQuantity == -1 || maxQuantity > quantity)
+            {
+                discountTotal = quantity * discountAmountPerItem;
+            }
+            else if (maxQuantity <= quantity)
+            {
+                discountTotal = maxQuantity * discountAmountPerItem;
+            }
+
+            var total = itemTotal - discountTotal; //Removed donation...
+
+            $("#displayAmount").val(total.toFixed(2));
+
+            // update the prices
+            $("span." + class_totalItemAmount).html(itemTotal.toFixed(2));
+            $("span." + class_discountAmount).html(discountTotal.toFixed(2));
+            $("span." + class_totalAmount).html(total.toFixed(2));
+            if(total == 0)
+            {
+                $(".allowBypass").removeClass("required");
+                $("#paymentTypeSpan").hide();
+            }
+            else
+            {
+                $("#paymentTypeSpan").show();
+                $(".allowBypass").addClass("required");
+            }
+        }
+    </script>
 }
