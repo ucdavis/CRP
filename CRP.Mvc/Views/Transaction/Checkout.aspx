@@ -291,7 +291,7 @@
             var discountAmountPerItem = parseFloat($("span." + class_discounterPerItemAmount).html());
             var maxQuantity = parseInt($("span." + class_discounterMaxQuantity).html());
 
-            var donationAmount = parseFloat($("input." + class_donationAmount).val());
+            //var donationAmount = parseFloat($("input." + class_donationAmount).val());
 
             // calculate the totals
             var itemTotal = quantity * costPerItem;          
@@ -305,7 +305,8 @@
                 discountTotal = maxQuantity * discountAmountPerItem;
             }
             
-            var total = itemTotal - discountTotal + donationAmount;
+            //var total = itemTotal - discountTotal + donationAmount;
+            var total = itemTotal - discountTotal;
 
             $("#displayAmount").val(total.toFixed(2));
 
