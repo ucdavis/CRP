@@ -1300,6 +1300,7 @@
     <Content Include="Views\Item\MapNew.cshtml" />
     <Content Include="Views\Item\MapDirectionsNew.cshtml" />
     <Content Include="Views\Transaction\CheckoutNew.cshtml" />
+    <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
