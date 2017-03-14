@@ -23,15 +23,15 @@
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
             @Html.TextBox(".Answer", Model.Answer, new {@class = "form-control dateForm indexedControl " + Model.Question.ValidationClasses})
             break;
-            case "Boolean":
-                    var ans = false;
-                    if (!Boolean.TryParse(Model.Answer, out ans))
-                    {
-                        ans = false;
-                    }
-                    @Html.CheckBox(".Answer", ans, new {@class = "indexedControl"})
-                <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
-            break;
+        case "Boolean":
+                var ans = false;
+                if (!Boolean.TryParse(Model.Answer, out ans))
+                {
+                    ans = false;
+                }
+                @Html.CheckBox(".Answer", ans, new {@class = "indexedControl"})
+            <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
+        break;
                 @*case "Radio Buttons":
 
         var option = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Trim().ToLower() : string.Empty;

@@ -197,12 +197,14 @@
 
 @section AdditionalStyles
 {
+    @Styles.Render("~/Content/datepicker")
     @Styles.Render("~/Content/qtipcss")
 }
 
 @section AdditionalScripts
 {
     @Scripts.Render("~/bundles/qtip")
+    @Scripts.Render("~/bundles/bootstrap-datepicker")
 
     <script type="text/javascript" src="@Url.Content("~/Scripts/RenameForArray.js")"></script>
     @*<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.PhoneValidator.js")"></script>
@@ -331,6 +333,7 @@
                         classes: 'qtip-bootstrap'
                     }
                 });
+                $(item).datepicker();
                 //if(!$(item).hasClass("hasDatepicker")){
                 //    $(item).datepicker();
                 //}

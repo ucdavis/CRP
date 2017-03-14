@@ -35,6 +35,9 @@ namespace CRP.Mvc
             bundles.Add(new ScriptBundle("~/bundles/qtip").Include(
                 "~/Scripts/qTip/jquery.qtip.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-datepicker")
+                .Include("~/Scripts/bootstrap-datepicker.js"));
+
             bundles.Add(new StyleBundle("~/Content/qtipcss").Include(
                 "~/Scripts/qTip/jquery.qtip.min.css"));
 
@@ -48,6 +51,9 @@ namespace CRP.Mvc
 
             bundles.Add(new StyleBundle("~/Content/gPositions").Include(
                 "~/Content/jquery.gPositions.css"));
+
+            bundles.Add(new StyleBundle("~/Content/datepicker")
+                .Include("~/Content/bootstrap-datepicker.css"));
         }
     }
 }
