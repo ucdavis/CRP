@@ -7,6 +7,7 @@
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
+
 @Html.ValidationSummary("Checkout was unsuccessful. Please correct the errors and try again.")
 @using (Html.BeginForm("CheckoutNew", "Transaction", FormMethod.Post, new {@id = "CheckoutForm"}))
 {
@@ -67,13 +68,12 @@
                     }
                 </p>
                 <p class="table-item">
-                    <span id="paymentTypeSpan">
-                        <label for="paymentType">Payment Method: </label>
+                    <span id="paymentTypeSpan">                        
                         @{
                             var creditCardChecked = Model.CreditPayment ? "checked='checked'" : string.Empty;
                             var checkdChecked = Model.CheckPayment ? "checked='checked'" : string.Empty;
                         }
-                        @if (Model.Item.AllowCreditPayment)
+                        @*@if (Model.Item.AllowCreditPayment)
                         {
                             <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.CreditCard" @creditCardChecked/>
                             <label for="credit">Credit Card</label>
@@ -82,7 +82,28 @@
                         {
                             <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.Check" @checkdChecked/>
                             <label for="check">Check</label>
-                        }
+                        }*@
+                        <fieldset class="form-group">
+                            <h3>Payment Method: </h3>
+                            @if (Model.Item.AllowCreditPayment)
+                            {
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.CreditCard" @creditCardChecked/>
+                                        Credit Card
+                                    </label>
+                                </div>
+                            }
+                            @if (Model.Item.AllowCheckPayment)
+                            {
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.Check" @checkdChecked/>
+                                        Check
+                                    </label>
+                                </div>
+                            }
+                        </fieldset>
                     </span>
                 </p>
             </div>
@@ -172,8 +193,17 @@
      }*@
 
 }
+
+
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/qtipcss")
+}
+
 @section AdditionalScripts
 {
+    @Scripts.Render("~/bundles/qtip")
+
     <script type="text/javascript" src="@Url.Content("~/Scripts/RenameForArray.js")"></script>
     @*<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.PhoneValidator.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ZipValidator.js")"></script>*@
@@ -205,7 +235,6 @@
                     quantity = parseInt(quantity);
                     var counter = existingContainers.length;
 
-                    debugger;
 
                     // deal with the situation where we have too many of the containers
                     if (existingContainers.length > quantity) {
@@ -229,6 +258,7 @@
                         });
                     }
                     CalculateTotal();
+                    InitializeQuestions();
                 }
 
 
@@ -252,6 +282,7 @@
         function GenerateQuantityQuestionSet() {
             var $container = $($("div.QuantityContainer")[0]);
             $container.find("input.dateForm").removeClass("hasDatepicker");
+
             
             $container.after($container.clone());
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
@@ -287,26 +318,70 @@
             addQuantityIndex($("div.QuantityContainer"));
             $.each($("input.dateForm"), function(index, item){    
                 //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
-                $(item).attr("title", "");  
-                $(item).bt('mm/dd/yyyy format');  
-                if(!$(item).hasClass("hasDatepicker")){
-                    $(item).datepicker();
-                }
+                $(item).attr("title", "");
+                $(item).qtip({ // Grab some elements to apply the tooltip to
+                    content: {
+                        text: 'mm/dd/yyyy format'
+                    },
+                    position: {
+                        my: 'bottom left',
+                        at: 'right top'
+                    },
+                    style: {
+                        classes: 'qtip-bootstrap'
+                    }
+                });
+                //if(!$(item).hasClass("hasDatepicker")){
+                //    $(item).datepicker();
+                //}
             });
             $.each($("input.date"), function(index, item){
                 //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
                 $(item).attr("title", ""); 
-                $(item).bt('mm/dd/yyyy format');
+                $(item).qtip({ // Grab some elements to apply the tooltip to
+                    content: {
+                        text: 'mm/dd/yyyy format'
+                    },
+                    position: {
+                        my: 'bottom left',
+                        at: 'right top'
+                    },
+                    style: {
+                        classes: 'qtip-bootstrap'
+                    }
+                });
             });
             $.each($("input.url"), function(index, item){
                 //$(item).watermark("Example: http://www.ucdavis.edu/index.html", { className: "watermark" });
                 $(item).attr("title", ""); 
-                $(item).bt('You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html');
+                $(item).qtip({ // Grab some elements to apply the tooltip to
+                    content: {
+                        text: 'You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html'
+                    },
+                    position: {
+                        my: 'bottom left',
+                        at: 'right top'
+                    },
+                    style: {
+                        classes: 'qtip-bootstrap'
+                    }
+                });
             });
             $.each($("input.phoneUS"), function(index, item){
                 //$(item).watermark("(###) ###-####", { className: "watermark" });
                 $(item).attr("title", ""); 
-                $(item).bt('(###) ###-#### format');
+                $(item).qtip({ // Grab some elements to apply the tooltip to
+                    content: {
+                        text: '(###) ###-#### format'
+                    },
+                    position: {
+                        my: 'bottom left',
+                        at: 'right top'
+                    },
+                    style: {
+                        classes: 'qtip-bootstrap'
+                    }
+                });
             });          
             //            $("input.dateForm").filter().datepicker();
         }
