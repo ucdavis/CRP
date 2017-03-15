@@ -177,7 +177,20 @@
                 }
                 @Html.Partial("_QuestionFormNew", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
             }
+            if (showDonationLink && !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink))
+            {
+                <span id="DonationLink">
+                    <legend>@Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information")</legend>
+                    <div class="form-group">
+                        <div>@Html.Encode(Model.Item.DonationLinkInformation)</div>
+                        <div>
+                            <a href="@Html.Encode(Model.Item.DonationLinkLink)" target="_blank">@Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here")</a>
+                        </div>
+                    </div>
+                </span>
+            }
         }
+
     </div>
 
 
