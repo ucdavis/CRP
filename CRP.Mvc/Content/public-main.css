@@ -457,6 +457,12 @@ form.tickets {
   @media (max-width: 640px) {
     form.tickets {
       min-width: 300px; } }
+  div.tickets {
+  min-width: 450px;
+  padding-left: 24px; }
+  @media (max-width: 640px) {
+    div.tickets {
+      min-width: 300px; } }
 
 .form-check label {
   font-weight: 400; }
