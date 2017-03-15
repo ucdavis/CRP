@@ -55,22 +55,23 @@
             foreach (var o in Model.Question.Options)
             {
                 var cblAns = options.Contains(o.Name);
-
-
                 <br />
                 <span class="form-check">
                     <label class="form-check-label">
-                        @Html.CheckBox(".CblAnswer", cblAns, new { @class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses, @value = o.Name })
+                        @Html.CheckBox(".CblAnswer", cblAns, new { @class = "form-check-input " + StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses, @value = o.Name })
                         @Html.Encode(o.Name)
                     </label>
                 </span>
             }
 
             break;
+        case "No Answer":
+            <div>@Model.Question.Name</div>
+            break;
     @*case "Drop Down":
-    @this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")
+            @this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")
     break;
-    *@
+            *@
 
     }
 </div>
