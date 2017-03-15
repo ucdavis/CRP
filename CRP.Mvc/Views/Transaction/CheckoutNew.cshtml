@@ -112,6 +112,7 @@
     </div>
 
     <div class="boundary">
+        @*Quantity Level*@ 
         @if (Model.Item.QuestionSets.Any(a => a.QuantityLevel))
         {
             <legend>@Html.Encode(Model.Item.QuantityName)</legend>
@@ -134,7 +135,7 @@
                                 if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
                                 {
                                     disable = true;
-                                    answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                                    answer = new ItemTransactionAnswer() {Answer = Model.ReferenceId};
                                 }
                                 @Html.Partial("_QuestionFormNew", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
                             }
@@ -143,54 +144,43 @@
                 }
             </div>
         }
+        @*Transaction Level*@
+    @{
+        var showDonationLink = false;
+    }
+        @foreach (var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
+        {
+            <span id='@Html.Encode(qs.Id)'>
+                @{
+                    var questionSetName = qs.QuestionSet.Name;
+                    if (questionSetName == "Contact Information")
+                    {
+                        questionSetName = questionSetName + " / Billing Information";
+                        showDonationLink = true;
+                    }
+                    else
+                    {
+                        showDonationLink = false;
+                    }
+                }      
+                <legend>@Html.Encode(questionSetName)</legend>
+            </span>
+            foreach (var q in qs.QuestionSet.Questions)
+            {
+                var answer = Model.Answers.Where(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id).FirstOrDefault();
+                var disable = false;
+
+                if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                {
+                    disable = true;
+                    answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                }
+                @Html.Partial("_QuestionFormNew", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
+            }
+        }
     </div>
 
-    @*if (Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count() >= 1)
-     {
-         <div class="two_col_float two_col_float_right">
 
-             @for (var i = 0; i < Model.Quantity; i++)
-             {
-                 <div class="QuantityContainer">
-                     <fieldset>
-                         <legend>@Html.Encode(Model.Item.QuantityName) <span class="quantityIndex">@Html.Encode(i + 1)</span> </legend>
-                         @{ var questionSetCount = Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count(); }
-                         @foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
-                         {
-                             if (questionSetCount > 1)
-                             {
-                                <fieldset>
-                                    <legend>@Html.Encode(qs.QuestionSet.Name) <span class="quantityIndex">@Html.Encode(i + 1)</span> </legend>
-
-
-                                    <ul>
-                                        @foreach (var q in qs.QuestionSet.Questions)
-                                        {
-                                            int i1 = i;
-                                            var answer = Model.Answers.Where(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i1).FirstOrDefault();
-                                            var disable = false;
-
-                                            if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
-                                            {
-                                                disable = true;
-                                                answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
-                                            }
-                                            
-                                            var yyy = new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable);
-
-                                            @Html.Partial("_QuestionFormNew",yyy)
-
-                                        }
-                                    </ul>
-                                </fieldset>
-                             }
-
-                         }
-                     </fieldset>
-                 </div>
-             }
-         </div>
-     }*@
 
 }
 
