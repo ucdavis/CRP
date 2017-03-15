@@ -24,26 +24,43 @@
             @Html.TextBox(".Answer", Model.Answer, new {@class = "form-control dateForm indexedControl " + Model.Question.ValidationClasses})
             break;
         case "Boolean":
-                var ans = false;
-                if (!Boolean.TryParse(Model.Answer, out ans))
-                {
-                    ans = false;
-                }
-                @Html.CheckBox(".Answer", ans, new {@class = "indexedControl"})
+            var ans = false;
+            if (!Boolean.TryParse(Model.Answer, out ans))
+            {
+                ans = false;
+            }
+            @Html.CheckBox(".Answer", ans, new {@class = "indexedControl"})
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
-        break;
-                @*case "Radio Buttons":
+            break;
+        case "Radio Buttons":
+            <label>@Model.Question.Name</label>
 
-        var option = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Trim().ToLower() : string.Empty;
-        foreach (var o in Model.Question.Options)
-        {
-            var isChecked = option == o.Name.Trim().ToLower();
-            @Html.RadioButton(".Answer", o.Name, isChecked, new {@class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses})
+            var option = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Trim().ToLower() : string.Empty;
+            foreach (var o in Model.Question.Options)
+            {
+                var isChecked = option == o.Name.Trim().ToLower();
+                <br/>
+                <span class="form-check">
+                    <label class="form-check-label">
+                        @Html.RadioButton(".Answer", o.Name, isChecked, new { @class = "form-check-input " + StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses })
+                        @Html.Encode(o.Name)
+                    </label>
+                </span>
+            }
+            @*var option = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Trim().ToLower() : string.Empty;
+    foreach (var o in Model.Question.Options)
+    {
+        var isChecked = option == o.Name.Trim().ToLower();
+        <br/>
+        <label>
+            @Html.RadioButton(".Answer", o.Name, isChecked, new { @class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses })
             @Html.Encode(o.Name)
-        }
+        </label>
+    }*@
 
-        break;
-    case "Checkbox List":
+
+    break;
+    @*case "Checkbox List":
         var options = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Split(',') : new string[1];
 
         foreach (var o in Model.Question.Options)
@@ -58,7 +75,7 @@
     case "Drop Down":
         @this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")
         break;
-                *@
+    *@
 
     }
 </div>
