@@ -386,6 +386,23 @@
                     }
                 });
             });          
+            $.each($(".qtip-checklist"), function(index, item){
+                //$(item).watermark("(###) ###-####", { className: "watermark" });
+                $(item).attr("title", ""); 
+                $(item).qtip({ // Grab some elements to apply the tooltip to
+                    content: {
+                        text: 'Check all that apply'
+                    },
+                    position: {
+                        my: 'bottom left',
+                        at: 'right top'
+                    },
+                    style: {
+                        classes: 'qtip-bootstrap'
+                    }
+                });
+            });        
+
             //            $("input.dateForm").filter().datepicker();
         }
 
