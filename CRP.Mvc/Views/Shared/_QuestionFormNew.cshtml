@@ -47,34 +47,29 @@
                     </label>
                 </span>
             }
-            @*var option = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Trim().ToLower() : string.Empty;
-    foreach (var o in Model.Question.Options)
-    {
-        var isChecked = option == o.Name.Trim().ToLower();
-        <br/>
-        <label>
-            @Html.RadioButton(".Answer", o.Name, isChecked, new { @class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses })
-            @Html.Encode(o.Name)
-        </label>
-    }*@
+            break;
+        case "Checkbox List":
+            <label class="qtip-checklist">@Model.Question.Name</label>
+            var options = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Split(',') : new string[1];
+
+            foreach (var o in Model.Question.Options)
+            {
+                var cblAns = options.Contains(o.Name);
 
 
+                <br />
+                <span class="form-check">
+                    <label class="form-check-label">
+                        @Html.CheckBox(".CblAnswer", cblAns, new { @class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses, @value = o.Name })
+                        @Html.Encode(o.Name)
+                    </label>
+                </span>
+            }
+
+            break;
+    @*case "Drop Down":
+    @this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")
     break;
-    @*case "Checkbox List":
-        var options = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Split(',') : new string[1];
-
-        foreach (var o in Model.Question.Options)
-        {
-            var cblAns = options.Contains(o.Name);
-
-            @Html.CheckBox(".CblAnswer", cblAns, new {@class = StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses, @value = o.Name})
-            @Html.Encode(o.Name)
-        }
-
-        break;
-    case "Drop Down":
-        @this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")
-        break;
     *@
 
     }
