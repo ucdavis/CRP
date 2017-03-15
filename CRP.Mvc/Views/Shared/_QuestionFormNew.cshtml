@@ -1,4 +1,5 @@
 ﻿@using CRP.Core.Resources
+@using MvcContrib.FluentHtml
 @model CRP.Controllers.ViewModels.ItemQuestionViewModel
     
 <div class="form-group">
@@ -42,7 +43,7 @@
                 <br/>
                 <span class="form-check">
                     <label class="form-check-label">
-                        @Html.RadioButton(".Answer", o.Name, isChecked, new { @class = "form-check-input " + StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses })
+                        @Html.RadioButton(".Answer", o.Name, isChecked, new {@class = "form-check-input " + StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses})
                         @Html.Encode(o.Name)
                     </label>
                 </span>
@@ -55,10 +56,10 @@
             foreach (var o in Model.Question.Options)
             {
                 var cblAns = options.Contains(o.Name);
-                <br />
+                <br/>
                 <span class="form-check">
                     <label class="form-check-label">
-                        @Html.CheckBox(".CblAnswer", cblAns, new { @class = "form-check-input " + StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses, @value = o.Name })
+                        @Html.CheckBox(".CblAnswer", cblAns, new {@class = "form-check-input " + StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses, @value = o.Name})
                         @Html.Encode(o.Name)
                     </label>
                 </span>
@@ -68,11 +69,25 @@
         case "No Answer":
             <div>@Model.Question.Name</div>
             break;
-    @*case "Drop Down":
-            @this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")
-    break;
-            *@
+        case "Drop Down":
+            @*@this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")*@
+            <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
+            <select class="form-control indexedControl @Model.Question.ValidationClasses"  id=".Answer">
+                <option>--Select--</option>
+                @foreach (var o in Model.Question.Options.OrderBy(a => a.Name))
+                {
+                    if (Model.Answer != null && Model.Answer == o.Name)
+                    {
+                        <option value="@o.Name" selected>@o.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@o.Name">@o.Name</option>
+                    }
 
+                }
+            </select>
+            break;
     }
 </div>
 
