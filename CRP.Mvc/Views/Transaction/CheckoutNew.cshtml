@@ -297,7 +297,10 @@
                         });
                     }
                     CalculateTotal();
+                    // initialize the question names
                     InitializeQuestions();
+
+                    if(questionSet_Count > 0 && $("div.QuantityContainer").length != quantity) { alert("Error on page. Please reselect quantity."); return false;}
                 }
 
 
@@ -315,17 +318,26 @@
 
             // initialize the question names
             InitializeQuestions();
+            RepopulateRadioButtonAnswers();
 
         });
 
         function GenerateQuantityQuestionSet() {
             var $container = $($("div.QuantityContainer")[0]);
-            $container.find("input.dateForm").removeClass("hasDatepicker");
+            
 
             
             $container.after($container.clone());
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
             addQuantityIndex($("div.QuantityContainer"));
+        }
+
+        function RepopulateRadioButtonAnswers(){
+            $.each($("input[type=radio][checked=checked]"), function(index, item){
+                if($(item).hasClass("indexedControl")){
+                    $(item).attr("checked", true);
+                }
+            });    
         }
 
         function addQuantityIndex($container)
@@ -355,8 +367,7 @@
             RenameControls($("div.TransactionContainer"), "transactionAnswers", "div");
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
             addQuantityIndex($("div.QuantityContainer"));
-            $.each($("input.dateForm"), function(index, item){    
-                //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
+            $.each($("input.dateForm"), function(index, item){                    
                 $(item).attr("title", "");
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
@@ -371,12 +382,9 @@
                     }
                 });
                 $(item).datepicker();
-                //if(!$(item).hasClass("hasDatepicker")){
-                //    $(item).datepicker();
-                //}
+
             });
-            $.each($("input.date"), function(index, item){
-                //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
+            $.each($("input.date"), function(index, item){                
                 $(item).attr("title", ""); 
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
@@ -392,7 +400,6 @@
                 });
             });
             $.each($("input.url"), function(index, item){
-                //$(item).watermark("Example: http://www.ucdavis.edu/index.html", { className: "watermark" });
                 $(item).attr("title", ""); 
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
@@ -408,8 +415,8 @@
                 });
             });
             $.each($("input.phoneUS"), function(index, item){
-                //$(item).watermark("(###) ###-####", { className: "watermark" });
-                $(item).attr("title", ""); 
+                $(item).attr("title", "");
+                $(item).attr("placeholder", "(###) ###-####");
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
                         text: '(###) ###-#### format'
@@ -424,7 +431,7 @@
                 });
             });          
             $.each($(".qtip-checklist"), function(index, item){
-                //$(item).watermark("(###) ###-####", { className: "watermark" });
+
                 $(item).attr("title", ""); 
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {

@@ -1,4 +1,5 @@
-﻿@using CRP.Core.Resources
+﻿@using System.Web.UI.WebControls
+@using CRP.Core.Resources
 @using MvcContrib.FluentHtml
 @model CRP.Controllers.ViewModels.ItemQuestionViewModel
     
@@ -22,7 +23,7 @@
             break;
         case "Date":
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
-            @Html.TextBox(".Answer", Model.Answer, new {@class = "form-control dateForm indexedControl " + Model.Question.ValidationClasses})
+            @Html.TextBox(".Answer", Model.Answer, new {@class = "form-control dateForm indexedControl " + Model.Question.ValidationClasses, placeholder = "mm/dd/yyyy"})
             break;
         case "Boolean":
             var ans = false;
