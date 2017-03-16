@@ -16,7 +16,7 @@ namespace CRP.Mvc
 
             //Needs <script src="https://ajax.microsoft.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
             bundles.Add(new ScriptBundle("~/bundles/checkout").Include(
-                        "~/Scripts/xVal.jquery.validate.js",
+                        //"~/Scripts/xVal.jquery.validate.js", //Don't need this anymore?
                         "~/Scripts/RenameForArray.js",
                         "~/Scripts/jquery.PhoneValidator.js",
                         "~/Scripts/jquery.ZipValidator.js"));
