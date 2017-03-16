@@ -241,9 +241,15 @@
                 }
             });
             // validate the controls on blur
-            $("input").blur(function(){
+            //$("input").blur(function() {
+            //    debugger;
+            //    $("form#CheckoutForm").validate().element(this);
+            //});
+
+            $("#CheckoutForm").on('blur', 'input', (function() {
                 $("form#CheckoutForm").validate().element(this);
-            });
+            }));
+
 
             $("input.email").blur(function(event){
                 if($(this).hasClass("warning")){
@@ -301,6 +307,7 @@
                     InitializeQuestions();
 
                     if(questionSet_Count > 0 && $("div.QuantityContainer").length != quantity) { alert("Error on page. Please reselect quantity."); return false;}
+
                 }
 
 
@@ -324,11 +331,16 @@
         });
 
         function GenerateQuantityQuestionSet() {
-            var $container = $($("div.QuantityContainer")[0]);
             
+            var index = $("div.QuantityContainer").length - 1; //Copy the last one
+            //console.log(index);
+            var $container = $($("div.QuantityContainer")[index]);
 
+            var newContainer = $container.clone();
+            newContainer.find("span.failed").remove();
             
-            $container.after($container.clone());
+            $container.after(newContainer);
+
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
             addQuantityIndex($("div.QuantityContainer"));
         }
@@ -446,7 +458,14 @@
                         classes: 'qtip-bootstrap'
                     }
                 });
-            });        
+            });  
+            //$.each($("input"), function(index, item){
+
+            //    $(item).on('blur' ,(function() {
+            //        $("form#CheckoutForm").validate().element(this);
+            //    }));
+
+            //});
 
             //            $("input.dateForm").filter().datepicker();
         }
