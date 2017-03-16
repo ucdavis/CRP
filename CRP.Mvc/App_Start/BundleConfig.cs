@@ -14,8 +14,12 @@ namespace CRP.Mvc
             bundles.Add(new ScriptBundle("~/bundles/jqueryCurrent").Include(
                         "~/Scripts/jquery-1.10.2.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+            //Needs <script src="https://ajax.microsoft.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
+            bundles.Add(new ScriptBundle("~/bundles/checkout").Include(
+                        "~/Scripts/xVal.jquery.validate.js",
+                        "~/Scripts/RenameForArray.js",
+                        "~/Scripts/jquery.PhoneValidator.js",
+                        "~/Scripts/jquery.ZipValidator.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

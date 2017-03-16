@@ -150,44 +150,48 @@
     }
         @foreach (var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
         {
-            <span id='@Html.Encode(qs.Id)'>
-                @{
-                    var questionSetName = qs.QuestionSet.Name;
-                    if (questionSetName == "Contact Information")
-                    {
-                        questionSetName = questionSetName + " / Billing Information";
-                        showDonationLink = true;
-                    }
-                    else
-                    {
-                        showDonationLink = false;
-                    }
-                }      
-                <legend>@Html.Encode(questionSetName)</legend>
-            </span>
-            foreach (var q in qs.QuestionSet.Questions)
-            {
-                var answer = Model.Answers.Where(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id).FirstOrDefault();
-                var disable = false;
-
-                if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+            <div class="TransactionContainer">
+                <span id='@Html.Encode(qs.Id)'>
+                    @{
+                        var questionSetName = qs.QuestionSet.Name;
+                        if (questionSetName == "Contact Information")
+                        {
+                            questionSetName = questionSetName + " / Billing Information";
+                            showDonationLink = true;
+                        }
+                        else
+                        {
+                            showDonationLink = false;
+                        }
+                    }      
+                    <legend>@Html.Encode(questionSetName)</legend>
+                </span>
+                @foreach (var q in qs.QuestionSet.Questions)
                 {
-                    disable = true;
-                    answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                    var answer = Model.Answers.Where(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id).FirstOrDefault();
+                    var disable = false;
+
+                    if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                    {
+                        disable = true;
+                        answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                    }
+                    @Html.Partial("_QuestionFormNew", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
                 }
-                @Html.Partial("_QuestionFormNew", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
-            }
+            </div>
             if (showDonationLink && !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink))
             {
-                <span id="DonationLink">
-                    <legend>@Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information")</legend>
-                    <div class="form-group">
-                        <div>@Html.Encode(Model.Item.DonationLinkInformation)</div>
-                        <div>
-                            <a href="@Html.Encode(Model.Item.DonationLinkLink)" target="_blank">@Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here")</a>
+                <div class="TransactionContainer">
+                    <span id="DonationLink">
+                        <legend>@Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information")</legend>
+                        <div class="form-group">
+                            <div>@Html.Encode(Model.Item.DonationLinkInformation)</div>
+                            <div>
+                                <a href="@Html.Encode(Model.Item.DonationLinkLink)" target="_blank">@Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here")</a>
+                            </div>
                         </div>
-                    </div>
-                </span>
+                    </span>
+                </div>
             }
         }
 
@@ -206,12 +210,12 @@
 
 @section AdditionalScripts
 {
+    <script src="https://ajax.microsoft.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
+    @Scripts.Render("~/bundles/checkout");
     @Scripts.Render("~/bundles/qtip")
     @Scripts.Render("~/bundles/bootstrap-datepicker")
 
-    <script type="text/javascript" src="@Url.Content("~/Scripts/RenameForArray.js")"></script>
-    @*<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.PhoneValidator.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.ZipValidator.js")"></script>*@
+
 
     <script type="text/javascript">
         var class_quantityAmount = "quantityAmount";
@@ -229,6 +233,36 @@
         //Temp script. This will be replaced once everything else has been added.
 
         $(document).ready(function() {
+            $("form#CheckoutForm").validate({
+                errorElement:"span",            // set the tag for the item that contains the message
+                errorClass:"failed",            // set the class on that tag of the notification tag
+                success:function(label){        // function to execute on passing
+                    label.addClass("passed");   // add the passed class
+                }
+            });
+            // validate the controls on blur
+            $("input").blur(function(){
+                $("form#CheckoutForm").validate().element(this);
+            });
+
+            $("input.email").blur(function(event){
+                if($(this).hasClass("warning")){
+                    $(this).removeClass("warning");
+                }
+                if($(this).hasClass("failed")){
+                    //Do nothing
+                }
+                else{
+                    var emailVal = $(this).val().toLowerCase();                
+                    if(emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) == null){
+                        //alert("no match " + emailVal);
+                        $(this).addClass("warning");
+                        $(this).next().text("This may be invalid");
+                    }
+                }
+                    
+            });
+
             $("input#quantity").blur(function (event) {
 
                 var quantity = $(this).val();
@@ -263,7 +297,10 @@
                         });
                     }
                     CalculateTotal();
+                    // initialize the question names
                     InitializeQuestions();
+
+                    if(questionSet_Count > 0 && $("div.QuantityContainer").length != quantity) { alert("Error on page. Please reselect quantity."); return false;}
                 }
 
 
@@ -281,17 +318,27 @@
 
             // initialize the question names
             InitializeQuestions();
+            RepopulateRadioButtonAnswers();
 
+            $("input#quantity").focus();
         });
 
         function GenerateQuantityQuestionSet() {
             var $container = $($("div.QuantityContainer")[0]);
-            $container.find("input.dateForm").removeClass("hasDatepicker");
+            
 
             
             $container.after($container.clone());
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
             addQuantityIndex($("div.QuantityContainer"));
+        }
+
+        function RepopulateRadioButtonAnswers(){
+            $.each($("input[type=radio][checked=checked]"), function(index, item){
+                if($(item).hasClass("indexedControl")){
+                    $(item).attr("checked", true);
+                }
+            });    
         }
 
         function addQuantityIndex($container)
@@ -318,11 +365,10 @@
         }
 
         function InitializeQuestions() {
-            RenameControls($("div#TransactionContainer"), "transactionAnswers", "div");
+            RenameControls($("div.TransactionContainer"), "transactionAnswers", "div");
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
             addQuantityIndex($("div.QuantityContainer"));
-            $.each($("input.dateForm"), function(index, item){    
-                //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
+            $.each($("input.dateForm"), function(index, item){                    
                 $(item).attr("title", "");
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
@@ -337,12 +383,9 @@
                     }
                 });
                 $(item).datepicker();
-                //if(!$(item).hasClass("hasDatepicker")){
-                //    $(item).datepicker();
-                //}
+
             });
-            $.each($("input.date"), function(index, item){
-                //$(item).watermark("mm/dd/yyyy", { className: "watermark" });
+            $.each($("input.date"), function(index, item){                
                 $(item).attr("title", ""); 
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
@@ -358,7 +401,6 @@
                 });
             });
             $.each($("input.url"), function(index, item){
-                //$(item).watermark("Example: http://www.ucdavis.edu/index.html", { className: "watermark" });
                 $(item).attr("title", ""); 
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
@@ -374,8 +416,8 @@
                 });
             });
             $.each($("input.phoneUS"), function(index, item){
-                //$(item).watermark("(###) ###-####", { className: "watermark" });
-                $(item).attr("title", ""); 
+                $(item).attr("title", "");
+                $(item).attr("placeholder", "(###) ###-####");
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
                         text: '(###) ###-#### format'
@@ -390,7 +432,7 @@
                 });
             });          
             $.each($(".qtip-checklist"), function(index, item){
-                //$(item).watermark("(###) ###-####", { className: "watermark" });
+
                 $(item).attr("title", ""); 
                 $(item).qtip({ // Grab some elements to apply the tooltip to
                     content: {
