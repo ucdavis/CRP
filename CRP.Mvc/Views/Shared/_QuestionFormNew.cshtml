@@ -15,7 +15,7 @@
     {
         case "Text Box":
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
-            <input name=".Answer" id="_Answer" class="form-control indexedControl @Model.Question.ValidationClasses" type="text" @(Model.Disable ? "disabled='true'" : null) value="@Model.Answer" placeholder="@Model.Question.Name"/>
+            <input name=".Answer" id="_Answer" class="form-control indexedControl @Model.Question.ValidationClasses" type="text" @(Model.Disable ? "disabled='true'" : null) value="@Model.Answer" placeholder="@Model.Question.Name"/>            
             break;
         case "Text Area":
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
@@ -90,6 +90,7 @@
             </select>
             break;
     }
+    <span class="local-warning"></span>
     <span class="val_img">&nbsp</span> 
 </div>
 

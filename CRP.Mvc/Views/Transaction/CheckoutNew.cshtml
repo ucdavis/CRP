@@ -251,35 +251,33 @@
                     label.addClass("passed");   // add the passed class
                 }
             });
-            // validate the controls on blur
-            //$("input").blur(function() {
-            //    debugger;
-            //    $("form#CheckoutForm").validate().element(this);
-            //});
+
 
             $("#CheckoutForm").on('blur', 'input', (function() {
                 $("form#CheckoutForm").validate().element(this);
-            }));
+                var localSpan = $(this).parent().find(".local-warning");
+                localSpan.text("");
 
+                //Email warning check.
+                if ($(this).hasClass("email")) {
 
-
-            $("input.email").blur(function(event){
-                if($(this).hasClass("warning")){
-                    $(this).removeClass("warning");
-                }
-                if($(this).hasClass("failed")){
-                    //Do nothing
-                }
-                else{
-                    var emailVal = $(this).val().toLowerCase();                
-                    if(emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) == null){
-                        //alert("no match " + emailVal);
-                        $(this).addClass("warning");
-                        $(this).next().text("This may be invalid");
+                    if($(this).hasClass("warning")){
+                        $(this).removeClass("warning");
+                    }
+                    if($(this).hasClass("failed")){
+                        //Do nothing
+                    }
+                    else{
+                        var emailVal = $(this).val().toLowerCase();                
+                        if(emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) == null){
+                            //alert("no match " + emailVal);
+                            $(this).addClass("warning");
+                            localSpan.text("This may be invalid");
+                        }
                     }
                 }
-                    
-            });
+            }));
+
 
             $("input#quantity").blur(function (event) {
 
