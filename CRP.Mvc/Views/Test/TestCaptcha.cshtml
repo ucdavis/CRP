@@ -1,0 +1,23 @@
+﻿@using Microsoft.Azure
+
+@{
+    ViewBag.Title = "TestCaptcha";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<h2>TestCaptcha</h2>
+
+@using (Html.BeginForm("TestCaptcha", "Test", FormMethod.Post, new { @id = "CheckoutForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <div class="g-recaptcha" data-sitekey="@CloudConfigurationManager.GetSetting("NewRecaptchaPublicKey")"></div>
+    </div>
+    <input type="submit"/>
+}
+
+@section AdditionalScripts
+{
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+}

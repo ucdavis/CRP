@@ -1376,10 +1376,10 @@
     <Content Include="Views\Item\MapDirectionsNew.cshtml" />
     <Content Include="Views\Transaction\CheckoutNew.cshtml" />
     <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
+    <Content Include="Views\Test\TestCaptcha.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
