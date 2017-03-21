@@ -52,10 +52,7 @@ namespace CRP.Mvc.Controllers
             Log.Information("Hit exception");
         }
 
-        public ActionResult TestCaptcha()
-        {
-            return View();
-        }
+
 
         //[HttpPost]
         //public ActionResult TestCaptcha(bool? meh)
@@ -73,6 +70,11 @@ namespace CRP.Mvc.Controllers
         //    }
         //    return Content(success.ToString());
         //}
+
+        public ActionResult TestCaptcha()
+        {
+            return View();
+        }
 
         [HttpPost]
         public async Task<ActionResult> TestCaptcha(bool? meh)
