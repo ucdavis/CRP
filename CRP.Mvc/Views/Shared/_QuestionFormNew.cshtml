@@ -73,7 +73,7 @@
         case "Drop Down":
             @*@this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")*@
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
-            <select class="form-control indexedControl @Model.Question.ValidationClasses"  id=".Answer">
+            <select class="form-control indexedControl @Model.Question.ValidationClasses"  id="_Answer">
                 <option>--Select--</option>
                 @foreach (var o in Model.Question.Options.OrderBy(a => a.Name))
                 {
