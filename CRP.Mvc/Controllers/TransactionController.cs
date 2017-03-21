@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
@@ -17,6 +19,8 @@ using CRP.Core.Resources;
 using Microsoft.Azure;
 using MvcContrib;
 using MvcContrib.Attributes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using UCDArch.Data.NHibernate;
@@ -474,12 +478,23 @@ namespace CRP.Controllers
         /// <param name="coupon">The coupon.</param>
         /// <param name="transactionAnswers">The transaction answers.</param>
         /// <param name="quantityAnswers">The quantity answers.</param>
-        /// <param name="captchaValid">if set to <c>true</c> [captcha valid].</param>
         /// <returns></returns>
-        [CaptchaValidator]
         [HttpPost]
-        public ActionResult CheckoutNew(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
+        public async Task<ActionResult> CheckoutNew(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
         {
+            bool captchaValid = false;
+            var response = Request.Form["g-Recaptcha-Response"];
+            using (var client = new HttpClient())
+            {
+
+                var googleResponse = await client.PostAsync(String.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", CloudConfigurationManager.GetSetting("NewRecaptchaPrivateKey"), response), null);
+                googleResponse.EnsureSuccessStatusCode();
+                var responseContent = JsonConvert.DeserializeObject(await googleResponse.Content.ReadAsStringAsync());
+                dynamic data = JObject.FromObject(responseContent);
+                captchaValid = data.success;
+            }
+
+
             // if the arrays are null create new blank ones
             if (transactionAnswers == null) transactionAnswers = new QuestionAnswerParameter[0];
             if (quantityAnswers == null) quantityAnswers = new QuestionAnswerParameter[0];
@@ -528,7 +543,7 @@ namespace CRP.Controllers
 
             if (!captchaValid)
             {
-                ModelState.AddModelError("Captcha", "Captcha values are not valid.");
+                ModelState.AddModelError("Captcha", "reCaptcha missing or invalid. Are you a robot?");
             }
 
             if (quantity < 1)
