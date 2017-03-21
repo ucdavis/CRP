@@ -591,7 +591,8 @@ form.tickets {
 
 
 
-.validation-summary-errors { border-bottom:1px #e6e6e6 solid; font-weight:bold;}
+.validation-summary-errors { border-bottom:1px #e6e6e6 solid; color: red;font-size: large;}
+.validation-summary-errors ul li { color: red;}
 
 /* ---------------- */
 /*system wide status*/
