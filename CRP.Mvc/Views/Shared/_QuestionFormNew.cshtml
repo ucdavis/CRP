@@ -68,7 +68,7 @@
 
             break;
         case "No Answer":
-            <div>@Model.Question.Name</div>
+            <span>@Model.Question.Name</span>
             break;
         case "Drop Down":
             @*@this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")*@
