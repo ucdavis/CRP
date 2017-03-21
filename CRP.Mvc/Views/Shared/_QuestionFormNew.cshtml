@@ -19,7 +19,7 @@
             break;
         case "Text Area":
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
-            @Html.TextArea(".Answer", Model.Answer, new {@class = "form-control " + StaticValues.Class_indexedControl, rows = "3"})
+            @Html.TextArea(".Answer", Model.Answer, new {@class = "form-control " + StaticValues.Class_indexedControl + " " + Model.Question.ValidationClasses, rows = "3"})
             break;
         case "Date":
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
@@ -74,7 +74,7 @@
             @*@this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")*@
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
             <select class="form-control indexedControl @Model.Question.ValidationClasses"  id="_Answer">
-                <option>--Select--</option>
+                <option value="">--Select--</option>
                 @foreach (var o in Model.Question.Options.OrderBy(a => a.Name))
                 {
                     if (Model.Answer != null && Model.Answer == o.Name)
