@@ -28,7 +28,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="searchTerm"></param>
         /// <returns></returns>
-        public ActionResult Index(string searchTerm)
+        public ActionResult IndexOld(string searchTerm)
         {
             var viewModel = SearchViewModel.Create(Repository);
 
@@ -56,7 +56,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        public ActionResult IndexNew(string searchTerm)
+        public ActionResult Index(string searchTerm)
         {
             var viewModel = SearchViewModel.Create(Repository);
 

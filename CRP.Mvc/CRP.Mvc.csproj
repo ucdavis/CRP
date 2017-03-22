@@ -1305,16 +1305,16 @@
     <Content Include="Views\Help\WatchVideo.aspx" />
     <Content Include="Views\Home\About.aspx" />
     <Content Include="Views\Home\AdminHome.aspx" />
-    <Content Include="Views\Home\Index.aspx" />
+    <Content Include="Views\Home\IndexOld.aspx" />
     <Content Include="Views\ItemManagement\Create.aspx" />
     <Content Include="Views\ItemManagement\Details.aspx" />
     <Content Include="Views\ItemManagement\Edit.aspx" />
     <Content Include="Views\ItemManagement\ItemMapPinsView.ascx" />
     <Content Include="Views\ItemManagement\List.aspx" />
     <Content Include="Views\ItemManagement\Map.aspx" />
-    <Content Include="Views\Item\Details.aspx" />
-    <Content Include="Views\Item\Map.aspx" />
-    <Content Include="Views\Item\MapDirections.aspx" />
+    <Content Include="Views\Item\DetailsOld.aspx" />
+    <Content Include="Views\Item\MapOld.aspx" />
+    <Content Include="Views\Item\MapDirectionsOld.aspx" />
     <Content Include="Views\MapPin\Create.aspx" />
     <Content Include="Views\MapPin\Edit.aspx" />
     <Content Include="Views\MapPin\MapPinView.ascx" />
@@ -1330,7 +1330,7 @@
     <Content Include="Views\Report\ViewReport.aspx" />
     <Content Include="Views\Report\ViewSystemReport.aspx" />
     <Content Include="Views\SDK\Index.aspx" />
-    <Content Include="Views\Search\Index.aspx" />
+    <Content Include="Views\Search\IndexOld.aspx" />
     <Content Include="Views\Shared\CheckView.ascx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\FIDForm.ascx" />
@@ -1347,8 +1347,8 @@
     <Content Include="Views\Tag\Index.aspx" />
     <Content Include="Views\Template\Edit.aspx" />
     <Content Include="Views\Transaction\AdminLookup.aspx" />
-    <Content Include="Views\Transaction\Checkout.aspx" />
-    <Content Include="Views\Transaction\Confirmation.aspx" />
+    <Content Include="Views\Transaction\CheckoutOld.aspx" />
+    <Content Include="Views\Transaction\ConfirmationOld.aspx" />
     <Content Include="Views\Transaction\DetailsRefund.aspx" />
     <Content Include="Views\Transaction\Edit.aspx" />
     <Content Include="Views\Transaction\Lookup.aspx" />
@@ -1367,17 +1367,17 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Shared\_PublicLayout.cshtml" />
-    <Content Include="Views\Home\IndexNew.cshtml" />
-    <Content Include="Views\Search\IndexNew.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\_ItemBrowseNew.cshtml" />
-    <Content Include="Views\Item\DetailsNew.cshtml" />
+    <Content Include="Views\Item\Details.cshtml" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
-    <Content Include="Views\Item\MapNew.cshtml" />
-    <Content Include="Views\Item\MapDirectionsNew.cshtml" />
-    <Content Include="Views\Transaction\CheckoutNew.cshtml" />
+    <Content Include="Views\Item\Map.cshtml" />
+    <Content Include="Views\Item\MapDirections.cshtml" />
+    <Content Include="Views\Transaction\Checkout.cshtml" />
     <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
     <Content Include="Views\Test\TestCaptcha.cshtml" />
-    <Content Include="Views\Transaction\ConfirmationNew.cshtml" />
+    <Content Include="Views\Transaction\Confirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

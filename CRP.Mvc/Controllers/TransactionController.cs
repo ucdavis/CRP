@@ -54,7 +54,7 @@ namespace CRP.Controllers
         /// <param name="password"> </param>
         /// <param name="agribusinessExtraParams"></param>
         /// <returns></returns>
-        public ActionResult Checkout(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
+        public ActionResult CheckoutOld(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -112,7 +112,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [CaptchaValidator]
         [HttpPost]
-        public ActionResult Checkout(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
+        public ActionResult CheckoutOld(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
         {
             // if the arrays are null create new blank ones
             if (transactionAnswers==null) transactionAnswers = new QuestionAnswerParameter[0];
@@ -424,7 +424,7 @@ namespace CRP.Controllers
         /// <param name="password"> </param>
         /// <param name="agribusinessExtraParams"></param>
         /// <returns></returns>
-        public ActionResult CheckoutNew(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
+        public ActionResult Checkout(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -480,7 +480,7 @@ namespace CRP.Controllers
         /// <param name="quantityAnswers">The quantity answers.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> CheckoutNew(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
+        public async Task<ActionResult> Checkout(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
         {
             bool captchaValid = false;
             var response = Request.Form["g-Recaptcha-Response"];
@@ -543,7 +543,7 @@ namespace CRP.Controllers
 
             if (!captchaValid)
             {
-                ModelState.AddModelError("Captcha", "reCaptcha missing or invalid. Are you a robot?");
+                ModelState.AddModelError("Captcha", "Captcha missing or invalid. Are you a robot?");
             }
 
             if (quantity < 1)
@@ -857,7 +857,7 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Confirmation(int id)
+        public ActionResult ConfirmationOld(int id)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);            
 
@@ -877,7 +877,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        public ActionResult ConfirmationNew(int id)
+        public ActionResult Confirmation(int id)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
 

@@ -9,7 +9,7 @@
 }
 
 
-@using (Html.BeginForm("CheckoutNew", "Transaction", FormMethod.Post, new {@id = "CheckoutForm"}))
+@using (Html.BeginForm("Checkout", "Transaction", FormMethod.Post, new {@id = "CheckoutForm"}))
 {
     @Html.AntiForgeryToken()
     @Html.Hidden("displayAmount", Model.Item.CostPerItem)
