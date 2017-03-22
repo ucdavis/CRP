@@ -1347,8 +1347,8 @@
     <Content Include="Views\Tag\Index.aspx" />
     <Content Include="Views\Template\Edit.aspx" />
     <Content Include="Views\Transaction\AdminLookup.aspx" />
-    <Content Include="Views\Transaction\Checkout.aspx" />
-    <Content Include="Views\Transaction\Confirmation.aspx" />
+    <Content Include="Views\Transaction\CheckoutOld.aspx" />
+    <Content Include="Views\Transaction\ConfirmationOld.aspx" />
     <Content Include="Views\Transaction\DetailsRefund.aspx" />
     <Content Include="Views\Transaction\Edit.aspx" />
     <Content Include="Views\Transaction\Lookup.aspx" />
@@ -1374,10 +1374,10 @@
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Item\Map.cshtml" />
     <Content Include="Views\Item\MapDirections.cshtml" />
-    <Content Include="Views\Transaction\CheckoutNew.cshtml" />
+    <Content Include="Views\Transaction\Checkout.cshtml" />
     <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
     <Content Include="Views\Test\TestCaptcha.cshtml" />
-    <Content Include="Views\Transaction\ConfirmationNew.cshtml" />
+    <Content Include="Views\Transaction\Confirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
