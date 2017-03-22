@@ -876,6 +876,26 @@ namespace CRP.Controllers
             var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url, Fid);
             return View(viewModel);
         }
+
+        public ActionResult ConfirmationNew(int id)
+        {
+            var transaction = Repository.OfType<Transaction>().GetNullableById(id);
+
+            if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
+
+            Check.Require(transaction.Item != null);
+            if (transaction.Credit)
+            {
+                Check.Require(!string.IsNullOrEmpty(transaction.Item.TouchnetFID));
+            }
+
+            string postingString = CloudConfigurationManager.GetSetting("TouchNetPostingKey");
+            //string Fid = " FID=" + CloudConfigurationManager.GetSetting("TouchNetFid"); 
+            string Fid = " FID=" + transaction.Item.TouchnetFID;
+            var validationKey = CalculateValidationString(postingString, transaction.TransactionGuid.ToString() + Fid, transaction.Total.ToString());
+            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url, Fid);
+            return View(viewModel);
+        }
         /// <summary>
         /// Calculates the validation string.
         /// </summary>

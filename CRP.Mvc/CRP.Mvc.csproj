@@ -1377,6 +1377,7 @@
     <Content Include="Views\Transaction\CheckoutNew.cshtml" />
     <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
     <Content Include="Views\Test\TestCaptcha.cshtml" />
+    <Content Include="Views\Transaction\ConfirmationNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
