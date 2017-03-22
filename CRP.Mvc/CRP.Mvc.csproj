@@ -1330,7 +1330,7 @@
     <Content Include="Views\Report\ViewReport.aspx" />
     <Content Include="Views\Report\ViewSystemReport.aspx" />
     <Content Include="Views\SDK\Index.aspx" />
-    <Content Include="Views\Search\Index.aspx" />
+    <Content Include="Views\Search\IndexOld.aspx" />
     <Content Include="Views\Shared\CheckView.ascx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\FIDForm.ascx" />
@@ -1368,7 +1368,7 @@
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Shared\_PublicLayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Search\IndexNew.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\_ItemBrowseNew.cshtml" />
     <Content Include="Views\Item\Details.cshtml" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
