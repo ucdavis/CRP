@@ -1305,7 +1305,7 @@
     <Content Include="Views\Help\WatchVideo.aspx" />
     <Content Include="Views\Home\About.aspx" />
     <Content Include="Views\Home\AdminHome.aspx" />
-    <Content Include="Views\Home\Index.aspx" />
+    <Content Include="Views\Home\IndexOld.aspx" />
     <Content Include="Views\ItemManagement\Create.aspx" />
     <Content Include="Views\ItemManagement\Details.aspx" />
     <Content Include="Views\ItemManagement\Edit.aspx" />
@@ -1367,7 +1367,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Shared\_PublicLayout.cshtml" />
-    <Content Include="Views\Home\IndexNew.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Search\IndexNew.cshtml" />
     <Content Include="Views\Shared\_ItemBrowseNew.cshtml" />
     <Content Include="Views\Item\DetailsNew.cshtml" />

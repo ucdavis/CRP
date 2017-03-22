@@ -12,7 +12,7 @@ namespace CRP.Controllers
     [HandleTransactionsManually]
     public class HomeController : ApplicationController
     {
-        public ActionResult Index()
+        public ActionResult IndexOld()
         {
             //return View();
 
@@ -20,7 +20,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        public ActionResult IndexNew()
+        public ActionResult Index()
         {
             //return View();
 
