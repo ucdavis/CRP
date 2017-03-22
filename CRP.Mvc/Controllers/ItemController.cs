@@ -30,7 +30,7 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Details(int id)
+        public ActionResult DetailsOld(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -67,7 +67,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        public ActionResult DetailsNew(int id)
+        public ActionResult Details(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -132,6 +132,20 @@ namespace CRP.Controllers
             }
         }
 
+        public ActionResult MapOld(int id, bool usePins)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(id);
+
+            if (item == null || !item.Available)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+            var viewModel = BigMapViewModel.Create(item);
+            viewModel.UsePins = usePins;
+            return View(viewModel);
+        }
+
         public ActionResult Map(int id, bool usePins)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
@@ -146,7 +160,7 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        public ActionResult MapNew(int id, bool usePins)
+        public ActionResult MapDirectionsOld(int id, bool usePins)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -161,20 +175,6 @@ namespace CRP.Controllers
         }
 
         public ActionResult MapDirections(int id, bool usePins)
-        {
-            var item = Repository.OfType<Item>().GetNullableById(id);
-
-            if (item == null || !item.Available)
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction<HomeController>(a => a.Index());
-            }
-            var viewModel = BigMapViewModel.Create(item);
-            viewModel.UsePins = usePins;
-            return View(viewModel);
-        }
-
-        public ActionResult MapDirectionsNew(int id, bool usePins)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 

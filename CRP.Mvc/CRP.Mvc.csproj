@@ -1312,9 +1312,9 @@
     <Content Include="Views\ItemManagement\ItemMapPinsView.ascx" />
     <Content Include="Views\ItemManagement\List.aspx" />
     <Content Include="Views\ItemManagement\Map.aspx" />
-    <Content Include="Views\Item\Details.aspx" />
-    <Content Include="Views\Item\Map.aspx" />
-    <Content Include="Views\Item\MapDirections.aspx" />
+    <Content Include="Views\Item\DetailsOld.aspx" />
+    <Content Include="Views\Item\MapOld.aspx" />
+    <Content Include="Views\Item\MapDirectionsOld.aspx" />
     <Content Include="Views\MapPin\Create.aspx" />
     <Content Include="Views\MapPin\Edit.aspx" />
     <Content Include="Views\MapPin\MapPinView.ascx" />
@@ -1370,10 +1370,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Search\IndexNew.cshtml" />
     <Content Include="Views\Shared\_ItemBrowseNew.cshtml" />
-    <Content Include="Views\Item\DetailsNew.cshtml" />
+    <Content Include="Views\Item\Details.cshtml" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
-    <Content Include="Views\Item\MapNew.cshtml" />
-    <Content Include="Views\Item\MapDirectionsNew.cshtml" />
+    <Content Include="Views\Item\Map.cshtml" />
+    <Content Include="Views\Item\MapDirections.cshtml" />
     <Content Include="Views\Transaction\CheckoutNew.cshtml" />
     <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
     <Content Include="Views\Test\TestCaptcha.cshtml" />
