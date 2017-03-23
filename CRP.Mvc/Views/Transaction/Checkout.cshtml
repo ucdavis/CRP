@@ -149,9 +149,10 @@
                 }
             </div>
         }
-        @*Transaction Level*@@{
-                                 var showDonationLink = false;
-                             }
+        @*Transaction Level*@
+        @{
+            var showDonationLink = false;
+        }
         @foreach (var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
         {
             <div class="TransactionContainer">
