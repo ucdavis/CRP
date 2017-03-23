@@ -7,6 +7,7 @@ using UCDArch.Web.Controller;
 using CRP.Core.Abstractions;
 using System.Linq;
 using CRP.Core.Helpers;
+using DotNetOpenAuth.Messaging;
 
 namespace CRP.Controllers
 {
@@ -74,10 +75,7 @@ namespace CRP.Controllers
                     .ToList();
 
                 viewModel.Items = new List<Item>(unexpiredItems);
-                foreach (var expiredItem in expiredItems)
-                {
-                    viewModel.Items.Add(expiredItem);
-                }
+                viewModel.Items.AddRange(expiredItems);
             }
 
 
