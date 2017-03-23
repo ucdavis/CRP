@@ -5,7 +5,10 @@
 
 @{
     ViewBag.Title = "UC Davis Registration";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";    
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+    ViewBag.OgImage = Url.Action("GetImage", "Item", new { id = Model.Item.Id });
+    ViewBag.OgDescription = Model.Item.Summary;
+    ViewBag.OgTitle = Model.Item.Name;
 }
 
 

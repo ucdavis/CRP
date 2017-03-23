@@ -1,5 +1,12 @@
 ﻿@using CRP.Core.Domain
 @using Microsoft.Web.Mvc
+
+@{
+    ViewBag.OgImage = string.IsNullOrWhiteSpace(ViewBag.OgImage) ? Url.Content("~/Images/Media/thumbnail.jpg") : ViewBag.OgImage;
+    ViewBag.OgDescription = string.IsNullOrWhiteSpace(ViewBag.OgDescription) ? "Online Registration for UC Davis events developed by the College of Agriculture and Environmental Sciences at UC Davis" : ViewBag.OgDescription;
+    ViewBag.OgTitle = string.IsNullOrWhiteSpace(ViewBag.OgTitle) ? "Online Registration" : ViewBag.OgTitle;
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +18,9 @@
     <meta name="classification" content="UC Davis Starter template for CAES CRU and anyone else">
     <meta name="theme-color" content="#">
     <link rel="image_src" href="@Url.Content("~/Images/Media/thumbnail.jpg")" />
-    <meta property="og:image" content="@Url.Content("~/Images/Media/thumbnail.jpg")">
+    <meta property="og:image" content="@ViewBag.OgImage">
+    <meta property="og:description" content="@ViewBag.OgDescription" />
+    <meta property="og:title" content="@ViewBag.OgTitle" />
     <link rel="shortcut icon" href="@Url.Content("~/Images/Media/favicon.ico")">
 
     <!-- Typekit -->
