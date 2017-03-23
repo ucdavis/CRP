@@ -374,8 +374,9 @@
 
         function RepopulateRadioButtonAnswers(){
             $.each($("input[type=radio][checked=checked]"), function(index, item){
-                if($(item).hasClass("indexedControl")){
+                if($(item).hasClass("indexedControl")) {
                     $(item).attr("checked", true);
+                    $(item).prop("checked", true);
                 }
             });    
         }
