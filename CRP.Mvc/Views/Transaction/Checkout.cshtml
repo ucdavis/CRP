@@ -67,6 +67,7 @@
                     @if (!String.IsNullOrEmpty(Model.Item.RestrictedKey))
                     {
                         @Html.TextBox("restrictedKey", !string.IsNullOrWhiteSpace(Model.Password) ? Model.Password : string.Empty, new {@class = "form-control", placeholder = "Pass phrase to purchase"})
+                        @Html.ValidationMessage("Restricted Key")
                     }
                 </p>
                 <p class="table-item">
