@@ -12,7 +12,7 @@
     {
         <div class="event_card">
             <a href="@Url.Action("Details", "Item", new { id = item.Id })">
-                <img class="img-respo" src="@Url.Action("GetImage", "Item", new {id = item.Id})" alt="x" />
+                <img class="img-respo" src="@Url.Action("GetImage", "Item", new {id = item.Id})" alt="eventbanner-image" />
                 <div class="event_card-details">
                     <h1>@Html.Encode(item.Name)</h1>
                     <P>
