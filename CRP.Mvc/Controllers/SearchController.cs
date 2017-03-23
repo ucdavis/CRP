@@ -7,6 +7,7 @@ using UCDArch.Web.Controller;
 using CRP.Core.Abstractions;
 using System.Linq;
 using CRP.Core.Helpers;
+using DotNetOpenAuth.Messaging;
 
 namespace CRP.Controllers
 {
@@ -28,20 +29,20 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="searchTerm"></param>
         /// <returns></returns>
-        public ActionResult Index(string searchTerm)
+        public ActionResult IndexOld(string searchTerm)
         {
             var viewModel = SearchViewModel.Create(Repository);
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                var itemList = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false && a.Available && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().AddDays(-15)).AsQueryable(); //.OrderByDescending(a => a.Expiration >= DateTime.UtcNow.ToPacificTime()).ThenBy(a => a.Expiration);
+                var itemList = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false && a.Available && a.Expiration != null && a.Expiration >= DateTime.UtcNow.AddDays(-15).ToPacificTime()).AsQueryable(); //.OrderByDescending(a => a.Expiration >= DateTime.UtcNow.ToPacificTime()).ThenBy(a => a.Expiration);
                 var unexpiredItems = itemList
                     .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
                     .OrderBy(a => a.Expiration)
                     .ToList();
 
                 var expiredItems = itemList
-                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().AddDays(-15).Date && a.Expiration < DateTime.UtcNow.ToPacificTime().Date)
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.AddDays(-15).ToPacificTime().Date && a.Expiration < DateTime.UtcNow.ToPacificTime().Date)
                     .OrderByDescending(a => a.Expiration)
                     .ToList();
 
@@ -50,6 +51,31 @@ namespace CRP.Controllers
                 {
                     viewModel.Items.Add(expiredItem);
                 } 
+            }
+
+
+            return View(viewModel);
+        }
+
+        public ActionResult Index(string searchTerm)
+        {
+            var viewModel = SearchViewModel.Create(Repository);
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                var itemList = _searchTermProvider.GetByTerm(searchTerm).Where(a => a.Private == false && a.Available && a.Expiration != null && a.Expiration >= DateTime.UtcNow.AddDays(-15).ToPacificTime()).AsQueryable(); //.OrderByDescending(a => a.Expiration >= DateTime.UtcNow.ToPacificTime()).ThenBy(a => a.Expiration);
+                var unexpiredItems = itemList
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
+                    .OrderBy(a => a.Expiration)
+                    .ToList();
+
+                var expiredItems = itemList
+                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.AddDays(-15).ToPacificTime().Date && a.Expiration < DateTime.UtcNow.ToPacificTime().Date)
+                    .OrderByDescending(a => a.Expiration)
+                    .ToList();
+
+                viewModel.Items = new List<Item>(unexpiredItems);
+                viewModel.Items.AddRange(expiredItems);
             }
 
 

@@ -1,0 +1,60 @@
+﻿@using CRP.Controllers.Helpers
+@using CRP.Core.Resources
+@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.PaymentConfirmationViewModel
+
+@{
+    ViewBag.Title = "Confirmation";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+<div class="boundary">
+    <h2>Confirmation</h2>
+    @if (Model.Transaction.Credit)
+    {
+        <div>
+            <label>Item: </label>
+            @Model.Transaction.Item.Name
+        </div>
+        <div>
+            <label>Amount: </label>
+            @Html.Encode(string.Format("{0:C}", Model.Transaction.Total))
+        </div>
+
+        <div>
+
+            <!-- This form submits the payment information to uPay for processing -->
+            <form method="post" action="@Model.PaymentGatewayUrl" id="PaymentForm">
+                @Html.Hidden(StaticValues.Upay_TransactionId, Model.Transaction.TransactionGuid.ToString() + Model.Fid)
+                @Html.Hidden(StaticValues.Upay_Amount, Model.Transaction.Total)
+                @Html.Hidden(StaticValues.Upay_SiteId, Model.SiteId)
+                @Html.Hidden(StaticValues.Upay_ValidationKey, Model.ValidationKey)
+                @Html.Hidden(StaticValues.Upay_SuccessLink, Model.SuccessLink)
+                @Html.Hidden(StaticValues.Upay_CancelLink, Model.CancelLink )
+                @Html.Hidden(StaticValues.Upay_ErrorLink, Model.ErrorLink)
+                @Html.SubmitButton("Submit", "Click here to be taken to our payment site.")
+            </form>
+        </div>
+    }
+    else
+    {
+        <div>
+            Payment Amount: @Model.Transaction.Total.ToString("C")
+            @if (Model.Transaction.Total > 0)
+            {
+                @Html.Raw(Model.Transaction.Item.CheckPaymentInstructions)
+            }
+        </div>
+    }
+</div>
+
+@section AdditionalScripts
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            // submit the form automatically
+            $("form#PaymentForm").submit();
+
+        });
+    </script>
+}

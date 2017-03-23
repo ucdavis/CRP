@@ -7,3 +7,18 @@ a
 {
 	display: none;
 }
+
+input 
+{
+    display: none;
+}
+
+header {
+    display: none;
+}
+
+@media print {
+  img {
+    max-width: none !important;
+  }
+}

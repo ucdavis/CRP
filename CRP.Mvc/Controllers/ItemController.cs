@@ -30,7 +30,7 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Details(int id)
+        public ActionResult DetailsOld(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -56,6 +56,43 @@ namespace CRP.Controllers
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, null, null, null);
 
             if(!item.IsAvailableForReg)
+            {
+                if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
+                {
+                    Message = "Online registration for this event has passed.";
+                }
+            }
+
+
+            return View(viewModel);
+        }
+
+        public ActionResult Details(int id)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(id);
+
+            if (item == null)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+
+            if (!item.Available)
+            {
+                if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                    return this.RedirectToAction<HomeController>(a => a.Index());
+                }
+                else
+                {
+                    Message = "Event is not available to public";
+                }
+            }
+
+            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, null, null, null);
+
+            if (!item.IsAvailableForReg)
             {
                 if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
                 {
@@ -95,7 +132,35 @@ namespace CRP.Controllers
             }
         }
 
+        public ActionResult MapOld(int id, bool usePins)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(id);
+
+            if (item == null || !item.Available)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+            var viewModel = BigMapViewModel.Create(item);
+            viewModel.UsePins = usePins;
+            return View(viewModel);
+        }
+
         public ActionResult Map(int id, bool usePins)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(id);
+
+            if (item == null || !item.Available)
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                return this.RedirectToAction<HomeController>(a => a.Index());
+            }
+            var viewModel = BigMapViewModel.Create(item);
+            viewModel.UsePins = usePins;
+            return View(viewModel);
+        }
+
+        public ActionResult MapDirectionsOld(int id, bool usePins)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -121,6 +186,6 @@ namespace CRP.Controllers
             var viewModel = BigMapViewModel.Create(item);
             viewModel.UsePins = usePins;
             return View(viewModel);
-        } 
+        }
     }
 }

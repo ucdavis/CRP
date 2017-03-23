@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Core.Abstractions;
 using Microsoft.Azure;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog;
+
 
 namespace CRP.Mvc.Controllers
 {
@@ -45,6 +50,49 @@ namespace CRP.Mvc.Controllers
             Log.Information("About to hit exception");
             throw new NotImplementedException("Har Har har. We tested it.");
             Log.Information("Hit exception");
+        }
+
+
+
+        //[HttpPost]
+        //public ActionResult TestCaptcha(bool? meh)
+        //{
+        //    var success = false;
+
+        //    var response = Request.Form["g-Recaptcha-Response"];
+
+        //    using (var client = new WebClient())
+        //    {
+        //        var www = JsonConvert.DeserializeObject(client.DownloadString(String.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", CloudConfigurationManager.GetSetting("NewRecaptchaPrivateKey"), response)));
+        //        dynamic data = JObject.FromObject(www);
+        //        success = data.success;
+
+        //    }
+        //    return Content(success.ToString());
+        //}
+
+        public ActionResult TestCaptcha()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> TestCaptcha(bool? meh)
+        {
+            var success = false;
+
+            var response = Request.Form["g-Recaptcha-Response"];
+
+            using (var client = new HttpClient())
+            {
+
+                var googleResponse = await client.PostAsync(String.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", CloudConfigurationManager.GetSetting("NewRecaptchaPrivateKey"), response), null);
+                googleResponse.EnsureSuccessStatusCode();
+                var responseContent = JsonConvert.DeserializeObject(await googleResponse.Content.ReadAsStringAsync());
+                dynamic data = JObject.FromObject(responseContent);
+                success = data.success;                
+            }
+            return Content(success.ToString());
         }
     }
 }

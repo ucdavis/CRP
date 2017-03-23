@@ -1,0 +1,14 @@
+﻿@model CRP.Controllers.ViewModels.SearchViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="homepage bg-second">
+    <div class="boundary">
+        <h2>Search Results</h2>
+        <p>@Html.ActionLink("View All", "Index", "Home")</p>
+        @Html.Partial("_ItemBrowseNew", Model.Items)
+    </div>
+</div>
