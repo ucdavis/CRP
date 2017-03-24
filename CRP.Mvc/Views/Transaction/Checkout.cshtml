@@ -6,6 +6,8 @@
 @{
     ViewBag.Title = "Checkout";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
+    var creditCardChecked = Model.CreditPayment ? "checked='checked'" : string.Empty;
+    var checkdChecked = Model.CheckPayment ? "checked='checked'" : string.Empty;
 }
 
 
@@ -70,22 +72,8 @@
                         @Html.ValidationMessage("Restricted Key")
                     }
                 </p>
-                <p class="table-item">
-                    <span id="paymentTypeSpan">
-                        @{
-                            var creditCardChecked = Model.CreditPayment ? "checked='checked'" : string.Empty;
-                            var checkdChecked = Model.CheckPayment ? "checked='checked'" : string.Empty;
-                        }
-                        @*@if (Model.Item.AllowCreditPayment)
-                        {
-                            <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.CreditCard" @creditCardChecked/>
-                            <label for="credit">Credit Card</label>
-                        }
-                        @if (Model.Item.AllowCheckPayment)
-                        {
-                            <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.Check" @checkdChecked/>
-                            <label for="check">Check</label>
-                        }*@
+                <div class="table-item">
+                    <div id="paymentTypeSpan">
                         <div>
                             <div class="form-group">
                                 <h3>Payment Method: </h3>
@@ -109,8 +97,8 @@
                                 }
                             </div>
                         </div>
-                    </span>
-                </p>
+                    </div>
+                </div>
             </div>
 
         </div>
