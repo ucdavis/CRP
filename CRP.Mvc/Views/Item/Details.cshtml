@@ -18,7 +18,10 @@
         <div class="eventbanner-image">
             <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="eventbanner-image" />
         </div>
-        <div class="eventbanner-map">
+        @{
+            var showDiv = Model.HasMapPins ? string.Empty : "style=display:none";
+        }
+        <div class="eventbanner-map" @showDiv>
             @if (Model.HasMapPins)
             {
                 <div>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
