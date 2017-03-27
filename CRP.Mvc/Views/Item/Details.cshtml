@@ -106,27 +106,32 @@
             </div>
 
         </aside>
-        @*<div class="fullmap"> TODO: Check why this doesn't show
-            @if (Model.HasMapPins)
-            {
-                <div>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
-                <div>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
-                <div id="map" style="margin: 0px 0px 20px;">
-                    <div class="gp-map" style="height: 450px; width: 100%;"></div>
+        <div class="fullmap" @showDiv> 
 
-                    @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
-                    {
-                        <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
-                            <dt class="gp-name">@Html.Encode(a.Title)</dt>
-                            @if (!string.IsNullOrWhiteSpace(a.Description))
-                            {
-                                <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
-                            }
+                @if (Model.HasMapPins)
+            {
+
+                    <div id="map2" style="margin: 0px 0px 20px;">
+                        <div class="gp-map" style="height: 250px; width: 100%;"></div>
+
+                        @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
+                        {
+                            <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
+                                <dt class="gp-name">@Html.Encode(a.Title)</dt>
+                                @if (!string.IsNullOrWhiteSpace(a.Description))
+                                {
+                                    <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
+                                }
+                            </div>
+                        }
+                        <div class="eventbanner-mapbuttons">
+                            <p>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</p>
+                            <p>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</p>
                         </div>
-                    }
-                </div>
-            }
-        </div>*@
+                    </div>
+                }
+
+        </div>
     </div>
 </div>
 
@@ -141,6 +146,7 @@
     <script type="text/javascript">
         $(function() {
             $("#map").gPositions({ helpIcon: '@Url.Content("~/Images/question_blue.png")' });
+            $("#map2").gPositions({ helpIcon: '@Url.Content("~/Images/question_blue.png")' });
             $(".gp-sidecontainer-title img").attr("title", "");
             //$(".gp-sidecontainer-title img").bt("To view Locations on the map, click on the tabs below", { positions: 'top' });
             $(".gp-sidecontainer-title img").qtip({ // Grab some elements to apply the tooltip to
