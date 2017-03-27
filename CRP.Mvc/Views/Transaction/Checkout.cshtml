@@ -38,7 +38,7 @@
                 <p class="table-item">$<span class="perItemAmount">@Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem))</span>
                 </p>
                 <p class="table-item">
-                    @Html.TextBox("quantity", Model.Quantity, new {@class = "quantityAmount qty form-control"})
+                    @Html.TextBox("quantity", Model.Quantity, new {@class = "quantityAmount qty form-control", style = "margin-left: 116px;"})
                     @Html.ValidationMessage("Quantity")
                 </p>
                 <p class="table-item">$<span class="totalItemAmount">@Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem * Model.Quantity))</span>
