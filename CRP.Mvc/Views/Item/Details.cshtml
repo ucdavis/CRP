@@ -27,7 +27,7 @@
                 <div>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
                 <div>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
                 <div id="map" style="margin: 0px 0px 20px;">
-                    <div class="gp-map" style="height: 450px; width: 450px;"></div>
+                    <div class="gp-map" style="height: 450px; width: 100%;"></div>
 
                     @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
                     {
@@ -50,7 +50,7 @@
             @if (!string.IsNullOrEmpty(Model.Item.Link))
             {
                 <h2>Link:</h2>
-                <a target="_blank" href="@Html.Encode(Model.Item.Link)">@Html.Encode(Model.Item.Link)</a>
+                <p><a target="_blank" href="@Html.Encode(Model.Item.Link)">@Html.Encode(Model.Item.Link)</a></p>
             }
         </article>
         <aside>
@@ -103,6 +103,27 @@
             }
 
         </aside>
+        @*<div class="fullmap"> TODO: Check why this doesn't show
+            @if (Model.HasMapPins)
+            {
+                <div>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
+                <div>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
+                <div id="map" style="margin: 0px 0px 20px;">
+                    <div class="gp-map" style="height: 450px; width: 100%;"></div>
+
+                    @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
+                    {
+                        <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
+                            <dt class="gp-name">@Html.Encode(a.Title)</dt>
+                            @if (!string.IsNullOrWhiteSpace(a.Description))
+                            {
+                                <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>*@
     </div>
 </div>
 
