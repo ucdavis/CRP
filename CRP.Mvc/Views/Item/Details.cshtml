@@ -24,10 +24,9 @@
         <div class="eventbanner-map" @showDiv>
             @if (Model.HasMapPins)
             {
-                <div>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
-                <div>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</div>
+
                 <div id="map" style="margin: 0px 0px 20px;">
-                    <div class="gp-map" style="height: 450px; width: 100%;"></div>
+                    <div class="gp-map" style="height: 250px; width: 100%;"></div>
 
                     @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
                     {
@@ -39,6 +38,10 @@
                             }
                         </div>
                     }
+                    <div class="eventbanner-mapbuttons">
+                        <p>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</p>
+                        <p>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</p>
+                    </div>
                 </div>
             }
         </div>
@@ -54,6 +57,13 @@
             }
         </article>
         <aside>
+            @if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
+            {
+                <div class="registerbtn">
+                    <a class="btn btn-register" href="@Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} )">Register</a>
+                    <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
+                </div>
+            }
             @foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
             {
                 <div class="eventinfo-item">
@@ -67,7 +77,7 @@
                             if (ep.ExtendedProperty.Name.ToLower().Contains("location"))
                             {
                                 <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
-                            }                            
+                            }
                         }
                     </div>
                     <div class="eventinfo-text">
@@ -84,7 +94,8 @@
                     <h4>Price Per @Html.Encode(Model.Item.QuantityName):</h4>
                     <p>@Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))</p>
                 </div>
-            </div><div class="eventinfo-item">
+            </div>
+            <div class="eventinfo-item">
                 <div class="eventinfo-icon">
                     <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
                 </div>
@@ -93,14 +104,6 @@
                     <p>@Html.Encode(String.Format("{0:D}", Model.Item.Expiration))</p>
                 </div>
             </div>
-
-            @if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
-            {
-                <div class="registerbtn">
-                    <a class="btn btn-register" href="@Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} )">Register</a>
-                    <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
-                </div>
-            }
 
         </aside>
         @*<div class="fullmap"> TODO: Check why this doesn't show

@@ -247,8 +247,8 @@ article {
       width: 100%; } }
 
 aside {
-  width: 20%;
-  margin-top: 5%; }
+  width: 22%;
+  margin-top: 1%; }
   @media (max-width: 1450px) {
     aside {
       width: 25%; } }
@@ -565,6 +565,10 @@ form.tickets {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px; }
+
+.registerbtn {
+    margin-bottom: 16px;
+}
 
 
 

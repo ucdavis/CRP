@@ -6,10 +6,12 @@
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
-@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new {id = Model.Item.Id, usePins = true })
 
-<div id="map" style="margin: 0px 0px 20px;">
 
+<div id="map" class="boundary" >
+    <p>
+        @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true })
+    </p>
     <div class="gp-map" style="height: 1000px; width: 1500px;"></div>
     @foreach (var a in Model.Item.MapPins) { 
         <div class="gp-coordinate @(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
