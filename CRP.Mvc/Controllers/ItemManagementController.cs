@@ -62,7 +62,7 @@ namespace CRP.Controllers
         /// GET: /ItemManagement/List
         /// </summary>
         /// <returns></returns>
-        public ActionResult List(string transactionNumber)
+        public ActionResult ListOld(string transactionNumber)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
@@ -77,6 +77,23 @@ namespace CRP.Controllers
                 query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
             }
             return View(query); 
+        }
+
+        public ActionResult List(string transactionNumber)
+        {
+            var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
+
+            var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
+            // admins can see all
+            if (CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                query = Repository.OfType<Item>().Queryable;
+            }
+            if (!string.IsNullOrEmpty(transactionNumber))
+            {
+                query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
+            }
+            return View(query);
         }
 
         /// <summary>

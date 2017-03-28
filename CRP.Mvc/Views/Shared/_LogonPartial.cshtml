@@ -1,0 +1,16 @@
+﻿@using CRP.Controllers.Helpers
+@if (Request.IsAuthenticated)
+{
+    <div>
+        <p>
+            @Html.ActionLink("Lookup Order", "Lookup", "Transaction")
+        </p>
+        @if (!Request.IsOpenId())
+        {
+            var userName = HttpContext.Current.User.Identity.Name;
+            @userName
+        }
+
+        [@Html.ActionLink("Logout", "LogOut", "Account")]
+    </div>
+}
