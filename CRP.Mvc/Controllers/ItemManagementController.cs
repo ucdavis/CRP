@@ -62,7 +62,7 @@ namespace CRP.Controllers
         /// GET: /ItemManagement/List
         /// </summary>
         /// <returns></returns>
-        public ActionResult List(string transactionNumber)
+        public ActionResult ListOld(string transactionNumber)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
@@ -79,7 +79,7 @@ namespace CRP.Controllers
             return View(query); 
         }
 
-        public ActionResult List2(string transactionNumber)
+        public ActionResult List(string transactionNumber)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 

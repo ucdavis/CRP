@@ -1310,7 +1310,7 @@
     <Content Include="Views\ItemManagement\Details.aspx" />
     <Content Include="Views\ItemManagement\Edit.aspx" />
     <Content Include="Views\ItemManagement\ItemMapPinsView.ascx" />
-    <Content Include="Views\ItemManagement\List.aspx" />
+    <Content Include="Views\ItemManagement\ListOld.aspx" />
     <Content Include="Views\ItemManagement\Map.aspx" />
     <Content Include="Views\Item\DetailsOld.aspx" />
     <Content Include="Views\Item\MapOld.aspx" />
@@ -1378,7 +1378,7 @@
     <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
     <Content Include="Views\Test\TestCaptcha.cshtml" />
     <Content Include="Views\Transaction\Confirmation.cshtml" />
-    <Content Include="Views\ItemManagement\List2.cshtml" />
+    <Content Include="Views\ItemManagement\List.cshtml" />
     <Content Include="Views\Shared\_LogonPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
