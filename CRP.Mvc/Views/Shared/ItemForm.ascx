@@ -27,7 +27,7 @@
          <%= Html.Hidden("FidIsDisabled", !Model.CanChangeFID) %>
         <fieldset>
             <ul>
-            <li><%= Html.ActionLink<HelpController>(a => a.CreateItem(), "Watch Demo") %></li>
+            <li><a href="https://www.youtube.com/watch?v=Zi1DyKgev8M&feature=youtu.be" target="_blank">Watch Demo</a></li>
             <li><label for="ItemType">Item Type:</label><br /> 
             <% if (Model.Item == null || Model.IsNew) {%>                               
                 <%= this.Select("Item.ItemType").Options(Model.ItemTypes,x=>x.Id, x=>x.Name).FirstOption("--Select an Item Type--")
