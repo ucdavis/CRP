@@ -14,7 +14,7 @@
 
     <p>
         <%= Html.ActionLink<ItemManagementController>(a => a.Create(), "Create New") %> |
-        <%= Html.ActionLink<HelpController>(a => a.CreateItem(), "Watch Demo") %>
+        <a href="https://www.youtube.com/watch?v=Zi1DyKgev8M&feature=youtu.be" target="_blank">Watch Demo</a>
     </p>
     <p>
         <% using (Html.BeginForm("List","ItemManagement", FormMethod.Get)){%>
