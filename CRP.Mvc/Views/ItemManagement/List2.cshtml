@@ -1,0 +1,113 @@
+﻿@model IEnumerable<CRP.Core.Domain.Item>
+
+@{
+    ViewBag.Title = "List2";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+<div class="boundary">
+
+    <p>
+        @Html.ActionLink("Create New", "Create") | 
+        <a href="https://www.youtube.com/watch?v=Zi1DyKgev8M&feature=youtu.be" target="_blank">Watch Demo</a>
+    </p>
+    <p>
+        @using (Html.BeginForm("List2", "ItemManagement", FormMethod.Get))
+        {
+            <label for="transactionNumber">Transaction Number: </label>
+            @Html.TextBox("transactionNumber")
+            <input type="submit" value="Filter"/>
+        }
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.CostPerItem)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sold)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Expiration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Available)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink("Details", "Details", new {id = item.Id}) |
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Map", "Map", new { id = item.Id }) |
+                        @Html.ActionLink("Copy", "Copy", new { id = item.Id }) 
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @string.Format("{0:C}", item.CostPerItem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sold)
+                    </td>
+                    <td>
+                        @string.Format("{0:d}", item.Expiration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Available)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Register", "Checkout", "Transaction", new {id = item.Id}, null)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section AdditionalScripts
+{
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $(".table").dataTable({
+                "aaSorting": [[6, "desc"]], //Default sort on second column
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0, 3] }, //Disables sort on icon columns
+                    { 'type': 'date', 'aTargets': [5, 6] },
+                    { 'type': 'currency', 'aTargets': [2] }
+                ]
+            });
+        });
+    </script>
+}
+
+@section AdditionalStyles
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+}
