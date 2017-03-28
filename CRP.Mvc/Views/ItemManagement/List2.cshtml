@@ -4,6 +4,14 @@
     ViewBag.Title = "List2";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
 <div class="boundary">
 
     <p>
@@ -61,7 +69,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td>
+                    <td data-order="@item.CostPerItem">
                         @string.Format("{0:C}", item.CostPerItem)
                     </td>
                     <td>
@@ -98,9 +106,9 @@
             $(".table").dataTable({
                 "aaSorting": [[6, "desc"]], //Default sort on second column
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0, 3] }, //Disables sort on icon columns
+                    { 'bSortable': false, 'aTargets': [0, -1] }, //Disables sort on icon columns
                     { 'type': 'date', 'aTargets': [5, 6] },
-                    { 'type': 'currency', 'aTargets': [2] }
+                    { 'type': 'boolean', 'aTargets': [7] }
                 ]
             });
         });

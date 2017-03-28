@@ -1379,6 +1379,7 @@
     <Content Include="Views\Test\TestCaptcha.cshtml" />
     <Content Include="Views\Transaction\Confirmation.cshtml" />
     <Content Include="Views\ItemManagement\List2.cshtml" />
+    <Content Include="Views\Shared\_LogonPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
