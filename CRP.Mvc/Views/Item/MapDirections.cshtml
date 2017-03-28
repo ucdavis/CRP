@@ -12,7 +12,7 @@
     <p>
         @Html.ActionLink("Full Screen Map Just Pins", "Map", new { id = Model.Item.Id, usePins = true })
     </p>
-    <div class="gp-map" style="height: 600px; width: 1200px;"></div>
+    <div class="gp-map" style="height: 800px; width: 1500px;"></div>
     @foreach (var a in Model.Item.MapPins)
     {
         <div class="gp-coordinate @(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">

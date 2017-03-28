@@ -12,11 +12,13 @@
     <p>
         @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true })
     </p>
-    <div class="gp-map" style="height: 1000px; width: 1500px;"></div>
-    @foreach (var a in Model.Item.MapPins) { 
+    <div class="gp-map" style="height: 800px; width: 1500px;"></div>
+    @foreach (var a in Model.Item.MapPins)
+    {
         <div class="gp-coordinate @(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
             <dt class="gp-name">@Html.Encode(a.Title)</dt>
-            @if (!string.IsNullOrWhiteSpace(a.Description)) { 
+            @if (!string.IsNullOrWhiteSpace(a.Description))
+            {
                 <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
             }
         </div>
