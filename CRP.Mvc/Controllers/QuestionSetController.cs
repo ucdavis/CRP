@@ -18,7 +18,7 @@ using Check = UCDArch.Core.Utils.Check;
 namespace CRP.Controllers
 {
     [Authorize]
-    [AnyoneWithRoleAttribute]
+    [AnyoneWithRole]
     public class QuestionSetController : ApplicationController
     {
         private readonly IRepositoryWithTypedId<School, string> _schoolRepository;
