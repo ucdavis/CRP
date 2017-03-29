@@ -1384,6 +1384,7 @@
     <Content Include="Views\QuestionSet\List.cshtml" />
     <Content Include="Views\Transaction\AdminLookup.cshtml" />
     <Content Include="Views\ItemManagement\DetailsNew.cshtml" />
+    <Content Include="Views\ItemManagement\_TabTransactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

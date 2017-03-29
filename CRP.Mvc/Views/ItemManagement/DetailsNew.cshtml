@@ -26,44 +26,8 @@
         <li><a href="#Notifications" data-toggle="tab">Notifications</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="Transactions">
-            <table id="table-Transactions">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Transaction</th>
-                    <th>Quantity</th>
-                    <th>Amount</th>
-                    <th>Payment Type</th>
-                    <th>Paid</th>
-                    <th>Active Eh</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var item in Model.Item.Transactions.Where(a => a.ParentTransaction == null))
-                {
-                    <tr>
-                        <td>
-                            @using (Html.BeginForm<ItemManagementController>
-                                (x => x.ToggleTransactionIsActive(item.Id, Request.QueryString["Transactions-orderBy"], Request.QueryString["Transactions-page"])))
-                            {
-                                @Html.AntiForgeryToken()
-                                <a href="javascript:;" class="FormSubmit">@(item.IsActive ? "Deactivate" : "Activate")</a>
-
-                            }
-                                
-                        </td>
-                        <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Credit)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Paid)</td>
-                        <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
+        @Html.Partial("_TabTransactions", Model.Item.Transactions)
+        
         <div class="tab-pane" id="Checks">test2</div>
         <div class="tab-pane" id="Reports">test3</div>
         <div class="tab-pane" id="Refunds">test4</div>
@@ -83,7 +47,7 @@
                 "aaSorting": [[1, "desc"]], //Default sort on second column
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [5, 6] }
+                    { 'type': 'boolean', 'aTargets': [4, 5, 6] }
                 ]
             });
         });
