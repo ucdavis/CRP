@@ -31,7 +31,7 @@
                     </td>
                     <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>
                     <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td data-sort="@item.Amount">@string.Format("{0:C}", item.Amount)</td>
                     <td>@Html.DisplayFor(modelItem => item.Credit)</td>
                     <td>@Html.DisplayFor(modelItem => item.Paid)</td>
                     <td>@Html.DisplayFor(modelItem => item.IsActive)</td>

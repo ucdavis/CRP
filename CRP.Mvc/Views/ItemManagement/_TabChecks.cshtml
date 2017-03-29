@@ -25,7 +25,7 @@
                     <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>
                     <td>@Html.DisplayFor(modelItem => Model.CheckName.FirstOrDefault(z => z.TransactionNumber == item.TransactionNumber).FullName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Total)</td>
+                    <td data-sort="@item.Total">@string.Format("{0:C}", item.Total)</td>
                     <td>@Html.DisplayFor(modelItem => item.Paid)</td>
 
                 </tr>
