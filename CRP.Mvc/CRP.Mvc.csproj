@@ -1304,7 +1304,7 @@
     <Content Include="Views\Help\LinkMap.aspx" />
     <Content Include="Views\Help\WatchVideo.aspx" />
     <Content Include="Views\Home\About.aspx" />
-    <Content Include="Views\Home\AdminHome.aspx" />
+    <Content Include="Views\Home\AdminHomeOld.aspx" />
     <Content Include="Views\Home\IndexOld.aspx" />
     <Content Include="Views\ItemManagement\Create.aspx" />
     <Content Include="Views\ItemManagement\Details.aspx" />
@@ -1380,6 +1380,7 @@
     <Content Include="Views\Transaction\Confirmation.cshtml" />
     <Content Include="Views\ItemManagement\List.cshtml" />
     <Content Include="Views\Shared\_LogonPartial.cshtml" />
+    <Content Include="Views\Home\AdminHome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
