@@ -1,0 +1,105 @@
+﻿@model IEnumerable<CRP.Core.Domain.Transaction>
+
+@{
+    ViewBag.Title = "AdminLookup";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+<div class="boundary">
+    <h2>Admin Lookup</h2>
+
+    <p>
+        @using (Html.BeginForm("AdminLookup", "Transaction", FormMethod.Get))
+        {
+            <label for="email">Email: </label>
+            @Html.TextBox("email")
+            <input type="submit" value="Find"/>
+        }
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPaid)
+            </th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Details", "Details", "ItemManagement", new { id = item.Item.Id }, new { @class = "btn" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPaid)
+                </td>
+
+
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+    
+@section AdditionalScripts
+{
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $(".table").dataTable({
+                "aaSorting": [[4, "desc"]], //Default sort 
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
+                    { 'type': 'date', 'aTargets': [4] },
+                    { 'type': 'boolean', 'aTargets': [3] }
+                ]
+            });
+        });
+    </script>
+}
+
+@section AdditionalStyles
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+}

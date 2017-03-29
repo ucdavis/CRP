@@ -1346,7 +1346,7 @@
     <Content Include="Views\Shared\TransactionForm.ascx" />
     <Content Include="Views\Tag\Index.aspx" />
     <Content Include="Views\Template\Edit.aspx" />
-    <Content Include="Views\Transaction\AdminLookup.aspx" />
+    <Content Include="Views\Transaction\AdminLookupOld.aspx" />
     <Content Include="Views\Transaction\CheckoutOld.aspx" />
     <Content Include="Views\Transaction\ConfirmationOld.aspx" />
     <Content Include="Views\Transaction\DetailsRefund.aspx" />
@@ -1382,6 +1382,7 @@
     <Content Include="Views\Shared\_LogonPartial.cshtml" />
     <Content Include="Views\Home\AdminHome.cshtml" />
     <Content Include="Views\QuestionSet\List.cshtml" />
+    <Content Include="Views\Transaction\AdminLookup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
