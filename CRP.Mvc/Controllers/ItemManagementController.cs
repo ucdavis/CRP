@@ -540,19 +540,6 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        public ActionResult DetailsNew(int id)
-        {
-            var item = Repository.OfType<Item>().GetNullableById(id);
-            if (item == null || !Access.HasItemAccess(CurrentUser, item))
-            {
-                Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction(a => a.List(null));
-            }
-
-            var viewModel = UserItemDetailViewModel.Create(Repository, item);
-
-            return View(viewModel);
-        }
 
         /// <summary>
         /// Toggles the transaction is active.

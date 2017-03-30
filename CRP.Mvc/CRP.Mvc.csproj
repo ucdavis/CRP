@@ -1307,7 +1307,7 @@
     <Content Include="Views\Home\AdminHomeOld.aspx" />
     <Content Include="Views\Home\IndexOld.aspx" />
     <Content Include="Views\ItemManagement\Create.aspx" />
-    <Content Include="Views\ItemManagement\Details.aspx" />
+    <Content Include="Views\ItemManagement\DetailsOld.aspx" />
     <Content Include="Views\ItemManagement\Edit.aspx" />
     <Content Include="Views\ItemManagement\ItemMapPinsView.ascx" />
     <Content Include="Views\ItemManagement\ListOld.aspx" />
@@ -1383,7 +1383,7 @@
     <Content Include="Views\Home\AdminHome.cshtml" />
     <Content Include="Views\QuestionSet\List.cshtml" />
     <Content Include="Views\Transaction\AdminLookup.cshtml" />
-    <Content Include="Views\ItemManagement\DetailsNew.cshtml" />
+    <Content Include="Views\ItemManagement\Details.cshtml" />
     <Content Include="Views\ItemManagement\_TabTransactions.cshtml" />
     <Content Include="Views\ItemManagement\_TabChecks.cshtml" />
     <Content Include="Views\ItemManagement\_TabReports.cshtml" />
