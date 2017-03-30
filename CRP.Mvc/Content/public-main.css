@@ -570,6 +570,9 @@ form.tickets {
     margin-bottom: 16px;
 }
 
+.tab-content {
+    margin-top: 10px;
+}
 
 
 /* client side validation messages */

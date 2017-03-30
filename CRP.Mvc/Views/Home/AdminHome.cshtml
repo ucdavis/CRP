@@ -20,12 +20,11 @@
         @Html.ActionLink("Question Sets", "List", "QuestionSet", null, new { @class = "btn" })
     </p>
     <p>
-        @Html.ActionLink("Transaction Lookup", "AdminLookup", "Transaction", null, new { @class = "btn" })
-    </p>
-    <p>
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Administrative Screens <span class="caret"></span></button>
             <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Transaction Lookup", "AdminLookup", "Transaction")</li>
+                <li class="divider"></li>
                 <li>@Html.ActionLink("Application Management", "Index", "ApplicationManagement")</li>
                 <li>@Html.ActionLink("System Reports", "ViewSystemReport", "Report")</li>
                 <li>@Html.ActionLink("Manage Users", "ManageUsers", "Account")</li>
