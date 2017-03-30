@@ -21,7 +21,7 @@
                 <tr>
                     <td>
                         @using (Html.BeginForm<ItemManagementController>
-                        (x => x.ToggleTransactionIsActive(item.Id, Request.QueryString["Transactions-orderBy"], Request.QueryString["Transactions-page"])))
+                        (x => x.ToggleTransactionIsActive(item.Id, null, null)))
                         {
                             @Html.AntiForgeryToken()
                             <a href="javascript:;" class="FormSubmit">@(item.IsActive ? "Deactivate" : "Activate")</a>
