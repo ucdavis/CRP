@@ -1,0 +1,38 @@
+﻿@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.UserItemDetailViewModel
+    
+<div class="tab-pane" id="Reports">
+    <p>
+        @Html.ActionLink("Create", "Create", "Report", new {itemId = Model.Item.Id}, new { @class = "btn" })
+    </p>
+    <table id="table-Reports">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th># of Columns</th>
+            <th>Created By</th>
+            <th>System Report</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Reports)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Select", "ViewReport", "Report", new {id = item.Id, itemId = Model.Item.Id}, null)
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Columns.Count)</td>
+                <td>@Html.DisplayFor(modelItem => item.User.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.SystemReusable)</td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+
+

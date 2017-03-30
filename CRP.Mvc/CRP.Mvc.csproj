@@ -1386,6 +1386,7 @@
     <Content Include="Views\ItemManagement\DetailsNew.cshtml" />
     <Content Include="Views\ItemManagement\_TabTransactions.cshtml" />
     <Content Include="Views\ItemManagement\_TabChecks.cshtml" />
+    <Content Include="Views\ItemManagement\_TabReports.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
