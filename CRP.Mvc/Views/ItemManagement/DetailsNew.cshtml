@@ -30,7 +30,7 @@
         @Html.Partial("_TabChecks")
         @Html.Partial("_TabReports")
         @Html.Partial("_TabRefunds")
-        <div class="tab-pane" id="Notifications">test5</div>
+        @Html.Partial("_TabNotifications", Model.Item.Transactions)  
     </div>
     
 
@@ -74,6 +74,16 @@
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
                     { 'type': 'boolean', 'aTargets': [5] }
+                ]
+            });
+            $("#table-Notifications").dataTable({
+                stateSave: true,
+                stateDuration: 60 * 5,
+                "aaSorting": [[1, "desc"]], //Default sort on second column
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
+                    { 'type': 'boolean', 'aTargets': [2, 4, 6] },
+                    { 'type': 'date', 'aTargets': [3] }
                 ]
             });
         });

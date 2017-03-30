@@ -1388,6 +1388,7 @@
     <Content Include="Views\ItemManagement\_TabChecks.cshtml" />
     <Content Include="Views\ItemManagement\_TabReports.cshtml" />
     <Content Include="Views\ItemManagement\_TabRefunds.cshtml" />
+    <Content Include="Views\ItemManagement\_TabNotifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
