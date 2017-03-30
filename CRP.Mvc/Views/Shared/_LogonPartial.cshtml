@@ -1,16 +1,19 @@
 ﻿@using CRP.Controllers.Helpers
 @if (Request.IsAuthenticated)
 {
-    <div>
-        <p>
-            @Html.ActionLink("Lookup Order", "Lookup", "Transaction")
-        </p>
+    <div class="dropdown">
+        @{var userName = String.Empty;}
         @if (!Request.IsOpenId())
         {
-            var userName = HttpContext.Current.User.Identity.Name;
-            @userName
+            userName = HttpContext.Current.User.Identity.Name;
         }
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">@userName More Actions <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Lookup Order", "Lookup", "Transaction")</li>
+            <li>@Html.ActionLink("Help", "Index", "Help")</li>
 
-        [@Html.ActionLink("Logout", "LogOut", "Account")]
+            <li class="divider"></li>
+            <li>@Html.ActionLink("Logout", "LogOut", "Account")</li>
+        </ul>
     </div>
 }

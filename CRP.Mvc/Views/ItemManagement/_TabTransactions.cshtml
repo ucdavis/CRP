@@ -1,0 +1,45 @@
+﻿@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@model IEnumerable<CRP.Core.Domain.Transaction>
+    
+<div class="tab-pane active" id="Transactions">
+    <table id="table-Transactions">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Transaction</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Payment Type</th>
+                <th>Paid</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Where(a => a.ParentTransaction == null))
+            {
+                <tr>
+                    <td>
+                        @using (Html.BeginForm<ItemManagementController>
+                        (x => x.ToggleTransactionIsActive(item.Id, null, null)))
+                        {
+                            @Html.AntiForgeryToken()
+                            <a href="javascript:;" class="FormSubmit">@(item.IsActive ? "Deactivate" : "Activate")</a>
+
+                        }
+
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                    <td data-sort="@item.Amount">@string.Format("{0:C}", item.Amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Credit)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Paid)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
