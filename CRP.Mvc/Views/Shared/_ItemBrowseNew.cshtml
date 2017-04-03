@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CRP.Core.Domain.Item>
+﻿@using System.Globalization
+@model IEnumerable<CRP.Core.Domain.Item>
 @{
     var DisplayText = "Upcoming events";
     if (Model == null || !Model.Any())
@@ -20,10 +21,23 @@
                     </P>
                     @foreach (var ep in item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
                     {
+                        var answer = ep.Answer;
+                        if (ep.ExtendedProperty.QuestionType.Name == "Date")
+                        {
+                            try
+                            {
+     
+                                answer = Convert.ToDateTime(ep.Answer, new CultureInfo("en-US")).ToString("D");
+                            }
+                            catch
+                            {
+                                // ignored
+                            }
+                        }
+
                         <p>
                             <strong>@ep.ExtendedProperty.Name:</strong>
-                            @Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box"
-                                ? ep.Answer : Convert.ToDateTime(ep.Answer).ToString("D"))
+                            @answer
                         </p>
                     }
                     <p>
