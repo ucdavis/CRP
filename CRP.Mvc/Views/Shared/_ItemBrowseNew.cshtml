@@ -26,9 +26,8 @@
                         {
                             try
                             {
-                                var xxx = Convert.ToDateTime(ep.Answer, new CultureInfo("en-US"));
-                                //var xxx = Convert.ToDateTime(ep.Answer);
-                                answer = xxx.ToString("D");
+     
+                                answer = Convert.ToDateTime(ep.Answer, new CultureInfo("en-US")).ToString("D");
                             }
                             catch
                             {
