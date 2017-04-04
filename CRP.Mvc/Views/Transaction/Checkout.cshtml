@@ -192,7 +192,7 @@
             @Html.ValidationMessage("Captcha")
         </div>
         <div class="form-group">
-            <button type="submit" class="btn">Submit</button>
+            <button type="submit" class="btn"><span id="submit-amount">Submit</span></button>
         </div>
 
     </div>
@@ -229,54 +229,57 @@
         var class_discountAmount = "discountAmount";
         var class_totalAmount = "totalAmount";
         var questionSet_Count = '@Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count()';
+        var payType = "";
     </script>
 
     <script type="text/javascript">
 
         $(document).ready(function() {
             $("form#CheckoutForm").validate({
-                errorElement:"span",            // set the tag for the item that contains the message
-                errorClass:"failed",            // set the class on that tag of the notification tag
+                errorElement: "span", // set the tag for the item that contains the message
+                errorClass: "failed", // set the class on that tag of the notification tag
                 errorPlacement: function(error, element) {
-                    if (element.is(':radio') || element.is(':checkbox')) {                        
+                    if (element.is(':radio') || element.is(':checkbox')) {
                         error.insertBefore(element.closest("div.form-group"));
                     } else {
                         error.insertAfter(element);
                     }
 
-                    
+
                 },
-                success:function(label){        // function to execute on passing
-                    label.addClass("passed");   // add the passed class
+                success: function(label) { // function to execute on passing
+                    label.addClass("passed"); // add the passed class
                 }
             });
 
 
-            $("#CheckoutForm").on('blur', 'input,textarea,select', (function() {
-                $("form#CheckoutForm").validate().element(this);
-                var localSpan = $(this).parent().find(".local-warning");
-                localSpan.text("");
+            $("#CheckoutForm").on('blur',
+                'input,textarea,select',
+                (function() {
+                    $("form#CheckoutForm").validate().element(this);
+                    var localSpan = $(this).parent().find(".local-warning");
+                    localSpan.text("");
 
 
-                //Email warning check.
-                if ($(this).hasClass("email")) {
+                    //Email warning check.
+                    if ($(this).hasClass("email")) {
 
-                    if($(this).hasClass("warning")){
-                        $(this).removeClass("warning");
-                    }
-                    if($(this).hasClass("failed")){
-                        //Do nothing
-                    }
-                    else{
-                        var emailVal = $(this).val().toLowerCase();                
-                        if(emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) == null){
-                            //alert("no match " + emailVal);
-                            $(this).addClass("warning");
-                            localSpan.text("This may be invalid");
+                        if ($(this).hasClass("warning")) {
+                            $(this).removeClass("warning");
+                        }
+                        if ($(this).hasClass("failed")) {
+                            //Do nothing
+                        } else {
+                            var emailVal = $(this).val().toLowerCase();
+                            if (emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) ==
+                                null) {
+                                //alert("no match " + emailVal);
+                                $(this).addClass("warning");
+                                localSpan.text("This may be invalid");
+                            }
                         }
                     }
-                }
-            }));
+                }));
 
             //$("#CheckoutForm").on('blur', 'textarea', (function() {
             //    $("form#CheckoutForm").validate().element(this);
@@ -285,8 +288,7 @@
             //}));
 
 
-
-            $("input#quantity").blur(function (event) {
+            $("input#quantity").blur(function(event) {
 
                 var quantity = $(this).val();
                 if (isNaN(quantity) || quantity <= 0) {
@@ -301,7 +303,7 @@
                     // deal with the situation where we have too many of the containers
                     if (existingContainers.length > quantity) {
                         do {
-                            $(existingContainers[(counter-1)]).remove();
+                            $(existingContainers[(counter - 1)]).remove();
 
                             counter--;
                         } while (counter > quantity);
@@ -315,18 +317,21 @@
 
                         // get the containers again, and rename the header in them
                         var $container = $("div.QuantityContainer");
-                        $.each($container, function(index, item) {
-                            $(item).find("span.quantityIndex").html(index + 1);
-                        });
+                        $.each($container,
+                            function(index, item) {
+                                $(item).find("span.quantityIndex").html(index + 1);
+                            });
                     }
                     CalculateTotal();
                     // initialize the question names
                     InitializeQuestions();
 
-                    if(questionSet_Count > 0 && $("div.QuantityContainer").length != quantity) { alert("Error on page. Please reselect quantity."); return false;}
+                    if (questionSet_Count > 0 && $("div.QuantityContainer").length != quantity) {
+                        alert("Error on page. Please reselect quantity.");
+                        return false;
+                    }
 
                 }
-
 
 
             });
@@ -336,147 +341,161 @@
             }
 
             // update the coupon values and validate the coupon
-            $("input#Coupon").blur(function (event) {
+            $("input#Coupon").blur(function(event) {
                 processCoupon(event);
+            });
+
+            $("input:radio[name=paymentType]").click(function() {
+                payType = $(this).val();
+                CalculateTotal();
             });
 
             // initialize the question names
             InitializeQuestions();
             RepopulateRadioButtonAnswers();
+            CalculateTotal();
 
             $("input#quantity").focus();
         });
 
         function GenerateQuantityQuestionSet() {
-            
+
             var index = $("div.QuantityContainer").length - 1; //Copy the last one
             //console.log(index);
             var $container = $($("div.QuantityContainer")[index]);
 
             var newContainer = $container.clone();
             newContainer.find("span.failed").remove();
-            
+
             $container.after(newContainer);
 
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
             addQuantityIndex($("div.QuantityContainer"));
         }
 
-        function RepopulateRadioButtonAnswers(){
-            $.each($("input[type=radio][checked=checked]"), function(index, item){
-                if($(item).hasClass("indexedControl")) {
-                    $(item).attr("checked", true);
-                    $(item).prop("checked", true);
-                }
-            });    
+        function RepopulateRadioButtonAnswers() {
+            $.each($("input[type=radio][checked=checked]"),
+                function(index, item) {
+                    if ($(item).hasClass("indexedControl")) {
+                        $(item).attr("checked", true);
+                        $(item).prop("checked", true);
+                    }
+                });
         }
 
-        function addQuantityIndex($container)
-        {
+        function addQuantityIndex($container) {
             var masterIndex = 0;
             var cName = "quantityAnswers";
-            
-            $.each($container, function(cIndex, cItem) {
-                var p = $(cItem).find("div.form-group");
-                
-                $.each(p, function(index, item) {
-                    // quantity index doesn't exist, create it
-                    // search for input ending with "_QuantityIndex"
-                    if ($(item).find("input[id$='_QuantityIndex']").length == 0) {
-                        //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
-                        $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex").attr("name", cName + ".QuantityIndex").addClass("indexedControl").val(cIndex));
-                    }
-                    else {
-                        $(item).find("input[id$='_QuantityIndex']").val(cIndex);
-                    }
 
+            $.each($container,
+                function(cIndex, cItem) {
+                    var p = $(cItem).find("div.form-group");
+
+                    $.each(p,
+                        function(index, item) {
+                            // quantity index doesn't exist, create it
+                            // search for input ending with "_QuantityIndex"
+                            if ($(item).find("input[id$='_QuantityIndex']").length == 0) {
+                                //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
+                                $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex")
+                                    .attr("name", cName + ".QuantityIndex").addClass("indexedControl").val(cIndex));
+                            } else {
+                                $(item).find("input[id$='_QuantityIndex']").val(cIndex);
+                            }
+
+                        });
                 });
-            });
         }
 
         function InitializeQuestions() {
             RenameControls($("div.TransactionContainer"), "transactionAnswers", "div");
             RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
             addQuantityIndex($("div.QuantityContainer"));
-            $.each($("input.dateForm"), function(index, item){                    
-                $(item).attr("title", "");
-                $(item).qtip({ // Grab some elements to apply the tooltip to
-                    content: {
-                        text: 'mm/dd/yyyy format'
-                    },
-                    position: {
-                        my: 'bottom left',
-                        at: 'left top'
-                    },
-                    style: {
-                        classes: 'qtip-bootstrap'
-                    }
-                });
-                $(item).datepicker();
+            $.each($("input.dateForm"),
+                function(index, item) {
+                    $(item).attr("title", "");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text: 'mm/dd/yyyy format'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
+                    $(item).datepicker();
 
-            });
-            $.each($("input.date"), function(index, item){                
-                $(item).attr("title", ""); 
-                $(item).qtip({ // Grab some elements to apply the tooltip to
-                    content: {
-                        text: 'mm/dd/yyyy format'
-                    },
-                    position: {
-                        my: 'bottom left',
-                        at: 'left top'
-                    },
-                    style: {
-                        classes: 'qtip-bootstrap'
-                    }
                 });
-            });
-            $.each($("input.url"), function(index, item){
-                $(item).attr("title", ""); 
-                $(item).qtip({ // Grab some elements to apply the tooltip to
-                    content: {
-                        text: 'You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html'
-                    },
-                    position: {
-                        my: 'bottom left',
-                        at: 'left top'
-                    },
-                    style: {
-                        classes: 'qtip-bootstrap'
-                    }
+            $.each($("input.date"),
+                function(index, item) {
+                    $(item).attr("title", "");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text: 'mm/dd/yyyy format'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
                 });
-            });
-            $.each($("input.phoneUS"), function(index, item){
-                $(item).attr("title", "");
-                $(item).attr("placeholder", "(###) ###-####");
-                $(item).qtip({ // Grab some elements to apply the tooltip to
-                    content: {
-                        text: '(###) ###-#### format'
-                    },
-                    position: {
-                        my: 'bottom left',
-                        at: 'left top'
-                    },
-                    style: {
-                        classes: 'qtip-bootstrap'
-                    }
+            $.each($("input.url"),
+                function(index, item) {
+                    $(item).attr("title", "");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text:
+                                'You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
                 });
-            });          
-            $.each($(".qtip-checklist"), function(index, item){
+            $.each($("input.phoneUS"),
+                function(index, item) {
+                    $(item).attr("title", "");
+                    $(item).attr("placeholder", "(###) ###-####");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text: '(###) ###-#### format'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
+                });
+            $.each($(".qtip-checklist"),
+                function(index, item) {
 
-                $(item).attr("title", ""); 
-                $(item).qtip({ // Grab some elements to apply the tooltip to
-                    content: {
-                        text: 'Check all that apply'
-                    },
-                    position: {
-                        my: 'bottom left',
-                        at: 'left top'
-                    },
-                    style: {
-                        classes: 'qtip-bootstrap'
-                    }
+                    $(item).attr("title", "");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text: 'Check all that apply'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
                 });
-            });  
             //$.each($("input"), function(index, item){
 
             //    $(item).on('blur' ,(function() {
@@ -489,33 +508,35 @@
         }
 
         function processCoupon(event) {
-            var url = '@Url.Action("Validate", "Coupon")';//<%= Html.Encode(Model.Item.Id) %>';
+            var url = '@Url.Action("Validate", "Coupon")'; //<%= Html.Encode(Model.Item.Id) %>';
             var couponCode = $("input#Coupon").val();
             var quantity = $("#quantity").val();
 
             $("img#CouponValidateImage").show();
 
-            $.getJSON(url, { itemId: @Html.Encode(Model.Item.Id), couponCode: couponCode, quantity: quantity }, function(result) {
-                var message = result.message;
+            $.getJSON(url,
+                { itemId: @Html.Encode(Model.Item.Id), couponCode: couponCode, quantity: quantity },
+                function(result) {
+                    var message = result.message;
 
-                // if the message is undefined, we have a valid coupon
+                    // if the message is undefined, we have a valid coupon
 
-                var discountAmount = result.discountAmount;
-                var maxQuantity = result.maxQuantity;
+                    var discountAmount = result.discountAmount;
+                    var maxQuantity = result.maxQuantity;
 
-                $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
-                $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
+                    $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
+                    $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
 
-                $("span#CouponMessage").html("Coupon accepted.");
+                    $("span#CouponMessage").html("Coupon accepted.");
 
-                CalculateTotal();
+                    CalculateTotal();
 
-                // display error message
-                $("span#CouponMessage").html(message);
+                    // display error message
+                    $("span#CouponMessage").html(message);
 
-                // hide the loading image
-                $("img#CouponValidateImage").hide();
-            });
+                    // hide the loading image
+                    $("img#CouponValidateImage").hide();
+                });
         }
 
         function CalculateTotal() {
@@ -529,12 +550,9 @@
             // calculate the totals
             var itemTotal = quantity * costPerItem;
             var discountTotal = 0;
-            if (maxQuantity == -1 || maxQuantity > quantity)
-            {
+            if (maxQuantity == -1 || maxQuantity > quantity) {
                 discountTotal = quantity * discountAmountPerItem;
-            }
-            else if (maxQuantity <= quantity)
-            {
+            } else if (maxQuantity <= quantity) {
                 discountTotal = maxQuantity * discountAmountPerItem;
             }
 
@@ -546,16 +564,26 @@
             $("span." + class_totalItemAmount).html(itemTotal.toFixed(2));
             $("span." + class_discountAmount).html(discountTotal.toFixed(2));
             $("span." + class_totalAmount).html(total.toFixed(2));
-            if(total == 0)
-            {
+            if (total == 0) {
                 $(".allowBypass").removeClass("required");
                 $("#paymentTypeSpan").hide();
-            }
-            else
-            {
+                $("#submit-amount").text("Submit");
+            } else {
+                var submitText = "Please select payment method above first";
+                switch (payType) {
+                case "CreditCard":
+                    submitText = "Pay $" + total.toFixed(2) + " now by Credit Card";
+                    break;
+                case "Check":
+                    submitText = "Pay $" + total.toFixed(2) + " now by Check";
+                    break;
+                default:
+                    break;
+                }
+                $("#submit-amount").text(submitText);
                 $("#paymentTypeSpan").show();
                 $(".allowBypass").addClass("required");
             }
         }
     </script>
-}
+    }
