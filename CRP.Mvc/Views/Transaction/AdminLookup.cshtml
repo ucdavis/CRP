@@ -53,7 +53,7 @@
         {
             <tr>
                 <td>
-                    @Html.ActionLink("Details", "Details", "ItemManagement", new { id = item.Item.Id }, new { @class = "btn" })
+                    @Html.ActionLink("Details", "Details", "ItemManagement", new { id = item.Item.Id },null)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Item.Name)
