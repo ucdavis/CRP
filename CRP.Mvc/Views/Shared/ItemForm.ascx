@@ -12,7 +12,7 @@
                 $(item).bt('mm/dd/yyyy format');
                 $(item).datepicker();
             });
-            $("#file").bt('The maximum picture size is 4 meg. A free online resize tool can be found at: http://www.picresize.com/');
+            $("#file").bt('The maximum picture size is 4 meg. It must have an aspec ratio of 16:9 (1200x675 preferred).  A free online resize tool can be found at: http://www.picresize.com/');
             $("#Item_Summary").bt('A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters.');
             $("#tagInput").bt('You must click on the plus button to add the tag you have entered here.', { positions: 'top' });
             $("#tags").bt('Click on the tag to remove it.', { positions: 'bottom' });

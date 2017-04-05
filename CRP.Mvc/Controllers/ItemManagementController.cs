@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -137,13 +140,24 @@ namespace CRP.Controllers
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
                 var file = Request.Files[0];
-                var reader = new BinaryReader(file.InputStream);
-                item.Image = reader.ReadBytes(file.ContentLength);
+                //var reader = new BinaryReader(file.InputStream);
+                //item.Image = reader.ReadBytes(file.ContentLength);
+
+
+                Image temp = Image.FromStream(file.InputStream);
+                var temp2 = ResizeImage(temp, 1200, 675);
+
+                using (var ms = new MemoryStream())
+                {
+                    temp2.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    item.Image = ms.ToArray();
+                }
             }
             if (item.Image == null || item.Image.Length <= 0)
             {
                 ModelState.AddModelError("Image", @"An image is required.");
             }
+
             // process the extended properties and tags
             //item = PopulateObject.Item(Repository, item, extendedProperties, tags);
             item = Copiers.PopulateItem(Repository, item, extendedProperties, tags, mapLink);
@@ -328,13 +342,24 @@ namespace CRP.Controllers
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
                 var file = Request.Files[0];
-                var reader = new BinaryReader(file.InputStream);
-                destinationItem.Image = reader.ReadBytes(file.ContentLength);
+                //var reader = new BinaryReader(file.InputStream);
+                //destinationItem.Image = reader.ReadBytes(file.ContentLength);
+                
+                Image temp = Image.FromStream(file.InputStream);
+
+                var temp2 = ResizeImage(temp, 1200, 675);
+
+                using (var ms = new MemoryStream())
+                {
+                    temp2.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    destinationItem.Image = ms.ToArray();
+                }
             }
             if(destinationItem.Image == null ||destinationItem.Image.Length <=0)
             {
                 ModelState.AddModelError("Image", @"An image is required.");
             }
+
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destinationItem.ValidationResults());
 
@@ -349,6 +374,32 @@ namespace CRP.Controllers
             //viewModel.Item = destinationItem;
             return View(viewModel);
         }
+
+        private static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
 
         /// <summary>
         /// POST: /ItemManagement/RemoveEditor
