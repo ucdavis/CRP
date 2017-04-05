@@ -1351,7 +1351,7 @@
     <Content Include="Views\Transaction\ConfirmationOld.aspx" />
     <Content Include="Views\Transaction\DetailsRefund.aspx" />
     <Content Include="Views\Transaction\Edit.aspx" />
-    <Content Include="Views\Transaction\Lookup.aspx" />
+    <Content Include="Views\Transaction\LookupOld.aspx" />
     <Content Include="Views\Transaction\PaymentResult.aspx" />
     <Content Include="Views\Transaction\Refund.aspx" />
     <Content Include="Web.config">
@@ -1389,6 +1389,7 @@
     <Content Include="Views\ItemManagement\_TabReports.cshtml" />
     <Content Include="Views\ItemManagement\_TabRefunds.cshtml" />
     <Content Include="Views\ItemManagement\_TabNotifications.cshtml" />
+    <Content Include="Views\Transaction\Lookup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

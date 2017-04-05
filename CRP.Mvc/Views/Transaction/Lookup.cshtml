@@ -1,0 +1,73 @@
+﻿@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.LookupViewModel
+
+@{
+    ViewBag.Title = "Lookup";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+<div class="boundary">
+    <h2>Lookup</h2>
+    @using (Html.BeginForm("Lookup", "Transaction", FormMethod.Post)) {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label>Order Number:</label>
+            @Html.TextBox("orderNumber", Model.TransactionNumber, new {@class= "form-control" })
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            @Html.TextBox("email", Model.Email, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <input id="Submit" name="Submit", type="submit" value="Lookup Order" class="btn btn-primary"/>
+        </div>
+
+    }
+
+    @if (Model.Transaction != null)
+    {
+        <ul>
+            <li>
+                Amount of Order:
+                @Html.Encode(Model.Transaction.Total.ToString("C"))
+            </li>
+            <li>
+                Amount Paid:
+                @Html.Encode(Model.Transaction.TotalPaid.ToString("C"))
+            </li>
+            <li>
+                Paid by:
+                @Html.Encode(Model.Transaction.Credit ? "Credit Card" : "Check")
+            </li>
+            @if (!Model.Transaction.IsActive)
+            {
+                <li>
+                    Transaction has been canceled
+                </li>
+            }
+            @if (Model.Transaction.RefundIssued)
+            {
+                <li>
+                    Refund has been issued
+                </li>
+                <li>
+                    Refund Amount:
+                    @Html.Encode(Model.Transaction.RefundAmount.ToString("C"))
+                </li>
+            }
+        </ul>
+        if (Model.Transaction.Check && !Model.Transaction.Paid && Model.Transaction.IsActive)
+        {
+            <div class="form-group">
+                <h2>Check Payment Instructions</h2>
+                @Html.Raw(Model.Transaction.Item.CheckPaymentInstructions)
+            </div>
+        }
+        if (Model.ShowCreditCardReSubmit)
+        {
+            <div class="form-group">
+                <a href='@Url.Action("Confirmation", "Transaction", new {id=Model.Transaction.Id} )' class="btn btn-primary">Click Here To Resubmit Credit Card Payment</a>
+            </div>
+        }
+    }
+</div>
+
