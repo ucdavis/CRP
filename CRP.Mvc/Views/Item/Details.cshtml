@@ -125,8 +125,7 @@
                             </div>
                         }
                         <div class="eventbanner-mapbuttons">
-                            <p>@Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</p>
-                            <p>@Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })</p>
+                            @Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" }) | @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })
                         </div>
                     </div>
                 }
