@@ -1,5 +1,6 @@
 ﻿@using CRP.Controllers.ViewModels
 @using CRP.Core.Resources
+@using FluentNHibernate.Utils
 @using Microsoft.Azure
 @model CRP.Controllers.ViewModels.ItemDetailViewModel
 
@@ -271,7 +272,9 @@
                             //Do nothing
                         } else {
                             var emailVal = $(this).val().toLowerCase();
-                            if (emailVal != null && emailVal != "" && emailVal.match(@StaticValues.EmailWarningRegEx) ==
+                            if (emailVal != null &&
+                                emailVal != "" &&
+                                emailVal.match(@StaticValues.EmailWarningRegEx) ==
                                 null) {
                                 //alert("no match " + emailVal);
                                 $(this).addClass("warning");
@@ -564,22 +567,29 @@
             $("span." + class_totalItemAmount).html(itemTotal.toFixed(2));
             $("span." + class_discountAmount).html(discountTotal.toFixed(2));
             $("span." + class_totalAmount).html(total.toFixed(2));
-            if (total == 0) {
+            if (total === 0) {
                 $(".allowBypass").removeClass("required");
                 $("#paymentTypeSpan").hide();
                 $("#submit-amount").text("Submit");
             } else {
                 var submitText = "Please select payment method above first";
-                switch (payType) {
-                case "CreditCard":
-                    submitText = "Pay $" + total.toFixed(2) + " now by Credit Card";
-                    break;
-                case "Check":
-                    submitText = "Pay $" + total.toFixed(2) + " by Check";
-                    break;
-                default:
-                    break;
+                var ccPaymentText = "Pay $" + total.toFixed(2) + " now by Credit Card";
+                var checkPaymentText = "Pay $" + total.toFixed(2) + " by Check";
+                if (payType === "CreditCard") {
+                    submitText = ccPaymentText;
+                } else {
+                    if (payType === "Check") {
+                        submitText = checkPaymentText;
+                    } else {
+                        if (@Model.CreditPayment.ToLowerInvariantString()) {
+                            submitText = ccPaymentText;
+                        }
+                        if (@Model.CheckPayment.ToLowerInvariantString()) {
+                            submitText = checkPaymentText;
+                        }
+                    }
                 }
+
                 $("#submit-amount").text(submitText);
                 $("#paymentTypeSpan").show();
                 $(".allowBypass").addClass("required");
