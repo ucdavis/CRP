@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
 using CRP.Core.Helpers;
 using CRP.Core.Resources;
+using CRP.Mvc.Controllers.Helpers;
 using UCDArch.Core.PersistanceSupport;
 
 namespace CRP.Services
@@ -189,6 +194,8 @@ namespace CRP.Services
             }
         }
 
+
+
         private static void CopyItemFields(Item sourceItem, Item rtItem)
         {
             rtItem.Summary = sourceItem.Summary;
@@ -203,7 +210,23 @@ namespace CRP.Services
             {
                 rtItem.Expiration = DateTime.UtcNow.ToPacificTime().Date.AddMonths(1);
             }
-            rtItem.Image = sourceItem.Image;
+            //rtItem.Image = sourceItem.Image;
+            using (var ms = new MemoryStream(sourceItem.Image))
+            {
+                var temp = Image.FromStream(ms);
+
+                var temp2 = ImageHelper.ResizeImage(temp, 1200, 675);
+
+                using (var ms2 = new MemoryStream())
+                {
+                    temp2.Save(ms2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    rtItem.Image = ms2.ToArray();
+                }
+            }
+
+  
+
+
             rtItem.Link = sourceItem.Link;
 
             rtItem.DonationLinkInformation = sourceItem.DonationLinkInformation;

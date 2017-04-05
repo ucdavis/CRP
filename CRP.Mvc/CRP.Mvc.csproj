@@ -491,6 +491,7 @@
     <Compile Include="Controllers\Helpers\Filter\RolesFilter.cs" />
     <Compile Include="Controllers\Helpers\GoogleMapHelper.cs" />
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
+    <Compile Include="Controllers\Helpers\ImageHelper.cs" />
     <Compile Include="Controllers\Helpers\InvoiceNumberGenerator.cs" />
     <Compile Include="Controllers\Helpers\ReturnUrlGenerator.cs" />
     <Compile Include="Controllers\Helpers\RoleNames.cs" />

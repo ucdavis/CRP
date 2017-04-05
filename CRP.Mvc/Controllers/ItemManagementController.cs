@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -10,6 +11,7 @@ using CRP.Controllers.Helpers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
+using CRP.Mvc.Controllers.Helpers;
 using CRP.Services;
 //using Elmah;
 using MvcContrib;
@@ -137,13 +139,24 @@ namespace CRP.Controllers
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
                 var file = Request.Files[0];
-                var reader = new BinaryReader(file.InputStream);
-                item.Image = reader.ReadBytes(file.ContentLength);
+                //var reader = new BinaryReader(file.InputStream);
+                //item.Image = reader.ReadBytes(file.ContentLength);
+
+
+                Image temp = Image.FromStream(file.InputStream);
+                var temp2 = ImageHelper.ResizeImage(temp, 1200, 675);
+
+                using (var ms = new MemoryStream())
+                {
+                    temp2.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    item.Image = ms.ToArray();
+                }
             }
             if (item.Image == null || item.Image.Length <= 0)
             {
                 ModelState.AddModelError("Image", @"An image is required.");
             }
+
             // process the extended properties and tags
             //item = PopulateObject.Item(Repository, item, extendedProperties, tags);
             item = Copiers.PopulateItem(Repository, item, extendedProperties, tags, mapLink);
@@ -328,13 +341,24 @@ namespace CRP.Controllers
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
                 var file = Request.Files[0];
-                var reader = new BinaryReader(file.InputStream);
-                destinationItem.Image = reader.ReadBytes(file.ContentLength);
+                //var reader = new BinaryReader(file.InputStream);
+                //destinationItem.Image = reader.ReadBytes(file.ContentLength);
+                
+                Image temp = Image.FromStream(file.InputStream);
+
+                var temp2 = ImageHelper.ResizeImage(temp, 1200, 675);
+
+                using (var ms = new MemoryStream())
+                {
+                    temp2.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    destinationItem.Image = ms.ToArray();
+                }
             }
             if(destinationItem.Image == null ||destinationItem.Image.Length <=0)
             {
                 ModelState.AddModelError("Image", @"An image is required.");
             }
+
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, destinationItem.ValidationResults());
 
@@ -349,6 +373,7 @@ namespace CRP.Controllers
             //viewModel.Item = destinationItem;
             return View(viewModel);
         }
+
 
         /// <summary>
         /// POST: /ItemManagement/RemoveEditor
