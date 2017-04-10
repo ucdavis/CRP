@@ -39,6 +39,20 @@ namespace CRP.Controllers
             }
             var viewModel = MapPinViewModel.Create(Repository, item);
             viewModel.MapPin = new MapPin();
+
+            return View(viewModel);
+        }
+        public ActionResult CreateOld(int itemId)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
+            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
+            {
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+            var viewModel = MapPinViewModel.Create(Repository, item);
+            viewModel.MapPin = new MapPin();
             
             return View(viewModel);
         } 
