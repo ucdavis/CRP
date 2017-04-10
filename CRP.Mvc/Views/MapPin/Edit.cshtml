@@ -2,18 +2,17 @@
 @model CRP.Controllers.ViewModels.MapPinViewModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
+
+
 <div class="boundary">
-    <h2>Create</h2>
-    @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
+    <h2>Edit</h2>
+    @Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.")
     @Html.Partial("_MapPinView")
 </div>
-
-
-
 
 @section AdditionalStyles
 {

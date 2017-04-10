@@ -1,0 +1,39 @@
+﻿@model CRP.Controllers.ViewModels.MapPinViewModel
+    
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        <div id="map">
+            <div class="gp-map" style="height: 400px; width: 900px;"></div>
+            @if (Model != null && Model.MapPin != null && !string.IsNullOrWhiteSpace(Model.MapPin.Latitude))
+                {
+                <div class="gp-coordinate gp-default" data-lat="@Model.MapPin.Latitude" data-lng="@Model.MapPin.Longitude">
+                    <dt class="gp-name">n/a</dt>
+                </div>
+            }
+
+
+        </div>
+        <div style="clear: both;"></div>
+        <hr />
+
+        <div class="form-group">
+            <label for="Title">Title:</label>
+            @Html.TextBox("Title", Model != null && Model.MapPin != null && Model.MapPin.Title != null ? Model.MapPin.Title : string.Empty, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.MapPin.Title)
+        </div>
+
+        <div class="form-group">
+            <label for="Description">Description:</label>
+            @Html.TextArea("Description", Model != null && Model.MapPin != null && !string.IsNullOrWhiteSpace(Model.MapPin.Description) ? Model.MapPin.Description : string.Empty, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.MapPin.Description)
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            @Html.ActionLink("Cancel", "Map", "ItemManagement", new { id = Model.Item.Id }, new { @class = "btn" })
+        </div>
+    </div>
+}
+
