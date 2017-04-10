@@ -1,0 +1,89 @@
+﻿@using Microsoft.Azure
+@model CRP.Core.Domain.Item
+
+@{
+    ViewBag.Title = "Map";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="boundary">
+    <h2>Map: @Model.Name</h2>
+    <div id="map" style="margin: 0px 0px 20px;">
+
+        <div class="gp-map" style="height: 400px; width: 900px;"></div>
+
+        @foreach (var a in Model.MapPins.OrderByDescending(a => a.IsPrimary))
+        {
+            <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
+                <dt class="gp-name">@a.Title</dt>
+                @if (!string.IsNullOrWhiteSpace(a.Description))
+                {
+                    <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
+                }
+            </div>
+        }
+
+    </div>
+    <div style="clear:both;"></div>
+    
+    <hr/>
+    <div>
+        <p>
+            @Html.ActionLink("Add Map Pin", "Create", "MapPin", new {itemid = @Model.Id}, new {@class="btn btn-primary"})            
+        </p>
+        <table id="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.MapPins.OrderByDescending(a => a.IsPrimary))
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "MapPin", new {itemId = item.Item.Id, mapPinId = item.Id}, null) |
+                        @Html.ActionLink("Remove", "RemoveMapPin", "MapPin", new {itemId = item.Item.Id, mapPinId = item.Id}, null)
+                    </td>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/gPositions")
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+}
+
+@section AdditionalScripts
+{
+    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=@CloudConfigurationManager.GetSetting("MapsApi")" type="text/javascript"></script>
+    @Scripts.Render("~/bundles/map")
+
+    <script type="text/javascript">
+        $(function () {
+            $("#map").gPositions({ loadAll: true, helpIcon: '@Url.Content("~/Images/question_blue.png")', mode: MapMode.Standard });
+        });
+    </script>
+    
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    
+    <script type="text/javascript">
+        $(function() {
+            $("#table").dataTable({
+                "aaSorting": [[1, "desc"]], //Default sort on second column
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns                  
+                ]
+            });
+           
+        });
+    </script>
+}
