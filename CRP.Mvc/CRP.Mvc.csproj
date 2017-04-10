@@ -1396,6 +1396,7 @@
     <Content Include="Views\MapPin\Edit.cshtml" />
     <Content Include="Views\MapPin\_MapPinView.cshtml" />
     <Content Include="Views\Report\ViewReport.cshtml" />
+    <Content Include="Views\Report\CreateNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
