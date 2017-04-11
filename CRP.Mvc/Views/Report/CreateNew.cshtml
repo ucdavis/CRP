@@ -210,7 +210,8 @@
 
     </fieldset>
     <p style="margin-top: 10px; margin-bottom: 10px;">
-        <input type="submit" value="Create" class="btn btn-primary"/>
+        <input type="submit" value="Create" class="btn btn-primary"/> |
+        @Html.ActionLink("Cancel", "Details", "ItemManagement", null, null, "Reports", new { id = Model.Item.Id }, new {@class="btn"})
     </p>
 
     <span style="display: none">
