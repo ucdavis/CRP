@@ -1,0 +1,35 @@
+﻿@using Microsoft.Azure
+@model CRP.Controllers.ViewModels.MapPinViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="boundary">
+    <h2>Create</h2>
+    @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
+    @Html.Partial("_MapPinView")
+</div>
+
+
+
+
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/gPositions")
+
+}
+
+@section AdditionalScripts
+{
+    <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=@CloudConfigurationManager.GetSetting("MapsApi")" type="text/javascript"></script>
+    @Scripts.Render("~/bundles/map")
+
+    <script type="text/javascript">
+        $(function () {
+            $("#map").gPositions({ mode: MapMode.SELECTINGPOINT, showLocations: false, helpIcon: '@Url.Content("~/Images/question_blue.png")' });
+        });
+    </script>
+}
+

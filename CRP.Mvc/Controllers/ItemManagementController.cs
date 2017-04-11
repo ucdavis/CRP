@@ -253,6 +253,21 @@ namespace CRP.Controllers
             return new JsonNetResult(itemType.ExtendedProperties);
         }
 
+        public ActionResult MapOld(int id)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(id);
+            if (item == null || !Access.HasItemAccess(CurrentUser, item))
+            {
+                return this.RedirectToAction(a => a.List(null));
+            }
+
+            //var viewModel = ItemViewModel.Create(Repository, CurrentUser, item); // For now use this view model, but all we really need it the item.
+
+            //return View(viewModel);
+            return View(item);
+
+        }
+
         public ActionResult Map(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);

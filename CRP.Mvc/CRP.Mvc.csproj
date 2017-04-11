@@ -1312,12 +1312,12 @@
     <Content Include="Views\ItemManagement\Edit.aspx" />
     <Content Include="Views\ItemManagement\ItemMapPinsView.ascx" />
     <Content Include="Views\ItemManagement\ListOld.aspx" />
-    <Content Include="Views\ItemManagement\Map.aspx" />
+    <Content Include="Views\ItemManagement\MapOld.aspx" />
     <Content Include="Views\Item\DetailsOld.aspx" />
     <Content Include="Views\Item\MapOld.aspx" />
     <Content Include="Views\Item\MapDirectionsOld.aspx" />
-    <Content Include="Views\MapPin\Create.aspx" />
-    <Content Include="Views\MapPin\Edit.aspx" />
+    <Content Include="Views\MapPin\CreateOld.aspx" />
+    <Content Include="Views\MapPin\EditOld.aspx" />
     <Content Include="Views\MapPin\MapPinView.ascx" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\QuestionSet\Create.aspx" />
@@ -1327,8 +1327,8 @@
     <Content Include="Views\QuestionSet\LinkToItemType.aspx" />
     <Content Include="Views\QuestionSet\ListOld.aspx" />
     <Content Include="Views\Question\Create.aspx" />
-    <Content Include="Views\Report\Create.aspx" />
-    <Content Include="Views\Report\ViewReport.aspx" />
+    <Content Include="Views\Report\CreateOld.aspx" />
+    <Content Include="Views\Report\ViewReportOld.aspx" />
     <Content Include="Views\Report\ViewSystemReport.aspx" />
     <Content Include="Views\SDK\Index.aspx" />
     <Content Include="Views\Search\IndexOld.aspx" />
@@ -1391,6 +1391,12 @@
     <Content Include="Views\ItemManagement\_TabRefunds.cshtml" />
     <Content Include="Views\ItemManagement\_TabNotifications.cshtml" />
     <Content Include="Views\Transaction\Lookup.cshtml" />
+    <Content Include="Views\ItemManagement\Map.cshtml" />
+    <Content Include="Views\MapPin\Create.cshtml" />
+    <Content Include="Views\MapPin\Edit.cshtml" />
+    <Content Include="Views\MapPin\_MapPinView.cshtml" />
+    <Content Include="Views\Report\ViewReport.cshtml" />
+    <Content Include="Views\Report\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

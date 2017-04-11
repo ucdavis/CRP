@@ -39,6 +39,20 @@ namespace CRP.Controllers
             }
             var viewModel = MapPinViewModel.Create(Repository, item);
             viewModel.MapPin = new MapPin();
+
+            return View(viewModel);
+        }
+        public ActionResult CreateOld(int itemId)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
+            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
+            {
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+            var viewModel = MapPinViewModel.Create(Repository, item);
+            viewModel.MapPin = new MapPin();
             
             return View(viewModel);
         } 
@@ -88,6 +102,26 @@ namespace CRP.Controllers
         /// <param name="mapPinId"></param>
         /// <returns></returns>
         public ActionResult Edit(int itemId, int mapPinId)
+        {
+            var item = Repository.OfType<Item>().GetNullableById(itemId);
+            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
+            {
+                //Don't Have editor rights
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+            var mapPin = Repository.OfType<MapPin>().GetNullableById(mapPinId);
+            if (mapPin == null || !item.MapPins.Contains(mapPin))
+            {
+                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
+                //return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
+                return this.RedirectToAction<ItemManagementController>(a => a.Map(item.Id));
+            }
+            var viewModel = MapPinViewModel.Create(Repository, item);
+            viewModel.MapPin = mapPin;
+            return View(viewModel);
+        }
+        public ActionResult EditOld(int itemId, int mapPinId)
         {
             var item = Repository.OfType<Item>().GetNullableById(itemId);
             if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))

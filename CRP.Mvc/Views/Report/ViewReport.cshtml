@@ -1,0 +1,61 @@
+﻿@using CRP.Controllers.Helpers
+@using CRP.Core.Resources
+@using Microsoft.Azure
+@model CRP.Controllers.ViewModels.ReportViewModel
+
+@{
+    ViewBag.Title = "ViewReport";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="boundary">
+    <p>
+        @Html.ActionLink("Back to Item", "Details", "ItemManagement", null, null, "Reports", new { id = Model.ItemId }, null) |
+        @Html.ActionLink("Generate Excel Report", "CreateExcelReport", "Excel", new { id = Model.ItemReportId, itemId = Model.ItemId }, null)
+    </p>
+    <hr/>
+    <h2>@Model.ReportName</h2>
+    <table id="table">
+        <thead>
+        <tr>
+            @foreach (var ch in Model.ColumnNames)
+            {
+                <td>@ch</td>
+            }
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var row in Model.RowValues)
+        {
+            <tr>
+                @foreach (var cell in row)
+                {
+                    <td>@cell</td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>
+
+@section AdditionalStyles
+{    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+
+}
+@section AdditionalScripts
+{
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(function() {
+            $("#table").dataTable({
+                responsive: true
+            });
+
+        });
+    </script>
+}
+
