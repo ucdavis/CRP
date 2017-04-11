@@ -1351,7 +1351,7 @@
     <Content Include="Views\Transaction\CheckoutOld.aspx" />
     <Content Include="Views\Transaction\ConfirmationOld.aspx" />
     <Content Include="Views\Transaction\DetailsRefund.aspx" />
-    <Content Include="Views\Transaction\Edit.aspx" />
+    <Content Include="Views\Transaction\EditOld.aspx" />
     <Content Include="Views\Transaction\LookupOld.aspx" />
     <Content Include="Views\Transaction\PaymentResult.aspx" />
     <Content Include="Views\Transaction\Refund.aspx" />
@@ -1397,6 +1397,7 @@
     <Content Include="Views\MapPin\_MapPinView.cshtml" />
     <Content Include="Views\Report\ViewReport.cshtml" />
     <Content Include="Views\Report\Create.cshtml" />
+    <Content Include="Views\Transaction\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
