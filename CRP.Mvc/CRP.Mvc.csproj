@@ -1327,7 +1327,7 @@
     <Content Include="Views\QuestionSet\LinkToItemType.aspx" />
     <Content Include="Views\QuestionSet\ListOld.aspx" />
     <Content Include="Views\Question\Create.aspx" />
-    <Content Include="Views\Report\Create.aspx" />
+    <Content Include="Views\Report\CreateOld.aspx" />
     <Content Include="Views\Report\ViewReportOld.aspx" />
     <Content Include="Views\Report\ViewSystemReport.aspx" />
     <Content Include="Views\SDK\Index.aspx" />
@@ -1396,7 +1396,7 @@
     <Content Include="Views\MapPin\Edit.cshtml" />
     <Content Include="Views\MapPin\_MapPinView.cshtml" />
     <Content Include="Views\Report\ViewReport.cshtml" />
-    <Content Include="Views\Report\CreateNew.cshtml" />
+    <Content Include="Views\Report\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

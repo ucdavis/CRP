@@ -2,12 +2,12 @@
 @model CRP.Controllers.ViewModels.CreateReportViewModel
 
 @{
-    ViewBag.Title = "CreateNew";
+    ViewBag.Title = "Create New Report";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 <div class="main">
 <div class="boundary">
-<h2>CreateNew</h2>
+<h2>Create New Report</h2>
 
 @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
 
@@ -17,7 +17,7 @@
     @Html.AntiForgeryToken()
 
     <fieldset>
-        <legend>Fields</legend>
+        <legend>Report Name</legend>
 
         <p>
             <label for="Name">Name: </label>

@@ -93,7 +93,7 @@ namespace CRP.Controllers
         /// <param name="itemId"></param>
         /// <returns></returns>
         [UserOnly]
-        public ActionResult Create(int itemId)
+        public ActionResult CreateOld(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableById(itemId);
 
@@ -129,7 +129,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [HttpPost]
         [UserOnly]
-        public ActionResult Create(int itemId, string name, CreateReportParameter[] createReportParameters)
+        public ActionResult CreateOld(int itemId, string name, CreateReportParameter[] createReportParameters)
         {
             var item = Repository.OfType<Item>().GetNullableById(itemId);
 
@@ -185,7 +185,7 @@ namespace CRP.Controllers
         }
 
         [UserOnly]
-        public ActionResult CreateNew(int itemId)
+        public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableById(itemId);
 
@@ -221,7 +221,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [HttpPost]
         [UserOnly]
-        public ActionResult CreateNew(int itemId, string name, CreateReportParameter[] createReportParameters)
+        public ActionResult Create(int itemId, string name, CreateReportParameter[] createReportParameters)
         {
             var item = Repository.OfType<Item>().GetNullableById(itemId);
 
