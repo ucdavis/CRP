@@ -839,6 +839,7 @@
     <Content Include="Images\Media\152-icon.jpg" />
     <Content Include="Images\Media\76-icon.jpg" />
     <Content Include="Images\Media\caeslogo.svg" />
+    <Content Include="Images\Media\contact.svg" />
     <Content Include="Images\Media\date_icon.svg" />
     <Content Include="Images\Media\favicon.ico" />
     <Content Include="Images\Media\gunrock_banner.svg" />

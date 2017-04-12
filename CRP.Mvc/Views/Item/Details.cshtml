@@ -83,6 +83,10 @@
                             {
                                 <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
                             }
+                            if (ep.ExtendedProperty.Name.ToLower().Contains("contact"))
+                            {
+                                <img src="@Url.Content("~/Images/Media/contact.svg")" alt="Location icon">
+                            }
                         }
                     </div>
                     <div class="eventinfo-text">
