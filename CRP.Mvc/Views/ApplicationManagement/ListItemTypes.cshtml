@@ -1,0 +1,87 @@
+﻿@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@model IEnumerable<CRP.Core.Domain.ItemType>
+
+@{
+    ViewBag.Title = "ListItemTypes";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+<div class="boundary">
+    <h2>Item Types</h2>
+
+    <p>
+        @Html.ActionLink("Create", "CreateItemType", "ApplicationManagement", null, new {@class = "btn btn-primary"})
+    </p>
+    <table id="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Edit", "EditItemType", new { id = item.Id })
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @using (Html.BeginForm<ApplicationManagementController>(a => a.ToggleActive(item.Id), FormMethod.Post))
+                    {
+
+                        @Html.AntiForgeryToken()
+                        <a href="javascript:;" class="FormSubmit">@(item.IsActive ? "Deactivate" : "Activate")</a>
+
+                    }
+
+                </td>
+
+            </tr>
+        }
+        </tbody>
+
+    </table>
+</div>
+
+@section AdditionalStyles
+{    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+}
+
+@section AdditionalScripts
+{
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $("#table").dataTable({
+                "aaSorting": [[1, "desc"]], //Default sort on second column
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0,3] } //Disables sort on icon columns
+                ]
+            });
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("a.FormSubmit").click(function() { $(this).parents("form").submit(); });
+        });
+    </script>
+}

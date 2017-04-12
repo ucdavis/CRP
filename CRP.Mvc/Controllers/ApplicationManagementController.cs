@@ -32,7 +32,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult ListItemTypes()
         {
-            return View(Repository.OfType<ItemType>().Queryable);
+            return View(Repository.OfType<ItemType>().Queryable.ToArray());
         }
 
         /// <summary>
