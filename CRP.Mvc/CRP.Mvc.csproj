@@ -1286,7 +1286,7 @@
     <Content Include="Views\ApplicationKey\Index.aspx" />
     <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
     <Content Include="Views\ApplicationManagement\EditItemType.aspx" />
-    <Content Include="Views\ApplicationManagement\Index.aspx" />
+    <Content Include="Views\ApplicationManagement\IndexOld.aspx" />
     <Content Include="Views\ApplicationManagement\ListItemTypes.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />
     <Content Include="Views\DisplayProfile\Create.aspx" />
@@ -1399,6 +1399,7 @@
     <Content Include="Views\Report\ViewReport.cshtml" />
     <Content Include="Views\Report\Create.cshtml" />
     <Content Include="Views\Transaction\Edit.cshtml" />
+    <Content Include="Views\ApplicationManagement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
