@@ -796,6 +796,7 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\jquery.bt.css" />
+    <Content Include="Content\jquery.gPositionsNew.css" />
     <Content Include="Content\jquery.gPositions.css" />
     <Content Include="Content\openid.css" />
     <Content Include="Content\print.css" />
