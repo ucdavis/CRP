@@ -1,0 +1,76 @@
+﻿@model CRP.Controllers.ViewModels.EditTransactionViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+<div class="boundary">
+    <h2>Edit</h2>
+    @Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.")
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("CheckSort", Model.Sort)
+        @Html.Hidden("CheckPage", Model.Page)
+        <div>
+            <div>
+                <h4>Transaction Number:</h4>
+                <p>@Model.TransactionValue.TransactionNumber</p>
+            </div>
+            <div>
+                <h4>Transaction Date:</h4>
+                <p>@Model.TransactionValue.TransactionDate</p>
+            </div>
+            <div>
+                <h4>Amount:</h4>
+                <p>@Model.TransactionValue.AmountTotal.ToString("C")</p>
+            </div>
+            <div>
+                <h4>Correction Total:</h4>
+                <p>@Model.TransactionValue.CorrectionTotal.ToString("C")</p>
+            </div>
+            <div>
+                <h4>Uncorrected Donation Total:</h4>
+                <p>@Model.TransactionValue.UncorrectedDonationTotal.ToString("C")</p>
+            </div>
+            <div>
+                <h4>Current Donation Total:</h4>
+                <p>@Model.TransactionValue.DonationTotal.ToString("C")</p>
+            </div>
+            <div>
+                <h4>Total Paid:</h4>
+                <p>@Model.TransactionValue.TotalPaid.ToString("C")</p>
+            </div>
+            <div>
+                <h4>Total:</h4>
+                <p>@Model.TransactionValue.Total.ToString("C")</p>
+            </div>
+            <div>
+                <h4>Contact Name:</h4>
+                <p>@Model.ContactName</p>
+            </div>
+            <div>
+                <h4>Contact Email:</h4>
+                <p>@Model.ContactEmail</p>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label for="Amount">Correction:</label>
+                @Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new { @class = "amount form-control" })
+                @Html.ValidationMessageFor(x => x.Amount)
+                @Html.ValidationMessage("Transaction.CorrectionAmount")
+            </div>
+            <div class="form-group">
+                <label for="CorrectionReason">Correction Reason:</label>
+                @Html.TextArea("CorrectionReason", Model.CorrectionReason, new {@class="form-control"})
+                @Html.ValidationMessageFor(x => x.CorrectionReason)
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Correction" class="btn btn-primary"/> |
+                @Html.ActionLink("Cancel", "Details", "ItemManagement", null, null, "Checks", new { id = Model.TransactionValue.Item.Id }, new { @class = "btn" })
+            </div>
+        </div>
+    }
+</div>
+
+

@@ -56,6 +56,9 @@ namespace CRP.Mvc
             bundles.Add(new StyleBundle("~/Content/gPositions").Include(
                 "~/Content/jquery.gPositions.css"));
 
+            bundles.Add(new StyleBundle("~/Content/gPositionsNew").Include(
+                "~/Content/jquery.gPositionsNew.css"));
+
             bundles.Add(new StyleBundle("~/Content/datepicker")
                 .Include("~/Content/bootstrap-datepicker.css"));
         }
