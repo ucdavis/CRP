@@ -839,6 +839,7 @@
     <Content Include="Images\Media\152-icon.jpg" />
     <Content Include="Images\Media\76-icon.jpg" />
     <Content Include="Images\Media\caeslogo.svg" />
+    <Content Include="Images\Media\contact.svg" />
     <Content Include="Images\Media\date_icon.svg" />
     <Content Include="Images\Media\favicon.ico" />
     <Content Include="Images\Media\gunrock_banner.svg" />
@@ -1286,8 +1287,8 @@
     <Content Include="Views\ApplicationKey\Index.aspx" />
     <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
     <Content Include="Views\ApplicationManagement\EditItemType.aspx" />
-    <Content Include="Views\ApplicationManagement\Index.aspx" />
-    <Content Include="Views\ApplicationManagement\ListItemTypes.aspx" />
+    <Content Include="Views\ApplicationManagement\IndexOld.aspx" />
+    <Content Include="Views\ApplicationManagement\ListItemTypesOld.aspx" />
     <Content Include="Views\Coupon\Create.aspx" />
     <Content Include="Views\DisplayProfile\Create.aspx" />
     <Content Include="Views\DisplayProfile\Edit.aspx" />
@@ -1399,6 +1400,8 @@
     <Content Include="Views\Report\ViewReport.cshtml" />
     <Content Include="Views\Report\Create.cshtml" />
     <Content Include="Views\Transaction\Edit.cshtml" />
+    <Content Include="Views\ApplicationManagement\Index.cshtml" />
+    <Content Include="Views\ApplicationManagement\ListItemTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

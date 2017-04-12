@@ -40,7 +40,12 @@
                         </div>
                     }
                     <div class="eventbanner-mapbuttons">
-                        @Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" }) | @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })
+                        @Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })
+                        @if (Model.Item.MapPins.Count > 1)
+                        {
+                            @Html.Raw(" | ")
+                            @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new {id = Model.Item.Id, usePins = true}, new {target = "_blank"})
+                        }
                     </div>
                 </div>
             }
@@ -77,6 +82,10 @@
                             if (ep.ExtendedProperty.Name.ToLower().Contains("location"))
                             {
                                 <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
+                            }
+                            if (ep.ExtendedProperty.Name.ToLower().Contains("contact"))
+                            {
+                                <img src="@Url.Content("~/Images/Media/contact.svg")" alt="Location icon">
                             }
                         }
                     </div>
