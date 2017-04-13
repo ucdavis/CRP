@@ -1282,7 +1282,7 @@
     <Content Include="Views\Account\OpenIdAccount.aspx" />
     <Content Include="Views\Account\OpenIdLogon.aspx" />
     <Content Include="Views\ApplicationKey\ApplicationKeyForm.ascx" />
-    <Content Include="Views\ApplicationKey\Create.aspx" />
+    <Content Include="Views\ApplicationKey\CreateOld.aspx" />
     <Content Include="Views\ApplicationKey\Edit.aspx" />
     <Content Include="Views\ApplicationKey\IndexOld.aspx" />
     <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
@@ -1408,6 +1408,7 @@
     <Content Include="Views\FID\Edit.cshtml" />
     <Content Include="Views\FID\Create.cshtml" />
     <Content Include="Views\ApplicationKey\Index.cshtml" />
+    <Content Include="Views\ApplicationKey\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
