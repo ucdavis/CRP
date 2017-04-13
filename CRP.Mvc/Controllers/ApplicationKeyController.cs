@@ -32,7 +32,7 @@ namespace CRP.Controllers
         public ActionResult Index()
         {
             var keys = _applicationKeyRepository.Queryable;
-            return View(keys);
+            return View(keys.ToArray());
         }
 
         public ActionResult Create()
@@ -57,44 +57,45 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
-        public ActionResult Edit(int id)
-        {
-            var applicationKey = _applicationKeyRepository.GetNullableById(id);
-            if (applicationKey == null)
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Application Key");
-                return this.RedirectToAction(a => a.Index());
-            }
+        //We don't edit these, but I can't remember why this is here, so just commenting out for now.
+        //public ActionResult Edit(int id)
+        //{
+        //    var applicationKey = _applicationKeyRepository.GetNullableById(id);
+        //    if (applicationKey == null)
+        //    {
+        //        Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Application Key");
+        //        return this.RedirectToAction(a => a.Index());
+        //    }
 
-            var viewModel = ApplicationKeyViewModel.Create(Repository, applicationKey);
-            return View(viewModel);
-        }
+        //    var viewModel = ApplicationKeyViewModel.Create(Repository, applicationKey);
+        //    return View(viewModel);
+        //}
 
-        [HttpPost]
-        public ActionResult Edit(int id, ApplicationKey applicationKey)
-        {
-            var srcAppKey = _applicationKeyRepository.GetNullableById(id);
-            if (srcAppKey == null)
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Application Key");
-                return this.RedirectToAction(a => a.Index());
-            }
+        //[HttpPost]
+        //public ActionResult Edit(int id, ApplicationKey applicationKey)
+        //{
+        //    var srcAppKey = _applicationKeyRepository.GetNullableById(id);
+        //    if (srcAppKey == null)
+        //    {
+        //        Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Application Key");
+        //        return this.RedirectToAction(a => a.Index());
+        //    }
 
-            srcAppKey.Application = applicationKey.Application;
-            srcAppKey.Key = applicationKey.Key;
+        //    srcAppKey.Application = applicationKey.Application;
+        //    srcAppKey.Key = applicationKey.Key;
 
-            srcAppKey.TransferValidationMessagesTo(ModelState);
+        //    srcAppKey.TransferValidationMessagesTo(ModelState);
 
-            if (ModelState.IsValid)
-            {
-                _applicationKeyRepository.EnsurePersistent(srcAppKey);
-                Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Application Key");
-                return this.RedirectToAction(a=>a.Index());
-            }
+        //    if (ModelState.IsValid)
+        //    {
+        //        _applicationKeyRepository.EnsurePersistent(srcAppKey);
+        //        Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType, "Application Key");
+        //        return this.RedirectToAction(a=>a.Index());
+        //    }
 
-            var viewModel = ApplicationKeyViewModel.Create(Repository, applicationKey);
-            return View(viewModel);
-        }
+        //    var viewModel = ApplicationKeyViewModel.Create(Repository, applicationKey);
+        //    return View(viewModel);
+        //}
 
         public RedirectToRouteResult ToggleActive(int id)
         {
