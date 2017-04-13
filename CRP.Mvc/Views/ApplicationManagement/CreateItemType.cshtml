@@ -41,18 +41,18 @@
                     {
                         var prop = Model.ItemType.ExtendedProperties.ElementAt(i);
                 
-                        <div style="margin-top: 10px">
+                        <div style="margin-top: 10px" class="form-group">
                             <label>Property Name:</label>
-                            <input id='@Html.Encode("ExtendedProperties[" + i + "]_Name")' name='@Html.Encode("ExtendedProperties[" + i + "].Name")' value='@Html.Encode(prop.Name)' />
-                            <span id='@Html.Encode("ExtendedProperties[" + i + "]_QuestionType")' style="display:block">
+                            <input id='@Html.Encode("ExtendedProperties[" + i + "]_Name")' name='@Html.Encode("ExtendedProperties[" + i + "].Name")' value='@Html.Encode(prop.Name)' class="form-control" />
+                            <div id='@Html.Encode("ExtendedProperties[" + i + "]_QuestionType")' style="display:block">
                                 <label>Question Type:</label>
-                                <select id='@Html.Encode("ExtendedProperties[" + i + "]_QuestionType")' name='@Html.Encode("ExtendedProperties[" + i + "].QuestionType")'>
+                                <select id='@Html.Encode("ExtendedProperties[" + i + "]_QuestionType")' name='@Html.Encode("ExtendedProperties[" + i + "].QuestionType")' class="form-control">
                                     <option value="">Select a Question Type</option>
                                     @foreach(var o in Model.QuestionTypes) { 
                                         <option value='@Html.Encode(o.Id)'>@Html.Encode(o.Name)</option>
                                     }
                                 </select>
-                            </span>
+                            </div>
                         </div>
 
                     }
@@ -63,9 +63,9 @@
             <img id="addExtendedProperty" src="@Url.Content("~/Images/plus.png")" style="width:24px; height:24px" />
         </fieldset>
 
-        <span id="QuestionTypeBase" style="display:none;">
-            @this.Select("QuestionTypeBase").Options(Model.QuestionTypes, x=>x.Id, x=>x.Name).FirstOption("Select a Question Type").Label("Question Type: ")
-        </span>
+        <div id="QuestionTypeBase" style="display:none;" class="form-group">
+            @this.Select("QuestionTypeBase").Options(Model.QuestionTypes, x=>x.Id, x=>x.Name).FirstOption("Select a Question Type").Label("Question Type: ").Class("form-control")
+        </div>
 
         <div class="form-group" style="margin-top: 5px">
             <p>
@@ -91,10 +91,10 @@
         function AddExtendedProperty() {
 
             var count = $("div#ExtendedProperties").children().length;
-            var div = $("<div style='margin-top: 10px'>");
+            var div = $("<div style='margin-top: 10px'> class='form-group'");
             div.append($("<label>").html("Property Name:"));
-            div.append($("<input>").attr("id", "ExtendedProperties[" + count + "]_Name").attr("name", "ExtendedProperties[" + count + "].Name"));
-            div.append($("span#QuestionTypeBase").clone().css("display", "block").attr("id", "ExtendedProperties[" + count + "]_QuestionType"));
+            div.append($("<input class='form-control'>").attr("id", "ExtendedProperties[" + count + "]_Name").attr("name", "ExtendedProperties[" + count + "].Name"));
+            div.append($("div#QuestionTypeBase").clone().css("display", "block").attr("id", "ExtendedProperties[" + count + "]_QuestionType"));
             div.find("select").attr("id", "ExtendedProperties[" + count + "]_QuestionType").attr("name", "ExtendedProperties[" + count + "].QuestionType");
 
             $("div#ExtendedProperties").append(div);
