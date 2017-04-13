@@ -6,6 +6,14 @@
     ViewBag.Title = "ListItemTypes";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
 <div class="boundary">
     <h2>Item Types</h2>
 

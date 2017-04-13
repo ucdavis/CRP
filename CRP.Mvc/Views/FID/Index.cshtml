@@ -20,35 +20,38 @@
     </p>
     <table id="table">
         <thead>
-            <tr>
-                <th></th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.FID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
 
-            </tr>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.ActionLink("View", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                </tr>
-            }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("View", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
+    <div class="form-group">
+        @Html.ActionLink("Back", "Index", "ApplicationManagement", null, new{@class="btn"})
+    </div>
 </div>
 
 @section AdditionalStyles
