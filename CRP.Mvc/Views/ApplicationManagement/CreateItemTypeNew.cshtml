@@ -20,13 +20,13 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        <fieldset>
-            <legend>Name</legend>
-            <p>
-                @Html.TextBox("ItemType.Name")
-                @Html.ValidationMessageFor(x => x.ItemType.Name)
-            </p>
-        </fieldset>
+        <div class="form-group">
+            <label for="ItemType.Name">Name</label>
+
+            @Html.TextBox("ItemType.Name", Model.ItemType != null ? Model.ItemType.Name : string.Empty, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.ItemType.Name)
+
+        </div>
         <fieldset>
             <legend>Extended Properties</legend>
             @Html.ValidationMessageFor(x => x.ItemType.ItemTypeExtendedProperties)
