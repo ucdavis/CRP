@@ -1,0 +1,44 @@
+﻿@model CRP.Core.Domain.TouchnetFID
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
+<div class="boundary">
+    <h2>Details</h2>
+
+    <div>
+        <h4>Touchnet FID</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.FID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FID)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", "FID", new { id = Model.Id }, new {@class="btn"}) |
+        @Html.ActionLink("Back to List", "Index", "FID", null, new {@class="btn"})
+    </p>
+</div>

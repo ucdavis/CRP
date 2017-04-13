@@ -1,0 +1,77 @@
+﻿@model IEnumerable<CRP.Core.Domain.TouchnetFID>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
+<div class="boundary">
+    <h2>Touchnet FID</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create", "FID", null, new {@class="btn"})
+    </p>
+    <table id="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.FID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("View", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <div class="form-group">
+        @Html.ActionLink("Back", "Index", "ApplicationManagement", null, new{@class="btn"})
+    </div>
+</div>
+
+@section AdditionalStyles
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+}
+
+@section AdditionalScripts
+{
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+        $(function() {
+            $("#table").dataTable({
+                "aaSorting": [[1, "desc"]], //Default sort on second column
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+                ]
+            });
+
+        });
+</script>
+}

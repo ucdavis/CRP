@@ -1295,10 +1295,10 @@
     <Content Include="Views\DisplayProfile\List.aspx" />
     <Content Include="Views\Error\Index.aspx" />
     <Content Include="Views\ExtendedProperty\Create.aspx" />
-    <Content Include="Views\FID\Create.aspx" />
-    <Content Include="Views\FID\Details.aspx" />
-    <Content Include="Views\FID\Edit.aspx" />
-    <Content Include="Views\FID\Index.aspx" />
+    <Content Include="Views\FID\CreateOld.aspx" />
+    <Content Include="Views\FID\DetailsOld.aspx" />
+    <Content Include="Views\FID\EditOld.aspx" />
+    <Content Include="Views\FID\IndexOld.aspx" />
     <Content Include="Views\Help\Create.aspx" />
     <Content Include="Views\Help\CreateItem.aspx" />
     <Content Include="Views\Help\Details.aspx" />
@@ -1348,7 +1348,7 @@
     <Content Include="Views\Shared\TemplateInstructions.ascx" />
     <Content Include="Views\Shared\TransactionForm.ascx" />
     <Content Include="Views\Tag\Index.aspx" />
-    <Content Include="Views\Template\Edit.aspx" />
+    <Content Include="Views\Template\EditOld.aspx" />
     <Content Include="Views\Transaction\AdminLookupOld.aspx" />
     <Content Include="Views\Transaction\CheckoutOld.aspx" />
     <Content Include="Views\Transaction\ConfirmationOld.aspx" />
@@ -1402,6 +1402,11 @@
     <Content Include="Views\Transaction\Edit.cshtml" />
     <Content Include="Views\ApplicationManagement\Index.cshtml" />
     <Content Include="Views\ApplicationManagement\ListItemTypes.cshtml" />
+    <Content Include="Views\Template\Edit.cshtml" />
+    <Content Include="Views\FID\Index.cshtml" />
+    <Content Include="Views\FID\Details.cshtml" />
+    <Content Include="Views\FID\Edit.cshtml" />
+    <Content Include="Views\FID\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

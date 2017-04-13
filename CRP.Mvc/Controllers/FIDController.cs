@@ -22,7 +22,7 @@ namespace CRP.Controllers
         /// <returns>Queryable of TouchnetFID</returns>
         public ActionResult Index()
         {
-            return View(Repository.OfType<TouchnetFID>().Queryable);
+            return View(Repository.OfType<TouchnetFID>().Queryable.ToArray());
         }
 
 
