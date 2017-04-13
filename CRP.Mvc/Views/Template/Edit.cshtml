@@ -1,0 +1,144 @@
+﻿@using CRP.Core.Resources
+@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.ConfirmationTemplateViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="boundary">
+    <h2>Edit System Confirmation Template</h2>
+    @Html.ValidationSummary()
+    
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("id", Model.Template.Id)
+
+        <div id="Confirmation_Word_Bank">
+            <strong style="font-family:Trebuchet MS,Arial,Georgia; font-size:1.2em;">Template Fields: </strong> @Html.Image("~/images/question_blue.png", new { @id = "ConfirmationWordBankHelp" })<br>
+            <a href="javascript:;" class="add-token" name="{FirstName}">First Name</a><br>
+            <a href="javascript:;" class="add-token" name="{LastName}">Last Name</a><br>
+            <a href="javascript:;" class="add-token" name="{TotalPaid}">Total Paid</a><br>
+            <a href="javascript:;" class="add-token" name="{Quantity}">Quantity</a><br>
+            <a href="javascript:;" class="add-token" name="{QuantityName}">Quantity Name</a><br>
+            <a href="javascript:;" class="add-token" name="{TransactionNumber}">Transaction Number</a><br>
+            <a href="javascript:;" class="add-token" name="{PaymentMethod}">Payment Method</a><br>
+            <a href="javascript:;" class="add-token" name="{DonationThanks}">Donation Thanks</a><br>
+        </div>
+        <div id="Confirmation_Word_Bank_Unpaid">
+            <strong style="font-family:Trebuchet MS,Arial,Georgia; font-size:1.2em;">Template Fields: </strong> @Html.Image("~/images/question_blue.png", new { @id = "ConfirmationWordBankHelpUnpaid" })<br>
+            <a href="javascript:;" class="add-token-unpaid" name="{FirstName}">First Name</a><br>
+            <a href="javascript:;" class="add-token-unpaid" name="{LastName}">Last Name</a><br>
+            <a href="javascript:;" class="add-token-unpaid" name="{TotalPaid}">Total Paid</a><br>
+            <a href="javascript:;" class="add-token-unpaid" name="{Quantity}">Quantity</a><br>
+            <a href="javascript:;" class="add-token-unpaid" name="{QuantityName}">Quantity Name</a><br>
+            <a href="javascript:;" class="add-token-unpaid" name="{TransactionNumber}">Transaction Number</a><br>
+            <a href="javascript:;" class="add-token-unpaid" name="{PaymentMethod}">Payment Method</a><br>
+            <a href="javascript:;" class="add-token-unpaid" name="{DonationThanks}">Donation Thanks</a><br>
+        </div>
+
+        <h3>Paid Template</h3>
+        @Html.TextArea("PaidText", Model.PaidText)<br />
+        <h3>Unpaid Template</h3>
+        @Html.TextArea("UnpaidText", Model.UnpaidText)
+
+        <div class="form-group" style="margin-top: 5px">
+            <input id="Submit" name="Submit" type="submit" value="Save" class="btn btn-primary">
+        </div>
+    }
+
+</div>
+
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/qtipcss")
+    <style type="text/css">
+        #Confirmation_Word_Bank {
+            margin-left:540px;
+            margin-top:35px;
+            background-color:#EFEFEF;
+            border:1px solid #7F7F7F;
+            float:right;
+            padding:5px;
+            position:absolute;
+            width:130px;
+            font-family:Trebuchet MS,Arial,Georgia;
+            font-size:0.8em;
+        }
+        #Confirmation_Word_Bank a:link
+        {
+            color:#0B65C1;
+            font-weight:bold;
+            text-decoration:none;
+        }
+        #Confirmation_Word_Bank a:hover{color: #A50000}
+
+        #Confirmation_Word_Bank_Unpaid {
+            margin-left:540px;
+            margin-top:363px;
+            background-color:#EFEFEF;
+            border:1px solid #7F7F7F;
+            float:right;
+            padding:5px;
+            position:absolute;
+            width:130px;
+            font-family:Trebuchet MS,Arial,Georgia;
+            font-size:0.8em;
+        }
+        #Confirmation_Word_Bank_Unpaid a:link
+        {
+            color:#0B65C1;
+            font-weight:bold;
+            text-decoration:none;
+        }
+        #Confirmation_Word_Bank_Unpaid a:hover{color: #A50000}
+    </style>
+
+}
+@section AdditionalScripts
+{
+    @Scripts.Render("~/bundles/qtip")
+    <script src="@Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.enableTinyMce.js")" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#PaidText").enableTinyMce({ script_location: '@Url.Content("~/Scripts/tiny_mce/tiny_mce.js")', overrideWidth: '500', overrideHeight: '250' ,overrideShowPreview: 'preview,', overridePlugin_preview_pageurl: '@Url.Content("~/Static/Preview.html")'});
+            $(".add-token").click(function(event) {
+                var pasteValue = $(this).attr("name");
+                tinyMCE.execInstanceCommand("PaidText", "mceInsertContent", false, pasteValue);
+            });
+            $("#UnpaidText").enableTinyMce({ script_location: '@Url.Content("~/Scripts/tiny_mce/tiny_mce.js")', overrideWidth: '500', overrideHeight: '250', overrideShowPreview: 'preview,', overridePlugin_preview_pageurl: '@Url.Content("~/Static/Preview.html")' });
+            $(".add-token-unpaid").click(function(event) {
+                var pasteValue = $(this).attr("name");
+                tinyMCE.execInstanceCommand("UnpaidText", "mceInsertContent", false, pasteValue);
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#ConfirmationWordBankHelp").attr("title", "");
+            $("#ConfirmationWordBankHelpUnpaid").attr("title", "");
+            $("#ConfirmationWordBankHelp").qtip({ // Grab some elements to apply the tooltip to
+                content: {
+                    text: "The following are a list of values that can be clicked on to insert into the text where the cursor is on the Paid Template. The values will be dynamically replaced when used.<br><h3>First Name: </h3>The Contact Information's First Name.<br><h3>Last Name: </h3>The Contact Information's Last Name.<br><h3>Total Paid: </h3>The total amount of accepted payments.<br><h3>Quantity: </h3>The number of items purchased.<br><h3>Quantity Name: </h3>The Name of the items.<br><h3>Transaction Number: </h3>The transaction number. Can be used with the email to lookup the transaction.<br><h3>Payment Method: </h3>'Check' or 'Credit Card' sans quotes.<br><h3>Donation Thanks: </h3>If a donation is detected the text '@String.Format(Html.Encode(ScreenText.STR_DonationText), "xxx")' Sans quotes where xxx is replaced with the amount."
+                },
+                position: {
+                    my: 'top right',
+                    at: 'bottom left'
+                }
+            });
+            $("#ConfirmationWordBankHelpUnpaid").qtip({ // Grab some elements to apply the tooltip to
+                content: {
+                    text: "The following are a list of values that can be clicked on to insert into the text where the cursor is on the Unpaid Template. The values will be dynamically replaced when used.<br><h3>First Name: </h3>The Contact Information's First Name.<br><h3>Last Name: </h3>The Contact Information's Last Name.<br><h3>Total Paid: </h3>The total amount of accepted payments.<br><h3>Quantity: </h3>The number of items purchased.<br><h3>Quantity Name: </h3>The Name of the items.<br><h3>Transaction Number: </h3>The transaction number. Can be used with the email to lookup the transaction.<br><h3>Payment Method: </h3>'Check' or 'Credit Card' sans quotes.<br><h3>Donation Thanks: </h3>If a donation is detected the text '@String.Format(Html.Encode(ScreenText.STR_DonationText), "xxx")' Sans quotes where xxx is replaced with the amount."
+                },
+                position: {
+                    my: 'top right',
+                    at: 'bottom left'
+                }
+            });
+        });
+    </script>
+}
