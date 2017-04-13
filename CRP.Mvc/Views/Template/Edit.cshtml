@@ -7,6 +7,13 @@
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
 <div class="boundary">
     <h2>Edit System Confirmation Template</h2>
     @Html.ValidationSummary()
@@ -45,7 +52,7 @@
         @Html.TextArea("UnpaidText", Model.UnpaidText)
 
         <div class="form-group" style="margin-top: 5px">
-            <input id="Submit" name="Submit" type="submit" value="Save" class="btn btn-primary">
+            <input id="Submit" name="Submit" type="submit" value="Save" class="btn btn-primary"> | @Html.ActionLink("Back", "Index", "ApplicationManagement", null, new {@class="btn"})
         </div>
     }
 
