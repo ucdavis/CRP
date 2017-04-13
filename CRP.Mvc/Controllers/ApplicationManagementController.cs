@@ -125,6 +125,92 @@ namespace CRP.Controllers
             }
         }
 
+        public ActionResult CreateItemTypeNew()
+        {
+            return View(ItemTypeViewModel.Create(Repository));
+        }
+
+        /// <summary>
+        /// POST: /ApplicationManagement/CreateItemType
+        /// </summary>
+        /// <remarks>
+        /// Description:
+        ///     Creates a new item type with defined extended properties
+        /// PreCondition:
+        ///     Item type with same name doesn't already exist
+        /// PostCondition:
+        ///     Item is created
+        ///     Extended properties passed in are saved
+        /// </remarks>
+        /// <param name="itemType"></param>
+        /// <param name="extendedProperties"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult CreateItemTypeNew(ItemType itemType, ExtendedProperty[] extendedProperties)
+        {
+            ModelState.Clear();
+            //foreach (var ep in extendedProperties)
+            //{
+            //    ep.ItemType = itemType;
+
+            //    if (ep.IsValid())
+            //    {
+            //        itemType.AddExtendedProperty(ep);
+            //    }
+            //    else
+            //    {
+            //        ModelState.AddModelError("ExtendedProperty", "At least one extended property is not valid.");
+            //    }
+            //}
+            if (extendedProperties != null)
+            {
+                var duplicateCheck = new List<string>();
+                foreach (var list in extendedProperties)
+                {
+                    if (duplicateCheck.Contains(list.Name))
+                    {
+                        ModelState.AddModelError("ExtendedProperty",
+                                                 "Duplicate names not allowed. Extended property \"" + list.Name +
+                                                 "\" already exists.");
+                        break;
+                    }
+                    duplicateCheck.Add(list.Name);
+                }
+            }
+
+            //Validation is done in the domain
+            if (extendedProperties != null)
+            {
+                foreach (var ep in extendedProperties)
+                {
+                    ep.ItemType = itemType;
+                    itemType.AddExtendedProperty(ep);
+                }
+            }
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemType.ValidationResults());
+
+            // make sure the item type doesn't already exist with the same name
+            if (Repository.OfType<ItemType>().Queryable.Where(a => a.Name == itemType.Name).Any())
+            {
+                // name already exists, we have a problem
+                ModelState.AddModelError("Name", "A item type of the same name already exists.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                Repository.OfType<ItemType>().EnsurePersistent(itemType);
+                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Item Type");
+                return this.RedirectToAction(a => a.ListItemTypes());
+            }
+            else
+            {
+                var viewModel = ItemTypeViewModel.Create(Repository);
+                viewModel.ItemType = itemType;
+
+                return View(viewModel);
+            }
+        }
+
         /// <summary>
         /// GET: /ApplicationManagement/EditItemType/{id}
         /// </summary>

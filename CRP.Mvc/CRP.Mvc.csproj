@@ -1409,6 +1409,7 @@
     <Content Include="Views\FID\Create.cshtml" />
     <Content Include="Views\ApplicationKey\Index.cshtml" />
     <Content Include="Views\ApplicationKey\Create.cshtml" />
+    <Content Include="Views\ApplicationManagement\CreateItemTypeNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
