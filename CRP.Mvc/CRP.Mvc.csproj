@@ -1284,7 +1284,7 @@
     <Content Include="Views\ApplicationKey\ApplicationKeyForm.ascx" />
     <Content Include="Views\ApplicationKey\Create.aspx" />
     <Content Include="Views\ApplicationKey\Edit.aspx" />
-    <Content Include="Views\ApplicationKey\Index.aspx" />
+    <Content Include="Views\ApplicationKey\IndexOld.aspx" />
     <Content Include="Views\ApplicationManagement\CreateItemType.aspx" />
     <Content Include="Views\ApplicationManagement\EditItemType.aspx" />
     <Content Include="Views\ApplicationManagement\IndexOld.aspx" />
@@ -1407,6 +1407,7 @@
     <Content Include="Views\FID\Details.cshtml" />
     <Content Include="Views\FID\Edit.cshtml" />
     <Content Include="Views\FID\Create.cshtml" />
+    <Content Include="Views\ApplicationKey\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

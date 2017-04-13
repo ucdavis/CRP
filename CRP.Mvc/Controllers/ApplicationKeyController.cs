@@ -32,7 +32,7 @@ namespace CRP.Controllers
         public ActionResult Index()
         {
             var keys = _applicationKeyRepository.Queryable;
-            return View(keys);
+            return View(keys.ToArray());
         }
 
         public ActionResult Create()
