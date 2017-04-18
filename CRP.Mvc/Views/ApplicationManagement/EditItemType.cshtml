@@ -1,0 +1,166 @@
+﻿@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@model CRP.Core.Domain.ItemType
+
+@{
+    ViewBag.Title = "EditItemType";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
+<div class="boundary">
+    <h2>Edit ItemType</h2>
+    @Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.")
+    
+
+    @using (Html.BeginForm()) {
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label for="Name">Name</label>
+            @Html.TextBox("Name", Model.Name, new {@class = "form-control"})
+            @Html.ValidationMessageFor(x => x.Name)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" class="btn btn-default"/>
+        </p>
+    }
+    
+    <hr/>
+    <h3>Extended Properties</h3>
+    <p>
+        @Html.ActionLink("Create", "Create", "ExtendedProperty", new { itemTypeId = Model.Id }, new {@class="btn btn-primary"})
+    </p>
+    <table id="extendedPropertyTable">
+        <thead>
+        <tr>
+            <td></td>
+            <td>Property Name</td>
+            <td>Question Type</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var property in Model.ExtendedProperties)
+        {
+            <tr>
+                <td>
+                    @using (Html.BeginForm<ExtendedPropertyController>
+                        (b => b.Delete(property.Id), FormMethod.Post)) {
+                            @Html.AntiForgeryToken()
+                            <a href="javascript:;" class="FormSubmit">Delete</a>
+
+                        }
+                </td>
+                <td>@property.Name</td>
+                <td>@property.QuestionType.Name</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <hr/>
+    <h3>Transaction Question Sets</h3>
+    <p>
+        @Html.ActionLink("Add Transaction Question Set", "LinkToItemType", "QuestionSet", new {itemTypeId=Model.Id, transaction=true, quantity=false} , new {@class="btn btn-primary"})        
+    </p>
+    <table id="t-questionSetsTable">
+        <thead>
+        <tr>
+            <td></td>
+            <td>Question Set Name</td>
+            <td>Active</td>
+            <td># Questions</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var questionSet in Model.QuestionSets.Where(a => a.TransactionLevel))
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "QuestionSet", new {id=questionSet.QuestionSet.Id}, null)
+                </td>
+                <td>@questionSet.QuestionSet.Name</td>
+                <td>@questionSet.QuestionSet.IsActive</td>
+                <td>@questionSet.QuestionSet.Questions.Count</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <hr />
+    <h3>Quantity Question Sets</h3>
+    <p>
+        @Html.ActionLink("Add Quantity Question Set", "LinkToItemType", "QuestionSet", new { itemTypeId = Model.Id, transaction = false, quantity = true }, new { @class = "btn btn-primary" })
+    </p>
+    <table id="q-questionSetsTable">
+        <thead>
+        <tr>
+            <td></td>
+            <td>Question Set Name</td>
+            <td>Active</td>
+            <td># Questions</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var questionSet in Model.QuestionSets.Where(a => a.QuantityLevel))
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "QuestionSet", new { id = questionSet.QuestionSet.Id }, null)
+                </td>
+                <td>@questionSet.QuestionSet.Name</td>
+                <td>@questionSet.QuestionSet.IsActive</td>
+                <td>@questionSet.QuestionSet.Questions.Count</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <p>
+        @Html.ActionLink("Back", "ListItemTypes", "ApplicationManagement", null, new {@class="btn btn-primary"})
+    </p>
+</div>
+
+
+
+@section AdditionalStyles
+{
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+}
+
+@section AdditionalScripts
+{
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("a.FormSubmit").click(function () { $(this).parents("form").submit(); });
+
+            $("#extendedPropertyTable").dataTable({
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+                ]
+            });
+
+            $("#t-questionSetsTable").dataTable({
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+                ]
+            });
+
+            $("#q-questionSetsTable").dataTable({
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+                ]
+            });
+        });
+
+        
+    </script>
+
+}

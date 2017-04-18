@@ -69,7 +69,8 @@
 
         <div class="form-group" style="margin-top: 5px">
             <p>
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" /> | 
+                @Html.ActionLink("Cancel", "ListItemTypes", "ApplicationManagement", null, new { @class = "btn" })
             </p>
         </div>
     }
