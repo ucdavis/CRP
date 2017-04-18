@@ -1,0 +1,104 @@
+﻿@using MvcContrib.FluentHtml
+@model CRP.Controllers.ViewModels.ItemTypeViewModel
+
+@{
+    ViewBag.Title = "CreateItemTypeNew";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
+<div class="boundary">
+    <h2>Create ItemType</h2>
+    @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
+    
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label for="ItemType.Name">Name</label>
+
+            @Html.TextBox("ItemType.Name", Model.ItemType != null ? Model.ItemType.Name : string.Empty, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.ItemType.Name)
+
+        </div>
+        <fieldset>
+            <legend>Extended Properties</legend>
+            @Html.ValidationMessageFor(x => x.ItemType.ItemTypeExtendedProperties)
+
+            <!-- This is the container for the extended properties -->
+            <div id="ExtendedProperties" class="form-group">
+
+                @if (Model.ItemType != null)
+                {
+                    //foreach (var prop in Model.ItemType.ExtendedProperties)
+                    for (var i = 0; i < Model.ItemType.ExtendedProperties.Count; i++ )
+                    {
+                        var prop = Model.ItemType.ExtendedProperties.ElementAt(i);
+                
+                        <div style="margin-top: 10px" class="form-group">
+                            <label>Property Name:</label>
+                            <input id='@Html.Encode("ExtendedProperties[" + i + "]_Name")' name='@Html.Encode("ExtendedProperties[" + i + "].Name")' value='@Html.Encode(prop.Name)' class="form-control" />
+                            <div id='@Html.Encode("ExtendedProperties[" + i + "]_QuestionType")' style="display:block">
+                                <label>Question Type:</label>
+                                <select id='@Html.Encode("ExtendedProperties[" + i + "]_QuestionType")' name='@Html.Encode("ExtendedProperties[" + i + "].QuestionType")' class="form-control">
+                                    <option value="">Select a Question Type</option>
+                                    @foreach(var o in Model.QuestionTypes) { 
+                                        <option value='@Html.Encode(o.Id)'>@Html.Encode(o.Name)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                    }
+                }
+
+            </div>
+
+            <img id="addExtendedProperty" src="@Url.Content("~/Images/plus.png")" style="width:24px; height:24px" />
+        </fieldset>
+
+        <div id="QuestionTypeBase" style="display:none;" class="form-group">
+            @this.Select("QuestionTypeBase").Options(Model.QuestionTypes, x=>x.Id, x=>x.Name).FirstOption("Select a Question Type").Label("Question Type: ").Class("form-control")
+        </div>
+
+        <div class="form-group" style="margin-top: 5px">
+            <p>
+                <input type="submit" value="Create" class="btn btn-default" /> | 
+                @Html.ActionLink("Cancel", "ListItemTypes", "ApplicationManagement", null, new { @class = "btn" })
+            </p>
+        </div>
+    }
+</div>
+
+@section AdditionalStyles
+{
+    
+}
+
+@section AdditionalScripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $("img#addExtendedProperty").click(function() { AddExtendedProperty(); });
+        });
+
+        function AddExtendedProperty() {
+
+            var count = $("div#ExtendedProperties").children().length;
+            var div = $("<div style='margin-top: 10px'> class='form-group'");
+            div.append($("<label>").html("Property Name:"));
+            div.append($("<input class='form-control'>").attr("id", "ExtendedProperties[" + count + "]_Name").attr("name", "ExtendedProperties[" + count + "].Name"));
+            div.append($("div#QuestionTypeBase").clone().css("display", "block").attr("id", "ExtendedProperties[" + count + "]_QuestionType"));
+            div.find("select").attr("id", "ExtendedProperties[" + count + "]_QuestionType").attr("name", "ExtendedProperties[" + count + "].QuestionType");
+
+            $("div#ExtendedProperties").append(div);
+        }
+</script>
+}
