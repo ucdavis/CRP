@@ -102,12 +102,30 @@ namespace CRP.Controllers.ViewModels
             {
                 var checkName = new CheckName();
                 checkName.TransactionNumber = transaction.TransactionNumber;
-                checkName.LastName = transaction.TransactionAnswers.Where(a =>
-                        a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
-                        a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
-                checkName.FirstName = transaction.TransactionAnswers.Where(a =>
-                        a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
-                        a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
+
+                var lastName = transaction.TransactionAnswers
+                    .FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                        a.Question.Name == StaticValues.Question_LastName);
+                var firstName = transaction.TransactionAnswers
+                    .FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                        a.Question.Name == StaticValues.Question_FirstName);
+
+                if (lastName != null)
+                {
+                    checkName.LastName = lastName.Answer;
+                }
+                else
+                {
+                    checkName.LastName = "!ERR!";
+                }
+                if (firstName != null)
+                {
+                    checkName.FirstName = firstName.Answer;
+                }
+                else
+                {
+                    checkName.FirstName = "!ERR!";
+                }
 
                 viewModel.CheckName.Add(checkName);
             }
