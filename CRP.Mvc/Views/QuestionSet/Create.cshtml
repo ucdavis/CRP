@@ -1,0 +1,126 @@
+﻿@using CRP.Controllers
+@using CRP.Controllers.Helpers
+@using CRP.Core.Resources
+@using Microsoft.Web.Mvc
+@using MvcContrib.FluentHtml
+@model CRP.Controllers.ViewModels.QuestionSetViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<div class="boundary">
+    <h2>Create</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Question Set</h4>
+            <hr/>
+            @Html.ValidationSummary(false, "Create was unsuccessful. Please correct the errors and try again.")
+            <div class="form-group">
+                @Html.LabelFor(model => model.QuestionSet.Name, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.QuestionSet.Name, new {htmlAttributes = new {@class = "form-control"}})
+                    @Html.ValidationMessageFor(model => model.QuestionSet.Name, "", new {@class = "text-danger"})
+                </div>
+            </div>
+
+            <!-- Hide or display the transaction/quantity selector when already adding it to an item type Don't think this will ever be visible. -->
+            @if ((!Model.Transaction && !Model.Quantity) && (Model.Item != null && Model.ItemType != null))
+            {
+                <div class="form-group">
+                    @Html.Label("transaction", htmlAttributes: new {@class = "control-label col-md-2"})
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.CheckBox("transaction")
+                            @Html.ValidationMessage("transaction", new {@class = "text-danger"})
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("quantity", htmlAttributes: new {@class = "control-label col-md-2"})
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.CheckBox("quantity")
+                            @Html.ValidationMessage("quantity", new {@class = "text-danger"})
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Html.Hidden("transaction", Model.Transaction)
+                @Html.Hidden("quantity", Model.Quantity)
+            }
+
+            <!-- Hide or display reusable selectors when needed -->
+            @if (Model.Item == null && Model.ItemType == null)
+            {
+                if (Model.IsAdmin)
+                {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.QuestionSet.SystemReusable, htmlAttributes: new {@class = "control-label col-md-2"})
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.QuestionSet.SystemReusable)
+                                @Html.ValidationMessageFor(model => model.QuestionSet.SystemReusable, "", new {@class = "text-danger"})
+                                @Html.ValidationMessageFor(x => x.QuestionSet.Reusability, "", new {@class = "text-danger"})
+                            </div>
+                        </div>
+                    </div>
+                }
+                if (Model.IsAdmin || Model.IsSchoolAdmin)
+                {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.QuestionSet.CollegeReusable, htmlAttributes: new {@class = "control-label col-md-2"})
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.QuestionSet.CollegeReusable)
+                                @Html.ValidationMessageFor(model => model.QuestionSet.CollegeReusable, "", new {@class = "text-danger"})
+                                @Html.ValidationMessageFor(x => x.QuestionSet.Reusability, "", new {@class = "text-danger"})
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="school" class="control-label col-md-2">College</label>
+                        <div class="col-md-10">
+                            @this.Select("school").Options(Model.Schools, x => x.Id, x => x.LongDescription).Class("form-control")
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.QuestionSet.UserReusable, htmlAttributes: new {@class = "control-label col-md-2"})
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.QuestionSet.UserReusable)
+                                @Html.ValidationMessageFor(model => model.QuestionSet.UserReusable, "", new {@class = "text-danger"})
+                                @Html.ValidationMessageFor(x => x.QuestionSet.Reusability, "", new {@class = "text-danger"})
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default"/>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @if(Model.ItemType != null) {
+            @Html.ActionLink("Back to Item Type", "EditItemType", "ApplicationManagement", new {id = Model.ItemType.Id}, new {@class="btn btn-primary"})
+        
+        } else if (Model.Item != null) { 
+            @Html.ActionLink("Back to Item", "Edit", "ItemManagement", null, null, "Questions", new {id=Model.Item.Id}, new {@class="btn btn-primary"})
+        } else { 
+            @Html.ActionLink("Back to List", "List", "QuestionSet", null, new { @class = "btn btn-primary" })
+        }
+    </div>
+</div>
