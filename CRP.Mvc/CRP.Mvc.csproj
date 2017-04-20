@@ -1323,7 +1323,7 @@
     <Content Include="Views\MapPin\MapPinView.ascx" />
     <Content Include="Views\Payment\LinkToTransaction.aspx" />
     <Content Include="Views\QuestionSet\CreateOld.aspx" />
-    <Content Include="Views\QuestionSet\Details.aspx" />
+    <Content Include="Views\QuestionSet\DetailsOld.aspx" />
     <Content Include="Views\QuestionSet\Edit.aspx" />
     <Content Include="Views\QuestionSet\LinkToItem.aspx" />
     <Content Include="Views\QuestionSet\LinkToItemType.aspx" />
@@ -1412,6 +1412,7 @@
     <Content Include="Views\ApplicationManagement\CreateItemType.cshtml" />
     <Content Include="Views\ApplicationManagement\EditItemType.cshtml" />
     <Content Include="Views\QuestionSet\Create.cshtml" />
+    <Content Include="Views\QuestionSet\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
