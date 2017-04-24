@@ -1,0 +1,130 @@
+﻿@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.QuestionSetViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
+<div class="boundary">
+    <h2>Edit</h2>       
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+    
+        <div class="form-horizontal">
+            <h4>QuestionSet</h4>
+            <hr />
+            @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.", new { @class = "text-danger" })
+            @Html.Hidden("Id", Model.QuestionSet.Id)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.QuestionSet.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.QuestionSet.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.QuestionSet.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.QuestionSet.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.QuestionSet.IsActive)
+                        @Html.ValidationMessageFor(model => model.QuestionSet.IsActive, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+    
+    <hr/>
+    <h4>Questions</h4>
+            
+    <p>
+        @Html.ActionLink("Create", "Create", "Question", new {questionSetId=Model.QuestionSet.Id}, new {@class="btn btn-primary"})
+        
+    </p>
+    <table id="table">
+        <thead>
+        <tr>
+            <td></td>
+            <td>Order</td>
+            <td>Question</td>
+            <td>Type</td>
+            <td>Options</td>
+            <td>Validators</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var q in Model.QuestionSet.Questions)
+        {
+            <tr>
+                <td>
+                    @using (Html.BeginForm<QuestionController>(a => a.Delete(q.Id), FormMethod.Post, new {name = "DeleteQuestionForm"}))
+                         {
+                             @Html.AntiForgeryToken()
+                             <a class="DeleteQuestion" href="javascript:;">Delete</a>
+                         }
+                </td>
+                <td>@q.Order</td>
+                <td>@q.Name</td>
+                <td>@q.QuestionType.Name</td>
+                <td>@(string.Join(", ", q.Options.Select(a => a.Name).ToArray()))</td>
+                <td>@(string.Join(", ", q.Validators.Select(a => a.Name).ToArray()))</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <div>
+        @if(Model.ItemType != null) {
+            @Html.ActionLink("Back to Item Type", "EditItemType", "ApplicationManagement", new {id = Model.ItemType.Id}, new {@class="btn btn-primary"})
+        
+        } else if (Model.Item != null) { 
+            @Html.ActionLink("Back to Item", "Edit", "ItemManagement", null, null, "Questions", new {id=Model.Item.Id}, new {@class="btn btn-primary"})
+        } else { 
+            @Html.ActionLink("Back to List", "List", "QuestionSet", null, new { @class = "btn btn-primary" })
+        }
+
+    </div>
+</div>
+
+@section AdditionalScripts
+{
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $("#table").dataTable({
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+                ]
+            });
+            // assign the submit event to each of the delete links
+            $("a.DeleteQuestion").click(function (event) { $(this).parents("form[name='DeleteQuestionForm']").submit(); });
+        });
+
+    </script>
+}
+
+@section AdditionalStyles
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+}
