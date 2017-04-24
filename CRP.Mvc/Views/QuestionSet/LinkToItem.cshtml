@@ -86,7 +86,8 @@
         $(function() {
             $("#table").dataTable({
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
+                    { 'type': 'boolean', 'aTargets': [2,3,4] }
                 ]
             });
             $("a.SelectLinkToForm").click(function (event) { $(this).parents("form").submit(); });
