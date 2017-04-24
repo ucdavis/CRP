@@ -1325,7 +1325,7 @@
     <Content Include="Views\QuestionSet\CreateOld.aspx" />
     <Content Include="Views\QuestionSet\DetailsOld.aspx" />
     <Content Include="Views\QuestionSet\EditOld.aspx" />
-    <Content Include="Views\QuestionSet\LinkToItem.aspx" />
+    <Content Include="Views\QuestionSet\LinkToItemOld.aspx" />
     <Content Include="Views\QuestionSet\LinkToItemType.aspx" />
     <Content Include="Views\QuestionSet\ListOld.aspx" />
     <Content Include="Views\Question\Create.aspx" />
@@ -1414,6 +1414,7 @@
     <Content Include="Views\QuestionSet\Create.cshtml" />
     <Content Include="Views\QuestionSet\Details.cshtml" />
     <Content Include="Views\QuestionSet\Edit.cshtml" />
+    <Content Include="Views\QuestionSet\LinkToItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
