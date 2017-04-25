@@ -1,0 +1,102 @@
+﻿@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.QuestionSetLinkViewModel
+
+@{
+    ViewBag.Title = "LinkToItemType";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
+<div class="boundary">
+    <h2>Link To Item Type</h2>
+    @Html.Hidden("transaction", Model.Transaction)
+    @Html.Hidden("quantity", Model.Quantity)
+
+    <p>
+        @Html.ActionLink("Create New Question Set", "Create", "QuestionSet", new { itemTypeId = Model.ItemTypeId, transaction = Model.Transaction, quantity = Model.Quantity }, new { @class = "btn btn-primary" })
+    </p>
+    <table id="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    System Reusable
+                </th>
+                <th>
+                    College Reusable
+                </th>
+                <th>
+                    User Reusable
+                </th>
+                <th>
+                    # of Questions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.QuestionSets)
+            {
+                <tr>
+                    <td>
+                        @using (Html.BeginForm<QuestionSetController>(a => a.LinkToItemType(item.Id, Model.ItemTypeId, Model.Transaction, Model.Quantity), FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <a href="javascript:;" class="SelectLinkToForm">Select</a>
+                        }
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SystemReusable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CollegeReusable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserReusable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Questions.Count)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <P>
+        @Html.ActionLink("Back to Item", "Edit", "ItemManagement", null, null, "Questions", new { id = Model.ItemId }, new { @class = "btn btn-primary" })
+    </P>
+</div>
+
+@section AdditionalScripts
+{
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $("#table").dataTable({
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
+                    { 'type': 'boolean', 'aTargets': [2,3,4] }
+                ]
+            });
+            $("a.SelectLinkToForm").click(function (event) { $(this).parents("form").submit(); });
+        });
+
+    </script>
+}
+
+@section AdditionalStyles
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+}
