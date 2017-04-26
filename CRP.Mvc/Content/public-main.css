@@ -504,7 +504,7 @@ form.tickets {
 .fullmap {
   display: none;
   width: 100%;
-  height: 350px; }
+  }
   @media (max-width: 640px) {
     .fullmap {
       display: block; } }
