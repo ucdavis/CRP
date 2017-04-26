@@ -25,8 +25,9 @@
 .gp-sidecontainer-title
 {
 	font-weight: bold;
-	border-bottom: 1px solid lightGrey;
-	padding-left: 5px;
+    text-align: center;
+    margin-bottom: 8px;
+    margin-top: 5px;
 }
 
 .gp-sidecontainer-title img
@@ -38,13 +39,13 @@
 {
 	border-style: solid;
 	border-width: 1px;
-	margin: 5px 0;
 	cursor: pointer;
-	-moz-border-radius: 0px 4px 4px 0px;
-	border-radius: 0px 4px 4px 0px;
-	border-left: 0px;
+
 	padding: 5px 5px 5px 10px;
 	background: white;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 10px;
 }
 
 .gp-selected
@@ -109,3 +110,10 @@
 	color: #CD0A0A;
 }
 
+.eventbanner-mapbuttons {
+    margin: 8px 0px;
+    text-align: center;
+    border-top: 1px solid #c7c8cc ;
+    border-bottom: 1px solid #c7c8cc ;
+    padding: 8px 0px;
+}

@@ -588,7 +588,7 @@ namespace CRP.Controllers
         [UserOnly]
         public ActionResult LinkToItem(int id, int itemId, bool transaction, bool quantity)
         {
-            // get teh question set
+            // get the question set
             var questionSet = Repository.OfType<QuestionSet>().GetNullableById(id);
             var item = Repository.OfType<Item>().GetNullableById(itemId);
 
