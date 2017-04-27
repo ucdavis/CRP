@@ -189,13 +189,12 @@ body {
   /* IE6-9 */ }
 
 header .topbanner {
-  background-image: url("../Images/Media/gunrock_banner_final.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 39px; }
+    background: #002855 url('../Images/Media/gunrock_banner_final.svg') center top/cover no-repeat;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 39px;
+}
   header .topbanner .header_item {
     margin-right: 9%; }
     @media (max-width: 850px) {
