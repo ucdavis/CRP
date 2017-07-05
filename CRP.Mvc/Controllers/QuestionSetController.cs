@@ -713,7 +713,12 @@ namespace CRP.Controllers
             // check to make sure there aren't any answers already
             if (Repository.OfType<TransactionAnswer>().Queryable.Where(a => a.QuestionSet == itemQuestionSet.QuestionSet).Any())
             {
-                ModelState.AddModelError("Question Set", "Someone has already entered a response to this question set and it cannot be deleted.");
+                if (Repository.OfType<TransactionAnswer>().Queryable
+                    .Any(a => a.QuestionSet == itemQuestionSet.QuestionSet && a.Transaction.Item.Id == itemId))
+                {
+                    ModelState.AddModelError("Question Set",
+                        "Someone has already entered a response to this question set and it cannot be deleted.");
+                }
             }
 
             if(ModelState.IsValid)
