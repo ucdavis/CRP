@@ -11,6 +11,7 @@ using UCDArch.Core.Utils;
 using System.Linq;
 using System.Net;
 using Microsoft.Azure;
+using Serilog;
 
 
 namespace CRP.Core.Abstractions
@@ -169,9 +170,9 @@ Your Transaction number is: {TransactionNumber}
                 transaction.NotifiedDate = SystemTime.Now();
                 repository.OfType<Transaction>().EnsurePersistent(transaction);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+                Log.Error(ex, "Error sending confirmation");
             }
         }
 
@@ -366,7 +367,7 @@ Your Transaction number is: {TransactionNumber}
             }
             catch(Exception ex)
             {
-                
+                Log.Error(ex, "Error sending Refund Notification");
             }
             message.Body = body.ToString();
 
