@@ -1103,7 +1103,7 @@ namespace CRP.Controllers
         /// <param name="sort">The sort.</param>
         /// <param name="page">The page.</param>
         /// <returns></returns>
-        [AnyoneWithRole]
+        [RefunderOnly]
         public ActionResult Refund(int id, string sort, string page)
         {
             var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
@@ -1166,7 +1166,7 @@ namespace CRP.Controllers
         /// <param name="refundSort">The refund sort.</param>
         /// <param name="refundPage">The refund page.</param>
         /// <returns></returns>
-        [AnyoneWithRole]
+        [RefunderOnly]
         [HttpPost]
         public ActionResult Refund(Transaction transaction, string refundSort, string refundPage)
         {
@@ -1257,7 +1257,7 @@ namespace CRP.Controllers
 
         }
 
-        [AnyoneWithRole]
+        [RefunderOnly]
         [HttpPost]
         public ActionResult RemoveRefund(int id, string sort, string page)
         {
@@ -1350,7 +1350,7 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// Detailses the refund.
+        /// Details of the refund.
         /// </summary>
         /// <param name="id">The id.</param>
         /// <param name="sort">The sort.</param>

@@ -45,7 +45,7 @@ namespace CRP.Controllers.Filter
     {
         public RefunderOnlyAttribute()
         {
-            Roles = RoleNames.Refunder;    //Set the roles prop to a comma delimited string of allowed roles
+            Roles = RoleNames.Admin + "," + RoleNames.Refunder;    //Set the roles prop to a comma delimited string of allowed roles
         }
     }
 }
