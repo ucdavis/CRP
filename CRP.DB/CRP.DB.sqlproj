@@ -114,6 +114,12 @@
     <Folder Include="Scripts\Post-Deployment" />
     <Folder Include="Data Generation Plans" />
     <Folder Include="Schema Comparisons" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="Storage\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Schema Objects" />
@@ -190,6 +196,7 @@
       <SubType>NotInBuild</SubType>
     </None>
     <None Include="Change Scripts\UpdateViewsForCatbert.sql" />
+    <None Include="Schema Comparisons\SchemaCompAzureToDb.scmp" />
   </ItemGroup>
   <ItemGroup>
     <BuildContributorArgument Include="OutDir=$(OutDir)" />
@@ -206,5 +213,77 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Permissions.sql" />
+    <Build Include="dbo\Tables\Validators.sql" />
+    <Build Include="dbo\Tables\UserUnit.sql" />
+    <Build Include="dbo\Tables\Users.sql" />
+    <Build Include="dbo\Tables\UnitAssociations.sql" />
+    <Build Include="dbo\Tables\Unit.sql" />
+    <Build Include="dbo\Tables\Transactions.sql" />
+    <Build Include="dbo\Tables\TransactionAnswers.sql" />
+    <Build Include="dbo\Tables\TrackingTypes.sql" />
+    <Build Include="dbo\Tables\TrackingActions.sql" />
+    <Build Include="dbo\Tables\Tracking.sql" />
+    <Build Include="dbo\Tables\TouchnetFIDs.sql" />
+    <Build Include="dbo\Tables\Templates.sql" />
+    <Build Include="dbo\Tables\Tags.sql" />
+    <Build Include="dbo\Tables\Schools.sql" />
+    <Build Include="dbo\Tables\Roles.sql" />
+    <Build Include="dbo\Tables\QuestionXValidator.sql" />
+    <Build Include="dbo\Tables\QuestionTypes.sql" />
+    <Build Include="dbo\Tables\QuestionSets.sql" />
+    <Build Include="dbo\Tables\Questions.sql" />
+    <Build Include="dbo\Tables\QuestionOptions.sql" />
+    <Build Include="dbo\Tables\QuantityAnswers.sql" />
+    <Build Include="dbo\Tables\Permissions.sql" />
+    <Build Include="dbo\Tables\PaymentLogs.sql" />
+    <Build Include="dbo\Tables\PageTracking.sql" />
+    <Build Include="dbo\Tables\OpenIdUsers.sql" />
+    <Build Include="dbo\Tables\Messages.sql" />
+    <Build Include="dbo\Tables\MapPins.sql" />
+    <Build Include="dbo\Tables\ItemTypes.sql" />
+    <Build Include="dbo\Tables\ItemTypeQuestionSets.sql" />
+    <Build Include="dbo\Tables\ItemsXTags.sql" />
+    <Build Include="dbo\Tables\Items.sql" />
+    <Build Include="dbo\Tables\ItemReports.sql" />
+    <Build Include="dbo\Tables\ItemReportColumns.sql" />
+    <Build Include="dbo\Tables\ItemQuestionSets.sql" />
+    <Build Include="dbo\Tables\HelpTopics.sql" />
+    <Build Include="dbo\Tables\ExtendedPropertyAnswers.sql" />
+    <Build Include="dbo\Tables\ExtendedProperties.sql" />
+    <Build Include="dbo\Tables\Editors.sql" />
+    <Build Include="dbo\Tables\DisplayProfiles.sql" />
+    <Build Include="dbo\Tables\Coupons.sql" />
+    <Build Include="dbo\Tables\Checks.sql" />
+    <Build Include="dbo\Tables\Audits.sql" />
+    <Build Include="dbo\Tables\Applications.sql" />
+    <Build Include="dbo\Tables\ApplicationRoles.sql" />
+    <Build Include="dbo\Tables\ApplicationKeys.sql" />
+    <Build Include="dbo\Tables\AccessTokens.sql" />
+    <Build Include="dbo\Views\vUsers2.sql" />
+    <Build Include="dbo\Views\vUsers.sql" />
+    <Build Include="dbo\Views\vUnits.sql" />
+    <Build Include="dbo\Views\vUnitAssociations.sql" />
+    <Build Include="dbo\Views\vSchools.sql" />
+    <Build Include="dbo\Views\vActiveUsersForCrp.sql" />
+    <Build Include="dbo\Views\UserUnits_V.sql" />
+    <Build Include="dbo\Views\ApplicationUserUnits_V.sql" />
+    <Build Include="dbo\Views\ApplicationUsers_V.sql" />
+    <Build Include="dbo\Views\ApplicationRoles_V.sql" />
+    <Build Include="Storage\Tags.sql" />
+    <Build Include="Storage\Items.sql" />
+    <Build Include="Storage\ExtendedPropertyAnswers.sql" />
+    <Build Include="FullTextIndexes.sql" />
+    <Build Include="dbo\Functions\udf_GenerateTransactionNumber.sql" />
+    <Build Include="dbo\Functions\udf_Catbert3_vUserUnits.sql" />
+    <Build Include="dbo\Functions\udf_Catbert3_vUsers.sql" />
+    <Build Include="dbo\Functions\udf_Catbert3_vUserRoles.sql" />
+    <Build Include="dbo\Stored Procedures\usp_ItemsSearch.sql" />
+    <Build Include="dbo\Stored Procedures\usp_insertUserInRole.sql" />
+    <Build Include="dbo\Stored Procedures\usp_insertRole.sql" />
+    <Build Include="dbo\Stored Procedures\usp_getUsersInRole.sql" />
+    <Build Include="dbo\Stored Procedures\usp_getRolesInAppByLoginID.sql" />
+    <Build Include="dbo\Stored Procedures\usp_getAllRolesInApp.sql" />
+    <Build Include="dbo\Stored Procedures\usp_deleteUserFromRole.sql" />
+    <Build Include="dbo\Stored Procedures\usp_deleteEmptyRole.sql" />
   </ItemGroup>
 </Project>
