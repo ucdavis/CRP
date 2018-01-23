@@ -120,6 +120,7 @@
     <Folder Include="Storage\" />
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Schema Objects" />
@@ -285,5 +286,11 @@
     <Build Include="dbo\Stored Procedures\usp_getAllRolesInApp.sql" />
     <Build Include="dbo\Stored Procedures\usp_deleteUserFromRole.sql" />
     <Build Include="dbo\Stored Procedures\usp_deleteEmptyRole.sql" />
+    <Build Include="dbo\Views\vUsersOld.sql" />
+    <Build Include="dbo\Views\vUsers2Old.sql" />
+    <Build Include="dbo\Views\vUnitsOld.sql" />
+    <Build Include="dbo\Views\vUnitAssociationsOld.sql" />
+    <Build Include="dbo\Views\vSchoolsOld.sql" />
+    <Build Include="dbo\Views\vActiveUsersForCrpOld.sql" />
   </ItemGroup>
 </Project>
