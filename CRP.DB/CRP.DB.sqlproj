@@ -12,6 +12,7 @@
     <PostConversionCheckOutFromScc>
     </PostConversionCheckOutFromScc>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <CompatibilityMode>130</CompatibilityMode>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,19 +49,19 @@
     <DefaultSchema>dbo</DefaultSchema>
     <TargetLanguage>CS</TargetLanguage>
     <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
-    <AnsiNullDefault>True</AnsiNullDefault>
-    <AnsiNulls>True</AnsiNulls>
-    <AnsiPadding>True</AnsiPadding>
-    <AnsiWarnings>True</AnsiWarnings>
-    <ArithAbort>True</ArithAbort>
-    <ConcatNullYieldsNull>True</ConcatNullYieldsNull>
-    <QuotedIdentifier>True</QuotedIdentifier>
+    <AnsiNullDefault>False</AnsiNullDefault>
+    <AnsiNulls>False</AnsiNulls>
+    <AnsiPadding>False</AnsiPadding>
+    <AnsiWarnings>False</AnsiWarnings>
+    <ArithAbort>False</ArithAbort>
+    <ConcatNullYieldsNull>False</ConcatNullYieldsNull>
+    <QuotedIdentifier>False</QuotedIdentifier>
     <NumericRoundAbort>False</NumericRoundAbort>
     <RecursiveTriggersEnabled>False</RecursiveTriggersEnabled>
     <DatabaseState>ONLINE</DatabaseState>
     <UpdateOptions>READ_WRITE</UpdateOptions>
     <CloseCursorOnCommitEnabled>False</CloseCursorOnCommitEnabled>
-    <DefaultCursor>LOCAL</DefaultCursor>
+    <DefaultCursor>GLOBAL</DefaultCursor>
     <AutoClose>False</AutoClose>
     <AutoCreateStatistics>True</AutoCreateStatistics>
     <AutoShrink>False</AutoShrink>
@@ -73,11 +74,11 @@
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
     <Trustworthy>False</Trustworthy>
     <AutoUpdateStatisticsAsynchronously>False</AutoUpdateStatisticsAsynchronously>
-    <PageVerify>NONE</PageVerify>
-    <ServiceBrokerOption>DisableBroker</ServiceBrokerOption>
+    <PageVerify>CHECKSUM</PageVerify>
+    <ServiceBrokerOption>EnableBroker</ServiceBrokerOption>
     <DateCorrelationOptimizationOn>False</DateCorrelationOptimizationOn>
     <Parameterization>SIMPLE</Parameterization>
-    <AllowSnapshotIsolation>False</AllowSnapshotIsolation>
+    <AllowSnapshotIsolation>True</AllowSnapshotIsolation>
     <ReadCommittedSnapshot>False</ReadCommittedSnapshot>
     <VardecimalStorageFormatOn>True</VardecimalStorageFormatOn>
     <SupplementalLoggingOn>False</SupplementalLoggingOn>
