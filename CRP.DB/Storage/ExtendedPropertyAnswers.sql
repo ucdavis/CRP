@@ -1,0 +1,4 @@
+﻿CREATE FULLTEXT CATALOG [ExtendedPropertyAnswers]
+    WITH ACCENT_SENSITIVITY = ON
+    AUTHORIZATION [dbo];
+
