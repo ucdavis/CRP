@@ -20,23 +20,23 @@ namespace CRP.Controllers.Helpers
             return new CustomGridBuilder<T>(builder);
         }
 
-        public static string GenerateCaptcha(this HtmlHelper helper)
-        {
+        //public static string GenerateCaptcha(this HtmlHelper helper)
+        //{
 
-            var captchaControl = new Recaptcha.RecaptchaControl
-            {
-                ID = "recaptcha",
-                Theme = "clean",
-                PublicKey = CloudConfigurationManager.GetSetting("RecaptchaPublicKey"),
-                PrivateKey = CloudConfigurationManager.GetSetting("RecaptchaPrivateKey")
-            };
+        //    var captchaControl = new Recaptcha.RecaptchaControl
+        //    {
+        //        ID = "recaptcha",
+        //        Theme = "clean",
+        //        PublicKey = CloudConfigurationManager.GetSetting("RecaptchaPublicKey"),
+        //        PrivateKey = CloudConfigurationManager.GetSetting("RecaptchaPrivateKey")
+        //    };
 
-            var htmlWriter = new HtmlTextWriter(new StringWriter());
+        //    var htmlWriter = new HtmlTextWriter(new StringWriter());
 
-            captchaControl.RenderControl(htmlWriter);
+        //    captchaControl.RenderControl(htmlWriter);
 
-            return htmlWriter.InnerWriter.ToString();
-        }
+        //    return htmlWriter.InnerWriter.ToString();
+        //}
 
         private const string HtmlTag = @"&lt;{0}&gt;";
         private const string Span = "span";
