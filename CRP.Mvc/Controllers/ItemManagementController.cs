@@ -12,6 +12,7 @@ using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.Helpers;
+using CRP.Mvc.Controllers.ViewModels;
 using CRP.Services;
 //using Elmah;
 using MvcContrib;
@@ -95,7 +96,21 @@ namespace CRP.Controllers
             {
                 query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
             }
-            return View(query.ToList());
+
+            var slimmedDown = query.Select(a => new ItemListView
+            {
+                Id = a.Id,
+                Name = a.Name,
+                CostPerItem = a.CostPerItem,
+                Quantity = a.Quantity,
+                Sold = 0,
+                Expiration = a.Expiration,
+                DateCreated = a.DateCreated,
+                Available = a.Available
+            }).ToList();
+
+            //return View(query.ToList());
+            return View(slimmedDown);
         }
 
         /// <summary>

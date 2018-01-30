@@ -524,6 +524,7 @@
     <Compile Include="Controllers\ViewModels\ExtendedPropertyViewModel.cs" />
     <Compile Include="Controllers\ViewModels\HelpTopicViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemDetailViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\ItemListView.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LinkPaymentViewModel.cs" />
