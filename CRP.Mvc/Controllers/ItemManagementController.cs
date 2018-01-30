@@ -95,7 +95,7 @@ namespace CRP.Controllers
             {
                 query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
             }
-            return View(query);
+            return View(query.ToList());
         }
 
         /// <summary>
