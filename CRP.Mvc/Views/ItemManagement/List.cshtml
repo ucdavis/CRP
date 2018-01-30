@@ -41,9 +41,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Sold)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Expiration)
             </th>
@@ -75,9 +75,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Quantity)
                     </td>
-                    <td>
+                    @*<td>
                         @Html.DisplayFor(modelItem => item.Sold)
-                    </td>
+                    </td>*@
                     <td>
                         @string.Format("{0:d}", item.Expiration)
                     </td>
