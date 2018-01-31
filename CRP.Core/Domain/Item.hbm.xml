@@ -10,7 +10,7 @@
 
     <property name="Name" column="Name" />
     <property name="Summary" column="Summary" />
-    <property name="Description" column="Description" />
+    <property name="Description" column="Description" length="2147483647" />
     <property name="CostPerItem" column="CostPerItem" />
     <property name="Quantity" column="Quantity" />
     <property name="QuantityName" column="QuantityName" />
