@@ -16,6 +16,14 @@ namespace CRP.Core.Abstractions
 
         public void SendEmail(MailMessage mailMessage)
         {
+            if (mailMessage.IsBodyHtml)
+            {
+                mailMessage.IsBodyHtml = false;
+                var mimeType = new System.Net.Mime.ContentType("text/html");
+                var alternate = AlternateView.CreateAlternateViewFromString(mailMessage.Body, mimeType);
+
+                mailMessage.AlternateViews.Add(alternate);
+            }
             var client = new SmtpClient
             {
                 UseDefaultCredentials = false,
