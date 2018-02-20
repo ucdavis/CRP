@@ -17,6 +17,7 @@ using CRP.Services;
 //using Elmah;
 using MvcContrib;
 using MvcContrib.Attributes;
+using Serilog;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
@@ -103,7 +104,7 @@ namespace CRP.Controllers
                 Name = a.Name,
                 CostPerItem = a.CostPerItem,
                 Quantity = a.Quantity,
-                Sold = 0,
+                Sold = a.SoldCount,
                 Expiration = a.Expiration,
                 DateCreated = a.DateCreated,
                 Available = a.Available
@@ -653,7 +654,17 @@ namespace CRP.Controllers
             else
             {
                 Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");  
-            }             
+            }
+
+            try
+            {
+                transaction.Item.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == transaction.Item.Id && a.IsActive).Sum(a => a.Quantity);
+                Repository.OfType<Item>().EnsurePersistent(transaction.Item);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(string.Format("Error updating Item SoldCount {0}", ex.Message));
+            }
             return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Transactions, pageAndSort["sort"], pageAndSort["page"]));              
             //return this.RedirectToAction(a => a.Details(transaction.Item.Id));
         }
