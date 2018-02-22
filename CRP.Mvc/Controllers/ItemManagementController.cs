@@ -658,7 +658,15 @@ namespace CRP.Controllers
 
             try
             {
-                transaction.Item.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == transaction.Item.Id && a.IsActive).Sum(a => a.Quantity);
+                if (Repository.OfType<Transaction>().Queryable.Any(a => a.Item.Id == transaction.Item.Id && a.IsActive))
+                {
+                    transaction.Item.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == transaction.Item.Id && a.IsActive).Sum(a => a.Quantity);
+                }
+                else
+                {
+                    transaction.Item.SoldCount = 0;
+                }
+                
                 Repository.OfType<Item>().EnsurePersistent(transaction.Item);
             }
             catch (Exception ex)
