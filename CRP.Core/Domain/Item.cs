@@ -47,6 +47,8 @@ namespace CRP.Core.Domain
 
             AllowCheckPayment = true;
             AllowCreditPayment = true;
+
+            SoldCount = 0;
         }
 
         [Required]
@@ -191,6 +193,8 @@ namespace CRP.Core.Domain
                 return Transactions.Where(a => a.IsActive).Sum(a => a.Quantity);
             }
         }
+
+        public virtual int SoldCount { get; set; }
 
         /// <summary>
         /// Gets the sold and paid quantity.

@@ -21,6 +21,7 @@ using MvcContrib;
 using MvcContrib.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Core.Utils;
 using UCDArch.Data.NHibernate;
@@ -774,6 +775,15 @@ namespace CRP.Controllers
                         _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transactionQuantity);
                     }
 
+                    try
+                    {
+                        updatedItem.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == updatedItem.Id && a.IsActive).Sum(a => a.Quantity); ;
+                        Repository.OfType<Item>().EnsurePersistent(updatedItem);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(string.Format("Error Updating SoldCount from user checkout {0}", ex.Message));
+                    }
 
                 }
                 // redirect to confirmation and let the user decide payment or not

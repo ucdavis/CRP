@@ -30,6 +30,7 @@
     <property name="CheckPaymentInstructions" column="CheckPaymentInstructions" />
     <property name="AllowCheckPayment" column="AllowCheckPayment"/>
     <property name="AllowCreditPayment" column="AllowCreditPayment" />
+    <property name="SoldCount" column="SoldCount" />
     <!--<property name="HideDonation" column="HideDonation" />-->
 
     <property name="DonationLinkLegend" column="DonationLinkLegend" />

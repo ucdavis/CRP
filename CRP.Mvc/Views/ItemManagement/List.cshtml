@@ -41,9 +41,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
-            @*<th>
+            <th>
                 @Html.DisplayNameFor(model => model.Sold)
-            </th>*@
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Expiration)
             </th>
@@ -75,9 +75,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Quantity)
                     </td>
-                    @*<td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Sold)
-                    </td>*@
+                    </td>
                     <td>
                         @string.Format("{0:d}", item.Expiration)
                     </td>
@@ -107,8 +107,8 @@
                 "aaSorting": [[5, "desc"]], //Default sort on second column
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [0, -1] }, //Disables sort on icon columns
-                    { 'type': 'date', 'aTargets': [4, 5] },
-                    { 'type': 'boolean', 'aTargets': [6] }
+                    { 'type': 'date', 'aTargets': [5, 6] },
+                    { 'type': 'boolean', 'aTargets': [7] }
                 ]
             });
         });
