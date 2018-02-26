@@ -64,8 +64,20 @@
         <aside>
             @if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
             {
+                var available = Model.Item.Quantity - Model.Item.Sold;
+                if (available <= 0)
+                {
+                    <div style="text-align: center"><strong class="fa fa-warning" style="color: red"> SOLD OUT</strong> But check back later.</div>
+                }
+                else
+                {
+                    if (available <= 5)
+                    {
+                        <div class="t-center"><strong class="fa fa-info-circle" style="color: salmon"> Warning</strong> Only @available @Model.Item.QuantityName (s) left.</div>
+                    }
+                }
                 <div class="registerbtn">
-                    <a class="btn btn-register" href="@Url.Action("Checkout", "Transaction", new {id=Model.Item.Id} )">Register</a>
+                    <a class="btn btn-register" href="@Url.Action("Checkout", "Transaction", new {id = Model.Item.Id})">Register</a>
                     <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
                 </div>
             }

@@ -9,6 +9,7 @@
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
     var creditCardChecked = Model.CreditPayment ? "checked='checked'" : string.Empty;
     var checkdChecked = Model.CheckPayment ? "checked='checked'" : string.Empty;
+    var available = Model.Item.Quantity - Model.Item.Sold;
 }
 
 
@@ -20,8 +21,19 @@
 
     <div class="boundary">
         <h1>@Model.Item.Name</h1>
+        @if (available <= 0)
+        {
+            <div><strong class="fa fa-warning" style="color: red"> SOLD OUT</strong> But check back later.</div>
+        }
+        else
+        {
+            if (available <= 5)
+            {
+                <div><strong class="fa fa-info-circle" style="color: salmon"> Warning</strong> Only @available @Model.Item.QuantityName (s) left.</div>
+            }
+        }
         <p class="lead">
-            @Model.Item.Summary
+        @Model.Item.Summary
         </p>
         <p><a href="@Url.Action("Details", "Item", new {id = Model.Item.Id})" class="return"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Return to event details</a>
         </p>
