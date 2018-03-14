@@ -58,7 +58,7 @@
 
     <h2>Edit</h2>
     <%= Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.") %>
-
+  
     <div id="tabs">
     
         <ul>
@@ -249,7 +249,9 @@
 
     
     <div>
-        <%=Html.ActionLink<ItemManagementController>(a => a.List(null), "Back to List") %>
+        <%=Html.ActionLink<ItemManagementController>(a => a.List(null), "Back to List") %> |
+        <%= Html.ActionLink<ItemManagementController>(b => b.Details(Model.Item.Id), "Details") %> |
+        <%= Html.ActionLink<ItemManagementController>(b => b.Map(Model.Item.Id), "Map") %> 
     </div>
 
 </asp:Content>
