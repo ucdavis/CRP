@@ -19,7 +19,7 @@ namespace CRP.Core.Abstractions
     public interface INotificationProvider
     {
         void SendConfirmation(IRepository repository, Transaction transaction, string emailAddress);
-        void SendLowQuantityWarning(IRepository repository, Item item, int transactionQuantity);
+        void SendLowQuantityWarning(IRepository repository, Item item, int soldAndPaid);
         void SendPaymentResultErrors(string email, PaymentResultParameters touchNetValues, NameValueCollection requestAllParams, string extraBody, PaymentResultType paymentResultType);
         void SendRefundNotification(User user, Transaction refundTransaction, bool canceled);
 
@@ -184,8 +184,7 @@ Your Transaction number is: {TransactionNumber}
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="item">The item.</param>
-        /// <param name="transactionQuantity">The transaction quantity.</param>
-        public void SendLowQuantityWarning(IRepository repository, Item item, int transactionQuantity)
+        public void SendLowQuantityWarning(IRepository repository, Item item, int soldAndPaid)
         {
             Check.Require(item != null);
             var email = item.Editors.Where(a => a.Owner).First().User.Email;
@@ -204,7 +203,7 @@ Your Transaction number is: {TransactionNumber}
             bodyBuilder.Append("<tfoot>");
             bodyBuilder.Append("<tr>");
             bodyBuilder.Append("<td>Quantity Remaining:</td>");
-            bodyBuilder.AppendFormat("<td>{0}</td>", item.Quantity - (item.Sold + transactionQuantity));
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.Quantity - item.SoldCount);
             bodyBuilder.Append("</tr>");
             bodyBuilder.Append("</tfoot>");
             bodyBuilder.Append("<tbody>");
@@ -215,12 +214,12 @@ Your Transaction number is: {TransactionNumber}
 
             bodyBuilder.Append("<tr>");
             bodyBuilder.Append("<td>Total Sold:</td>");
-            bodyBuilder.AppendFormat("<td>{0}</td>", item.Sold  + transactionQuantity);
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.SoldCount);
             bodyBuilder.Append("</tr>");
 
             bodyBuilder.Append("<tr>");
             bodyBuilder.Append("<td>Total Sold and Paid for:</td>");
-            bodyBuilder.AppendFormat("<td>{0}</td>", item.SoldAndPaidQuantity);
+            bodyBuilder.AppendFormat("<td>{0}</td>", soldAndPaid);
             bodyBuilder.Append("</tr>");
 
             bodyBuilder.Append("</tbody>");
