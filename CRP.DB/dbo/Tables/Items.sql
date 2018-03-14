@@ -27,6 +27,7 @@
     [DonationLinkText]         VARCHAR (50)    NULL,
     [DonationLinkLink]         VARCHAR (200)   NULL,
     [SoldCount] INT NOT NULL DEFAULT ((0)), 
+    [NotifyEditors] BIT NOT NULL DEFAULT ((0)), 
     CONSTRAINT [PK_Items] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_Items_ItemTypes] FOREIGN KEY ([ItemTypeId]) REFERENCES [dbo].[ItemTypes] ([id])
 );

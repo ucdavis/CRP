@@ -772,7 +772,26 @@ namespace CRP.Controllers
                     }
                     if (updatedItem.Quantity - (updatedItem.Sold + transactionQuantity) <= 10)
                     {
-                        _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transactionQuantity);
+                        try
+                        {
+                            _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transactionQuantity);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("Error trying to send email notification {0}", ex.Message);
+                        }
+                    }
+
+                    if (updatedItem.NotifyEditors)
+                    {
+                        try
+                        {
+                            _notificationProvider.SendPurchaseToOwners(Repository, updatedItem, transactionQuantity);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("Error trying to send email notification2 {0}", ex.Message);
+                        }
                     }
 
                     try

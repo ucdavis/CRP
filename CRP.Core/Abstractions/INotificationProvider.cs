@@ -24,6 +24,8 @@ namespace CRP.Core.Abstractions
         void SendRefundNotification(User user, Transaction refundTransaction, bool canceled);
 
         void TestEmailFromService(MailMessage message);
+
+        void SendPurchaseToOwners(IRepository repository, Item item, int transactionQuantity);
     }
 
     public class NotificationProvider : INotificationProvider
@@ -376,6 +378,24 @@ Your Transaction number is: {TransactionNumber}
 
         public void TestEmailFromService(MailMessage message)
         {
+            _emailService.SendEmail(message);
+        }
+
+        public void SendPurchaseToOwners(IRepository repository, Item item, int transactionQuantity)
+        {
+            var message = new MailMessage("automatedemail@caes.ucdavis.edu", item.Editors.Single(a => a.Owner).User.Email) { IsBodyHtml = true };
+            foreach (var editor in item.Editors.Where(a => !a.Owner))
+            {
+                message.To.Add(editor.User.Email);
+            }
+
+            message.Subject = "Online Registration Notification";
+            var body = new StringBuilder(string.Format("Your event: {0}<br/><br/>", item.Name));
+            body.Append(string.Format("Just sold {0} {1}<br/><br/>", transactionQuantity, item.QuantityName));
+            body.Append("This is a notification only email. Do not reply.<br/><br/>");
+            body.Append("You are getting this notification because you are an editor on an event that has a setting to inform you when people register for your event.");
+
+            message.Body = body.ToString();
             _emailService.SendEmail(message);
         }
     }
