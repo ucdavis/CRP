@@ -49,6 +49,7 @@ namespace CRP.Core.Domain
             AllowCreditPayment = true;
 
             SoldCount = 0;
+            NotifyEditors = false;
         }
 
         [Required]
@@ -195,6 +196,8 @@ namespace CRP.Core.Domain
         }
 
         public virtual int SoldCount { get; set; }
+
+        public virtual bool NotifyEditors { get; set; }
 
         /// <summary>
         /// Gets the sold and paid quantity.
