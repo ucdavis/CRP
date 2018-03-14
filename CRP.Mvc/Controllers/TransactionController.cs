@@ -768,7 +768,7 @@ namespace CRP.Controllers
                     var transactionQuantity = transaction.Quantity;
                     if (updatedItem.Transactions.Contains(transaction))
                     {
-                        transactionQuantity = 0;
+                        transactionQuantity = 0; //Ok, for clarity, this is getting set to zero because the updatedItem.Sold will add it in if the transaction is found.
                     }
                     if (updatedItem.Quantity - (updatedItem.Sold + transactionQuantity) <= 10)
                     {
@@ -786,7 +786,7 @@ namespace CRP.Controllers
                     {
                         try
                         {
-                            _notificationProvider.SendPurchaseToOwners(Repository, updatedItem, transactionQuantity);
+                            _notificationProvider.SendPurchaseToOwners(Repository, updatedItem, transaction.Quantity);
                         }
                         catch (Exception ex)
                         {

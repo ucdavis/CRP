@@ -391,7 +391,7 @@ Your Transaction number is: {TransactionNumber}
 
             message.Subject = "Online Registration Notification";
             var body = new StringBuilder(string.Format("Your event: {0}<br/><br/>", item.Name));
-            body.Append(string.Format("Just sold {0} {1}<br/><br/>", transactionQuantity, item.QuantityName));
+            body.Append(string.Format("Just sold {0} {1}(s)<br/><br/>", transactionQuantity, item.QuantityName));
             body.Append("This is a notification only email. Do not reply.<br/><br/>");
             body.Append("You are getting this notification because you are an editor on an event that has a setting to inform you when people register for your event.");
 
