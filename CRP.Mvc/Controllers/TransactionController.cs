@@ -752,9 +752,9 @@ namespace CRP.Controllers
                                 _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-
+                            Log.Error(ex.Message);
 
                         }
                     }
@@ -772,7 +772,7 @@ namespace CRP.Controllers
                         {
                             try
                             {
-                                var soldAndPaid = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == updatedItem.Id && a.IsActive && a.Paid).Sum(a => a.Quantity);
+                                var soldAndPaid = updatedItem.SoldAndPaidQuantity;
                                 _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, soldAndPaid);
                             }
                             catch (Exception ex)
