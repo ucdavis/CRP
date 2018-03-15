@@ -84,8 +84,8 @@ Begin DesignProperties =
             Begin Extent = 
                Top = 6
                Left = 38
-               Bottom = 259
-               Right = 337
+               Bottom = 280
+               Right = 198
             End
             DisplayFlags = 280
             TopColumn = 0
@@ -97,8 +97,12 @@ Begin DesignProperties =
    Begin DataPane = 
       Begin ParameterDefaults = ""
       End
-      Begin ColumnWidths = 9
+      Begin ColumnWidths = 13
          Width = 284
+         Width = 1500
+         Width = 1500
+         Width = 1500
+         Width = 1500
          Width = 1500
          Width = 1500
          Width = 1500
@@ -128,4 +132,6 @@ Begin DesignProperties =
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vUsers';
+
+
 

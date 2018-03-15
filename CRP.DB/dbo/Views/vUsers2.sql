@@ -16,7 +16,7 @@ Begin DesignProperties =
    Begin PaneConfigurations = 
       Begin PaneConfiguration = 0
          NumPanes = 4
-         Configuration = "(H (1[30] 4[31] 2[20] 3) )"
+         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
       End
       Begin PaneConfiguration = 1
          NumPanes = 3
@@ -84,20 +84,20 @@ Begin DesignProperties =
       Begin Tables = 
          Begin Table = "vActiveUsersForCrp"
             Begin Extent = 
-               Top = 40
-               Left = 400
-               Bottom = 156
-               Right = 630
+               Top = 6
+               Left = 38
+               Bottom = 80
+               Right = 198
             End
             DisplayFlags = 280
             TopColumn = 0
          End
          Begin Table = "Users (Catbert3.dbo)"
             Begin Extent = 
-               Top = 43
-               Left = 15
-               Bottom = 299
-               Right = 284
+               Top = 6
+               Left = 236
+               Bottom = 125
+               Right = 396
             End
             DisplayFlags = 280
             TopColumn = 0
@@ -109,10 +109,8 @@ Begin DesignProperties =
    Begin DataPane = 
       Begin ParameterDefaults = ""
       End
-      Begin ColumnWidths = 11
+      Begin ColumnWidths = 9
          Width = 284
-         Width = 1500
-         Width = 1500
          Width = 1500
          Width = 1500
          Width = 1500
@@ -142,4 +140,6 @@ Begin DesignProperties =
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vUsers2';
+
+
 
