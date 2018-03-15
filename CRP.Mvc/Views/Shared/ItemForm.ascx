@@ -18,7 +18,9 @@
             $("#tags").bt('Click on the tag to remove it.', { positions: 'bottom' });
             $("#Item_DonationLinkLink").bt('If this is blank, it will not show up to the user. Validation Has been removed for this field. You need to test it before making this available to the public.');
             $("#Item_DonationLinkText").bt('This is the text that will appear in the clickable link.');
-            
+            $("#available-to-public").bt('This allows the general public to register if the last day to register has not passed.', { positions: 'right' });
+            $("#private-conference").bt('If this is checked, an available event will not be listed on the home screen', { positions: 'right' });
+            $("#notify-editors").bt('If this is checked, all editors for the event will be notified everytime someone registers for the event.', { positions: 'right' });
         });
     </script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/jquery.UrlValidator.js") %>"></script>        
@@ -161,16 +163,18 @@
                 </fieldset>
             </li>
 
-            <li><table><tbody><tr><td>
-            <!-- NEEDS BALLOON-->
-                <label for="Item.Available">Available to public:</label></td><td>
+            <li><table><tbody><tr id="available-to-public" title=""><td>
+                <label  for="Item.Available">Available to public:</label></td><td>
                 <%= Html.CheckBox("Item.Available") %>
                 <%= Html.ValidationMessageFor(x => x.Item.Available) %></td></tr>
-                <tr><td>
-                <!-- NEEDS BALLOON-->
+                <tr id="private-conference" title=""><td>
                 <label for="Item.Private">Private Conference:</label></td><td>
                 <%= Html.CheckBox("Item.Private") %>
                 <%= Html.ValidationMessageFor(x => x.Item.Private) %>
+                <tr id="notify-editors" title=""><td>
+                <label for="Item.NotifyEditors">Notify Editors on purchase:</label></td><td>
+                <%= Html.CheckBox("Item.NotifyEditors", Model.Item != null ? Model.Item.NotifyEditors : false)%>       
+
             </td></tr></tbody></table></li>
             <li>
                 <label for="Item.RestrictedKey">Restricted Password:</label><br />
