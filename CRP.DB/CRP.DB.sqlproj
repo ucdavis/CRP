@@ -245,7 +245,9 @@
     <Build Include="dbo\Tables\ItemTypes.sql" />
     <Build Include="dbo\Tables\ItemTypeQuestionSets.sql" />
     <Build Include="dbo\Tables\ItemsXTags.sql" />
-    <Build Include="dbo\Tables\Items.sql" />
+    <Build Include="dbo\Tables\Items.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
     <Build Include="dbo\Tables\ItemReports.sql" />
     <Build Include="dbo\Tables\ItemReportColumns.sql" />
     <Build Include="dbo\Tables\ItemQuestionSets.sql" />
@@ -261,16 +263,37 @@
     <Build Include="dbo\Tables\ApplicationRoles.sql" />
     <Build Include="dbo\Tables\ApplicationKeys.sql" />
     <Build Include="dbo\Tables\AccessTokens.sql" />
-    <Build Include="dbo\Views\vUsers2.sql" />
-    <Build Include="dbo\Views\vUsers.sql" />
+    <Build Include="dbo\Views\vUsers2.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Views\vUsers.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
     <Build Include="dbo\Views\vUnits.sql" />
     <Build Include="dbo\Views\vUnitAssociations.sql" />
     <Build Include="dbo\Views\vSchools.sql" />
-    <Build Include="dbo\Views\vActiveUsersForCrp.sql" />
-    <Build Include="dbo\Views\UserUnits_V.sql" />
-    <Build Include="dbo\Views\ApplicationUserUnits_V.sql" />
-    <Build Include="dbo\Views\ApplicationUsers_V.sql" />
-    <Build Include="dbo\Views\ApplicationRoles_V.sql" />
+    <Build Include="dbo\Views\vActiveUsersForCrp.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Views\UserUnits_V.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Views\ApplicationUserUnits_V.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Views\ApplicationUsers_V.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Views\ApplicationRoles_V.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
     <Build Include="Storage\Tags.sql" />
     <Build Include="Storage\Items.sql" />
     <Build Include="Storage\ExtendedPropertyAnswers.sql" />

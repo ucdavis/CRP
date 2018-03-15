@@ -32,6 +32,7 @@ namespace CRP.Controllers.Helpers
 
             dest.Available = src.Available;
             dest.Private = src.Private;
+            dest.NotifyEditors = src.NotifyEditors;
             dest.Unit = src.Unit;
             dest.RestrictedKey = src.RestrictedKey;
             dest.AllowCheckPayment = src.AllowCheckPayment;
