@@ -752,9 +752,9 @@ namespace CRP.Controllers
                                 _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-
+                            Log.Error(ex.Message);
 
                         }
                     }
@@ -763,28 +763,40 @@ namespace CRP.Controllers
                 var updatedItem = Repository.OfType<Item>().GetNullableById(transaction.Item.Id);
                 if (updatedItem != null)
                 {
-                    //For whatever reason, if you are logged in with your CAES user, the item is updated, 
-                    //if you are logged in with open id (google), item is not updated.
-                    var transactionQuantity = transaction.Quantity;
-                    if (updatedItem.Transactions.Contains(transaction))
-                    {
-                        transactionQuantity = 0;
-                    }
-                    if (updatedItem.Quantity - (updatedItem.Sold + transactionQuantity) <= 10)
-                    {
-                        _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transactionQuantity);
-                    }
-
                     try
                     {
-                        updatedItem.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == updatedItem.Id && a.IsActive).Sum(a => a.Quantity); ;
+                        updatedItem.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == updatedItem.Id && a.IsActive).Sum(a => a.Quantity);
                         Repository.OfType<Item>().EnsurePersistent(updatedItem);
+
+                        if ((updatedItem.Quantity - updatedItem.SoldCount) <= 10)
+                        {
+                            try
+                            {
+                                var soldAndPaid = updatedItem.SoldAndPaidQuantity;
+                                _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, soldAndPaid);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error("Error trying to send email notification {0}", ex.Message);
+                            }
+                        }
+
+                        if (updatedItem.NotifyEditors)
+                        {
+                            try
+                            {
+                                _notificationProvider.SendPurchaseToOwners(Repository, updatedItem, transaction.Quantity);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error("Error trying to send email notification2 {0}", ex.Message);
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
                         Log.Error(string.Format("Error Updating SoldCount from user checkout {0}", ex.Message));
                     }
-
                 }
                 // redirect to confirmation and let the user decide payment or not
                 return this.RedirectToAction(a => a.Confirmation(transaction.Id));

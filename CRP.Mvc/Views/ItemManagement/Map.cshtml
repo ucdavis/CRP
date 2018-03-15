@@ -6,6 +6,24 @@
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
+@section NavButtons
+{
+    <div class="pull-right" style="margin-left: 10px;">
+        <div class="dropdown">
+
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Item Actions <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Edit", "Edit", "ItemManagement", new { id = Model.Id }, null)</li>
+                <li>@Html.ActionLink("Details", "Details", "ItemManagement", new { id = Model.Id }, null)</li>
+            </ul>
+        </div>
+    </div>
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+
+}
+
 <div class="boundary">
     <h2>Map: @Model.Name</h2>
     <p>@Html.ActionLink("Back To List", "Index", "ItemManagement")</p>

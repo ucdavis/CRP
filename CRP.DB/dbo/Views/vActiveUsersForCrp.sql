@@ -83,20 +83,20 @@ Begin DesignProperties =
       Begin Tables = 
          Begin Table = "Permissions (Catbert3.dbo)"
             Begin Extent = 
-               Top = 39
-               Left = 20
-               Bottom = 235
-               Right = 216
+               Top = 6
+               Left = 38
+               Bottom = 125
+               Right = 198
             End
             DisplayFlags = 280
             TopColumn = 0
          End
          Begin Table = "Applications (Catbert3.dbo)"
             Begin Extent = 
-               Top = 102
-               Left = 328
-               Bottom = 221
-               Right = 589
+               Top = 6
+               Left = 236
+               Bottom = 125
+               Right = 406
             End
             DisplayFlags = 280
             TopColumn = 0
@@ -139,4 +139,6 @@ Begin DesignProperties =
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vActiveUsersForCrp';
+
+
 

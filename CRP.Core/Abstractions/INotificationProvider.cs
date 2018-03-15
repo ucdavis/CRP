@@ -19,11 +19,13 @@ namespace CRP.Core.Abstractions
     public interface INotificationProvider
     {
         void SendConfirmation(IRepository repository, Transaction transaction, string emailAddress);
-        void SendLowQuantityWarning(IRepository repository, Item item, int transactionQuantity);
+        void SendLowQuantityWarning(IRepository repository, Item item, int soldAndPaid);
         void SendPaymentResultErrors(string email, PaymentResultParameters touchNetValues, NameValueCollection requestAllParams, string extraBody, PaymentResultType paymentResultType);
         void SendRefundNotification(User user, Transaction refundTransaction, bool canceled);
 
         void TestEmailFromService(MailMessage message);
+
+        void SendPurchaseToOwners(IRepository repository, Item item, int transactionQuantity);
     }
 
     public class NotificationProvider : INotificationProvider
@@ -182,8 +184,7 @@ Your Transaction number is: {TransactionNumber}
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="item">The item.</param>
-        /// <param name="transactionQuantity">The transaction quantity.</param>
-        public void SendLowQuantityWarning(IRepository repository, Item item, int transactionQuantity)
+        public void SendLowQuantityWarning(IRepository repository, Item item, int soldAndPaid)
         {
             Check.Require(item != null);
             var email = item.Editors.Where(a => a.Owner).First().User.Email;
@@ -202,7 +203,7 @@ Your Transaction number is: {TransactionNumber}
             bodyBuilder.Append("<tfoot>");
             bodyBuilder.Append("<tr>");
             bodyBuilder.Append("<td>Quantity Remaining:</td>");
-            bodyBuilder.AppendFormat("<td>{0}</td>", item.Quantity - (item.Sold + transactionQuantity));
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.Quantity - item.SoldCount);
             bodyBuilder.Append("</tr>");
             bodyBuilder.Append("</tfoot>");
             bodyBuilder.Append("<tbody>");
@@ -213,12 +214,12 @@ Your Transaction number is: {TransactionNumber}
 
             bodyBuilder.Append("<tr>");
             bodyBuilder.Append("<td>Total Sold:</td>");
-            bodyBuilder.AppendFormat("<td>{0}</td>", item.Sold  + transactionQuantity);
+            bodyBuilder.AppendFormat("<td>{0}</td>", item.SoldCount);
             bodyBuilder.Append("</tr>");
 
             bodyBuilder.Append("<tr>");
             bodyBuilder.Append("<td>Total Sold and Paid for:</td>");
-            bodyBuilder.AppendFormat("<td>{0}</td>", item.SoldAndPaidQuantity);
+            bodyBuilder.AppendFormat("<td>{0}</td>", soldAndPaid);
             bodyBuilder.Append("</tr>");
 
             bodyBuilder.Append("</tbody>");
@@ -376,6 +377,24 @@ Your Transaction number is: {TransactionNumber}
 
         public void TestEmailFromService(MailMessage message)
         {
+            _emailService.SendEmail(message);
+        }
+
+        public void SendPurchaseToOwners(IRepository repository, Item item, int transactionQuantity)
+        {
+            var message = new MailMessage("automatedemail@caes.ucdavis.edu", item.Editors.Single(a => a.Owner).User.Email) { IsBodyHtml = true };
+            foreach (var editor in item.Editors.Where(a => !a.Owner))
+            {
+                message.To.Add(editor.User.Email);
+            }
+
+            message.Subject = "Online Registration Notification";
+            var body = new StringBuilder(string.Format("Your event: {0}<br/><br/>", item.Name));
+            body.Append(string.Format("Just sold {0} {1}(s)<br/><br/>", transactionQuantity, item.QuantityName));
+            body.Append("This is a notification only email. Do not reply.<br/><br/>");
+            body.Append("You are getting this notification because you are an editor on an event that has a setting to inform you when people register for your event.");
+
+            message.Body = body.ToString();
             _emailService.SendEmail(message);
         }
     }
