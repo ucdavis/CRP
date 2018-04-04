@@ -54,6 +54,7 @@
 <body>
 
 <header>
+    <h2 style="text-align: center; background-color: red"><strong>!!!! TEST SITE !!!! TEST SITE !!!! TEST SITE !!!! TEST SITE !!!! TEST SITE !!!!</strong></h2>
     <div class="bleed">
         <div class="topbanner">
             <div class="header_item">
@@ -64,11 +65,11 @@
                 {
                     @Html.AntiForgeryToken()
                     <div id="search_box" class="search_box">
-                        @Html.TextBox("searchTerm", string.Empty, new { @maxlength = "20" })
+                        @Html.TextBox("searchTerm", string.Empty, new {@maxlength = "20"})
                     </div>
                 }
 
-            </div>            
+            </div>
         </div>
     </div>
     <div class="header_contents">
@@ -87,7 +88,7 @@
         </div>
 
     </div>
-    
+
 </header>
 <div class="body-content">
     @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))

@@ -66,6 +66,7 @@
 </head>
     
 <body>
+<h2 style="text-align: center; background-color: red"><strong>!!!! TEST SITE !!!! TEST SITE !!!! TEST SITE !!!! TEST SITE !!!! TEST SITE !!!!</strong></h2>
 <%--<%:Html.Partial("SystemMessage") %>--%>
 <div id="brand_bar">
 <div id="brand_bar_content">                    
