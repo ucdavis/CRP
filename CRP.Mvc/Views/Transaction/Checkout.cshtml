@@ -369,8 +369,11 @@
                 var theChoice = $(this).val();
                 if (theChoice === '-- None --') {
                     $(".qs-id-Contact-Information-Zip-Code").val("99999");
+                    if ($(".qs-id-Contact-Information-Province-Region-Country").val() === "USA") {
+                        $(".qs-id-Contact-Information-Province-Region-Country").val("");
+                    }
                 } else {
-                    $(".qs-id-Contact-Information-Region").val("USA");
+                    $(".qs-id-Contact-Information-Province-Region-Country").val("USA");
                 }
             });
 
