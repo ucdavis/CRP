@@ -1660,6 +1660,7 @@ namespace CRP.Controllers
                 questionAnswer.Add(StaticValues.Question_Zip, agribusinessExtraParams.Zip);
                 questionAnswer.Add(StaticValues.Question_PhoneNumber, agribusinessExtraParams.Phone != null ? agribusinessExtraParams.Phone.Replace('.', '-') : string.Empty);
                 questionAnswer.Add(StaticValues.Question_Email, agribusinessExtraParams.Email);
+                questionAnswer.Add(StaticValues.Question_Region, string.Empty);
                 foreach(var question in questionSet.Questions)
                 {
                     //If it doesn't find the question, it will throw an exception. (a good thing.)
@@ -1703,7 +1704,8 @@ namespace CRP.Controllers
                 questionAnswer.Add(StaticValues.Question_State, openIdUser.State);
                 questionAnswer.Add(StaticValues.Question_Zip, openIdUser.Zip);
                 questionAnswer.Add(StaticValues.Question_PhoneNumber, openIdUser.PhoneNumber);
-                questionAnswer.Add(StaticValues.Question_Email, openIdUser.Email);   
+                questionAnswer.Add(StaticValues.Question_Email, openIdUser.Email);
+                questionAnswer.Add(StaticValues.Question_Region, string.Empty);
                 foreach (var question in questionSet.Questions)
                 {
                     //If it doesn't find the question, it will throw an exception. (a good thing.)

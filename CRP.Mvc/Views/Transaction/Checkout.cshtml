@@ -155,7 +155,7 @@
             var showDonationLink = false;
         }
         @foreach (var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
-        {
+        {            
             <div class="TransactionContainer">
                 <span id='@Html.Encode(qs.Id)'>
                     @{
@@ -363,6 +363,18 @@
             $("input:radio[name=paymentType]").click(function() {
                 payType = $(this).val();
                 CalculateTotal();
+            });
+
+            $(".qs-id-Contact-Information-State").on('change', function() {
+                var theChoice = $(this).val();
+                if (theChoice === '-- None --') {
+                    $(".qs-id-Contact-Information-Zip-Code").val("99999");
+                    if ($(".qs-id-Contact-Information-Province-Region-Country").val() === "USA") {
+                        $(".qs-id-Contact-Information-Province-Region-Country").val("");
+                    }
+                } else {
+                    $(".qs-id-Contact-Information-Province-Region-Country").val("USA");
+                }
             });
 
             // initialize the question names
