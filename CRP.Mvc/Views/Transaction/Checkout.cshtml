@@ -375,6 +375,9 @@
                         }
                     } else {
                         $(".qs-id-Contact-Information-Province-Region-Country").val("USA");
+                        if ($(".qs-id-Contact-Information-Zip-Code").val() === "99999") {
+                            $(".qs-id-Contact-Information-Zip-Code").val("");
+                        }
                     }
                 });
 
