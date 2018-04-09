@@ -15,7 +15,7 @@
     {
         case "Text Box":
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
-            <input name=".Answer" id="_Answer" class="form-control indexedControl @Model.Question.ValidationClasses" type="text" @(Model.Disable ? "disabled='true'" : null) value="@Model.Answer" placeholder="@Model.Question.Name"/>            
+            <input name=".Answer" id="_Answer" class="form-control indexedControl @Model.Question.ValidationClasses @string.Format("qs-id-{0}-{1}",Model.Question.QuestionSet.Name.Replace(" ", "-"), Model.Question.Name.Replace(" ", "-").Replace('/', '-'))" type="text" @(Model.Disable ? "disabled='true'" : null) value="@Model.Answer" placeholder="@Model.Question.Name" />
             break;
         case "Text Area":
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
@@ -73,7 +73,7 @@
         case "Drop Down":
             @*@this.Select(".Answer").Options(Model.Question.Options.OrderBy(a => a.Name), x => x.Name, x => x.Name).Class("indexedControl " + Model.Question.ValidationClasses).Selected(Model.Answer ?? string.Empty).FirstOption("--Select--")*@
             <label id="_Answer" class="indexedControl">@Model.Question.Name</label>
-            <select class="form-control indexedControl @Model.Question.ValidationClasses"  id="_Answer">
+            <select class="form-control indexedControl @Model.Question.ValidationClasses @Model.Question.ValidationClasses @string.Format("qs-id-{0}-{1}",Model.Question.QuestionSet.Name.Replace(" ", "-"), Model.Question.Name.Replace(" ", "-").Replace('/', '-'))" id="_Answer">
                 <option value="">--Select--</option>
                 @foreach (var o in Model.Question.Options.OrderBy(a => a.Name))
                 {

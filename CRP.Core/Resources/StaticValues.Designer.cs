@@ -268,6 +268,15 @@ namespace CRP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Province/Region/Country.
+        /// </summary>
+        public static string Question_Region {
+            get {
+                return ResourceManager.GetString("Question_Region", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
         public static string Question_State {
