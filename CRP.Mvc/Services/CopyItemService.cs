@@ -26,7 +26,13 @@ namespace CRP.Services
         {
             var questionSetDict = new Dictionary<int, QuestionSet>();
 
-            var rtItem = new Item(string.Format("{0} (copy)",sourceItem.Name), sourceItem.Quantity);
+            var itemName = sourceItem.Name;
+            if (itemName.Length > 93)
+            {
+                itemName = itemName.Substring(0, 80) + "...";
+            }
+
+            var rtItem = new Item(string.Format("{0} (copy)",itemName), sourceItem.Quantity);
 
             CopyItemFields(sourceItem, rtItem);
             CopyTags(sourceItem, rtItem);
@@ -45,6 +51,12 @@ namespace CRP.Services
 
                 
             }
+            //For debugging
+            //else
+            //{
+            //    var xxx = rtItem.ValidationResults();
+                
+            //}
 
 
             return rtItem;
