@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
@@ -689,7 +690,14 @@ namespace CRP.Controllers
             var newItem = _copyItemService.Copy(item, Repository, CurrentUser.Identity.Name);
             if (!newItem.IsValid())
             {
-                Message = "The copy was not able to save because of Invalid Data";
+                var errorMessages = new StringBuilder();
+                var errors = newItem.ValidationResults();
+                foreach (var validationResult in errors)
+                {
+                    errorMessages.AppendLine(validationResult.Message);
+                }
+
+                Message = "The copy was not able to save because of Invalid Data:" + errorMessages;
                 return this.RedirectToAction<ErrorController>(a => a.Index(ErrorController.ErrorType.UnknownError));
             }
 
