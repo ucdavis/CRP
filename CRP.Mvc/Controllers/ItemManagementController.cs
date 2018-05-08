@@ -697,7 +697,7 @@ namespace CRP.Controllers
                     errorMessages.AppendLine(validationResult.Message);
                 }
 
-                Message = "The copy was not able to save because of Invalid Data:" + errorMessages;
+                Message = "The copy was not able to save because of Invalid Data: " + errorMessages;
                 return this.RedirectToAction<ErrorController>(a => a.Index(ErrorController.ErrorType.UnknownError));
             }
 
