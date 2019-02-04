@@ -121,17 +121,17 @@
         @*Quantity Level*@
         @if (Model.Item.QuestionSets.Any(a => a.QuantityLevel))
         {
-            <legend>@Html.Encode(Model.Item.QuantityName)</legend>
+            <legend>@Model.Item.QuantityName</legend>
             <div class="ticket-wrapper">
                 @for (var i = 0; i < Model.Quantity; i++) //@for (var i = 0; i < Model.Quantity; i++)
                 {
                     <div class="tickets QuantityContainer">
-                        <h3>@Html.Encode(Model.Item.QuantityName) <span class="quantityIndex">@Html.Encode(i + 1)</span>
+                        <h3>@Model.Item.QuantityName <span class="quantityIndex">@Html.Encode(i + 1)</span>
                         </h3>
                         @{ var questionSetCount = Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count(); }
                         @foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
                         {
-                            <legend>@Html.Encode(qs.QuestionSet.Name) <span class="quantityIndex">@Html.Encode(i + 1)</span> </legend>
+                            <legend>@qs.QuestionSet.Name <span class="quantityIndex">@Html.Encode(i + 1)</span> </legend>
                             foreach (var q in qs.QuestionSet.Questions)
                             {
                                 int i1 = i;
@@ -170,7 +170,7 @@
                             showDonationLink = false;
                         }
                     }
-                    <legend>@Html.Encode(questionSetName)</legend>
+                    <legend>@questionSetName </legend>
                 </span>
                 @foreach (var q in qs.QuestionSet.Questions)
                 {
