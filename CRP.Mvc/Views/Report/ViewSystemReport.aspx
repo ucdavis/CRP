@@ -17,7 +17,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2>View System Report</h2>
+    <h2>View System Report (These are all from the beginning of the current year.)</h2>
 
     <p>
         <select id="reportId" name="reportId">
