@@ -47,7 +47,7 @@ namespace CRP.Core.Domain
 
         public virtual Unit Unit { get; set; }
 
-        public string GetAccountString()
+        public virtual string GetAccountString()
         {
             if (string.IsNullOrWhiteSpace(SubAccount))
             {
