@@ -27,6 +27,6 @@
     CONSTRAINT [FK_Transactions_Items] FOREIGN KEY ([ItemId]) REFERENCES [dbo].[Items] ([id]),
     CONSTRAINT [FK_Transactions_OpenIdUsers] FOREIGN KEY ([OpenIdUserId]) REFERENCES [dbo].[OpenIdUsers] ([id]),
     CONSTRAINT [FK_Transactions_Transactions] FOREIGN KEY ([TransactionId]) REFERENCES [dbo].[Transactions] ([id]),
-    CONSTRAINT [FK_Transactions_FinacialAccounts] FOREIGN KEY ([FinancialAccountId]) REFERENCES [dbo].[FinancialAccount] ([id])
+    CONSTRAINT [FK_Transactions_FinacialAccounts] FOREIGN KEY ([FinancialAccountId]) REFERENCES [dbo].[FinancialAccounts] ([id])
 );
 
