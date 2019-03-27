@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Abstractions;
@@ -323,5 +323,34 @@ namespace CRP.Core.Domain
         //private bool CorrectionTotalAmountPaid { get; set; }
         #endregion Fields ONLY used for complex validation, not in database
 
+
+        public virtual Dictionary<string, string> GetPaymentDictionary()
+        {
+            var dictionary = new Dictionary<string, string>
+            {
+                {"transaction_type"       , "sale"},
+                {"reference_number"       , Id.ToString()},             // use the actual id so we can find it easily
+                {"amount"                 , Total.ToString("F2")},
+                {"currency"               , "USD"},
+                {"transaction_uuid"       , Guid.NewGuid().ToString()},
+                {"signed_date_time"       , DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")},
+                {"unsigned_field_names"   , string.Empty},
+                {"locale"                 , "en"},
+                //{"bill_to_email"          , CustomerEmail},
+                //{"bill_to_forename"       , CustomerName},
+                {"bill_to_address_country", "US"},
+                {"bill_to_address_state"  , "CA"}
+            };
+
+            //dictionary.Add("line_item_count", Items.Count.ToString("D"));
+            //for (var i = 0; i < Items.Count; i++)
+            //{
+            //    dictionary.Add($"item_{i}_name", Items[i].Description);
+            //    //dictionary.Add($"item_{i}_quantity", Items[i].Quantity.ToString());
+            //    dictionary.Add($"item_{i}_unit_price", Items[i].Total.ToString("F2"));
+            //}
+
+            return dictionary;
+        }
     }
 }
