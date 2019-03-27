@@ -143,45 +143,6 @@
     <value>OpenId</value>
     <comment>signifier if the user is an openid user or not</comment>
   </data>
-  <data name="Partial_CheckView" xml:space="preserve">
-    <value>~/Views/Shared/CheckView.ascx</value>
-    <comment>Path to check view partial</comment>
-  </data>
-  <data name="Partial_FidForm" xml:space="preserve">
-    <value>~/Views/Shared/FIDForm.ascx</value>
-    <comment>The path to the fid form</comment>
-  </data>
-  <data name="Partial_HelpForm" xml:space="preserve">
-    <value>~/Views/Shared/HelpForm.ascx</value>
-    <comment>The path to the help form partial view</comment>
-  </data>
-  <data name="Partial_ItemBrowse" xml:space="preserve">
-    <value>~/Views/Shared/ItemBrowse.ascx</value>
-    <comment>Path to item browse partial</comment>
-  </data>
-  <data name="Partial_ItemForm" xml:space="preserve">
-    <value>~/Views/Shared/ItemForm.ascx</value>
-    <comment>Path to item form partial</comment>
-  </data>
-  <data name="Partial_LogOnUserControl" xml:space="preserve">
-    <value>~/Views/Shared/LogOnUserControl.ascx</value>
-    <comment>Path to logon user control</comment>
-  </data>
-  <data name="Partial_PageHeader" xml:space="preserve">
-    <value>~/Views/Shared/PageHeader.ascx</value>
-    <comment>Path to page header partial</comment>
-  </data>
-  <data name="Partial_QuestionForm" xml:space="preserve">
-    <value>~/Views/Shared/QuestionForm.ascx</value>
-    <comment>Path to question form partial</comment>
-  </data>
-  <data name="Partial_TagView" xml:space="preserve">
-    <value>~/Views/Shared/TagView.ascx</value>
-    <comment>Path to tag view partial</comment>
-  </data>
-  <data name="Partial_TransactionForm" xml:space="preserve">
-    <value>~/Views/Shared/TransactionForm.ascx</value>
-  </data>
   <data name="QuestionSet_ContactInformation" xml:space="preserve">
     <value>Contact Information</value>
     <comment>The name of the required question set</comment>
@@ -381,13 +342,5 @@
   <data name="Upay_ValidationKey" xml:space="preserve">
     <value>VALIDATION_KEY</value>
     <comment>Upay parameter, validation key</comment>
-  </data>
-  <data name="View_PageHeader" xml:space="preserve">
-    <value>~/Views/Shared/PageHeader.ascx</value>
-    <comment>The path to the page header view</comment>
-  </data>
-  <data name="View_TemplateInstructions" xml:space="preserve">
-    <value>~/Views/Shared/TemplateInstructions.ascx</value>
-    <comment>The path the the template instructions</comment>
   </data>
 </root>
