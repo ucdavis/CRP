@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CRP.Core.Abstractions;
@@ -47,9 +47,9 @@ namespace CRP.Core.Domain
 
             TransactionGuid = Guid.NewGuid();
 
-            if (Item != null && FidUsed == null)
+            if (Item != null && FinancialAccount == null)
             {
-                FidUsed = Item.TouchnetFID;
+                FinancialAccount = Item.FinancialAccount;
             }
         }
         #endregion
@@ -89,7 +89,7 @@ namespace CRP.Core.Domain
 
         public virtual Guid TransactionGuid { get; set; }
         
-        public virtual string FidUsed { get; set; }
+        public virtual FinancialAccount FinancialAccount { get; set; }
 
         [Required]
         public virtual ICollection<PaymentLog> PaymentLogs { get; set; }

@@ -22,6 +22,7 @@
     [AllowCreditPayment]       BIT             CONSTRAINT [DF_Items_AllowCreditPayment] DEFAULT ((1)) NOT NULL,
     [HideDonation]             BIT             CONSTRAINT [DF_Items_HideDonation] DEFAULT ((0)) NOT NULL,
     [TouchnetFID]              CHAR (3)        NULL,
+	[FinancialAccountId]       INT             NULL,
     [DonationLinkLegend]       VARCHAR (50)    NULL,
     [DonationLinkInformation]  VARCHAR (500)   NULL,
     [DonationLinkText]         VARCHAR (50)    NULL,
@@ -29,7 +30,8 @@
     [SoldCount]                INT             CONSTRAINT [DF_Items_SoldCount] DEFAULT ((0)) NOT NULL,
     [NotifyEditors]            BIT             CONSTRAINT [DF_Items_NotifyEditors] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_Items] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_Items_ItemTypes] FOREIGN KEY ([ItemTypeId]) REFERENCES [dbo].[ItemTypes] ([id])
+    CONSTRAINT [FK_Items_ItemTypes] FOREIGN KEY ([ItemTypeId]) REFERENCES [dbo].[ItemTypes] ([id]),
+	CONSTRAINT [FK_Items_FinancialAccounts] FOREIGN KEY ([FinancialAccountId]) REFERENCES [dbo].[FinancialAccounts] ([id])
 );
 
 

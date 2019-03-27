@@ -38,8 +38,9 @@
     <property name="DonationLinkInformation" column="DonationLinkInformation" />
     <property name="DonationLinkText" column="DonationLinkText" />
     <property name="DonationLinkLink" column="DonationLinkLink" />
-    
-    <property name="TouchnetFID" column="TouchnetFID"/>
+
+    <many-to-one name="FinancialAccount" class="CRP.Core.Domain.FinancialAccount" column="FinancialAccountId" fetch="join" />
+
 
     <bag name="Templates" table="Templates" cascade="all-delete-orphan" inverse="true" >
       <key column="ItemId" />

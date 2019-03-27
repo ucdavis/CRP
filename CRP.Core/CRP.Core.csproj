@@ -157,6 +157,7 @@
     <Compile Include="Abstractions\IQuestionAnswer.cs" />
     <Compile Include="Abstractions\ISearchTermProvider.cs" />
     <Compile Include="Abstractions\SystemTime.cs" />
+    <Compile Include="Domain\FinancialAccount.cs" />
     <Compile Include="Domain\ApplicationKey.cs" />
     <Compile Include="Domain\CatbertClasses.cs" />
     <Compile Include="Domain\Coupon.cs" />
@@ -181,7 +182,6 @@
     <Compile Include="Domain\QuestionType.cs" />
     <Compile Include="Domain\Tag.cs" />
     <Compile Include="Domain\Template.cs" />
-    <Compile Include="Domain\TouchnetFID.cs" />
     <Compile Include="Domain\Transaction.cs" />
     <Compile Include="Domain\TransactionAnswer.cs" />
     <Compile Include="Domain\Validator.cs" />
@@ -301,9 +301,6 @@
     <EmbeddedResource Include="Domain\HelpTopic.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Domain\TouchnetFID.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Domain\MapPin.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +331,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\FinancialAccount.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
