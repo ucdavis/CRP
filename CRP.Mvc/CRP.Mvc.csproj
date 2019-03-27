@@ -481,7 +481,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
-    <Compile Include="Controllers\FIDController.cs" />
+    <Compile Include="Controllers\FinancialAccountController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\Helpers\Access.cs" />
     <Compile Include="Controllers\Helpers\CASHelper.cs" />
