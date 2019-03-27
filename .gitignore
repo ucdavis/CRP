@@ -143,17 +143,10 @@ publish/
 *.pubxml
 *.publishproj
 
-# NuGet Packages
+# NuGet Build Packages
 *.nupkg
 # The packages folder can be ignored because of Package Restore
 **/packages/*
-# except build/, which is used as an MSBuild target.
-!**/packages/build/
-# Uncomment if necessary however generally it will be regenerated when needed
-#!**/packages/repositories.config
-# NuGet v3's project.json files produces more ignoreable files
-*.nuget.props
-*.nuget.targets
 
 # Microsoft Azure Build Output
 csx/
@@ -183,7 +176,6 @@ ClientBin/
 *.dbproj.schemaview
 *.pfx
 *.publishsettings
-node_modules/
 orleans.codegen.cs
 
 # Since there are multiple workflows, uncomment next line to ignore bower_components 
@@ -244,11 +236,19 @@ paket-files/
 .idea/
 *.sln.iml
 
-#ignore AppSettings.config file
+# AppSettings.config files
 AppSettings.config
 AppDebugSettings.config
 AppTestSettings.config
 AppReleaseSettings.config
-CRP/bin/
-CRP.Core/bin/*
+
+# vscode
+.vs/
+
+# ignore libraries
 packages/
+node_modules/
+
+# ignore msbuild files
+bin/
+obj/
