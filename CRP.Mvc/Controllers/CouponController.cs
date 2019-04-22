@@ -7,10 +7,7 @@ using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using MvcContrib;
-using MvcContrib.Attributes;
 using UCDArch.Web.ActionResults;
-using UCDArch.Web.Controller;
-using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
@@ -23,20 +20,12 @@ namespace CRP.Controllers
             _couponService = couponService;
         }
 
-        //
-        // GET: /Coupon/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         /// <summary>
         /// GET: /Coupon/Create/{itemId}
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [UserOnlyAttribute]
+        [UserOnly]
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableById(itemId);
