@@ -1,0 +1,64 @@
+﻿@model ItemQuestionViewModel
+@using CRP.Controllers.ViewModels
+
+<li>
+        @if (Model.Question.QuestionType.Name != "Boolean"){
+            @Model.Question.Name
+        }
+
+        @Html.Hidden(".QuestionId", Model.Question.Id, new { @class = "indexedControl" })
+        @Html.Hidden(".QuestionSetId", Model.Question.QuestionSet.Id, new { @class = "indexedControl" })
+        @Html.Hidden(".QuantityIndex", 0, new { @class = "indexedControl" })
+
+        @if (Model.Question.QuestionType.Name != "Boolean") {
+            <br />
+        }
+    
+        <!-- Render the controls now -->
+        @switch(Model.Question.QuestionType.Name) { 
+            case "Text Box":
+                @Html.TextBox(".Answer", Model.Answer, new { @class = "indexedControl", disabled = Model.Disable })
+                break;
+
+            case "Text Area":
+                @Html.TextArea(".Answer", Model.Answer, new { @class = "indexedControl" })
+                break;
+
+            case "Boolean":
+                bool ans;
+                if (!bool.TryParse(Model.Answer, out ans)) {
+                    ans = false;
+                }
+                @Html.CheckBox(".Answer", ans, new { @class="indexedControl" }) @Model.Question.Name
+                break;
+
+            case "Radio Buttons":
+                var option = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Trim().ToLower() : string.Empty;         
+                foreach (var o in Model.Question.Options){  
+                    var isChecked = option == o.Name.Trim().ToLower();
+                    @Html.RadioButton(".Answer", o.Name, isChecked , new { @class = $"indexedControl {Model.Question.ValidationClasses}"})
+                    @o.Name
+                } 
+                break; 
+
+            case "Checkbox List":
+                var checkOptions = !string.IsNullOrEmpty(Model.Answer) ? Model.Answer.Split(',') : new string[1];
+                foreach (var o in Model.Question.Options) {
+                    var cblAns = checkOptions.Contains(o.Name);
+
+                    @Html.CheckBox(".CblAnswer", cblAns, new { @class = $"indexedControl {Model.Question.ValidationClasses}", @value = o.Name })
+                    @o.Name
+                } 
+                break;
+
+            case "Drop Down":
+                var options = Model.Question.Options.OrderBy(a => a.Name).Select(o => new SelectListItem() {Text = o.Name, Value = o.Name, Selected = (Equals(o.Name, Model.Answer))});
+                @Html.DropDownList(".Answer", options, "--Select--", new { @class = $"indexedControl {Model.Question.ValidationClasses}" })
+                break; 
+
+            case "Date":
+                @Html.TextBox(".Answer", Model.Answer, new { @class = $"dateForm indexedControl {Model.Question.ValidationClasses}"})
+                break;
+         }
+    <span class="val_img">&nbsp</span>    
+</li>

@@ -1,0 +1,119 @@
+﻿@model CRP.Core.Domain.OpenIdUser
+@using CRP.Controllers.Helpers
+@using CRP.Core.Resources
+@using Microsoft.Web.Mvc
+
+@{
+    ViewBag.Title = "Open ID Account";
+}
+
+<h2>OpenIdAccount</h2>
+
+@Html.ValidationSummary("Edit was unsuccessful. Please correct the errors and try again.")
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Fields</legend>
+        <p>
+            <label for="Email">Email:</label>
+            @Html.TextBox("Email", Model.Email)
+            @Html.ValidationMessage("Email", "*")
+        </p>
+        <p>
+            <label for="FirstName">FirstName:</label>
+            @Html.TextBox("FirstName", Model.FirstName)
+            @Html.ValidationMessage("FirstName", "*")
+        </p>
+        <p>
+            <label for="LastName">LastName:</label>
+            @Html.TextBox("LastName", Model.LastName)
+            @Html.ValidationMessage("LastName", "*")
+        </p>
+        <p>
+            <label for="StreetAddress">StreetAddress:</label>
+            @Html.TextBox("StreetAddress", Model.StreetAddress)
+            @Html.ValidationMessage("StreetAddress", "*")
+        </p>
+        <p>
+            <label for="Address2">Address2:</label>
+            @Html.TextBox("Address2", Model.Address2)
+            @Html.ValidationMessage("Address2", "*")
+        </p>
+        <p>
+            <label for="City">City:</label>
+            @Html.TextBox("City", Model.City)
+            @Html.ValidationMessage("City", "*")
+        </p>
+        <p>
+            <label for="State">State:</label>
+            @Html.TextBox("State", Model.State)
+            @Html.ValidationMessage("State", "*")
+        </p>
+        <p>
+            <label for="Zip">Zip:</label>
+            @Html.TextBox("Zip", Model.Zip)
+            @Html.ValidationMessage("Zip", "*")
+        </p>
+        <p>
+            <label for="PhoneNumber">PhoneNumber:</label>
+            @Html.TextBox("PhoneNumber", Model.PhoneNumber)
+            @Html.ValidationMessage("PhoneNumber", "*")
+        </p>
+        <p>
+            <input type="submit" value="Save"/>
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back Home", "Index", "Home")
+</div>
+    
+    <fieldset>
+        <legend>Transactions</legend>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>See Email</th>
+                    <th>Transaction Number</th>
+                    <th>Is Active</th>
+                    <th>Transaction Date</th>
+                    <th>Quantity</th>
+                    <th>SubTotal</th>
+                    <th>Donation</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in Model.Transactions.Where(t => t.ParentTransaction == null))
+                {
+                    <tr>
+                        <td>
+                            @using (Html.BeginForm("Lookup", "Transaction", FormMethod.Post))
+                            {
+                                // pull the email
+                                var answer = t.TransactionAnswers.FirstOrDefault(b =>
+                                    b.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation
+                                    && b.Question.Name == StaticValues.Question_Email);
+
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("orderNumber", t.TransactionNumber)
+                                @Html.Hidden("email", answer != null ? answer.Answer : string.Empty)
+                                @Html.SubmitButton("Submit", "View")
+                            }
+                        </td>
+                        <td>@t.TransactionNumber</td>
+                        <td>@t.IsActive</td>
+                        <td data-sort="@t.TransactionDate.Ticks">@t.TransactionDate.ToString("d")</td>
+                        <td>@t.Quantity</td>
+                        <td>@t.AmountTotal.ToString("C")</td>
+                        <td>@t.DonationTotal.ToString("C")</td>
+                        <td>@t.Total.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </fieldset>

@@ -1,0 +1,65 @@
+﻿@model CRP.Core.Domain.HelpTopic
+
+@Html.ValidationSummary(true, "Save was unsuccessful. Please correct the errors and try again.")
+
+@Html.AntiForgeryToken()
+
+<fieldset>
+    <legend>Fields</legend>
+    <ul>
+        <li>
+            <label for="Question">Frequently Asked Question:</label>
+            @Html.TextBox("Question")
+            @Html.ValidationMessageFor(x => x.Question)
+        </li>
+        <li>
+            <label for="IsActive">Is Active: </label>
+            @Html.CheckBox("IsActive", Model != null ? Model.IsActive : false)
+            @Html.ValidationMessage("IsActive")
+        </li>
+        <li>
+            <label for="AvailableToPublic">Available To Public:</label>
+            @Html.CheckBox("AvailableToPublic", Model != null ? Model.AvailableToPublic : false)
+            @Html.ValidationMessage("AvailableToPublic")
+        </li>
+        <li>
+            <label for="IsVideo">Video:</label>
+            @Html.CheckBox("IsVideo", Model != null ? Model.IsVideo : false)
+            @Html.ValidationMessageFor(x => x.IsVideoNeedsVideoName)
+        </li>
+        <li>
+            <label for="VideoName">Name of video:</label>
+            @Html.TextBox("VideoName")
+            @Html.ValidationMessageFor(x => x.VideoName)
+        </li>
+        <li>
+            <label for="NumberOfReads">Number Of Reads:</label>
+            @Html.TextBox("NumberOfReads")
+            @Html.ValidationMessage("NumberOfReads")
+        </li>
+        <li>
+            <label for="Answer">Answer:</label>
+            @Html.TextArea("Answer")
+            @Html.ValidationMessageFor(x => x.IsNotVideoNeedsAnswer)
+        </li>
+    </ul>
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+</fieldset>
+
+<div>
+    @Html.ActionLink("Back to List", "Index", "Home")
+</div>
+
+@section AdditionalScripts
+{
+    <script src='@Url.Content("~/Scripts/tiny_mce/jquery.tinymce.js")' type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.enableTinyMce.js")" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#Answer").enableTinyMce({ script_location: '@Url.Content("~/Scripts/tiny_mce/tiny_mce.js")', overrideHeight: '225', overrideWidth: '925' });
+        });
+    </script>
+}

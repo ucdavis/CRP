@@ -1,0 +1,327 @@
+﻿@model CRP.Controllers.ViewModels.ItemViewModel
+@using CRP.Core.Resources
+@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@using MvcContrib.FluentHtml
+
+@{
+    ViewBag.Title = "Edit Item";
+}
+
+<div class="boundary">
+    <h2>@ViewBag.Title</h2>
+
+    @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
+
+    <div id="tabs">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#@StaticValues.Tab_Details" data-toggle="tab">Item Details</a></li>
+            <li role="presentation"><a href="#@StaticValues.Tab_Editors" data-toggle="tab">Editors</a></li>
+            <li role="presentation"><a href="#@StaticValues.Tab_Questions" data-toggle="tab">Questions</a></li>
+            <li role="presentation"><a href="#@StaticValues.Tab_Templates" data-toggle="tab">Confirmation Template</a></li>
+            <li role="presentation"><a href="#@StaticValues.Tab_Coupons" data-toggle="tab">Coupons</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="@StaticValues.Tab_Details" class="tab-pane active">
+
+                @using (Html.BeginForm("Edit", "ItemManagement", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                {
+                    @Html.Partial("ItemForm")
+                }
+
+            </div>
+            <div id="@StaticValues.Tab_Editors" class="tab-pane">
+
+                @using (Html.BeginForm("AddEditor", "ItemManagement", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("id")
+                    <fieldset>
+                        Add User: @this.Select("userId").Options(Model.Users.OrderBy(a => a.LastName), x => x.Id, x => x.SortableName).FirstOption("--Select a User--")
+                        <input type="submit" value="Add User" />
+                    </fieldset>
+                }
+
+                <table id="table-editors" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Full Name</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var editor in Model.Item.Editors)
+                        {
+                            <tr>
+                                <td>
+                                    @using (Html.BeginForm("RemoveEditor", "ItemManagement", FormMethod.Post, new { id = "RemoveForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.Hidden("id")
+                                        @Html.Hidden("editorId", editor.Id)
+                                        <a href="javascript:;" class="FormSubmit">Delete</a>
+                                    }
+                                </td>
+                                <td>@editor.User.FullName</td>
+                                <td>@editor.Owner</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="@StaticValues.Tab_Questions" class="tab-pane">
+                <fieldset>
+                    <legend>Transaction</legend>
+
+                    <p>
+                        @Html.ActionLink("Add Question Set", "LinkToItem", "QuestionSet", new { itemId = Model.Item.Id, transaction = true, quantity = false }, null)
+                    </p>
+
+                    @{
+                        var transactionQuestionSets = Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order);
+                    }
+                    <table id="table-questions-transactions" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th># of Questions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var question in transactionQuestionSets)
+                            {
+                                <tr>
+                                    <td>
+                                        @using (Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(question.Id)))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <a href="javascript:;" class="FormSubmit">Delete</a>
+                                        }
+
+                                        @if (!question.QuestionSet.SystemReusable || !question.QuestionSet.CollegeReusable || !question.QuestionSet.UserReusable)
+                                        {
+                                            <text>|</text>
+                                            @Html.ActionLink("Edit", "Edit", "QuestionSet", new { id = question.QuestionSet.Id }, null)
+                                        }
+                                    </td>
+                                    <td>@question.QuestionSet.Name</td>
+                                    <td>@question.QuestionSet.Questions.Count</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Quantity</legend>
+
+                    <p>
+                        @Html.ActionLink("Add Question Set", "LinkToItem", "QuestionSet", new { itemId = Model.Item.Id, transaction = false, quantity = true }, null)
+                    </p>
+
+                    @{
+                        var transactionQuantitySets = Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order);
+                    }
+                    <table id="table-questions-quantity" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th># of Questions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var question in transactionQuantitySets)
+                            {
+                                <tr>
+                                    <td>
+                                        @using (Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(question.Id)))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <a href="javascript:;" class="FormSubmit">Delete</a>
+                                        }
+
+                                        @if (!question.QuestionSet.SystemReusable || !question.QuestionSet.CollegeReusable || !question.QuestionSet.UserReusable)
+                                        {
+                                            <text>|</text>
+                                            @Html.ActionLink("Edit", "Edit", "QuestionSet", new { id = question.QuestionSet.Id }, null)
+                                        }
+                                    </td>
+                                    <td>@question.QuestionSet.Name</td>
+                                    <td>@question.QuestionSet.Questions.Count</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+            <div id="@StaticValues.Tab_Templates" class="tab-pane">
+                <fieldset class="row">
+                    <div class="col-lg-3 col-lg-push-9">
+                        @Html.Partial("TemplateInstructions")
+                    </div>
+                    <div class="col-lg-9 col-lg-pull-3">
+                        <div class="form-group">
+                            <h3>Paid Template</h3>
+                            @Html.TextAreaFor(x => x.PaidText, new {@class = "form-control", rows = 5})
+                        </div>
+
+                        <div class="form-group">
+
+                            <h3>Unpaid Template</h3>
+                            @Html.TextAreaFor(x => x.UnpaidText, new {@class = "form-control", rows = 5})
+                        </div>
+
+                        <input type="button" value="Save" onclick="SaveTemplateText()"/>
+                    </div>
+                </fieldset>
+            </div>
+            <div id="@StaticValues.Tab_Coupons" class="tab-pane">
+                <fieldset>
+                    <p>
+                        @Html.ActionLink("Generate Coupon", "Create", "Coupon", new { itemId = Model.Item.Id }, null)
+                    </p>
+
+                    <table id="table-coupons" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Code</th>
+                                <th>Discount</th>
+                                <th>Email</th>
+                                <th>Expiration</th>
+                                <th>Max Quantity</th>
+                                <th>Is Active</th>
+                                <th>Max Usage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var coupon in Model.Item.Coupons)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (coupon.IsActive)
+                                        {
+                                            using (Html.BeginForm<CouponController>(b => b.Deactivate(coupon.Id), FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <a href="javascript:;" class="FormSubmit">Deactivate</a>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@coupon.Code</td>
+                                    <td>@coupon.DiscountAmount.ToString("C")</td>
+                                    <td>@coupon.Email</td>
+                                    <td data-sort="@(coupon.Expiration?.Ticks)">
+                                        @(coupon.Expiration?.ToString("d"))
+                                    </td>
+                                    <td>@coupon.MaxQuantity</td>
+                                    <td>@coupon.IsActive</td>
+                                    <td data-sort="@coupon.MaxUsage">
+                                        @(coupon.MaxUsage == int.MaxValue ? "Unlimited" : coupon.MaxUsage.ToString())
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "List", "ItemManagement") |
+        @Html.ActionLink("Details", "Details", "ItemManagement", new { id = Model.Item.Id }, null) |
+        @Html.ActionLink("Map", "Map", "ItemManagement", new { id = Model.Item.Id }, null)
+    </div>
+</div>
+
+
+@section AdditionalScripts {
+
+    <script type="text/javascript">
+        // set values to be consumed in itemEdit.js
+        var getExtendedPropertyUrl = '@Url.Action("GetExtendedProperties", "ItemManagement")';
+        var saveTemplateUrl = '@Url.Action("SaveTemplate", "ItemManagement")';
+        var id = '@Model.Item.Id';
+        var scriptUrl = '@Url.Content("~/Scripts/tiny_mce/tiny_mce.js")';
+    </script>
+
+    @Scripts.Render("~/Scripts/ItemEdit.js")
+    @Scripts.Render("~/Scripts/tiny_mce/jquery.tinymce.js")
+    @Scripts.Render("~/Scripts/jquery.enableTinyMce.js")
+
+    <script type="text/javascript">
+        function SaveTemplateText() {
+            var textboxPaid = $("#PaidText");
+            var textboxUnpaid = $("#UnpaidText");
+            var token = $($("input:hidden[name='__RequestVerificationToken']")[0]).val();
+            $.post(saveTemplateUrl, { id: id, textPaid: textboxPaid.val(), textUnpaid: textboxUnpaid.val(), __RequestVerificationToken: token }
+                , function (result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
+        }
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            //---------------- setup html editors ------------------//
+            $("#PaidText").enableTinyMce({
+                script_location: scriptUrl,
+                //overrideWidth: '500',
+                //overrideHeight: '250',
+                overrideShowPreview: 'preview,',
+                overridePlugin_preview_pageurl: '@Url.Content("~/Static/Preview.html")',
+            });
+            $(".add-token").click(function (event) {
+                var pasteValue = $(this).attr("name");
+                tinyMCE.execInstanceCommand("PaidText", "mceInsertContent", false, pasteValue);
+            });
+
+            $("#UnpaidText").enableTinyMce({
+                script_location: scriptUrl,
+                overrideWidth: '500',
+                overrideHeight: '250',
+                overrideShowPreview: 'preview,',
+                overridePlugin_preview_pageurl: '@Url.Content("~/Static/Preview.html")',
+            });
+            $(".add-token-unpaid").click(function (event) {
+                var pasteValue = $(this).attr("name");
+                tinyMCE.execInstanceCommand("UnpaidText", "mceInsertContent", false, pasteValue);
+            });
+
+            $("#Item_Description").enableTinyMce({ script_location: scriptUrl });
+            $("#Item_CheckPaymentInstructions").enableTinyMce({ script_location: scriptUrl, overrideHeight: '255' });
+
+            //---------------- setup tables ------------------//
+            $("#table-editors").dataTable({
+                columnDefs: [{
+                    targets: [0],
+                    orderable: false,
+                }],
+            });
+
+            $("#table-questions-transactions").dataTable({
+                columnDefs: [{
+                    targets: [0],
+                    orderable: false,
+                }],
+            });
+
+            $("#table-questions-quantity").dataTable({
+                columnDefs: [{
+                    targets: [0],
+                    orderable: false,
+                }],
+            });
+
+            $("#table-coupons").dataTable({
+                columnDefs: [{
+                    targets: [0],
+                    orderable: false,
+                }],
+            });
+        });
+    </script>
+}

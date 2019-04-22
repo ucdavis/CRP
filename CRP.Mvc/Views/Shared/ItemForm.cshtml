@@ -1,0 +1,232 @@
+﻿@model CRP.Controllers.ViewModels.ItemViewModel
+@using CRP.Controllers.Helpers;
+@using MvcContrib.FluentHtml
+
+@Html.AntiForgeryToken()
+@Html.HiddenFor(x => x.CanChangeFinanceAccount, !Model.CanChangeFinanceAccount)
+
+<fieldset>
+    <legend><a href="https://www.youtube.com/watch?v=Zi1DyKgev8M&feature=youtu.be" target="_blank">Watch Demo</a></legend>
+    <div class="form-group">
+        <label>Item Type:</label>
+        @(this.Select("Item.ItemType")
+              .Options(Model.ItemTypes, x => x.Id, x => x.Name)
+              .FirstOption("--Select an Item Type--")
+              .Selected(Model.Item?.ItemType?.Id ?? 0)
+              .Disabled(Model.Item != null || !Model.IsNew)
+              .Class("form-control")
+        )
+        @Html.ValidationMessageFor(x => x.Item.ItemType)
+    </div>
+
+    <div class="form-group">
+        <label>Name:</label>
+        @Html.TextBoxFor(x => x.Item.Name, new { @class="form-control" })
+        @Html.ValidationMessageFor(x => x.Item.Name)
+    </div>
+    <div class="form-group">
+        <label>Unit:</label>
+        @(this.Select("Item.Unit")
+              .Options(Model.Units, x => x.Id, x => x.FullName)
+              .Selected(Model.Item?.Unit.Id ?? (Model.UserUnit?.Id ?? 0))
+              .Class("form-control")
+        )
+    </div>
+    <div class="form-group">
+        <label>Account Number:</label>
+        <span>@(Model?.Item?.FinancialAccount.GetAccountString())</span>
+        @(this.Select("Item.FinancialAccount")
+              .Options(Model.FinancialAccounts, x => x.Id, x => x.GetAccountString())
+              .FirstOption("--Select an Account Number--")
+              .Selected(Model.Item?.FinancialAccount?.Id ?? 0)
+              .Disabled(Model.Item != null || !Model.IsNew || !Model.CanChangeFinanceAccount)
+              .Class("form-control")
+        )
+        
+        <span>*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</span>
+    </div>
+    <div class="form-group">
+        <label>Summary:</label>
+        @Html.TextAreaFor(x => x.Item.Summary, new { @class="form-control", rows="5", @data_toggle="tooltip", @title = "A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters."})
+        @Html.ValidationMessageFor(x => x.Item.Summary)
+    </div>
+    <div class="form-group">
+        <label>Description:</label>
+        @Html.TextAreaFor(x => x.Item.Description, new { @class = "form-control", rows = "5" })
+        @Html.ValidationMessageFor(x => x.Item.Description)
+    </div>
+    <div class="form-group">
+        <label>Check Payment Instructions:</label>
+        @{
+            var checkPaymentInstructionsValue = Model.Item?.CheckPaymentInstructions == null
+                ? Html.HtmlEncode("<h1>Thank you for your purchase!</h1> <h2>Please mail your RSVP card and payment to:</h2> <address>College of Agricultural and Environmental Sciences<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 95616<br /></address><h2>Please make checks payable to UC Regents.</h2>")
+                : Html.HtmlEncode(Model.Item.CheckPaymentInstructions);
+        }
+        @Html.TextAreaFor(x => x.Item.CheckPaymentInstructions, new { @class = "form-control", rows = "5", @Value = checkPaymentInstructionsValue })
+        @Html.ValidationMessageFor(x => x.Item.CheckPaymentInstructions)
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(x => x.Item.AllowCreditPayment)
+            Allow Credit Payment
+        </label>
+        @Html.ValidationMessageFor(x => x.Item.AllowCreditPayment)
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(x => x.Item.AllowCheckPayment)
+            Allow Check Payment
+        </label>
+        @Html.ValidationMessageFor(x => x.Item.AllowCheckPayment)
+    </div>
+
+    <div class="form-group">
+        <label>Name Of Item:</label>
+        @Html.TextBoxFor(x => x.Item.QuantityName, new { @Value = Model.Item?.QuantityName ?? "Ticket", @class="form-control" })
+        @Html.ValidationMessageFor(x => x.Item.QuantityName)
+    </div>
+    <div class="form-group">
+        <label id="CostPerItemLabel">Cost Per @(Model.Item?.QuantityName ?? "Ticket"):</label>
+        @Html.TextBoxFor(x => x.Item.CostPerItem, "{0:0.00}", new { @class="form-control" })
+        @Html.ValidationMessageFor(x => x.Item.CostPerItem)
+    </div>
+    <div class="form-group">
+        <label id="QuantityLabel">Number of @(Model.Item?.QuantityName ?? "Ticket")(s) Available:</label>
+        @Html.TextBoxFor(x => x.Item.Quantity, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Item.Quantity)
+    </div>
+    <div class="form-group">
+        <label for="Item.Expiration">Last Day To Register Online:</label>
+        @Html.TextBoxFor(x => x.Item.Expiration, "{0:d}", new { @class="form-control", @data_provider="datepicker" })
+        @Html.ValidationMessageFor(x => x.Item.Expiration)
+    </div>
+    <div class="form-group">
+        <label for="Item.Link">Link:</label>
+        @Html.TextBoxFor(x => x.Item.Link, new { @class = "form-control validateLink", @data_toggle="tooltip", @title = "You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html", @placeholder= "Example: http://www.ucdavis.edu/index.html" })
+        @Html.ValidationMessageFor(x => x.Item.Link)
+    </div>
+    <fieldset>
+        <legend>Optional Donation Link</legend>
+        <div class="form-group">
+            <label>Donation Legend:</label>
+            @Html.TextBoxFor(x => x.Item.DonationLinkLegend, new { @class="form-control" })
+            @Html.ValidationMessageFor(x => x.Item.DonationLinkLegend)
+        </div>
+        <div class="form-group">
+            <label>Donation Information:</label>
+            @Html.TextAreaFor(x => x.Item.DonationLinkInformation, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.Item.DonationLinkInformation)
+        </div>
+        <div class="form-group">
+            <label>Donation Link:</label>
+            @Html.TextBoxFor(x => x.Item.DonationLinkLink, new { @class = "form-control", @data_toggle ="tooltip", @title = "If this is blank, it will not show up to the user. Validation Has been removed for this field. You need to test it before making this available to the public." })
+            @Html.ValidationMessageFor(x => x.Item.DonationLinkLink)
+        </div>
+        <div class="form-group">
+            <label>Donation Link Text:</label>
+            @{
+                var defaultDonationLinkText = Model.Item != null
+                    ? Model.Item.DonationLinkText
+                    : "Click here";
+            }
+            @Html.TextBoxFor(x => x.Item.DonationLinkText, new { @class = "form-control", @Value = defaultDonationLinkText, @data_toggle ="tooltip", @title = "This is the text that will appear in the clickable link." })
+            @Html.ValidationMessageFor(x => x.Item.DonationLinkText)
+        </div>
+    </fieldset>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(x => x.Item.Available, new { @data_toggle = "tooltip", @data_placement = "right", @title = "This allows the general public to register if the last day to register has not passed." })
+            Available to public
+        </label>
+        @Html.ValidationMessageFor(x => x.Item.Available)
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(x => x.Item.Private, new { @data_toggle = "tooltip", @data_placement = "right", @title = "If this is checked, an available event will not be listed on the home screen." })
+            Private Conference
+        </label>
+        @Html.ValidationMessageFor(x => x.Item.Private)
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(x => x.Item.NotifyEditors, new { @data_toggle = "tooltip", @data_placement = "right", @title = "If this is checked, all editors for the event will be notified everytime someone registers for the event." })
+            Notify Editors on purchase
+        </label>
+    </div>
+    <div class="form-group">
+        <label>Restricted Password:</label>
+        @Html.TextBoxFor(x => x.Item.RestrictedKey, new { @class="form-control" })
+        @Html.ValidationMessageFor(x => x.Item.RestrictedKey)
+    </div>
+    <div class="form-group">
+        Direct Link to Register:
+        @Url.ItemDetailsPath(Model.Item?.Id ?? 0)
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Extended Properties</legend>
+    @Html.ValidationMessage("Extended Properties")
+    <div id="ExtendedProperties">
+        @if (Model.Item?.ItemType?.ExtendedProperties != null)
+        {
+            var properties = Model.Item.ItemType.ExtendedProperties.ToList();
+            for (var i = 0; i < properties.Count; i++)
+            {
+                var property = properties[i];
+                var answer = Model.Item.ExtendedPropertyAnswers.FirstOrDefault(a => a.ExtendedProperty == property);
+                var value = answer?.Answer ?? string.Empty;
+                var isDate = property.QuestionType.Name == "Date";
+
+                <div class="form-group">
+                    <label>@property.Name</label>
+                    <input type="text" id="ExtendedProperties[@i]_value"
+                           name="ExtendedProperties[@i].value"
+                           value='@value'
+                           class='required form-control'
+                           data-provide="@(isDate ? "datepicker" : string.Empty)"
+                           data-date-format="mm/dd/yyyy"
+                           placeholder='@(isDate ? "mm/dd/yyyy" : string.Empty)' />
+                    <input type="hidden"
+                           name="ExtendedProperties[@i].propertyId"
+                           value='@property.Id' />
+                </div>
+            }
+        }
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Upload Picture</legend>
+    <!-- NEEDS BALLOON-->
+
+    <img src='@Url.Action("GetImage", "Item", new {id = Model.Item?.Id ?? -1})' alt="" />
+
+    <input type="file" id="file" name="file" title='' />
+    <p>
+        The maximum picture size is 4 meg. It must have an aspec ratio of 16:9 (1200x675 preferred). <br />
+        A free online resize tool can be found at: http://www.picresize.com/  <br />
+        This one is a little better for cropping if you need to change the aspect ratio: http://resizeimage.net/
+    </p>
+    @Html.ValidationMessage("Image")
+</fieldset>
+
+<fieldset>
+    <legend>Tags</legend>
+
+    <!-- NEEDS BALLOON-->
+    <div class="form-group">
+        <input type="text" id="tagInput" title='You must click on the plus button to add the tag you have entered here' data-toggle="tooltip" data-placement="top" />
+        <img id="tagAddButton" src="@Url.Content("~/Images/plus.png")" style="height:24px; width: 24px" />
+    </div>
+    <div id="tagContainer">
+        @if (Model.Item != null)
+        {
+            foreach (var tag in Model.Item.Tags)
+            {
+                <input type="text" id="tags" name="tags" title='Click on the tag to remove it.' style="cursor:pointer" value='@tag.Name' data-toggle="tooltip" data-placement="bottom" />
+            }
+        }
+    </div>
+</fieldset>
+<input type="submit" value="Save" class="save_btn" />

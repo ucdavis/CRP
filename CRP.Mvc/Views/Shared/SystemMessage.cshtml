@@ -1,0 +1,20 @@
+﻿@model dynamic
+@using CRP.Controllers.Helpers
+
+@{
+    var messages = ViewData["ServiceMessages"] as ServiceMessage[];
+    var showIt = messages.Any();
+}       
+
+@if (showIt)
+{
+    <div id="system_wide_status">
+        <div id="system_wide_status_text">
+            @foreach (var message in messages.OrderByDescending(a => a.Critical).ThenBy(a => a.Global))
+            {
+                var isCritical = message.Critical ? "critical" : "notCritical";
+                <div class="@isCritical">@message.Message</div>
+            }
+        </div>
+    </div>
+}

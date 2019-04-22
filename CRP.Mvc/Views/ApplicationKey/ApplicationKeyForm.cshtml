@@ -1,0 +1,27 @@
+﻿@using Microsoft.Web.Mvc
+@model CRP.Controllers.ApplicationKeyViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Fields</legend>
+
+        <p>
+            Application:
+            @Html.TextBoxFor(a => a.ApplicationKey.Application)
+            @Html.ValidationMessageFor(a => a.ApplicationKey.Application)
+        </p>
+
+        <p>
+            Key:
+            @Html.TextBoxFor(a => a.ApplicationKey.Key)
+            @Html.ValidationMessageFor(a => a.ApplicationKey.Key)
+        </p>
+
+        <p>
+            @Html.SubmitButton("Save", "Save")
+        </p>
+
+    </fieldset>
+}

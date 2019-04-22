@@ -1,0 +1,12 @@
+﻿@model CRP.Core.Domain.HelpTopic
+
+@{
+    ViewBag.Title = "Create FAQ";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.Partial("HelpForm")
+}

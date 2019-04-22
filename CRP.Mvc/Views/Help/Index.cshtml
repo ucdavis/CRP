@@ -1,0 +1,59 @@
+﻿@model CRP.Controllers.ViewModels.HelpTopicViewModel
+
+@{
+    ViewBag.Title = "Help Topics";
+}
+
+
+    <h2>@ViewBag.Title</h2>
+    @if (Model.IsUserAuthorized) {
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+    }
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            @if (Model.IsUserAdmin)
+            {
+                <th>Active</th>
+                <th>Public</th>
+                <th>Read Count</th>
+            }
+            <th>Frequently Asked Questions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model.HelpTopics)
+        {
+            <tr>
+                <td>
+                    @if (t.IsVideo)
+                    {
+                        @Html.ActionLink("Watch", "WatchVideo", new {id = t.Id})
+                    }
+                    else
+                    {
+                        @Html.ActionLink("View", "Details", new {id = t.Id})
+                    }
+
+                    @if (Model.IsUserAdmin)
+                    {
+                        <text> | </text>
+                        @Html.ActionLink("Edit", "Edit", new {id = t.Id})
+                    }
+                </td>
+                @if (Model.IsUserAdmin)
+                {
+
+                    <td>@t.IsActive</td>
+                    <td>@t.AvailableToPublic</td>
+                    <td>@t.NumberOfReads</td>
+                }
+                <td>@t.Question</td>
+            </tr>
+        }
+    </tbody>
+</table>

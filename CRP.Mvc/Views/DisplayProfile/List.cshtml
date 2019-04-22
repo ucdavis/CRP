@@ -1,0 +1,68 @@
+﻿@model IQueryable<CRP.Core.Domain.DisplayProfile>
+@using CRP.Core.Resources
+@using CRP.Controllers
+
+@{
+    ViewBag.Title = "Display Profiles";
+}
+
+
+<h2>ListDisplayProfiles</h2>
+
+<p>
+    @Html.ActionLink("Create", "Create")
+</p>
+    
+<p>
+    Department display profiles:
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Edit</th>
+        <th>Name</th>
+        <th>Unit</th>
+        <th>College</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model.Where(p => !p.SchoolMaster))
+    {
+        <tr>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "DisplayProfile", new { id = p.Id })
+            </td>
+            <td>@p.Name</td>
+            <td>@p.Unit.FullName</td>
+            <td>@p.Unit.School.LongDescription</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>
+    College Display Profiles
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Edit</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var c in Model.Where(c => c.SchoolMaster))
+    {
+        <tr>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "DisplayProfile", new { id = c.Id })
+            </td>
+            <td>@c.Name</td>
+            <td>@c.School.LongDescription</td>
+        </tr>
+    }
+    </tbody>
+</table>

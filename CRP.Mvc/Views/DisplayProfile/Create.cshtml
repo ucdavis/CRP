@@ -1,0 +1,69 @@
+﻿@model CRP.Controllers.ViewModels.DisplayProfileViewModel
+@using CRP.Core.Resources
+@using CRP.Core.Domain
+@using MvcContrib.FluentHtml
+
+@{
+    ViewBag.Title = "Create Display Profile";
+}
+
+@section AdditionalStyles
+{
+    <style type="text/css">
+        textarea {
+            width: 600px;
+            height: 10em;
+        }
+    </style>
+}
+
+
+<h2>@ViewBag.Title</h2>
+
+@Html.ValidationSummary(true, "Create was unsuccessful. Please correct the errors and try again.")
+
+@using (Html.BeginForm("Create", "DisplayProfile", FormMethod.Post, new {@enctype="multipart/form-data"})) {
+
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Fields</legend>
+        <p>
+            <label for="Name">Name:</label>
+            @Html.TextBox("Name")
+            @Html.ValidationMessageFor(x => x.DisplayProfile.Name)
+        </p>
+        <p>
+            @(this.Select("Unit").Options(Model.Units, x => x.Id, x => x.FullName).FirstOption("--Select a Department--")
+                    .Selected(Model.DisplayProfile != null && Model.DisplayProfile.Unit != null ? Model.DisplayProfile.Unit.Id : 0)
+                    .Label("Department: "))  
+                @Html.ValidationMessageFor(x => x.DisplayProfile.DepartmentOrSchool)
+                    @Html.ValidationMessageFor(x => x.DisplayProfile.DepartmentAndSchool)
+        </p>
+        <p>
+            @(this.Select("School").Options(Model.Schools, x => x.Id, x=>x.LongDescription)
+                .FirstOption("--Select a School--")
+                .Selected(Model.DisplayProfile != null && Model.DisplayProfile.School != null ? Model.DisplayProfile.School.Id.ToString() : "0")
+                .Label("School:")
+)
+                    @Html.ValidationMessageFor(x => x.DisplayProfile.DepartmentOrSchool)
+                    @Html.ValidationMessageFor(x => x.DisplayProfile.DepartmentAndSchool)
+        </p>
+        <p>
+            <label for="file">Logo:</label>
+            <input type="file" name="file" id="file" />
+        </p>
+        <p>
+            <label for="CustomCss">Custom Css:</label>
+            @Html.TextArea("CustomCss", Model.DisplayProfile != null ? Model.DisplayProfile.CustomCss : string.Empty)
+        </p>
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+
+ } 
+
+<div>
+    @Html.ActionLink("Back to List", "List")
+</div>

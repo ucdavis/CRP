@@ -1,0 +1,57 @@
+﻿@model CRP.Core.Domain.DisplayProfile
+@using CRP.Core.Resources
+@using CRP.Core.Domain
+
+@{
+    ViewBag.Title = "Edit Display Profile";
+}
+
+@section AdditionalStyles
+{
+    <style type="text/css">
+        textarea {
+            width: 600px;
+            height: 10em;
+        }
+    </style>
+}
+
+<h2>@ViewBag.Title</h2>
+    
+@Html.ValidationSummary(false, "Edit was unsuccessful. Please correct the errors and try again.")
+
+
+@using (Html.BeginForm("Edit", "DisplayProfile", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+   {
+
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Fields</legend>
+        <p>
+            <label for="Name">Name:</label>
+            @Html.TextBox("Name", Model.Name)
+            @Html.ValidationMessageFor(x => x.Name)
+        </p>
+        
+        <p>
+            <img src='@Url.Action("GetLogo", new {id = Model.Id})' />
+        
+            <label for="file">Logo:</label>
+            <input type="file" name="file" id="file" />
+        </p>
+        <p>
+            <label for="CustomCss">Custom Css:</label>
+            @Html.TextArea("CustomCss", Model.CustomCss)
+        </p>
+        
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+
+ } 
+
+<div>
+    @Html.ActionLink("Back to List", "List")
+</div>
