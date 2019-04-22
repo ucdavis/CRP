@@ -6,9 +6,3 @@ FROM  dbo.Unit INNER JOIN
                dbo.UserUnit ON dbo.Unit.UnitID = dbo.UserUnit.UnitID INNER JOIN
                dbo.Users ON dbo.UserUnit.UserID = dbo.Users.UserID
 GO
-
-
-
-GO
-
-

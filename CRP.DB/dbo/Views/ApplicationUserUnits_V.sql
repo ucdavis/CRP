@@ -7,13 +7,3 @@ FROM            dbo.Unit INNER JOIN
                          dbo.Users ON dbo.UnitAssociations.UserID = dbo.Users.UserID INNER JOIN
                          dbo.Applications ON dbo.UnitAssociations.ApplicationID = dbo.Applications.ApplicationID
 GO
-
-
-
-GO
-
-
-
-GO
-
-
