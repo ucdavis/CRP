@@ -2,8 +2,6 @@
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
-//using Elmah;
-using UCDArch.Web.Controller;
 using UCDArch.Web.Attributes;
 using MvcContrib;
 
@@ -12,14 +10,6 @@ namespace CRP.Controllers
     [HandleTransactionsManually]
     public class HomeController : ApplicationController
     {
-        public ActionResult IndexOld()
-        {
-            //return View();
-
-            var viewModel = BrowseItemsViewModel.Create(Repository);
-            return View(viewModel);
-        }
-
         public ActionResult Index()
         {
             //return View();
