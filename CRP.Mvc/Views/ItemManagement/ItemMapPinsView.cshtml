@@ -44,8 +44,8 @@
                 {
                     <tr>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", "MapPin", new { itemId = Model.Id, mapPinId = p.Id })
-                            @Html.ActionLink("Remove", "RemoveMapPin", "MapPin", new { itemId = Model.Id, mapPinId = p.Id })
+                            @Html.ActionLink("Edit", "Edit", "MapPin", new { itemId = Model.Id, mapPinId = p.Id }, null)
+                            @Html.ActionLink("Remove", "RemoveMapPin", "MapPin", new { itemId = Model.Id, mapPinId = p.Id }, null)
                         </td>
                         <td>@p.Title</td>
                         <td>@p.Description</td>
