@@ -77,7 +77,7 @@
                     }
                 }
                 <div class="registerbtn">
-                    <a class="btn btn-register" href="@Url.Action("Checkout", "Transaction", new {id = Model.Item.Id})">Register</a>
+                    <a class="btn btn-register" href="@Url.Action("Checkout", "Payments", new {id = Model.Item.Id})">Register</a>
                     <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
                 </div>
             }
