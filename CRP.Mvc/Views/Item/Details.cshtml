@@ -1,4 +1,4 @@
-﻿@using System.Globalization
+@using System.Globalization
 @using CRP.Controllers.Helpers
 @using CRP.Core.Helpers
 @using Microsoft.Azure
@@ -6,7 +6,7 @@
 
 @{
     ViewBag.Title = "UC Davis Registration";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+
     ViewBag.OgImage = Url.Action("GetImage", "Item", new { id = Model.Item.Id });
     ViewBag.OgDescription = Model.Item.Summary;
     ViewBag.OgTitle = Model.Item.Name;
