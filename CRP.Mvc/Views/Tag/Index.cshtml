@@ -1,0 +1,9 @@
+﻿@model CRP.Controllers.ViewModels.BrowseItemsViewModel
+
+@{
+    ViewBag.Title = "Tags";
+}
+
+@Html.ActionLink("View All", "Index", "Home")
+
+@Html.Partial("_ItemBrowse", Model.Items.ToList()) 

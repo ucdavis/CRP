@@ -1,0 +1,56 @@
+﻿@model CRP.Controllers.ViewModels.SystemReportViewModel
+
+@{
+    ViewBag.Title = "View System Report";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    <select id="reportId" name="reportId">
+        <option value="">--Select a Report--</option>
+        @for (var i = 0; i < Model.Reports.Length; i++)
+        {
+            <option value="@i" @(Model.SelectedReport.HasValue && Model.SelectedReport == i ? "selected" : string.Empty)>@Model.Reports.GetValue(i)</option>
+        }
+    </select>
+</p>
+
+<!-- Hide this report stuff because no report is selected -->
+@if (Model.SelectedReport.HasValue)
+{
+    <p>
+        <img src='@Url.Action("GenerateChart", "Report", new { reportId = Model.SelectedReport })' />
+    </p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var x in Model.SystemReportData)
+        {
+            <tr>
+                <td>@x.Name</td>
+                <td>@x.Value</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@section AdditionalScripts {
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("select#reportId").change(function(event) {
+                // redirect to this page with the extra parameter
+                window.location = '@Url.Action("ViewSystemReport")' + '?reportId=' + $(this).val();
+            });
+        });
+    </script>
+
+}

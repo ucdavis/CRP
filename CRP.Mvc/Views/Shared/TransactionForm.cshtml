@@ -1,0 +1,99 @@
+﻿@model ItemTransactionViewModel
+@using CRP.Controllers.ViewModels
+
+<div class="two_col_float">
+    <div id="TransactionContainer">
+        @foreach(var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order)) {
+            <fieldset id='@qs.Id'>
+                @{
+                    var questionSetName = qs.QuestionSet.Name;
+                    bool showDonationLink;
+                    if (questionSetName == "Contact Information")
+                    {
+                        questionSetName = questionSetName + " / Billing Information";
+                        showDonationLink = true;
+                    }
+                    else
+                    {
+                        showDonationLink = false;
+                    }
+                }
+                <legend>@questionSetName</legend>
+                
+                <ul>
+                @foreach (var q in qs.QuestionSet.Questions)
+                {
+                    var answer = Model.Answers.FirstOrDefault(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id);
+                    var disable = false;
+
+                    if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                    {
+                        disable = true;
+                        answer = new ItemTransactionAnswer() {Answer = Model.ReferenceId};
+                    }
+
+                    @Html.Partial("_QuestionForm", new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty, disable))
+
+                }
+                </ul>
+                
+            </fieldset>
+            if (showDonationLink && !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink)) {
+                <fieldset id="DonationLink">
+                    <legend>@(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information")</legend>
+                    <ul>
+                        <li>
+                            @Model.Item.DonationLinkInformation
+                        </li>
+                    <li>
+                        <a href="@Model.Item.DonationLinkLink" target="_blank">@(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here")</a>
+                    </li>
+                    </ul>
+                </fieldset>           
+               
+            } 
+        } 
+    </div>
+</div>
+
+@if (Model.Item.QuestionSets.Any(a => a.QuantityLevel))
+{
+    <div class="two_col_float two_col_float_right">
+        @for (var i = 0; i < Model.Quantity; i++)
+        {
+            <div class="QuantityContainer">
+                <fieldset>
+                    <legend>@Model.Item.QuantityName <span class="quantityIndex">@i + 1</span> </legend>
+                    @{ var questionSetCount = Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count(); }
+
+                    @foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
+                    {
+                        if (questionSetCount > 1)
+                        {
+                            <legend>@qs.QuestionSet.Name <span class="quantityIndex">@i + 1</span> </legend>
+                        }
+                        <ul>
+                            @foreach (var q in qs.QuestionSet.Questions)
+                            {
+                                var i1 = i;
+                                var answer = Model.Answers.FirstOrDefault(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i1);
+                                var disable = false;
+
+                                if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                                {
+                                    disable = true;
+                                    answer = new ItemTransactionAnswer() {Answer = Model.ReferenceId};
+                                }
+
+
+                                @Html.Partial("_QuestionForm", new ItemQuestionViewModel(q, Model.OpenIDUser, answer != null ? answer.Answer : string.Empty, disable))
+                            }
+                        </ul>
+
+                    }
+                </fieldset>
+            </div>
+        }
+    </div>
+}
+<div style="clear:both;">&nbsp</div>
