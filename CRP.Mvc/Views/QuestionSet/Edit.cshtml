@@ -1,10 +1,9 @@
-﻿@using CRP.Controllers
+@using CRP.Controllers
 @using Microsoft.Web.Mvc
 @model CRP.Controllers.ViewModels.QuestionSetViewModel
 
 @{
     ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -108,23 +107,20 @@
 
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
         $(function() {
-            $("#table").dataTable({
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+            $("#table-questions").dataTable({
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }
                 ]
             });
+
             // assign the submit event to each of the delete links
-            $("a.DeleteQuestion").click(function (event) { $(this).parents("form[name='DeleteQuestionForm']").submit(); });
+            $("a.DeleteQuestion").click(function(event) {
+                 $(this).parents("form[name='DeleteQuestionForm']").submit();
+        });
         });
 
     </script>
 }
-
-@section AdditionalStyles
-{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
-}
+

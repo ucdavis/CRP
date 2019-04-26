@@ -1,11 +1,7 @@
-﻿@using CRP.Controllers.Helpers
-@using CRP.Core.Resources
-@using Microsoft.Azure
-@model CRP.Controllers.ViewModels.ReportViewModel
+﻿@model CRP.Controllers.ViewModels.ReportViewModel
 
 @{
     ViewBag.Title = "ViewReport";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 <div class="boundary">
@@ -39,16 +35,8 @@
 
 </div>
 
-@section AdditionalStyles
-{    
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
-
-}
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
-
     <script type="text/javascript">
         $(function() {
             $("#table").dataTable({

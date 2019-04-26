@@ -1,0 +1,170 @@
+﻿@using CRP.Core.Domain
+@using Microsoft.Web.Mvc
+
+@{
+    ViewBag.OgImage = string.IsNullOrWhiteSpace(ViewBag.OgImage) ? Url.Content("~/Images/Media/thumbnail.jpg") : ViewBag.OgImage;
+    ViewBag.OgDescription = string.IsNullOrWhiteSpace(ViewBag.OgDescription) ? "Online Registration for UC Davis events developed by the College of Agriculture and Environmental Sciences at UC Davis" : ViewBag.OgDescription;
+    ViewBag.OgTitle = string.IsNullOrWhiteSpace(ViewBag.OgTitle) ? "Online Registration" : ViewBag.OgTitle;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- le Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="subject" content="UC Davis Starter template for CAES CRU and anyone else">
+    <meta name="classification" content="UC Davis Starter template for CAES CRU and anyone else">
+    <meta name="theme-color" content="#">
+    <link rel="image_src" href="@Url.Content("~/Images/Media/thumbnail.jpg")" />
+    <meta property="og:image" content="@ViewBag.OgImage">
+    <meta property="og:description" content="@ViewBag.OgDescription" />
+    <meta property="og:title" content="@ViewBag.OgTitle" />
+    <link rel="shortcut icon" href="@Url.Content("~/Images/Media/favicon.ico")">
+    <meta name="twitter:card" content="photo">
+    <meta name="twitter:site" content="&#64;ucdavis">
+    <meta name="twitter:title" content="@ViewBag.OgTitle">
+    <meta name="twitter:description" content="@ViewBag.OgDescription">
+    <meta name="twitter:image:src" content="@ViewBag.OgImage">
+
+    <!-- Typekit -->
+    <script src="https://use.typekit.net/vqy0brq.js"></script>
+    <script>
+        try {
+            Typekit.load();
+        } catch (e) { }
+    </script>
+
+    <title>UC Davis Registration</title>
+    <meta name="description" content="Online Registration for UC Davis events developed by the College of Agriculture and Environmental Sciences at UC Davis">
+
+    <!-- le Apple -->
+    <link rel="apple-touch-icon" href="@Url.Content("~/Images/Media/thumbnail.jpg")">
+    <link rel="apple-touch-icon" sizes="76x76" href="@Url.Content("~/Images/Media/76-icon.jpg")">
+    <link rel="apple-touch-icon" sizes="120x120" href="@Url.Content("~/Images/Media/120-icon.jpg")">
+    <link rel="apple-touch-icon" sizes="152x152" href="@Url.Content("~/Images/Media/152-icon.jpg")">
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" integrity="sha256-JDBcnYeV19J14isGd3EtnsCQK05d8PczJ5+fvEvBJvI=" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css" />
+
+    @Styles.Render("~/Content/public-css")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("AdditionalStyles", required: false)
+</head>
+<body>
+
+    <header>
+        <div class="bleed">
+            <div class="topbanner">
+                <div class="header_item">
+                    <a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt="UC Davis"></a>
+                </div>
+                <div class="header_item">
+                    @using (Html.BeginForm("Index", "Search"))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div id="search_box" class="search_box">
+                            @Html.TextBox("searchTerm", string.Empty, new { @maxlength = "20" })
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="header_contents">
+            <div class="header_item">
+                <!-- <h1><a href="/">Registration</a></h1> -->
+                <a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Images/Media/registrationlogo.svg")" alt="UC Davis CAES logo"></a>
+            </div>
+
+            <div class="login_contents">
+                <!-- May not want or need this -->
+                @RenderSection("NavButtons", required: false)
+            </div>
+
+            <div class="header_item">
+                <a href="http://www.caes.ucdavis.edu/"><img src="@Url.Content("~/Images/Media/caeslogo.svg")" alt="UC Davis CAES logo"></a>
+            </div>
+
+        </div>
+
+    </header>
+    <div class="body-content">
+        @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
+        {
+            <div class="boundary">
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    @ViewBag.ErrorMessage
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(TempData["ErrorMessage"] as string))
+        {
+            <div class="boundary">
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    @TempData["ErrorMessage"]
+                </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(TempData["Message"] as string))
+        {
+            <div class="boundary">
+                <div class="alert alert-info">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    @TempData["Message"]
+                </div>
+            </div>
+        }
+
+        <div class="main">
+            @RenderBody()
+        </div>
+
+        <footer>
+            <div class="footer_contents">
+                <div class="foot_top">
+                    <!-- <ul class="footer-list no-bullet">
+                        <li><a href="/">UC Davis Commencement</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/colophon">Site Information</a></li>
+                    </ul> -->
+                </div>
+                <div class="foot_bottom">
+                    <ul class="footer-list no-bullet">
+                        <li>
+                            &copy; Copyright 2005-2019
+                            The Regents of the University of California, Davis campus. All rights reserved.
+                        </li>
+                    </ul>
+                    <ul class="footer-list no-bullet float-right">
+                        <li>@Html.ActionLink("Admin Home", "AdminHome", "Home")</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+    @*<script src="https://www.google.com/jsapi" type="text/javascript"></script>*@
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js" integrity="sha256-tW5LzEC7QjhG0CiAvxlseMTs2qJS7u3DRPauDjFJ3zo=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+
+    @Scripts.Render("~/bundles/watermark")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input#searchTerm").watermark('Search     ', { className: 'watermark' });
+        });
+    </script>
+
+    @RenderSection("AdditionalScripts", required: false)
+</body>
+</html>

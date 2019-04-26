@@ -53,16 +53,9 @@
     </div>
 </div>
 
-@section AdditionalStyles
-{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
-}
-
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
+    <script type="text/javascript">
         $(function() {
             $("#table").dataTable({
                 "aaSorting": [[1, "desc"]], //Default sort on second column
@@ -72,5 +65,5 @@
             });
 
         });
-</script>
+    </script>
 }

@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "List2";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -88,7 +87,7 @@
                         @Html.DisplayFor(modelItem => item.Available)
                     </td>
                     <td>
-                        @Html.ActionLink("Register", "Checkout", "Transaction", new {id = item.Id}, null)
+                        @Html.ActionLink("Register", "Checkout", "Payments", new {id = item.Id}, null)
                     </td>
                 </tr>
             }
@@ -99,8 +98,6 @@
 
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
         $(function() {
             $(".table").dataTable({
@@ -113,9 +110,4 @@
             });
         });
     </script>
-}
-
-@section AdditionalStyles
-{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
 }
