@@ -1,47 +1,62 @@
-﻿$(document).ready(function () {
+﻿$(function () {
     $("input#Item_Expiration").datepicker();
 
 
     $("select#Item_ItemType").change(function (event) {
 
-        var url = getExtendedPropertyUrl;
-        $.getJSON(url + '/' + $(this).val(), {},
-                    function (result) {
+        var url = window.getExtendedPropertyUrl;
+        $.getJSON(url + '/' + $(this).val(), {}, function (result) {
 
-                        $("div#ExtendedProperties").children().remove();
+        // remove old questions;
+            $("div#ExtendedProperties").children().remove();
 
-                        var length = result.length;
+            if (!result.length) {
+                return;
+            }
 
+            // for each question, add the input, etc
+            $.each(result, function (index, item) {
 
-                        if (length > 0) {
-                            $.each(result, function (index, item) {
+                var name = item.Name.replace(/ /g, "");
 
-                                var name = item.Name.replace(/ /g, "");
+                // create container
+                var container = $("<div class='form-group'>");
 
-                                // create the label
-                                var label = $("<label>").attr("for", "item." + name).html(item.Name);
-                                // must have a title, or bt breaks all of this.
-                                var textBox = $("<input>").attr("id", "ExtendedProperties[" + index + "]_value")
-                                                          .attr("name", "ExtendedProperties[" + index + "].value")
-                                                          .attr("title", "")
-                                                          .attr("class", "required")
-                                                          .attr("type", "text");                                                          
-                                // create hidden field to store the extended property id
-                                var hidden = $("<input>").attr("type", "hidden")
-                                                         .attr("id", "ExtendedProperties[" + index + "]_propertyId")
-                                                         .attr("name", "ExtendedProperties[" + index + "].propertyId")
-                                                         .val(item.Id);
-                                //debugger;
-                                if (item.QuestionType.Name == "Date") {
-                                    //textBox.datepicker().watermark("mm/dd/yyyy", { className: "watermark" });
-                                    textBox.datepicker().bt('mm/dd/yyyy format');
-                                }
+                // create the label
+                var label = $("<label>")
+                    .attr("for", "item." + name)
+                    .html(item.Name);
 
-                                var p = $("<p>").append(label).append(textBox).append(hidden);
-                                $("div#ExtendedProperties").append(p);
-                            });
-                        }
-                    });
+                // must have a title, or bt breaks all of this.
+                var textBox = $("<input>")
+                    .attr("type", "text")
+                    .attr("name", "ExtendedProperties[" + index + "].value")
+                    .attr("class", "required form-control");
+                
+                // create hidden field to store the extended property id
+                var hidden = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "ExtendedProperties[" + index + "].propertyId")
+                    .val(item.Id);
+
+                // add date values
+                if (item.QuestionType.Name === "Date") {
+                    textBox
+                        .attr("title", "mm/dd/yyyy")
+                        .attr("placeholder", "mm/dd/yyyy")
+                        .attr("data-date-format", "mm/dd/yyyy")
+                        .datepicker();
+                }
+
+                // build and append tree
+                container
+                    .append(label)
+                    .append(textBox)
+                    .append(hidden);
+
+                $("div#ExtendedProperties").append(container);
+            });
+        });
     });
 
 
@@ -66,106 +81,9 @@
         $(this).parent().submit();
     });
 
-    //    $("textarea#BodyText").tinymce({
-    //        script_url: scriptUrl,
-    //        // General options
-    //        theme: "advanced",
-    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
-
-    //        // Theme options
-    //        theme_advanced_buttons1: "save,print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo,|,bullist,numlist",
-    //        theme_advanced_buttons3: "",
-    //        theme_advanced_toolbar_location: "top",
-    //        theme_advanced_toolbar_align: "left",
-    //        theme_advanced_statusbar_location: "bottom",
-    //        theme_advanced_resizing: false,
-
-    //        // dimensions stuff
-    //        height: "400",
-
-    //        // Example content CSS (should be your site CSS)
-    //        //content_css: "css/Main.css",
-
-    //        // Drop lists for link/image/media/template dialogs
-    //        template_external_list_url: "js/template_list.js",
-    //        external_link_list_url: "js/link_list.js",
-    //        external_image_list_url: "js/image_list.js",
-    //        media_external_list_url: "js/media_list.js",
-
-    //        save_onsavecallback: function() {
-    //            var textbox = $(this);
-    //            var token = $($("input:hidden[name='__RequestVerificationToken']")[0]).val();
-
-    //            $.post(saveTemplateUrl, { id: id, text: textbox.val(), __RequestVerificationToken: token }
-    //                , function(result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
-    //        }
-    //    });    
-
-
-    //    $("textarea#Item_Description").tinymce({
-    //        script_url: scriptUrl,
-    //        // General options
-    //        theme: "advanced",
-    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
-
-    //        // Theme options
-    //        theme_advanced_buttons1: "print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
-    //        theme_advanced_buttons3: "",
-    //        theme_advanced_toolbar_location: "top",
-    //        theme_advanced_toolbar_align: "left",
-    //        theme_advanced_statusbar_location: "bottom",
-    //        theme_advanced_resizing: false,
-
-    //        // dimensions stuff
-    //        height: "400",
-
-    //        // Example content CSS (should be your site CSS)
-    //        //content_css: "css/Main.css",
-
-    //        // Drop lists for link/image/media/template dialogs
-    //        template_external_list_url: "js/template_list.js",
-    //        external_link_list_url: "js/link_list.js",
-    //        external_image_list_url: "js/image_list.js",
-    //        media_external_list_url: "js/media_list.js"
-    //    });
-
-    //    $("textarea#Item_CheckPaymentInstructions").tinymce({
-    //        script_url: scriptUrl,
-    //        // General options
-    //        theme: "advanced",
-    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
-
-    //        // Theme options
-    //        theme_advanced_buttons1: "print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
-    //        theme_advanced_buttons3: "",
-    //        theme_advanced_toolbar_location: "top",
-    //        theme_advanced_toolbar_align: "left",
-    //        theme_advanced_statusbar_location: "bottom",
-    //        theme_advanced_resizing: false,
-
-    //        // dimensions stuff
-    //        height: "225",
-
-    //        // Example content CSS (should be your site CSS)
-    //        //content_css: "css/Main.css",
-
-    //        // Drop lists for link/image/media/template dialogs
-    //        template_external_list_url: "js/template_list.js",
-    //        external_link_list_url: "js/link_list.js",
-    //        external_image_list_url: "js/image_list.js",
-    //        media_external_list_url: "js/media_list.js"
-    //    });
-
     $("input#Item_QuantityName").change(function (event) {
         var quantityName = $(this).val();
         $("#CostPerItemLabel").text("Cost Per " + quantityName + ":");
         $("#QuantityLabel").text("Number of " + quantityName + "(s) Available:");
-    });
-
-    $("#Item_TouchnetFID").change(function (event) {
-        $("#TouchnetFidExtraLable").text(" " + $(this).val());
     });
 });
