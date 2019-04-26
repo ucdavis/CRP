@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -496,7 +496,6 @@
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Controllers\Helpers\ImageHelper.cs" />
     <Compile Include="Controllers\Helpers\InvoiceNumberGenerator.cs" />
-    <Compile Include="Controllers\Helpers\ReturnUrlGenerator.cs" />
     <Compile Include="Controllers\Helpers\RoleNames.cs" />
     <Compile Include="Controllers\Helpers\ServiceMessages.cs" />
     <Compile Include="Controllers\Helpers\StringExtension.cs" />
@@ -506,17 +505,16 @@
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\ItemManagementController.cs" />
     <Compile Include="Controllers\MapPinController.cs" />
-    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
-    <Compile Include="Controllers\SDKController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\Services\IAccessControlService.cs" />
     <Compile Include="Controllers\Services\ICouponService.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\ViewModels\BigMapViewModel.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
@@ -528,6 +526,7 @@
     <Compile Include="Controllers\ViewModels\HelpTopicViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemDetailViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemListView.cs" />
+    <Compile Include="Controllers\ViewModels\ItemManagement\EditItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LinkPaymentViewModel.cs" />
@@ -536,6 +535,7 @@
     <Compile Include="Controllers\ViewModels\PaymentConfirmationViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\ReceiptResponseModel.cs" />
     <Compile Include="Controllers\ViewModels\ReportViewModel.cs" />
     <Compile Include="Controllers\ViewModels\SearchViewModel.cs" />
     <Compile Include="Controllers\ViewModels\SystemReportViewModel.cs" />
@@ -544,7 +544,10 @@
     </Compile>
     <Compile Include="Models\SearchTermProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\CyberSourceReasonCodes.cs" />
+    <Compile Include="Resources\CyberSourceReplyCodes.cs" />
     <Compile Include="Services\CopyItemService.cs" />
+    <Compile Include="Services\DataSigningService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />
@@ -1280,68 +1283,33 @@
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Static\Preview.html" />
-    <Content Include="Views\Account\CasLogon.aspx" />
-    <Content Include="Views\Account\LogOn.aspx" />
-    <Content Include="Views\Account\ManageUsers.aspx" />
-    <Content Include="Views\Account\OpenIdAccount.aspx" />
-    <Content Include="Views\Account\OpenIdLogon.aspx" />
-    <Content Include="Views\ApplicationKey\ApplicationKeyForm.ascx" />
-    <Content Include="Views\ApplicationKey\Edit.aspx" />
-    <Content Include="Views\Checks\LinkToTransaction.aspx" />
-    <Content Include="Views\Coupon\Create.aspx" />
-    <Content Include="Views\DisplayProfile\Create.aspx" />
-    <Content Include="Views\DisplayProfile\Edit.aspx" />
-    <Content Include="Views\DisplayProfile\List.aspx" />
-    <Content Include="Views\Error\Index.aspx" />
-    <Content Include="Views\ExtendedProperty\Create.aspx" />
-    <Content Include="Views\Help\Create.aspx" />
-    <Content Include="Views\Help\CreateItem.aspx" />
-    <Content Include="Views\Help\Details.aspx" />
-    <Content Include="Views\Help\Edit.aspx" />
-    <Content Include="Views\Help\Index.aspx" />
-    <Content Include="Views\Help\LinkMap.aspx" />
-    <Content Include="Views\Help\WatchVideo.aspx" />
-    <Content Include="Views\Home\About.aspx" />
-    <Content Include="Views\Home\AdminHomeOld.aspx" />
-    <Content Include="Views\Home\IndexOld.aspx" />
+    <None Include="Views\Account\CasLogon.cshtml" />
+    <Content Include="Views\Account\CasLogon.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Account\ManageUsers.cshtml" />
+    <Content Include="Views\Account\OpenIdAccount.cshtml" />
+    <Content Include="Views\ApplicationKey\ApplicationKeyForm.cshtml" />
+    <Content Include="Views\ApplicationKey\Edit.cshtml" />
+    <Content Include="Views\Transaction\Link.cshtml" />
+    <Content Include="Views\Coupon\Create.cshtml" />
+    <Content Include="Views\DisplayProfile\Create.cshtml" />
+    <Content Include="Views\DisplayProfile\Edit.cshtml" />
+    <Content Include="Views\DisplayProfile\List.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\ExtendedProperty\Create.cshtml" />
+    <Content Include="Views\Help\Create.cshtml" />
+    <Content Include="Views\Help\CreateItem.cshtml" />
+    <Content Include="Views\Help\Details.cshtml" />
+    <Content Include="Views\Help\Edit.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Help\LinkMap.cshtml" />
+    <Content Include="Views\Help\WatchVideo.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
     <None Include="Views\ItemManagement\Create.cshtml" />
-    <Content Include="Views\ItemManagement\Edit.aspx" />
-    <Content Include="Views\ItemManagement\ItemMapPinsView.ascx" />
-    <Content Include="Views\Item\DetailsOld.aspx" />
-    <Content Include="Views\Item\MapOld.aspx" />
-    <Content Include="Views\Item\MapDirectionsOld.aspx" />
-    <Content Include="Views\MapPin\CreateOld.aspx" />
-    <Content Include="Views\MapPin\EditOld.aspx" />
-    <Content Include="Views\MapPin\MapPinView.ascx" />
-    <Content Include="Views\QuestionSet\CreateOld.aspx" />
-    <Content Include="Views\QuestionSet\DetailsOld.aspx" />
-    <Content Include="Views\QuestionSet\EditOld.aspx" />
-    <Content Include="Views\QuestionSet\LinkToItemOld.aspx" />
-    <Content Include="Views\QuestionSet\LinkToItemTypeOld.aspx" />
-    <Content Include="Views\QuestionSet\ListOld.aspx" />
-    <Content Include="Views\Question\Create.aspx" />
-    <Content Include="Views\Report\CreateOld.aspx" />
-    <Content Include="Views\Report\ViewReportOld.aspx" />
-    <Content Include="Views\Report\ViewSystemReport.aspx" />
-    <Content Include="Views\SDK\Index.aspx" />
-    <Content Include="Views\Search\IndexOld.aspx" />
-    <Content Include="Views\Shared\CheckView.ascx" />
-    <Content Include="Views\Shared\Error.aspx" />
-    <Content Include="Views\Shared\FIDForm.ascx" />
-    <Content Include="Views\Shared\HelpForm.ascx" />
-    <Content Include="Views\Shared\ItemBrowse.ascx" />
-    <Content Include="Views\Shared\ItemForm.ascx" />
-    <Content Include="Views\Shared\LogOnUserControl.ascx" />
-    <Content Include="Views\Shared\PageHeader.ascx" />
-    <Content Include="Views\Shared\QuestionForm.ascx" />
-    <Content Include="Views\Shared\SystemMessage.ascx" />
-    <Content Include="Views\Shared\TagView.ascx" />
-    <Content Include="Views\Shared\TemplateInstructions.ascx" />
-    <Content Include="Views\Shared\TransactionForm.ascx" />
-    <Content Include="Views\Tag\Index.aspx" />
-    <Content Include="Views\Transaction\DetailsRefund.aspx" />
+    <Content Include="Views\ItemManagement\Edit.cshtml" />
+    <Content Include="Views\ItemManagement\ItemMapPinsView.cshtml" />
+    <Content Include="Views\MapPin\MapPinView.cshtml" />
     <None Include="Views\Payments\Receipt.cshtml" />
-    <Content Include="Views\Transaction\Refund.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1353,19 +1321,32 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Site.Master" />
-    <Content Include="Views\Shared\_PublicLayout.cshtml" />
+    <Content Include="Views\_ViewImports.cshtml" />
+    <Content Include="Views\Shared\_Analytics.cshtml" />
+    <Content Include="Views\Question\Create.cshtml" />
+    <Content Include="Views\Report\ViewSystemReport.cshtml" />
+    <Content Include="Views\Shared\CheckView.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\HelpForm.cshtml" />
+    <Content Include="Views\Shared\ItemForm.cshtml" />
+    <Content Include="Views\Shared\LogOnUserControl.cshtml" />
+    <Content Include="Views\Shared\PageHeader.cshtml" />
+    <Content Include="Views\Shared\SystemMessage.cshtml" />
+    <Content Include="Views\Shared\TemplateInstructions.cshtml" />
+    <Content Include="Views\Shared\TransactionForm.cshtml" />
+    <None Include="Views\Shared\_LayoutOld.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\Shared\_ItemBrowseNew.cshtml" />
+    <Content Include="Views\Shared\_ItemBrowse.cshtml" />
     <Content Include="Views\Item\Details.cshtml" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Item\Map.cshtml" />
     <Content Include="Views\Item\MapDirections.cshtml" />
-    <Content Include="Views\Transaction\Checkout.cshtml" />
-    <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
+    <Content Include="Views\Payments\Checkout.cshtml" />
+    <Content Include="Views\Shared\_QuestionForm.cshtml" />
     <Content Include="Views\Test\TestCaptcha.cshtml" />
-    <Content Include="Views\Transaction\Confirmation.cshtml" />
+    <Content Include="Views\Payments\Confirmation.cshtml" />
     <Content Include="Views\ItemManagement\List.cshtml" />
     <Content Include="Views\Shared\_LogonPartial.cshtml" />
     <Content Include="Views\Home\AdminHome.cshtml" />
@@ -1388,10 +1369,10 @@
     <Content Include="Views\ApplicationManagement\Index.cshtml" />
     <Content Include="Views\ApplicationManagement\ListItemTypes.cshtml" />
     <Content Include="Views\Template\Edit.cshtml" />
-    <Content Include="Views\FID\Index.cshtml" />
-    <Content Include="Views\FID\Details.cshtml" />
-    <Content Include="Views\FID\Edit.cshtml" />
-    <Content Include="Views\FID\Create.cshtml" />
+    <Content Include="Views\FinancialAccount\Index.cshtml" />
+    <Content Include="Views\FinancialAccount\Details.cshtml" />
+    <Content Include="Views\FinancialAccount\Edit.cshtml" />
+    <Content Include="Views\FinancialAccount\Create.cshtml" />
     <Content Include="Views\ApplicationKey\Index.cshtml" />
     <Content Include="Views\ApplicationKey\Create.cshtml" />
     <Content Include="Views\ApplicationManagement\CreateItemType.cshtml" />
@@ -1401,9 +1382,13 @@
     <Content Include="Views\QuestionSet\Edit.cshtml" />
     <Content Include="Views\QuestionSet\LinkToItem.cshtml" />
     <Content Include="Views\QuestionSet\LinkToItemType.cshtml" />
+    <Content Include="Views\Tag\Index.cshtml" />
+    <Content Include="Views\Transaction\DetailsRefund.cshtml" />
+    <Content Include="Views\Transaction\Refund.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Checks\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
