@@ -75,7 +75,8 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Coupon");
-                return Redirect(Url.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
+                var redirectUrl = Url.Action("Edit", "ItemManagement", new {id = item.Id});
+                return Redirect(redirectUrl + "#Coupons");
             }
 
             var viewModel = CouponViewModel.Create(Repository, item, couponType);
@@ -155,7 +156,8 @@ namespace CRP.Controllers
             }
 
             // redirect to edit with the anchor to coupon
-            return Redirect(Url.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
+            var redirectUrl = Url.Action("Edit", "ItemManagement", new {id = coupon.Item.Id});
+            return Redirect(redirectUrl + "#Coupons");
         }
     }
 }

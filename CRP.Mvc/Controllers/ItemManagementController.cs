@@ -458,8 +458,8 @@ namespace CRP.Controllers
                 }
             }
 
-            //return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
-            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+            var redirectUrl = Url.Action("Edit", "ItemManagement", new { id });
+            return Redirect(redirectUrl + "#Editors");
         }
 
         /// <summary>
@@ -481,10 +481,12 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult AddEditor(int id, int? userId)
         {
+            var returnUrl = Url.Action("Edit", "ItemManagement", new { id }) + "#Editors";
+
             if (!userId.HasValue)
             {
                 Message = NotificationMessages.STR_SelectUserFirst;
-                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+                return Redirect(returnUrl);
             }
 
             var item = Repository.OfType<Item>().GetNullableById(id);
@@ -508,7 +510,7 @@ namespace CRP.Controllers
             if(item.Editors.Where(a => a.User.LoginID == user.LoginID).Any())
             {
                 Message = NotificationMessages.STR_EditorAlreadyExists;
-                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+                return Redirect(returnUrl);
 
             }
 
@@ -526,8 +528,7 @@ namespace CRP.Controllers
                 Message = "Unable to add editor.";
             }
 
-            //return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
-            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+            return Redirect(returnUrl);
         }
 
         /// <summary>
@@ -674,8 +675,9 @@ namespace CRP.Controllers
             {
                 Log.Error(string.Format("Error updating Item SoldCount {0}", ex.Message));
             }
-            return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Transactions, pageAndSort["sort"], pageAndSort["page"]));              
-            //return this.RedirectToAction(a => a.Details(transaction.Item.Id));
+
+            var redirectUrl = Url.Action("Details", "ItemManagement", new {id = transaction.Item.Id});
+            return Redirect(redirectUrl + "#Transactions");              
         }
         [PageTracker]
         public ActionResult Copy(int id)

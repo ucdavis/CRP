@@ -142,9 +142,9 @@ namespace CRP.Controllers
             {
                 Repository.OfType<ItemReport>().EnsurePersistent(report);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Report");
-                //return Redirect(ReturnUrlGenerator.DetailItemUrl(item.Id, StaticValues.Tab_Reports));
 
-                return Redirect(Url.DetailItemUrl(item.Id, StaticValues.Tab_Reports));
+                var redirectUrl = Url.Action("Edit", "ItemManagement", new { item.Id });
+                return Redirect(redirectUrl + "#Reports");
             }
 
             Message = "Errors with report found.";
