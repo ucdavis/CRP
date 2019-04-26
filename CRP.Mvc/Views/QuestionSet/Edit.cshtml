@@ -1,4 +1,4 @@
-@using CRP.Controllers
+﻿@using CRP.Controllers
 @using Microsoft.Web.Mvc
 @model CRP.Controllers.ViewModels.QuestionSetViewModel
 
@@ -60,7 +60,7 @@
         @Html.ActionLink("Create", "Create", "Question", new {questionSetId=Model.QuestionSet.Id}, new {@class="btn btn-primary"})
         
     </p>
-    <table id="table">
+    <table id="table-questions" class="table table-bordered">
         <thead>
         <tr>
             <td></td>
@@ -118,9 +118,8 @@
             // assign the submit event to each of the delete links
             $("a.DeleteQuestion").click(function(event) {
                  $(this).parents("form[name='DeleteQuestionForm']").submit();
-        });
+            });
         });
 
     </script>
 }
-
