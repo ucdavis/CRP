@@ -1,0 +1,184 @@
+﻿@model CRP.Controllers.ViewModels.LinkPaymentViewModel
+@using CRP.Core.Domain
+
+@{
+    ViewBag.Title = "Link To Transaction";
+}
+
+@section AdditionalStyles
+{
+    <style type="text/css">
+        .deactivated {
+            border: 2px solid #ff0000;
+        }
+    </style>
+}
+
+<div class="boundary">
+
+
+    @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
+
+    <p>
+        @Html.ActionLink("Back to Item", "Details", "ItemManagement", new { id = Model.Transaction.Item.Id }, null)
+    </p>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("TotalAmount", Model.Transaction.AmountTotal)
+        @Html.Hidden("DonationAmount", Model.Transaction.DonationTotal)
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div id="TransactionDetails">
+                    <dl>
+                        <dt>Transaction Number</dt>
+                        <dd>@Model.Transaction.TransactionNumber</dd>
+
+                        <dt>Transaction Date</dt>
+                        <dd>@Model.Transaction.TransactionDate</dd>
+
+                        <dt>Amount</dt>
+                        <dd>@Model.Transaction.AmountTotal.ToString("C")</dd>
+
+                        <dt>Donation Amount</dt>
+                        <dd>@Model.Transaction.DonationTotal.ToString("C")</dd>
+                    </dl>
+                </div>
+            </div>
+            <div id="check-forms" class="col-lg-8">
+                @for (var i = 0; i < Model.PaymentLogs.Count(); i++)
+                {
+                    <fieldset class="check @(Model.PaymentLogs.ElementAt(i).Accepted ? string.Empty:" deactivated")">
+                        <legend>Check <span class="checkIndex">@i + 1</span>
+                            <i class="fa fa-times-circle deactivate-check pull-right text-danger"></i>
+                        </legend>
+                        @Html.Partial("CheckView", Model.PaymentLogs.ToList()[i])
+                    </fieldset>
+                }
+
+                @if (Model.AddBlankCheck)
+                {
+                    <fieldset class="check">
+                        <legend>Check <span class="checkIndex">@(Model.PaymentLogs.Count() + 1)</span>
+                            <i class="fa fa-times-circle deactivate-check pull-right text-danger"></i>
+                        </legend>
+                        @Html.Partial("CheckView", new PaymentLog() { Accepted = true })
+                    </fieldset>
+                }
+                <!-- needs a help balloon -->
+                <span id="addCheck" class="btn btn-primary pull-right">Add Check <i class="fa fa-plus-circle fa-fw"></i></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                Transaction Total: $ <span id="transactionTotal">@($"{Model.Transaction.Total:0.00}")</span>
+                <br />
+                Payment Total: $ <span id="paymentTotal">@($"{Model.Transaction.TotalPaid:0.00}")</span>
+                <br />
+                Remaining Balance: $ <span id="remainingTotal">@($"{Model.Transaction.Total - Model.Transaction.TotalPaid:0.00}")</span>
+
+                <div id="message"></div>
+
+                <div id="saveContainer" class="pull-right">
+                    <input type="submit" value="save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+@section AdditionalScripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#addCheck").click(function (event) {
+                // duplicate first fieldset
+                var fieldset = $($("fieldset.check")[0]);
+                var cloned = fieldset.clone();
+                var addImg = $("#addCheck");
+
+                cloned.find("input").val("");
+                cloned.find("textarea").val("");
+                cloned.find("input.accepted-field").val(true);
+                cloned.removeClass("deactivated");
+
+                // add clone just before the add button
+                addImg.before(cloned);
+                RenameControls(); // rename the controls to match the indexes
+
+                var picker = cloned.find("input.date");
+                picker.removeClass("hasDatepicker"); // for some reason it wasn't working without removing the class
+                picker.datepicker();
+            });
+
+            $("#check-forms").on("blur", "input.amount", RecalculateTotal);
+
+            $("#check-forms").on("click", ".deactivate-check", function (event) {
+
+                var $fieldset = $(event.target).parents("fieldset.check");
+
+                if ($fieldset.hasClass("deactivated")) {
+                    $fieldset.removeClass("deactivated");
+                    $fieldset.find("input.accepted-field").val(true);
+                } else {
+                    $fieldset.addClass("deactivated");
+                    $fieldset.find("input.accepted-field").val(false);
+                }
+            });
+
+            $("input.date").datepicker();
+
+            RenameControls();
+        });
+
+        function RenameControls() {
+            $("fieldset.check").each(function (index, item) {
+                $(item).find("span.checkIndex").text(index + 1);
+
+                $(item)
+                    .find("input, textarea")
+                    .each(function (index2, item2) {
+                        RenameControl(index, item2);
+                    });
+            });
+        }
+
+        function RenameControl(index, obj) {
+            // pull the last part of the name out
+            var charIndex = ($(obj).attr("id")).indexOf("_");
+            var nameEnd = ($(obj).attr("id")).substring(charIndex + 1);
+
+            $(obj).attr("id", "Checks[" + index + "]_" + nameEnd);
+            $(obj).attr("name", "Checks[" + index + "]." + nameEnd);
+        }
+
+        function RecalculateTotal() {
+            var sum = 0;
+            var total = parseFloat($("input#TotalAmount").val());
+            var donationTotal = parseFloat($("input#DonationAmount").val());
+
+            $("input.amount").each(function (index, item) {
+                var checkItem = $(item);
+                if (!checkItem.parents("fieldset").hasClass("deactivated")) {
+                    sum += parseFloat(checkItem.val());
+                }
+            });
+
+            var remaining = (total + donationTotal) - sum;
+
+            if (remaining < 0) {
+                $("div#message").text("Amount paid is more than transaction total, correct amount or go back and add the donation amount first.");
+                $("span#remainingTotal").css("color", "red");
+            } else {
+                $("div#message").text("");
+                $("span#remainingTotal").css("color", "");
+            }
+
+            $("span#paymentTotal").text(sum.toFixed(2));
+            $("span#remainingTotal").text(remaining.toFixed(2));
+        }
+    </script>
+}

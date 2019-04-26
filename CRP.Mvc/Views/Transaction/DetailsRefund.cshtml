@@ -72,5 +72,5 @@
 </fieldset>
 
 <div>
-    @Url.DetailItemLink(Model.TransactionValue.Item.Id, StaticValues.Tab_Refunds, Model.Sort, Model.Page)
+    @Html.ActionLink("Back to Item", "Details", "ItemManagement", new { id = Model.TransactionValue.Item.Id }, null)
 </div>

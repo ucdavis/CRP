@@ -1,0 +1,55 @@
+﻿@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.PaymentConfirmationViewModel
+
+@{
+    ViewBag.Title = "Confirmation";
+}
+
+<div class="boundary">
+    <h2>Confirmation</h2>
+    @if (Model.Transaction.Credit)
+    {
+        <div>
+            <label>Item: </label>
+            @Model.Transaction.Item.Name
+        </div>
+        <div>
+            <label>Amount: </label>
+            @Html.Encode(string.Format("{0:C}", Model.Transaction.Total))
+        </div>
+
+        <div>
+            
+            <form action="@Model.PostUrl" method="post" autocomplete="off" style="margin-right: 3px">
+                @foreach (var pair in Model.PaymentDictionary)
+                {
+                    <input type="hidden" name="@pair.Key" value="@pair.Value" />
+                }
+                <input type="hidden" name="signature" value="@Model.Signature" />
+                @Html.SubmitButton("Submit", "Click here to be taken to our payment site.")
+            </form>
+        </div>
+    }
+    else
+    {
+        <div>
+            Payment Amount: @Model.Transaction.Total.ToString("C")
+            @if (Model.Transaction.Total > 0)
+            {
+                @Html.Raw(Model.Transaction.Item.CheckPaymentInstructions)
+            }
+        </div>
+    }
+</div>
+
+@section AdditionalScripts
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            // submit the form automatically
+            $("form#PaymentForm").submit();
+
+        });
+    </script>
+}

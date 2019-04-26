@@ -1,6 +1,4 @@
-@using CRP.Controllers
-@using Microsoft.Web.Mvc
-@model CRP.Controllers.ViewModels.UserItemDetailViewModel
+﻿@model CRP.Controllers.ViewModels.UserItemDetailViewModel
     
 <div class="tab-pane" id="Checks">
     <table id="table-Checks" class="table table-bordered">
@@ -19,7 +17,7 @@
             {
                 <tr>
                     <td>
-                        @Html.ActionLink("Select", "LinkToTransaction", "Payment", new { transactionId = item.Id}, null) |
+                        @Html.ActionLink("Select", "Link", "Transaction", new { transactionId = item.Id}, null) |
                         @Html.ActionLink("Edit", "Edit", "Transaction", new {id = item.Id}, null)
                     </td>
                     <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>

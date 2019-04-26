@@ -1,4 +1,4 @@
-@using CRP.Controllers
+﻿@using CRP.Controllers
 @using Microsoft.Web.Mvc
 @model CRP.Controllers.ViewModels.UserItemDetailViewModel
     
@@ -42,7 +42,8 @@
                     <td data-sort="@item.TransactionGuid">
                         @if (item.Credit)
                         {
-                            <i class="fa fa-credit-card" aria-hidden="true"></i>@(item.TransactionGuid + (item.FidUsed != null ? string.Format(" FID={0}", item.FidUsed) : Model.Fid))
+                            <i class="fa fa-credit-card" aria-hidden="true"></i>
+                            @item.TransactionGuid
                         }
                     </td>
                     <td data-sort="@item.Amount">@string.Format("{0:C}", item.Amount)</td>
