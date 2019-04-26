@@ -1,11 +1,14 @@
-@using CRP.Controllers
-@using CRP.Core.Resources
-@using Microsoft.Web.Mvc
-@model CRP.Controllers.ViewModels.UserItemDetailViewModel
+﻿@model CRP.Controllers.ViewModels.UserItemDetailViewModel
 
 @{
     ViewBag.Title = "DetailsNew";
 }
+
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/qtipcss")
+}
+
 @section NavButtons
 {
     <div class="pull-right" style="margin-left: 10px;">
@@ -28,7 +31,7 @@
 
     <h2>Details: @Model.Item.Name</h2>
     <h3>Sold: @Model.Item.Sold</h3>
-    
+
     <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a href="#Transactions" data-toggle="tab">Transactions</a></li>
         <li><a href="#Checks" data-toggle="tab">Checks</a></li>
@@ -37,64 +40,57 @@
         <li><a href="#Notifications" data-toggle="tab">Notifications</a></li>
     </ul>
     <div class="tab-content">
-        @Html.Partial("_TabTransactions", Model.Item.Transactions)       
+        @Html.Partial("_TabTransactions", Model.Item.Transactions)
         @Html.Partial("_TabChecks")
         @Html.Partial("_TabReports")
         @Html.Partial("_TabRefunds")
-        @Html.Partial("_TabNotifications", Model.Item.Transactions)  
+        @Html.Partial("_TabNotifications", Model.Item.Transactions)
     </div>
-    
+
 
 </div>
 
 @section AdditionalScripts
 {
     @Scripts.Render("~/bundles/qtip")
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
-        $(function() {
+        $(function () {
             $("#table-Transactions").dataTable({
                 stateSave: true,
                 stateDuration: 60 * 5,
-                "aaSorting": [[1, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [4, 5, 6] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
                 ]
             });
             $("#table-Checks").dataTable({
                 stateSave: true,
                 stateDuration: 60 * 5,
-                "aaSorting": [[1, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [5] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
                 ]
             });
             $("#table-Reports").dataTable({
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [4] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
                 ]
             });
             $("#table-Refunds").dataTable({
                 stateSave: true,
                 stateDuration: 60 * 5,
-                "aaSorting": [[1, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [5] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
                 ]
             });
             $("#table-Notifications").dataTable({
                 stateSave: true,
                 stateDuration: 60 * 5,
-                "aaSorting": [[1, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [2, 4, 6] },
-                    { 'type': 'date', 'aTargets': [3] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
                 ]
             });
         });
@@ -103,8 +99,8 @@
     <script type="text/javascript">
 
 
-        $(document).ready(function() {
-            $("a.FormSubmit").click(function() { $(this).parents("form").submit(); });
+        $(document).ready(function () {
+            $("a.FormSubmit").click(function () { $(this).parents("form").submit(); });
 
             //Select active tab with link
             $('#myTab a').click(function (e) {
@@ -127,8 +123,4 @@
 
 }
 
-@section AdditionalStyles
-{
-    @Styles.Render("~/Content/qtipcss")
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css"/>
-}
+
