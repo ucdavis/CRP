@@ -38,12 +38,19 @@ namespace CRP.Core.Domain
         /// Payee's name
         /// </summary>         
         [StringLength(200)]
+        [Required]
         public virtual string Name { get; set; }
+
         /// <summary>
         /// Amount paid
         /// </summary>
+        [Required]
+        [Range(0, 100_000_000)]
         public virtual decimal Amount { get; set; }
+
+        [Required]
         public virtual DateTime DatePayment { get; set; }
+
         [Required]
         public virtual Transaction Transaction { get; set; }
 
