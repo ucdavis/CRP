@@ -1,38 +1,37 @@
 ﻿@model CRP.Core.Domain.PaymentLog
 
-<img src="@Url.Content("~/Images/red_close.jpg")" class="deactivate-check" style="height:20px; width:20px;" />
 
 @Html.Hidden("Id", Model.Id)
-@Html.Hidden("Accepted", Model.Accepted, new {@class="accepted-field"})
-<ul>
-@if (Model.DisplayCheckInvalidMessage) {
-<li>*There is a problem with this check or another listed</li>
-} 
-<li>
-    <label for="Name">Payee:</label><br />
-    @Html.TextBox("Name", Model.Name)
-    @Html.ValidationMessage("PaymentLog.Name")
-</li>
-<li>
-    <label for="CheckNumber">CheckNumber:</label><br />
-    @Html.TextBox("CheckNumber", Model.CheckNumber.HasValue ? Model.CheckNumber.Value.ToString() : string.Empty)
-    @Html.ValidationMessage("PaymentLog.CheckNumber")
-    @Html.ValidationMessage("PaymentLog.CheckNumberRequired")
-</li>
-<li>
-    <label for="Amount">Amount:</label><br />
-    @Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new {@class="amount"})
-    @Html.ValidationMessage("PaymentLog.Amount")
-    @Html.ValidationMessage("PaymentLog.AmountRequired")
-</li>
-<li>
-    <label for="DatePayment">Date Payment:</label><br />
-    @Html.TextBox("DatePayment", String.Format("{0:d}", Model.DatePayment), new {@class="date"})
-    @Html.ValidationMessage("PaymentLog.DatePayment")
-</li>
-<li>
-    <label for="Notes">Notes:</label><br />
-    @Html.TextArea("Notes", Model.Notes)
-    @Html.ValidationMessage("PaymentLog.Notes")
-</li>
-</ul>
+@Html.Hidden("Accepted", Model.Accepted, new { @class = "accepted-field" })
+
+<div class="">
+    @if (Model.DisplayCheckInvalidMessage)
+    {
+        <span>*There is a problem with this check or another listed</span>
+    }
+    <div class="form-group">
+        <label>Payee:</label>
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div class="form-group">
+        <label>Check Number:</label>
+        @Html.TextBoxFor(x => x.CheckNumber, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(x => x.CheckNumber)
+    </div>
+    <div class="form-group">
+        <label>Amount:</label>
+        @Html.TextBoxFor(x => x.Amount, new { @class = "amount form-control", @type = "number", required = "required", min=0, max=100000000 })
+        @Html.ValidationMessageFor(x => x.Amount)
+    </div>
+    <div class="form-group">
+        <label>Date Payment:</label>
+        @Html.TextBoxFor(x => x.DatePayment, "{0:d}", new { @class = "date form-control", required = "required" })
+        @Html.ValidationMessageFor(x => x.DatePayment)
+    </div>
+    <div class="form-group">
+        <label>Notes:</label>
+        @Html.TextBoxFor(x => x.Notes, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Notes)
+    </div>
+</div>

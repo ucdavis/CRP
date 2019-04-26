@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,13 +12,11 @@ using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.Helpers;
 using CRP.Mvc.Controllers.ViewModels;
+using CRP.Mvc.Controllers.ViewModels.ItemManagement;
 using CRP.Services;
-//using Elmah;
 using MvcContrib;
-using MvcContrib.Attributes;
 using Serilog;
 using UCDArch.Web.ActionResults;
-using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
@@ -44,56 +40,19 @@ namespace CRP.Controllers
             return this.RedirectToAction(a => a.List(null));
         }
 
-        /// <summary>
-        /// GET: /ItemManagement/List
-        /// </summary>
-        /// <returns></returns>
-        //public ActionResult List()
-        //{
-        //    // list items that the user has editor rights to
-        //    var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
-
-        //    var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
-        //    // admins can see all
-        //    if (CurrentUser.IsInRole(RoleNames.Admin))
-        //    {
-        //        query = Repository.OfType<Item>().Queryable;
-        //    }
-
-        //    return View(query);
-        //}
-
-        /// <summary>
-        /// GET: /ItemManagement/List
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult ListOld(string transactionNumber)
-        {
-            var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
-
-            var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
-            // admins can see all
-            if (CurrentUser.IsInRole(RoleNames.Admin))
-            {
-                query = Repository.OfType<Item>().Queryable;
-            }
-            if (!string.IsNullOrEmpty(transactionNumber))
-            {
-                query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
-            }
-            return View(query); 
-        }
-
         public ActionResult List(string transactionNumber)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
             var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
+
             // admins can see all
             if (CurrentUser.IsInRole(RoleNames.Admin))
             {
                 query = Repository.OfType<Item>().Queryable;
             }
+
+            // fetch matching transactions
             if (!string.IsNullOrEmpty(transactionNumber))
             {
                 query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
@@ -101,17 +60,16 @@ namespace CRP.Controllers
 
             var slimmedDown = query.Select(a => new ItemListView
             {
-                Id = a.Id,
-                Name = a.Name,
+                Id          = a.Id,
+                Name        = a.Name,
                 CostPerItem = a.CostPerItem,
-                Quantity = a.Quantity,
-                Sold = a.SoldCount,
-                Expiration = a.Expiration,
+                Quantity    = a.Quantity,
+                Sold        = a.SoldCount,
+                Expiration  = a.Expiration,
                 DateCreated = a.DateCreated,
-                Available = a.Available
+                Available   = a.Available
             }).ToList();
 
-            //return View(query.ToList());
             return View(slimmedDown);
         }
 
@@ -149,9 +107,10 @@ namespace CRP.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [PageTracker]
-        public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
+        public ActionResult Create(EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             ModelState.Clear();
+
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
@@ -174,13 +133,12 @@ namespace CRP.Controllers
                 ModelState.AddModelError("Image", @"An image is required.");
             }
 
-            // process the extended properties and tags
-            //item = PopulateObject.Item(Repository, item, extendedProperties, tags);
-            item = Copiers.PopulateItem(Repository, item, extendedProperties, tags, mapLink);
+            // setup new item
+            var itemToCreate = Copiers.CopyItem(Repository, item, new Item(), extendedProperties, tags, mapLink);
 
-            if(item.ExtendedPropertyAnswers != null && item.ExtendedPropertyAnswers.Count > 0)
+            if (itemToCreate.ExtendedPropertyAnswers != null && itemToCreate.ExtendedPropertyAnswers.Count > 0)
             {
-                foreach (var extendedPropertyAnswer in item.ExtendedPropertyAnswers)
+                foreach (var extendedPropertyAnswer in itemToCreate.ExtendedPropertyAnswers)
                 {
                     if(string.IsNullOrWhiteSpace(extendedPropertyAnswer.Answer))
                     {
@@ -193,9 +151,9 @@ namespace CRP.Controllers
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
             // add permissions
-            var editor = new Editor(item, user);
+            var editor = new Editor(itemToCreate, user);
             editor.Owner = true;
-            item.AddEditor(editor);
+            itemToCreate.AddEditor(editor);
 
             // set the unit
             //item.Unit = user.Units.FirstOrDefault();
@@ -208,46 +166,46 @@ namespace CRP.Controllers
             // this should really not be null at any point.
             if (questionSet != null)
             {
-                item.AddTransactionQuestionSet(questionSet);
+                itemToCreate.AddTransactionQuestionSet(questionSet);
             }
 
-            if (item.ItemType != null)
+            if (itemToCreate.ItemType != null)
             {
                 // add the default question sets
-                foreach (var qs in item.ItemType.QuestionSets)
+                foreach (var qs in itemToCreate.ItemType.QuestionSets)
                 {
                     if (qs.TransactionLevel)
                     {
-                        item.AddTransactionQuestionSet(qs.QuestionSet);
+                        itemToCreate.AddTransactionQuestionSet(qs.QuestionSet);
                     }
                     else
                     {
-                        item.AddQuantityQuestionSet(qs.QuestionSet);
+                        itemToCreate.AddQuantityQuestionSet(qs.QuestionSet);
                     }
                 }
             }
 
-            if(item.Template == null)
+            if (itemToCreate.Template == null)
             {
                 var tempTemplate = Repository.OfType<Template>().Queryable.Where(a => a.Default).FirstOrDefault();
                 if (tempTemplate != null && !string.IsNullOrEmpty(tempTemplate.Text))
                 {
                     var template = new Template(tempTemplate.Text);
-                    item.Template = template;
+                    itemToCreate.Template = template;
                 }
             }
 
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemToCreate.ValidationResults());
 
             if (ModelState.IsValid)
             {
-                Repository.OfType<Item>().EnsurePersistent(item);
+                Repository.OfType<Item>().EnsurePersistent(itemToCreate);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction(a => a.List(null));
             }
             else
             {
-                var viewModel = ItemViewModel.Create(Repository, CurrentUser, item);
+                var viewModel = ItemViewModel.Create(Repository, CurrentUser, itemToCreate);
                 viewModel.IsNew = true;
                 return View(viewModel);
             }
@@ -268,21 +226,6 @@ namespace CRP.Controllers
             }
 
             return new JsonNetResult(itemType.ExtendedProperties);
-        }
-
-        public ActionResult MapOld(int id)
-        {
-            var item = Repository.OfType<Item>().GetNullableById(id);
-            if (item == null || !Access.HasItemAccess(CurrentUser, item))
-            {
-                return this.RedirectToAction(a => a.List(null));
-            }
-
-            //var viewModel = ItemViewModel.Create(Repository, CurrentUser, item); // For now use this view model, but all we really need it the item.
-
-            //return View(viewModel);
-            return View(item);
-
         }
 
         public ActionResult Map(int id)
@@ -342,7 +285,7 @@ namespace CRP.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [PageTracker]
-        public ActionResult Edit(int id, [Bind(Exclude = "Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool fidIsDisabled)
+        public ActionResult Edit(int id, EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             ModelState.Clear();
             var destinationItem = Repository.OfType<Item>().GetNullableById(id);
@@ -355,7 +298,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List(null));
             }
 
-            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink, fidIsDisabled);//PopulateObject.Item(Repository, item, extendedProperties, tags);
+            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);
 
             if(destinationItem.ExtendedPropertyAnswers != null && destinationItem.ExtendedPropertyAnswers.Count > 0)
             {

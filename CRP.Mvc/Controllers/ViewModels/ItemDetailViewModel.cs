@@ -77,7 +77,7 @@ namespace CRP.Controllers.ViewModels
     {
         public Item Item { get; set; }
         public IEnumerable<ItemReport> Reports { get; set; }
-        public string Fid { get; set; }
+        public FinancialAccount FinancialAccount { get; set; }
         public IList<CheckName> CheckName { get; set; }
 
         public static UserItemDetailViewModel Create(IRepository repository, Item item)
@@ -95,8 +95,8 @@ namespace CRP.Controllers.ViewModels
             var userReports = repository.OfType<ItemReport>().Queryable.Where(b => !b.SystemReusable && b.Item == item).ToList();
 
             viewModel.Reports = systemReports.Union(userReports);
-            //viewModel.Fid = string.Format(" FID={0}", CloudConfigurationManager.GetSetting("TouchNetFid"));
-            viewModel.Fid = string.Format(" FID={0}", string.IsNullOrEmpty(item.TouchnetFID) ? string.Empty : item.TouchnetFID);
+
+            viewModel.FinancialAccount = item.FinancialAccount;
 
             foreach (var transaction in viewModel.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null && a.IsActive))
             {
