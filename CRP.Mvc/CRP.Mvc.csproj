@@ -809,7 +809,6 @@
     <Content Include="Content\print.css" />
     <Content Include="Content\public-main.css" />
     <Content Include="Content\quicksandstylesheet.css" />
-    <Content Include="Content\Site_old.css" />
     <Content Include="Content\telerik.common.css" />
     <Content Include="Content\telerik.common.min.css" />
     <Content Include="Content\telerik.vista.css" />
@@ -1334,7 +1333,6 @@
     <Content Include="Views\Shared\SystemMessage.cshtml" />
     <Content Include="Views\Shared\TemplateInstructions.cshtml" />
     <Content Include="Views\Shared\TransactionForm.cshtml" />
-    <None Include="Views\Shared\_LayoutOld.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
