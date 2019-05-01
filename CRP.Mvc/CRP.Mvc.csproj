@@ -1366,7 +1366,7 @@
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Static\Preview.html" />
-    <None Include="Views\Account\CasLogon.cshtml" />
+    <Content Include="Views\Account\CasLogon.cshtml" />
     <Content Include="Views\Account\CasLogon.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Account\ManageUsers.cshtml" />
@@ -1388,11 +1388,11 @@
     <Content Include="Views\Help\LinkMap.cshtml" />
     <Content Include="Views\Help\WatchVideo.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <None Include="Views\ItemManagement\Create.cshtml" />
+    <Content Include="Views\ItemManagement\Create.cshtml" />
     <Content Include="Views\ItemManagement\Edit.cshtml" />
     <Content Include="Views\ItemManagement\ItemMapPinsView.cshtml" />
     <Content Include="Views\MapPin\MapPinView.cshtml" />
-    <None Include="Views\Payments\Receipt.cshtml" />
+    <Content Include="Views\Payments\Receipt.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
