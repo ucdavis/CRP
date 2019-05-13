@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+// ReSharper disable InconsistentNaming
 
 namespace CRP.Mvc.Controllers.ViewModels
 {
