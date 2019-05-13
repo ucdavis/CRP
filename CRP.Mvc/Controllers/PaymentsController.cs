@@ -11,6 +11,7 @@ using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.ViewModels;
+using CRP.Mvc.Controllers.ViewModels.Payment;
 using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
 using Microsoft.Azure;
@@ -574,11 +575,18 @@ namespace CRP.Controllers
             Message = "Payment Processed. Thank You.";
 
             // Fake payment status
-            //var model = CreateInvoicePaymentViewModel(invoice);
-            //model.Paid = true;
-            //model.PaidDate = response.AuthorizationDateTime;
+            var model = new PaymentReceiptViewModel
+            {
+                Item         = transaction.Item,
+                Transaction  = transaction,
+                AuthCode     = response.Auth_Code,
+                AuthDateTime = response.AuthorizationDateTime,
+                CardNumber   = response.Req_Card_Number,
+                CardExp      = response.CardExpiration,
+                Amount       = response.Auth_Amount
+            };
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
