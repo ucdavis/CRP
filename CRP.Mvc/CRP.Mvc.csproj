@@ -616,10 +616,11 @@
     <Compile Include="Controllers\ViewModels\LinkPaymentViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LookupViewModel.cs" />
     <Compile Include="Controllers\ViewModels\MapPinViewModel.cs" />
-    <Compile Include="Controllers\ViewModels\PaymentConfirmationViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\Payment\PaymentConfirmationViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\Payment\PaymentReceiptViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
-    <Compile Include="Controllers\ViewModels\ReceiptResponseModel.cs" />
+    <Compile Include="Models\ReceiptResponseModel.cs" />
     <Compile Include="Controllers\ViewModels\ReportViewModel.cs" />
     <Compile Include="Controllers\ViewModels\SearchViewModel.cs" />
     <Compile Include="Controllers\ViewModels\SystemReportViewModel.cs" />
