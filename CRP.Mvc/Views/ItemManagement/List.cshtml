@@ -25,7 +25,7 @@
             <input type="submit" value="Filter"/>
         }
     </p>
-    <table class="table">
+    <table class="table table-bordered">
         <thead>
         <tr>
             <th></th>
@@ -59,7 +59,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td nowrap>
                         @Html.ActionLink("Details", "Details", new {id = item.Id}) |
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                         @Html.ActionLink("Map", "Map", new { id = item.Id }) |
@@ -68,8 +68,8 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td data-order="@item.CostPerItem">
-                        @string.Format("{0:C}", item.CostPerItem)
+                    <td data-sort="@item.CostPerItem">
+                        @($"{item.CostPerItem:C}")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Quantity)
@@ -77,13 +77,13 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Sold)
                     </td>
-                    <td>
-                        @string.Format("{0:d}", item.Expiration)
+                    <td data-sort="@(item.Expiration?.Ticks)">
+                        @($"{item.Expiration:d}")
                     </td>
-                    <td>
+                    <td data-sort="@item.DateCreated.Ticks">
                         @Html.DisplayFor(modelItem => item.DateCreated)
                     </td>
-                    <td>
+                    <td data-sort="@item.Available">
                         @Html.DisplayFor(modelItem => item.Available)
                     </td>
                     <td>
@@ -100,12 +100,10 @@
 {
     <script type="text/javascript">
         $(function() {
-            $(".table").dataTable({
-                "aaSorting": [[6, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0, -1] }, //Disables sort on icon columns
-                    { 'type': 'date', 'aTargets': [5, 6] },
-                    { 'type': 'boolean', 'aTargets': [7] }
+            $(".table").DataTable({
+                sorting: [[6, "desc"]], //Default sort on second column
+                columnDefs: [
+                    { orderable: false, 'targets': [0, -1] }, //Disables sort on icon columns
                 ]
             });
         });

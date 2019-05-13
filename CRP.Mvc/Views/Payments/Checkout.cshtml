@@ -10,6 +10,9 @@
     var creditCardChecked = Model.CreditPayment ? "checked='checked'" : string.Empty;
     var checkdChecked = Model.CheckPayment ? "checked='checked'" : string.Empty;
     var available = Model.Item.Quantity - Model.Item.Sold;
+
+
+    var quantityName = !string.IsNullOrWhiteSpace(Model.Item.QuantityName) ? Model.Item.QuantityName : ScreenText.STR_QuantityName;
 }
 
 @section AdditionalStyles
@@ -50,35 +53,35 @@
     <div class="event-checkout">
         <div class="boundary">
             <div class="table-flex border-bot">
-                <p class="table-header">Price per @(!String.IsNullOrEmpty(Model.Item.QuantityName) ? Html.Encode(Model.Item.QuantityName) : Html.Encode(ScreenText.STR_QuantityName))</p>
+                <p class="table-header">Price per @(quantityName)</p>
                 <p class="table-header">Quantity</p>
                 <p class="table-header">Total</p>
             </div>
             <div class="table-flex">
                 <p class="table-item">
-                    $<span class="perItemAmount">@Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem))</span>
+                    $<span class="perItemAmount">@($"{Model.Item.CostPerItem:0.00}")</span>
                 </p>
                 <p class="table-item">
                     @Html.TextBox("quantity", Model.Quantity, new { @class = "quantityAmount qty form-control", style = "margin-left: 116px;" })
                     @Html.ValidationMessage("Quantity")
                 </p>
                 <p class="table-item">
-                    $<span class="totalItemAmount">@Html.Encode(string.Format("{0:0.00}", Model.Item.CostPerItem * Model.Quantity))</span>
+                    $<span class="totalItemAmount">@($"{Model.Item.CostPerItem * Model.Quantity:0.00}")</span>
                 </p>
             </div>
             <div class="table-flex border-bot">
                 <p class="table-item">
-                    @Html.TextBox("Coupon", !string.IsNullOrWhiteSpace(Model.Coupon) ? Model.Coupon : string.Empty, new { @class = "form-control discountcode", placeholder = "Coupon Code" })
+                    @Html.TextBoxFor(x => x.Coupon, new { @class = "form-control discountcode", placeholder = "Coupon Code" })
                     <img src='@Url.Content("~/Images/ajax-loader.gif")' id="CouponValidateImage" style="display: none;" />
                     <span id="CouponMessage"></span>
                 </p>
                 <p class="table-item">
-                    $<span class="discounterPerItemAmount">@Html.Encode(string.Format("{0:0.00}", Model.CouponAmountToDisplay))</span>
+                    $<span class="discounterPerItemAmount">@($"{Model.CouponAmountToDisplay:0.00}")</span>
 
                     <span class="discounterMaxQuantity" style="display: none;"></span>
                 </p>
                 <p class="table-item">
-                    $<span class="discountAmount">@Html.Encode(string.Format("{0:0.00}", Model.CouponTotalDiscountToDisplay))</span>
+                    $<span class="discountAmount">@($"{Model.CouponTotalDiscountToDisplay:0.00}")</span>
                 </p>
             </div>
             <div class="table-flex border-bot">
@@ -91,7 +94,7 @@
                 <p class="table-item">
                     @if (!String.IsNullOrEmpty(Model.Item.RestrictedKey))
                     {
-                        @Html.TextBox("restrictedKey", !string.IsNullOrWhiteSpace(Model.Password) ? Model.Password : string.Empty, new { @class = "form-control", placeholder = "Pass phrase to purchase" })
+                        @Html.TextBox("restrictedKey", Model.Password, new { @class = "form-control", placeholder = "Pass phrase to purchase" })
                         @Html.ValidationMessage("Restricted Key")
                     }
                 </p>
@@ -131,49 +134,52 @@
         @*Quantity Level*@
         @if (Model.Item.QuestionSets.Any(a => a.QuantityLevel))
         {
-            <legend>@Model.Item.QuantityName</legend>
-            <div class="ticket-wrapper">
-                @for (var i = 0; i < Model.Quantity; i++)
-                {
-                    <div class="tickets QuantityContainer">
-                        <h3>
-                            @Model.Item.QuantityName <span class="quantityIndex">@Html.Encode(i + 1)</span>
-                        </h3>
-                        @{ var questionSetCount = Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count(); }
-                        @foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
-                        {
-                            <legend>@qs.QuestionSet.Name <span class="quantityIndex">@Html.Encode(i + 1)</span> </legend>
-                            foreach (var q in qs.QuestionSet.Questions)
+            for (var i = 0; i < Model.Quantity; i++)
+            {
+                <div class="QuantityContainer">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            @quantityName Information<span class="quantityIndex">@(i + 1)</span>
+                        </div>
+                        <div class="panel-body">
+                            @foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
                             {
-                                int i1 = i;
-                                var answer = Model.Answers.Where(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i1).FirstOrDefault();
-                                var disable = false;
+                                <fieldset>
+                                    <legend>@qs.QuestionSet.Name <span class="quantityIndex">@(i + 1)</span> </legend>
+                                    @foreach (var q in qs.QuestionSet.Questions)
+                                    {
+                                        int i1 = i;
+                                        var answer = Model.Answers.FirstOrDefault(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i1);
+                                        var disable = false;
 
-                                if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
-                                {
-                                    disable = true;
-                                    answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
-                                }
-                                @Html.Partial("_QuestionForm", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
+                                        // try to find the matching answer
+                                        if (string.Equals(q.Name, "Reference Id", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(Model.ReferenceId))
+                                        {
+                                            disable = true;
+                                            answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                                        }
+
+                                        @Html.Partial("_QuestionForm", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
+                                    }
+                                </fieldset>
                             }
-                        }
+                        </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         }
+
         @*Transaction Level*@
-        @{
-            var showDonationLink = false;
-        }
         @foreach (var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
         {
             <div class="TransactionContainer">
-                <span id='@Html.Encode(qs.Id)'>
+                <div class="panel panel-default">
                     @{
                         var questionSetName = qs.QuestionSet.Name;
+                        bool showDonationLink;
                         if (questionSetName == "Contact Information")
                         {
-                            questionSetName = questionSetName + " / Billing Information";
+                            questionSetName += " / Billing Information";
                             showDonationLink = true;
                         }
                         else
@@ -181,35 +187,42 @@
                             showDonationLink = false;
                         }
                     }
-                    <legend>@questionSetName </legend>
-                </span>
-                @foreach (var q in qs.QuestionSet.Questions)
-                {
-                    var answer = Model.Answers.Where(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id).FirstOrDefault();
-                    var disable = false;
+                    <div class="panel-heading">
+                        @questionSetName
+                    </div>
+                    <div class="panel-body">
 
-                    if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                        @foreach (var q in qs.QuestionSet.Questions)
+                        {
+                            var answer = Model.Answers.FirstOrDefault(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id);
+                            var disable = false;
+
+                            if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                            {
+                                disable = true;
+                                answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                            }
+                            @Html.Partial("_QuestionForm", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
+                        }
+                    </div>
+
+                    @if (showDonationLink && !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink))
                     {
-                        disable = true;
-                        answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
-                    }
-                    @Html.Partial("_QuestionForm", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
-                }
-            </div>
-            if (showDonationLink && !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink))
-            {
-                <div class="TransactionContainer">
-                    <span id="DonationLink">
-                        <legend>@Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information")</legend>
-                        <div class="form-group">
-                            <div>@Html.Encode(Model.Item.DonationLinkInformation)</div>
-                            <div>
-                                <a href="@Html.Encode(Model.Item.DonationLinkLink)" target="_blank">@Html.Encode(!string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here")</a>
+                        var donationTitle = !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information";
+                        var donationText = !string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here";
+
+                        <div class="panel-body TransactionContainer">
+                            <h3>@donationTitle</h3>
+                            <div class="form-group">
+                                <div>@Model.Item.DonationLinkInformation</div>
+                                <div>
+                                    <a href="@Model.Item.DonationLinkLink" target="_blank">@donationText</a>
+                                </div>
                             </div>
                         </div>
-                    </span>
+                    }
                 </div>
-            }
+            </div>
         }
         <div class="form-group recaptcha">
             <div class="g-recaptcha" data-sitekey="@CloudConfigurationManager.GetSetting("NewRecaptchaPublicKey")"></div>
@@ -218,10 +231,7 @@
         <div class="form-group">
             <button type="submit" class="btn"><span id="submit-amount">Submit</span></button>
         </div>
-
     </div>
-
-
 }
 
 
@@ -242,13 +252,12 @@
         var class_discounterMaxQuantity = "discounterMaxQuantity";
         var class_discountAmount = "discountAmount";
         var class_totalAmount = "totalAmount";
-        var questionSet_Count = '@Model.Item.QuestionSets.Where(a => a.QuantityLevel).Count()';
+        var questionSet_Count = '@Model.Item.QuestionSets.Count(a => a.QuantityLevel)';
         var payType = "";
     </script>
 
     <script type="text/javascript">
-
-        $(document).ready(function() {
+        $(function() {
             $("form#CheckoutForm").validate({
                 errorElement: "span", // set the tag for the item that contains the message
                 errorClass: "failed", // set the class on that tag of the notification tag
@@ -296,12 +305,6 @@
                         }
                     }
                 }));
-
-            //$("#CheckoutForm").on('blur', 'textarea', (function() {
-            //    $("form#CheckoutForm").validate().element(this);
-            //    var localSpan = $(this).parent().find(".local-warning");
-            //    localSpan.text("");
-            //}));
 
 
             $("input#quantity").blur(function(event) {
@@ -352,7 +355,7 @@
 
             });
 
-            if ($("input#Coupon").val() != "") {
+            if ($("input#Coupon").val() !== "") {
                 processCoupon();
             }
 
@@ -418,30 +421,28 @@
         function addQuantityIndex($container) {
             var masterIndex = 0;
             var cName = "quantityAnswers";
+            $container.each(function(cIndex, cItem) {
+                var p = $(cItem).find("div.form-group");
 
-            $.each($container,
-                function(cIndex, cItem) {
-                    var p = $(cItem).find("div.form-group");
+                $.each(p,
+                    function(index, item) {
+                        // quantity index doesn't exist, create it
+                        // search for input ending with "_QuantityIndex"
+                        if ($(item).find("input[id$='_QuantityIndex']").length === 0) {
+                            //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
+                            $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex")
+                                .attr("name", cName + ".QuantityIndex").addClass("indexedControl").val(cIndex));
+                        } else {
+                            $(item).find("input[id$='_QuantityIndex']").val(cIndex);
+                        }
 
-                    $.each(p,
-                        function(index, item) {
-                            // quantity index doesn't exist, create it
-                            // search for input ending with "_QuantityIndex"
-                            if ($(item).find("input[id$='_QuantityIndex']").length == 0) {
-                                //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
-                                $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex")
-                                    .attr("name", cName + ".QuantityIndex").addClass("indexedControl").val(cIndex));
-                            } else {
-                                $(item).find("input[id$='_QuantityIndex']").val(cIndex);
-                            }
-
-                        });
+                    });
                 });
         }
 
         function InitializeQuestions() {
-            RenameControls($("div.TransactionContainer"), "transactionAnswers", "div");
-            RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
+            RenameControls($("div.TransactionContainer"), "transactionAnswers", ".form-group");
+            RenameControls($("div.QuantityContainer"), "quantityAnswers", ".form-group");
             addQuantityIndex($("div.QuantityContainer"));
             $.each($("input.dateForm"),
                 function(index, item) {

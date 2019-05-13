@@ -93,8 +93,8 @@
                             @foreach (var question in transactionQuestionSets)
                             {
                                 <tr>
-                                    <td>
-                                        @using (Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(question.Id)))
+                                    <td nowrap>
+                                        @using (Html.BeginForm("UnlinkFromItem", "QuestionSet", new { id = question.Id }, FormMethod.Post, new { style = "display:inline-block" }))
                                         {
                                             @Html.AntiForgeryToken()
                                             <a href="javascript:;" class="FormSubmit">Delete</a>
@@ -136,8 +136,8 @@
                             @foreach (var question in transactionQuantitySets)
                             {
                                 <tr>
-                                    <td>
-                                        @using (Html.BeginForm<QuestionSetController>(b => b.UnlinkFromItem(question.Id)))
+                                    <td nowrap>
+                                        @using (Html.BeginForm("UnlinkFromItem", "QuestionSet", new { id = question.Id }, FormMethod.Post, new { style = "display:inline-block" }))
                                         {
                                             @Html.AntiForgeryToken()
                                             <a href="javascript:;" class="FormSubmit">Delete</a>
@@ -146,7 +146,7 @@
                                         @if (!question.QuestionSet.SystemReusable || !question.QuestionSet.CollegeReusable || !question.QuestionSet.UserReusable)
                                         {
                                             <text>|</text>
-                                            @Html.ActionLink("Edit", "Edit", "QuestionSet", new { id = question.QuestionSet.Id }, null)
+                                            @Html.ActionLink("Edit", "Edit", "QuestionSet", new {id = question.QuestionSet.Id}, null)
                                         }
                                     </td>
                                     <td>@question.QuestionSet.Name</td>
@@ -295,28 +295,32 @@
             $("#Item_CheckPaymentInstructions").enableTinyMce({ script_location: scriptUrl, overrideHeight: '255' });
 
             //---------------- setup tables ------------------//
-            $("#table-editors").dataTable({
+            $("#table-editors").DataTable({
+                order: [[1, 'asc']],
                 columnDefs: [{
                     targets: [0],
                     orderable: false,
                 }],
             });
 
-            $("#table-questions-transactions").dataTable({
+            $("#table-questions-transactions").DataTable({
+                order: [[1, 'asc']],
                 columnDefs: [{
                     targets: [0],
                     orderable: false,
                 }],
             });
 
-            $("#table-questions-quantity").dataTable({
+            $("#table-questions-quantity").DataTable({
+                order: [[1, 'asc']],
                 columnDefs: [{
                     targets: [0],
                     orderable: false,
                 }],
             });
 
-            $("#table-coupons").dataTable({
+            $("#table-coupons").DataTable({
+                order: [[1, 'asc']],
                 columnDefs: [{
                     targets: [0],
                     orderable: false,

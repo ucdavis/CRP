@@ -4,12 +4,11 @@
     var masterIndex = 0;
 
     // go through each container passed
-    $.each($container, function (cIndex, cItem) {
-        // get the paragraph tags that each contain a question
+    $container.each(function (cIndex, cItem) {
         var spans = $(cItem).find(containerType);
 
         // iterate through the paragraphs
-        $.each(spans, function (index, item) {
+        spans.each(function (index, item) {
             // construct the new name
             var cName = name + "[" + masterIndex + "]";
 
@@ -21,7 +20,7 @@
                 var charIndex = ($(item2).attr("id")).indexOf("_");
                 var nameEnd = ($(item2).attr("id")).substring(charIndex + 1);
                 
-                if (item2.tagName == "LABEL") {
+                if (item2.tagName === "LABEL") {
                     $(item2).attr("for", cName + "_" + nameEnd);
                 }
                 else {

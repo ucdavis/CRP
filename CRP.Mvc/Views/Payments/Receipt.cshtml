@@ -1,0 +1,38 @@
+@model CRP.Mvc.Controllers.ViewModels.Payment.PaymentReceiptViewModel
+@{
+    ViewBag.Title = "Payment Receipt";
+}
+
+<div class="boundary">
+    <h2>Successful Transaction</h2>
+    <p>You have successfully paid for and registered for the following event:</p>
+    <div>
+        <label>Item: </label>
+        @Model.Item.Name
+    </div>
+    <div>
+        <label>Amount: </label>
+        @($"{Model.Transaction.Total:C}")
+    </div>
+    
+    <p>Payment Details:</p>
+    <dl>
+        <dt>Card Number</dt>
+        <dd>@Model.CardNumber</dd>
+
+        @if (Model.CardExp.HasValue)
+        {
+            <dt>Card Exp</dt>
+            <dd>@Model.CardExp.Value.ToString("MM-yyyy")</dd>
+        }
+
+        <dt>Amount</dt>
+        <dd>$@Model.Amount</dd>
+
+        <dt>Code</dt>
+        <dd>@Model.AuthCode</dd>
+
+        <dt>Date</dt>
+        <dd>@Model.AuthDateTime.ToString("d")</dd>
+    </dl>
+</div>

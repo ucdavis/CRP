@@ -6,34 +6,34 @@
 }
 
 <div class="boundary">
-    <h2>Confirmation</h2>
+    <h2>Registration Confirmation</h2>
+    <p>You have successfully registered for the following event:</p>
+    <div>
+        <label>Item: </label>
+        @Model.Transaction.Item.Name
+    </div>
+    <div>
+        <label>Amount: </label>
+        @($"{Model.Transaction.Total:C}")
+    </div>
+    
     @if (Model.Transaction.Credit)
     {
         <div>
-            <label>Item: </label>
-            @Model.Transaction.Item.Name
-        </div>
-        <div>
-            <label>Amount: </label>
-            @Html.Encode(string.Format("{0:C}", Model.Transaction.Total))
-        </div>
-
-        <div>
-            
+            <p>Payment is still due:</p>
             <form action="@Model.PostUrl" method="post" autocomplete="off" style="margin-right: 3px">
                 @foreach (var pair in Model.PaymentDictionary)
                 {
-                    <input type="hidden" name="@pair.Key" value="@pair.Value" />
+                    <input type="hidden" name="@pair.Key" value="@pair.Value"/>
                 }
-                <input type="hidden" name="signature" value="@Model.Signature" />
-                @Html.SubmitButton("Submit", "Click here to be taken to our payment site.")
+                <input type="hidden" name="signature" value="@Model.Signature"/>
+                @Html.SubmitButton("Submit", "Click here to be taken to our payment site")
             </form>
         </div>
     }
     else
     {
         <div>
-            Payment Amount: @Model.Transaction.Total.ToString("C")
             @if (Model.Transaction.Total > 0)
             {
                 @Html.Raw(Model.Transaction.Item.CheckPaymentInstructions)
@@ -41,15 +41,3 @@
         </div>
     }
 </div>
-
-@section AdditionalScripts
-{
-    <script type="text/javascript">
-        $(document).ready(function() {
-
-            // submit the form automatically
-            $("form#PaymentForm").submit();
-
-        });
-    </script>
-}
