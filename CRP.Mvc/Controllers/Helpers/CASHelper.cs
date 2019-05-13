@@ -3,16 +3,17 @@ using System.IO;
 using System.Net;
 using System.Web;
 using System.Web.Security;
+using Microsoft.Azure;
 
 namespace CRP.Controllers.Helpers
 {
     public static class CASHelper
     {
-#if DEBUG
-        private const string StrCasUrl = "https://ssodev.ucdavis.edu/cas/";
-#else
-        private const string StrCasUrl = "https://cas.ucdavis.edu/cas/";
-#endif
+        private static string GetCasBaseUrl()
+        {
+            return CloudConfigurationManager.GetSetting("CasBaseUrl");
+        }
+
         private const string StrTicket = "ticket";
         private const string StrReturnUrl = "ReturnURL";
 
@@ -78,6 +79,7 @@ namespace CRP.Controllers.Helpers
                 }
 
                 // get ticket & service
+                var baseUrl = GetCasBaseUrl();
                 string ticket = context.Request.QueryString[StrTicket];
                 string service = context.Server.UrlEncode(context.Request.Url.GetLeftPart(UriPartial.Path) + query);
 
@@ -85,7 +87,7 @@ namespace CRP.Controllers.Helpers
                 if (!string.IsNullOrEmpty(ticket))
                 {
                     // validate ticket against cas
-                    StreamReader sr = new StreamReader(new WebClient().OpenRead(StrCasUrl + "validate?ticket=" + ticket + "&service=" + service));
+                    StreamReader sr = new StreamReader(new WebClient().OpenRead(baseUrl + "validate?ticket=" + ticket + "&service=" + service));
 
                     // parse text file
                     if (sr.ReadLine() == "yes")
@@ -103,7 +105,7 @@ namespace CRP.Controllers.Helpers
                 }
 
                 // ticket doesn't exist or is invalid so redirect user to CAS login
-                context.Response.Redirect(StrCasUrl + "login?service=" + service);
+                context.Response.Redirect(baseUrl + "login?service=" + service);
             }
 
             return null;
