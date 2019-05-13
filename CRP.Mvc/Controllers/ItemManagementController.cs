@@ -552,76 +552,81 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult ToggleTransactionIsActive(int id, string sort, string page)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-
-
+            // get transaction
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if (transaction == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
                 return this.RedirectToAction(a => a.List(null));
             }
+
+            // check item
             if (transaction.Item == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction(a => a.List(null));
             }
-            if(!Access.HasItemAccess(CurrentUser, transaction.Item))
+
+            // check user access
+            if (!Access.HasItemAccess(CurrentUser, transaction.Item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List(null));
             }
-            if (transaction.IsActive)
+
+            if (transaction.IsActive && transaction.Paid)
             {
-                if(transaction.Paid)
-                {
-                    ModelState.AddModelError("Deactivate", NotificationMessages.STR_Paid_transactions_can_not_be_deactivated);
-                }
+                // you can't deactivate paid registrations
+                ModelState.AddModelError("Deactivate", NotificationMessages.STR_Paid_transactions_can_not_be_deactivated);
             }
-            else
+            else if ((transaction.Item.Sold + transaction.Quantity) > transaction.Item.Quantity)
             {
-                if((transaction.Item.Sold + transaction.Quantity) > transaction.Item.Quantity)
-                {
-                    ModelState.AddModelError("Activate", NotificationMessages.STR_Transaction_can_not_be_activated);
-                }
+                // you can't activate too many transactions
+                ModelState.AddModelError("Activate", NotificationMessages.STR_Transaction_can_not_be_activated);
             }
+
+            // swap active
             transaction.IsActive = !transaction.IsActive;
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
-            if(ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                Repository.OfType<Transaction>().EnsurePersistent(transaction);
-                Message = transaction.IsActive
-                              ? NotificationMessages.STR_Activated.Replace(NotificationMessages.ObjectType, "Transaction")
-                              :
-                                  NotificationMessages.STR_Deactivated.Replace(NotificationMessages.ObjectType,
-                                                                               "Transaction");
+                Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");
+                return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
             }
-            else
-            {
-                Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");  
-            }
+
+            // persist transaction
+            Repository.OfType<Transaction>().EnsurePersistent(transaction);
+
+            // set message based on old state => new state
+            Message = transaction.IsActive
+                ? NotificationMessages.STR_Activated.Replace(NotificationMessages.ObjectType, "Transaction")
+                : NotificationMessages.STR_Deactivated.Replace(NotificationMessages.ObjectType, "Transaction");
 
             try
             {
+                // update counts
                 if (Repository.OfType<Transaction>().Queryable.Any(a => a.Item.Id == transaction.Item.Id && a.IsActive))
                 {
-                    transaction.Item.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == transaction.Item.Id && a.IsActive).Sum(a => a.Quantity);
+                    transaction.Item.SoldCount = Repository.OfType<Transaction>().Queryable
+                        .Where(a => a.Item.Id == transaction.Item.Id && a.IsActive)
+                        .Sum(a => a.Quantity);
                 }
                 else
                 {
                     transaction.Item.SoldCount = 0;
                 }
                 
+                // persist item
                 Repository.OfType<Item>().EnsurePersistent(transaction.Item);
             }
             catch (Exception ex)
             {
-                Log.Error(string.Format("Error updating Item SoldCount {0}", ex.Message));
+                Log.Error("Error updating Item SoldCount", ex);
             }
 
-            var redirectUrl = Url.Action("Details", "ItemManagement", new {id = transaction.Item.Id});
-            return Redirect(redirectUrl + "#Transactions");              
+            return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
         }
+
         [PageTracker]
         public ActionResult Copy(int id)
         {
@@ -648,46 +653,6 @@ namespace CRP.Controllers
 
             return this.RedirectToAction(a => a.Edit(newItem.Id)); 
         }
-
-        ///// <summary>
-        ///// Validates the parameters.
-        ///// </summary>
-        ///// <param name="pageName">The page name.</param>
-        ///// <param name="sort">The sort.</param>
-        ///// <param name="page">The page.</param>
-        ///// <returns></returns>
-        //private Dictionary<string, string> ValidateParameters(string pageName, string sort, string page)
-        //{
-        //    var rtValue = new Dictionary<string, string>(2);
-
-        //    Int32 validPage;
-        //    if (!int.TryParse(page, out validPage))
-        //    {
-        //        validPage = 1;
-        //    }
-        //    rtValue.Add("page", validPage.ToString());
-
-        //    var validSort = new List<string>();
-        //    validSort.Add("TransactionNumber-asc");
-        //    validSort.Add("TransactionNumber-desc");
-        //    validSort.Add("Quantity-asc");
-        //    validSort.Add("Quantity-desc");
-        //    validSort.Add("Paid-asc");
-        //    validSort.Add("Paid-desc");
-        //    validSort.Add("IsActive-asc");
-        //    validSort.Add("IsActive-desc");
-        //    if (validSort.Contains(sort))
-        //    {
-        //        rtValue.Add("sort", sort);
-        //    }
-        //    else
-        //    {
-        //        rtValue.Add("sort", string.Empty);
-        //    }
-
-        //    return rtValue;
-        //}        
-
     }
 
     public class ExtendedPropertyParameter
