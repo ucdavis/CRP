@@ -32,6 +32,6 @@
     <property name="TnSubmit" column="TnSubmit"/>
     <property name="TnSuccessLink" column="TnSuccessLink"/>
     <property name="TnCancelLink" column="TnCancelLink"/>
-
+    <property name="Cleared" column="Cleared" />
   </class>
 </hibernate-mapping>

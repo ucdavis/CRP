@@ -21,17 +21,17 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
-            DatePayment = DateTime.UtcNow.ToPacificTime();
-            Accepted = false;
-            Check = false;
-            Credit = false;
-            CheckNumberRequired = false;
-            NameRequired = false;
-            AmountRequired = false;
+            DatePayment                  = DateTime.UtcNow.ToPacificTime();
+            Accepted                     = false;
+            Check                        = false;
+            Credit                       = false;
+            CheckNumberRequired          = false;
+            NameRequired                 = false;
+            AmountRequired               = false;
             GatewayTransactionIdRequired = false;
-            CardTypeRequired = false;
-            CheckOrCredit = false;
-            DisplayCheckInvalidMessage = false;
+            CardTypeRequired             = false;
+            CheckOrCredit                = false;
+            DisplayCheckInvalidMessage   = false;
         }
 
         /// <summary>
@@ -78,6 +78,9 @@ namespace CRP.Core.Domain
         /// </summary>
         public virtual bool Credit { get; set; }
         public virtual string Notes { get; set; }
+
+        public virtual bool Cleared { get; set; }
+
 
         #region TouchNet Return Values
 
@@ -202,6 +205,8 @@ namespace CRP.Core.Domain
 
         [AssertFalse(ErrorMessage = "Check or Credit must be selected.")]
         public virtual bool CheckOrCredit { get; set; }
+
+
         #endregion Fields ONLY used for complex validation, not in database
     }
 }
