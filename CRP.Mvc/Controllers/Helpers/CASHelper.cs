@@ -59,7 +59,6 @@ namespace CRP.Controllers.Helpers
             }
 
             // if user is unauthorized and no validTicket is defined then authenticate with cas
-            //if (context.Response.StatusCode == 0x191 && (validTicket == null || validTicket.Expired))
             if (validTicket == null || validTicket.Expired)
             {
                 // build query string but strip out ticket if it is defined
@@ -105,7 +104,7 @@ namespace CRP.Controllers.Helpers
                 }
 
                 // ticket doesn't exist or is invalid so redirect user to CAS login
-                context.Response.Redirect(baseUrl + "login?service=" + service);
+                return baseUrl + "login?service=" + service;
             }
 
             return null;
