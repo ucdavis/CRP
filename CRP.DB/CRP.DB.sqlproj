@@ -199,6 +199,8 @@
     </None>
     <None Include="Change Scripts\UpdateViewsForCatbert.sql" />
     <None Include="Schema Comparisons\SchemaCompAzureToDb.scmp" />
+    <None Include="Schema Comparisons\SchemaComparisonTest.scmp" />
+    <None Include="Schema Comparisons\SchemaComparisonLocalhost.scmp" />
   </ItemGroup>
   <ItemGroup>
     <BuildContributorArgument Include="OutDir=$(OutDir)" />
