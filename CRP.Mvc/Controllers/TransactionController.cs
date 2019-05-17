@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
@@ -7,7 +9,13 @@ using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
+using CRP.Mvc.Controllers.ViewModels.Transaction;
+using CRP.Mvc.Models.Sloth;
+using CRP.Mvc.Resources;
+using CRP.Mvc.Services;
 using MvcContrib;
+using UCDArch.Web.ActionResults;
+using UCDArch.Web.Attributes;
 using UCDArch.Web.Helpers;
 using UCDArch.Web.Validator;
 
@@ -16,10 +24,29 @@ namespace CRP.Controllers
     public class TransactionController : ApplicationController
     {
         private readonly INotificationProvider _notificationProvider;
+        private readonly ISlothService _slothService;
 
-        public TransactionController(INotificationProvider notificationProvider)
+        public TransactionController(INotificationProvider notificationProvider, ISlothService slothService)
         {
             _notificationProvider = notificationProvider;
+            _slothService = slothService;
+        }
+
+        public ActionResult Details(int id)
+        {
+            var transaction = Repository.OfType<Transaction>().GetNullableById(id);
+            if (transaction == null)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+
+            return View(transaction);
         }
 
         /// <summary>
@@ -667,6 +694,113 @@ namespace CRP.Controllers
             var transactions = transactionAnswers.Select(transactionAnswer => transactionAnswer.Transaction);
 
             return View(transactions);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [BypassAntiForgeryToken]
+        public async Task<ActionResult> DepositNotify(TransactionDepositNotification model)
+        {
+            // parse id
+            if (!int.TryParse(model.MerchantTrackingNumber, out int transactionId))
+            {
+                return new JsonNetResult(new
+                {
+                    message = "merchant tracking number bad format",
+                    success = false,
+                });
+            }
+
+            // find transaction with payment
+            var paymentLog = Repository.OfType<PaymentLog>().Queryable
+                .FirstOrDefault(p => p.GatewayTransactionId == model.ProcessorTrackingNumber
+                                  && p.Transaction.Id == transactionId);
+
+            if (paymentLog == null)
+            {
+                return new JsonNetResult(new
+                {
+                    message = "transaction not found for merchant tracking number",
+                    success = false,
+                });
+            }
+
+            if (paymentLog.Cleared)
+            {
+                return new JsonNetResult(new
+                {
+                    message = "transaction already cleared",
+                    success = false,
+                });
+            }
+
+            // build transfer request
+            var total = paymentLog.Amount;
+            var fee = total * FeeSchedule.StandardRate;
+            var income = total - fee;
+
+            // create transfers
+            var debitHolding = new CreateTransfer()
+            {
+                Amount      = total,
+                Direction   = CreateTransfer.CreditDebit.Debit,
+                Chart       = KfsAccounts.HoldingChart,
+                Account     = KfsAccounts.HoldingAccount,
+                ObjectCode  = KfsObjectCodes.Income,
+                Description = "Funds Distribution"
+            };
+
+            var feeCredit = new CreateTransfer()
+            {
+                Amount      = fee,
+                Direction   = CreateTransfer.CreditDebit.Credit,
+                Chart       = KfsAccounts.FeeChart,
+                Account     = KfsAccounts.FeeAccount,
+                ObjectCode  = KfsObjectCodes.Income,
+                Description = "Processing Fee"
+            };
+
+            var incomeCredit = new CreateTransfer()
+            {
+                Amount      = income,
+                Direction   = CreateTransfer.CreditDebit.Credit,
+                Chart       = paymentLog.Transaction.Item.FinancialAccount.Chart,
+                Account     = paymentLog.Transaction.Item.FinancialAccount.Account,
+                SubAccount  = paymentLog.Transaction.Item.FinancialAccount.SubAccount,
+                ObjectCode  = KfsObjectCodes.Income,
+                Description = "Funds Distribution"
+            };
+
+            // setup transaction
+            var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
+
+            var request = new CreateTransaction()
+            {
+                AutoApprove            = true,
+                MerchantTrackingNumber = paymentLog.Transaction.Id.ToString(),
+                MerchantTrackingUrl    = merchantUrl,
+                KfsTrackingNumber      = model.KfsTrackingNumber,
+                TransactionDate        = DateTime.UtcNow,
+                Transfers              = new List<CreateTransfer>()
+                {
+                    debitHolding,
+                    feeCredit, 
+                    incomeCredit,
+                },
+                Source                 = "Registration",
+                SourceType             = "CyberSource",
+            };
+
+            var response = await _slothService.CreateTransaction(request);
+
+            // mark transaction as cleared
+            paymentLog.Cleared = true;
+            Repository.OfType<PaymentLog>().EnsurePersistent(paymentLog);
+
+            return new JsonNetResult(new
+            {
+                success = true,
+            });
         }
     }
 }

@@ -1,0 +1,49 @@
+﻿@model CRP.Core.Domain.Transaction
+@{
+    ViewBag.Title = "Transaction Details";
+}
+
+<div class="container">
+    <h2>@ViewBag.Title</h2>
+    
+    <dl>
+        <dd>Amount</dd>
+        <dt>@Model.Amount.ToString("C")</dt>
+        
+        <dd>Quantity</dd>
+        <dt>@Model.Quantity</dt>
+    </dl>
+    
+    <h3>Payment Logs</h3>
+    <table id="paymentLogsTable" class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Amount</th>
+            <th>Gateway Transaction Id</th>
+            <th>Transaction Date</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach(var log in Model.PaymentLogs.Where(p => p.Accepted))
+            {
+                <tr>
+                    <td>@log.Id</td>
+                    <td>@log.Amount.ToString("C")</td>
+                    <td>@log.GatewayTransactionId</td>
+                    <td>@log.TnPaymentDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section AdditionalScripts
+{
+    <script>
+        $(function() {
+            $('#paymentLogsTable').DataTable({
+            });
+        });
+    </script>
+}

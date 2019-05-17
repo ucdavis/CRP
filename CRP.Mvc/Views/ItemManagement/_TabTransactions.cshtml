@@ -18,7 +18,9 @@
             {
                 <tr>
                     <td>
-                        @using(Html.BeginForm("ToggleTransactionIsActive", "ItemManagement", new { id = item.Id }, FormMethod.Post, null))
+                        <a href="@Url.Action("Details", "Transaction", new{ id = item.Id })">Details</a> |
+
+                        @using (Html.BeginForm("ToggleTransactionIsActive", "ItemManagement", new {id = item.Id}, FormMethod.Post, new { style="display:inline;" }))
                         {
                             @Html.AntiForgeryToken()
                             <a href="javascript:;" class="FormSubmit">@(item.IsActive ? "Deactivate" : "Activate")</a>
