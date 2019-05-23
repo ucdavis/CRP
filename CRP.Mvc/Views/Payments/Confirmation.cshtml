@@ -31,13 +31,10 @@
             </form>
         </div>
     }
-    else
+    else if (Model.Transaction.Total > 0)
     {
         <div>
-            @if (Model.Transaction.Total > 0)
-            {
-                @Html.Raw(Model.Transaction.Item.CheckPaymentInstructions)
-            }
+            @Html.Raw(Model.Transaction.Item.CheckPaymentInstructions)
         </div>
     }
 </div>
