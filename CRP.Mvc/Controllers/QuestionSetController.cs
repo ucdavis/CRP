@@ -39,30 +39,29 @@ namespace CRP.Controllers
         /// <returns></returns>
         public ActionResult List()
         {
-            IQueryable<QuestionSet> query;
             var user = Repository.OfType<User>().Queryable.FirstOrDefault(a => a.LoginID == CurrentUser.Identity.Name);
             Check.Require(user != null, "User is required.");
+
             var schools = user.Units.Select(a => a.School).ToList();
 
+            IQueryable<QuestionSet> query;
             if (CurrentUser.IsInRole(RoleNames.Admin))
             {
-                query = from a in Repository.OfType<QuestionSet>().Queryable
-                        where a.SystemReusable
-                            || (a.UserReusable && Equals(a.User, user))
-                            || (a.CollegeReusable && schools.Contains(a.School))
-                        select a;
+                query = Repository.OfType<QuestionSet>().Queryable
+                            .Where(a => a.SystemReusable
+                                || (a.UserReusable && a.User.Id == user.Id)
+                                || (a.CollegeReusable && schools.Contains(a.School)));
             }
             else if (CurrentUser.IsInRole(RoleNames.SchoolAdmin))
             {
-                query = from a in Repository.OfType<QuestionSet>().Queryable
-                        where (a.UserReusable && Equals(a.User, user)) || (a.CollegeReusable && schools.Contains(a.School))
-                        select a;
+                query = Repository.OfType<QuestionSet>().Queryable
+                            .Where(a => a.UserReusable && a.User.Id == user.Id
+                                || (a.CollegeReusable && schools.Contains(a.School)));
             }
             else
             {
-                query = from a in Repository.OfType<QuestionSet>().Queryable
-                        where a.UserReusable && Equals(a.User, user)
-                        select a;
+                query = Repository.OfType<QuestionSet>().Queryable
+                    .Where(a => a.UserReusable && a.User.Id == user.Id);
             }
 
             return View(query.ToList());
