@@ -21,7 +21,7 @@
         @Html.AntiForgeryToken()
     
         <div class="form-horizontal">
-            <h4>QuestionSet</h4>
+            <h4>Question Set</h4>
             <hr />
             @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.", new { @class = "text-danger" })
             @Html.Hidden("Id", Model.QuestionSet.Id)
