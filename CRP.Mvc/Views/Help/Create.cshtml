@@ -4,9 +4,15 @@
     ViewBag.Title = "Create FAQ";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="container">
+    <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.Partial("HelpForm")
-}
+    @using (Html.BeginForm())
+    {
+        @Html.Partial("HelpForm")
+    }
+    
+    <div>
+        @Html.ActionLink("Back to List", "Index", "Help")
+    </div>
+</div>

@@ -4,9 +4,15 @@
     ViewBag.Title = "Edit Help Item";
 }
 
-<h2>Edit</h2>
+<div class="container">
+    <h2>Edit</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.Partial("HelpForm")
-}
+    @using (Html.BeginForm())
+    {
+        @Html.Partial("HelpForm")
+    }
+    
+    <div>
+        @Html.ActionLink("Back to List", "Index", "Help")
+    </div>
+</div>

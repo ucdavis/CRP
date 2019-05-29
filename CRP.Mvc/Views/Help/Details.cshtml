@@ -1,17 +1,18 @@
 ﻿@model CRP.Core.Domain.HelpTopic
-@using CRP.Controllers.Helpers
 
 @{
     ViewBag.Title = "Help Details";
 }
 
-<h2>Frequently Asked Question</h2>
-<h3>@Model.Question</h3>
+<div class="container">
+    <h2>Frequently Asked Question</h2>
+    <h3>@Model.Question</h3>
 
-<div id="Answer">
-    @Html.HtmlEncode(Model.Answer)
+    <div id="Answer">
+        @Html.Raw(Model.Answer)
+    </div>
+
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
 </div>
-
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>
