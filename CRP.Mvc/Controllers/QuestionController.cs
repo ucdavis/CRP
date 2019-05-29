@@ -1,11 +1,9 @@
 using System.Linq;
 using System.Web.Mvc;
-//using CRP.App_GlobalResources;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
-using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Validator;
 
@@ -29,9 +27,26 @@ namespace CRP.Controllers
                 return this.RedirectToAction<QuestionSetController>(a => a.List());
             }
 
-            var viewModel = QuestionViewModel.Create(Repository);
-            viewModel.QuestionSet = questionSet;
+            // Check to make sure the question set hasn't been used yet
+            // If it is reusable, and it has already been used, we can add a question to it.
+            if ((questionSet.SystemReusable || questionSet.CollegeReusable || questionSet.UserReusable) && questionSet.Items.Count > 0)
+            {
+                Message = "Question cannot be added to the question set because it is already being used by an item.";
+                return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
+            }
 
+            // check to make sure it isn't the system's default contact information set
+            if (questionSet.Name == StaticValues.QuestionSet_ContactInformation && questionSet.SystemReusable)
+            {
+                Message = "This is a system default question set and cannot be modified.";
+                return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
+            }
+
+            // lookups
+            ViewBag.QuestionTypes = Repository.OfType<QuestionType>().GetAll().ToList();
+            ViewBag.Validators = Repository.OfType<Validator>().GetAll().ToList();
+
+            var viewModel = new QuestionViewModel();
             return View(viewModel);
         }
 
@@ -50,14 +65,13 @@ namespace CRP.Controllers
         ///     Question was created
         ///     Options were created if question needs them
         /// </remarks>
-        /// <param name="questionSetId">Question set Id</param>
-        /// <param name="question"></param>
-        /// <param name="questionOptions"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Create(int questionSetId, [Bind(Exclude="Id")]Question question, string[] questionOptions)//, string[] validators)
+        public ActionResult Create(int questionSetId, QuestionViewModel model)
         {
             ModelState.Clear();
+
+            // look for question set
             var questionSet = Repository.OfType<QuestionSet>().GetNullableById(questionSetId);
             if (questionSet == null || !Access.HasQuestionSetAccess(Repository, CurrentUser, questionSet))
             {
@@ -66,17 +80,41 @@ namespace CRP.Controllers
             }
 
             // Check to make sure the question set hasn't been used yet
-            //If it is reusable, and it has already been used, we can add a question to it.
+            // If it is reusable, and it has already been used, we can add a question to it.
             if ((questionSet.SystemReusable || questionSet.CollegeReusable || questionSet.UserReusable) && questionSet.Items.Count > 0)
             {
                 Message = "Question cannot be added to the question set because it is already being used by an item.";
                 return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
             }
 
-            // process the options
-            if (question.QuestionType != null && question.QuestionType.HasOptions && questionOptions != null)
+            // check to make sure it isn't the system's default contact information set
+            if (questionSet.Name == StaticValues.QuestionSet_ContactInformation && questionSet.SystemReusable)
             {
-                foreach (string s in questionOptions)
+                Message = "This is a system default question set and cannot be modified.";
+                return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
+            }
+
+            // lookups
+            ViewBag.QuestionTypes = Repository.OfType<QuestionType>().GetAll().ToList();
+            ViewBag.Validators = Repository.OfType<Validator>().GetAll().ToList();
+
+            // build new question
+            var question = new Question();
+            question.Name = model.Name;
+
+            // find question type
+            var questionType = Repository.OfType<QuestionType>().GetNullableById(model.QuestionTypeId);
+            if (questionType == null)
+            {
+                ModelState.AddModelError("QuestionType", "Question Type not found.");
+                return View(model);
+            }
+            question.QuestionType = questionType;
+
+            // process the options
+            if (questionType.HasOptions)
+            {
+                foreach (var s in model.Options)
                 {
                     if (!string.IsNullOrEmpty(s))
                     {
@@ -86,109 +124,90 @@ namespace CRP.Controllers
                 }
             }
 
-            //// add the validators
-            //if (validators != null)
-            //{
-            //    foreach (string s in validators)
-            //    {
-            //        int id;
-            //        if (int.TryParse(s, out id))
-            //        {
-            //            var validator = Repository.OfType<Validator>().GetNullableById(id);
-
-            //            if (validator != null)
-            //            {
-            //                question.Validators.Add(validator);
-            //            }
-            //        }
-            //    }
-            //}
-
-            // add the question
-            questionSet.AddQuestion(question);
-
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, question.ValidationResults());
-
-            var validatorsSelected = question.Validators.Count(validator => validator.Class.ToLower().Trim() != "required");
-
-            //Validator and Question type validation:
-            if (question.QuestionType != null)
+            // add the validators
+            foreach (var validatorId in model.Validators)
             {
-                switch (question.QuestionType.Name)
+                var validator = Repository.OfType<Validator>().GetNullableById(validatorId);
+                if (validator != null)
                 {
-                    case "Text Box":
-                        //All possible, but only a combination of required and others
-                        if (validatorsSelected > 1)
-                        {
-                            ModelState.AddModelError("Validators", "Cannot have Email, Url, Date, or Phone Number validators selected together.");
-                        }
-                        break;
-                    case "Boolean":
-                        if (question.Validators.Count > 0) //Count of all validators
-                        {
-                            ModelState.AddModelError("Validators", "Boolean Question Type should not have validators.");
-                        }
-                        break;
-                    case "Radio Buttons":
-                    case "Checkbox List":
-                    case "Drop Down":
-                    case "Text Area":
-                        if (validatorsSelected > 0) //count of all validators excluding required
-                        {
-                            ModelState.AddModelError("Validators", string.Format("The only validator allowed for a Question Type of {0} is Required.", question.QuestionType.Name));
-                        }
-                        break;
-
-                    case "Date":
-                        foreach (var validator in question.Validators)
-                        {
-                            if (validator.Class.ToLower().Trim() != "required" && validator.Class.ToLower().Trim() != "date")
-                            {
-                                ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
-                            }
-                        }
-                        break;
-                    case "No Answer":
-                        foreach (var validator in question.Validators)
-                        {
-                            ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
-                        }
-                        break;
-                    default:
-                        //No checks
-                        break;
+                    question.Validators.Add(validator);
                 }
             }
 
-            // check to make sure it isn't the system's default contact information set
-            if (questionSet.Name == StaticValues.QuestionSet_ContactInformation && questionSet.SystemReusable)
+            // add the question to the set
+            questionSet.AddQuestion(question);
+
+            var validatorsSelected = question.Validators.Count(validator => validator.Class.ToLower().Trim() != "required");
+
+            // Validator and Question type validation:
+            switch (questionType.Name)
             {
-                ModelState.AddModelError("Question Set", "This is a system default question set and cannot be modified.");
+                case "Text Box":
+                    //All possible, but only a combination of required and others
+                    if (validatorsSelected > 1)
+                    {
+                        ModelState.AddModelError("Validators", "Cannot have Email, Url, Date, or Phone Number validators selected together.");
+                    }
+                    break;
+
+                case "Boolean":
+                    if (question.Validators.Count > 0) //Count of all validators
+                    {
+                        ModelState.AddModelError("Validators", "Boolean Question Type should not have validators.");
+                    }
+                    break;
+
+                case "Radio Buttons":
+                case "Checkbox List":
+                case "Drop Down":
+                case "Text Area":
+                    if (validatorsSelected > 0) //count of all validators excluding required
+                    {
+                        ModelState.AddModelError("Validators", string.Format("The only validator allowed for a Question Type of {0} is Required.", question.QuestionType.Name));
+                    }
+                    break;
+
+                case "Date":
+                    foreach (var validator in question.Validators)
+                    {
+                        if (validator.Class.ToLower().Trim() != "required" && validator.Class.ToLower().Trim() != "date")
+                        {
+                            ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
+                        }
+                    }
+                    break;
+
+                case "No Answer":
+                    foreach (var validator in question.Validators)
+                    {
+                        ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
+                    }
+                    break;
+
+                default:
+                    //No checks
+                    break;
             }
 
-            //Moved to Questions.cs domain validation
             // check to make sure there are options if needed
-            //if (question.QuestionType.HasOptions && question.Options.Count <= 0)
-            //{
-            //    ModelState.AddModelError("Options", "The question type requires at least one option.");
-            //}
-
-            if (ModelState.IsValid)
+            if (questionType.HasOptions && question.Options.Count <= 0)
             {
-                // valid redirect to edit
-                Repository.OfType<Question>().EnsurePersistent(question);
-                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question");
-                return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
+                ModelState.AddModelError("Options", "The question type requires at least one option.");
             }
-            else
-            {
-                // not valid, go back
-                var viewModel = QuestionViewModel.Create(Repository);
-                viewModel.QuestionSet = questionSet;
-                viewModel.Question = question;
 
-                return View(viewModel);
+            // check any other complex issues
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, question.ValidationResults());
+
+            // not valid, go back
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
+
+            // valid redirect to edit
+            Repository.OfType<Question>().EnsurePersistent(question);
+            Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Question");
+            return this.RedirectToAction<QuestionSetController>(a => a.Edit(questionSetId));
         }
 
         /// <summary>

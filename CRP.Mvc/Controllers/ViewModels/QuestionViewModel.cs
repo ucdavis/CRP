@@ -1,28 +1,29 @@
-﻿using System.Collections.Generic;
-using CRP.Core.Domain;
-using UCDArch.Core.PersistanceSupport;
-using Check = UCDArch.Core.Utils.Check;
+﻿
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CRP.Controllers.ViewModels
 {
     public class QuestionViewModel
     {
-        public IEnumerable<QuestionType> QuestionTypes { get; set; }
-        public Question Question { get; set; }
-        public QuestionSet QuestionSet { get; set; }
-        public IEnumerable<Validator> Validators { get; set; }
-
-        public static QuestionViewModel Create(IRepository repository)
+        public QuestionViewModel()
         {
-            Check.Require(repository != null, "Repository is required.");
-
-            var viewModel = new QuestionViewModel() 
-            {
-                QuestionTypes = repository.OfType<QuestionType>().GetAll(), 
-                Validators = repository.OfType<Validator>().GetAll()
-            };
-
-            return viewModel;
+            Options = new List<string>();
+            Validators = new List<int>();
         }
+
+
+        [Required]
+        [StringLength(200)]
+        public string Name { get; set; }
+
+        [Required]
+        public int QuestionTypeId { get; set; }
+
+        [Required]
+        public IList<string> Options { get; set; }
+
+        [Required]
+        public IList<int> Validators { get; set; }
     }
 }

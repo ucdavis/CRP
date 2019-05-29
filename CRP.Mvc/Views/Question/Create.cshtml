@@ -1,165 +1,273 @@
 ﻿@model CRP.Controllers.ViewModels.QuestionViewModel
-@using MvcContrib.FluentHtml
+
+@using System.Net.Http
+@using CRP.Core.Domain
+@using Newtonsoft.Json
+@using Validator = CRP.Core.Domain.Validator
 
 @{
     ViewBag.Title = "Create Question for Set";
+    var query = Request.Url.ParseQueryString();
+    var questionSetId = query["questionSetId"];
+
+    var questionTypes = (IReadOnlyList<QuestionType>) ViewBag.QuestionTypes;
+    var validators = (IReadOnlyList<Validator>) ViewBag.Validators;
 }
+    <div class="boundary">
+        <h2>@ViewBag.Title</h2>
 
-<div class="boundary">
+        @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
 
-    <h2>@ViewBag.Title</h2>
+        <div class="row">
+            <div class="col-lg-6">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
 
-    @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Name)
+                    </div>
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @{
+                            var questionTypesOptions = questionTypes.Select(t => new SelectListItem() { Text = t.Name, Value = t.Id.ToString() });
+                        }
 
-        <span style="display:none;" id="TypesWithOptions">@string.Join(",", Model.QuestionTypes.Where(a => a.HasOptions).Select(a => a.Id.ToString()).ToArray())</span>
+                        <label>Question Type</label>
+                        @Html.DropDownListFor(x => x.QuestionTypeId, questionTypesOptions, "-- Select --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.QuestionTypeId)
+                    </div>
 
-        <fieldset>
-            <legend>Fields</legend>
+                    <div id="Option" class="form-group" style="display: none;">
+                        <label>Options:</label>
+                        <div id="OptionsContainer">
+                            @for (var i = 0; i < Model.Options.Count; i++)
+                            {
+                                var option = Model.Options[i];
 
-            <p>
-                <label for="Name">Name:</label>
-                @Html.TextBox("Name", Model.Question != null ? Model.Question.Name : string.Empty, new { style = "width: 700px" })
-                @Html.ValidationMessageFor(x => x.Question.Name)
-            </p>
+                                <div class='input-group'>
+                                    <span class='input-group-addon'>@(i + 1)</span>
+                                    <input id="Options[@i]" name="Options[@i]" class='form-control' value="@option" required>
+                                </div>
+                            }
+                        </div>
 
-            <p>
-                <label for="Validators">Validators:</label>
+                        <img id="AddOptions" src="@Url.Content("~/Images/plus.png")" style="width: 24px; height: 24px;"/>
+                    </div>
 
-                @this.CheckBoxList("Validators").Options(Model.Validators, x => x.Id, x => x.Name)
-                @Html.ValidationMessage("Validators")
-            </p>
+                    <fieldset>
+                        <legend for="Validators">Validators:</legend>
+                        
+                        @for (var i = 0; i < validators.Count; i++)
+                        {
+                            var id = "Validators[" + i + "]";
+                            var name = "Validators[" + i + "]";
+                            var validator = validators[i];
+                            var match = Model.Validators.Contains(validator.Id);
 
-            <p>
-                @this.Select("QuestionType").Options(Model.QuestionTypes, x => x.Id, x => x.Name).FirstOption("--Select a Type--").Selected(Model.Question != null && Model.Question.QuestionType != null ? Model.Question.QuestionType.Id : 0).Label("Question Type:")
-                @Html.ValidationMessageFor(x => x.Question.QuestionType)
-            </p>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBox(name, match, new {id, value = validator.Id})
+                                    @validator.Name
+                                </label>
+                            </div>
+                        }
 
-            <p id="Option" style="display:none;">
-                <span id="OptionsContainer">
-                </span>
-                <img id="AddOptions" src="@Url.Content("~/Images/plus.png")" style="width:24px; height:24px;" />
-                @Html.ValidationMessageFor(x => x.Question.OptionsRequired)
-                @Html.ValidationMessageFor(x => x.Question.OptionsNames)
-                @Html.ValidationMessageFor(x => x.Question.OptionsNotAllowed)
-            </p>
+                        @Html.ValidationMessageFor(x => x.Validators)
+                    </fieldset>
 
-            <p>
-                <input type="submit" value="Create" />
-            </p>
-        </fieldset>
+                    <input type="submit" value="Create" class="btn btn-primary pull-right" />
+                }
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Sample</div>
+                    <div class="panel-body">
 
-    }
+                        <div class="form-group hideAndShow" id="SampleTextBox" style="display: none;">
+                            <label>
+                                @(!string.IsNullOrEmpty(Model.Name) ? Model.Name : "Sample of a TextBox Question?")
+                            </label>
+                            <input type="text" class="form-control" />
+                        </div>
 
-    <div>
-        @Html.ActionLink("Back to Question Set", "Edit", "QuestionSet", new { id = Model.QuestionSet.Id }, null)
-    </div>
-    <div class="two_col_float two_col_float_left">
-        <div class="QuantityContainer">
-            <fieldset>
-                <legend>Sample</legend>
-                <ul>
-                    <li id="SampleTextBox" style="display:none;" class="hideAndShow">
-                        @(Model.Question != null ? Model.Question.Name : "Sample of a TextBox Question?")
-                        <br />
-                        @Html.TextBox("TextBoxQuestion", "")
-                    </li>
-                    <li id="SampleTextArea" style="display:none;" class="hideAndShow">
-                        @(Model.Question != null ? Model.Question.Name : "Sample of a TextArea Question?")
-                        <br />
-                        @Html.TextArea(".Answer", "")
-                    </li>
-                    <li id="SampleBoolean" style="display:none;" class="hideAndShow">
-                        @Html.CheckBox(".Answer", true, new { @class = "BooleanSample" }) Sample of a Boolean Question?
-                    </li>
-                    <li id="SampleRadioButtons" style="display:none;" class="hideAndShow">
-                        @(Model.Question != null ? Model.Question.Name : "Sample of a Radio Button Question?")
-                        <br />
-                        @Html.RadioButton(".Answer", "Option 1", false)
-                        "Red"
-                        @Html.RadioButton(".Answer", "Option 2", true)
-                        "Blue"
-                        @Html.RadioButton(".Answer", "Option 3", false)
-                        "Green"
-                        @Html.RadioButton(".Answer", "Option 4", false)
-                        "Not any color above but one that cause this to wrap on next line"
-                    </li>
-                    <li id="SampleCheckboxList" style="display:none;" class="hideAndShow">
-                        @(Model.Question != null ? Model.Question.Name : "Sample of a Checkbox List Question?")
-                        <br />
-                        @Html.CheckBox(".CblAnswer", false)
-                        "Checkbox List 1"
-                        @Html.CheckBox(".CblAnswer", true)
-                        "Checkbox List 2"
-                        @Html.CheckBox(".CblAnswer", true)
-                        "Checkbox List 3"
-                        @Html.CheckBox(".CblAnswer", false)
-                        "Checkbox List 4"
-                        @Html.CheckBox(".CblAnswer", true)
-                        "Checkbox List 5"
-                    </li>
-                    <li id="SampleDropDown" style="display:none;" class="hideAndShow">
-                        @{ var dropDownPick = new Dictionary<int, string>(3) { { 1, "DropDown 1" }, { 2, "DropDown 2" }, { 3, "DropDown 3" } };}
+                        <div class="form-group hideAndShow" id="SampleTextArea" style="display: none;">
+                            <label>
+                                @(!string.IsNullOrEmpty(Model.Name) ? Model.Name : "Sample of a TextArea Question?")
+                            </label>
+                            <textarea class="form-control"></textarea>
+                        </div>
 
-                        @(Model.Question != null ? Model.Question.Name : "Sample of a Dropdown List Question?")
-                        <br />
-                        @this.Select("Test").Options(dropDownPick, x => x.Key, x => x.Value).FirstOption("--Select a Type--")
-                    </li>
-                    <li id="SampleDate" style="display:none;" class="hideAndShow">
-                        @(Model.Question != null ? Model.Question.Name : "Sample of a Date Question?")
-                        <br />
-                        @Html.TextBox(".Answer", string.Empty, new { @class = "dateForm" })
-                    </li>
-                    <li id="SampleNoAnswer" style="display:none;" class="hideAndShow">
-                        @Model.Question != null ? Model.Question.Name : "Sample of a No Answer Question? This can cover several lines up to a maximum of about 200 characters."
-                        <br />
-                    </li>
-                </ul>
-            </fieldset>
+                        <div class="checkbox hideAndShow" id="SampleBoolean" style="display: none;">
+                            <label>
+                                <input type="checkbox" />
+                                Sample of a Boolean Question?
+                            </label>
+                        </div>
+
+                        <div class="hideAndShow" id="SampleRadioButtons" style="display: none;">
+                            <label>
+                                @(!string.IsNullOrEmpty(Model.Name) ? Model.Name : "Sample of a Radio Button Question?")
+                            </label>
+
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="radioExample" />
+                                    "Red"
+                                </label>
+                            </div>
+
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="radioExample" />
+                                    "Blue"
+                                </label>
+                            </div>
+
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="radioExample" />
+                                    "Green"
+                                </label>
+                            </div>
+
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="radioExample" />
+                                    "Not any color above but one that cause this to wrap on next line"
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="hideAndShow" id="SampleCheckboxList" style="display: none;">
+                            <label>
+                                @(!string.IsNullOrEmpty(Model.Name) ? Model.Name : "Sample of a Checkbox List Question?")
+                            </label>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" />
+                                    "Checkbox List 1"
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" />
+                                    "Checkbox List 2"
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" />
+                                    "Checkbox List 3"
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" />
+                                    "Checkbox List 4"
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" />
+                                    "Checkbox List 5"
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group hideAndShow" id="SampleDropDown" style="display: none;">
+                            <label>
+                                @(!string.IsNullOrEmpty(Model.Name) ? Model.Name : "Sample of a Dropdown List Question?")
+                            </label>
+
+                            <select class="form-control">
+                                <option>-- Select a Option --</option>
+                                <option value="1">DropDown 1</option>
+                                <option value="2">DropDown 2</option>
+                                <option value="3">DropDown 3</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group hideAndShow" id="SampleDate" style="display: none;">
+                            <label>
+                                @(!string.IsNullOrEmpty(Model.Name) ? Model.Name : "Sample of a Date Question?")
+                            </label>
+                            <input type="text" class="form-control" data-provide="datepicker" placeholder="MM/DD/YYYY" />
+                        </div>
+
+                        <div class="form-group hideAndShow" id="SampleNoAnswer" style="display: none;">
+                            @(!string.IsNullOrEmpty(Model.Name) ? Model.Name : "Sample of a No Answer Question? This can cover several lines up to a maximum of about 200 characters.")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            @Html.ActionLink("Back to Question Set", "Edit", "QuestionSet", new { id = questionSetId }, null)
         </div>
     </div>
-</div>
 
 @section AdditionalScripts {
     <script type="text/javascript">
         $(document).ready(function () {
             // attach event handlers
-            $("img#AddOptions").click(function () { AddOptionInput(); });
-            $("select#QuestionType").change(function (event) { QuestionTypeChange(this); });
-            $("select#QuestionType").trigger("change");
+            $("#QuestionTypeId").change(QuestionTypeChange);
+            $("#AddOptions").click(AddOptionInput);
 
+            // setup page on first load
+            QuestionTypeChange();
         });
 
-        function AddOptionInput() {
-            var index = $("span#OptionsContainer").children().length;
+        var typesWithOptions = @Html.Raw(JsonConvert.SerializeObject(questionTypes.Where(a => a.HasOptions).Select(a => a.Id.ToString())));
 
-            var input = $("<input>");
-            var name = "questionOptions[" + index + "]";
-            input.attr("id", name);
-            input.attr("name", name);
+        function QuestionTypeChange() {
+            var input = $("#QuestionTypeId");
+            var selectedId = input.find("option:selected").val();
 
-            $("span#OptionsContainer").append(input);
-        }
-
-        function QuestionTypeChange(obj) {
-            var selectedId = $(obj).find("option:selected").val();
-            var typesWithOptions = $("span#TypesWithOptions").html().split(",");
-
+            // should we show/hide options list?
             if ($.inArray(selectedId, typesWithOptions) >= 0) {
-                // it's in the array, it has options
-                $("p#Option").show();
-                $("span#OptionsContainer").empty();
+                // it's in the array, it requires options, show and add one if necessary
+                $("#Option").show();
+
+                var options = $("#OptionsContainer").children().length;
+                if (options < 1) {
+                    AddOptionInput();
+                }
             }
             else {
-                $("p#Option").hide();
+                // always reset the list
+                $("#Option").hide();
+                $("#OptionsContainer").empty();
             }
-            $(".hideAndShow").hide();
-            var myText = $(obj).find("option:selected").text().replace(" ", "");
-            $("li#Sample" + myText).show();
 
+            // hide all samples, then show just one
+            $(".hideAndShow").hide();
+            var myText = input.find("option:selected").text().replace(" ", "");
+            $("#Sample" + myText).show();
+        }
+
+        function AddOptionInput() {
+            var index = $("#OptionsContainer").children().length;
+
+            // create input for entry
+            var container = $("<div class='input-group'><span class='input-group-addon'>" + (index + 1) + "</span></div>");
+
+            var input = $("<input class='form-control' required>");
+            var name = "Options[" + index + "]";
+            input.attr("id", name);
+            input.attr("name", name);
+            container.append(input);
+
+            $("#OptionsContainer").append(container);
+            input.focus();
         }
     </script>
 }
