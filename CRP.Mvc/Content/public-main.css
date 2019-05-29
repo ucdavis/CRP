@@ -473,10 +473,17 @@ form.tickets {
   border-bottom: 1px solid #C8C7CC; }
 
 .event_card {
-  background: #fff;
-  flex-basis: 30%;
-  margin-bottom: 32px;
-  margin-top: 16px; }
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(49,49,93,.03), 0 2px 5px 0 rgba(49,49,93,.1), 0 1px 2px 0 rgba(0,0,0,.08);
+    flex-basis: 30%;
+    margin-bottom: 32px;
+    margin-top: 16px;
+}
+
+    .event_card:hover {
+        box-shadow: 0 0 0 5px rgba(49,49,93,.03), 0 2px 5px 0 rgba(49,49,93,.1), 0 1px 2px 0 rgba(0,0,0,.08);
+    }
+
   @media (max-width: 1250px) {
     .event_card {
       flex-basis: 49%; } }
