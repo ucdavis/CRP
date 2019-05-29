@@ -35,22 +35,32 @@ namespace CRP.Core.Domain
         [Required]
         [StringLength(50)]
         public virtual string Name { get; set; }
+
+        [Display(Name = "College Reusable")]
         public virtual bool CollegeReusable { get; set; }
 
+        [Display(Name = "System Reusable")]
         public virtual bool SystemReusable { get; set; }
+
+        [Display(Name = "User Reusable")]
         public virtual bool UserReusable { get; set; }
+
         public virtual School School { get; set; }
+
         public virtual User User { get; set; }
+
         /// <summary>
         /// Used to determine whether or not a reusable question set should be displayed as an option.
         /// </summary>
+        [Display(Name = "Is Active")]
         public virtual bool IsActive { get; set; }
 
-        //public virtual ICollection<QuestionSetQuestion> Questions { get; set; }
         [Required]
         public virtual ICollection<Question> Questions { get; set; }
+
         [Required]
         public virtual ICollection<ItemQuestionSet> Items { get; set; }
+
         [Required]
         public virtual ICollection<ItemTypeQuestionSet> ItemTypes { get; set; }
 
