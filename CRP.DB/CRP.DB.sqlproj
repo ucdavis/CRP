@@ -313,5 +313,6 @@
     <Build Include="dbo\Stored Procedures\usp_deleteUserFromRole.sql" />
     <Build Include="dbo\Stored Procedures\usp_deleteEmptyRole.sql" />
     <Build Include="dbo\Tables\FinancialAccounts.sql" />
+    <Build Include="Change Scripts\MigrateFIDs.sql" />
   </ItemGroup>
 </Project>
