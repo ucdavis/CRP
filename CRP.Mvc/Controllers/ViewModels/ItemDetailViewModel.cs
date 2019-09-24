@@ -105,6 +105,8 @@ namespace CRP.Controllers.ViewModels
             var transIds = transactions.Select(a => a.Id).ToArray();
             var childTransactions = repository.OfType<Transaction>().Queryable
                 .Where(a => transIds.Contains(a.ParentTransaction.Id)).ToArray();
+            var paymentLogs = repository.OfType<PaymentLog>().Queryable.Where(a => transIds.Contains(a.Transaction.Id))
+                .ToArray();
 
             var allNames = repository.OfType<TransactionAnswer>().Queryable.Where(a =>
                 a.Transaction.Item.Id == item.Id && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
@@ -116,6 +118,7 @@ namespace CRP.Controllers.ViewModels
             {
                 transaction.ChildTransactions =
                     childTransactions.Where(a => a.ParentTransaction.Id == transaction.Id).ToArray();
+                transaction.PaymentLogs = paymentLogs.Where(a => a.Transaction.Id == transaction.Id).ToArray();
                 if (!transaction.Check)
                 {
                     continue;
