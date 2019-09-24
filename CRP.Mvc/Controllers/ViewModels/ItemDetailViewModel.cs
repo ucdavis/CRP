@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Castle.Core.Internal;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
@@ -80,6 +81,8 @@ namespace CRP.Controllers.ViewModels
         public string Fid { get; set; }
         public IList<CheckName> CheckName { get; set; }
 
+        public IList<Transaction> Transactions { get; set; }
+
         public static UserItemDetailViewModel Create(IRepository repository, Item item)
         {
             Check.Require(repository != null, "Repository is required.");
@@ -98,7 +101,10 @@ namespace CRP.Controllers.ViewModels
             //viewModel.Fid = string.Format(" FID={0}", CloudConfigurationManager.GetSetting("TouchNetFid"));
             viewModel.Fid = string.Format(" FID={0}", string.IsNullOrEmpty(item.TouchnetFID) ? string.Empty : item.TouchnetFID);
 
-            var transactions = repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == item.Id && a.Check && a.ParentTransaction == null && a.IsActive).ToArray();
+            var transactions = repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == item.Id && a.ParentTransaction == null && a.IsActive).ToArray();
+            var transIds = transactions.Select(a => a.Id).ToArray();
+            var childTransactions = repository.OfType<Transaction>().Queryable
+                .Where(a => transIds.Contains(a.ParentTransaction.Id)).ToArray();
 
             var allNames = repository.OfType<TransactionAnswer>().Queryable.Where(a =>
                 a.Transaction.Item.Id == item.Id && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
@@ -108,6 +114,12 @@ namespace CRP.Controllers.ViewModels
 
             foreach (var transaction in transactions)
             {
+                transaction.ChildTransactions =
+                    childTransactions.Where(a => a.ParentTransaction.Id == transaction.Id).ToArray();
+                if (!transaction.Check)
+                {
+                    continue;
+                }
                 var checkName = new CheckName();
                 checkName.TransactionNumber = transaction.TransactionNumber;
 
@@ -138,6 +150,8 @@ namespace CRP.Controllers.ViewModels
 
                 viewModel.CheckName.Add(checkName);
             }
+
+            viewModel.Transactions = transactions;
 
             return viewModel;
         }
