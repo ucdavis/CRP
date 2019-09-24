@@ -98,17 +98,26 @@ namespace CRP.Controllers.ViewModels
             //viewModel.Fid = string.Format(" FID={0}", CloudConfigurationManager.GetSetting("TouchNetFid"));
             viewModel.Fid = string.Format(" FID={0}", string.IsNullOrEmpty(item.TouchnetFID) ? string.Empty : item.TouchnetFID);
 
-            foreach (var transaction in viewModel.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null && a.IsActive))
+            var transactions = repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == item.Id && a.Check && a.ParentTransaction == null && a.IsActive).ToArray();
+
+            var allNames = repository.OfType<TransactionAnswer>().Queryable.Where(a =>
+                a.Transaction.Item.Id == item.Id && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                (a.Question.Name == StaticValues.Question_LastName ||
+                 a.Question.Name == StaticValues.Question_FirstName)).Select(a =>
+                new {TransactionId = a.Transaction.Id, QuestionName = a.Question.Name, Answer = a}).ToArray();
+
+            foreach (var transaction in transactions)
             {
                 var checkName = new CheckName();
                 checkName.TransactionNumber = transaction.TransactionNumber;
 
-                var lastName = transaction.TransactionAnswers
-                    .FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
-                        a.Question.Name == StaticValues.Question_LastName);
-                var firstName = transaction.TransactionAnswers
-                    .FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
-                        a.Question.Name == StaticValues.Question_FirstName);
+                var lastName = allNames.Where(a =>
+                        a.TransactionId == transaction.Id && a.QuestionName == StaticValues.Question_LastName).Select(a => a.Answer)
+                    .FirstOrDefault();
+
+                var firstName = allNames.Where(a =>
+                        a.TransactionId == transaction.Id && a.QuestionName == StaticValues.Question_FirstName).Select(a => a.Answer)
+                    .FirstOrDefault();
 
                 if (lastName != null)
                 {
