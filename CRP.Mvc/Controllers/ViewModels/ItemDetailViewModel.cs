@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Castle.Core.Internal;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
