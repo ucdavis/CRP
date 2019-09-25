@@ -56,13 +56,13 @@ namespace CRP.Controllers.ViewModels
                 .Where(a => a.Item.Id == item.Id).ToArray();
             var transIds = transactions.Select(a => a.Id).ToArray();
             var reportColumnNames = itemReport.Columns.Select(a => a.Name).ToArray();
-            var reportQuestionSets = itemReport.Columns.Select(a => a.QuestionSet).ToArray();
+            var reportQuestionSetIds = itemReport.Columns.Where(a => a.QuestionSet != null).Select(a => a.QuestionSet.Id).Distinct().ToArray();
 
             //var transactionAnswer = transaction.TransactionAnswers.Where(a => a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
 
             var transactionAnswers = repository.OfType<TransactionAnswer>().Queryable.Where(a =>
                 transIds.Contains(a.Transaction.Id) && reportColumnNames.Contains(a.Question.Name) &&
-                reportQuestionSets.Contains(a.QuestionSet)).ToArray();
+                reportQuestionSetIds.Contains(a.QuestionSet.Id)).ToArray();
             
             //Figure out if these are needed.
             var childTransactions = repository.OfType<Transaction>().Queryable
@@ -75,12 +75,12 @@ namespace CRP.Controllers.ViewModels
             {
                 //var quantityAnswer = transaction.QuantityAnswers.Where(a => a.QuantityId == quantityId.Value && a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
                 var quantityAnswers = repository.OfType<QuantityAnswer>().Queryable
-                    .Where(a => transIds.Contains(a.Transaction.Id) && reportColumnNames.Contains(a.Question.Name) && reportQuestionSets.Contains(a.QuestionSet)).ToArray();
+                    .Where(a => transIds.Contains(a.Transaction.Id) && reportColumnNames.Contains(a.Question.Name) && reportQuestionSetIds.Contains(a.QuestionSet.Id)).ToArray();
                 // go through all the transactions
                 foreach (var x in transactions.Where(a => a.ParentTransaction == null))
                 {
-                    x.QuantityAnswers = quantityAnswers;
-                    x.TransactionAnswers = transactionAnswers;
+                    x.QuantityAnswers = quantityAnswers.Where(a => a.Transaction.Id == x.Id).ToArray();
+                    x.TransactionAnswers = transactionAnswers.Where(a => a.Transaction.Id == x.Id).ToArray();
                     x.ChildTransactions = childTransactions.Where(a => a.ParentTransaction.Id == x.Id).ToArray();
                     x.PaymentLogs = paymentLogs.Where(a => a.Transaction.Id == x.Id).ToArray();
                     // go through all the unqiue quantity ids
@@ -105,7 +105,7 @@ namespace CRP.Controllers.ViewModels
                 // go through all the transactions
                 foreach (var x in transactions.Where(a => a.ParentTransaction == null))
                 {
-                    x.TransactionAnswers = transactionAnswers;
+                    x.TransactionAnswers = transactionAnswers.Where(a => a.Transaction.Id == x.Id).ToArray();
                     x.ChildTransactions = childTransactions.Where(a => a.ParentTransaction.Id == x.Id).ToArray();
                     x.PaymentLogs = paymentLogs.Where(a => a.Transaction.Id == x.Id).ToArray();
                     var row = new List<string>();
@@ -172,7 +172,7 @@ namespace CRP.Controllers.ViewModels
 
             if (itemReportColumn.Transaction)
             {
-                var transactionAnswer = transaction.TransactionAnswers.Where(a => a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
+                var transactionAnswer = transaction.TransactionAnswers.Where(a => a.Question.Name == itemReportColumn.Name && a.QuestionSet.Id == itemReportColumn.QuestionSet.Id).FirstOrDefault();
 
                 if (transactionAnswer != null)
                 {
@@ -181,7 +181,7 @@ namespace CRP.Controllers.ViewModels
             }
             else if (itemReportColumn.Quantity)
             {
-                var quantityAnswer = transaction.QuantityAnswers.Where(a => a.QuantityId == quantityId.Value && a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
+                var quantityAnswer = transaction.QuantityAnswers.Where(a => a.QuantityId == quantityId.Value && a.Question.Name == itemReportColumn.Name && a.QuestionSet.Id == itemReportColumn.QuestionSet.Id).FirstOrDefault();
 
                 if (quantityAnswer != null)
                 {
