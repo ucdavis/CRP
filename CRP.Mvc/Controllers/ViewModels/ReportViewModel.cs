@@ -39,10 +39,10 @@ namespace CRP.Controllers.ViewModels
                 return GenerateChecks(viewModel, itemReport, item, repository);
             }
 
-            return GenerateGeneric(viewModel, itemReport, item, fromExcel);
+            return GenerateGeneric(viewModel, itemReport, item, fromExcel, repository);
         }
 
-        private static ReportViewModel GenerateGeneric (ReportViewModel viewModel, ItemReport itemReport, Item item, bool fromExcel)
+        private static ReportViewModel GenerateGeneric (ReportViewModel viewModel, ItemReport itemReport, Item item, bool fromExcel, IRepository repository)
         {
             //deal with the column names
             foreach (var ir in itemReport.Columns)
@@ -52,12 +52,37 @@ namespace CRP.Controllers.ViewModels
                                               : ir.Name);
             }
 
+            var transactions = repository.OfType<Transaction>().Queryable
+                .Where(a => a.Item.Id == item.Id).ToArray();
+            var transIds = transactions.Select(a => a.Id).ToArray();
+            var reportColumnNames = itemReport.Columns.Select(a => a.Name).ToArray();
+            var reportQuestionSets = itemReport.Columns.Select(a => a.QuestionSet).ToArray();
+
+            //var transactionAnswer = transaction.TransactionAnswers.Where(a => a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
+
+            var transactionAnswers = repository.OfType<TransactionAnswer>().Queryable.Where(a =>
+                transIds.Contains(a.Transaction.Id) && reportColumnNames.Contains(a.Question.Name) &&
+                reportQuestionSets.Contains(a.QuestionSet)).ToArray();
+            
+            //Figure out if these are needed.
+            var childTransactions = repository.OfType<Transaction>().Queryable
+                .Where(a => transIds.Contains(a.ParentTransaction.Id)).ToArray();
+            var paymentLogs = repository.OfType<PaymentLog>().Queryable.Where(a => transIds.Contains(a.Transaction.Id))
+                .ToArray();
+
             // deal with the row values, if there are any quantity properties, we need to go through the quantity values
             if (itemReport.Columns.Any(a => a.Quantity))
             {
+                //var quantityAnswer = transaction.QuantityAnswers.Where(a => a.QuantityId == quantityId.Value && a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
+                var quantityAnswers = repository.OfType<QuantityAnswer>().Queryable
+                    .Where(a => transIds.Contains(a.Transaction.Id) && reportColumnNames.Contains(a.Question.Name) && reportQuestionSets.Contains(a.QuestionSet)).ToArray();
                 // go through all the transactions
-                foreach (var x in item.Transactions.Where(a => a.ParentTransaction == null))
+                foreach (var x in transactions.Where(a => a.ParentTransaction == null))
                 {
+                    x.QuantityAnswers = quantityAnswers;
+                    x.TransactionAnswers = transactionAnswers;
+                    x.ChildTransactions = childTransactions.Where(a => a.ParentTransaction.Id == x.Id).ToArray();
+                    x.PaymentLogs = paymentLogs.Where(a => a.Transaction.Id == x.Id).ToArray();
                     // go through all the unqiue quantity ids
                     foreach (var y in x.QuantityAnswers.Select(a => a.QuantityId).Distinct())
                     {
@@ -78,8 +103,11 @@ namespace CRP.Controllers.ViewModels
             else
             {
                 // go through all the transactions
-                foreach (var x in item.Transactions.Where(a => a.ParentTransaction == null))
+                foreach (var x in transactions.Where(a => a.ParentTransaction == null))
                 {
+                    x.TransactionAnswers = transactionAnswers;
+                    x.ChildTransactions = childTransactions.Where(a => a.ParentTransaction.Id == x.Id).ToArray();
+                    x.PaymentLogs = paymentLogs.Where(a => a.Transaction.Id == x.Id).ToArray();
                     var row = new List<string>();
 
                     foreach (var z in itemReport.Columns)
