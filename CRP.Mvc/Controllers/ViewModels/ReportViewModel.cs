@@ -36,7 +36,7 @@ namespace CRP.Controllers.ViewModels
 
             if (itemReport.Name == "Checks" && itemReport.SystemReusable)
             {
-                return GenerateChecks(viewModel, itemReport, item);
+                return GenerateChecks(viewModel, itemReport, item, repository);
             }
 
             return GenerateGeneric(viewModel, itemReport, item, fromExcel);
@@ -94,7 +94,7 @@ namespace CRP.Controllers.ViewModels
             return viewModel;
         }
 
-        private static ReportViewModel GenerateChecks (ReportViewModel viewModel, ItemReport itemReport, Item item)
+        private static ReportViewModel GenerateChecks (ReportViewModel viewModel, ItemReport itemReport, Item item, IRepository repository)
         {
             //deal with the column names
             foreach (var ir in itemReport.Columns)
@@ -102,9 +102,16 @@ namespace CRP.Controllers.ViewModels
                 viewModel.ColumnNames.Add(ir.Name);
             }
 
+            var transactions = repository.OfType<Transaction>().Queryable
+                .Where(a => a.Item.Id == item.Id && a.ParentTransaction == null).ToArray();
+            var transIds = transactions.Select(a => a.Id).ToArray();
+            var paymentLogs = repository.OfType<PaymentLog>().Queryable.Where(a => transIds.Contains(a.Transaction.Id))
+                .ToArray();
+
             // go through all the transactions
-            foreach (var x in item.Transactions.Where(a => a.ParentTransaction == null))
+            foreach (var x in transactions)
             {
+                x.PaymentLogs = paymentLogs.Where(a => a.Transaction.Id == x.Id).ToArray();
                 // go through all the unqiue quantity ids
                 foreach (var y in x.PaymentLogs.Where(a => a.Check && a.Accepted))
                 {
