@@ -52,30 +52,29 @@ namespace CRP.Controllers.ViewModels
                                               : ir.Name);
             }
 
-            var transactions = repository.OfType<Transaction>().Queryable
-                .Where(a => a.Item.Id == item.Id).ToArray();
+            var transactions = repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == item.Id).ToArray();
             var transIds = transactions.Select(a => a.Id).ToArray();
-            var reportColumnNames = itemReport.Columns.Select(a => a.Name).ToArray();
             var reportQuestionSetIds = itemReport.Columns.Where(a => a.QuestionSet != null).Select(a => a.QuestionSet.Id).Distinct().ToArray();
 
             //var transactionAnswer = transaction.TransactionAnswers.Where(a => a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
-
+            var transactionReportNames = itemReport.Columns.Where(a => a.Transaction).Select(a => a.Name).ToArray();
             var transactionAnswers = repository.OfType<TransactionAnswer>().Queryable.Where(a =>
-                transIds.Contains(a.Transaction.Id) && reportColumnNames.Contains(a.Question.Name) &&
+                transIds.Contains(a.Transaction.Id) && transactionReportNames.Contains(a.Question.Name) &&
                 reportQuestionSetIds.Contains(a.QuestionSet.Id)).ToArray();
             
             //Figure out if these are needed.
-            var childTransactions = repository.OfType<Transaction>().Queryable
-                .Where(a => transIds.Contains(a.ParentTransaction.Id)).ToArray();
-            var paymentLogs = repository.OfType<PaymentLog>().Queryable.Where(a => transIds.Contains(a.Transaction.Id))
-                .ToArray();
+            var childTransactions = transactions.Where(a => a.ParentTransaction != null && transIds.Contains(a.ParentTransaction.Id)).ToArray();
+            var needPaymentLogs = itemReport.Columns.Where(a => a.Property).Any(a => a.Name == StaticValues.Report_Paid || a.Name == StaticValues.Report_TotalPaid);
+            var paymentLogs = needPaymentLogs ? repository.OfType<PaymentLog>().Queryable.Where(a => transIds.Contains(a.Transaction.Id))
+                .ToArray() : new PaymentLog[0];
 
             // deal with the row values, if there are any quantity properties, we need to go through the quantity values
             if (itemReport.Columns.Any(a => a.Quantity))
             {
+                var quantityReportNames = itemReport.Columns.Where(a => a.Quantity).Select(a => a.Name).ToArray();
                 //var quantityAnswer = transaction.QuantityAnswers.Where(a => a.QuantityId == quantityId.Value && a.Question.Name == itemReportColumn.Name && a.QuestionSet == itemReportColumn.QuestionSet).FirstOrDefault();
                 var quantityAnswers = repository.OfType<QuantityAnswer>().Queryable
-                    .Where(a => transIds.Contains(a.Transaction.Id) && reportColumnNames.Contains(a.Question.Name) && reportQuestionSetIds.Contains(a.QuestionSet.Id)).ToArray();
+                    .Where(a => transIds.Contains(a.Transaction.Id) && quantityReportNames.Contains(a.Question.Name) && reportQuestionSetIds.Contains(a.QuestionSet.Id)).ToArray();
                 // go through all the transactions
                 foreach (var x in transactions.Where(a => a.ParentTransaction == null))
                 {
