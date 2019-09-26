@@ -57,7 +57,7 @@ namespace CRP.Controllers.ViewModels
             var reportQuestionSetIds = itemReport.Columns.Where(a => a.QuestionSet != null).Select(a => a.QuestionSet.Id).Distinct().ToArray();
 
             var transactionReportNames = itemReport.Columns.Where(a => a.Transaction).Select(a => a.Name).ToArray();
-            var transactionAnswers = repository.OfType<TransactionAnswer>().Queryable.Where(a =>
+            var transactionAnswers = repository.OfType<TransactionAnswer>().Queryable.Fetch(a => a.Question).Where(a =>
                 transIds.Contains(a.Transaction.Id) && transactionReportNames.Contains(a.Question.Name) &&
                 reportQuestionSetIds.Contains(a.QuestionSet.Id)).ToArray();
             
@@ -70,7 +70,7 @@ namespace CRP.Controllers.ViewModels
             if (itemReport.Columns.Any(a => a.Quantity))
             {
                 var quantityReportNames = itemReport.Columns.Where(a => a.Quantity).Select(a => a.Name).ToArray();
-                var quantityAnswers = repository.OfType<QuantityAnswer>().Queryable
+                var quantityAnswers = repository.OfType<QuantityAnswer>().Queryable.Fetch(a => a.Question)
                     .Where(a => transIds.Contains(a.Transaction.Id) && quantityReportNames.Contains(a.Question.Name) && reportQuestionSetIds.Contains(a.QuestionSet.Id)).ToArray();
                 // go through all the transactions
                 foreach (var x in transactions.Where(a => a.ParentTransaction == null))

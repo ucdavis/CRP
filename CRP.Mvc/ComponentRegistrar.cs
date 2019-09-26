@@ -31,6 +31,8 @@ namespace CRP.Mvc
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)
         {
+            container.Register(Component.For<IQueryExtensionProvider>().ImplementedBy<NHibernateQueryExtensionProvider>().Named("queryExtensionProvider"));
+
             container.Register(Component.For(typeof(IRepositoryWithTypedId<,>)).ImplementedBy(typeof(RepositoryWithTypedId<,>)).Named("repositoryWithTypedId"));
             container.Register(Component.For(typeof(IRepository<>)).ImplementedBy(typeof(Repository<>)).Named("repositoryType"));
             container.Register(Component.For<IRepository>().ImplementedBy<Repository>().Named("repository"));
