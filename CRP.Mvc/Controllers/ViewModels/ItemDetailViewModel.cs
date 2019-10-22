@@ -100,7 +100,7 @@ namespace CRP.Controllers.ViewModels
             //viewModel.Fid = string.Format(" FID={0}", CloudConfigurationManager.GetSetting("TouchNetFid"));
             viewModel.Fid = string.Format(" FID={0}", string.IsNullOrEmpty(item.TouchnetFID) ? string.Empty : item.TouchnetFID);
 
-            var transactions = repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == item.Id && a.ParentTransaction == null && a.IsActive).ToArray();
+            var transactions = repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == item.Id && a.ParentTransaction == null).ToArray();
             var transIds = transactions.Select(a => a.Id).ToArray();
             var childTransactions = repository.OfType<Transaction>().Queryable
                 .Where(a => transIds.Contains(a.ParentTransaction.Id)).ToArray();
@@ -113,7 +113,7 @@ namespace CRP.Controllers.ViewModels
                  a.Question.Name == StaticValues.Question_FirstName)).Select(a =>
                 new {TransactionId = a.Transaction.Id, QuestionName = a.Question.Name, Answer = a}).ToArray();
 
-            foreach (var transaction in transactions)
+            foreach (var transaction in transactions.Where(a => a.IsActive))
             {
                 transaction.ChildTransactions =
                     childTransactions.Where(a => a.ParentTransaction.Id == transaction.Id).ToArray();
