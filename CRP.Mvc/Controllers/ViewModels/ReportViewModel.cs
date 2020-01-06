@@ -250,7 +250,7 @@ namespace CRP.Controllers.ViewModels
             }
 
 
-            if (result != null && itemReportColumn.Format == StaticValues.FormatCapitalize)
+            if (!string.IsNullOrWhiteSpace(result) && itemReportColumn.Format == StaticValues.FormatCapitalize)
             {
                 result = UCDArch.Core.Utils.Inflector.Capitalize(result);
             }
