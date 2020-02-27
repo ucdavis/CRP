@@ -1,4 +1,5 @@
 ﻿@using CRP.Core.Domain
+@using Microsoft.Azure
 @using Microsoft.Web.Mvc
 
 @{
@@ -54,6 +55,10 @@
 <body>
 
 <header>
+    @if (CloudConfigurationManager.GetSetting("ShowTestingBanner") == "YES")
+    {
+        <h1 style="background-color: red; text-align: center; color: white">----------- Testing SITE. Testing SITE. Testing SITE. -----------</h1>
+    }
     <div class="bleed">
         <div class="topbanner">
             <div class="header_item">
@@ -64,11 +69,11 @@
                 {
                     @Html.AntiForgeryToken()
                     <div id="search_box" class="search_box">
-                        @Html.TextBox("searchTerm", string.Empty, new { @maxlength = "20" })
+                        @Html.TextBox("searchTerm", string.Empty, new {@maxlength = "20"})
                     </div>
                 }
 
-            </div>            
+            </div>
         </div>
     </div>
     <div class="header_contents">
@@ -87,7 +92,7 @@
         </div>
 
     </div>
-    
+
 </header>
 <div class="body-content">
     @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))

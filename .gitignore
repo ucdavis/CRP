@@ -252,3 +252,4 @@ AppReleaseSettings.config
 CRP/bin/
 CRP.Core/bin/*
 packages/
+/CRP.DB/CRP.DB.jfm
