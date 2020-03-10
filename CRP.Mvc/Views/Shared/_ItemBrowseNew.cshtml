@@ -15,9 +15,9 @@
             <a href="@Url.Action("Details", "Item", new { id = item.Id })">
                 <img class="img-respo" src="@Url.Action("GetImage", "Item", new {id = item.Id})" alt="eventbanner-image" />
                 <div class="event_card-details">
-                    <h1>@Html.Encode(item.Name)</h1>
+                    <h1>@item.Name</h1>
                     <P>
-                        @Html.Encode(item.Summary)
+                        @item.Summary
                     </P>
                     @foreach (var ep in item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
                     {
