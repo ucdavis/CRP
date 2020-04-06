@@ -248,6 +248,7 @@ AppReleaseSettings.config
 # ignore libraries
 packages/
 node_modules/
+/CRP.DB/CRP.DB.jfm
 
 # ignore msbuild files
 bin/

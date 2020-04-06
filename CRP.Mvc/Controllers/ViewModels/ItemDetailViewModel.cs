@@ -80,6 +80,8 @@ namespace CRP.Controllers.ViewModels
         public FinancialAccount FinancialAccount { get; set; }
         public IList<CheckName> CheckName { get; set; }
 
+        public IList<Transaction> Transactions { get; set; }
+
         public static UserItemDetailViewModel Create(IRepository repository, Item item)
         {
             Check.Require(repository != null, "Repository is required.");
@@ -98,17 +100,38 @@ namespace CRP.Controllers.ViewModels
 
             viewModel.FinancialAccount = item.FinancialAccount;
 
-            foreach (var transaction in viewModel.Item.Transactions.Where(a => a.Check && a.ParentTransaction == null && a.IsActive))
+            var transactions = repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == item.Id && a.ParentTransaction == null).ToArray();
+            var transIds = transactions.Select(a => a.Id).ToArray();
+            var childTransactions = repository.OfType<Transaction>().Queryable
+                .Where(a => transIds.Contains(a.ParentTransaction.Id)).ToArray();
+            var paymentLogs = repository.OfType<PaymentLog>().Queryable.Where(a => transIds.Contains(a.Transaction.Id))
+                .ToArray();
+
+            var allNames = repository.OfType<TransactionAnswer>().Queryable.Where(a =>
+                a.Transaction.Item.Id == item.Id && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
+                (a.Question.Name == StaticValues.Question_LastName ||
+                 a.Question.Name == StaticValues.Question_FirstName)).Select(a =>
+                new {TransactionId = a.Transaction.Id, QuestionName = a.Question.Name, Answer = a}).ToArray();
+
+            foreach (var transaction in transactions.Where(a => a.IsActive))
             {
+                transaction.ChildTransactions =
+                    childTransactions.Where(a => a.ParentTransaction.Id == transaction.Id).ToArray();
+                transaction.PaymentLogs = paymentLogs.Where(a => a.Transaction.Id == transaction.Id).ToArray();
+                if (!transaction.Check)
+                {
+                    continue;
+                }
                 var checkName = new CheckName();
                 checkName.TransactionNumber = transaction.TransactionNumber;
 
-                var lastName = transaction.TransactionAnswers
-                    .FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
-                        a.Question.Name == StaticValues.Question_LastName);
-                var firstName = transaction.TransactionAnswers
-                    .FirstOrDefault(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
-                        a.Question.Name == StaticValues.Question_FirstName);
+                var lastName = allNames.Where(a =>
+                        a.TransactionId == transaction.Id && a.QuestionName == StaticValues.Question_LastName).Select(a => a.Answer)
+                    .FirstOrDefault();
+
+                var firstName = allNames.Where(a =>
+                        a.TransactionId == transaction.Id && a.QuestionName == StaticValues.Question_FirstName).Select(a => a.Answer)
+                    .FirstOrDefault();
 
                 if (lastName != null)
                 {
@@ -129,6 +152,8 @@ namespace CRP.Controllers.ViewModels
 
                 viewModel.CheckName.Add(checkName);
             }
+
+            viewModel.Transactions = transactions;
 
             return viewModel;
         }

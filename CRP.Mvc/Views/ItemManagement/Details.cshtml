@@ -40,11 +40,11 @@
         <li><a href="#Notifications" data-toggle="tab">Notifications</a></li>
     </ul>
     <div class="tab-content">
-        @Html.Partial("_TabTransactions", Model.Item.Transactions)
+        @Html.Partial("_TabTransactions", Model.Transactions)       
         @Html.Partial("_TabChecks")
         @Html.Partial("_TabReports")
         @Html.Partial("_TabRefunds")
-        @Html.Partial("_TabNotifications", Model.Item.Transactions)
+        @Html.Partial("_TabNotifications", Model.Transactions)  
     </div>
 
 
