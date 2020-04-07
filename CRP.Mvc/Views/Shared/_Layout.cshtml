@@ -1,4 +1,5 @@
 ﻿@using CRP.Core.Domain
+@using Microsoft.Azure
 @using Microsoft.Web.Mvc
 
 @{
@@ -58,6 +59,10 @@
 <body>
 
     <header>
+        @if (CloudConfigurationManager.GetSetting("ShowTestingBanner") == "YES")
+        {
+            <h1 style="background-color: red; text-align: center; color: white">----------- Testing SITE. Testing SITE. Testing SITE. -----------</h1>
+        }
         <div class="bleed">
             <div class="topbanner">
                 <div class="header_item">
