@@ -21,6 +21,11 @@ namespace CRP.Controllers
             _searchTermProvider = searchTermProvider;
         }
 
+        /// <summary>
+        /// Tested 20200408
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <returns></returns>
         public ActionResult Index(string searchTerm)
         {
             var viewModel = SearchViewModel.Create(Repository);
