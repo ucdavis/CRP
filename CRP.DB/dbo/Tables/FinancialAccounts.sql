@@ -6,7 +6,7 @@
     [Name]        NVARCHAR (128) NOT NULL,
     [Project]     NVARCHAR (9)   NULL,
     [SubAccount]  NVARCHAR (5)   NULL,
-    [UnitId]      INT            NOT NULL,
+    [UnitId]      INT            NULL,
     CONSTRAINT [PK_FinancialAccounts] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 

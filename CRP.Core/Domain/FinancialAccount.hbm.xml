@@ -15,7 +15,7 @@
     <property name="SubAccount" column="SubAccount" />
     <property name="Project" column="Project" />
 
-    <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" not-null="true" fetch="join" />
+    <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" fetch="join" />
 
   </class>
 </hibernate-mapping>
