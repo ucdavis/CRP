@@ -144,7 +144,14 @@
                 <div class="foot_bottom">
                     <ul class="footer-list no-bullet">
                         <li>
-                            &copy; Copyright 2005-2019
+                            &copy; Copyright 2005-
+                            <script language="JavaScript" type="text/javascript">
+                                now = new Date;
+                                theYear = now.getYear();
+                                if (theYear < 1900)
+                                    theYear = theYear + 1900;
+                                document.write(theYear);
+                            </script>
                             The Regents of the University of California, Davis campus. All rights reserved.
                         </li>
                     </ul>
