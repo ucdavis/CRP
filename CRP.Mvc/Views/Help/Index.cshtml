@@ -4,62 +4,19 @@
     ViewBag.Title = "Help Topics";
 }
 
-<div class="container">
-
-    <div class="row">
-        <h2>@ViewBag.Title</h2>
-        @if (Model.IsUserAuthorized)
-        {
-            <p class="pull-right">
-                @Html.ActionLink("Create New", "Create")
-            </p>
-        }
-    </div>
-    
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th></th>
-                @if (Model.IsUserAdmin)
-                {
-                    <th>Active</th>
-                    <th>Public</th>
-                    <th>Read Count</th>
-                }
-                <th>Frequently Asked Questions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var t in Model.HelpTopics)
-            {
-                <tr>
-                    <td>
-                        @if (t.IsVideo)
-                        {
-                            @Html.ActionLink("Watch", "WatchVideo", new { id = t.Id })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("View", "Details", new { id = t.Id })
-                        }
-
-                        @if (Model.IsUserAdmin)
-                        {
-                            <text> | </text>
-                            @Html.ActionLink("Edit", "Edit", new { id = t.Id })
-                        }
-                    </td>
-                    @if (Model.IsUserAdmin)
-                    {
-
-                        <td>@t.IsActive</td>
-                        <td>@t.AvailableToPublic</td>
-                        <td>@t.NumberOfReads</td>
-                    }
-                    <td>@t.Question</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="boundary">
+    <h1>Replaced</h1>
+    <p>
+        The local Help and FAQ has been replaced.
+    </p>
+    <hr/>
+    <p>
+        <a class="btn btn-green" href="https://computing.caes.ucdavis.edu/documentation/registration/registration-change-log" target="_blank">What's New (April 10, 2020)</a>
+    </p>
+    <p>
+        <a class="btn btn-green" href="https://computing.caes.ucdavis.edu/documentation/registration" target="_blank">FAQ</a>
+    </p>
+    <p>
+        <a class="btn btn-red" href="https://caeshelp.ucdavis.edu/?appname=Registration" target="_blank">Admin Help Ticket</a>
+    </p>
 </div>
