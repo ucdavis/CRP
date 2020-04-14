@@ -1396,13 +1396,7 @@
     <Content Include="Views\DisplayProfile\List.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\ExtendedProperty\Create.cshtml" />
-    <Content Include="Views\Help\Create.cshtml" />
-    <Content Include="Views\Help\CreateItem.cshtml" />
-    <Content Include="Views\Help\Details.cshtml" />
-    <Content Include="Views\Help\Edit.cshtml" />
     <Content Include="Views\Help\Index.cshtml" />
-    <Content Include="Views\Help\LinkMap.cshtml" />
-    <Content Include="Views\Help\WatchVideo.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\ItemManagement\Create.cshtml" />
     <Content Include="Views\ItemManagement\Edit.cshtml" />
@@ -1740,7 +1734,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50317</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50317/</IISUrl>
+          <IISUrl>http://localhost:50318/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
