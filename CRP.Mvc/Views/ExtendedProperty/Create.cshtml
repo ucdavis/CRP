@@ -6,6 +6,7 @@
     var questionTypeSelectOptions = Model.QuestionTypes.Select(q => new SelectListItem() {Text = q.Name, Value = q.Id.ToString()});
 }
 
+<div class="boundary">
 <h2>Create Extended Property for @Model.ItemType.Name</h2>
 
 
@@ -36,4 +37,5 @@
 
 <div>
     @Html.ActionLink("Back to Item Type", "EditItemType", "ApplicationManagement", new { id = Model.ItemType.Id }, new {})
+</div>
 </div>

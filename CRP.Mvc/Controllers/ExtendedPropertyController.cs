@@ -18,6 +18,10 @@ namespace CRP.Controllers
     {
         //
         // GET: /ExtendedProperty/
+        /// <summary>
+        /// Tested 20200415
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return this.RedirectToAction<HomeController>(a => a.Index());
@@ -25,6 +29,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ExtendedProperty/Create/{itemTypeId}
+        /// Tested 20200415 (Fixed View boundary)
         /// </summary>
         /// <param name="itemTypeId">The id of the item type</param>
         /// <returns></returns>
@@ -56,6 +61,7 @@ namespace CRP.Controllers
         /// </remarks>
         /// <param name="itemTypeId"></param>
         /// <param name="extendedProperty"></param>
+        /// Tested 20200415
         /// <returns></returns>
         [HttpPost]
         public ActionResult Create(int itemTypeId, [Bind(Exclude="Id")] ExtendedProperty extendedProperty)
@@ -110,6 +116,7 @@ namespace CRP.Controllers
         ///     Extended property is deleted
         /// </remarks>
         /// <param name="id"></param>
+        /// Tested 20200415
         /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int id)
