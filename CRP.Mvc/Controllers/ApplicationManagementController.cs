@@ -18,7 +18,10 @@ namespace CRP.Controllers
     {
         //
         // GET: /ApplicationManagement/
-
+        /// <summary>
+        /// Tested 20200415
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();
@@ -28,6 +31,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ApplicationManagement/ListItemTypes
+        /// Tested 20200415 (Fixed VIew)
         /// </summary>
         /// <returns></returns>
         public ActionResult ListItemTypes()
