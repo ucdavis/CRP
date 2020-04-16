@@ -418,6 +418,7 @@ namespace CRP.Controllers
         /// <param name="itemTypeId">The id of the item type to link to</param>
         /// <param name="transaction"></param>
         /// <param name="quantity"></param>
+        /// Tested 202020416
         /// <returns></returns>
         [Authorize(Roles = "Admin")]
         public ActionResult LinkToItemType(int itemTypeId, bool transaction, bool quantity)
@@ -463,6 +464,7 @@ namespace CRP.Controllers
         /// <param name="itemTypeId">The item type id.</param>
         /// <param name="transaction">if set to <c>true</c> [transaction].</param>
         /// <param name="quantity">if set to <c>true</c> [quantity].</param>
+        /// Tested 20200416
         /// <returns></returns>
         [HttpPost]
         [AdminOnly]
