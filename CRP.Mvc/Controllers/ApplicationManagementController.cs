@@ -41,6 +41,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ApplicationManagement/CreateItemType
+        /// Tested 20200415
         /// </summary>
         /// <returns></returns>
         public ActionResult CreateItemType()
@@ -59,6 +60,7 @@ namespace CRP.Controllers
         /// PostCondition:
         ///     Item is created
         ///     Extended properties passed in are saved
+        /// Tested 20200415
         /// </remarks>
         /// <param name="itemType"></param>
         /// <param name="extendedProperties"></param>
@@ -133,6 +135,7 @@ namespace CRP.Controllers
         /// GET: /ApplicationManagement/EditItemType/{id}
         /// </summary>
         /// <param name="id"></param>
+        /// Tested 20200416 Fixed formatting
         /// <returns></returns>
         public ActionResult EditItemType(int id)
         {
@@ -197,6 +200,11 @@ namespace CRP.Controllers
             }
         }
 
+        /// <summary>
+        /// Tested 20200416
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ToggleActive(int id)
         {
