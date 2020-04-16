@@ -38,7 +38,7 @@
     <p>
         @Html.ActionLink("Create", "Create", "ExtendedProperty", new { itemTypeId = Model.Id }, new {@class="btn btn-primary"})
     </p>
-    <table id="extendedPropertyTable">
+    <table id="extendedPropertyTable" class="table table-bordered">
         <thead>
         <tr>
             <td></td>
@@ -69,7 +69,7 @@
     <p>
         @Html.ActionLink("Add Transaction Question Set", "LinkToItemType", "QuestionSet", new {itemTypeId=Model.Id, transaction=true, quantity=false} , new {@class="btn btn-primary"})        
     </p>
-    <table id="t-questionSetsTable">
+    <table id="t-questionSetsTable"  class="table table-bordered">
         <thead>
         <tr>
             <td></td>
@@ -97,7 +97,7 @@
     <p>
         @Html.ActionLink("Add Quantity Question Set", "LinkToItemType", "QuestionSet", new { itemTypeId = Model.Id, transaction = false, quantity = true }, new { @class = "btn btn-primary" })
     </p>
-    <table id="q-questionSetsTable">
+    <table id="q-questionSetsTable"  class="table table-bordered">
         <thead>
         <tr>
             <td></td>
