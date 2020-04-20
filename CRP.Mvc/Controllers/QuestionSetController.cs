@@ -27,7 +27,7 @@ namespace CRP.Controllers
 
         //
         // GET: /QuestionSet/
-
+        // Tested 20200416
         public ActionResult Index()
         {
             return this.RedirectToAction(a => a.List());
@@ -35,6 +35,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /QuestionSet/List
+        /// Tested 20200416
         /// </summary>
         /// <returns></returns>
         public ActionResult List()
@@ -66,7 +67,11 @@ namespace CRP.Controllers
 
             return View(query.ToList());
         }
-
+        /// <summary>
+        /// Tested 20200416
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Details(int id)
         {
             var questionSet = Repository.OfType<QuestionSet>().GetNullableById(id);
@@ -83,6 +88,7 @@ namespace CRP.Controllers
         /// GET: /QuestionSet/Edit/{id}
         /// </summary>
         /// <param name="id"></param>
+        /// Tested 202020416
         /// <returns></returns>
         public ActionResult Edit(int id)
         {
@@ -129,6 +135,7 @@ namespace CRP.Controllers
         ///     Question set is updated
         /// </remarks>
         /// <param name="questionSet"></param>
+        /// Tested 20200416
         /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(int id, QuestionSet questionSet)
@@ -200,6 +207,7 @@ namespace CRP.Controllers
         /// <param name="itemTypeId">The id for an itemType, if it is to be automatically associated with an itemType</param>
         /// <param name="transaction">If adding to an item or item type, the questionSet type to add it to</param>
         /// <param name="quantity">If adding to an item or item type, the questionSet type to add it to</param>
+        /// Tested 20200416
         /// <returns></returns>
         public ActionResult Create(int? itemId, int? itemTypeId, bool? transaction, bool? quantity)
         {
@@ -263,6 +271,7 @@ namespace CRP.Controllers
         /// <param name="school"></param>
         /// <param name="transaction"></param>
         /// <param name="quantity"></param>
+        /// Tested 20200416
         /// <returns></returns>
         [HttpPost]
         [HandleTransactionsManually]
@@ -531,6 +540,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Get: /QuestionSet/LinkToItem
+        /// Tested 20200420
         /// </summary>
         /// <param name="itemId">The item id.</param>
         /// <param name="transaction">if set to <c>true</c> [transaction].</param>
@@ -565,6 +575,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /QuestionSet/LinkToItem/
+        /// Tested 20200420
         /// </summary>
         /// <remarks>
         /// Description:
@@ -658,6 +669,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /QuestionSet/UnlinkFromItem
+        /// Tested 20200420
         /// </summary>
         /// <remarks>
         /// Description:
