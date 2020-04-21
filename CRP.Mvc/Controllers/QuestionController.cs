@@ -15,6 +15,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Question/Create/{questionSetId}
+        /// Tested 20200421
         /// </summary>
         /// <param name="questionSetId">Question set Id</param>
         /// <returns></returns>
@@ -52,6 +53,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Question/Create/{questionSetId}
+        /// Tested 202020421
         /// </summary>
         /// <remarks>
         /// Description:
@@ -106,7 +108,7 @@ namespace CRP.Controllers
             var questionType = Repository.OfType<QuestionType>().GetNullableById(model.QuestionTypeId);
             if (questionType == null)
             {
-                ModelState.AddModelError("QuestionType", "Question Type not found.");
+                ModelState.AddModelError("Question.QuestionType", "Question Type not found.");
                 return View(model);
             }
             question.QuestionType = questionType;
@@ -146,14 +148,14 @@ namespace CRP.Controllers
                     //All possible, but only a combination of required and others
                     if (validatorsSelected > 1)
                     {
-                        ModelState.AddModelError("Validators", "Cannot have Email, Url, Date, or Phone Number validators selected together.");
+                        ModelState.AddModelError("Question.Validators", "Cannot have Email, Url, Date, or Phone Number validators selected together.");
                     }
                     break;
 
                 case "Boolean":
                     if (question.Validators.Count > 0) //Count of all validators
                     {
-                        ModelState.AddModelError("Validators", "Boolean Question Type should not have validators.");
+                        ModelState.AddModelError("Question.Validators", "Boolean Question Type should not have validators.");
                     }
                     break;
 
@@ -163,7 +165,7 @@ namespace CRP.Controllers
                 case "Text Area":
                     if (validatorsSelected > 0) //count of all validators excluding required
                     {
-                        ModelState.AddModelError("Validators", string.Format("The only validator allowed for a Question Type of {0} is Required.", question.QuestionType.Name));
+                        ModelState.AddModelError("Question.Validators", string.Format("The only validator allowed for a Question Type of {0} is Required.", question.QuestionType.Name));
                     }
                     break;
 
@@ -172,7 +174,7 @@ namespace CRP.Controllers
                     {
                         if (validator.Class.ToLower().Trim() != "required" && validator.Class.ToLower().Trim() != "date")
                         {
-                            ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
+                            ModelState.AddModelError("Question.Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
                         }
                     }
                     break;
@@ -180,7 +182,7 @@ namespace CRP.Controllers
                 case "No Answer":
                     foreach (var validator in question.Validators)
                     {
-                        ModelState.AddModelError("Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
+                        ModelState.AddModelError("Question.Validators", string.Format("{0} is not a valid validator for a Question Type of {1}", validator.Name, question.QuestionType.Name));
                     }
                     break;
 
@@ -192,7 +194,7 @@ namespace CRP.Controllers
             // check to make sure there are options if needed
             if (questionType.HasOptions && question.Options.Count <= 0)
             {
-                ModelState.AddModelError("Options", "The question type requires at least one option.");
+                ModelState.AddModelError("Question.Options", "The question type requires at least one option.");
             }
 
             // check any other complex issues
@@ -212,6 +214,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Question/Delete/{id}
+        /// Tested 20200421
         /// </summary>
         /// <remarks>
         /// Assumption:
