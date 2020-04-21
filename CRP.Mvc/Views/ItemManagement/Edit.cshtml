@@ -181,7 +181,7 @@
             <div id="@StaticValues.Tab_Coupons" class="tab-pane">
                 <fieldset>
                     <p>
-                        @Html.ActionLink("Generate Coupon", "Create", "Coupon", new { itemId = Model.Item.Id }, null)
+                        @Html.ActionLink("Generate Coupon", "Create", "Coupon", new { itemId = Model.Item.Id }, new {@class="btn btn-primary"})
                     </p>
 
                     <table id="table-coupons" class="table table-bordered">
