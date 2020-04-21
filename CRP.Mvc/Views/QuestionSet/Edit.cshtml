@@ -79,7 +79,7 @@
                     @using (Html.BeginForm<QuestionController>(a => a.Delete(q.Id), FormMethod.Post, new {name = "DeleteQuestionForm"}))
                          {
                              @Html.AntiForgeryToken()
-                             <a class="DeleteQuestion" href="javascript:;">Delete</a>
+                             <button type="submit" class="btn-link">Delete</button>
                          }
                 </td>
                 <td>@q.Order</td>
@@ -113,11 +113,6 @@
                 "columnDefs": [
                     { 'orderable': false, 'targets': [0] }
                 ]
-            });
-
-            // assign the submit event to each of the delete links
-            $("a.DeleteQuestion").click(function(event) {
-                 $(this).parents("form[name='DeleteQuestionForm']").submit();
             });
         });
 

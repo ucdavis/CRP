@@ -603,6 +603,10 @@ form.tickets {
 	background-color:Orange
 }
 
+.btn-link {
+    color: #1592A6;
+}
+
 
 
 .validation-summary-errors { border-bottom:1px #e6e6e6 solid; color: red;font-size: large;}
