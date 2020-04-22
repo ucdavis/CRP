@@ -22,6 +22,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Coupon/Create/{itemId}
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
@@ -42,6 +43,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Coupon/Create/{itemId}
+        /// Tested 20200422
         /// </summary>
         /// <remarks>
         /// Description:
@@ -121,6 +123,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Coupon/Deactivate/{id}
+        /// Tested 20200422
         /// </summary>
         /// <remarks>
         /// Description:
