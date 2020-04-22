@@ -2,13 +2,15 @@
 
 @{
     ViewBag.Title = "Create new Coupon";
+    var isChecked = "checked='checked'";
+
 }
 
 <div class="boundary">
 
 <h2>Coupon for @Model.Item.Name</h2>
 
-    @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
+    @Html.ValidationSummary(false,"Create was unsuccessful. Please correct the errors and try again.")
     
     @using(Html.BeginForm()) { 
     
@@ -16,24 +18,24 @@
     
         <fieldset>
             <legend>Fields</legend>
-            
-            <p>Coupon Type:</p>
+
+            <label>Coupon Type:</label>
             @Html.ValidationMessage("CouponType")
-            <ul>
-                <li><input type="radio" name="couponType" class="couponType" value="Unlimited" />Unlimited</li>
-                <li><input type="radio" name="couponType" class="couponType" value="LimitedUsage" />Limited Usage
+            <ul class="list-unstyled-padded"> 
+                <li><input type="radio" name="couponType" class="couponType" value="Unlimited"  @(Model.CouponType == "Unlimited" ? isChecked : String.Empty)/>Unlimited</li>
+                <li><input type="radio" name="couponType" class="couponType" value="LimitedUsage" @(Model.CouponType == "LimitedUsage" ? isChecked : String.Empty)/>Limited Usage
                 
-                    <span id="maxUsageContainer" style="display:inline-block; display:none; margin-left: 2em;">
+                    <span id="maxUsageContainer" style="display: inline-block; @(Model.CouponType == "LimitedUsage" ? String.Empty : "display:none;")  margin-left: 2em;">
                         <label>Maximum # of times this coupon can be used: </label>
                         @Html.TextBox("MaxUsage", Model.Coupon != null ? Model.Coupon.MaxUsage.ToString() : string.Empty) 
                         @Html.ValidationMessageFor(x => x.Coupon.MaxUsage)   
                     </span>
 
                 </li>
-                <li><input type="radio" name="couponType" class="couponType" value="SingleUsage" />Single Usage</li>
+                <li><input type="radio" name="couponType" class="couponType" value="SingleUsage" @(Model.CouponType == "SingleUsage" ? isChecked : String.Empty)/>Single Usage</li>
             </ul>
 
-@*            <p>
+            @*            <p>
                 <label for="Unlimited">Unlimited Usage: </label>
                 <%= Html.CheckBox("Unlimited", Model.Coupon != null ? Model.Coupon.Unlimited : false) %>
                 <%= Html.ValidationMessage("Unlimited") %>
@@ -41,7 +43,7 @@
 
             <p>
                 <label for="Expiration">Expiration Date: </label>
-                @Html.TextBox("Expiration", Model.Coupon == null ? string.Empty : (Model.Coupon.Expiration.HasValue ? Model.Coupon.Expiration.Value.ToString("D") : string.Empty))
+                @Html.TextBox("Expiration", Model.Coupon == null ? string.Empty : (Model.Coupon.Expiration.HasValue ? Model.Coupon.Expiration.Value.ToString("MM/dd/yyyy") : string.Empty))
                 @Html.ValidationMessage("Expiration")
             </p>
             <p>
@@ -53,6 +55,7 @@
                 <label for="DiscountAmount">Discount Amount:</label>
                 @Html.TextBox("DiscountAmount", Model.Coupon != null ? string.Format("{0:0.00}", Model.Coupon.DiscountAmount) : string.Empty)
                 @Html.ValidationMessageFor(x => x.Coupon.DiscountAmount)
+                @Html.ValidationMessageFor(x => x.Coupon.DiscountAmountCostPerItem)
             </p>
             
             <p>
@@ -66,12 +69,12 @@
             </p>*@
             
             <p>
-                <input type="submit" value="Create" />
+                <input type="submit" value="Create" class = "btn btn-primary"/>
             </p>
         </fieldset>
     } 
-    
-    @Html.ActionLink("Back to Item", "Edit", "ItemManagement", new { id = Model.Item.Id }, null)
+
+    @Html.ActionLink(linkText: "Back to Item", actionName:"Edit", controllerName: "ItemManagement", protocol: null,hostName:null, routeValues: new { id = Model.Item.Id }, fragment:"Coupons", htmlAttributes:null)
 </div>
 
 

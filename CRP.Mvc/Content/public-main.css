@@ -607,6 +607,12 @@ form.tickets {
     color: #1592A6;
 }
 
+.list-unstyled-padded {
+    padding-left: 20px;
+    list-style: none;
+}
+
+
 
 
 .validation-summary-errors { border-bottom:1px #e6e6e6 solid; color: red;font-size: large;}
