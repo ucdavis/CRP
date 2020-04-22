@@ -32,7 +32,7 @@ namespace CRP.Controllers
             _copyItemService = copyItemService;
         }
 
-        //
+        //Tested 20200422
         // GET: /ItemManagement/
 
         public ActionResult Index()
@@ -40,6 +40,11 @@ namespace CRP.Controllers
             return this.RedirectToAction(a => a.List(null));
         }
 
+        /// <summary>
+        /// Tested 20200422
+        /// </summary>
+        /// <param name="transactionNumber"></param>
+        /// <returns></returns>
         public ActionResult List(string transactionNumber)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
