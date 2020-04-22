@@ -1,5 +1,6 @@
 ﻿@model CRP.Controllers.ViewModels.ItemViewModel
 @using CRP.Controllers.Helpers;
+@using Microsoft.Azure
 @using MvcContrib.FluentHtml
 
 @{ 
@@ -10,7 +11,7 @@
 @Html.HiddenFor(x => x.CanChangeFinanceAccount, !Model.CanChangeFinanceAccount)
 
 <fieldset>
-    <legend><a href="https://www.youtube.com/watch?v=Zi1DyKgev8M&feature=youtu.be" target="_blank">Watch Demo</a></legend>
+    <legend><a href="@CloudConfigurationManager.GetSetting("WatchDemoLink")'" target="_blank">Watch Demo</a></legend>
     <div class="form-group">
         <label>Item Type:</label>
         @{ 
