@@ -1,4 +1,6 @@
 ﻿@using Microsoft.Azure
+
+
 @model CRP.Core.Domain.Item
 
 @{
@@ -56,6 +58,7 @@
                 <th></th>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Primary Location</th>
             </tr>
             </thead>
             <tbody>
@@ -68,6 +71,7 @@
                     </td>
                     <td>@item.Title</td>
                     <td>@item.Description</td>
+                    <td>@item.IsPrimary</td>
                 </tr>
             }
             </tbody>
