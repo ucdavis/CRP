@@ -23,6 +23,7 @@ namespace CRP.Controllers
         /// <summary>
         /// GET: /MapPin/Create
         /// #1
+        /// Tested 20200422
         /// </summary>
         /// <param name="id">Item Id</param>
         /// <returns></returns>
@@ -44,6 +45,7 @@ namespace CRP.Controllers
         /// <summary>
         /// POST: /MapPin/Create
         /// #2
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPin"></param>
@@ -81,6 +83,7 @@ namespace CRP.Controllers
         /// <summary>
         /// GET: /MapPin/Edit/5
         /// #3
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPinId"></param>
@@ -109,6 +112,7 @@ namespace CRP.Controllers
         /// <summary>
         /// POST: /MapPin/Edit/5
         /// #4
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPinId"></param>
@@ -160,7 +164,7 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPinId"></param>
