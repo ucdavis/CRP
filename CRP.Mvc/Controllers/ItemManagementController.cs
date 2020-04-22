@@ -228,6 +228,11 @@ namespace CRP.Controllers
             return new JsonNetResult(itemType.ExtendedProperties);
         }
 
+        /// <summary>
+        /// Tested 20200422
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Map(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);

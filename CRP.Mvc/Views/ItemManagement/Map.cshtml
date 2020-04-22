@@ -1,4 +1,6 @@
 ﻿@using Microsoft.Azure
+
+
 @model CRP.Core.Domain.Item
 
 @{
@@ -49,12 +51,14 @@
         <p>
             @Html.ActionLink("Add Map Pin", "Create", "MapPin", new {itemid = @Model.Id}, new {@class="btn btn-primary"})            
         </p>
-        <table id="table">
+        <span class="help-block">The first pin you add should be the location of your event.</span>
+        <table id="table" class="table table-bordered">
             <thead>
             <tr>
                 <th></th>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Primary Location</th>
             </tr>
             </thead>
             <tbody>
@@ -67,6 +71,7 @@
                     </td>
                     <td>@item.Title</td>
                     <td>@item.Description</td>
+                    <td>@item.IsPrimary</td>
                 </tr>
             }
             </tbody>
