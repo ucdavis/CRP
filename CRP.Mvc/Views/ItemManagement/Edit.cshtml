@@ -15,11 +15,11 @@
 
     <div id="tabs">
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#@StaticValues.Tab_Details" data-toggle="tab">Item Details</a></li>
-            <li role="presentation"><a href="#@StaticValues.Tab_Editors" data-toggle="tab">Editors</a></li>
-            <li role="presentation"><a href="#@StaticValues.Tab_Questions" data-toggle="tab">Questions</a></li>
-            <li role="presentation"><a href="#@StaticValues.Tab_Templates" data-toggle="tab">Confirmation Template</a></li>
-            <li role="presentation"><a href="#@StaticValues.Tab_Coupons" data-toggle="tab">Coupons</a></li>
+            <li role="presentation" class="active"><a id="Tab-@StaticValues.Tab_Details" href="#@StaticValues.Tab_Details" data-toggle="tab">Item Details</a></li>
+            <li role="presentation"><a id="Tab-@StaticValues.Tab_Editors" href="#@StaticValues.Tab_Editors" data-toggle="tab">Editors</a></li>
+            <li role="presentation"><a id="Tab-@StaticValues.Tab_Questions" href="#@StaticValues.Tab_Questions" data-toggle="tab">Questions</a></li>
+            <li role="presentation"><a id="Tab-@StaticValues.Tab_Templates" href="#@StaticValues.Tab_Templates" data-toggle="tab">Confirmation Template</a></li>
+            <li role="presentation"><a id="Tab-@StaticValues.Tab_Coupons" href="#@StaticValues.Tab_Coupons" data-toggle="tab">Coupons</a></li>
         </ul>
         <div class="tab-content">
             <div id="@StaticValues.Tab_Details" class="tab-pane active">
@@ -266,6 +266,30 @@
 
     <script type="text/javascript">
         $(function () {
+            var fragment = window.location.hash;
+
+            switch (fragment) {
+            case "#@StaticValues.Tab_Details":
+                $("#Tab-@StaticValues.Tab_Details").click();
+                break;
+            case "#@StaticValues.Tab_Editors":
+                $("#Tab-@StaticValues.Tab_Editors").click();
+                break;
+            case "#@StaticValues.Tab_Questions":
+                $("#Tab-@StaticValues.Tab_Questions").click();
+                break;
+            case "#@StaticValues.Tab_Templates":
+                $("#Tab-@StaticValues.Tab_Templates").click();
+                break;
+            case "#@StaticValues.Tab_Coupons":
+                $("#Tab-@StaticValues.Tab_Coupons").click();
+                break;
+            default:
+                //Nothing
+            }
+
+
+
             //---------------- setup html editors ------------------//
             $("#PaidText").enableTinyMce({
                 script_location: scriptUrl,
@@ -326,6 +350,9 @@
                     orderable: false,
                 }],
             });
+
+            
         });
     </script>
+
 }
