@@ -280,7 +280,8 @@
                 $("#Tab-@StaticValues.Tab_Details").click();
                 break;
             case "#@StaticValues.Tab_Editors":
-                $("#Tab-@StaticValues.Tab_Editors").click();
+                    $("#Tab-@StaticValues.Tab_Editors").click();
+                    $("#userId").chosen();
                 break;
             case "#@StaticValues.Tab_Questions":
                 $("#Tab-@StaticValues.Tab_Questions").click();
@@ -358,7 +359,15 @@
                 }],
             });
 
-            $("#userId").chosen();
+            
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr("href"); // activated tab
+                if (target == "#Editors") {
+                    $("#userId").chosen();
+                }
+
+            });
         });
     </script>
 
