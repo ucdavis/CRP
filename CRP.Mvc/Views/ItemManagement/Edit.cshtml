@@ -4,6 +4,7 @@
 @using Microsoft.Web.Mvc
 @using MvcContrib.FluentHtml
 
+
 @{
     ViewBag.Title = "Edit Item";
 }
@@ -239,6 +240,10 @@
     </div>
 </div>
 
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/Chosen")
+}
 
 @section AdditionalScripts {
 
@@ -253,6 +258,8 @@
     @Scripts.Render("~/Scripts/ItemEdit.js")
     @Scripts.Render("~/Scripts/tiny_mce/jquery.tinymce.js")
     @Scripts.Render("~/Scripts/jquery.enableTinyMce.js")
+    @Scripts.Render("~/bundles/chosen")
+    
 
     <script type="text/javascript">
         function SaveTemplateText() {
@@ -351,7 +358,7 @@
                 }],
             });
 
-            
+            $("#userId").chosen();
         });
     </script>
 
