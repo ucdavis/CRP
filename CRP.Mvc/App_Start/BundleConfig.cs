@@ -28,6 +28,8 @@ namespace CRP.Mvc
 
             bundles.Add(new ScriptBundle("~/bundles/qtip").Include(
                 "~/Scripts/qTip/jquery.qtip.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/chosen").Include(
+                "~/Scripts/chosen.jquery.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/qtipcss").Include(
                 "~/Scripts/qTip/jquery.qtip.min.css"));
@@ -43,6 +45,8 @@ namespace CRP.Mvc
 
             bundles.Add(new StyleBundle("~/Content/gPositionsNew").Include(
                 "~/Content/jquery.gPositionsNew.css"));
+            bundles.Add(new StyleBundle("~/Content/Chosen").Include(
+                "~/Content/chosen.css"));
         }
     }
 }
