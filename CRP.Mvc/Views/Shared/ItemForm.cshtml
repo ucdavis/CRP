@@ -106,7 +106,9 @@
                 ? Html.HtmlEncode("<h1>Thank you for your purchase!</h1> <h2>Please mail your RSVP card and payment to:</h2> <address>College of Agricultural and Environmental Sciences<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 95616<br /></address><h2>Please make checks payable to UC Regents.</h2>")
                 : Html.HtmlEncode(Model.Item.CheckPaymentInstructions);
         }
-        @Html.TextAreaFor(x => x.Item.CheckPaymentInstructions, new { @class = "form-control", rows = "5", @Value = checkPaymentInstructionsValue })
+        
+        <textarea class="form-control" cols="20" data-val="true" data-val-required="The CheckPaymentInstructions field is required." id="Item_CheckPaymentInstructions" name="Item.CheckPaymentInstructions" rows="5">@checkPaymentInstructionsValue</textarea>
+        
         @Html.ValidationMessageFor(x => x.Item.CheckPaymentInstructions)
     </div>
     <div class="checkbox">
