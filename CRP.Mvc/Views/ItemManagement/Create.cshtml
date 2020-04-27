@@ -20,6 +20,11 @@
     </div>
 </div>
 
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/Chosen")
+}
+
 @section AdditionalScripts {
     <script type="text/javascript">
     var getExtendedPropertyUrl = '@Url.Action("GetExtendedProperties", "ItemManagement")';
@@ -29,11 +34,13 @@
     @Scripts.Render("~/Scripts/ItemEdit.js")
     @Scripts.Render("~/Scripts/tiny_mce/jquery.tinymce.js")
     @Scripts.Render(" ~/Scripts/jquery.enableTinyMce.js")
+    @Scripts.Render("~/bundles/chosen")
 
     <script type="text/javascript">
         $(document).ready(function () {
             $("#Item_Description").enableTinyMce({ script_location: '@Url.Content("~/Scripts/tiny_mce/tiny_mce.js")' });
             $("#Item_CheckPaymentInstructions").enableTinyMce({ script_location: '@Url.Content("~/Scripts/tiny_mce/tiny_mce.js")', overrideHeight: '255' });
+            $("#Item_FinancialAccountId").chosen();
         });
     </script>
 }
