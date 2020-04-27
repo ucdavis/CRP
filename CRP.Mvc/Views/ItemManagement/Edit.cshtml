@@ -39,7 +39,7 @@
                     @Html.Hidden("id")
                     <div class="form-group">
                         Add User: @this.Select("userId").Options(Model.Users.OrderBy(a => a.LastName), x => x.Id, x => x.SortableName).FirstOption("--Select a User--")
-                        <input type="submit" value="Add User" />
+                        <input type="submit" value="Add User" class="btn btn-primary" />
                     </div>
                 }
 
