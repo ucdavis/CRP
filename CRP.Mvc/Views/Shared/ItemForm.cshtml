@@ -151,8 +151,8 @@
         @Html.TextBoxFor(x => x.Item.Link, new { @class = "form-control validateLink", @data_toggle="tooltip", @title = "You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html", @placeholder= "Example: http://www.ucdavis.edu/index.html" })
         @Html.ValidationMessageFor(x => x.Item.Link)
     </div>
-    <fieldset>
-        <legend>Optional Donation Link</legend>
+    <fieldset class="field-border">
+        <legend class="field-border">Optional Donation Link</legend>
         <div class="form-group">
             <label>Donation Legend:</label>
             @Html.TextBoxFor(x => x.Item.DonationLinkLegend, new { @class="form-control" })
@@ -219,8 +219,8 @@
     </div>
 </fieldset>
 
-<fieldset>
-    <legend>Extended Properties</legend>
+<fieldset class="field-border">
+    <legend class="field-border">Extended Properties</legend>
     @Html.ValidationMessage("Extended Properties")
     <div id="ExtendedProperties">
         @if (selectedItemType?.ExtendedProperties != null)
@@ -252,8 +252,8 @@
     </div>
 </fieldset>
 
-<fieldset>
-    <legend>Upload Picture</legend>
+<fieldset class="field-border">
+    <legend class="field-border">Upload Picture</legend>
     <!-- NEEDS BALLOON-->
 
     <img src='@Url.Action("GetImage", "Item", new {id = Model.Item?.Id ?? -1})' alt="" />
@@ -267,8 +267,8 @@
     @Html.ValidationMessage("Image")
 </fieldset>
 
-<fieldset>
-    <legend>Tags</legend>
+<fieldset class="field-border">
+    <legend class="field-border">Tags</legend>
 
     <!-- NEEDS BALLOON-->
     <div class="form-group">
@@ -285,4 +285,4 @@
         }
     </div>
 </fieldset>
-<input type="submit" value="Save" class="save_btn" />
+<input type="submit" value="Save" class="btn btn-primary" />
