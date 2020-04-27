@@ -46,6 +46,10 @@ namespace CRP.Controllers.Helpers
             var account = repository.OfType<FinancialAccount>().GetNullableById(src.FinancialAccountId);
             dest.FinancialAccount = account;
 
+            //Try to get item type.
+            var itemType = repository.OfType<ItemType>().GetNullableById(src.ItemTypeId);
+            dest.ItemType = itemType;
+
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 
             return dest;
