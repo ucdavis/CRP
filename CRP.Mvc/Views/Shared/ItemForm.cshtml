@@ -36,6 +36,10 @@
 
         @Html.DropDownListFor(x => x.Item.ItemTypeId, typeOptions, "--Select an item type--", getItemTyepHtmlOptions())
         @Html.ValidationMessageFor(x => x.Item.ItemTypeId)
+        @if (typeDisabled)
+        {
+            @Html.HiddenFor(x => x.Item.ItemTypeId)
+        }
     </div>
 
     <div class="form-group">
@@ -74,18 +78,20 @@
             {
                 if (accountDisabled)
                 {
-                    return new { @class = "form-control", @required = true, @disabled = true };
+                    return new { @class = "form-control", @disabled = true };
                 }
 
-                return new { @class = "form-control", @required = true };
+                return new { @class = "form-control" };
             };
         }
 
 
         @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--",  getFinancialAccountHtmlOptions())
-
+        @Html.ValidationMessage("Item.FinancialAccount")
         <span>*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</span>
+        
     </div>
+
     <div class="form-group">
         <label>Summary:</label>
         @Html.TextAreaFor(x => x.Item.Summary, new { @class="form-control", rows="5", @data_toggle="tooltip", @title = "A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters."})
