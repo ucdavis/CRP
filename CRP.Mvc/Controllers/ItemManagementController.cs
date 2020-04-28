@@ -362,6 +362,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/RemoveEditor
+        /// Tested 20200424
         /// </summary>
         /// <remarks>
         /// Description:
@@ -417,6 +418,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/AddEditor
+        /// Tested 20200424
         /// </summary>
         /// <remarks>
         /// Description:

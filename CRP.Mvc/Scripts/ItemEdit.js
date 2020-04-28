@@ -1,89 +1,93 @@
-﻿$(function () {
-    $("input#Item_Expiration").datepicker();
+﻿$(function() {
+  $("input#Item_Expiration").datepicker();
 
+  $("select#Item_ItemTypeId").change(function(event) {
+    var url = window.getExtendedPropertyUrl;
+    $.getJSON(url + "/" + $(this).val(), {}, function(result) {
+      // remove old questions;
+      $("div#ExtendedProperties")
+        .children()
+        .remove();
 
-    $("select#Item_ItemType").change(function (event) {
+      if (!result.length) {
+        return;
+      }
 
-        var url = window.getExtendedPropertyUrl;
-        $.getJSON(url + '/' + $(this).val(), {}, function (result) {
+      // for each question, add the input, etc
+      $.each(result, function(index, item) {
+        var name = item.Name.replace(/ /g, "");
 
-        // remove old questions;
-            $("div#ExtendedProperties").children().remove();
+        // create container
+        var container = $("<div class='form-group'>");
 
-            if (!result.length) {
-                return;
-            }
+        // create the label
+        var label = $("<label>")
+          .attr("for", "item." + name)
+          .html(item.Name);
 
-            // for each question, add the input, etc
-            $.each(result, function (index, item) {
+        // must have a title, or bt breaks all of this.
+        var textBox = $("<input>")
+          .attr("type", "text")
+          .attr("name", "ExtendedProperties[" + index + "].value")
+          .attr("class", "required form-control");
 
-                var name = item.Name.replace(/ /g, "");
+        // create hidden field to store the extended property id
+        var hidden = $("<input>")
+          .attr("type", "hidden")
+          .attr("name", "ExtendedProperties[" + index + "].propertyId")
+          .val(item.Id);
 
-                // create container
-                var container = $("<div class='form-group'>");
+        // add date values
+        if (item.QuestionType.Name === "Date") {
+          textBox
+            .attr("title", "mm/dd/yyyy")
+            .attr("placeholder", "mm/dd/yyyy")
+            .attr("data-date-format", "mm/dd/yyyy")
+            .datepicker();
+        }
 
-                // create the label
-                var label = $("<label>")
-                    .attr("for", "item." + name)
-                    .html(item.Name);
+        // build and append tree
+        container
+          .append(label)
+          .append(textBox)
+          .append(hidden);
 
-                // must have a title, or bt breaks all of this.
-                var textBox = $("<input>")
-                    .attr("type", "text")
-                    .attr("name", "ExtendedProperties[" + index + "].value")
-                    .attr("class", "required form-control");
-                
-                // create hidden field to store the extended property id
-                var hidden = $("<input>")
-                    .attr("type", "hidden")
-                    .attr("name", "ExtendedProperties[" + index + "].propertyId")
-                    .val(item.Id);
-
-                // add date values
-                if (item.QuestionType.Name === "Date") {
-                    textBox
-                        .attr("title", "mm/dd/yyyy")
-                        .attr("placeholder", "mm/dd/yyyy")
-                        .attr("data-date-format", "mm/dd/yyyy")
-                        .datepicker();
-                }
-
-                // build and append tree
-                container
-                    .append(label)
-                    .append(textBox)
-                    .append(hidden);
-
-                $("div#ExtendedProperties").append(container);
-            });
-        });
+        $("div#ExtendedProperties").append(container);
+      });
     });
+  });
 
-
-    $("img#tagAddButton").click(function (event) {
-        var input = $("<input>").attr("id", "tags").attr("name", "tags").val($("input#tagInput").val());
-        input.attr("type", "text");
-        input.css("cursor", "pointer");
-        input.click(function (event) { $(this).remove(); });
-        $("div#tagContainer").append(input);
-
-        // blank the input
-        $("input#tagInput").val("");
+  $("img#tagAddButton").click(function(event) {
+    var input = $("<input>")
+      .attr("id", "tags")
+      .attr("name", "tags")
+      .val($("input#tagInput").val());
+    input.attr("type", "text");
+    input.css("cursor", "pointer");
+    input.click(function(event) {
+      $(this).remove();
     });
+    $("div#tagContainer").append(input);
 
-    $("input#tags").click(function (event) {
-        $(this).remove();
-    });
+    // blank the input
+    $("input#tagInput").val("");
+  });
 
-    $("a.FormSubmit").click(function (event) {
-        //$(this).parents("form#RemoveForm").submit();
+  $("input#tags").click(function(event) {
+    $(this).remove();
+  });
 
-        $(this).parent().submit();
-    });
+  $("a.FormSubmit").click(function(event) {
+    //$(this).parents("form#RemoveForm").submit();
 
-    $("input#Item_QuantityName").change(function (event) {
-        var quantityName = $(this).val();
-        $("#CostPerItemLabel").text("Cost Per " + quantityName + ":");
-        $("#QuantityLabel").text("Number of " + quantityName + "(s) Available:");
-    });
+    $(this)
+      .parent()
+      .submit();
+  });
+
+  $("input#Item_QuantityName").change(function(event) {
+    var quantityName = $(this).val();
+    $("#CostPerItemLabel").text("Cost Per " + quantityName + ":");
+    $("#QuantityLabel").text("Number of " + quantityName + "(s) Available:");
+  });
 });

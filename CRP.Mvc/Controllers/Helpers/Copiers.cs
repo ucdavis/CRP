@@ -39,12 +39,22 @@ namespace CRP.Controllers.Helpers
             dest.AllowCreditPayment = src.AllowCreditPayment;
             dest.Summary            = src.Summary;
 
+            if (src.Image != null)
+            {
+                //Only populate dest if an image was supplied 
+                dest.Image = src.Image;
+            }
+
             // lookup references
             var unit = repository.OfType<Unit>().GetNullableById(src.UnitId);
             dest.Unit = unit;
 
             var account = repository.OfType<FinancialAccount>().GetNullableById(src.FinancialAccountId);
             dest.FinancialAccount = account;
+
+            //Try to get item type.
+            var itemType = repository.OfType<ItemType>().GetNullableById(src.ItemTypeId);
+            dest.ItemType = itemType;
 
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 

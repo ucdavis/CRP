@@ -37,10 +37,10 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.Hidden("id")
-                    <fieldset>
+                    <div class="form-group">
                         Add User: @this.Select("userId").Options(Model.Users.OrderBy(a => a.LastName), x => x.Id, x => x.SortableName).FirstOption("--Select a User--")
-                        <input type="submit" value="Add User" />
-                    </fieldset>
+                        <input type="submit" value="Add User" class="btn btn-primary" />
+                    </div>
                 }
 
                 <table id="table-editors" class="table table-bordered">
@@ -277,8 +277,9 @@
 
             switch (fragment) {
             case "#@StaticValues.Tab_Details":
-                $("#Tab-@StaticValues.Tab_Details").click();
-                break;
+                    $("#Tab-@StaticValues.Tab_Details").click();
+                    $("#Item_FinancialAccountId").chosen();
+                    break;
             case "#@StaticValues.Tab_Editors":
                     $("#Tab-@StaticValues.Tab_Editors").click();
                     $("#userId").chosen();
@@ -293,7 +294,7 @@
                 $("#Tab-@StaticValues.Tab_Coupons").click();
                 break;
             default:
-                //Nothing
+                $("#Item_FinancialAccountId").chosen();
             }
 
 
@@ -363,10 +364,12 @@
 
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 var target = $(e.target).attr("href"); // activated tab
-                if (target == "#Editors") {
+                if (target === "#Editors") {
                     $("#userId").chosen();
                 }
-
+                if (target === "#Details") {
+                    $("#Item_FinancialAccountId").chosen();
+                }
             });
         });
     </script>

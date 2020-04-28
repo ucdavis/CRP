@@ -36,6 +36,10 @@
 
         @Html.DropDownListFor(x => x.Item.ItemTypeId, typeOptions, "--Select an item type--", getItemTyepHtmlOptions())
         @Html.ValidationMessageFor(x => x.Item.ItemTypeId)
+        @if (typeDisabled)
+        {
+            @Html.HiddenFor(x => x.Item.ItemTypeId)
+        }
     </div>
 
     <div class="form-group">
@@ -45,10 +49,7 @@
     </div>
     <div class="form-group">
         <label>Unit:</label>
-        @{ 
-            var unitOptions = Model.Units.Select(u => new SelectListItem { Text = u.FullName, Value = u.Id.ToString() });
-        }
-        @Html.DropDownListFor(x => x.Item.UnitId, unitOptions, "--Select unit--", new { @class = "form-control" })
+        @this.Select("Item.UnitId").Class("form-control").Options(Model.Units, x=>x.Id, x=>x.FullName).Selected(Model.Item != null ? Model.Item.UnitId : (Model.UserUnit != null ? Model.UserUnit.Id : 0 ))
     </div>
     <div class="form-group">
         <label>Account Number:</label>
@@ -77,18 +78,20 @@
             {
                 if (accountDisabled)
                 {
-                    return new { @class = "form-control", @required = true, @disabled = true };
+                    return new { @class = "form-control", @disabled = true };
                 }
 
-                return new { @class = "form-control", @required = true };
+                return new { @class = "form-control" };
             };
         }
 
 
         @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--",  getFinancialAccountHtmlOptions())
-
-        <span>*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</span>
+        @Html.ValidationMessage("Item.FinancialAccount")
+        <text class="help-block">*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</text>
+        
     </div>
+
     <div class="form-group">
         <label>Summary:</label>
         @Html.TextAreaFor(x => x.Item.Summary, new { @class="form-control", rows="5", @data_toggle="tooltip", @title = "A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters."})
@@ -106,7 +109,9 @@
                 ? Html.HtmlEncode("<h1>Thank you for your purchase!</h1> <h2>Please mail your RSVP card and payment to:</h2> <address>College of Agricultural and Environmental Sciences<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 95616<br /></address><h2>Please make checks payable to UC Regents.</h2>")
                 : Html.HtmlEncode(Model.Item.CheckPaymentInstructions);
         }
-        @Html.TextAreaFor(x => x.Item.CheckPaymentInstructions, new { @class = "form-control", rows = "5", @Value = checkPaymentInstructionsValue })
+        
+        <textarea class="form-control" cols="20" data-val="true" data-val-required="The CheckPaymentInstructions field is required." id="Item_CheckPaymentInstructions" name="Item.CheckPaymentInstructions" rows="5">@checkPaymentInstructionsValue</textarea>
+        
         @Html.ValidationMessageFor(x => x.Item.CheckPaymentInstructions)
     </div>
     <div class="checkbox">
@@ -148,9 +153,10 @@
         <label for="Item.Link">Link:</label>
         @Html.TextBoxFor(x => x.Item.Link, new { @class = "form-control validateLink", @data_toggle="tooltip", @title = "You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html", @placeholder= "Example: http://www.ucdavis.edu/index.html" })
         @Html.ValidationMessageFor(x => x.Item.Link)
+        <text class="help-block">The link can be used to point to your own website for more information.</text>
     </div>
-    <fieldset>
-        <legend>Optional Donation Link</legend>
+    <fieldset class="field-border">
+        <legend class="field-border">Optional Donation Link</legend>
         <div class="form-group">
             <label>Donation Legend:</label>
             @Html.TextBoxFor(x => x.Item.DonationLinkLegend, new { @class="form-control" })
@@ -217,8 +223,8 @@
     </div>
 </fieldset>
 
-<fieldset>
-    <legend>Extended Properties</legend>
+<fieldset class="field-border">
+    <legend class="field-border">Extended Properties</legend>
     @Html.ValidationMessage("Extended Properties")
     <div id="ExtendedProperties">
         @if (selectedItemType?.ExtendedProperties != null)
@@ -250,23 +256,24 @@
     </div>
 </fieldset>
 
-<fieldset>
-    <legend>Upload Picture</legend>
+<fieldset class="field-border">
+    <legend class="field-border">Upload Picture</legend>
     <!-- NEEDS BALLOON-->
 
     <img src='@Url.Action("GetImage", "Item", new {id = Model.Item?.Id ?? -1})' alt="" />
 
     <input type="file" id="file" name="file" title='' />
-    <p>
+    <text class="help-block">
         The maximum picture size is 4 meg. It must have an aspec ratio of 16:9 (1200x675 preferred). <br />
         A free online resize tool can be found at: http://www.picresize.com/  <br />
-        This one is a little better for cropping if you need to change the aspect ratio: http://resizeimage.net/
-    </p>
+        This one is a little better for cropping if you need to change the aspect ratio: http://resizeimage.net/ <br/>
+        We don't specifically endorse these website, but we have used them in the past.
+     </text>
     @Html.ValidationMessage("Image")
 </fieldset>
 
-<fieldset>
-    <legend>Tags</legend>
+<fieldset class="field-border">
+    <legend class="field-border">Tags</legend>
 
     <!-- NEEDS BALLOON-->
     <div class="form-group">
@@ -283,4 +290,4 @@
         }
     </div>
 </fieldset>
-<input type="submit" value="Save" class="save_btn" />
+<input type="submit" value="Save" class="btn btn-primary" />
