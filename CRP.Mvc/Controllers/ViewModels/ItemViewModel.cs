@@ -83,42 +83,35 @@ namespace CRP.Controllers.ViewModels
             // setup model
             if(item != null)
             {
-                viewModel.Item = new EditItemViewModel
-                {
-                    Id                       = item.Id,
-
-                    Name                     = item.Name,
-                    Description              = item.Description,
-                    CheckPaymentInstructions = item.CheckPaymentInstructions,
-                    CostPerItem              = item.CostPerItem,
-                    Quantity                 = item.Quantity,
-                    QuantityName             = item.QuantityName,
-                    Expiration               = item.Expiration,
-                    Link                     = item.Link,
-
-                    DonationLinkInformation  = item.DonationLinkInformation,
-                    DonationLinkLegend       = item.DonationLinkLegend,
-                    DonationLinkLink         = item.DonationLinkLink,
-                    DonationLinkText         = item.DonationLinkText,
-
-                    Available                = item.Available,
-                    Private                  = item.Private,
-                    NotifyEditors            = item.NotifyEditors,
-                    RestrictedKey            = item.RestrictedKey,
-                    AllowCheckPayment        = item.AllowCheckPayment,
-                    AllowCreditPayment       = item.AllowCreditPayment,
-                    Summary                  = item.Summary,
-
-                    ItemTypeId               = item.ItemType.Id,
-                    UnitId                   = item.Unit?.Id ?? 0,
-                    FinancialAccountId       = item.FinancialAccount?.Id ?? 0,
-
-                    Tags                     = item.Tags.Select(t => t.Name).ToArray(),
-                    ExtendedPropertyAnswers  = item.ExtendedPropertyAnswers.ToList(),
-                    Coupons                  = item.Coupons.ToList(),
-                    Editors                  = item.Editors.ToList(),
-                    QuestionSets             = item.QuestionSets.ToList(),
-                };
+                viewModel.Item = new EditItemViewModel();
+                viewModel.Item.Id = item.Id;
+                viewModel.Item.Name = item.Name;
+                viewModel.Item.Description = item.Description;
+                viewModel.Item.CheckPaymentInstructions = item.CheckPaymentInstructions;
+                viewModel.Item.CostPerItem = item.CostPerItem;
+                viewModel.Item.Quantity = item.Quantity;
+                viewModel.Item.QuantityName = item.QuantityName;
+                viewModel.Item.Expiration = item.Expiration;
+                viewModel.Item.Link = item.Link;
+                viewModel.Item.DonationLinkInformation = item.DonationLinkInformation;
+                viewModel.Item.DonationLinkLegend = item.DonationLinkLegend;
+                viewModel.Item.DonationLinkLink = item.DonationLinkLink;
+                viewModel.Item.DonationLinkText = item.DonationLinkText;
+                viewModel.Item.Available = item.Available;
+                viewModel.Item.Private = item.Private;
+                viewModel.Item.NotifyEditors = item.NotifyEditors;
+                viewModel.Item.RestrictedKey = item.RestrictedKey;
+                viewModel.Item.AllowCheckPayment = item.AllowCheckPayment;
+                viewModel.Item.AllowCreditPayment = item.AllowCreditPayment;
+                viewModel.Item.Summary = item.Summary;
+                viewModel.Item.ItemTypeId = item.ItemType?.Id ?? 0;
+                viewModel.Item.UnitId = item.Unit?.Id ?? 0;
+                viewModel.Item.FinancialAccountId = item.FinancialAccount?.Id ?? 0;
+                viewModel.Item.Tags = item.Tags.Select(t => t.Name).ToArray();
+                viewModel.Item.ExtendedPropertyAnswers = item.ExtendedPropertyAnswers.ToList();
+                viewModel.Item.Coupons = item.Coupons.ToList();
+                viewModel.Item.Editors = item.Editors.ToList();
+                viewModel.Item.QuestionSets = item.QuestionSets.ToList();
 
                 viewModel.UnpaidText = string.Empty;
                 viewModel.PaidText = string.Empty;
