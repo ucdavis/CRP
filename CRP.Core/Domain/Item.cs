@@ -129,7 +129,7 @@ namespace CRP.Core.Domain
         [Required]
         public virtual string CheckPaymentInstructions { get; set; }
 
-
+        [Required(ErrorMessage = "An account must be selected.")]
         public virtual FinancialAccount FinancialAccount { get; set; }
         
 
