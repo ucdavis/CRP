@@ -39,6 +39,12 @@ namespace CRP.Controllers.Helpers
             dest.AllowCreditPayment = src.AllowCreditPayment;
             dest.Summary            = src.Summary;
 
+            if (src.Image != null)
+            {
+                //Only populate dest if an image was supplied 
+                dest.Image = src.Image;
+            }
+
             // lookup references
             var unit = repository.OfType<Unit>().GetNullableById(src.UnitId);
             dest.Unit = unit;
