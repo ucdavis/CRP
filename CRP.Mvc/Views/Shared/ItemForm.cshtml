@@ -88,7 +88,7 @@
 
         @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--",  getFinancialAccountHtmlOptions())
         @Html.ValidationMessage("Item.FinancialAccount")
-        <span>*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</span>
+        <text class="help-block">*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</text>
         
     </div>
 
@@ -153,6 +153,7 @@
         <label for="Item.Link">Link:</label>
         @Html.TextBoxFor(x => x.Item.Link, new { @class = "form-control validateLink", @data_toggle="tooltip", @title = "You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html", @placeholder= "Example: http://www.ucdavis.edu/index.html" })
         @Html.ValidationMessageFor(x => x.Item.Link)
+        <text class="help-block">The link can be used to point to your own website for more information.</text>
     </div>
     <fieldset class="field-border">
         <legend class="field-border">Optional Donation Link</legend>
@@ -262,11 +263,12 @@
     <img src='@Url.Action("GetImage", "Item", new {id = Model.Item?.Id ?? -1})' alt="" />
 
     <input type="file" id="file" name="file" title='' />
-    <p>
+    <text class="help-block">
         The maximum picture size is 4 meg. It must have an aspec ratio of 16:9 (1200x675 preferred). <br />
         A free online resize tool can be found at: http://www.picresize.com/  <br />
-        This one is a little better for cropping if you need to change the aspect ratio: http://resizeimage.net/
-    </p>
+        This one is a little better for cropping if you need to change the aspect ratio: http://resizeimage.net/ <br/>
+        We don't specifically endorse these website, but we have used them in the past.
+     </text>
     @Html.ValidationMessage("Image")
 </fieldset>
 
