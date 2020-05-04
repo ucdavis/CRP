@@ -23,7 +23,7 @@ namespace CRP.Mvc.Controllers.ViewModels.ItemManagement
         public string Description { get; set; }
 
         [Range(0.00, 922337203685477.00, ErrorMessage = "must be zero or more")]
-        public decimal CostPerItem { get; set; }
+        public decimal? CostPerItem { get; set; }
         /// <summary>
         /// 
         /// # items available for sale

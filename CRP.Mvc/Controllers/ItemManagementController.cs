@@ -138,6 +138,14 @@ namespace CRP.Controllers
                 ModelState.AddModelError("Image", @"An image is required.");
             }
 
+            //This was changed to a nullable decimal because text was setting the value to zero.
+            //Check it here because the copyItem sets the value and a null would trow an exception.
+            if (item.CostPerItem == null)
+            {
+                ModelState.AddModelError("Item.CostPerItem", "Please enter a valid amount (Just a number).");
+                item.CostPerItem = 0m;
+            }
+
             // setup new item
             var itemToCreate = Copiers.CopyItem(Repository, item, new Item(), extendedProperties, tags, mapLink);
 
@@ -218,6 +226,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/GetExtendedProperties/{id}
+        /// Tested 20200427
         /// </summary>
         /// <param name="id">Id of the item type</param>
         /// <returns></returns>
@@ -306,6 +315,14 @@ namespace CRP.Controllers
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List(null));
+            }
+
+            //This was changed to a nullable decimal because text was setting the value to zero.
+            //Check it here because the copyItem sets the value and a null would trow an exception.
+            if (item.CostPerItem == null)
+            {
+                ModelState.AddModelError("Item.CostPerItem", "Please enter a valid amount (Just a number).");
+                item.CostPerItem = 0m;
             }
 
             destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);
