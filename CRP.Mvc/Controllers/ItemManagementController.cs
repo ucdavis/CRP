@@ -63,6 +63,8 @@ namespace CRP.Controllers
                 query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
             }
 
+            query = query.OrderByDescending(a => a.DateCreated);
+
             var slimmedDown = query.Select(a => new ItemListView
             {
                 Id          = a.Id,
