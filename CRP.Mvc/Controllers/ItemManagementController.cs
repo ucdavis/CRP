@@ -140,10 +140,15 @@ namespace CRP.Controllers
 
             //This was changed to a nullable decimal because text was setting the value to zero.
             //Check it here because the copyItem sets the value and a null would trow an exception.
-            if (item.CostPerItem == null)
+            if (!item.CostPerItem.HasValue)
             {
                 ModelState.AddModelError("Item.CostPerItem", "Please enter a valid amount (Just a number).");
                 item.CostPerItem = 0m;
+            }
+            if (!item.Quantity.HasValue)
+            {
+                ModelState.AddModelError("Item.Quantity", "Please enter a number for the Quantity.");
+                item.Quantity = 0;
             }
 
             // setup new item
@@ -319,10 +324,16 @@ namespace CRP.Controllers
 
             //This was changed to a nullable decimal because text was setting the value to zero.
             //Check it here because the copyItem sets the value and a null would trow an exception.
-            if (item.CostPerItem == null)
+            if (!item.CostPerItem.HasValue)
             {
                 ModelState.AddModelError("Item.CostPerItem", "Please enter a valid amount (Just a number).");
                 item.CostPerItem = 0m;
+            }
+
+            if (!item.Quantity.HasValue)
+            {
+                ModelState.AddModelError("Item.Quantity", "Please enter a number for the Quantity.");
+                item.Quantity = 0;
             }
 
             destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);

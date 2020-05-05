@@ -29,7 +29,7 @@ namespace CRP.Mvc.Controllers.ViewModels.ItemManagement
         /// # items available for sale
         /// </summary>
         [Range(0, Int32.MaxValue)]
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
         [StringLength(50)]
         public string QuantityName { get; set; }
