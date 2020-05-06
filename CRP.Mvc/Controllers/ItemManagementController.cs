@@ -638,6 +638,25 @@ namespace CRP.Controllers
             if (!ModelState.IsValid)
             {
                 Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");
+                var errors = string.Empty;
+                try
+                {
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                            errors = $"{errors}{error.ErrorMessage}<br/>";
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e.InnerException?.Message);
+                }
+                if (!string.IsNullOrWhiteSpace(errors))
+                {
+                    ErrorMessage = errors;
+                }
                 return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
             }
 
