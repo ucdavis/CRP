@@ -1,4 +1,5 @@
-﻿@model CRP.Controllers.ViewModels.UserItemDetailViewModel
+﻿@using Microsoft.Web.Mvc.Html
+@model CRP.Controllers.ViewModels.UserItemDetailViewModel
 
 @{
     ViewBag.Title = "DetailsNew";
@@ -18,6 +19,8 @@
             <ul class="dropdown-menu">
                 <li>@Html.ActionLink("Edit", "Edit", "ItemManagement", new { id = Model.Item.Id }, null)</li>
                 <li>@Html.ActionLink("Map", "Map", "ItemManagement", new { id = Model.Item.Id }, null)</li>
+                <li class="divider"></li>
+                <li>@Html.ActionLink("Back to List", "List", "ItemManagement")</li>
             </ul>
         </div>
     </div>

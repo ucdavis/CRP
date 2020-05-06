@@ -82,6 +82,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/Create
+        /// Tested 20200505
         /// </summary>
         /// <returns></returns>
         [PageTracker]
@@ -95,6 +96,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/Create/
+        /// Tested 20200505
         /// </summary>
         /// <remarks>
         /// Description:   
@@ -272,6 +274,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/Edit/{id}
+        /// Tested main page, but not all tabs 20200505
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -292,6 +295,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/Edit/{id}
+        /// Tested 20200505
         /// </summary>
         /// <remarks>
         /// Description:
@@ -566,6 +570,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/Details/{id}
+        /// Tested 20200506
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
