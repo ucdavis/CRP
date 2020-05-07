@@ -328,8 +328,15 @@
             var textboxPaid = $("#PaidText");
             var textboxUnpaid = $("#UnpaidText");
             var token = $($("input:hidden[name='__RequestVerificationToken']")[0]).val();
+
             $.post(saveTemplateUrl, { id: id, textPaid: textboxPaid.val(), textUnpaid: textboxUnpaid.val(), __RequestVerificationToken: token }
-                , function (result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
+                , function (result) {
+                    if (result) {
+                        alert(result);
+                    }
+                    else { alert("template was unable to save."); }
+
+                });
         }
     </script>
 

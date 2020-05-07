@@ -522,6 +522,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/SaveTemplate
+        /// Tested 20200507
         /// </summary>
         /// <remarks>
         /// Description:
@@ -543,7 +544,7 @@ namespace CRP.Controllers
 
             if (item == null || string.IsNullOrEmpty(textPaid) || !Access.HasItemAccess(CurrentUser, item))
             {
-                return new JsonNetResult(null);
+                return new JsonNetResult("Unable to save. No Access or Paid text was empty.");
             }
 
             var template = new Template(textPaid + StaticValues.ConfirmationTemplateDelimiter + textUnpaid);
@@ -562,10 +563,10 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Item>().EnsurePersistent(item);
-                return new JsonNetResult(true);
+                return new JsonNetResult("Template Saved");
             }
 
-            return new JsonNetResult(null);
+            return new JsonNetResult("Unable to Save.");
         }
 
         /// <summary>
@@ -591,6 +592,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Toggles the transaction is active.
+        /// TESTED 20200506 And fixed
         /// </summary>
         /// <param name="id">The id.</param>
         /// <param name="sort">The sort.</param>
