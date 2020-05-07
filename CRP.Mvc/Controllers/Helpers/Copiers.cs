@@ -20,8 +20,8 @@ namespace CRP.Controllers.Helpers
             dest.Name                     = src.Name;
             dest.Description              = src.Description;
             dest.CheckPaymentInstructions = src.CheckPaymentInstructions;
-            dest.CostPerItem              = src.CostPerItem;
-            dest.Quantity                 = src.Quantity;
+            dest.CostPerItem              = src.CostPerItem.Value;
+            dest.Quantity                 = src.Quantity.Value;
             dest.QuantityName             = src.QuantityName; //Was missing this JCS 2010/06/29
             dest.Expiration               = src.Expiration;
             dest.Link                     = src.Link;

@@ -23,7 +23,7 @@
                         @using (Html.BeginForm("ToggleTransactionIsActive", "ItemManagement", new {id = item.Id}, FormMethod.Post, new { style="display:inline;" }))
                         {
                             @Html.AntiForgeryToken()
-                            <a href="javascript:;" class="FormSubmit">@(item.IsActive ? "Deactivate" : "Activate")</a>
+                            <button type="submit" class="btn-link">@(item.IsActive ? "Deactivate" : "Activate")</button>                                                                                      
                         }
                     </td>
                     <td>@Html.DisplayFor(x => item.TransactionNumber)</td>

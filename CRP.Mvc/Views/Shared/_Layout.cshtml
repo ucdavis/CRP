@@ -104,7 +104,7 @@
             <div class="boundary">
                 <div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">×</button>
-                    @ViewBag.ErrorMessage
+                    @ViewBag.ErrorMessage 
                 </div>
             </div>
         }
@@ -113,7 +113,7 @@
             <div class="boundary">
                 <div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">×</button>
-                    @TempData["ErrorMessage"]
+                    @Html.Raw( @TempData["ErrorMessage"])
                 </div>
             </div>
         }

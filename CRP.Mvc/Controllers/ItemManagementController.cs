@@ -63,6 +63,8 @@ namespace CRP.Controllers
                 query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
             }
 
+            query = query.OrderByDescending(a => a.DateCreated);
+
             var slimmedDown = query.Select(a => new ItemListView
             {
                 Id          = a.Id,
@@ -80,6 +82,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/Create
+        /// Tested 20200505
         /// </summary>
         /// <returns></returns>
         [PageTracker]
@@ -93,6 +96,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/Create/
+        /// Tested 20200505
         /// </summary>
         /// <remarks>
         /// Description:   
@@ -136,6 +140,19 @@ namespace CRP.Controllers
             if (item.Image == null || item.Image.Length <= 0)
             {
                 ModelState.AddModelError("Image", @"An image is required.");
+            }
+
+            //This was changed to a nullable decimal because text was setting the value to zero.
+            //Check it here because the copyItem sets the value and a null would trow an exception.
+            if (!item.CostPerItem.HasValue)
+            {
+                ModelState.AddModelError("Item.CostPerItem", "Please enter a valid amount (Just a number).");
+                item.CostPerItem = 0m;
+            }
+            if (!item.Quantity.HasValue)
+            {
+                ModelState.AddModelError("Item.Quantity", "Please enter a number for the Quantity.");
+                item.Quantity = 0;
             }
 
             // setup new item
@@ -218,6 +235,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/GetExtendedProperties/{id}
+        /// Tested 20200427
         /// </summary>
         /// <param name="id">Id of the item type</param>
         /// <returns></returns>
@@ -256,6 +274,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/Edit/{id}
+        /// Tested main page, but not all tabs 20200505
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -276,6 +295,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/Edit/{id}
+        /// Tested 20200505
         /// </summary>
         /// <remarks>
         /// Description:
@@ -306,6 +326,20 @@ namespace CRP.Controllers
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List(null));
+            }
+
+            //This was changed to a nullable decimal because text was setting the value to zero.
+            //Check it here because the copyItem sets the value and a null would trow an exception.
+            if (!item.CostPerItem.HasValue)
+            {
+                ModelState.AddModelError("Item.CostPerItem", "Please enter a valid amount (Just a number).");
+                item.CostPerItem = 0m;
+            }
+
+            if (!item.Quantity.HasValue)
+            {
+                ModelState.AddModelError("Item.Quantity", "Please enter a number for the Quantity.");
+                item.Quantity = 0;
             }
 
             destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);
@@ -488,6 +522,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/SaveTemplate
+        /// Tested 20200507
         /// </summary>
         /// <remarks>
         /// Description:
@@ -509,7 +544,7 @@ namespace CRP.Controllers
 
             if (item == null || string.IsNullOrEmpty(textPaid) || !Access.HasItemAccess(CurrentUser, item))
             {
-                return new JsonNetResult(null);
+                return new JsonNetResult("Unable to save. No Access or Paid text was empty.");
             }
 
             var template = new Template(textPaid + StaticValues.ConfirmationTemplateDelimiter + textUnpaid);
@@ -528,14 +563,15 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Item>().EnsurePersistent(item);
-                return new JsonNetResult(true);
+                return new JsonNetResult("Template Saved");
             }
 
-            return new JsonNetResult(null);
+            return new JsonNetResult("Unable to Save.");
         }
 
         /// <summary>
         /// GET: /ItemManagement/Details/{id}
+        /// Tested 20200506
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -556,6 +592,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Toggles the transaction is active.
+        /// TESTED 20200506 And fixed
         /// </summary>
         /// <param name="id">The id.</param>
         /// <param name="sort">The sort.</param>
@@ -603,6 +640,25 @@ namespace CRP.Controllers
             if (!ModelState.IsValid)
             {
                 Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");
+                var errors = string.Empty;
+                try
+                {
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                            errors = $"{errors}{error.ErrorMessage}<br/>";
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e.InnerException?.Message);
+                }
+                if (!string.IsNullOrWhiteSpace(errors))
+                {
+                    ErrorMessage = errors;
+                }
                 return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
             }
 

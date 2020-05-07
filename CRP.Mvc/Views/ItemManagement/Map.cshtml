@@ -16,6 +16,8 @@
             <ul class="dropdown-menu">
                 <li>@Html.ActionLink("Edit", "Edit", "ItemManagement", new { id = Model.Id }, null)</li>
                 <li>@Html.ActionLink("Details", "Details", "ItemManagement", new { id = Model.Id }, null)</li>
+                <li class="divider"></li>
+                <li>@Html.ActionLink("Back to List", "List", "ItemManagement")</li>
             </ul>
         </div>
     </div>

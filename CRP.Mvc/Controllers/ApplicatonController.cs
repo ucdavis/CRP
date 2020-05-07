@@ -9,5 +9,14 @@ using UCDArch.Web.Controller;
 namespace CRP.Controllers
 {
     //[LocServiceMessage("ConferenceRegistrationAndPayments", ViewDataKey = "ServiceMessages", MessageServiceAppSettingsKey = "MessageServer")]
-    public class ApplicationController : SuperController { }
+    public class ApplicationController : SuperController
+    {
+        private const string TempDataErrorMessageKey = "ErrorMessage";
+
+        public string ErrorMessage
+        {
+            get => TempData[TempDataErrorMessageKey] as string;
+            set => TempData[TempDataErrorMessageKey] = value;
+        }
+    }
 }

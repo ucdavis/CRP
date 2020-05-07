@@ -544,7 +544,9 @@ namespace CRP.Controllers
                 _notificationProvider.SendConfirmation(Repository, transactionToUpdate, question.Answer);
             }
 
-            return RedirectToAction("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id });
+            return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Notifications");
+
+            //return RedirectToAction("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }); //Above uses the Fragment.
 
         }
 
