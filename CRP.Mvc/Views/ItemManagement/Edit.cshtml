@@ -180,25 +180,23 @@
                 </fieldset>
             </div>
             <div id="@StaticValues.Tab_Templates" class="tab-pane">
-                <fieldset class="row">
-                    <div class="col-lg-3 col-lg-push-9">
-                        @Html.Partial("TemplateInstructions")
-                    </div>
-                    <div class="col-lg-9 col-lg-pull-3">
-                        <div class="form-group">
-                            <h3>Paid Template</h3>
-                            @Html.TextAreaFor(x => x.PaidText, new {@class = "form-control", rows = 5})
-                        </div>
 
-                        <div class="form-group">
+                    @Html.Partial("TemplateInstructions")
+                    <h3>Paid Template</h3>
+                    @Html.TextAreaFor(x => x.PaidText)
 
-                            <h3>Unpaid Template</h3>
-                            @Html.TextAreaFor(x => x.UnpaidText, new {@class = "form-control", rows = 5})
-                        </div>
+                    <h3>Unpaid Template</h3>
+                    @Html.TextAreaFor(x => x.UnpaidText)
 
-                        <input type="button" value="Save" onclick="SaveTemplateText()"/>
-                    </div>
-                </fieldset>
+                    <input style="margin-top: 15px; margin-bottom: 15px;" type="button" value="Save" class="btn btn-primary" onclick="SaveTemplateText()"/>
+                
+                    <text class="help-block">
+                        The Unpaid Template should be used if your event is free or if you allow a coupon that can reduce the price to zero.<br/>
+                        As the language would most likely be different between these two, they need to be different.<br/>
+                        If your event will always charge something, you can leave this blank.<br/>
+                        If you click on the "Template Fields" to the right, the replaceable text will be inserted where your cursor is in the text editor. 
+                    </text>
+
             </div>
             <div id="@StaticValues.Tab_Coupons" class="tab-pane">
                 <fieldset>
@@ -264,6 +262,49 @@
 @section AdditionalStyles
 {
     @Styles.Render("~/Content/Chosen")
+    
+    @Styles.Render("~/Content/qtipcss")
+    <style type="text/css">
+        #Confirmation_Word_Bank {
+            margin-left:540px;
+            margin-top:35px;
+            background-color:#EFEFEF;
+            border:1px solid #7F7F7F;
+            float:right;
+            padding:5px;
+            position:absolute;
+            width:130px;
+            font-family:Trebuchet MS,Arial,Georgia;
+            font-size:0.8em;
+        }
+        #Confirmation_Word_Bank a:link
+        {
+            color:#0B65C1;
+            font-weight:bold;
+            text-decoration:none;
+        }
+        #Confirmation_Word_Bank a:hover{color: #A50000}
+
+        #Confirmation_Word_Bank_Unpaid {
+            margin-left:540px;
+            margin-top:340px;
+            background-color:#EFEFEF;
+            border:1px solid #7F7F7F;
+            float:right;
+            padding:5px;
+            position:absolute;
+            width:130px;
+            font-family:Trebuchet MS,Arial,Georgia;
+            font-size:0.8em;
+        }
+        #Confirmation_Word_Bank_Unpaid a:link
+        {
+            color:#0B65C1;
+            font-weight:bold;
+            text-decoration:none;
+        }
+        #Confirmation_Word_Bank_Unpaid a:hover{color: #A50000}
+    </style>
 }
 
 @section AdditionalScripts {
@@ -280,7 +321,7 @@
     @Scripts.Render("~/Scripts/tiny_mce/jquery.tinymce.js")
     @Scripts.Render("~/Scripts/jquery.enableTinyMce.js")
     @Scripts.Render("~/bundles/chosen")
-    
+    @Scripts.Render("~/bundles/qtip")
 
     <script type="text/javascript">
         function SaveTemplateText() {
@@ -298,12 +339,12 @@
 
             switch (fragment) {
             case "#@StaticValues.Tab_Details":
-                    $("#Tab-@StaticValues.Tab_Details").click();
-                    $("#Item_FinancialAccountId").chosen();
-                    break;
+                $("#Tab-@StaticValues.Tab_Details").click();
+                $("#Item_FinancialAccountId").chosen();
+                break;
             case "#@StaticValues.Tab_Editors":
-                    $("#Tab-@StaticValues.Tab_Editors").click();
-                    $("#userId").chosen();
+                $("#Tab-@StaticValues.Tab_Editors").click();
+                $("#userId").chosen();
                 break;
             case "#@StaticValues.Tab_Questions":
                 $("#Tab-@StaticValues.Tab_Questions").click();
@@ -323,8 +364,8 @@
             //---------------- setup html editors ------------------//
             $("#PaidText").enableTinyMce({
                 script_location: scriptUrl,
-                //overrideWidth: '500',
-                //overrideHeight: '250',
+                overrideWidth: '500',
+                overrideHeight: '250',
                 overrideShowPreview: 'preview,',
                 overridePlugin_preview_pageurl: '@Url.Content("~/Static/Preview.html")',
             });
@@ -390,6 +431,31 @@
                 }
                 if (target === "#Details") {
                     $("#Item_FinancialAccountId").chosen();
+                }
+            });
+        });
+    </script>
+    
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $("#ConfirmationWordBankHelp").attr("title", "");
+            $("#ConfirmationWordBankHelpUnpaid").attr("title", "");
+            $("#ConfirmationWordBankHelp").qtip({ // Grab some elements to apply the tooltip to
+                content: {
+                    text: "The following are a list of values that can be clicked on to insert into the text where the cursor is on the Paid Template. The values will be dynamically replaced when used.<br><h3>First Name: </h3>The Contact Information's First Name.<br><h3>Last Name: </h3>The Contact Information's Last Name.<br><h3>Total Paid: </h3>The total amount of accepted payments.<br><h3>Quantity: </h3>The number of items purchased.<br><h3>Quantity Name: </h3>The Name of the items.<br><h3>Transaction Number: </h3>The transaction number. Can be used with the email to lookup the transaction.<br><h3>Payment Method: </h3>'Check' or 'Credit Card' sans quotes.<br><h3>Donation Thanks: </h3>If a donation is detected the text '@String.Format(Html.Encode(ScreenText.STR_DonationText), "xxx")' Sans quotes where xxx is replaced with the amount."
+                },
+                position: {
+                    my: 'top right',
+                    at: 'bottom left'
+                }
+            });
+            $("#ConfirmationWordBankHelpUnpaid").qtip({ // Grab some elements to apply the tooltip to
+                content: {
+                    text: "The following are a list of values that can be clicked on to insert into the text where the cursor is on the Unpaid Template. The values will be dynamically replaced when used.<br><h3>First Name: </h3>The Contact Information's First Name.<br><h3>Last Name: </h3>The Contact Information's Last Name.<br><h3>Total Paid: </h3>The total amount of accepted payments.<br><h3>Quantity: </h3>The number of items purchased.<br><h3>Quantity Name: </h3>The Name of the items.<br><h3>Transaction Number: </h3>The transaction number. Can be used with the email to lookup the transaction.<br><h3>Payment Method: </h3>'Check' or 'Credit Card' sans quotes.<br><h3>Donation Thanks: </h3>If a donation is detected the text '@String.Format(Html.Encode(ScreenText.STR_DonationText), "xxx")' Sans quotes where xxx is replaced with the amount."
+                },
+                position: {
+                    my: 'top right',
+                    at: 'bottom left'
                 }
             });
         });
