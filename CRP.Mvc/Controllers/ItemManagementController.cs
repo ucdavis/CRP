@@ -274,7 +274,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/Edit/{id}
-        /// Tested main page, but not all tabs 20200505
+        /// Tested main page, but not all tabs 20200505. Tested all tabs 20200511
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -695,6 +695,11 @@ namespace CRP.Controllers
             return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
         }
 
+        /// <summary>
+        /// Tested 20200511
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [PageTracker]
         public ActionResult Copy(int id)
         {
