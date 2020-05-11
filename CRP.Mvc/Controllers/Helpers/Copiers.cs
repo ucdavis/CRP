@@ -10,7 +10,7 @@ namespace CRP.Controllers.Helpers
 {
     public class Copiers
     {
-        public static Item CopyItem(IRepository repository, EditItemViewModel src, Item dest, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
+        public static Item CopyItem(IRepository repository, EditItemViewModel src, Item dest, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool CanChangeFinanceAccount)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(src != null, "Source item is required.");
@@ -49,8 +49,11 @@ namespace CRP.Controllers.Helpers
             var unit = repository.OfType<Unit>().GetNullableById(src.UnitId);
             dest.Unit = unit;
 
-            var account = repository.OfType<FinancialAccount>().GetNullableById(src.FinancialAccountId);
-            dest.FinancialAccount = account;
+            if (CanChangeFinanceAccount)
+            {
+                var account = repository.OfType<FinancialAccount>().GetNullableById(src.FinancialAccountId);
+                dest.FinancialAccount = account;
+            }
 
             //Try to get item type.
             var itemType = repository.OfType<ItemType>().GetNullableById(src.ItemTypeId);
