@@ -155,8 +155,8 @@ namespace CRP.Controllers
                 item.Quantity = 0;
             }
 
-            // setup new item
-            var itemToCreate = Copiers.CopyItem(Repository, item, new Item(), extendedProperties, tags, mapLink);
+            // setup new item CanChangeFinanceAccount will always be true on a create
+            var itemToCreate = Copiers.CopyItem(Repository, item, new Item(), extendedProperties, tags, mapLink, true);
 
             if (itemToCreate.ExtendedPropertyAnswers != null && itemToCreate.ExtendedPropertyAnswers.Count > 0)
             {
@@ -274,7 +274,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/Edit/{id}
-        /// Tested main page, but not all tabs 20200505
+        /// Tested main page, but not all tabs 20200505. Tested all tabs 20200511
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -315,7 +315,7 @@ namespace CRP.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [PageTracker]
-        public ActionResult Edit(int id, EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
+        public ActionResult Edit(int id, EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool CanChangeFinanceAccount )
         {
             ModelState.Clear();
             var destinationItem = Repository.OfType<Item>().GetNullableById(id);
@@ -342,7 +342,7 @@ namespace CRP.Controllers
                 item.Quantity = 0;
             }
 
-            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink);
+            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink, CanChangeFinanceAccount);
 
             if(destinationItem.ExtendedPropertyAnswers != null && destinationItem.ExtendedPropertyAnswers.Count > 0)
             {
@@ -695,6 +695,11 @@ namespace CRP.Controllers
             return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
         }
 
+        /// <summary>
+        /// Tested 20200511
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [PageTracker]
         public ActionResult Copy(int id)
         {

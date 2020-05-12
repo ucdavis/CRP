@@ -30,6 +30,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Report/ViewReport/
+        /// Tested 20200512
         /// </summary>
         /// <param name="id"></param>
         /// <param name="itemId"></param>
@@ -61,6 +62,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200512
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
         [UserOnly]
         public ActionResult Create(int itemId)
         {
@@ -79,6 +85,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Report/Create/
+        /// Tested 20200512
         /// </summary>
         /// <remarks>
         /// Description:
@@ -143,7 +150,7 @@ namespace CRP.Controllers
                 Repository.OfType<ItemReport>().EnsurePersistent(report);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Report");
 
-                var redirectUrl = Url.Action("Edit", "ItemManagement", new { item.Id });
+                var redirectUrl = Url.Action("Details", "ItemManagement", new { item.Id });
                 return Redirect(redirectUrl + "#Reports");
             }
 
@@ -153,6 +160,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200512 (But queries are horrible) 
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult ViewSystemReport(int? reportId)
         {
@@ -187,6 +199,11 @@ namespace CRP.Controllers
             return new List<SystemReportData>();
         }
 
+        /// <summary>
+        /// Tested 20200512
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult GenerateChart(int reportId)
         {
