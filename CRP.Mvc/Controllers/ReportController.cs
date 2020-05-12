@@ -62,6 +62,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200512
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
         [UserOnly]
         public ActionResult Create(int itemId)
         {
@@ -80,6 +85,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Report/Create/
+        /// Tested 20200512
         /// </summary>
         /// <remarks>
         /// Description:
@@ -154,6 +160,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200512 (But queries are horrible) 
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult ViewSystemReport(int? reportId)
         {
@@ -188,6 +199,11 @@ namespace CRP.Controllers
             return new List<SystemReportData>();
         }
 
+        /// <summary>
+        /// Tested 20200512
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult GenerateChart(int reportId)
         {
