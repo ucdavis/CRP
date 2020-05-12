@@ -30,6 +30,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Report/ViewReport/
+        /// Tested 20200512
         /// </summary>
         /// <param name="id"></param>
         /// <param name="itemId"></param>
@@ -143,7 +144,7 @@ namespace CRP.Controllers
                 Repository.OfType<ItemReport>().EnsurePersistent(report);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Report");
 
-                var redirectUrl = Url.Action("Edit", "ItemManagement", new { item.Id });
+                var redirectUrl = Url.Action("Details", "ItemManagement", new { item.Id });
                 return Redirect(redirectUrl + "#Reports");
             }
 
