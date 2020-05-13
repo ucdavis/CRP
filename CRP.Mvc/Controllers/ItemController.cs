@@ -54,7 +54,7 @@ namespace CRP.Controllers
             {
                 if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
                 {
-                    Message = "Online registration for this event has passed.";
+                    Message = "Online registration for this event has passed. Or it has sold out.";
                 }
             }
 

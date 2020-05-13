@@ -60,6 +60,25 @@ namespace CRP.Controllers
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
+            //Check access here as well.
+            if (!item.Available)
+            {
+                if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                    return this.RedirectToAction<HomeController>(a => a.Index());
+                }
+            }
+
+            if (!item.IsAvailableForReg)
+            {
+                if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
+                {
+                    Message = "Online registration for this event has passed. Or it has sold out.";
+                    return this.RedirectToAction<ItemController>(a => a.Details(id));
+                }
+            }
+
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon, password);
             viewModel.Quantity = 1;
             viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
