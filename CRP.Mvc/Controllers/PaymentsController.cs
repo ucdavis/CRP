@@ -332,7 +332,7 @@ namespace CRP.Controllers
 
 
             // deal with donation
-            if (donation.HasValue && donation.Value > 0.0m)
+            if (donation.HasValue && donation.Value > 0.0m)  //Shouldn't ever happen anymore 
             {
                 var donationTransaction = new Transaction(item);
                 donationTransaction.Donation = true;
