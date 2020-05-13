@@ -24,6 +24,7 @@ namespace CRP.Controllers.ViewModels
         public DateTime CreateDate { get; set; }
         public string CreatedBy { get; set; }
         public decimal RefundAmount { get; set; }
+        public string Fid { get; set; } //For CreditCard transactions before CyberSource
 
         public static EditTransactionViewModel Create(IRepository repository, Transaction transaction)
         {
@@ -32,6 +33,14 @@ namespace CRP.Controllers.ViewModels
             var viewModel = new EditTransactionViewModel() { };
             viewModel.TransactionValue = transaction;
             viewModel.FinancialAccount = transaction.FinancialAccount;
+
+
+            var fid = string.Empty;
+            if (viewModel.TransactionValue.FidUsed != null)
+            {
+                fid = viewModel.TransactionValue.FidUsed;
+                viewModel.Fid = string.Format(" FID={0}", fid);
+            }
             
             return viewModel;
         }
