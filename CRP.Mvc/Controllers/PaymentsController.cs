@@ -60,6 +60,25 @@ namespace CRP.Controllers
                 return this.RedirectToAction<HomeController>(a => a.Index());
             }
 
+            //Check access here as well.
+            if (!item.Available)
+            {
+                if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
+                {
+                    Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
+                    return this.RedirectToAction<HomeController>(a => a.Index());
+                }
+            }
+
+            if (!item.IsAvailableForReg)
+            {
+                if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
+                {
+                    Message = "Online registration for this event has passed. Or it has sold out.";
+                    return this.RedirectToAction<ItemController>(a => a.Details(id));
+                }
+            }
+
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon, password);
             viewModel.Quantity = 1;
             viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
@@ -313,7 +332,7 @@ namespace CRP.Controllers
 
 
             // deal with donation
-            if (donation.HasValue && donation.Value > 0.0m)
+            if (donation.HasValue && donation.Value > 0.0m)  //Shouldn't ever happen anymore 
             {
                 var donationTransaction = new Transaction(item);
                 donationTransaction.Donation = true;
@@ -333,7 +352,7 @@ namespace CRP.Controllers
                 // do a final check to make sure the inventory is there
                 if (item.Sold + quantity > item.Quantity)
                 {
-                    ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
+                    ModelState.AddModelError("Quantity", "Quantity is more than what is available");
                 }
             }
             //if (transaction.Total == 0 && transaction.Credit)

@@ -20,6 +20,11 @@ namespace CRP.Controllers
             _searchTermProvider = searchTermProvider;
         }
 
+        /// <summary>
+        /// Tested 20200512
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Details(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
@@ -49,7 +54,7 @@ namespace CRP.Controllers
             {
                 if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to override and register for things (also allows preview)
                 {
-                    Message = "Online registration for this event has passed.";
+                    Message = "Online registration for this event has passed. Or it has sold out.";
                 }
             }
 
@@ -59,6 +64,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Item/GetImage/{id}
+        /// Tested 20200512
         /// </summary>
         /// <remarks>
         /// Returns an image for an item, should have unrestricted access
@@ -85,6 +91,13 @@ namespace CRP.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Tested 20200512
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="usePins"></param>
+        /// <returns></returns>
         public ActionResult Map(int id, bool usePins)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
@@ -99,6 +112,12 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200512
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="usePins"></param>
+        /// <returns></returns>
         public ActionResult MapDirections(int id, bool usePins)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);

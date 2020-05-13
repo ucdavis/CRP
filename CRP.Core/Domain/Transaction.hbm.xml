@@ -27,6 +27,7 @@
     <property name ="CreatedBy" column="CreatedBy" />
     <property name="CorrectionReason" column="CorrectionReason"/>
     <property name="TransactionGuid" column="TransactionGuid"/>
+    <property name="FidUsed" column="FidUsed"/>
 
     <many-to-one name="FinancialAccount" class="CRP.Core.Domain.FinancialAccount" column="FinancialAccountId" fetch="join" />
     

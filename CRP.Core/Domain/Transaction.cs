@@ -91,6 +91,8 @@ namespace CRP.Core.Domain
         
         public virtual FinancialAccount FinancialAccount { get; set; }
 
+        public virtual string FidUsed { get; set; } //PreCyberSource
+
         [Required]
         public virtual ICollection<PaymentLog> PaymentLogs { get; set; }
         [Required]
