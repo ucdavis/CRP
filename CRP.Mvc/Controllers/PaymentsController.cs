@@ -352,7 +352,7 @@ namespace CRP.Controllers
                 // do a final check to make sure the inventory is there
                 if (item.Sold + quantity > item.Quantity)
                 {
-                    ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
+                    ModelState.AddModelError("Quantity", "Quantity is more than what is available");
                 }
             }
             //if (transaction.Total == 0 && transaction.Credit)
