@@ -5,6 +5,9 @@
 
 <div class="container">
     <h2>@ViewBag.Title</h2>
+    <p>
+        @Html.ActionLink(linkText: "Back to Item", actionName:"Details", controllerName: "ItemManagement", protocol: null, hostName: null, routeValues: new {id = Model.Item.Id}, fragment: "Transactions", htmlAttributes:null)
+    </p>
     
     <dl>
         <dd>Amount</dd>
@@ -22,16 +25,20 @@
             <th>Amount</th>
             <th>Gateway Transaction Id</th>
             <th>Transaction Date</th>
+            <th>Accepted</th>
+            <th>Touchnet Status</th>
         </tr>
         </thead>
         <tbody>
-            @foreach(var log in Model.PaymentLogs.Where(p => p.Accepted))
+            @foreach(var log in Model.PaymentLogs)
             {
                 <tr>
                     <td>@log.Id</td>
                     <td>@log.Amount.ToString("C")</td>
                     <td>@log.GatewayTransactionId</td>
                     <td>@log.TnPaymentDate</td>
+                    <td>@log.Accepted</td>
+                    <td>@log.TnStatus</td>
                 </tr>
             }
         </tbody>

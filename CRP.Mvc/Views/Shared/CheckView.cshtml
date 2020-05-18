@@ -11,27 +11,29 @@
     }
     <div class="form-group">
         <label>Payee:</label>
-        @Html.TextBoxFor(x => x.Name, new { @class = "form-control", required = "required" })
-        @Html.ValidationMessageFor(x => x.Name)
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+        @Html.ValidationMessage("PaymentLog.Name")
     </div>
     <div class="form-group">
         <label>Check Number:</label>
-        @Html.TextBoxFor(x => x.CheckNumber, new { @class = "form-control", required = "required" })
-        @Html.ValidationMessageFor(x => x.CheckNumber)
+        @Html.TextBoxFor(x => x.CheckNumber, new { @class = "form-control" })
+        @Html.ValidationMessage("PaymentLog.CheckNumber")
+        @Html.ValidationMessage("PaymentLog.CheckNumberRequired")
     </div>
     <div class="form-group">
         <label>Amount:</label>
-        @Html.TextBoxFor(x => x.Amount, new { @class = "amount form-control", @type = "number", required = "required", min=0, max=100000000 })
-        @Html.ValidationMessageFor(x => x.Amount)
+        @Html.TextBoxFor(x => x.Amount, new { @class = "amount form-control", min=0, max=100000000 })
+        @Html.ValidationMessage("PaymentLog.Amount")
+        @Html.ValidationMessage("PaymentLog.AmountRequired")
     </div>
     <div class="form-group">
         <label>Date Payment:</label>
-        @Html.TextBoxFor(x => x.DatePayment, "{0:d}", new { @class = "date form-control", required = "required" })
-        @Html.ValidationMessageFor(x => x.DatePayment)
+        @Html.TextBoxFor(x => x.DatePayment, "{0:d}", new { @class = "date form-control" })
+        @Html.ValidationMessage("PaymentLog.DatePayment")
     </div>
     <div class="form-group">
         <label>Notes:</label>
         @Html.TextBoxFor(x => x.Notes, new { @class = "form-control" })
-        @Html.ValidationMessageFor(x => x.Notes)
+        @Html.ValidationMessage("PaymentLog.Notes")
     </div>
 </div>

@@ -171,7 +171,7 @@ namespace CRP.Controllers
                         _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
                     }
                 }
-                return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transaction.Item.Id }) + "#Checks");
             }
             var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
             viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
