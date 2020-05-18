@@ -20,7 +20,7 @@
     @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.")
 
     <p>
-        @Html.ActionLink("Back to Item", "Details", "ItemManagement", new { id = Model.Transaction.Item.Id }, null)
+        @Html.ActionLink(linkText: "Back to Item", actionName:"Details", controllerName: "ItemManagement", protocol: null, hostName: null, routeValues: new {id = Model.Transaction.Item.Id}, fragment: "Checks", htmlAttributes:null)
     </p>
 
     @using (Html.BeginForm())
@@ -51,7 +51,7 @@
                 @for (var i = 0; i < Model.PaymentLogs.Count(); i++)
                 {
                     <fieldset class="check @(Model.PaymentLogs.ElementAt(i).Accepted ? string.Empty:" deactivated")">
-                        <legend>Check <span class="checkIndex">@i + 1</span>
+                        <legend>Check <span class="checkIndex">@i + 1</span> <span style="background-color: red" class="deact @(Model.PaymentLogs.ElementAt(i).Accepted ? "hidden":" show")"> Deactivated</span>
                             <i class="fa fa-times-circle deactivate-check pull-right text-danger"></i>
                         </legend>
                         @Html.Partial("CheckView", Model.PaymentLogs.ToList()[i])
@@ -122,9 +122,11 @@
 
                 if ($fieldset.hasClass("deactivated")) {
                     $fieldset.removeClass("deactivated");
+                    $fieldset.find("span.deact").addClass("hidden");
                     $fieldset.find("input.accepted-field").val(true);
                 } else {
                     $fieldset.addClass("deactivated");
+                    $fieldset.find("span.deact").removeClass("hidden");
                     $fieldset.find("input.accepted-field").val(false);
                 }
             });
