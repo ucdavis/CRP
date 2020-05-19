@@ -295,7 +295,7 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transactionToUpdate);
-                return RedirectToAction("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id });
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Checks");
             }
 
             //TODO: We could replace the line below with a rollback to be more consistent.
