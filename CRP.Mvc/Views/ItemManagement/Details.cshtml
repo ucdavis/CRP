@@ -64,6 +64,7 @@
                 "sorting": [[1, "desc"]], //Default sort on second column
                 "columnDefs": [
                     { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [4,5,6]},
                 ]
             });
             $("#table-Checks").dataTable({
@@ -72,6 +73,7 @@
                 "sorting": [[1, "desc"]], //Default sort on second column
                 "columnDefs": [
                     { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [5]},
                 ]
             });
             $("#table-Reports").dataTable({
@@ -85,6 +87,7 @@
                 "sorting": [[1, "desc"]], //Default sort on second column
                 "columnDefs": [
                     { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [5]},
                 ]
             });
             $("#table-Notifications").dataTable({
@@ -93,6 +96,7 @@
                 "sorting": [[1, "desc"]], //Default sort on second column
                 "columnDefs": [
                     { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [2,4,6]},
                 ]
             });
         });

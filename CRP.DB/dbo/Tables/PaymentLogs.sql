@@ -25,6 +25,7 @@
     [TnSuccessLink]        VARCHAR (MAX) NULL,
     [TnCancelLink]         VARCHAR (MAX) NULL,
     [Cleared]              BIT           NOT NULL DEFAULT 0, 
+    [ReturnedResults] VARCHAR(MAX) NULL, 
     CONSTRAINT [PK_PaymentLogs] PRIMARY KEY CLUSTERED ([id] ASC),
     CONSTRAINT [FK_PaymentLogs_Transactions] FOREIGN KEY ([TransactionId]) REFERENCES [dbo].[Transactions] ([id])
 );
