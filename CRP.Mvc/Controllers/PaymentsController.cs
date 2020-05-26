@@ -693,7 +693,8 @@ namespace CRP.Controllers
                 TnBillingCity        = response.Req_Bill_To_Address_City,
                 TnBillingState       = response.Req_Bill_To_Address_State,
                 TnBillingZip         = response.Req_Bill_To_Address_Postal_Code,
-                TnPaymentDate        = response.Auth_Time
+                TnPaymentDate        = response.Auth_Time,
+                ReturnedResults      = JsonConvert.SerializeObject(dictionary),
             };
 
             if (decimal.TryParse(response.Auth_Amount, out decimal amount))

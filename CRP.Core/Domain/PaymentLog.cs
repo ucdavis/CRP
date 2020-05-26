@@ -98,6 +98,8 @@ namespace CRP.Core.Domain
         public virtual string TnSuccessLink { get; set; }
         public virtual string TnCancelLink { get; set; }
 
+        public virtual string ReturnedResults { get; set; } //CyberSource Raw results
+
 
         #endregion TouchNet Return Values
 
