@@ -6,9 +6,14 @@
 <div class="boundary">
     <h2>Successful Transaction</h2>
     <p>You have successfully paid for and registered for the following event:</p>
+    <p>Please print for your own records</p>
     <div>
         <label>Item: </label>
         @Model.Item.Name
+    </div>
+    <div>
+        <label>Transaction:</label>
+        @Model.Transaction.TransactionNumber
     </div>
     <div>
         <label>Amount: </label>

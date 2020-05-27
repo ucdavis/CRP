@@ -722,7 +722,15 @@ namespace CRP.Controllers
                 if (question != null)
                 {
                     // send an email to the user
-                    _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
+                    try
+                    {
+                        _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error("Error Sending Email...", e);
+                    }
+                    
                 }
             }
             else

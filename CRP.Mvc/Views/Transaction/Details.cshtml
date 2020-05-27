@@ -17,12 +17,21 @@
         <dt>@Model.Quantity</dt>
     </dl>
     
+    @if (Model.Paid == false && Model.Credit == true && Model.Refunded == false)
+    {
+        <strong>Link to Pay Page:</strong>
+        <span>
+            @Url.Action("Confirmation", "Payments", new { id = Model.Id }, "https")
+        </span>
+    }
+
     <h3>Payment Logs</h3>
     <table id="paymentLogsTable" class="table table-bordered">
         <thead>
         <tr>
             <th>Id</th>
             <th>Amount</th>
+            <th>Is Check</th>
             <th>Gateway Transaction Id</th>
             <th>Transaction Date</th>
             <th>Accepted</th>
@@ -35,6 +44,7 @@
                 <tr>
                     <td>@log.Id</td>
                     <td>@log.Amount.ToString("C")</td>
+                    <td>@log.Check</td>
                     <td>@log.GatewayTransactionId</td>
                     <td>@log.TnPaymentDate</td>
                     <td>@log.Accepted</td>
