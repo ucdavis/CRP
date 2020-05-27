@@ -9,6 +9,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.ViewModels;
 using CRP.Mvc.Controllers.ViewModels.Payment;
@@ -735,7 +736,7 @@ namespace CRP.Controllers
             }
             else
             {
-                
+                paymentLog.TnStatus = response.Decision.SafeTruncate(1);
             }
 
             Repository.OfType<Transaction>().EnsurePersistent(transaction);

@@ -35,7 +35,8 @@
             <th>Gateway Transaction Id</th>
             <th>Transaction Date</th>
             <th>Accepted</th>
-            <th>Touchnet Status</th>
+            <th>CC Status</th>
+            <th>Is CyberSource</th>
         </tr>
         </thead>
         <tbody>
@@ -49,6 +50,7 @@
                     <td>@log.TnPaymentDate</td>
                     <td>@log.Accepted</td>
                     <td>@log.TnStatus</td>
+                    <td>@(string.IsNullOrWhiteSpace(log.ReturnedResults) ? "No":"Yes")</td>
                 </tr>
             }
         </tbody>
