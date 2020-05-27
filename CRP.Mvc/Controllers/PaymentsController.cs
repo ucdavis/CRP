@@ -709,7 +709,7 @@ namespace CRP.Controllers
             if (response.Decision == CyberSourceReplyCodes.Accept)
             {
                 paymentLog.Accepted = true;
-
+                
                 if (!transaction.IsActive)
                 {
                     //Possibly we could email someone here to say it has been re-activated
@@ -736,8 +736,9 @@ namespace CRP.Controllers
             }
             else
             {
-                paymentLog.TnStatus = response.Decision.SafeTruncate(1);
+                
             }
+            paymentLog.TnStatus = response.Decision.SafeTruncate(1);
 
             Repository.OfType<Transaction>().EnsurePersistent(transaction);
             return new JsonNetResult(new { });
