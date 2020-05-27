@@ -45,7 +45,7 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-
+            
             return View(transaction);
         }
 
@@ -187,6 +187,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Edit Get
+        /// Tested 20200519
         /// </summary>
         /// <param name="id">The id.</param>
         /// <param name="sort"></param>
@@ -239,6 +240,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Edit Post
+        /// Tested 20200519
         /// </summary>
         /// <param name="transaction">The transaction.</param>
         /// <param name="checkSort"></param>
