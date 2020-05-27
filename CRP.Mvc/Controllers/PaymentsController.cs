@@ -9,6 +9,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.ViewModels;
 using CRP.Mvc.Controllers.ViewModels.Payment;
@@ -708,7 +709,7 @@ namespace CRP.Controllers
             if (response.Decision == CyberSourceReplyCodes.Accept)
             {
                 paymentLog.Accepted = true;
-
+                
                 if (!transaction.IsActive)
                 {
                     //Possibly we could email someone here to say it has been re-activated
@@ -737,6 +738,7 @@ namespace CRP.Controllers
             {
                 
             }
+            paymentLog.TnStatus = response.Decision.SafeTruncate(1);
 
             Repository.OfType<Transaction>().EnsurePersistent(transaction);
             return new JsonNetResult(new { });
