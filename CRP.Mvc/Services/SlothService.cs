@@ -6,6 +6,7 @@ using CRP.Core.Domain;
 using CRP.Mvc.Helpers;
 using CRP.Mvc.Models.Configuration;
 using CRP.Mvc.Models.Sloth;
+using Microsoft.Azure;
 
 namespace CRP.Mvc.Services
 {
@@ -16,6 +17,8 @@ namespace CRP.Mvc.Services
         Task<IList<Transaction>> GetTransactionsByKfsKey(string kfskey);
 
         Task<CreateSlothTransactionResponse> CreateTransaction(CreateTransaction transaction);
+
+        Task<string> Test();
     }
 
     public class SlothService : ISlothService
@@ -25,6 +28,8 @@ namespace CRP.Mvc.Services
         public SlothService()
         {
             _settings = new SlothSettings();
+            _settings.BaseUrl = CloudConfigurationManager.GetSetting("Sloth.BaseUrl");
+            _settings.ApiKey = CloudConfigurationManager.GetSetting("Sloth.ApiKey");
         }
 
         public async Task<Transaction> GetTransactionsByProcessorId(string id)
@@ -63,6 +68,11 @@ namespace CRP.Mvc.Services
                 var result = await response.GetContentOrNullAsync<CreateSlothTransactionResponse>();
                 return result;
             }
+        }
+
+        public async Task<string> Test()
+        {
+            return _settings.BaseUrl;
         }
 
         private HttpClient GetHttpClient()
