@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Core.Abstractions;
+using CRP.Mvc.Services;
 using Microsoft.Azure;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,9 +23,11 @@ namespace CRP.Mvc.Controllers
     public class TestController : ApplicationController
     {
         private readonly INotificationProvider _notificationProvider;
-        public TestController(INotificationProvider notificationProvider)
+        private readonly ISlothService _slothService;
+        public TestController(INotificationProvider notificationProvider, ISlothService slothService)
         {
             _notificationProvider = notificationProvider;
+            _slothService = slothService;
         }
         public ActionResult TestEmail()
         {
@@ -50,6 +53,11 @@ namespace CRP.Mvc.Controllers
             Log.Information("About to hit exception");
             throw new NotImplementedException("Har Har har. We tested it.");
             Log.Information("Hit exception");
+        }
+
+        public async Task<ContentResult> TestSloth()
+        {
+            return Content(await _slothService.Test());
         }
 
 
