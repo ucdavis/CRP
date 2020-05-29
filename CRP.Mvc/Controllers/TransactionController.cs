@@ -14,6 +14,7 @@ using CRP.Mvc.Models.Sloth;
 using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
 using MvcContrib;
+using Newtonsoft.Json;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Helpers;
@@ -32,6 +33,11 @@ namespace CRP.Controllers
             _slothService = slothService;
         }
 
+        /// <summary>
+        /// Tested 20200527
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Details(int id)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
@@ -791,9 +797,12 @@ namespace CRP.Controllers
                     feeCredit, 
                     incomeCredit,
                 },
-                Source                 = "Registration",
+                Source                 = "Registration CyberSource",
                 SourceType             = "CyberSource",
+                ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
             };
+
+            //var getIt = JsonConvert.SerializeObject(request); //Debug it so can test in swagger
 
             var response = await _slothService.CreateTransaction(request);
 
