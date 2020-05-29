@@ -15,6 +15,7 @@ using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
 using MvcContrib;
 using Newtonsoft.Json;
+using Serilog;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Attributes;
 using UCDArch.Web.Helpers;
@@ -711,9 +712,11 @@ namespace CRP.Controllers
         [BypassAntiForgeryToken]
         public async Task<ActionResult> DepositNotify(TransactionDepositNotification model)
         {
+            Log.Information("DepositNotify - Starting");
             // parse id
             if (!int.TryParse(model.MerchantTrackingNumber, out int transactionId))
             {
+                Log.Information("DepositNotify - merchant tracking number bad format");
                 return new JsonNetResult(new
                 {
                     message = "merchant tracking number bad format",
@@ -728,6 +731,7 @@ namespace CRP.Controllers
 
             if (paymentLog == null)
             {
+                Log.Information("DepositNotify - transaction not found for merchant tracking number");
                 return new JsonNetResult(new
                 {
                     message = "transaction not found for merchant tracking number",
@@ -737,6 +741,7 @@ namespace CRP.Controllers
 
             if (paymentLog.Cleared)
             {
+                Log.Information("DepositNotify - transaction already cleared");
                 return new JsonNetResult(new
                 {
                     message = "transaction already cleared",
@@ -801,15 +806,24 @@ namespace CRP.Controllers
                 SourceType             = "CyberSource",
                 ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
             };
+            Log.Information("DepositNotify - Created Transaction");
 
             //var getIt = JsonConvert.SerializeObject(request); //Debug it so can test in swagger
+            try
+            {
+                var response = await _slothService.CreateTransaction(request);
+            }
+            catch (Exception e)
+            {
+                Log.Information("DepositNotify - Exception");
+                throw;
+            }
 
-            var response = await _slothService.CreateTransaction(request);
-
+            Log.Information("DepositNotify - Success Creating Transaction");
             // mark transaction as cleared
             paymentLog.Cleared = true;
             Repository.OfType<PaymentLog>().EnsurePersistent(paymentLog);
-
+            Log.Information("DepositNotify - Success Saving PaymentLog");
             return new JsonNetResult(new
             {
                 success = true,
