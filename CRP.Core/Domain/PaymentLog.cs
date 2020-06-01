@@ -58,7 +58,7 @@ namespace CRP.Core.Domain
         /// <summary>
         /// Payment gateway transaction id
         /// </summary>
-        [StringLength(16)]
+        [StringLength(40)]
         public virtual string GatewayTransactionId { get; set; }
         /// <summary>
         /// Card type that was used to pay
