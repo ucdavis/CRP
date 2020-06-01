@@ -57,7 +57,8 @@ namespace CRP.Mvc.Controllers
 
         public async Task<ContentResult> TestSloth()
         {
-            return Content(await _slothService.Test());
+            var xxx = await _slothService.Test();
+            return Content("done");
         }
 
 
