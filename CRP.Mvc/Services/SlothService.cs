@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CRP.Core.Domain;
@@ -18,7 +19,7 @@ namespace CRP.Mvc.Services
 
         Task<CreateSlothTransactionResponse> CreateTransaction(CreateTransaction transaction);
 
-        Task<string> Test();
+        Task<Transaction> Test();
     }
 
     public class SlothService : ISlothService
@@ -34,6 +35,7 @@ namespace CRP.Mvc.Services
 
         public async Task<Transaction> GetTransactionsByProcessorId(string id)
         {
+            //Note: The transaction currently being used is CRP not Sloth so will not work.
             using (var client = GetHttpClient())
             {
                 var escapedId = Uri.EscapeUriString(id);
@@ -47,6 +49,7 @@ namespace CRP.Mvc.Services
 
         public async Task<IList<Transaction>> GetTransactionsByKfsKey(string kfskey)
         {
+            //Note: The transaction currently being used is CRP not Sloth so will not work.
             using (var client = GetHttpClient())
             {
                 var escapedKey = Uri.EscapeUriString(kfskey);
@@ -70,9 +73,17 @@ namespace CRP.Mvc.Services
             }
         }
 
-        public async Task<string> Test()
+        public async Task<Transaction> Test()
         {
-            return _settings.BaseUrl;
+            //Note: The transaction currently being used is CRP not Sloth so will not work.
+            using (var client = GetHttpClient())
+            {
+                var url = $"transactions";
+
+                var response = await client.GetAsync(url);
+                var result = await response.GetContentOrNullAsync<Transaction>();
+                return result;
+            }
         }
 
         private HttpClient GetHttpClient()
@@ -81,6 +92,7 @@ namespace CRP.Mvc.Services
             {
                 BaseAddress = new Uri(_settings.BaseUrl),
             };
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             client.DefaultRequestHeaders.Add("X-Auth-Token", _settings.ApiKey);
 
             return client;
