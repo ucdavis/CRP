@@ -6,7 +6,7 @@
 <div class="boundary">
     <h2>Successful Transaction</h2>
     <p>You have successfully paid for and registered for the following event:</p>
-    <p>Please print for your own records</p>
+    <p>Please <a href="#" class="btn-link" type="button" onclick="window.print()">Print</a> for your own records</p>
     <div>
         <label>Item: </label>
         @Model.Item.Name
@@ -34,7 +34,7 @@
         <dt>Amount</dt>
         <dd>$@Model.Amount</dd>
 
-        <dt>Code</dt>
+        <dt>Authorization Code:</dt>
         <dd>@Model.AuthCode</dd>
 
         <dt>Date</dt>

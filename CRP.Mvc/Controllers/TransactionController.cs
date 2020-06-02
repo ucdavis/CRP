@@ -57,6 +57,8 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Payment/LinkToTransaction/{id}
+        /// Point Up: Previous name location
+        /// Method to act on payment checks.
         /// </summary>
         /// <param name="transactionId">Transaction Id</param>
         /// <returns></returns>
