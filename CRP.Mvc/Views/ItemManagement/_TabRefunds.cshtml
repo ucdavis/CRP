@@ -26,10 +26,10 @@
                         }
                         else
                         {
-                            using (Html.BeginForm<TransactionController>(x => x.RemoveRefund(item.Id, null, null), FormMethod.Post, new {@class = "display_inline"}))
+                            using (Html.BeginForm<TransactionController>(x => x.RemoveRefund(item.Id), FormMethod.Post, new {@class = "display_inline"}))
                             {
                                 @Html.AntiForgeryToken()
-                                <a href="javascript:;" class="FormSubmit">Undo</a>
+                                <button type="submit" class="btn-link">Undo</button>
                             }
                             <div>
                                 |
