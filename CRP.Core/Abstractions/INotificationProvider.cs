@@ -267,6 +267,10 @@ Your Transaction number is: {TransactionNumber}
             }
 
             var body = new StringBuilder("Refund Information<br/><br/>");
+            if (canceled)
+            {
+                body.Append($"<br/<br/<b>This is a CANCEL of a refund!</b><br/<br/<b>");
+            }
             body.Append("<b>Refunder</b><br/>");
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Name", user.FullName));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Email", user.Email));
