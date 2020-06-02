@@ -22,7 +22,7 @@ namespace CRP.Core.Abstractions
 
         void SendLowQuantityWarning(IRepository repository, Item item, int soldAndPaid);
 
-        void SendRefundNotification(User user, Transaction refundTransaction, bool canceled);
+        void SendRefundNotification(User user, Transaction refundTransaction, bool canceled, string link);
 
         void TestEmailFromService(MailMessage message);
 
@@ -237,7 +237,7 @@ Your Transaction number is: {TransactionNumber}
             _emailService.SendEmail(message);
         }
 
-        public void SendRefundNotification(User user, Transaction refundTransaction, bool canceled)
+        public void SendRefundNotification(User user, Transaction refundTransaction, bool canceled, string link)
         {
             var email = CloudConfigurationManager.GetSetting("EmailForRefunds");
             if(string.IsNullOrWhiteSpace(email))
@@ -273,7 +273,9 @@ Your Transaction number is: {TransactionNumber}
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Kerb", user.LoginID));
             body.Append("<br/>");
             body.Append("<b>Details</b><br/>");
-            body.Append(string.Format("  <b>{0} :</b> {1} Transaction ID={2}<br/>", "Account Id", refundTransaction.ParentTransaction.TransactionGuid, accountId));
+            body.Append($"  <b>Transaction ID :</b> {refundTransaction.ParentTransaction.TransactionGuid}<br/>");
+            body.Append($"  <b>Account ID :</b> {accountId}<br/>");
+            body.Append($"  <b>Link to Payment Details :</b> {link}<br/>");
             body.Append(string.Format("  <b>{0} :</b> ${1}<br/>", "Refund Amount", refundTransaction.Amount));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Date", refundTransaction.TransactionDate));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Event Name", refundTransaction.Item.Name));

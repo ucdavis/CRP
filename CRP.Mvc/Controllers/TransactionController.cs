@@ -214,6 +214,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Edit Get
+        /// To add a correction (change amount for checks)
         /// Tested 20200519
         /// </summary>
         /// <param name="id">The id.</param>
@@ -261,6 +262,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Edit Post
+        /// To add a correction (change amount for checks)
         /// Tested 20200519
         /// </summary>
         /// <param name="transaction">The transaction.</param>
@@ -345,13 +347,10 @@ namespace CRP.Controllers
         /// Get ..\Transaction\Refund
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort">The sort.</param>
-        /// <param name="page">The page.</param>
         /// <returns></returns>
         [RefunderOnly]
-        public ActionResult Refund(int id, string sort, string page)
+        public ActionResult Refund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if (transaction == null)
             {
@@ -374,7 +373,7 @@ namespace CRP.Controllers
             if(transaction.ChildTransactions.Where(a => a.Refunded && a.IsActive).Any())
             {
                 Message = @"Active Refund already exists.";
-                return RedirectToAction("Details", "ItemManagement", new { id = transaction.Item.Id });
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transaction.Item.Id }) + "#Refunds");
             }
             var viewModel = EditTransactionViewModel.Create(Repository, transaction);
             viewModel.TransactionValue = transaction;
@@ -392,9 +391,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Page = pageAndSort["page"];
-            viewModel.Sort = pageAndSort["sort"];
-
             return View(viewModel);
         }
 
@@ -402,12 +398,10 @@ namespace CRP.Controllers
         /// Refunds the specified transaction.
         /// </summary>
         /// <param name="transaction">The transaction.</param>
-        /// <param name="refundSort">The refund sort.</param>
-        /// <param name="refundPage">The refund page.</param>
         /// <returns></returns>
         [RefunderOnly]
         [HttpPost]
-        public ActionResult Refund(Transaction transaction, string refundSort, string refundPage)
+        public ActionResult Refund(Transaction transaction)
         {
             ModelState.Clear();
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(transaction.Id);
@@ -429,7 +423,6 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", refundSort, refundPage);
 
             var refundTransaction = new Transaction(transactionToUpdate.Item);
             refundTransaction.Amount = transaction.Amount;
@@ -457,9 +450,11 @@ namespace CRP.Controllers
                 if(transactionToUpdate.Credit)
                 {
                     var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
-                    _notificationProvider.SendRefundNotification(user, refundTransaction, false);
+                    var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
+                    _notificationProvider.SendRefundNotification(user, refundTransaction, false, link);
+                    Message = "An email has been sent to Accounting to process the Credit Card Refund.";
                 }
-                return RedirectToAction("Details", "ItemManagement", new { id = transaction.Item.Id });
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Refunds");
             }
 
             //TODO: We could replace the line below with a rollback to be more consistent.
@@ -481,8 +476,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             viewModel.CorrectionReason = transaction.CorrectionReason;
             viewModel.RefundAmount = transaction.Amount;
 
@@ -526,7 +519,8 @@ namespace CRP.Controllers
             if(transactionToUpdate.Credit)
             {
                 var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
-                _notificationProvider.SendRefundNotification(user, childTransaction, true);
+                var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
+                _notificationProvider.SendRefundNotification(user, childTransaction, true, link);
             }
             return RedirectToAction("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id });
         }

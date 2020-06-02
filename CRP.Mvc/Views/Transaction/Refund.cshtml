@@ -13,8 +13,13 @@
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-        @Html.Hidden("RefundSort", Model.Sort)
-        @Html.Hidden("RefundPage", Model.Page)
+        if (Model.TransactionValue.Check)
+        {
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                This is a check, and you or your department will be responsible for processing the refund.
+            </div>
+        }
 
         <fieldset>
             <legend>Fields</legend>
@@ -61,14 +66,14 @@
             </ul>
            <div class="form-group">
                 <label for="Amount">Refund Amount:</label>
-                @Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new {@class="amount"})
+                @Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new {@class="amount form-control"})
                 @Html.ValidationMessage("Amount")
                 @Html.ValidationMessage("TotalPaid")
            </div>
             
             <div class="form-group">
                 <label for="CorrectionReason">Refund Reason:</label>
-                @Html.TextArea("CorrectionReason", Model.CorrectionReason)
+                @Html.TextArea("CorrectionReason", Model.CorrectionReason, new { @class = "form-control" })
                 @Html.ValidationMessage("Transaction.CorrectionReason")
             </div>
         </fieldset>
