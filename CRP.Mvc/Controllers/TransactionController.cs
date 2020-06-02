@@ -345,6 +345,7 @@ namespace CRP.Controllers
         /// <summary>
         /// Refunds the specified id.
         /// Get ..\Transaction\Refund
+        /// Tested 20200602
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns></returns>
@@ -396,6 +397,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Refunds the specified transaction.
+        /// Tested 20200602
         /// </summary>
         /// <param name="transaction">The transaction.</param>
         /// <returns></returns>
@@ -563,14 +565,12 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Details of the refund.
+        /// Tested 20200602
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort">The sort.</param>
-        /// <param name="page">The page.</param>
         /// <returns></returns>
-        public ActionResult DetailsRefund(int id, string sort, string page)
+        public ActionResult DetailsRefund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToView = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToView == null)
             {
@@ -615,8 +615,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             viewModel.CorrectionReason = childTransaction.CorrectionReason;
             viewModel.CreateDate = childTransaction.TransactionDate;
             viewModel.CreatedBy = childTransaction.CreatedBy;
