@@ -487,9 +487,8 @@ namespace CRP.Controllers
 
         [RefunderOnly]
         [HttpPost]
-        public ActionResult RemoveRefund(int id, string sort, string page)
+        public ActionResult RemoveRefund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToUpdate == null)
             {
@@ -523,8 +522,13 @@ namespace CRP.Controllers
                 var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
                 var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
                 _notificationProvider.SendRefundNotification(user, childTransaction, true, link);
+                Message = "An email has been sent to Accounting to cancel the Credit Card Refund.";
             }
-            return RedirectToAction("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id });
+            else
+            {
+                Message = "Check refund canceled.";
+            }
+            return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Refunds");
         }
 
         public ActionResult SendNotification(int id, string sort, string page)
