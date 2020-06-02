@@ -37,6 +37,7 @@
             <th>Accepted</th>
             <th>CC Status</th>
             <th>Is CyberSource</th>
+            <th>Cleared</th>
         </tr>
         </thead>
         <tbody>
@@ -51,6 +52,15 @@
                     <td>@log.Accepted</td>
                     <td>@log.TnStatus</td>
                     <td>@(string.IsNullOrWhiteSpace(log.ReturnedResults) ? "No":"Yes")</td>
+                    @if (!string.IsNullOrWhiteSpace(log.ReturnedResults))
+                    {
+                        <td>@(log.Cleared ? "Yes": "No")</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    
                 </tr>
             }
         </tbody>

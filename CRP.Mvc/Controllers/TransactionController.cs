@@ -14,7 +14,6 @@ using CRP.Mvc.Models.Sloth;
 using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
 using MvcContrib;
-using Newtonsoft.Json;
 using Serilog;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Attributes;
