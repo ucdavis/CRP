@@ -58,11 +58,12 @@ namespace CRP.Controllers
         /// <summary>
         /// GET: /Payment/LinkToTransaction/{id}
         /// Point Up: Previous name location
-        /// Method to act on payment checks.
+        /// Method to act on payment checks. (Add, Edit, Deactivate)
+        /// Tested 20200602
         /// </summary>
         /// <param name="transactionId">Transaction Id</param>
         /// <returns></returns>
-        public ActionResult Link(int transactionId, string sort, string page)
+        public ActionResult Link(int transactionId)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
             if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List(null));
@@ -78,11 +79,19 @@ namespace CRP.Controllers
 
             return View(viewModel);
         }
-
+        /// <summary>
+        /// Was previously in the Payment Controller
+        /// Method to act on payment checks. (Add, Edit, Deactivate)
+        /// Tested 20200602
+        /// </summary>
+        /// <param name="transactionId"></param>
+        /// <param name="Checks"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult Link(int transactionId, PaymentLog[] Checks, string checkSort, string checkPage)
+        public ActionResult Link(int transactionId, PaymentLog[] Checks)
         {
             ModelState.Clear();
+            var checkFound = false;
             // get the transaction
             var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
             if (transaction == null)
@@ -115,6 +124,7 @@ namespace CRP.Controllers
                     //If all these are empty, they probably just don't want it.
                     if (!string.IsNullOrEmpty(check.Name) || check.Amount != 0 || !string.IsNullOrEmpty(check.Notes))
                     {
+                        checkFound = true;
                         paymentLog = Copiers.CopyCheckValues(check, new PaymentLog());
                         paymentLog.Check = true;
                         transaction.AddPaymentLog(paymentLog);
@@ -130,6 +140,7 @@ namespace CRP.Controllers
                 // update an existing one
                 else if (check.Id > 0)
                 {
+                    checkFound = true;
                     var tempCheck = Repository.OfType<PaymentLog>().GetNullableById(check.Id);
                     paymentLog = Copiers.CopyCheckValues(check, tempCheck);
                     if (paymentLog.Id > 0 && paymentLog.Accepted)// && (string.IsNullOrEmpty(paymentLog.Name) || string.IsNullOrEmpty(paymentLog.Name.Trim()) || paymentLog.Amount <= 0.0m))
@@ -147,6 +158,7 @@ namespace CRP.Controllers
             {
                 ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
             }
+
 
             //figure out the total of the checks
             var checktotal = transaction.PaymentLogs.Where(a => a.Accepted).Sum(a => a.Amount);
@@ -168,7 +180,14 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
-                Message = "Checks associated with transaction.";
+                if (checkFound)
+                {
+                    Message = "Checks associated with transaction.";
+                }
+                else
+                {
+                    Message = "No checks found to add or update.";
+                }
                 if (transaction.Paid && !transaction.Notified)
                 {
                     // attempt to get the contact information question set and retrieve email address
@@ -198,11 +217,9 @@ namespace CRP.Controllers
         /// Tested 20200519
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort"></param>
-        /// <param name="page"></param>
         /// <returns></returns>
         [AnyoneWithRole]
-        public ActionResult Edit(int id, string sort, string page)
+        public ActionResult Edit(int id)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if(transaction == null)
@@ -239,10 +256,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-            viewModel.Page = pageAndSort["page"];
-            viewModel.Sort = pageAndSort["sort"];
-
             return View(viewModel);
         }
 
@@ -251,12 +264,10 @@ namespace CRP.Controllers
         /// Tested 20200519
         /// </summary>
         /// <param name="transaction">The transaction.</param>
-        /// <param name="checkSort"></param>
-        /// <param name="checkPage"></param>
         /// <returns></returns>
         [HttpPost]
         [AnyoneWithRole]
-        public ActionResult Edit(Transaction transaction, string checkSort, string checkPage)
+        public ActionResult Edit(Transaction transaction)
         {
             ModelState.Clear();
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(transaction.Id);
@@ -277,8 +288,6 @@ namespace CRP.Controllers
                 }
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", checkSort, checkPage);
 
             var correctionTransaction = new Transaction(transactionToUpdate.Item);
             correctionTransaction.Amount = transaction.Amount;
@@ -327,8 +336,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             
             return View(viewModel);
         }

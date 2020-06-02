@@ -9,8 +9,6 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.Hidden("CheckSort", Model.Sort)
-        @Html.Hidden("CheckPage", Model.Page)
         <div>
             <div>
                 <h4>Transaction Number:</h4>
