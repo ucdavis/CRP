@@ -20,7 +20,7 @@
             {
                 <tr>
                     <td>
-                        @using (Html.BeginForm<TransactionController>(x => x.SendNotification(item.Id, null, null), FormMethod.Post, new {@class = "display_inline"}))
+                        @using (Html.BeginForm<TransactionController>(x => x.SendNotification(item.Id), FormMethod.Post, new {@class = "display_inline"}))
                         {
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn-link">Send</button>

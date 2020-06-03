@@ -485,6 +485,11 @@ namespace CRP.Controllers
 
         }
 
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [RefunderOnly]
         [HttpPost]
         public ActionResult RemoveRefund(int id)
@@ -531,9 +536,13 @@ namespace CRP.Controllers
             return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Refunds");
         }
 
-        public ActionResult SendNotification(int id, string sort, string page)
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult SendNotification(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToUpdate == null)
             {
@@ -559,6 +568,7 @@ namespace CRP.Controllers
             {
                 // send an email to the user
                 _notificationProvider.SendConfirmation(Repository, transactionToUpdate, question.Answer);
+                Message = $"Notification sent to {question.Answer}";
             }
 
             return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Notifications");
