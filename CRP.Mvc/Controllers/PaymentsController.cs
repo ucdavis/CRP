@@ -492,6 +492,7 @@ namespace CRP.Controllers
                 else
                 {      
                     answer = qa.Answer ?? string.Empty;
+                    answer = answer.Trim();
                     if (validationClasses != null && validationClasses.Contains("email"))
                     {
                         answer = answer.ToLower();
