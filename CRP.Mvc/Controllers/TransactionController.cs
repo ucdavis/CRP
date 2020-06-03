@@ -646,6 +646,12 @@ namespace CRP.Controllers
             return View(LookupViewModel.Create(Repository));
         }
 
+        /// <summary>
+        /// Tested 20200603p
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Lookup(string orderNumber, string email)
         {
@@ -707,6 +713,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult AdminLookup(string email)
         {
