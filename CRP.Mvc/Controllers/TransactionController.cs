@@ -637,6 +637,10 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Lookup()
         {
             return View(LookupViewModel.Create(Repository));
@@ -667,8 +671,12 @@ namespace CRP.Controllers
                     {
                         if (!transaction.Paid && transaction.IsActive)
                         {
-                            if (transaction.PaymentLogs.Where(a => a.TnStatus == "C" || a.TnStatus == "E").Any())
+                            if (transaction.PaymentLogs.Any(a => a.TnStatus == "A" || a.TnStatus == "S"))
                             {
+                                //There is a successful payment, don't show payment link.
+                            }
+                            else 
+                            { 
                                 if(!transaction.RefundIssued ) //Just in case
                                 {
                                     viewModel.ShowCreditCardReSubmit = true;
