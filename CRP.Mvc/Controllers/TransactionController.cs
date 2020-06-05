@@ -8,13 +8,13 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.ViewModels.Transaction;
 using CRP.Mvc.Models.Sloth;
 using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
 using MvcContrib;
-using Newtonsoft.Json;
 using Serilog;
 using UCDArch.Web.ActionResults;
 using UCDArch.Web.Attributes;
@@ -58,10 +58,13 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Payment/LinkToTransaction/{id}
+        /// Point Up: Previous name location
+        /// Method to act on payment checks. (Add, Edit, Deactivate)
+        /// Tested 20200602
         /// </summary>
         /// <param name="transactionId">Transaction Id</param>
         /// <returns></returns>
-        public ActionResult Link(int transactionId, string sort, string page)
+        public ActionResult Link(int transactionId)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
             if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List(null));
@@ -77,11 +80,19 @@ namespace CRP.Controllers
 
             return View(viewModel);
         }
-
+        /// <summary>
+        /// Was previously in the Payment Controller
+        /// Method to act on payment checks. (Add, Edit, Deactivate)
+        /// Tested 20200602
+        /// </summary>
+        /// <param name="transactionId"></param>
+        /// <param name="Checks"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult Link(int transactionId, PaymentLog[] Checks, string checkSort, string checkPage)
+        public ActionResult Link(int transactionId, PaymentLog[] Checks)
         {
             ModelState.Clear();
+            var checkFound = false;
             // get the transaction
             var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
             if (transaction == null)
@@ -114,6 +125,7 @@ namespace CRP.Controllers
                     //If all these are empty, they probably just don't want it.
                     if (!string.IsNullOrEmpty(check.Name) || check.Amount != 0 || !string.IsNullOrEmpty(check.Notes))
                     {
+                        checkFound = true;
                         paymentLog = Copiers.CopyCheckValues(check, new PaymentLog());
                         paymentLog.Check = true;
                         transaction.AddPaymentLog(paymentLog);
@@ -129,6 +141,7 @@ namespace CRP.Controllers
                 // update an existing one
                 else if (check.Id > 0)
                 {
+                    checkFound = true;
                     var tempCheck = Repository.OfType<PaymentLog>().GetNullableById(check.Id);
                     paymentLog = Copiers.CopyCheckValues(check, tempCheck);
                     if (paymentLog.Id > 0 && paymentLog.Accepted)// && (string.IsNullOrEmpty(paymentLog.Name) || string.IsNullOrEmpty(paymentLog.Name.Trim()) || paymentLog.Amount <= 0.0m))
@@ -146,6 +159,7 @@ namespace CRP.Controllers
             {
                 ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
             }
+
 
             //figure out the total of the checks
             var checktotal = transaction.PaymentLogs.Where(a => a.Accepted).Sum(a => a.Amount);
@@ -167,7 +181,14 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
-                Message = "Checks associated with transaction.";
+                if (checkFound)
+                {
+                    Message = "Checks associated with transaction.";
+                }
+                else
+                {
+                    Message = "No checks found to add or update.";
+                }
                 if (transaction.Paid && !transaction.Notified)
                 {
                     // attempt to get the contact information question set and retrieve email address
@@ -194,14 +215,13 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Edit Get
+        /// To add a correction (change amount for checks)
         /// Tested 20200519
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort"></param>
-        /// <param name="page"></param>
         /// <returns></returns>
         [AnyoneWithRole]
-        public ActionResult Edit(int id, string sort, string page)
+        public ActionResult Edit(int id)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if(transaction == null)
@@ -238,24 +258,19 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-            viewModel.Page = pageAndSort["page"];
-            viewModel.Sort = pageAndSort["sort"];
-
             return View(viewModel);
         }
 
         /// <summary>
         /// Edit Post
+        /// To add a correction (change amount for checks)
         /// Tested 20200519
         /// </summary>
         /// <param name="transaction">The transaction.</param>
-        /// <param name="checkSort"></param>
-        /// <param name="checkPage"></param>
         /// <returns></returns>
         [HttpPost]
         [AnyoneWithRole]
-        public ActionResult Edit(Transaction transaction, string checkSort, string checkPage)
+        public ActionResult Edit(Transaction transaction)
         {
             ModelState.Clear();
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(transaction.Id);
@@ -276,8 +291,6 @@ namespace CRP.Controllers
                 }
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", checkSort, checkPage);
 
             var correctionTransaction = new Transaction(transactionToUpdate.Item);
             correctionTransaction.Amount = transaction.Amount;
@@ -326,8 +339,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             
             return View(viewModel);
         }
@@ -335,15 +346,13 @@ namespace CRP.Controllers
         /// <summary>
         /// Refunds the specified id.
         /// Get ..\Transaction\Refund
+        /// Tested 20200602
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort">The sort.</param>
-        /// <param name="page">The page.</param>
         /// <returns></returns>
         [RefunderOnly]
-        public ActionResult Refund(int id, string sort, string page)
+        public ActionResult Refund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if (transaction == null)
             {
@@ -366,7 +375,7 @@ namespace CRP.Controllers
             if(transaction.ChildTransactions.Where(a => a.Refunded && a.IsActive).Any())
             {
                 Message = @"Active Refund already exists.";
-                return RedirectToAction("Details", "ItemManagement", new { id = transaction.Item.Id });
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transaction.Item.Id }) + "#Refunds");
             }
             var viewModel = EditTransactionViewModel.Create(Repository, transaction);
             viewModel.TransactionValue = transaction;
@@ -384,22 +393,18 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Page = pageAndSort["page"];
-            viewModel.Sort = pageAndSort["sort"];
-
             return View(viewModel);
         }
 
         /// <summary>
         /// Refunds the specified transaction.
+        /// Tested 20200602
         /// </summary>
         /// <param name="transaction">The transaction.</param>
-        /// <param name="refundSort">The refund sort.</param>
-        /// <param name="refundPage">The refund page.</param>
         /// <returns></returns>
         [RefunderOnly]
         [HttpPost]
-        public ActionResult Refund(Transaction transaction, string refundSort, string refundPage)
+        public ActionResult Refund(Transaction transaction)
         {
             ModelState.Clear();
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(transaction.Id);
@@ -421,7 +426,6 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", refundSort, refundPage);
 
             var refundTransaction = new Transaction(transactionToUpdate.Item);
             refundTransaction.Amount = transaction.Amount;
@@ -449,9 +453,11 @@ namespace CRP.Controllers
                 if(transactionToUpdate.Credit)
                 {
                     var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
-                    _notificationProvider.SendRefundNotification(user, refundTransaction, false);
+                    var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
+                    _notificationProvider.SendRefundNotification(user, refundTransaction, false, link);
+                    Message = "An email has been sent to Accounting to process the Credit Card Refund.";
                 }
-                return RedirectToAction("Details", "ItemManagement", new { id = transaction.Item.Id });
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Refunds");
             }
 
             //TODO: We could replace the line below with a rollback to be more consistent.
@@ -473,8 +479,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             viewModel.CorrectionReason = transaction.CorrectionReason;
             viewModel.RefundAmount = transaction.Amount;
 
@@ -482,11 +486,15 @@ namespace CRP.Controllers
 
         }
 
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [RefunderOnly]
         [HttpPost]
-        public ActionResult RemoveRefund(int id, string sort, string page)
+        public ActionResult RemoveRefund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToUpdate == null)
             {
@@ -518,14 +526,24 @@ namespace CRP.Controllers
             if(transactionToUpdate.Credit)
             {
                 var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
-                _notificationProvider.SendRefundNotification(user, childTransaction, true);
+                var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
+                _notificationProvider.SendRefundNotification(user, childTransaction, true, link);
+                Message = "An email has been sent to Accounting to cancel the Credit Card Refund.";
             }
-            return RedirectToAction("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id });
+            else
+            {
+                Message = "Check refund canceled.";
+            }
+            return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Refunds");
         }
 
-        public ActionResult SendNotification(int id, string sort, string page)
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult SendNotification(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToUpdate == null)
             {
@@ -551,6 +569,7 @@ namespace CRP.Controllers
             {
                 // send an email to the user
                 _notificationProvider.SendConfirmation(Repository, transactionToUpdate, question.Answer);
+                Message = $"Notification sent to {question.Answer}";
             }
 
             return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Notifications");
@@ -561,14 +580,12 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Details of the refund.
+        /// Tested 20200602
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort">The sort.</param>
-        /// <param name="page">The page.</param>
         /// <returns></returns>
-        public ActionResult DetailsRefund(int id, string sort, string page)
+        public ActionResult DetailsRefund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToView = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToView == null)
             {
@@ -613,8 +630,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             viewModel.CorrectionReason = childTransaction.CorrectionReason;
             viewModel.CreateDate = childTransaction.TransactionDate;
             viewModel.CreatedBy = childTransaction.CreatedBy;
@@ -623,11 +638,21 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Lookup()
         {
             return View(LookupViewModel.Create(Repository));
         }
 
+        /// <summary>
+        /// Tested 20200603p
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Lookup(string orderNumber, string email)
         {
@@ -653,8 +678,12 @@ namespace CRP.Controllers
                     {
                         if (!transaction.Paid && transaction.IsActive)
                         {
-                            if (transaction.PaymentLogs.Where(a => a.TnStatus == "C" || a.TnStatus == "E").Any())
+                            if (transaction.PaymentLogs.Any(a => a.TnStatus == "A" || a.TnStatus == "S"))
                             {
+                                //There is a successful payment, don't show payment link.
+                            }
+                            else 
+                            { 
                                 if(!transaction.RefundIssued ) //Just in case
                                 {
                                     viewModel.ShowCreditCardReSubmit = true;
@@ -685,6 +714,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult AdminLookup(string email)
         {
@@ -707,6 +741,11 @@ namespace CRP.Controllers
             return View(transactions);
         }
 
+        /// <summary>
+        /// Tested 20200605
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [BypassAntiForgeryToken]
@@ -725,9 +764,12 @@ namespace CRP.Controllers
             }
 
             // find transaction with payment
+            // Only a successful paymentLog will have a GatewayTransactionId...
             var paymentLog = Repository.OfType<PaymentLog>().Queryable
                 .FirstOrDefault(p => p.GatewayTransactionId == model.ProcessorTrackingNumber
                                   && p.Transaction.Id == transactionId);
+
+
 
             if (paymentLog == null)
             {
@@ -749,6 +791,8 @@ namespace CRP.Controllers
                 });
             }
 
+            var transId = paymentLog.Transaction.TransactionNumber;
+
             // build transfer request
             var total = paymentLog.Amount;
             var fee = total * FeeSchedule.StandardRate;
@@ -762,7 +806,7 @@ namespace CRP.Controllers
                 Chart       = KfsAccounts.HoldingChart,
                 Account     = KfsAccounts.HoldingAccount,
                 ObjectCode  = KfsObjectCodes.Income,
-                Description = "Funds Distribution"
+                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
             };
 
             var feeCredit = new CreateTransfer()
@@ -772,7 +816,7 @@ namespace CRP.Controllers
                 Chart       = KfsAccounts.FeeChart,
                 Account     = KfsAccounts.FeeAccount,
                 ObjectCode  = KfsObjectCodes.Income,
-                Description = "Processing Fee"
+                Description = $"Processing Fee - {transId}".SafeTruncate(40)
             };
 
             var incomeCredit = new CreateTransfer()
@@ -783,7 +827,7 @@ namespace CRP.Controllers
                 Account     = paymentLog.Transaction.Item.FinancialAccount.Account,
                 SubAccount  = paymentLog.Transaction.Item.FinancialAccount.SubAccount,
                 ObjectCode  = KfsObjectCodes.Income,
-                Description = "Funds Distribution"
+                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
             };
 
             // setup transaction
