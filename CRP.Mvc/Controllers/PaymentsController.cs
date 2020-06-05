@@ -513,6 +513,12 @@ namespace CRP.Controllers
             return answer ?? (string.Empty);  //Something seems to have changed in the view where an empty text area now has null instead of an empty string
         }
 
+
+        /// <summary>
+        /// Don't auto submit this page with JS. It is used if there is an error or if they cancel so they can try again.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Confirmation(int id)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
@@ -561,7 +567,7 @@ namespace CRP.Controllers
             if (!_dataSigningService.Check(dictionary, response.Signature))
             {
                 Log.Error("Check Signature Failure");
-                Message = "An error has occurred. Payment not processed. If you experience further problems, contact us.";
+                ErrorMessage = "An error has occurred. Payment not processed. If you experience further problems, contact us.";
                 return new HttpStatusCodeResult(500);
             }
 
@@ -569,7 +575,7 @@ namespace CRP.Controllers
             if (!int.TryParse(response.Req_Reference_Number, out int transactionId))
             {
                 Log.Error("Order not found {0}", response.Req_Reference_Number);
-                Message = "Transaction for payment not found. Please contact technical support.";
+                ErrorMessage = "Transaction for payment not found. Please contact technical support.";
                 return new HttpNotFoundResult();
             }
 
@@ -580,7 +586,7 @@ namespace CRP.Controllers
             if (transaction == null)
             {
                 Log.Error("Order not found {0}", response.Req_Reference_Number);
-                Message = "Transaction for payment not found. Please contact technical support.";
+                ErrorMessage = "Transaction for payment not found. Please contact technical support.";
                 return new HttpNotFoundResult();
             }
 
@@ -588,7 +594,7 @@ namespace CRP.Controllers
             if (!responseValid.IsValid)
             {
                 // send them back to the pay page with errors
-                Message = $"Errors detected: {string.Join(",", responseValid.Errors)}";
+                ErrorMessage = $"Errors detected: {string.Join(",", responseValid.Errors)}";
                 return RedirectToAction(nameof(Confirmation), new {id = transactionId});
             }
 
@@ -628,7 +634,7 @@ namespace CRP.Controllers
             if (!_dataSigningService.Check(dictionary, response.Signature))
             {
                 Log.Error("Check Signature Failure");
-                Message = "An error has occurred. Payment not processed. If you experience further problems, contact us.";
+                ErrorMessage = "An error has occurred. Payment not processed. If you experience further problems, contact us.";
                 return new HttpStatusCodeResult(500);
             }
 
@@ -636,7 +642,7 @@ namespace CRP.Controllers
             if (!int.TryParse(response.Req_Reference_Number, out int transactionId))
             {
                 Log.Error("Order not found {0}", response.Req_Reference_Number);
-                Message = "Transaction for payment not found. Please contact technical support.";
+                ErrorMessage = "Transaction for payment not found. Please contact technical support.";
                 return new HttpNotFoundResult();
             }
             var transaction = Repository.OfType<Transaction>()
@@ -646,11 +652,11 @@ namespace CRP.Controllers
             if (transaction == null)
             {
                 Log.Error("Order not found {0}", response.Req_Reference_Number);
-                Message = "Transaction for payment not found. Please contact technical support.";
+                ErrorMessage = "Transaction for payment not found. Please contact technical support.";
                 return new HttpNotFoundResult();
             }
 
-            Message = "Payment Process Cancelled";
+            Message = "Payment Process Canceled";
             return RedirectToAction(nameof(Confirmation), new {id = transactionId});
         }
 
