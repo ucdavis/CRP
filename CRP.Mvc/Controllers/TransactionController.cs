@@ -8,6 +8,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Abstractions;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.ViewModels.Transaction;
 using CRP.Mvc.Models.Sloth;
@@ -740,6 +741,11 @@ namespace CRP.Controllers
             return View(transactions);
         }
 
+        /// <summary>
+        /// Tested 20200605
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [BypassAntiForgeryToken]
@@ -758,9 +764,12 @@ namespace CRP.Controllers
             }
 
             // find transaction with payment
+            // Only a successful paymentLog will have a GatewayTransactionId...
             var paymentLog = Repository.OfType<PaymentLog>().Queryable
                 .FirstOrDefault(p => p.GatewayTransactionId == model.ProcessorTrackingNumber
                                   && p.Transaction.Id == transactionId);
+
+
 
             if (paymentLog == null)
             {
@@ -782,6 +791,8 @@ namespace CRP.Controllers
                 });
             }
 
+            var transId = paymentLog.Transaction.TransactionNumber;
+
             // build transfer request
             var total = paymentLog.Amount;
             var fee = total * FeeSchedule.StandardRate;
@@ -795,7 +806,7 @@ namespace CRP.Controllers
                 Chart       = KfsAccounts.HoldingChart,
                 Account     = KfsAccounts.HoldingAccount,
                 ObjectCode  = KfsObjectCodes.Income,
-                Description = "Funds Distribution"
+                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
             };
 
             var feeCredit = new CreateTransfer()
@@ -805,7 +816,7 @@ namespace CRP.Controllers
                 Chart       = KfsAccounts.FeeChart,
                 Account     = KfsAccounts.FeeAccount,
                 ObjectCode  = KfsObjectCodes.Income,
-                Description = "Processing Fee"
+                Description = $"Processing Fee - {transId}".SafeTruncate(40)
             };
 
             var incomeCredit = new CreateTransfer()
@@ -816,7 +827,7 @@ namespace CRP.Controllers
                 Account     = paymentLog.Transaction.Item.FinancialAccount.Account,
                 SubAccount  = paymentLog.Transaction.Item.FinancialAccount.SubAccount,
                 ObjectCode  = KfsObjectCodes.Income,
-                Description = "Funds Distribution"
+                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
             };
 
             // setup transaction
