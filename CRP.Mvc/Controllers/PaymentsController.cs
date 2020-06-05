@@ -633,10 +633,15 @@ namespace CRP.Controllers
             }
 
             // find matching transaction
-            var transactionId = new Guid(response.Req_Reference_Number);
+            if (!int.TryParse(response.Req_Reference_Number, out int transactionId))
+            {
+                Log.Error("Order not found {0}", response.Req_Reference_Number);
+                Message = "Transaction for payment not found. Please contact technical support.";
+                return new HttpNotFoundResult();
+            }
             var transaction = Repository.OfType<Transaction>()
                 .Queryable
-                .SingleOrDefault(a => a.TransactionGuid == transactionId);
+                .SingleOrDefault(a => a.Id == transactionId);
 
             if (transaction == null)
             {
