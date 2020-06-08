@@ -32,13 +32,20 @@
         <h1>@Model.Item.Name</h1>
         @if (available <= 0)
         {
-            <div><strong class="fa fa-warning" style="color: red"> SOLD OUT</strong> But check back later.</div>
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong class="fa fa-warning" style="color: red"> SOLD OUT</strong> But check back later.
+            </div>
+
         }
         else
         {
             if (available <= 5)
             {
-                <div><strong class="fa fa-info-circle" style="color: salmon"> Warning</strong> Only @available @Model.Item.QuantityName (s) left.</div>
+                <div class="alert alert-info">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <strong class="fa fa-info-circle" style="color: salmon"> Warning</strong> Only @available @Model.Item.QuantityName (s) left.
+                </div>
             }
         }
         <p class="lead">
