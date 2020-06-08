@@ -62,7 +62,7 @@
                     $<span class="perItemAmount">@($"{Model.Item.CostPerItem:0.00}")</span>
                 </p>
                 <p class="table-item">
-                    <input id="quantity" type="number" name="quantity" value="@Model.Quantity" class="quantityAmount qty form-control" style="margin-left: 116px;" min="1" step="1" required/>
+                    <input id="quantity" type="number" name="quantity" value="@Model.Quantity" class="quantityAmount qty form-control" style="margin-left: 116px;" min="1" step="1" required data-val="true" data-val-number="The field Quantity must be a number." data-val-required="The Quantity field is required."/>
                     @Html.ValidationMessage("Quantity")
                 </p>
                 <p class="table-item">
