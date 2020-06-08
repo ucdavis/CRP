@@ -62,7 +62,7 @@
                     $<span class="perItemAmount">@($"{Model.Item.CostPerItem:0.00}")</span>
                 </p>
                 <p class="table-item">
-                    @Html.TextBox("quantity", Model.Quantity, new { @class = "quantityAmount qty form-control", style = "margin-left: 116px;" })
+                    <input id="quantity" type="number" name="quantity" value="@Model.Quantity" class="quantityAmount qty form-control" style="margin-left: 116px;" min="1" step="1" required/>
                     @Html.ValidationMessage("Quantity")
                 </p>
                 <p class="table-item">
@@ -139,7 +139,7 @@
                 <div class="QuantityContainer">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            @quantityName Information<span class="quantityIndex">@(i + 1)</span>
+                            @quantityName Information <span class="quantityIndex">@(i + 1)</span>
                         </div>
                         <div class="panel-body">
                             @foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))

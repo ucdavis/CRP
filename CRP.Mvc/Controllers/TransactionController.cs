@@ -781,6 +781,11 @@ namespace CRP.Controllers
                 });
             }
 
+            if (paymentLog.TnStatus != "A")
+            {
+                Log.Error("DepositNotify - Error PaymentLog found without accepted TNStatus");
+            }
+
             if (paymentLog.Cleared)
             {
                 Log.Information("DepositNotify - transaction already cleared");
