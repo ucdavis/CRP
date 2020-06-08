@@ -139,7 +139,7 @@
                 <div class="QuantityContainer">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            @quantityName Information<span class="quantityIndex">@(i + 1)</span>
+                            @quantityName Information <span class="quantityIndex">@(i + 1)</span>
                         </div>
                         <div class="panel-body">
                             @foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
