@@ -177,21 +177,22 @@
         }
 
         @*Transaction Level*@
+       
         @foreach (var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
         {
             <div class="TransactionContainer">
                 <div class="panel panel-default">
                     @{
                         var questionSetName = qs.QuestionSet.Name;
-                        bool showDonationLink;
+                        
                         if (questionSetName == "Contact Information")
                         {
                             questionSetName += " / Billing Information";
-                            showDonationLink = true;
+ 
                         }
                         else
                         {
-                            showDonationLink = false;
+
                         }
                     }
                     <div class="panel-heading">
@@ -213,21 +214,27 @@
                         }
                     </div>
 
-                    @if (showDonationLink && !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink))
-                    {
-                        var donationTitle = !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information";
-                        var donationText = !string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here";
-
-                        <div class="panel-body TransactionContainer">
-                            <h3>@donationTitle</h3>
-                            <div class="form-group">
-                                <div>@Model.Item.DonationLinkInformation</div>
-                                <div>
-                                    <a href="@Model.Item.DonationLinkLink" target="_blank">@donationText</a>
-                                </div>
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink))
+        {
+            var donationTitle = !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information";
+            var donationText = !string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here";
+            <div class="TransactionContainer">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @donationTitle
+                    </div>
+                    <div class="panel-body TransactionContainer">
+           
+                        <div class="form-group">
+                            <div>@Model.Item.DonationLinkInformation</div>
+                            <div>
+                                <a href="@Model.Item.DonationLinkLink" target="_blank">@donationText</a>
                             </div>
                         </div>
-                    }
+                    </div>
                 </div>
             </div>
         }
