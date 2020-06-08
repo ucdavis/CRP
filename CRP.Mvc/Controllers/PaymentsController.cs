@@ -51,7 +51,7 @@ namespace CRP.Controllers
         /// <param name="password"> </param>
         /// <param name="agribusinessExtraParams"></param>
         /// <returns></returns>
-        public ActionResult Checkout(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
+        public ActionResult Checkout(int id, string referenceId, string coupon, string password)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
 
@@ -82,11 +82,12 @@ namespace CRP.Controllers
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon, password);
             viewModel.Quantity = 1;
-            viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
-            if (!viewModel.Answers.Any())
-            {
-                viewModel.Answers = PopulateItemTransactionAnswer(agribusinessExtraParams, item.QuestionSets);
-            }
+            viewModel.Answers = new List<ItemTransactionAnswer>(); //We don't support openId or Agri business anymore. But keeping the commented code below in case I've introduced a problem 20200608.
+            //viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
+            //if (!viewModel.Answers.Any())
+            //{
+            //    viewModel.Answers = PopulateItemTransactionAnswer(agribusinessExtraParams, item.QuestionSets);
+            //}
             viewModel.TotalAmountToRedisplay = viewModel.Quantity * item.CostPerItem;
             viewModel.CouponAmountToDisplay = 0.0m; // They have not entered a coupon yet
             viewModel.CouponTotalDiscountToDisplay = 0.0m;
