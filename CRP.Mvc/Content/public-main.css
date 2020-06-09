@@ -543,7 +543,6 @@ form.tickets {
 
 .eventinfo-item {
   display: flex;
-  justify-content: space-between;
   margin-bottom: 20px; }
   @media (max-width: 640px) {
     .eventinfo-item {
@@ -647,8 +646,8 @@ legend.field-border {
 /* Cal Updates on 6 2020 */
 
 .right-side {
-  width:32%;
-  margin-left:2%;
+  width:28%;
+  margin-left:5%;
 }
 .left-side {
   width:65%;
@@ -656,4 +655,7 @@ legend.field-border {
 .left-side img {
   max-width:100%;
   height:auto;
+}
+.align-items-center {
+  align-items:center !important;
 }
