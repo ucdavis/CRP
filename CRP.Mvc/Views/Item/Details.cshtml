@@ -12,35 +12,8 @@
     ViewBag.OgTitle = Model.Item.Name;
 }
 
-<p>map test</p>
-<div class="eventbanner-map" @showDiv>
-    @if (Model.HasMapPins)
-    {
 
-        <div id="map" style="margin: 0px 0px 20px; height: 75%">
-            <div class="gp-map" style="height: 100%; width: 100%;"></div>
 
-            @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
-            {
-                <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
-                    <dt class="gp-name">@Html.Encode(a.Title)</dt>
-                    @if (!string.IsNullOrWhiteSpace(a.Description))
-                    {
-                        <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
-                    }
-                </div>
-            }
-            <div class="eventbanner-mapbuttons">
-                @Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })
-                @if (Model.Item.MapPins.Count > 1)
-                {
-                    @Html.Raw(" | ")
-                    @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new {id = Model.Item.Id, usePins = true}, new {target = "_blank"})
-                }
-            </div>
-        </div>
-    }
-</div>
     <div class="content_wrapper boundary">
         <div class="left-side">
               <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="eventbanner-image" />
