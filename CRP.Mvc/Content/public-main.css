@@ -234,6 +234,7 @@ header .header_contents {
 .content_wrapper {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: flex-start; }
   @media (max-width: 640px) {
     .content_wrapper {
@@ -658,4 +659,14 @@ legend.field-border {
 }
 .align-items-center {
   align-items:center !important;
+}
+@media (max-width: 768px) {
+  .right-side {
+    width:100%;
+    margin-left:0px;
+    margin-top:10px;
+  }
+  .left-side {
+    width:100%;
+  }
 }
