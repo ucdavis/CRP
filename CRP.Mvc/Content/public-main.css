@@ -517,8 +517,7 @@ form.tickets {
       display: block; } }
 
 .eventbanner {
-  display: flex;
-  margin-bottom: 3%; }
+  display: flex; }
   .eventbanner .eventbanner-map {
     width: 100%;
     height:500px; }
