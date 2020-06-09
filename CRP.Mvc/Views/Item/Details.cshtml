@@ -14,12 +14,9 @@
 
 
 
-<div class="main">
     <div class="content_wrapper boundary">
-        <article>
-          <div class="eventbanner-image">
+        <div class="left-side">
               <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="eventbanner-image" />
-          </div>
           @{
               var showDiv = Model.HasMapPins ? string.Empty : "style=display:none";
           }
@@ -30,8 +27,8 @@
                 <h2>Link:</h2>
                 <p><a target="_blank" href="@Html.Encode(Model.Item.Link)">@Html.Encode(Model.Item.Link)</a></p>
             }
-        </article>
-        <aside>
+        </div>
+        <div class="right-side">
           <div class="map-thumb" @showDiv>
               @if (Model.HasMapPins)
               {
@@ -124,7 +121,7 @@
                 </div>
             </div>
 
-        </aside>
+        </div>
         <div class="fullmap" @showDiv>
 
                 @if (Model.HasMapPins)
@@ -151,7 +148,6 @@
 
         </div>
     </div>
-</div>
 
 @section AdditionalScripts
 {

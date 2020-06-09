@@ -48,10 +48,10 @@ h3, h1 {color:#1c1f22;}
 fieldset ul {margin:0; padding:0;}
 fieldset ul li {list-style-type:none; margin-bottom:0.25em;}
 fieldset ul li label {margin-bottom:0em;}
-.save_btn {margin-left:250px; background-color:#0D548A; padding:.25em 1em; color:#fff; -moz-border-radius: 10px; 
+.save_btn {margin-left:250px; background-color:#0D548A; padding:.25em 1em; color:#fff; -moz-border-radius: 10px;
 -webkit-border-radius: 10px; border:1px solid #000; font-weight:bold; letter-spacing:3px; margin-top:1em; font-size:1.2em; display:inline;}
 .save_btn:hover {background-color:Green;}
-.clear_btn {margin-left:250px; background-color:#F8F8F8; padding:.25em 1em; color:#000; -moz-border-radius: 10px; 
+.clear_btn {margin-left:250px; background-color:#F8F8F8; padding:.25em 1em; color:#000; -moz-border-radius: 10px;
 -webkit-border-radius: 10px; border:1px solid #000; font-weight:bold; letter-spacing:3px; margin-top:1em; font-size:1.2em; display:inline;}
 .clear_btn:hover {background-color:#EB1C1C;}
 .details {border:none; padding:0; margin:0;}
@@ -83,7 +83,7 @@ fieldset ul li label {margin-bottom:0em;}
 /* details view */
 .itemdetailsimg img{margin:0 0 1m 1em; height:auto; width:292px;}
 .itemdetailsimg {display:block; text-align:center;}
-.reg_btn h3{background-color:#0D548A; color:#FFF; font: 22px/30px 'QuicksandBook', Arial, sans-serif;  letter-spacing:2px; text-align:center; -moz-border-radius: 10px; 
+.reg_btn h3{background-color:#0D548A; color:#FFF; font: 22px/30px 'QuicksandBook', Arial, sans-serif;  letter-spacing:2px; text-align:center; -moz-border-radius: 10px;
 -webkit-border-radius: 10px; border:3px solid #F8F8F8; padding: 0.2em 0;}
 /* .reg_btn h3:hover{background-color:#FFF; color:#0D548A;} */
 .reg_btn h3:hover{font: 22px/30px 'QuicksandBold', Arial, sans-serif; border:3px solid #000;}
@@ -94,17 +94,17 @@ fieldset ul li label {margin-bottom:0em;}
 /* client side validation messages */
 .failed
 {
-    border: 1px solid #ff0000;    
+    border: 1px solid #ff0000;
 	color:Red;
 }
 .failed.passed
 {
-	border: none;    
+	border: none;
 	color:inherit;
 }
 .field-validation-error
 {
-	border: 1px solid #ff0000;    
+	border: 1px solid #ff0000;
 	color:Red;
 }
 
@@ -184,17 +184,17 @@ font-size:0.8em;
 }
 #Confirmation_Word_Bank_Unpaid a:hover{color: #A50000}
 
-#versionInformation 
+#versionInformation
 {
 	font-family:Trebuchet MS,Arial,Georgia;
 	position:absolute;
 	bottom:0;
 	width: 100%;
-	height: 60px;	
-	text-align:center;			
+	height: 60px;
+	text-align:center;
 }
 
-#footer 
+#footer
 {
     font-size:0.8em;
     text-align:center;
@@ -227,4 +227,18 @@ font-size:0.8em;
 #system_wide_status {border:3px solid #C83900; background-color:#fcf0f0;}
 .validation-summary-valid {
     display: none
+}
+
+/* Cal Updates on 6 2020 */
+
+.right-side {
+  width:32%;
+  margin-left:2%;
+}
+.left-side {
+  width:65%;
+}
+.left-side img {
+  max-width:100%;
+  height:auto;
 }

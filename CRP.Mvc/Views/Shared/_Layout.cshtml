@@ -65,10 +65,11 @@
         }
         <div class="bleed">
             <div class="topbanner">
-                <div class="header_item">
+              <div class="boundary">
+                <div>
                     <a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Images/Media/ucdavislogo.svg")" alt="UC Davis"></a>
                 </div>
-                <div class="header_item">
+                <div>
                     @using (Html.BeginForm("Index", "Search"))
                     {
                         @Html.AntiForgeryToken()
@@ -76,7 +77,7 @@
                             @Html.TextBox("searchTerm", string.Empty, new { @maxlength = "20" })
                         </div>
                     }
-
+                </div>
                 </div>
             </div>
         </div>
@@ -104,7 +105,7 @@
             <div class="boundary">
                 <div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">×</button>
-                    @ViewBag.ErrorMessage 
+                    @ViewBag.ErrorMessage
                 </div>
             </div>
         }
