@@ -12,9 +12,9 @@
     ViewBag.OgTitle = Model.Item.Name;
 }
 
-
-
 <div class="main">
+  <div class="row">
+    <div class="col-8-md">
     <div class="eventbanner">
         <div class="eventbanner-image">
             <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="eventbanner-image" />
@@ -22,34 +22,6 @@
         @{
             var showDiv = Model.HasMapPins ? string.Empty : "style=display:none";
         }
-        <div class="eventbanner-map" @showDiv>
-            @if (Model.HasMapPins)
-            {
-
-                <div id="map" style="margin: 0px 0px 20px; height: 75%">
-                    <div class="gp-map" style="height: 100%; width: 100%;"></div>
-
-                    @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
-                    {
-                        <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
-                            <dt class="gp-name">@Html.Encode(a.Title)</dt>
-                            @if (!string.IsNullOrWhiteSpace(a.Description))
-                            {
-                                <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
-                            }
-                        </div>
-                    }
-                    <div class="eventbanner-mapbuttons">
-                        @Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })
-                        @if (Model.Item.MapPins.Count > 1)
-                        {
-                            @Html.Raw(" | ")
-                            @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new {id = Model.Item.Id, usePins = true}, new {target = "_blank"})
-                        }
-                    </div>
-                </div>
-            }
-        </div>
     </div>
     <div class="content_wrapper boundary">
         <article>
@@ -61,73 +33,7 @@
                 <p><a target="_blank" href="@Html.Encode(Model.Item.Link)">@Html.Encode(Model.Item.Link)</a></p>
             }
         </article>
-        <aside>
-            @if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
-            {
-                var available = Model.Item.Quantity - Model.Item.Sold;
-                if (available <= 0)
-                {
-                    <div style="text-align: center"><strong class="fa fa-warning" style="color: red"> SOLD OUT</strong> But check back later.</div>
-                }
-                else
-                {
-                    if (available <= 5)
-                    {
-                        <div class="t-center"><strong class="fa fa-info-circle" style="color: salmon"> Warning</strong> Only @available @Model.Item.QuantityName (s) left.</div>
-                    }
-                }
-                <div class="registerbtn">
-                    <a class="btn btn-register" href="@Url.Action("Checkout", "Payments", new {id = Model.Item.Id})">Register</a>
-                    <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
-                </div>
-            }
-            @foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
-            {
-                <div class="eventinfo-item">
-                    <div class="eventinfo-icon">
-                        @if (ep.ExtendedProperty.QuestionType.Name == "Date")
-                        {
-                            <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
-                        }
-                        else
-                        {
-                            if (ep.ExtendedProperty.Name.ToLower().Contains("location"))
-                            {
-                                <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
-                            }
-                            if (ep.ExtendedProperty.Name.ToLower().Contains("contact"))
-                            {
-                                <img src="@Url.Content("~/Images/Media/contact.svg")" alt="Location icon">
-                            }
-                        }
-                    </div>
-                    <div class="eventinfo-text">
-                        <h4>@Html.Encode(ep.ExtendedProperty.Name):</h4>
-                        <p>@Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box" ? ep.Answer : Convert.ToDateTime(ep.Answer, new CultureInfo("en-US")).ToString("MMM dd, yyyy"))</p>
-                    </div>
-                </div>
-            }
-            <div class="eventinfo-item">
-                <div class="eventinfo-icon">
-                    <img src="@Url.Content("~/Images/Media/payment_icon.svg")" alt="payment icon">
-                </div>
-                <div class="eventinfo-text">
-                    <h4>Price Per @Html.Encode(Model.Item.QuantityName):</h4>
-                    <p>@Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))</p>
-                </div>
-            </div>
-            <div class="eventinfo-item">
-                <div class="eventinfo-icon">
-                    <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
-                </div>
-                <div class="eventinfo-text">
-                    <h4>Last day to register online:</h4>
-                    <p>@Html.Encode(String.Format("{0:D}", Model.Item.Expiration))</p>
-                </div>
-            </div>
-
-        </aside>
-        <div class="fullmap" @showDiv> 
+        <div class="fullmap" @showDiv>
 
                 @if (Model.HasMapPins)
             {
@@ -153,13 +59,112 @@
 
         </div>
     </div>
+    </div>
+    <div class="col-md-4">
+
+      <div class="eventbanner-map" @showDiv>
+          @if (Model.HasMapPins)
+          {
+
+              <div id="map" style="margin: 0px 0px 20px; height: 75%">
+                  <div class="gp-map" style="height: 100%; width: 100%;"></div>
+
+                  @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
+                  {
+                      <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
+                          <dt class="gp-name">@Html.Encode(a.Title)</dt>
+                          @if (!string.IsNullOrWhiteSpace(a.Description))
+                          {
+                              <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
+                          }
+                      </div>
+                  }
+                  <div class="eventbanner-mapbuttons">
+                      @Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })
+                      @if (Model.Item.MapPins.Count > 1)
+                      {
+                          @Html.Raw(" | ")
+                          @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new {id = Model.Item.Id, usePins = true}, new {target = "_blank"})
+                      }
+                  </div>
+              </div>
+          }
+      </div>
+      <aside>
+          @if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
+          {
+              var available = Model.Item.Quantity - Model.Item.Sold;
+              if (available <= 0)
+              {
+                  <div style="text-align: center"><strong class="fa fa-warning" style="color: red"> SOLD OUT</strong> But check back later.</div>
+              }
+              else
+              {
+                  if (available <= 5)
+                  {
+                      <div class="t-center"><strong class="fa fa-info-circle" style="color: salmon"> Warning</strong> Only @available @Model.Item.QuantityName (s) left.</div>
+                  }
+              }
+              <div class="registerbtn">
+                  <a class="btn btn-register" href="@Url.Action("Checkout", "Payments", new {id = Model.Item.Id})">Register</a>
+                  <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
+              </div>
+          }
+          @foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
+          {
+              <div class="eventinfo-item">
+                  <div class="eventinfo-icon">
+                      @if (ep.ExtendedProperty.QuestionType.Name == "Date")
+                      {
+                          <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
+                      }
+                      else
+                      {
+                          if (ep.ExtendedProperty.Name.ToLower().Contains("location"))
+                          {
+                              <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
+                          }
+                          if (ep.ExtendedProperty.Name.ToLower().Contains("contact"))
+                          {
+                              <img src="@Url.Content("~/Images/Media/contact.svg")" alt="Location icon">
+                          }
+                      }
+                  </div>
+                  <div class="eventinfo-text">
+                      <h4>@Html.Encode(ep.ExtendedProperty.Name):</h4>
+                      <p>@Html.Encode(ep.ExtendedProperty.QuestionType.Name == "Text Box" ? ep.Answer : Convert.ToDateTime(ep.Answer, new CultureInfo("en-US")).ToString("MMM dd, yyyy"))</p>
+                  </div>
+              </div>
+          }
+          <div class="eventinfo-item">
+              <div class="eventinfo-icon">
+                  <img src="@Url.Content("~/Images/Media/payment_icon.svg")" alt="payment icon">
+              </div>
+              <div class="eventinfo-text">
+                  <h4>Price Per @Html.Encode(Model.Item.QuantityName):</h4>
+                  <p>@Html.Encode(String.Format("{0:C}", Model.Item.CostPerItem))</p>
+              </div>
+          </div>
+          <div class="eventinfo-item">
+              <div class="eventinfo-icon">
+                  <img src="@Url.Content("~/Images/Media/date_icon.svg")" alt="calendar icon">
+              </div>
+              <div class="eventinfo-text">
+                  <h4>Last day to register online:</h4>
+                  <p>@Html.Encode(String.Format("{0:D}", Model.Item.Expiration))</p>
+              </div>
+          </div>
+
+      </aside>
+    </div>
+    </div>
 </div>
 
 @section AdditionalScripts
 {
     @Scripts.Render("~/bundles/qtip")
     <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=@CloudConfigurationManager.GetSetting("MapsApi")" type="text/javascript"></script>
-    
+
     @Scripts.Render("~/bundles/map")
 
 
