@@ -44,6 +44,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Transaction/Checkout/{id}
+        /// Tested 20200609
         /// </summary>
         /// <param name="id">Item id</param>
         /// <param name="referenceId">Reference Number for external applications</param>
