@@ -584,17 +584,17 @@ form.tickets {
 /* client side validation messages */
 .failed
 {
-    border: 1px solid #ff0000;    
+    border: 1px solid #ff0000;
 	color:Red;
 }
 .failed.passed
 {
-	border: none;    
+	border: none;
 	color:inherit;
 }
 .field-validation-error
 {
-	border: 1px solid #ff0000;    
+	border: 1px solid #ff0000;
 	color:Red;
 }
 
@@ -642,4 +642,18 @@ legend.field-border {
 #system_wide_status {border:3px solid #C83900; background-color:#fcf0f0;}
 .validation-summary-valid {
     display: none
+}
+
+/* Cal Updates on 6 2020 */
+
+.right-side {
+  width:32%;
+  margin-left:2%;
+}
+.left-side {
+  width:65%;
+}
+.left-side img {
+  max-width:100%;
+  height:auto;
 }

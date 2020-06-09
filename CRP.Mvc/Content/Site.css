@@ -228,17 +228,3 @@ font-size:0.8em;
 .validation-summary-valid {
     display: none
 }
-
-/* Cal Updates on 6 2020 */
-
-.right-side {
-  width:32%;
-  margin-left:2%;
-}
-.left-side {
-  width:65%;
-}
-.left-side img {
-  max-width:100%;
-  height:auto;
-}
