@@ -518,30 +518,13 @@ form.tickets {
 
 .eventbanner {
   display: flex;
-  justify-content: space-between;
   margin-bottom: 3%; }
-  @media (min-width: 850px) {
-    .eventbanner {
-      width: 80%;
-      margin: 0 auto;
-      min-width: 300px;
-      max-width: 1650px;
-      margin-bottom: 3%; } }
-  .eventbanner .eventbanner-image {
-    width: 64.8%; }
-    @media (max-width: 640px) {
-      .eventbanner .eventbanner-image {
-        width: 100%; } }
-    .eventbanner .eventbanner-image img {
-      width: 100%;
-      height: auto; }
   .eventbanner .eventbanner-map {
-    width: 35.2%;
-    background-color: #e9e9e9; }
+    width: 100%;
+    height:500px; }
     @media (max-width: 640px) {
       .eventbanner .eventbanner-map {
         display: none; } }
-
 .eventinfo-item {
   display: flex;
   margin-bottom: 20px; }
@@ -669,4 +652,7 @@ legend.field-border {
   .left-side {
     width:100%;
   }
+}
+.eventbanner-map {
+  width:100%;
 }
