@@ -521,6 +521,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Don't auto submit this page with JS. It is used if there is an error or if they cancel so they can try again.
+        /// Tested 20200610
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -554,6 +555,11 @@ namespace CRP.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Tested 202020610
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
         [HttpPost]
         [BypassAntiForgeryToken]
         public async Task<ActionResult> Receipt(ReceiptResponseModel response)
@@ -621,6 +627,11 @@ namespace CRP.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Tested 20200610
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
         [HttpPost]
         [BypassAntiForgeryToken]
         public async Task<ActionResult> Cancel(ReceiptResponseModel response)
@@ -665,6 +676,11 @@ namespace CRP.Controllers
             return RedirectToAction(nameof(Confirmation), new {id = transactionId});
         }
 
+        /// <summary>
+        /// Tested 20200610
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [BypassAntiForgeryToken]
@@ -761,6 +777,11 @@ namespace CRP.Controllers
             return new JsonNetResult(new { });
         }
 
+        /// <summary>
+        /// Tested 20200610
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
         private CheckResponseResults CheckResponse(ReceiptResponseModel response)
         {
             var contextLog = Log.ForContext("decision", response.Decision).ForContext("reason", response.Reason_Code);
@@ -847,6 +868,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Compares an answer against a regular expression
+        /// Tested 20200610
         /// </summary>
         /// <param name="pattern"></param>
         /// <param name="answer"></param>
@@ -871,6 +893,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// This one is used for Agribusiness to pass these values.
+        /// No longer supported
         /// </summary>
         /// <param name="agribusinessExtraParams"></param>
         /// <param name="questionSets"></param>
@@ -922,6 +945,12 @@ namespace CRP.Controllers
             return answers;
         }
 
+        /// <summary>
+        /// No longer supported
+        /// </summary>
+        /// <param name="openIdUser"></param>
+        /// <param name="questionSets"></param>
+        /// <returns></returns>
         private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(OpenIdUser openIdUser, ICollection<ItemQuestionSet> questionSets)
         {
             var answers = new List<ItemTransactionAnswer>();
@@ -1021,6 +1050,12 @@ namespace CRP.Controllers
             return answers;
         }
 
+        /// <summary>
+        /// Tested 20200610
+        /// </summary>
+        /// <param name="transactionAnswers"></param>
+        /// <param name="quantityAnswers"></param>
+        /// <returns></returns>
         private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
         {
             var answers = new List<ItemTransactionAnswer>();
