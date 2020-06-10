@@ -14,45 +14,12 @@
 
 
 
-<div class="main">
-    <div class="eventbanner">
-        <div class="eventbanner-image">
-            <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="eventbanner-image" />
-        </div>
-        @{
-            var showDiv = Model.HasMapPins ? string.Empty : "style=display:none";
-        }
-        <div class="eventbanner-map" @showDiv>
-            @if (Model.HasMapPins)
-            {
-
-                <div id="map" style="margin: 0px 0px 20px; height: 75%">
-                    <div class="gp-map" style="height: 100%; width: 100%;"></div>
-
-                    @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
-                    {
-                        <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
-                            <dt class="gp-name">@Html.Encode(a.Title)</dt>
-                            @if (!string.IsNullOrWhiteSpace(a.Description))
-                            {
-                                <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
-                            }
-                        </div>
-                    }
-                    <div class="eventbanner-mapbuttons">
-                        @Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })
-                        @if (Model.Item.MapPins.Count > 1)
-                        {
-                            @Html.Raw(" | ")
-                            @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new {id = Model.Item.Id, usePins = true}, new {target = "_blank"})
-                        }
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
     <div class="content_wrapper boundary">
-        <article>
+        <div class="left-side">
+              <img src="@Url.Action("GetImage", "Item", new {id = Model.Item.Id})" alt="eventbanner-image" />
+          @{
+              var showDiv = Model.HasMapPins ? string.Empty : "style=display:none";
+          }
             <h1>@Model.Item.Name</h1>
             @Html.Raw(Html.HtmlEncode(Model.Item.Description))
             @if (!string.IsNullOrEmpty(Model.Item.Link))
@@ -60,8 +27,38 @@
                 <h2>Link:</h2>
                 <p><a target="_blank" href="@Html.Encode(Model.Item.Link)">@Html.Encode(Model.Item.Link)</a></p>
             }
-        </article>
-        <aside>
+        </div>
+        <div class="right-side">
+          <div class="eventbanner">
+            <div class="eventbanner-map" @showDiv>
+                @if (Model.HasMapPins)
+                {
+
+                    <div id="map" style="margin: 0px 0px 20px; height: 75%">
+                        <div class="gp-map" style="height: 100%; width: 100%;"></div>
+
+                        @foreach (var a in Model.Item.MapPins.OrderByDescending(a => a.IsPrimary))
+                        {
+                            <div class="gp-coordinate@(a.IsPrimary ? " gp-default" : string.Empty)" data-lat="@a.Latitude" data-lng="@a.Longitude">
+                                <dt class="gp-name">@Html.Encode(a.Title)</dt>
+                                @if (!string.IsNullOrWhiteSpace(a.Description))
+                                {
+                                    <dd class="gp-description">@Html.Encode(a.Description ?? string.Empty)</dd>
+                                }
+                            </div>
+                        }
+                        <div class="eventbanner-mapbuttons">
+                            @Html.ActionLink("Full Screen Map", "Map", new { id = Model.Item.Id, usePins = true }, new { target = "_blank" })
+                            @if (Model.Item.MapPins.Count > 1)
+                            {
+                                @Html.Raw(" | ")
+                                @Html.ActionLink("Full Screen Map With Directions", "MapDirections", new {id = Model.Item.Id, usePins = true}, new {target = "_blank"})
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+          </div>
             @if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
             {
                 var available = Model.Item.Quantity - Model.Item.Sold;
@@ -126,8 +123,8 @@
                 </div>
             </div>
 
-        </aside>
-        <div class="fullmap" @showDiv> 
+        </div>
+        <div class="fullmap" @showDiv>
 
                 @if (Model.HasMapPins)
             {
@@ -153,13 +150,12 @@
 
         </div>
     </div>
-</div>
 
 @section AdditionalScripts
 {
     @Scripts.Render("~/bundles/qtip")
     <script src="https://maps-api-ssl.google.com/maps/api/js?v=3&sensor=false&key=@CloudConfigurationManager.GetSetting("MapsApi")" type="text/javascript"></script>
-    
+
     @Scripts.Render("~/bundles/map")
 
 
