@@ -127,7 +127,7 @@ namespace CRP.Core.Domain
 
             // check against the max number of usages if other valid conditions pass
             // usages has already surpassed max usage
-            if (CalculateUsage() > MaxUsage) return null;
+            if (CalculateUsage() >= MaxUsage) return null;
 
             // check for email restriction
             if (!string.IsNullOrEmpty(Email) && !ignoreEmail)

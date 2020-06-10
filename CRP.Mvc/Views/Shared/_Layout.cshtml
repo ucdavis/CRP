@@ -63,7 +63,7 @@
         {
             <h1 style="background-color: red; text-align: center; color: white">----------- Testing SITE. Testing SITE. Testing SITE. -----------</h1>
         }
-        <div class="bleed">
+        <div class="bleed noprint">
             <div class="topbanner">
               <div class="boundary content_wrapper align-items-center">
                 <div>
@@ -81,7 +81,7 @@
                 </div>
             </div>
         </div>
-        <div class="header_contents">
+        <div class="header_contents noprint">
             <div class="header_item">
                 <!-- <h1><a href="/">Registration</a></h1> -->
                 <a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Images/Media/registrationlogo.svg")" alt="UC Davis CAES logo"></a>
@@ -121,7 +121,7 @@
 
         @if (!string.IsNullOrWhiteSpace(TempData["Message"] as string))
         {
-            <div class="boundary">
+            <div class="boundary noprint">
                 <div class="alert alert-info">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     @TempData["Message"]
@@ -156,7 +156,7 @@
                             The Regents of the University of California, Davis campus. All rights reserved.
                         </li>
                     </ul>
-                    <ul class="footer-list no-bullet float-right">
+                    <ul class="footer-list no-bullet float-right noprint">
                         <li>@Html.ActionLink("Admin Home", "AdminHome", "Home")</li>
                     </ul>
                 </div>

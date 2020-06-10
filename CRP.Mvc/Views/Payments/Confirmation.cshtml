@@ -9,7 +9,7 @@
     <h2>Registration Confirmation</h2>
     <p>You have successfully registered for the following event:</p>
     <div>
-        <label>Item: </label>
+        <label>Event: </label>
         @Model.Transaction.Item.Name
     </div>
     <div>
@@ -24,7 +24,18 @@
     @if (Model.Transaction.Credit)
     {
         <div>
-            <p>Payment is still due:</p>
+            @if (Model.Transaction.Paid)
+            {
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    It appears this has been paid. If you think it hasn't you may still pay.
+                </div>
+            }
+            else
+            {
+                <p>Payment is still due:</p>
+            }
+            
             <form action="@Model.PostUrl" method="post" autocomplete="off" style="margin-right: 3px">
                 @foreach (var pair in Model.PaymentDictionary)
                 {

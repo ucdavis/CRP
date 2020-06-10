@@ -6,9 +6,9 @@
 <div class="boundary">
     <h2>Successful Transaction</h2>
     <p>You have successfully paid for and registered for the following event:</p>
-    <p>Please <a href="#" class="btn-link" type="button" onclick="window.print()">Print</a> for your own records</p>
+    <p class="noprint">Please <a href="#" class="btn-link" type="button" onclick="window.print()">Print/Save</a> for your own records</p>
     <div>
-        <label>Item: </label>
+        <label>Event: </label>
         @Model.Item.Name
     </div>
     <div>
@@ -41,3 +41,13 @@
         <dd>@Model.AuthDateTime.ToString("d")</dd>
     </dl>
 </div>
+
+@section AdditionalStyles
+{
+    <style media="print">
+
+        .noprint {
+            display: none !important;
+        }
+    </style>
+}

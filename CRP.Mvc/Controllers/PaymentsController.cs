@@ -44,6 +44,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Transaction/Checkout/{id}
+        /// Tested 20200609
         /// </summary>
         /// <param name="id">Item id</param>
         /// <param name="referenceId">Reference Number for external applications</param>
@@ -97,6 +98,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Transaction/Checkout/{id}
+        /// Tested 20200610
         /// </summary>
         /// <remarks>
         /// Description:
@@ -208,13 +210,14 @@ namespace CRP.Controllers
             {
                 ModelState.AddModelError("Quantity Level", "The number of answers does not match the number of Quantity Level questions.");
             }
-
+            
+            //No longer Supported
             // fill the openid user if they are openid validated
-            if (HttpContext.Request.IsOpenId())
-            {
-                // doesn't matter if it's null, just assign what we have
-                transaction.OpenIDUser = _openIdUserRepository.GetNullableById(CurrentUser.Identity.Name);
-            }
+            //if (HttpContext.Request.IsOpenId())
+            //{
+            //    // doesn't matter if it's null, just assign what we have
+            //    transaction.OpenIDUser = _openIdUserRepository.GetNullableById(CurrentUser.Identity.Name);
+            //}
 
             // deal with selected payment type
             if (paymentType == StaticValues.CreditCard)
@@ -464,6 +467,7 @@ namespace CRP.Controllers
         /// Null bools get changed to false
         /// Null radio get set to an empty string (because it may not have the required attribute)
         /// Null CheckboxList get set to an empty string
+        /// Tested 20200610
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="qa">The qa.</param>
@@ -525,7 +529,7 @@ namespace CRP.Controllers
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
 
             if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
-
+            
             Check.Require(transaction.Item != null);
             if (transaction.Credit)
             {
