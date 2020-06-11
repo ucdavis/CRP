@@ -222,6 +222,7 @@
                             {
                                 <tr>
                                     <td>
+                                        <a href="@Url.Action("Details", "Coupon", new{ id = coupon.Id })">Details</a>
                                         @if (coupon.IsActive)
                                         {
                                             using (Html.BeginForm<CouponController>(b => b.Deactivate(coupon.Id), FormMethod.Post))

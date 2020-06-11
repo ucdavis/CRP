@@ -76,7 +76,7 @@ namespace CRP.Controllers
 
             if (ModelState.IsValid)
             {
-                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Coupon");
+                Message = $"Coupon created: {coupon.Code}"; //NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Coupon");
                 var redirectUrl = Url.Action("Edit", "ItemManagement", new {id = item.Id});
                 return Redirect(redirectUrl + "#Coupons");
             }
@@ -161,6 +161,25 @@ namespace CRP.Controllers
             // redirect to edit with the anchor to coupon
             var redirectUrl = Url.Action("Edit", "ItemManagement", new {id = coupon.Item.Id});
             return Redirect(redirectUrl + "#Coupons");
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult Details(int id)
+        {
+            var coupon = Repository.OfType<Coupon>().GetNullableById(id);
+
+            if (coupon == null)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+
+            if (!Access.HasItemAccess(CurrentUser, coupon.Item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+
+            return View(coupon);
         }
     }
 }
