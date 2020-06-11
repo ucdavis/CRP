@@ -1481,6 +1481,7 @@
     <Content Include="Views\Transaction\DetailsRefund.cshtml" />
     <Content Include="Views\Transaction\Refund.cshtml" />
     <Content Include="Views\Transaction\Details.cshtml" />
+    <Content Include="Views\Coupon\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

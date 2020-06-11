@@ -1,0 +1,96 @@
+﻿@model CRP.Core.Domain.Coupon
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
+<div class="boundary">
+    <h2>Coupon Details</h2>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxQuantity)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.MaxQuantity)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxUsage)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.MaxUsage)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.Expiration)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.Expiration)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.DiscountAmount)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.DiscountAmount)
+        </dd>
+    
+        <dt>
+            Created By:
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+    
+        <dt>
+            Quantity Used:
+        </dt>
+        <dd>
+            @Model.Transactions.Sum(a => a.Quantity)
+        </dd>
+    
+    </dl>
+    
+    <p>
+        @Html.ActionLink(linkText: "Back to Item", actionName:"Edit", controllerName: "ItemManagement", protocol: null,hostName:null, routeValues: new { id = Model.Item.Id }, fragment:"Coupons", htmlAttributes:null)
+    </p>
+</div>
+
