@@ -5,6 +5,7 @@ using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
+using CRP.Mvc.Controllers.ViewModels;
 using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
@@ -231,6 +232,25 @@ namespace CRP.Controllers
             }
 
             return this.RedirectToAction(a => a.ListItemTypes());
+        }
+
+        public ActionResult ViewUnCleared()
+        {
+            //TODO: add in a date check to give it a few days to process
+            var unclearedPaymentLogs = Repository.OfType<PaymentLog>().Queryable
+                .Where(a => a.Credit && !a.Cleared && a.Accepted && a.ReturnedResults != null).Select(a =>
+                    new UnclearedModel
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Amount = a.Amount,
+                        DatePayment = a.DatePayment,
+                        Transaction = a.Transaction,
+                        GatewayTransactionId = a.GatewayTransactionId,
+                        TnPaymentDate = a.TnPaymentDate,
+                    }).ToArray();
+
+            return View(unclearedPaymentLogs);
         }
 
         #endregion
