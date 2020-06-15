@@ -14,5 +14,6 @@ namespace CRP.Mvc.Controllers.ViewModels
         public virtual Core.Domain.Transaction Transaction { get; set; }
         public virtual string GatewayTransactionId { get; set; }
         public virtual string TnPaymentDate { get; set; }
+        public virtual bool IsOld { get; set; }
     }
 }

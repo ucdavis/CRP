@@ -41,6 +41,11 @@
         <tbody>
         @foreach (var item in Model)
         {
+            var warning = string.Empty;
+            if (item.IsOld)
+            {
+                warning = "background-color: salmon";
+            }
             var slothLink = ViewBag.SlothLookup + item.Transaction.Id;
             <tr>
                 <td>
@@ -49,7 +54,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Amount)
                 </td>
-                <td>
+                <td style="@warning">
                     @Html.DisplayFor(modelItem => item.DatePayment)
                 </td>
 
@@ -74,7 +79,7 @@
     <script type="text/javascript">
         $(function() {
             $("#table").dataTable({
-                "aaSorting": [[2, "desc"]], //Default sort on 3 column
+                "aaSorting": [[2, "asc"]], //Default sort on 3 column
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [-1] }, //Disables sort on last column
                     { 'type': 'date', 'targets': [2]}
