@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -236,6 +237,7 @@ namespace CRP.Controllers
 
         public ActionResult ViewUnCleared()
         {
+            var compareDate = DateTime.UtcNow.AddDays(-5);
             //TODO: add in a date check to give it a few days to process
             var unclearedPaymentLogs = Repository.OfType<PaymentLog>().Queryable
                 .Where(a => a.Credit && !a.Cleared && a.Accepted && a.ReturnedResults != null).Select(a =>
@@ -248,6 +250,7 @@ namespace CRP.Controllers
                         Transaction = a.Transaction,
                         GatewayTransactionId = a.GatewayTransactionId,
                         TnPaymentDate = a.TnPaymentDate,
+                        IsOld = a.DatePayment < compareDate
                     }).ToArray();
 
             return View(unclearedPaymentLogs);
