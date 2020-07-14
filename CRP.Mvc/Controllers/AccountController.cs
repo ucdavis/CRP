@@ -64,7 +64,8 @@ namespace CRP.Controllers
             // figure out if the user is cas? or openid
             if (!Request.IsOpenId())
             {
-                return Redirect("https://cas.ucdavis.edu/cas/logout?service=" + returnUrl);
+                var baseUrl = CASHelper.GetCasBaseUrl();
+                return Redirect($"{baseUrl}logout?service=" + returnUrl);
             }
 
             return this.RedirectToAction<HomeController>(a => a.Index());
