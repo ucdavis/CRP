@@ -9,7 +9,7 @@ namespace CRP.Controllers.Helpers
 {
     public static class CASHelper
     {
-        private static string GetCasBaseUrl()
+        public static string GetCasBaseUrl()
         {
             return CloudConfigurationManager.GetSetting("CasBaseUrl");
         }
