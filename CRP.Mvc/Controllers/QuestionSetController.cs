@@ -160,7 +160,8 @@ namespace CRP.Controllers
 
             // copy the fields
             existingQs.Name = questionSet.Name;
-            existingQs.IsActive = questionSet.IsActive;
+            //existingQs.IsActive = questionSet.IsActive;
+            existingQs.IsActive = true; //I don't this is being used anywhere
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, existingQs.ValidationResults());
 
