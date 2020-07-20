@@ -59,7 +59,7 @@
                 }
             </div>
           </div>
-            @if (Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
+            @if (Model.Item.Expiration == null || Model.Item.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
             {
                 var available = Model.Item.Quantity - Model.Item.Sold;
                 if (available <= 0)
@@ -75,7 +75,10 @@
                 }
                 <div class="registerbtn">
                     <a class="btn btn-register" href="@Url.Action("Checkout", "Payments", new {id = Model.Item.Id})">Register</a>
-                    <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
+                    @if (Model.Item.Expiration != null)
+                    {
+                        <p class="discreet t-center">Register by @Html.Encode(Model.Item.Expiration.Value.ToString("MMM d")) <sup>@Model.Item.Expiration.DaySuffix()</sup></p>
+                    }
                 </div>
             }
             @foreach (var ep in Model.Item.ExtendedPropertyAnswers.Where(a => a.Answer != string.Empty))
@@ -119,7 +122,7 @@
                 </div>
                 <div class="eventinfo-text">
                     <h4>Last day to register online:</h4>
-                    <p>@Html.Encode(String.Format("{0:D}", Model.Item.Expiration))</p>
+                    <p>@Html.Encode(Model.Item.Expiration.HasValue ? string.Format("{0:D}", Model.Item.Expiration) : "Not Specified")</p>
                 </div>
             </div>
 
