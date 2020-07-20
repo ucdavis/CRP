@@ -217,7 +217,7 @@ namespace CRP.Core.Domain
         public virtual bool IsAvailableForReg { 
             get
             {
-                var lastDayToRegisterOnLine = Expiration == null ? SystemTime.Now().AddDays(-1).Date : (DateTime)Expiration;
+                var lastDayToRegisterOnLine = Expiration == null ? SystemTime.Now().AddDays(1).Date : (DateTime)Expiration;
                 if (Sold >= Quantity || SystemTime.Now().Date > lastDayToRegisterOnLine.Date || !Available)
                 {
                     return false;

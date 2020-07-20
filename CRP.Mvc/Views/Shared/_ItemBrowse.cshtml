@@ -49,7 +49,7 @@
                         <strong>
                             Last day to register online:
                         </strong>
-                        @Html.Encode(item.Expiration.HasValue ? item.Expiration.Value.ToString("D") : string.Empty)
+                        @Html.Encode(item.Expiration.HasValue ? item.Expiration.Value.ToString("D") : "Not Specified")
                     </p>
                 </div>
             </a>
