@@ -377,6 +377,13 @@ namespace CRP.Controllers
                         questionSet.UserReusable = true;
                     }
 
+                    //Do an extra check here. Note, no one should have a SchoolAdmin value.
+                    if (!CurrentUser.IsInRole(RoleNames.Admin))
+                    {
+                        questionSet.CollegeReusable = false;
+                        questionSet.SystemReusable = false;
+                    }
+
                     //make sure it's some type of reusable
                     if (questionSet.SystemReusable || questionSet.CollegeReusable || questionSet.UserReusable)
                     {
