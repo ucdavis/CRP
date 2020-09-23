@@ -234,7 +234,7 @@ namespace CRP.Controllers
 
             return this.RedirectToAction(a => a.ListItemTypes());
         }
-
+        #endregion
         public ActionResult ViewUnCleared()
         {
             var compareDate = DateTime.UtcNow.AddDays(-5);
@@ -256,6 +256,6 @@ namespace CRP.Controllers
             return View(unclearedPaymentLogs);
         }
 
-        #endregion
+        
     }
 }
