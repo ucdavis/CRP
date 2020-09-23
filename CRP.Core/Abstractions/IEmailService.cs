@@ -13,9 +13,16 @@ namespace CRP.Core.Abstractions
     {
         private static readonly string UserName = CloudConfigurationManager.GetSetting("CrpEmail");
         private static readonly string Password = CloudConfigurationManager.GetSetting("EmailToken");
+        private static readonly string Host = CloudConfigurationManager.GetSetting("EmailHost");
+        private static readonly string Port = CloudConfigurationManager.GetSetting("EmailPort");
 
         public void SendEmail(MailMessage mailMessage)
         {
+            mailMessage.Body = $"{mailMessage.Body} <br/><br/><hr> This email is not monitored.<br/>Please do not reply to it.";
+            mailMessage.IsBodyHtml = true;
+            
+
+            mailMessage.From = new MailAddress("registration-notify@ucdavis.edu"); //TODO
             if (mailMessage.IsBodyHtml)
             {
                 mailMessage.IsBodyHtml = false;
@@ -24,17 +31,18 @@ namespace CRP.Core.Abstractions
 
                 mailMessage.AlternateViews.Add(alternate);
             }
-            var client = new SmtpClient
-            {
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(UserName, Password),
-                Port = 587,
-                Host = "smtp.ucdavis.edu",
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                EnableSsl = true
-            };
 
-            client.Send(mailMessage);
+            using (var client = new SmtpClient(Host))
+            {
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(UserName, Password);
+                client.Port = int.Parse(Port);
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.EnableSsl = true;
+
+                client.Send(mailMessage);
+
+            }
         }
     }
 }
