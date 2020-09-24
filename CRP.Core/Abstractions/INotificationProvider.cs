@@ -306,6 +306,7 @@ Your Transaction number is: {TransactionNumber}
                 Log.Error(ex, "Error sending Refund Notification");
             }
             message.Body = body.ToString();
+            message.IsBodyHtml = true;
 
             _emailService.SendEmail(message);
         }
@@ -330,6 +331,8 @@ Your Transaction number is: {TransactionNumber}
             body.Append("You are getting this notification because you are an editor on an event that has a setting to inform you when people register for your event.");
 
             message.Body = body.ToString();
+
+            message.IsBodyHtml = true;
             _emailService.SendEmail(message);
         }
     }
