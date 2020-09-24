@@ -22,7 +22,7 @@ namespace CRP.Core.Abstractions
             mailMessage.IsBodyHtml = true;
             
 
-            mailMessage.From = new MailAddress("registration-notify@ucdavis.edu"); //TODO
+            mailMessage.From = new MailAddress("registration-notify@ucdavis.edu"); 
             if (mailMessage.IsBodyHtml)
             {
                 mailMessage.IsBodyHtml = false;
