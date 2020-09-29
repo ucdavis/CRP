@@ -6,9 +6,9 @@
 
 <div class="boundary">
     <p>
-        @Html.ActionLink("Back to Item", "Details", "ItemManagement", null, null, "Reports", new { id = Model.ItemId }, null) |
-        @Html.ActionLink("Generate Excel Report", "CreateExcelReport", "Excel", new { id = Model.ItemReportId, itemId = Model.ItemId }, null)
+        @Html.ActionLink("Generate Excel Report", "CreateExcelReport", "Excel", new { id = Model.ItemReportId, itemId = Model.ItemId }, new { @class = "btn" })
     </p>
+    <p>@Html.ActionLink("Back to Item", "Details", "ItemManagement", null, null, "Reports", new { id = Model.ItemId }, null)</p>
     <hr/>
     <h2>@Model.ReportName</h2>
     <table id="table" class="table table-bordered">
