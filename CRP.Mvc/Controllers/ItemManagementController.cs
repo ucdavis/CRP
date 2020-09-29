@@ -628,7 +628,7 @@ namespace CRP.Controllers
                 // you can't deactivate paid registrations
                 ModelState.AddModelError("Deactivate", NotificationMessages.STR_Paid_transactions_can_not_be_deactivated);
             }
-            else if ((transaction.Item.Sold + transaction.Quantity) > transaction.Item.Quantity)
+            else if (!transaction.IsActive && (transaction.Item.Sold + transaction.Quantity) > transaction.Item.Quantity)
             {
                 // you can't activate too many transactions
                 ModelState.AddModelError("Activate", NotificationMessages.STR_Transaction_can_not_be_activated);
