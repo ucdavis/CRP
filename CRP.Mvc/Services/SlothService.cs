@@ -8,6 +8,7 @@ using CRP.Mvc.Helpers;
 using CRP.Mvc.Models.Configuration;
 using CRP.Mvc.Models.Sloth;
 using Microsoft.Azure;
+using Serilog;
 
 namespace CRP.Mvc.Services
 {
@@ -68,8 +69,20 @@ namespace CRP.Mvc.Services
                 var url = "transactions";
 
                 var response = await client.PostAsJsonAsync(url, transaction);
-                var result = await response.GetContentOrNullAsync<CreateSlothTransactionResponse>();
-                return result;
+                try
+                {
+                    var result = await response.GetContentOrNullAsync<CreateSlothTransactionResponse>();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Exception trying to create transaction in sloth: {e.Message}");
+                    var info = await response.GetContentOrEmptyAsync();
+                    Log.Information($"DepositNotify - Error info: {info}");
+                    throw;
+                }
+                
+                
             }
         }
 
