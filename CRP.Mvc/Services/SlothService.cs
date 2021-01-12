@@ -76,9 +76,8 @@ namespace CRP.Mvc.Services
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Exception trying to create transaction in sloth: {e.Message}");
-                    var info = await response.GetContentOrEmptyAsync();
-                    Log.Information($"DepositNotify - Error info: {info}");
+                    Log.Error(e, "Exception trying to create transaction in sloth");
+                    Log.Information($"DepositNotify - Error info: {await response.GetContentOrEmptyAsync()}");
                     throw;
                 }
                 
