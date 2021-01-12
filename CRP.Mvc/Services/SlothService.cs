@@ -71,8 +71,7 @@ namespace CRP.Mvc.Services
                 var response = await client.PostAsJsonAsync(url, transaction);
                 try
                 {
-                    var result = await response.GetContentOrNullAsync<CreateSlothTransactionResponse>();
-                    return result;
+                    return await response.GetContentOrNullAsync<CreateSlothTransactionResponse>();
                 }
                 catch (Exception e)
                 {
