@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -544,6 +545,9 @@
     <Compile Include="Services\CopyItemService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app_offline.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\2009.3.1103.0\Black\loading.gif" />
     <Content Include="Content\2009.3.1103.0\Black\sprite.png" />
