@@ -45,7 +45,7 @@ namespace CRP.Core.Domain
         /// Amount paid
         /// </summary>
         [Required]
-        [Range(0, 100_000_000)]
+        [Range(0, 100000000)]
         public virtual decimal Amount { get; set; }
 
         [Required]
