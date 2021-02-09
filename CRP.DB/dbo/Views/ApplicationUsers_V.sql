@@ -7,13 +7,3 @@ FROM  dbo.Applications INNER JOIN
                dbo.Users ON dbo.Permissions.UserID = dbo.Users.UserID INNER JOIN
                dbo.Roles ON dbo.Permissions.RoleID = dbo.Roles.RoleID
 GO
-
-
-
-GO
-
-
-
-GO
-
-

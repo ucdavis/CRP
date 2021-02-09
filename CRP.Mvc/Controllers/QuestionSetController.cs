@@ -1,15 +1,12 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
-//using CRP.App_GlobalResources;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
-using MvcContrib.Attributes;
 using CRP.Core.Resources;
 using UCDArch.Core.PersistanceSupport;
-using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 using UCDArch.Web.Attributes;
 using MvcContrib;
@@ -30,7 +27,7 @@ namespace CRP.Controllers
 
         //
         // GET: /QuestionSet/
-
+        // Tested 20200416
         public ActionResult Index()
         {
             return this.RedirectToAction(a => a.List());
@@ -38,38 +35,43 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /QuestionSet/List
+        /// Tested 20200416
         /// </summary>
         /// <returns></returns>
         public ActionResult List()
         {
-            IQueryable query;
-            var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
+            var user = Repository.OfType<User>().Queryable.FirstOrDefault(a => a.LoginID == CurrentUser.Identity.Name);
             Check.Require(user != null, "User is required.");
+
             var schools = user.Units.Select(a => a.School).ToList();
 
+            IQueryable<QuestionSet> query;
             if (CurrentUser.IsInRole(RoleNames.Admin))
             {
-                query = from a in Repository.OfType<QuestionSet>().Queryable
-                        where a.SystemReusable || (a.UserReusable && a.User == user)
-                            || (a.CollegeReusable && schools.Contains(a.School))
-                        select a;
+                query = Repository.OfType<QuestionSet>().Queryable
+                            .Where(a => a.SystemReusable
+                                || (a.UserReusable && a.User.Id == user.Id)
+                                || (a.CollegeReusable && schools.Contains(a.School)));
             }
             else if (CurrentUser.IsInRole(RoleNames.SchoolAdmin))
             {
-                query = from a in Repository.OfType<QuestionSet>().Queryable
-                        where (a.UserReusable && a.User == user) || (a.CollegeReusable && schools.Contains(a.School))
-                        select a;
+                query = Repository.OfType<QuestionSet>().Queryable
+                            .Where(a => a.UserReusable && a.User.Id == user.Id
+                                || (a.CollegeReusable && schools.Contains(a.School)));
             }
             else
             {
-                query = from a in Repository.OfType<QuestionSet>().Queryable
-                        where (a.UserReusable && a.User == user)
-                        select a;
+                query = Repository.OfType<QuestionSet>().Queryable
+                    .Where(a => a.UserReusable && a.User.Id == user.Id);
             }
 
-            return View(query);
+            return View(query.ToList());
         }
-
+        /// <summary>
+        /// Tested 20200416
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Details(int id)
         {
             var questionSet = Repository.OfType<QuestionSet>().GetNullableById(id);
@@ -86,6 +88,7 @@ namespace CRP.Controllers
         /// GET: /QuestionSet/Edit/{id}
         /// </summary>
         /// <param name="id"></param>
+        /// Tested 202020416
         /// <returns></returns>
         public ActionResult Edit(int id)
         {
@@ -132,6 +135,7 @@ namespace CRP.Controllers
         ///     Question set is updated
         /// </remarks>
         /// <param name="questionSet"></param>
+        /// Tested 20200416
         /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(int id, QuestionSet questionSet)
@@ -156,7 +160,8 @@ namespace CRP.Controllers
 
             // copy the fields
             existingQs.Name = questionSet.Name;
-            existingQs.IsActive = questionSet.IsActive;
+            //existingQs.IsActive = questionSet.IsActive;
+            existingQs.IsActive = true; //I don't this is being used anywhere
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, existingQs.ValidationResults());
 
@@ -203,6 +208,7 @@ namespace CRP.Controllers
         /// <param name="itemTypeId">The id for an itemType, if it is to be automatically associated with an itemType</param>
         /// <param name="transaction">If adding to an item or item type, the questionSet type to add it to</param>
         /// <param name="quantity">If adding to an item or item type, the questionSet type to add it to</param>
+        /// Tested 20200416
         /// <returns></returns>
         public ActionResult Create(int? itemId, int? itemTypeId, bool? transaction, bool? quantity)
         {
@@ -266,6 +272,7 @@ namespace CRP.Controllers
         /// <param name="school"></param>
         /// <param name="transaction"></param>
         /// <param name="quantity"></param>
+        /// Tested 20200416
         /// <returns></returns>
         [HttpPost]
         [HandleTransactionsManually]
@@ -370,6 +377,13 @@ namespace CRP.Controllers
                         questionSet.UserReusable = true;
                     }
 
+                    //Do an extra check here. Note, no one should have a SchoolAdmin value.
+                    if (!CurrentUser.IsInRole(RoleNames.Admin))
+                    {
+                        questionSet.CollegeReusable = false;
+                        questionSet.SystemReusable = false;
+                    }
+
                     //make sure it's some type of reusable
                     if (questionSet.SystemReusable || questionSet.CollegeReusable || questionSet.UserReusable)
                     {
@@ -421,6 +435,7 @@ namespace CRP.Controllers
         /// <param name="itemTypeId">The id of the item type to link to</param>
         /// <param name="transaction"></param>
         /// <param name="quantity"></param>
+        /// Tested 202020416
         /// <returns></returns>
         [Authorize(Roles = "Admin")]
         public ActionResult LinkToItemType(int itemTypeId, bool transaction, bool quantity)
@@ -466,6 +481,7 @@ namespace CRP.Controllers
         /// <param name="itemTypeId">The item type id.</param>
         /// <param name="transaction">if set to <c>true</c> [transaction].</param>
         /// <param name="quantity">if set to <c>true</c> [quantity].</param>
+        /// Tested 20200416
         /// <returns></returns>
         [HttpPost]
         [AdminOnly]
@@ -532,6 +548,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Get: /QuestionSet/LinkToItem
+        /// Tested 20200420
         /// </summary>
         /// <param name="itemId">The item id.</param>
         /// <param name="transaction">if set to <c>true</c> [transaction].</param>
@@ -566,6 +583,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /QuestionSet/LinkToItem/
+        /// Tested 20200420
         /// </summary>
         /// <remarks>
         /// Description:
@@ -652,13 +670,14 @@ namespace CRP.Controllers
                 return LinkToItem(itemId, transaction, quantity);
             }
 
-            //return Redirect(ReturnUrlGenerator.EditItemUrl(itemId, StaticValues.Tab_Questions));
-            return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_Questions));
+            var redirectUrl = Url.Action("Edit", "ItemManagement", new { id = itemId });
+            return Redirect(redirectUrl + "#Questions");
 
         }
 
         /// <summary>
         /// POST: /QuestionSet/UnlinkFromItem
+        /// Tested 20200420
         /// </summary>
         /// <remarks>
         /// Description:
@@ -731,8 +750,8 @@ namespace CRP.Controllers
                 Message = "Unable to remove question set.";
             }
 
-            //return Redirect(ReturnUrlGenerator.EditItemUrl(itemId, StaticValues.Tab_Questions));
-            return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_Questions));
+            var redirectUrl = Url.Action("Edit", "ItemManagement", new { id = itemId });
+            return Redirect(redirectUrl + "#Questions");
         }
     }
 }

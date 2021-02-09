@@ -19,9 +19,10 @@ namespace CRP.Core.Abstractions
     public interface INotificationProvider
     {
         void SendConfirmation(IRepository repository, Transaction transaction, string emailAddress);
+
         void SendLowQuantityWarning(IRepository repository, Item item, int soldAndPaid);
-        void SendPaymentResultErrors(string email, PaymentResultParameters touchNetValues, NameValueCollection requestAllParams, string extraBody, PaymentResultType paymentResultType);
-        void SendRefundNotification(User user, Transaction refundTransaction, bool canceled);
+
+        void SendRefundNotification(User user, Transaction refundTransaction, bool canceled, string link);
 
         void TestEmailFromService(MailMessage message);
 
@@ -236,79 +237,7 @@ Your Transaction number is: {TransactionNumber}
             _emailService.SendEmail(message);
         }
 
-        public void SendPaymentResultErrors(string email, PaymentResultParameters touchNetValues, NameValueCollection requestAllParams, string extraBody, PaymentResultType paymentResultType)
-        {
-            var emailNotFound = false;
-            if(string.IsNullOrEmpty(email))
-            {
-                email = "jSylvestre@ucdavis.edu";
-                emailNotFound = true;
-            }
-
-            var message = new MailMessage("automatedemail@caes.ucdavis.edu", email) {IsBodyHtml = true};
-
-            var body = new StringBuilder("TouchNet Results<br/><br/>");
-            body.Append(DateTime.UtcNow.ToPacificTime() + "<br/>");
-
-            switch (paymentResultType)
-            {
-                case PaymentResultType.TransactionNotFound:
-                    message.Subject = "TouchNet Post Results -- Transaction not found";
-                    break;
-                case PaymentResultType.OverPaid:
-                    message.Subject = "TouchNet Post Results -- Has Overpaid";
-                    break;
-                case PaymentResultType.InValidPaymentLog:
-                    message.Subject = "TouchNet Post Results -- PaymentLog is Not Valid";
-                    break;
-                default:
-                    message.Subject = "TouchNet Post Results -- Unknown Result Type";
-                    break;
-            }
-            if (emailNotFound)
-            {
-                message.Subject = string.Format("email missing too {0}", message.Subject);
-            }
-
-            foreach (var k in requestAllParams.AllKeys)
-            {
-                if (k.ToLower() != "posting_key")
-                {
-                    body.Append(k + ":" + requestAllParams[k]);
-                    body.Append("<br/>");
-                }
-            }
-            message.Body = body.ToString();
-
-            body.Append("<br/>Function parameters================<br/>");
-            body.Append("acct_addr: " + touchNetValues.acct_addr + "<br/>");
-            body.Append("acct_addr2: " + touchNetValues.acct_addr2 + "<br/>");
-            body.Append("acct_city: " + touchNetValues.acct_city + "<br/>");
-            body.Append("acct_state: " + touchNetValues.acct_state + "<br/>");
-            body.Append("acct_zip: " + touchNetValues.acct_zip + "<br/>");
-            body.Append("CANCEL_LINK: " + touchNetValues.CANCEL_LINK + "<br/>");
-            body.Append("CARD_TYPE: " + touchNetValues.CARD_TYPE + "<br/>");
-            body.Append("ERROR_LINK: " + touchNetValues.ERROR_LINK + "<br/>");
-            body.Append("EXT_TRANS_ID: " + touchNetValues.EXT_TRANS_ID + "<br/>");
-            body.Append("NAME_ON_ACCT: " + touchNetValues.NAME_ON_ACCT + "<br/>");
-            body.Append("PMT_AMT: " + touchNetValues.PMT_AMT + "<br/>");
-            body.Append("pmt_date: " + touchNetValues.pmt_date + "<br/>");
-            body.Append("PMT_STATUS: " + touchNetValues.PMT_STATUS + "<br/>");
-            body.Append("Submit: " + touchNetValues.Submit + "<br/>");
-            body.Append("SUCCESS_LINK: " + touchNetValues.SUCCESS_LINK + "<br/>");
-            body.Append("sys_tracking_id: " + touchNetValues.sys_tracking_id + "<br/>");
-            body.Append("TPG_TRANS_ID: " + touchNetValues.TPG_TRANS_ID + "<br/>");
-            body.Append("UPAY_SITE_ID: " + touchNetValues.UPAY_SITE_ID + "<br/>");
-
-            message.Body = body.ToString();
-            if(!string.IsNullOrEmpty(extraBody))
-            {
-                message.Body = message.Body + extraBody;
-            }
-            _emailService.SendEmail(message);
-        }
-
-        public void SendRefundNotification(User user, Transaction refundTransaction, bool canceled)
+        public void SendRefundNotification(User user, Transaction refundTransaction, bool canceled, string link)
         {
             var email = CloudConfigurationManager.GetSetting("EmailForRefunds");
             if(string.IsNullOrWhiteSpace(email))
@@ -327,24 +256,30 @@ Your Transaction number is: {TransactionNumber}
                 message.Subject = "Registration Refund";
             }
 
-            var fid = string.Empty;
-            if (refundTransaction.ParentTransaction.FidUsed != null)
+            string accountId;
+            if (refundTransaction.ParentTransaction.FinancialAccount != null)
             {
-                fid = refundTransaction.ParentTransaction.FidUsed;
+                accountId = refundTransaction.ParentTransaction.FinancialAccount.GetAccountString();
             }
             else
             {
-                fid = refundTransaction.ParentTransaction.Item.TouchnetFID ?? string.Empty;
+                accountId = refundTransaction.ParentTransaction.Item.FinancialAccount.GetAccountString() ?? string.Empty;
             }
 
             var body = new StringBuilder("Refund Information<br/><br/>");
+            if (canceled)
+            {
+                body.Append($"<br/<br/<b>This is a CANCEL of a refund!</b><br/<br/<b>");
+            }
             body.Append("<b>Refunder</b><br/>");
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Name", user.FullName));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Email", user.Email));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Kerb", user.LoginID));
             body.Append("<br/>");
             body.Append("<b>Details</b><br/>");
-            body.Append(string.Format("  <b>{0} :</b> {1} FID={2}<br/>", "Touchnet Id", refundTransaction.ParentTransaction.TransactionGuid, fid));
+            body.Append($"  <b>Transaction ID :</b> {refundTransaction.ParentTransaction.TransactionGuid}<br/>");
+            body.Append($"  <b>Account ID :</b> {accountId}<br/>");
+            body.Append($"  <b>Link to Payment Details :</b> {link}<br/>");
             body.Append(string.Format("  <b>{0} :</b> ${1}<br/>", "Refund Amount", refundTransaction.Amount));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Date", refundTransaction.TransactionDate));
             body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Event Name", refundTransaction.Item.Name));
@@ -371,6 +306,7 @@ Your Transaction number is: {TransactionNumber}
                 Log.Error(ex, "Error sending Refund Notification");
             }
             message.Body = body.ToString();
+            message.IsBodyHtml = true;
 
             _emailService.SendEmail(message);
         }
@@ -395,6 +331,8 @@ Your Transaction number is: {TransactionNumber}
             body.Append("You are getting this notification because you are an editor on an event that has a setting to inform you when people register for your event.");
 
             message.Body = body.ToString();
+
+            message.IsBodyHtml = true;
             _emailService.SendEmail(message);
         }
     }

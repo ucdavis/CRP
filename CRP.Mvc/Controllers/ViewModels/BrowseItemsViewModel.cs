@@ -25,7 +25,7 @@ namespace CRP.Controllers.ViewModels
             var unexpiredItems =
                 repository.OfType<Item>()
                     .Queryable
-                    .Where(a => a.Available && !a.Private && a.Expiration != null && a.Expiration >= DateTime.UtcNow.ToPacificTime().Date)
+                    .Where(a => a.Available && !a.Private && (a.Expiration == null || a.Expiration >= DateTime.UtcNow.ToPacificTime().Date))
                     .OrderBy(a => a.Expiration)
                     .ToList();
 

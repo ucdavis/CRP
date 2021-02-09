@@ -244,8 +244,7 @@ namespace CRP.Controllers.ViewModels
                 }
                 else if (itemReportColumn.Name == StaticValues.Report_TransactionGuid)
                 {
-                    if (transaction.Credit) result = string.Format("{0} FID={1}", transaction.TransactionGuid, transaction.FidUsed ?? transaction.Item.TouchnetFID);
-                    else result = "n/a";
+                    result = transaction.Credit ? transaction.TransactionGuid.ToString() : "n/a";
                 }
             }
 

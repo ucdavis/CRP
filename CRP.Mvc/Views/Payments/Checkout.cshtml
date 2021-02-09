@@ -1,0 +1,652 @@
+﻿@using CRP.Controllers.ViewModels
+@using CRP.Core.Resources
+@using FluentNHibernate.Utils
+@using Microsoft.Azure
+@model CRP.Controllers.ViewModels.ItemDetailViewModel
+
+@{
+    ViewBag.Title = "Checkout";
+
+    var creditCardChecked = Model.CreditPayment ? "checked='checked'" : string.Empty;
+    var checkdChecked = Model.CheckPayment ? "checked='checked'" : string.Empty;
+    var available = Model.Item.Quantity - Model.Item.Sold;
+
+
+    var quantityName = !string.IsNullOrWhiteSpace(Model.Item.QuantityName) ? Model.Item.QuantityName : ScreenText.STR_QuantityName;
+}
+
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/qtipcss")
+}
+
+
+@using (Html.BeginForm("Checkout", "Payments", FormMethod.Post, new { @id = "CheckoutForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("displayAmount", Model.Item.CostPerItem)
+    @Html.Hidden("referenceIdHidden", Model.ReferenceId)
+
+    <div class="boundary">
+        <h1>@Model.Item.Name</h1>
+        @if (available <= 0)
+        {
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong class="fa fa-warning" style="color: red"> SOLD OUT</strong> But check back later.
+            </div>
+
+        }
+        else
+        {
+            if (available <= 5)
+            {
+                <div class="alert alert-info">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <strong class="fa fa-info-circle" style="color: salmon"> Warning</strong> Only @available @quantityName (s) left.
+                </div>
+            }
+        }
+        <p class="lead">
+            @Model.Item.Summary
+        </p>
+        <p>
+            <a href="@Url.Action("Details", "Item", new {id = Model.Item.Id})" class="return"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Return to event details</a>
+        </p>
+        @Html.ValidationSummary("Checkout was unsuccessful. Please correct the errors and try again.")
+    </div>
+
+    <div class="event-checkout">
+        <div class="boundary">
+            <div class="table-flex border-bot">
+                <p class="table-header">Price per @(quantityName)</p>
+                <p class="table-header">Quantity</p>
+                <p class="table-header">Total</p>
+            </div>
+            <div class="table-flex">
+                <p class="table-item">
+                    $<span class="perItemAmount">@($"{Model.Item.CostPerItem:0.00}")</span>
+                </p>
+                <p class="table-item">
+                    <input id="quantity" type="number" name="quantity" value="@Model.Quantity" class="quantityAmount qty form-control" style="margin-left: 116px;" min="1" step="1" required data-val="true" data-val-number="The field Quantity must be a number." data-val-required="The Quantity field is required."/>
+                    @Html.ValidationMessage("Quantity")
+                </p>
+                <p class="table-item">
+                    $<span class="totalItemAmount">@($"{Model.Item.CostPerItem * Model.Quantity:0.00}")</span>
+                </p>
+            </div>
+            <div class="table-flex border-bot">
+                <p class="table-item">
+                    @Html.TextBoxFor(x => x.Coupon, new { @class = "form-control discountcode", placeholder = "Coupon Code" })
+                    <img src='@Url.Content("~/Images/ajax-loader.gif")' id="CouponValidateImage" style="display: none;" />
+                    <span id="CouponMessage"></span>
+                </p>
+                <p class="table-item">
+                    $<span class="discounterPerItemAmount">@($"{Model.CouponAmountToDisplay:0.00}")</span>
+
+                    <span class="discounterMaxQuantity" style="display: none;"></span>
+                </p>
+                <p class="table-item">
+                    $<span class="discountAmount">@($"{Model.CouponTotalDiscountToDisplay:0.00}")</span>
+                </p>
+            </div>
+            <div class="table-flex border-bot">
+                <p class="table-header">Total</p>
+                <p class="table-header">
+                    <span class="smallcaps">USD </span>$<span class="totalAmount">@Html.Encode(string.Format("{0:0.00}", Model.TotalAmountToRedisplay))</span>
+                </p>
+            </div>
+            <div class="table-flex">
+                <p class="table-item">
+                    @if (!String.IsNullOrEmpty(Model.Item.RestrictedKey))
+                    {
+                        @Html.TextBox("restrictedKey", Model.Password, new { @class = "form-control", placeholder = "Pass phrase to purchase" })
+                        @Html.ValidationMessage("Restricted Key")
+                    }
+                </p>
+                <div class="table-item">
+                    <div id="paymentTypeSpan">
+                        <div>
+                            <div class="form-group">
+                                <h3>Payment Method: </h3>
+                                @if (Model.Item.AllowCreditPayment)
+                                {
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.CreditCard" @creditCardChecked />
+                                            Credit Card
+                                        </label>
+                                    </div>
+                                }
+                                @if (Model.Item.AllowCheckPayment)
+                                {
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" id="paymentType" name="paymentType" class="required allowBypass" value="@StaticValues.Check" @checkdChecked />
+                                            Check
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="boundary">
+        @*Quantity Level*@
+        @if (Model.Item.QuestionSets.Any(a => a.QuantityLevel))
+        {
+            for (var i = 0; i < Model.Quantity; i++)
+            {
+                <div class="QuantityContainer">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            @quantityName Information <span class="quantityIndex">@(i + 1)</span>
+                        </div>
+                        <div class="panel-body">
+                            @foreach (var qs in Model.Item.QuestionSets.Where(a => a.QuantityLevel).OrderBy(a => a.Order))
+                            {
+                                <fieldset>
+                                    <legend>@qs.QuestionSet.Name <span class="quantityIndex">@(i + 1)</span> </legend>
+                                    @foreach (var q in qs.QuestionSet.Questions)
+                                    {
+                                        int i1 = i;
+                                        var answer = Model.Answers.FirstOrDefault(a => !a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id && a.QuantityIndex == i1);
+                                        var disable = false;
+
+                                        // try to find the matching answer
+                                        if (string.Equals(q.Name, "Reference Id", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(Model.ReferenceId))
+                                        {
+                                            disable = true;
+                                            answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                                        }
+
+                                        @Html.Partial("_QuestionForm", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
+                                    }
+                                </fieldset>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        @*Transaction Level*@
+       
+        @foreach (var qs in Model.Item.QuestionSets.Where(a => a.TransactionLevel).OrderBy(a => a.Order))
+        {
+            <div class="TransactionContainer">
+                <div class="panel panel-default">
+                    @{
+                        var questionSetName = qs.QuestionSet.Name;
+                        
+                        if (questionSetName == "Contact Information")
+                        {
+                            questionSetName += " / Billing Information";
+ 
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    <div class="panel-heading">
+                        @questionSetName
+                    </div>
+                    <div class="panel-body">
+
+                        @foreach (var q in qs.QuestionSet.Questions)
+                        {
+                            var answer = Model.Answers.FirstOrDefault(a => a.Transaction && a.QuestionSetId == q.QuestionSet.Id && a.QuestionId == q.Id);
+                            var disable = false;
+
+                            if (q.Name == "Reference Id" && !string.IsNullOrEmpty(Model.ReferenceId))
+                            {
+                                disable = true;
+                                answer = new ItemTransactionAnswer() { Answer = Model.ReferenceId };
+                            }
+                            @Html.Partial("_QuestionForm", new ItemQuestionViewModel(q, Model.OpenIdUser, answer != null ? answer.Answer : string.Empty, disable))
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Item.DonationLinkLink))
+        {
+            var donationTitle = !string.IsNullOrWhiteSpace(Model.Item.DonationLinkLegend) ? Model.Item.DonationLinkLegend : "Donation Information";
+            var donationText = !string.IsNullOrWhiteSpace(Model.Item.DonationLinkText) ? Model.Item.DonationLinkText : "Click Here";
+            <div class="TransactionContainer">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @donationTitle
+                    </div>
+                    <div class="panel-body TransactionContainer">
+           
+                        <div class="form-group">
+                            <div>@Model.Item.DonationLinkInformation</div>
+                            <div>
+                                <a href="@Model.Item.DonationLinkLink" target="_blank">@donationText</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="form-group recaptcha">
+            <div class="g-recaptcha" data-sitekey="@CloudConfigurationManager.GetSetting("NewRecaptchaPublicKey")"></div>
+            @Html.ValidationMessage("Captcha")
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn"><span id="submit-amount">Submit</span></button>
+        </div>
+    </div>
+}
+
+
+@section AdditionalScripts
+{
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://ajax.microsoft.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
+    @Scripts.Render("~/bundles/checkout");
+    @Scripts.Render("~/bundles/qtip")
+    @Scripts.Render("~/bundles/bootstrap-datepicker")
+
+    <script type="text/javascript">
+        var class_quantityAmount = "quantityAmount";
+        var class_perItemAmount = "perItemAmount";
+        var class_totalItemAmount = "totalItemAmount";
+        var class_donationAmount = "donationAmount";
+        var class_discounterPerItemAmount = "discounterPerItemAmount";
+        var class_discounterMaxQuantity = "discounterMaxQuantity";
+        var class_discountAmount = "discountAmount";
+        var class_totalAmount = "totalAmount";
+        var questionSet_Count = '@Model.Item.QuestionSets.Count(a => a.QuantityLevel)';
+        var payType = "";
+    </script>
+
+    <script type="text/javascript">
+        $(function() {
+            $("form#CheckoutForm").validate({
+                errorElement: "span", // set the tag for the item that contains the message
+                errorClass: "failed", // set the class on that tag of the notification tag
+                errorPlacement: function(error, element) {
+                    if (element.is(':radio') || element.is(':checkbox')) {
+                        error.insertBefore(element.closest("div.form-group"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+
+
+                },
+                success: function(label) { // function to execute on passing
+                    label.addClass("passed"); // add the passed class
+                }
+            });
+
+
+            $("#CheckoutForm").on('blur',
+                'input,textarea,select',
+                (function() {
+                    $("form#CheckoutForm").validate().element(this);
+                    var localSpan = $(this).parent().find(".local-warning");
+                    localSpan.text("");
+
+
+                    //Email warning check.
+                    if ($(this).hasClass("email")) {
+
+                        if ($(this).hasClass("warning")) {
+                            $(this).removeClass("warning");
+                        }
+                        if ($(this).hasClass("failed")) {
+                            //Do nothing
+                        } else {
+                            var emailVal = $(this).val().toLowerCase();
+                            if (emailVal != null &&
+                                emailVal != "" &&
+                                emailVal.match(@StaticValues.EmailWarningRegEx) ==
+                                null) {
+                                //alert("no match " + emailVal);
+                                $(this).addClass("warning");
+                                localSpan.text("This may be invalid");
+                            }
+                        }
+                    }
+                }));
+
+
+            $("input#quantity").blur(function(event) {
+
+                var quantity = $(this).val();
+                if (isNaN(quantity) || quantity <= 0) {
+                    alert("Please enter a valid number.");
+                    return false;
+                } else {
+                    var existingContainers = $("div.QuantityContainer");
+                    quantity = parseInt(quantity);
+                    var counter = existingContainers.length;
+
+
+                    // deal with the situation where we have too many of the containers
+                    if (existingContainers.length > quantity) {
+                        do {
+                            $(existingContainers[(counter - 1)]).remove();
+
+                            counter--;
+                        } while (counter > quantity);
+                    }
+                    // deal with the situation where we don't have enough containers
+                    else if (existingContainers.length > 0 && existingContainers.length < quantity) {
+                        do {
+                            GenerateQuantityQuestionSet();
+                            counter++;
+                        } while (counter < quantity);
+
+                        // get the containers again, and rename the header in them
+                        var $container = $("div.QuantityContainer");
+                        $.each($container,
+                            function(index, item) {
+                                $(item).find("span.quantityIndex").html(index + 1);
+                            });
+                    }
+                    CalculateTotal();
+                    // initialize the question names
+                    InitializeQuestions();
+
+                    if (questionSet_Count > 0 && $("div.QuantityContainer").length != quantity) {
+                        alert("Error on page. Please reselect quantity.");
+                        return false;
+                    }
+
+                }
+
+
+            });
+
+            if ($("input#Coupon").val() !== "") {
+                processCoupon();
+            }
+
+            // update the coupon values and validate the coupon
+            $("input#Coupon").blur(function(event) {
+                processCoupon(event);
+            });
+
+            $("input:radio[name=paymentType]").click(function() {
+                payType = $(this).val();
+                CalculateTotal();
+            });
+
+            $(".qs-id-Contact-Information-State").on('change',
+                function() {
+                    var theChoice = $(this).val();
+                    if (theChoice === '-- None --') {
+                        $(".qs-id-Contact-Information-Zip-Code").val("99999");
+                        if ($(".qs-id-Contact-Information-Province-Region-Country").val() === "USA") {
+                            $(".qs-id-Contact-Information-Province-Region-Country").val("");
+                        }
+                    } else {
+                        $(".qs-id-Contact-Information-Province-Region-Country").val("USA");
+                        if ($(".qs-id-Contact-Information-Zip-Code").val() === "99999") {
+                            $(".qs-id-Contact-Information-Zip-Code").val("");
+                        }
+                    }
+                });
+
+            // initialize the question names
+            InitializeQuestions();
+            RepopulateRadioButtonAnswers();
+            CalculateTotal();
+
+            $("input#quantity").focus();
+        });
+
+        function GenerateQuantityQuestionSet() {
+
+            var index = $("div.QuantityContainer").length - 1; //Copy the last one
+            //console.log(index);
+            var $container = $($("div.QuantityContainer")[index]);
+
+            var newContainer = $container.clone();
+            newContainer.find("span.failed").remove();
+
+            $container.after(newContainer);
+
+            RenameControls($("div.QuantityContainer"), "quantityAnswers", "div");
+            addQuantityIndex($("div.QuantityContainer"));
+        }
+
+        function RepopulateRadioButtonAnswers() {
+            $.each($("input[type=radio][checked=checked]"),
+                function(index, item) {
+                    if ($(item).hasClass("indexedControl")) {
+                        $(item).attr("checked", true);
+                        $(item).prop("checked", true);
+                    }
+                });
+        }
+
+        function addQuantityIndex($container) {
+            var masterIndex = 0;
+            var cName = "quantityAnswers";
+            $container.each(function(cIndex, cItem) {
+                var p = $(cItem).find("div.form-group");
+
+                $.each(p,
+                    function(index, item) {
+                        // quantity index doesn't exist, create it
+                        // search for input ending with "_QuantityIndex"
+                        if ($(item).find("input[id$='_QuantityIndex']").length === 0) {
+                            //if ($(item).find("input#" + cName + "_QuantityIndex").length == 0) {
+                            $(item).append($("<input>").attr("type", "hidden").attr("id", cName + "_QuantityIndex")
+                                .attr("name", cName + ".QuantityIndex").addClass("indexedControl").val(cIndex));
+                        } else {
+                            $(item).find("input[id$='_QuantityIndex']").val(cIndex);
+                        }
+
+                    });
+                });
+        }
+
+        function InitializeQuestions() {
+            RenameControls($("div.TransactionContainer"), "transactionAnswers", ".form-group");
+            RenameControls($("div.QuantityContainer"), "quantityAnswers", ".form-group");
+            addQuantityIndex($("div.QuantityContainer"));
+            $.each($("input.dateForm"),
+                function(index, item) {
+                    $(item).attr("title", "");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text: 'mm/dd/yyyy format'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
+                    $(item).datepicker();
+
+                });
+            $.each($("input.date"),
+                function(index, item) {
+                    $(item).attr("title", "");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text: 'mm/dd/yyyy format'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
+                });
+            $.each($("input.url"),
+                function(index, item) {
+                    $(item).attr("title", "");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text:
+                                'You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
+                });
+            $.each($("input.phoneUS"),
+                function(index, item) {
+                    $(item).attr("title", "");
+                    $(item).attr("placeholder", "(###) ###-####");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text: '(###) ###-#### format'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
+                });
+            $.each($(".qtip-checklist"),
+                function(index, item) {
+
+                    $(item).attr("title", "");
+                    $(item).qtip({ // Grab some elements to apply the tooltip to
+                        content: {
+                            text: 'Check all that apply'
+                        },
+                        position: {
+                            my: 'bottom left',
+                            at: 'left top'
+                        },
+                        style: {
+                            classes: 'qtip-bootstrap'
+                        }
+                    });
+                });
+            //$.each($("input"), function(index, item){
+
+            //    $(item).on('blur' ,(function() {
+            //        $("form#CheckoutForm").validate().element(this);
+            //    }));
+
+            //});
+
+            //            $("input.dateForm").filter().datepicker();
+        }
+
+        function processCoupon(event) {
+            var url = '@Url.Action("Validate", "Coupon")'; //<%= Html.Encode(Model.Item.Id) %>';
+            var couponCode = $("input#Coupon").val();
+            var quantity = $("#quantity").val();
+            $("span#CouponMessage").removeClass("field-validation-error");
+
+            $("img#CouponValidateImage").show();
+
+            $.getJSON(url,
+                { itemId: @Html.Encode(Model.Item.Id), couponCode: couponCode, quantity: quantity },
+                function(result) {
+                    var message = result.message;
+
+                    // if the message is undefined, we have a valid coupon (And empty message means it was skipped)
+
+                    var discountAmount = result.discountAmount;
+                    var maxQuantity = result.maxQuantity;
+
+                    $("span." + class_discounterPerItemAmount).html(parseFloat(discountAmount).toFixed(2));
+                    $("span." + class_discounterMaxQuantity).html(parseFloat(maxQuantity).toFixed(2));
+                    
+                    $("span#CouponMessage").addClass("text-success");
+                    $("span#CouponMessage").html("Coupon accepted.");
+
+                    CalculateTotal();
+
+                    // display error message
+                    if (message !== undefined && message !== "") {
+                        $("span#CouponMessage").removeClass("text-success");
+                        $("span#CouponMessage").addClass("field-validation-error");
+                        $("span#CouponMessage").html(message);
+                    }
+                    if (message === "") {
+                        $("span#CouponMessage").html(message); //This just clears it out, (if they remove the coupon)
+                    }
+
+                    // hide the loading image
+                    $("img#CouponValidateImage").hide();
+                });
+        }
+
+        function CalculateTotal() {
+            // get the item price, quantity and discount per item prices
+            var costPerItem = parseFloat($("span." + class_perItemAmount).html());
+            var quantity = parseInt($("input." + class_quantityAmount).val());
+            var discountAmountPerItem = parseFloat($("span." + class_discounterPerItemAmount).html());
+            var maxQuantity = parseInt($("span." + class_discounterMaxQuantity).html());
+
+
+            // calculate the totals
+            var itemTotal = quantity * costPerItem;
+            var discountTotal = 0;
+            if (maxQuantity == -1 || maxQuantity > quantity) {
+                discountTotal = quantity * discountAmountPerItem;
+            } else if (maxQuantity <= quantity) {
+                discountTotal = maxQuantity * discountAmountPerItem;
+            }
+
+            var total = itemTotal - discountTotal; //Removed donation...
+
+            $("#displayAmount").val(total.toFixed(2));
+
+            // update the prices
+            $("span." + class_totalItemAmount).html(itemTotal.toFixed(2));
+            $("span." + class_discountAmount).html(discountTotal.toFixed(2));
+            $("span." + class_totalAmount).html(total.toFixed(2));
+            if (total === 0) {
+                $(".allowBypass").removeClass("required");
+                $("#paymentTypeSpan").hide();
+                $("#submit-amount").text("Submit");
+            } else {
+                var submitText = "Please select payment method above first";
+                var ccPaymentText = "Pay $" + total.toFixed(2) + " now by Credit Card";
+                var checkPaymentText = "Pay $" + total.toFixed(2) + " by Check";
+                if (payType === "CreditCard") {
+                    submitText = ccPaymentText;
+                } else {
+                    if (payType === "Check") {
+                        submitText = checkPaymentText;
+                    } else {
+                        if (@Model.CreditPayment.ToLowerInvariantString()) {
+                            submitText = ccPaymentText;
+                        }
+                        if (@Model.CheckPayment.ToLowerInvariantString()) {
+                            submitText = checkPaymentText;
+                        }
+                    }
+                }
+
+                $("#submit-amount").text(submitText);
+                $("#paymentTypeSpan").show();
+                $(".allowBypass").addClass("required");
+            }
+        }
+    </script>
+}

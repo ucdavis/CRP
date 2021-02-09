@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -5,6 +6,7 @@ using CRP.Controllers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
+using CRP.Mvc.Controllers.ViewModels;
 using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
@@ -18,7 +20,10 @@ namespace CRP.Controllers
     {
         //
         // GET: /ApplicationManagement/
-
+        /// <summary>
+        /// Tested 20200415
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();
@@ -28,6 +33,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ApplicationManagement/ListItemTypes
+        /// Tested 20200415 (Fixed VIew)
         /// </summary>
         /// <returns></returns>
         public ActionResult ListItemTypes()
@@ -37,6 +43,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ApplicationManagement/CreateItemType
+        /// Tested 20200415
         /// </summary>
         /// <returns></returns>
         public ActionResult CreateItemType()
@@ -55,6 +62,7 @@ namespace CRP.Controllers
         /// PostCondition:
         ///     Item is created
         ///     Extended properties passed in are saved
+        /// Tested 20200415
         /// </remarks>
         /// <param name="itemType"></param>
         /// <param name="extendedProperties"></param>
@@ -129,6 +137,7 @@ namespace CRP.Controllers
         /// GET: /ApplicationManagement/EditItemType/{id}
         /// </summary>
         /// <param name="id"></param>
+        /// Tested 20200416 Fixed formatting
         /// <returns></returns>
         public ActionResult EditItemType(int id)
         {
@@ -193,6 +202,11 @@ namespace CRP.Controllers
             }
         }
 
+        /// <summary>
+        /// Tested 20200416
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ToggleActive(int id)
         {
@@ -220,7 +234,28 @@ namespace CRP.Controllers
 
             return this.RedirectToAction(a => a.ListItemTypes());
         }
-
         #endregion
+        public ActionResult ViewUnCleared()
+        {
+            var compareDate = DateTime.UtcNow.AddDays(-5);
+            //TODO: add in a date check to give it a few days to process
+            var unclearedPaymentLogs = Repository.OfType<PaymentLog>().Queryable
+                .Where(a => a.Credit && !a.Cleared && a.Accepted && a.ReturnedResults != null).Select(a =>
+                    new UnclearedModel
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Amount = a.Amount,
+                        DatePayment = a.DatePayment,
+                        Transaction = a.Transaction,
+                        GatewayTransactionId = a.GatewayTransactionId,
+                        TnPaymentDate = a.TnPaymentDate,
+                        IsOld = a.DatePayment < compareDate
+                    }).ToArray();
+
+            return View(unclearedPaymentLogs);
+        }
+
+        
     }
 }

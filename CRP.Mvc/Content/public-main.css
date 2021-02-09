@@ -234,6 +234,7 @@ header .header_contents {
 .content_wrapper {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: flex-start; }
   @media (max-width: 640px) {
     .content_wrapper {
@@ -442,7 +443,7 @@ select {
     width: auto; }
 
 input.qty {
-  width: 40px; }
+  width: 70px; }
 
 .ticket-wrapper {
   display: flex;
@@ -473,10 +474,17 @@ form.tickets {
   border-bottom: 1px solid #C8C7CC; }
 
 .event_card {
-  background: #fff;
-  flex-basis: 30%;
-  margin-bottom: 32px;
-  margin-top: 16px; }
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(49,49,93,.03), 0 2px 5px 0 rgba(49,49,93,.1), 0 1px 2px 0 rgba(0,0,0,.08);
+    flex-basis: 30%;
+    margin-bottom: 32px;
+    margin-top: 16px;
+}
+
+    .event_card:hover {
+        box-shadow: 0 0 0 5px rgba(49,49,93,.03), 0 2px 5px 0 rgba(49,49,93,.1), 0 1px 2px 0 rgba(0,0,0,.08);
+    }
+
   @media (max-width: 1250px) {
     .event_card {
       flex-basis: 49%; } }
@@ -509,34 +517,15 @@ form.tickets {
       display: block; } }
 
 .eventbanner {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 3%; }
-  @media (min-width: 850px) {
-    .eventbanner {
-      width: 80%;
-      margin: 0 auto;
-      min-width: 300px;
-      max-width: 1650px;
-      margin-bottom: 3%; } }
-  .eventbanner .eventbanner-image {
-    width: 64.8%; }
-    @media (max-width: 640px) {
-      .eventbanner .eventbanner-image {
-        width: 100%; } }
-    .eventbanner .eventbanner-image img {
-      width: 100%;
-      height: auto; }
+  display: flex; }
   .eventbanner .eventbanner-map {
-    width: 35.2%;
-    background-color: #e9e9e9; }
+    width: 100%;
+    height:500px; }
     @media (max-width: 640px) {
       .eventbanner .eventbanner-map {
         display: none; } }
-
 .eventinfo-item {
   display: flex;
-  justify-content: space-between;
   margin-bottom: 20px; }
   @media (max-width: 640px) {
     .eventinfo-item {
@@ -577,23 +566,49 @@ form.tickets {
 /* client side validation messages */
 .failed
 {
-    border: 1px solid #ff0000;    
+    border: 1px solid #ff0000;
 	color:Red;
 }
 .failed.passed
 {
-	border: none;    
+	border: none;
 	color:inherit;
 }
 .field-validation-error
 {
-	border: 1px solid #ff0000;    
+	border: 1px solid #ff0000;
 	color:Red;
 }
 
 .warning
 {
 	background-color:Orange
+}
+
+.btn-link {
+    color: #1592A6;
+}
+
+.list-unstyled-padded {
+    padding-left: 20px;
+    list-style: none;
+}
+
+fieldset.field-border {
+    border: 1px groove #ddd !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+}
+
+legend.field-border {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width: inherit; /* Or auto */
+    padding: 0 10px; /* To give a bit of padding on the left and right */
+    border-bottom: none;
 }
 
 
@@ -609,4 +624,34 @@ form.tickets {
 #system_wide_status {border:3px solid #C83900; background-color:#fcf0f0;}
 .validation-summary-valid {
     display: none
+}
+
+/* Cal Updates on 6 2020 */
+
+.right-side {
+  width:28%;
+  margin-left:5%;
+}
+.left-side {
+  width:65%;
+}
+.left-side img {
+  max-width:100%;
+  height:auto;
+}
+.align-items-center {
+  align-items:center !important;
+}
+@media (max-width: 768px) {
+  .right-side {
+    width:100%;
+    margin-left:0px;
+    margin-top:5%;
+  }
+  .left-side {
+    width:100%;
+  }
+}
+.eventbanner-map {
+  width:100%;
 }

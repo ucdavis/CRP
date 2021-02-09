@@ -4,7 +4,6 @@
 
 @{
     ViewBag.Title = "LinkToItemType";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -22,7 +21,7 @@
     <p>
         @Html.ActionLink("Create New Question Set", "Create", "QuestionSet", new { itemTypeId = Model.ItemTypeId, transaction = Model.Transaction, quantity = Model.Quantity }, new { @class = "btn btn-primary" })
     </p>
-    <table id="table">
+    <table id="table" class="table table-bordered">
         <thead>
             <tr>
                 <th></th>
@@ -80,8 +79,6 @@
 
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
         $(function() {
             $("#table").dataTable({
@@ -94,9 +91,4 @@
         });
 
     </script>
-}
-
-@section AdditionalStyles
-{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
 }

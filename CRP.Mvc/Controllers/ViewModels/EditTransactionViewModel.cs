@@ -20,10 +20,11 @@ namespace CRP.Controllers.ViewModels
         public string CorrectionReason { get; set; }
         public string Sort { get; set; }
         public string Page { get; set; }
-        public string Fid { get; set; }
+        public FinancialAccount FinancialAccount { get; set; }
         public DateTime CreateDate { get; set; }
         public string CreatedBy { get; set; }
         public decimal RefundAmount { get; set; }
+        public string Fid { get; set; } //For CreditCard transactions before CyberSource
 
         public static EditTransactionViewModel Create(IRepository repository, Transaction transaction)
         {
@@ -31,20 +32,15 @@ namespace CRP.Controllers.ViewModels
 
             var viewModel = new EditTransactionViewModel() { };
             viewModel.TransactionValue = transaction;
+            viewModel.FinancialAccount = transaction.FinancialAccount;
+
+
             var fid = string.Empty;
             if (viewModel.TransactionValue.FidUsed != null)
             {
                 fid = viewModel.TransactionValue.FidUsed;
+                viewModel.Fid = string.Format(" FID={0}", fid);
             }
-            else
-            {
-                fid = string.IsNullOrEmpty(viewModel.TransactionValue.Item.TouchnetFID)
-                          ? string.Empty
-                          : viewModel.TransactionValue.Item.TouchnetFID;
-            }
-
-            //viewModel.Fid = string.Format(" FID={0}", CloudConfigurationManager.GetSetting("TouchNetFid"));
-            viewModel.Fid = string.Format(" FID={0}", fid);
             
             return viewModel;
         }

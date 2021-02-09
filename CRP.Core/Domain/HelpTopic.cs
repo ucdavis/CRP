@@ -16,13 +16,20 @@ namespace CRP.Core.Domain
             IsActive = true;
             NumberOfReads = 0;
         }
+
         [Required]
         public virtual string Question { get; set; }
+
         public virtual string Answer { get; set; }
+
         public virtual bool AvailableToPublic { get; set; }
+
         public virtual bool IsActive { get; set; }
+
         public virtual int NumberOfReads { get; set; }
+
         public virtual bool IsVideo { get; set; }
+
         [StringLength(50)]
         public virtual string VideoName { get; set; }
 

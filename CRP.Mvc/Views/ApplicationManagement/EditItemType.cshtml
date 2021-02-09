@@ -4,7 +4,6 @@
 
 @{
     ViewBag.Title = "EditItemType";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -39,7 +38,7 @@
     <p>
         @Html.ActionLink("Create", "Create", "ExtendedProperty", new { itemTypeId = Model.Id }, new {@class="btn btn-primary"})
     </p>
-    <table id="extendedPropertyTable">
+    <table id="extendedPropertyTable" class="table table-bordered">
         <thead>
         <tr>
             <td></td>
@@ -70,7 +69,7 @@
     <p>
         @Html.ActionLink("Add Transaction Question Set", "LinkToItemType", "QuestionSet", new {itemTypeId=Model.Id, transaction=true, quantity=false} , new {@class="btn btn-primary"})        
     </p>
-    <table id="t-questionSetsTable">
+    <table id="t-questionSetsTable"  class="table table-bordered">
         <thead>
         <tr>
             <td></td>
@@ -98,7 +97,7 @@
     <p>
         @Html.ActionLink("Add Quantity Question Set", "LinkToItemType", "QuestionSet", new { itemTypeId = Model.Id, transaction = false, quantity = true }, new { @class = "btn btn-primary" })
     </p>
-    <table id="q-questionSetsTable">
+    <table id="q-questionSetsTable"  class="table table-bordered">
         <thead>
         <tr>
             <td></td>
@@ -128,15 +127,8 @@
 
 
 
-@section AdditionalStyles
-{
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
-}
-
 @section AdditionalScripts
 {
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
         $(document).ready(function () {
             $("a.FormSubmit").click(function () { $(this).parents("form").submit(); });

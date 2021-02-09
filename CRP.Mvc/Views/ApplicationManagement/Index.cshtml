@@ -1,6 +1,5 @@
 ﻿@{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -22,10 +21,13 @@
         @Html.ActionLink("Edit System Confirmation Template", "Edit", "Template", null, new { @class = "btn" })
     </p>
     <p>
-        @Html.ActionLink("FID management", "Index", "FID", null, new { @class = "btn" })
+        @Html.ActionLink("Financial Account Management", "Index", "FinancialAccount", null, new { @class = "btn" })
     </p>
     <p>
         @Html.ActionLink("Application Key management", "Index", "ApplicationKey", null, new { @class = "btn" })
+    </p>
+    <p>
+        @Html.ActionLink("Uncleared CyberSource Transactions", "ViewUnCleared", "ApplicationManagement", null, new { @class = "btn" })
     </p>
 </div>
 

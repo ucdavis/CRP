@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -64,7 +63,8 @@
     </div>
     <hr/>
     <h4>Questions</h4>
-    <table id="table">
+
+    <table id="questionsTable" class="table table-bordered">
         <thead>
         <tr>
             <td>Order</td>
@@ -78,9 +78,9 @@
         @foreach (var q in Model.Questions)
         {
             <tr>
-                <td>@q.Order</td>
-                <td>@q.Name</td>
-                <td>@q.QuestionType.Name</td>
+                <td nowrap>@q.Order</td>
+                <td nowrap>@q.Name</td>
+                <td nowrap>@q.QuestionType.Name</td>
                 <td>@(string.Join(", ", q.Options.Select(a => a.Name).ToArray()))</td>
                 <td>@(string.Join(", ", q.Validators.Select(a => a.Name).ToArray()))</td>
             </tr>
@@ -88,23 +88,18 @@
         </tbody>
     </table>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new {@class="btn btn-primary"}) |
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new {@class="btn btn-primary"})
         @Html.ActionLink("Back to List", "Index",null, new { @class = "btn btn-primary" })
     </p>
 </div>
 
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
         $(function() {
-            $("#table").dataTable();
+            $("#questionsTable").DataTable({
+
+            });
         });
     </script>
-}
-
-@section AdditionalStyles
-{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
 }

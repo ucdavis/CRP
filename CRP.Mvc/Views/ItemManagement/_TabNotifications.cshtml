@@ -3,7 +3,7 @@
 @model IEnumerable<CRP.Core.Domain.Transaction>
     
 <div class="tab-pane" id="Notifications">
-    <table id="table-Notifications">
+    <table id="table-Notifications" class="table table-bordered">
         <thead>
             <tr>
                 <th></th>
@@ -20,10 +20,10 @@
             {
                 <tr>
                     <td>
-                        @using (Html.BeginForm<TransactionController>(x => x.SendNotification(item.Id, null, null), FormMethod.Post, new {@class = "display_inline"}))
+                        @using (Html.BeginForm<TransactionController>(x => x.SendNotification(item.Id), FormMethod.Post, new {@class = "display_inline"}))
                         {
                             @Html.AntiForgeryToken()
-                            <a href="javascript:;" class="FormSubmit">Send</a>
+                            <button type="submit" class="btn-link">Send</button>
                         }
 
                     </td>

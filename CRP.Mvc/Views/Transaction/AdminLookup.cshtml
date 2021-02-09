@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "AdminLookup";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 
@@ -20,10 +19,10 @@
         {
             <label for="email">Email: </label>
             @Html.TextBox("email")
-            <input type="submit" value="Find"/>
+            <input type="submit" value="Find" class="btn btn-primary"/>
         }
     </p>
-    <table class="table">
+    <table class="table table-bordered">
         <thead>
         <tr>
             <th></th>
@@ -83,8 +82,6 @@
     
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
         $(function() {
             $(".table").dataTable({
@@ -97,9 +94,4 @@
             });
         });
     </script>
-}
-
-@section AdditionalStyles
-{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
 }

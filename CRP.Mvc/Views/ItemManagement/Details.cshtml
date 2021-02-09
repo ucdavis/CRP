@@ -1,12 +1,15 @@
-﻿@using CRP.Controllers
-@using CRP.Core.Resources
-@using Microsoft.Web.Mvc
+﻿@using Microsoft.Web.Mvc.Html
 @model CRP.Controllers.ViewModels.UserItemDetailViewModel
 
 @{
     ViewBag.Title = "DetailsNew";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
+
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/qtipcss")
+}
+
 @section NavButtons
 {
     <div class="pull-right" style="margin-left: 10px;">
@@ -16,6 +19,8 @@
             <ul class="dropdown-menu">
                 <li>@Html.ActionLink("Edit", "Edit", "ItemManagement", new { id = Model.Item.Id }, null)</li>
                 <li>@Html.ActionLink("Map", "Map", "ItemManagement", new { id = Model.Item.Id }, null)</li>
+                <li class="divider"></li>
+                <li>@Html.ActionLink("Back to List", "List", "ItemManagement")</li>
             </ul>
         </div>
     </div>
@@ -29,7 +34,7 @@
 
     <h2>Details: @Model.Item.Name</h2>
     <h3>Sold: @Model.Item.Sold</h3>
-    
+
     <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a href="#Transactions" data-toggle="tab">Transactions</a></li>
         <li><a href="#Checks" data-toggle="tab">Checks</a></li>
@@ -44,58 +49,54 @@
         @Html.Partial("_TabRefunds")
         @Html.Partial("_TabNotifications", Model.Transactions)  
     </div>
-    
+
 
 </div>
 
 @section AdditionalScripts
 {
     @Scripts.Render("~/bundles/qtip")
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
-        $(function() {
+        $(function () {
             $("#table-Transactions").dataTable({
                 stateSave: true,
                 stateDuration: 60 * 5,
-                "aaSorting": [[1, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [4, 5, 6] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [4,5,6]},
                 ]
             });
             $("#table-Checks").dataTable({
                 stateSave: true,
                 stateDuration: 60 * 5,
-                "aaSorting": [[1, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [5] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [5]},
                 ]
             });
             $("#table-Reports").dataTable({
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [4] }
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
                 ]
             });
             $("#table-Refunds").dataTable({
                 stateSave: true,
                 stateDuration: 60 * 5,
-                "aaSorting": [[1, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [5] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [5]},
                 ]
             });
             $("#table-Notifications").dataTable({
                 stateSave: true,
                 stateDuration: 60 * 5,
-                "aaSorting": [[1, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    { 'type': 'boolean', 'aTargets': [2, 4, 6] },
-                    { 'type': 'date', 'aTargets': [3] }
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [2,4,6]},
                 ]
             });
         });
@@ -104,8 +105,8 @@
     <script type="text/javascript">
 
 
-        $(document).ready(function() {
-            $("a.FormSubmit").click(function() { $(this).parents("form").submit(); });
+        $(document).ready(function () {
+            $("a.FormSubmit").click(function () { $(this).parents("form").submit(); }); // Probably not needed anymore...
 
             //Select active tab with link
             $('#myTab a').click(function (e) {
@@ -128,8 +129,4 @@
 
 }
 
-@section AdditionalStyles
-{
-    @Styles.Render("~/Content/qtipcss")
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css"/>
-}
+

@@ -1,0 +1,39 @@
+﻿@model CRP.Core.Domain.PaymentLog
+
+
+@Html.Hidden("Id", Model.Id)
+@Html.Hidden("Accepted", Model.Accepted, new { @class = "accepted-field" })
+
+<div class="">
+    @if (Model.DisplayCheckInvalidMessage)
+    {
+        <span>*There is a problem with this check or another listed</span>
+    }
+    <div class="form-group">
+        <label>Payee:</label>
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+        @Html.ValidationMessage("PaymentLog.Name")
+    </div>
+    <div class="form-group">
+        <label>Check Number:</label>
+        @Html.TextBoxFor(x => x.CheckNumber, new { @class = "form-control" })
+        @Html.ValidationMessage("PaymentLog.CheckNumber")
+        @Html.ValidationMessage("PaymentLog.CheckNumberRequired")
+    </div>
+    <div class="form-group">
+        <label>Amount:</label>
+        @Html.TextBoxFor(x => x.Amount, new { @class = "amount form-control", min=0, max=100000000 })
+        @Html.ValidationMessage("PaymentLog.Amount")
+        @Html.ValidationMessage("PaymentLog.AmountRequired")
+    </div>
+    <div class="form-group">
+        <label>Date Payment:</label>
+        @Html.TextBoxFor(x => x.DatePayment, "{0:d}", new { @class = "date form-control" })
+        @Html.ValidationMessage("PaymentLog.DatePayment")
+    </div>
+    <div class="form-group">
+        <label>Notes:</label>
+        @Html.TextBoxFor(x => x.Notes, new { @class = "form-control" })
+        @Html.ValidationMessage("PaymentLog.Notes")
+    </div>
+</div>

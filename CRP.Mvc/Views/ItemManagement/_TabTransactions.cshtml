@@ -1,9 +1,7 @@
-﻿@using CRP.Controllers
-@using Microsoft.Web.Mvc
-@model IEnumerable<CRP.Core.Domain.Transaction>
+﻿@model IEnumerable<CRP.Core.Domain.Transaction>
     
 <div class="tab-pane active" id="Transactions">
-    <table id="table-Transactions">
+    <table id="table-Transactions" class="table table-bordered">
         <thead>
             <tr>
                 <th></th>
@@ -20,21 +18,20 @@
             {
                 <tr>
                     <td>
-                        @using (Html.BeginForm<ItemManagementController>
-                        (x => x.ToggleTransactionIsActive(item.Id, null, null)))
+                        <a href="@Url.Action("Details", "Transaction", new{ id = item.Id })">Details</a> |
+
+                        @using (Html.BeginForm("ToggleTransactionIsActive", "ItemManagement", new {id = item.Id}, FormMethod.Post, new { style="display:inline;" }))
                         {
                             @Html.AntiForgeryToken()
-                            <a href="javascript:;" class="FormSubmit">@(item.IsActive ? "Deactivate" : "Activate")</a>
-
+                            <button type="submit" class="btn-link">@(item.IsActive ? "Deactivate" : "Activate")</button>                                                                                      
                         }
-
                     </td>
-                    <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
-                    <td data-sort="@item.Amount">@string.Format("{0:C}", item.Amount)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Credit)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Paid)</td>
-                    <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                    <td>@Html.DisplayFor(x => item.TransactionNumber)</td>
+                    <td>@Html.DisplayFor(x => item.Quantity)</td>
+                    <td data-sort="@item.Amount">@($"{item.Amount:C}")</td>
+                    <td>@Html.DisplayFor(x => item.Credit)</td>
+                    <td>@Html.DisplayFor(x => item.Paid)</td>
+                    <td>@Html.DisplayFor(x => item.IsActive)</td>
                 </tr>
             }
         </tbody>

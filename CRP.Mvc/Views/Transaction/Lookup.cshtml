@@ -3,7 +3,6 @@
 
 @{
     ViewBag.Title = "Lookup";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 <div class="boundary">
     <h2>Lookup</h2>
@@ -65,7 +64,7 @@
         if (Model.ShowCreditCardReSubmit)
         {
             <div class="form-group">
-                <a href='@Url.Action("Confirmation", "Transaction", new {id=Model.Transaction.Id} )' class="btn btn-primary">Click Here To Resubmit Credit Card Payment</a>
+                <a href='@Url.Action("Confirmation", "Payments", new {id=Model.Transaction.Id} )' class="btn btn-primary">Click Here To Resubmit Credit Card Payment</a>
             </div>
         }
     }

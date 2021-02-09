@@ -5,9 +5,3 @@ FROM  dbo.ApplicationRoles INNER JOIN
                dbo.Applications ON dbo.ApplicationRoles.ApplicationID = dbo.Applications.ApplicationID INNER JOIN
                dbo.Roles ON dbo.ApplicationRoles.RoleID = dbo.Roles.RoleID
 GO
-
-
-
-GO
-
-

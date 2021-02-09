@@ -4,52 +4,60 @@ using CRP.Core.Domain;
 using UCDArch.Core.PersistanceSupport;
 using Check = UCDArch.Core.Utils.Check;
 using System.Linq;
+using CRP.Mvc.Controllers.ViewModels.ItemManagement;
 
 namespace CRP.Controllers.Helpers
 {
     public class Copiers
     {
-        public static Item CopyItem(IRepository repository, Item src, Item dest, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool fidIsDisabled)
+        public static Item CopyItem(IRepository repository, EditItemViewModel src, Item dest, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool CanChangeFinanceAccount)
         {
             Check.Require(repository != null, "Repository is required.");
             Check.Require(src != null, "Source item is required.");
             Check.Require(dest != null, "Destination item is required.");
 
             // copy the fields from the source
-            dest.Name = src.Name;
-            dest.Description = src.Description;
+            dest.Name                     = src.Name;
+            dest.Description              = src.Description;
             dest.CheckPaymentInstructions = src.CheckPaymentInstructions;
-            dest.CostPerItem = src.CostPerItem;
-            dest.Quantity = src.Quantity;
-            dest.QuantityName = src.QuantityName; //Was missing this JCS 2010/06/29
-            dest.Expiration = src.Expiration;
-            dest.Link = src.Link;
+            dest.CostPerItem              = src.CostPerItem.Value;
+            dest.Quantity                 = src.Quantity.Value;
+            dest.QuantityName             = src.QuantityName; //Was missing this JCS 2010/06/29
+            dest.Expiration               = src.Expiration;
+            dest.Link                     = src.Link;
 
             dest.DonationLinkInformation = src.DonationLinkInformation;
-            dest.DonationLinkLegend = src.DonationLinkLegend;
-            dest.DonationLinkLink = src.DonationLinkLink;
-            dest.DonationLinkText = src.DonationLinkText;
+            dest.DonationLinkLegend      = src.DonationLinkLegend;
+            dest.DonationLinkLink        = src.DonationLinkLink;
+            dest.DonationLinkText        = src.DonationLinkText;
 
-            dest.Available = src.Available;
-            dest.Private = src.Private;
-            dest.NotifyEditors = src.NotifyEditors;
-            dest.Unit = src.Unit;
-            dest.RestrictedKey = src.RestrictedKey;
-            dest.AllowCheckPayment = src.AllowCheckPayment;
+            dest.Available          = src.Available;
+            dest.Private            = src.Private;
+            dest.NotifyEditors      = src.NotifyEditors;
+            dest.RestrictedKey      = src.RestrictedKey;
+            dest.AllowCheckPayment  = src.AllowCheckPayment;
             dest.AllowCreditPayment = src.AllowCreditPayment;
-            dest.Summary = src.Summary;
-            //dest.HideDonation = src.HideDonation;
-            if (!fidIsDisabled) //Well, if the FID is disabled (only allow owner to change), then the fid would be cleared out.
+            dest.Summary            = src.Summary;
+
+            if (src.Image != null)
             {
-                if (string.IsNullOrEmpty(src.TouchnetFID))                    
-                {
-                    dest.TouchnetFID = null;
-                }
-                else
-                {
-                    dest.TouchnetFID = src.TouchnetFID;
-                }
+                //Only populate dest if an image was supplied 
+                dest.Image = src.Image;
             }
+
+            // lookup references
+            var unit = repository.OfType<Unit>().GetNullableById(src.UnitId);
+            dest.Unit = unit;
+
+            if (CanChangeFinanceAccount)
+            {
+                var account = repository.OfType<FinancialAccount>().GetNullableById(src.FinancialAccountId);
+                dest.FinancialAccount = account;
+            }
+
+            //Try to get item type.
+            var itemType = repository.OfType<ItemType>().GetNullableById(src.ItemTypeId);
+            dest.ItemType = itemType;
 
             PopulateItem(repository, dest, extendedProperties, tags, mapLink);
 

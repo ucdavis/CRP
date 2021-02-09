@@ -30,6 +30,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /Report/ViewReport/
+        /// Tested 20200512
         /// </summary>
         /// <param name="id"></param>
         /// <param name="itemId"></param>
@@ -60,130 +61,12 @@ namespace CRP.Controllers
 
             return View(viewModel);
         }
-        [UserOnly]
-        public ActionResult ViewReportOld(int id, int itemId)
-        {
-            var itemReport = Repository.OfType<ItemReport>().GetNullableById(id);
-            if (itemReport == null)
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "ItemReport");
-                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
-            }
-            var item = Repository.OfType<Item>().GetNullableById(itemId);
-            if (item == null)
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
-            }
-
-            if (!Access.HasItemAccess(CurrentUser, item))
-            {
-                Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
-            }
-
-            var viewModel = ReportViewModel.Create(Repository, itemReport, item, false);
-
-            return View(viewModel);
-        }
 
         /// <summary>
-        /// GET: /Report/Create/{itemId}
+        /// Tested 20200512
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [UserOnly]
-        public ActionResult CreateOld(int itemId)
-        {
-            var item = Repository.OfType<Item>().GetNullableById(itemId);
-
-            if (item == null)
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
-            }
-
-            var viewModel = CreateReportViewModel.Create(Repository, item);
-
-            return View(viewModel);
-        }
-
-        /// <summary>
-        /// POST: /Report/Create/
-        /// </summary>
-        /// <remarks>
-        /// Description:
-        ///     Create a report that is used specifically with one report.
-        /// PreCondition:
-        ///     Item is created, valid and has one or more question sets available
-        ///     createReportParameters parameter has at least one item
-        ///     name is not null or empty
-        /// PostCondition:
-        ///     Item Report is created
-        ///     Each createReportParameters is created into an ItemReportColumn object
-        ///     Item Report is added to an Item
-        /// </remarks>
-        /// <param name="itemId"></param>
-        /// <param name="name"></param>
-        /// <param name="createReportParameters"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [UserOnly]
-        public ActionResult CreateOld(int itemId, string name, CreateReportParameter[] createReportParameters)
-        {
-            var item = Repository.OfType<Item>().GetNullableById(itemId);
-
-            if (item == null)
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
-            }
-
-
-            var report = new ItemReport(name, item,
-                                        Repository.OfType<User>().Queryable.Where(
-                                            a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault());
-            if (createReportParameters == null || createReportParameters.Count() < 1)
-            {
-                Message = "Report Columns not Selected";
-                var viewModel2 = CreateReportViewModel.Create(Repository, item);
-                viewModel2.ItemReport = report;
-                return View(viewModel2);
-            }
-            foreach(var crp in createReportParameters)
-            {
-                var questionSet = Repository.OfType<QuestionSet>().GetNullableById(crp.QuestionSetId);
-                var question = Repository.OfType<Question>().GetNullableById(crp.QuestionId);
-
-                ItemReportColumn itemReportColumn = crp.Property ? new ItemReportColumn(crp.PropertyName, report) 
-                    : new ItemReportColumn(question.Name, report);
-
-                itemReportColumn.Transaction = crp.Transaction;
-                itemReportColumn.Quantity = crp.Quantity;
-                itemReportColumn.Property = crp.Property;
-                itemReportColumn.QuestionSet = questionSet;
-                itemReportColumn.Format = crp.Format;
-
-                report.AddReportColumn(itemReportColumn);
-            }
-
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, report.ValidationResults());
-
-            if (ModelState.IsValid)
-            {
-                Repository.OfType<ItemReport>().EnsurePersistent(report);
-                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Report");
-                //return Redirect(ReturnUrlGenerator.DetailItemUrl(item.Id, StaticValues.Tab_Reports));
-
-                return Redirect(Url.DetailItemUrl(item.Id, StaticValues.Tab_Reports));
-            }
-
-            Message = "Errors with report found.";
-            var viewModel = CreateReportViewModel.Create(Repository, item);
-            viewModel.ItemReport = report;
-            return View(viewModel);
-        }
-
         [UserOnly]
         public ActionResult Create(int itemId)
         {
@@ -202,6 +85,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Report/Create/
+        /// Tested 20200512
         /// </summary>
         /// <remarks>
         /// Description:
@@ -265,9 +149,9 @@ namespace CRP.Controllers
             {
                 Repository.OfType<ItemReport>().EnsurePersistent(report);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Report");
-                //return Redirect(ReturnUrlGenerator.DetailItemUrl(item.Id, StaticValues.Tab_Reports));
 
-                return Redirect(Url.DetailItemUrl(item.Id, StaticValues.Tab_Reports));
+                var redirectUrl = Url.Action("Details", "ItemManagement", new { item.Id });
+                return Redirect(redirectUrl + "#Reports");
             }
 
             Message = "Errors with report found.";
@@ -276,6 +160,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200512 (But queries are horrible) 
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult ViewSystemReport(int? reportId)
         {
@@ -310,6 +199,11 @@ namespace CRP.Controllers
             return new List<SystemReportData>();
         }
 
+        /// <summary>
+        /// Tested 20200512
+        /// </summary>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult GenerateChart(int reportId)
         {
@@ -346,7 +240,7 @@ namespace CRP.Controllers
         {
             DepartmentUsage = 0,
             DepartmentMoneyYtd,
-        } ;
+        }
     }
 
     public class CreateReportParameter

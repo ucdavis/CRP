@@ -129,8 +129,8 @@ namespace CRP.Core.Domain
         [Required]
         public virtual string CheckPaymentInstructions { get; set; }
 
-
-        public virtual string TouchnetFID { get; set; }
+        [Required(ErrorMessage = "An account must be selected.")]
+        public virtual FinancialAccount FinancialAccount { get; set; }
         
 
         [Required]
@@ -217,7 +217,7 @@ namespace CRP.Core.Domain
         public virtual bool IsAvailableForReg { 
             get
             {
-                var lastDayToRegisterOnLine = Expiration == null ? SystemTime.Now().AddDays(-1).Date : (DateTime)Expiration;
+                var lastDayToRegisterOnLine = Expiration == null ? SystemTime.Now().AddDays(1).Date : (DateTime)Expiration;
                 if (Sold >= Quantity || SystemTime.Now().Date > lastDayToRegisterOnLine.Date || !Available)
                 {
                     return false;
@@ -404,32 +404,6 @@ namespace CRP.Core.Domain
             get
             {
                 if(AllowCheckPayment == false && AllowCreditPayment == false)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
-
-        [AssertFalse(ErrorMessage = "Must select an Account Number when available to public is checked and credit payment is allowed")]
-        public virtual bool FID
-        {
-            get
-            {
-                if(string.IsNullOrEmpty(TouchnetFID) && Available && AllowCreditPayment)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
-
-        [AssertFalse(ErrorMessage = "FID must be 3 characters long when selected")]
-        public virtual bool FID_Length
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(TouchnetFID) && TouchnetFID.Trim().Length != 3)
                 {
                     return true;
                 }

@@ -5,8 +5,6 @@ using CRP.Controllers.Services;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
-using MvcContrib.Attributes;
-using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Helpers;
 using UCDArch.Web.Validator;
@@ -25,6 +23,7 @@ namespace CRP.Controllers
         /// <summary>
         /// GET: /MapPin/Create
         /// #1
+        /// Tested 20200422
         /// </summary>
         /// <param name="id">Item Id</param>
         /// <returns></returns>
@@ -42,24 +41,11 @@ namespace CRP.Controllers
 
             return View(viewModel);
         }
-        public ActionResult CreateOld(int itemId)
-        {
-            var item = Repository.OfType<Item>().GetNullableById(itemId);
-            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
-            {
-                //Don't Have editor rights
-                Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
-            }
-            var viewModel = MapPinViewModel.Create(Repository, item);
-            viewModel.MapPin = new MapPin();
-            
-            return View(viewModel);
-        } 
 
         /// <summary>
         /// POST: /MapPin/Create
         /// #2
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPin"></param>
@@ -97,6 +83,7 @@ namespace CRP.Controllers
         /// <summary>
         /// GET: /MapPin/Edit/5
         /// #3
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPinId"></param>
@@ -121,30 +108,11 @@ namespace CRP.Controllers
             viewModel.MapPin = mapPin;
             return View(viewModel);
         }
-        public ActionResult EditOld(int itemId, int mapPinId)
-        {
-            var item = Repository.OfType<Item>().GetNullableById(itemId);
-            if (item == null || !_accessControlService.HasItemAccess(CurrentUser, item))
-            {
-                //Don't Have editor rights
-                Message = NotificationMessages.STR_NoEditorRights;
-                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
-            }
-            var mapPin = Repository.OfType<MapPin>().GetNullableById(mapPinId);
-            if (mapPin == null || !item.MapPins.Contains(mapPin))
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "MapPin");
-                //return Redirect(Url.EditItemUrl(itemId, StaticValues.Tab_MapPins));
-                return this.RedirectToAction<ItemManagementController>(a => a.Map(item.Id));
-            }
-            var viewModel = MapPinViewModel.Create(Repository, item);
-            viewModel.MapPin = mapPin;
-            return View(viewModel);
-        }
 
         /// <summary>
         /// POST: /MapPin/Edit/5
         /// #4
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPinId"></param>
@@ -196,7 +164,7 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="mapPinId"></param>

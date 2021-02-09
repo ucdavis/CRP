@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -15,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CRP.Mvc</RootNamespace>
     <AssemblyName>CRP.Mvc</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -26,6 +25,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -121,11 +121,19 @@
       <HintPath>..\packages\Microsoft.ApplicationInsights.1.2.3\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -137,6 +145,9 @@
     <Reference Include="Microsoft.Web.Mvc, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.Futures.5.0.0\lib\net40\Microsoft.Web.Mvc.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
@@ -150,13 +161,14 @@
       <HintPath>..\packages\MvcContrib.Mvc3.FluentHtml-ci.3.0.100.0\lib\MvcContrib.FluentHtml.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="NHibernate, Version=3.4.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.3.4.1.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.SqlAzure, Version=2.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.SqlAzure.2.1.6\lib\NET45\NHibernate.SqlAzure.dll</HintPath>
     </Reference>
     <Reference Include="NPOI, Version=2.1.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <HintPath>..\packages\NPOI.Excel.2.1.1\lib\NPOI.dll</HintPath>
@@ -178,44 +190,122 @@
       <HintPath>..\packages\recaptcha.1.0.5.0\lib\.NetFramework 4.0\Recaptcha.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.2.0.0\lib\net45\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Exceptions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Exceptions.1.1.0\lib\net452\Serilog.Exceptions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Serilog.Sinks.Stackify, Version=1.0.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.Stackify.1.0.12.0\lib\net45\Serilog.Sinks.Stackify.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Serilog.Sinks.Stackify, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Stackify.2.0.2\lib\net45\Serilog.Sinks.Stackify.dll</HintPath>
     </Reference>
     <Reference Include="SerilogWeb.Classic, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9462ddd55fbc0e7f, processorArchitecture=MSIL">
       <HintPath>..\packages\SerilogWeb.Classic.2.0.2\lib\net45\SerilogWeb.Classic.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StackifyLib, Version=1.12.5589.24146, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StackifyLib.1.12.0.0\lib\StackifyLib.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="StackifyHttpTracer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93c44ce23f2048dd, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackifyHttpModule.1.0.41\lib\net40\StackifyHttpTracer.dll</HintPath>
+    </Reference>
+    <Reference Include="StackifyLib, Version=2.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackifyLib.2.1.4\lib\net462\StackifyLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.AppContext.4.3.0\lib\net463\System.AppContext.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Tracing, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.Tracing.4.3.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http">
-      <HintPath>..\packages\Microsoft.Net.Http.2.0.20505.0\lib\net40\System.Net.Http.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Linq, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.4.3.0\lib\net463\System.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Linq.Expressions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Expressions.4.3.0\lib\net463\System.Linq.Expressions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20505.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.4.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.4.3.0\lib\net463\System.Runtime.InteropServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.RegularExpressions.4.3.0\lib\net463\System.Text.RegularExpressions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -258,13 +348,16 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Web.Mvc, Version=2013.2.611.340, Culture=neutral, PublicKeyToken=29ac1a93ec063d92, processorArchitecture=MSIL">
       <HintPath>..\packages\TelerikMvcExtensions.2013.2.611\lib\net40\Telerik.Web.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="UCDArch, Version=5.0.0.119, Culture=neutral, PublicKeyToken=667f3cb07abadf4b, processorArchitecture=MSIL">
-      <HintPath>..\packages\UcdArch.5.0.0.119\lib\net35\UCDArch.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="UCDArch, Version=3.0.0.0, Culture=neutral, PublicKeyToken=667f3cb07abadf4b, processorArchitecture=MSIL">
+      <HintPath>..\packages\UcdArch.5.1.1.167\lib\net451\UCDArch.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="WebActivator, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivator.1.5.2\lib\net40\WebActivator.dll</HintPath>
@@ -478,7 +571,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\ExtendedPropertyController.cs" />
-    <Compile Include="Controllers\FIDController.cs" />
+    <Compile Include="Controllers\FinancialAccountController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\Helpers\Access.cs" />
     <Compile Include="Controllers\Helpers\CASHelper.cs" />
@@ -493,7 +586,6 @@
     <Compile Include="Controllers\Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Controllers\Helpers\ImageHelper.cs" />
     <Compile Include="Controllers\Helpers\InvoiceNumberGenerator.cs" />
-    <Compile Include="Controllers\Helpers\ReturnUrlGenerator.cs" />
     <Compile Include="Controllers\Helpers\RoleNames.cs" />
     <Compile Include="Controllers\Helpers\ServiceMessages.cs" />
     <Compile Include="Controllers\Helpers\StringExtension.cs" />
@@ -503,17 +595,16 @@
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\ItemManagementController.cs" />
     <Compile Include="Controllers\MapPinController.cs" />
-    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionSetController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
-    <Compile Include="Controllers\SDKController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\Services\IAccessControlService.cs" />
     <Compile Include="Controllers\Services\ICouponService.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\ViewModels\BigMapViewModel.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
@@ -525,14 +616,21 @@
     <Compile Include="Controllers\ViewModels\HelpTopicViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemDetailViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemListView.cs" />
+    <Compile Include="Controllers\ViewModels\ItemManagement\EditItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ItemViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LinkPaymentViewModel.cs" />
     <Compile Include="Controllers\ViewModels\LookupViewModel.cs" />
     <Compile Include="Controllers\ViewModels\MapPinViewModel.cs" />
-    <Compile Include="Controllers\ViewModels\PaymentConfirmationViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\Payment\PaymentConfirmationViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\Payment\PaymentReceiptViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionSetViewModel.cs" />
     <Compile Include="Controllers\ViewModels\QuestionViewModel.cs" />
+    <Compile Include="Controllers\ViewModels\Transaction\TransactionDepositNotification.cs" />
+    <Compile Include="Controllers\ViewModels\UnclearedModel.cs" />
+    <Compile Include="Helpers\HttpClientHelpers.cs" />
+    <Compile Include="Models\Configuration\SlothSettings.cs" />
+    <Compile Include="Models\ReceiptResponseModel.cs" />
     <Compile Include="Controllers\ViewModels\ReportViewModel.cs" />
     <Compile Include="Controllers\ViewModels\SearchViewModel.cs" />
     <Compile Include="Controllers\ViewModels\SystemReportViewModel.cs" />
@@ -540,13 +638,19 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\SearchTermProvider.cs" />
+    <Compile Include="Models\Sloth\CreateTransaction.cs" />
+    <Compile Include="Models\Sloth\CreateTransfer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\CyberSourceReasonCodes.cs" />
+    <Compile Include="Resources\CyberSourceReplyCodes.cs" />
+    <Compile Include="Resources\FeeSchedule.cs" />
+    <Compile Include="Resources\KfsAccounts.cs" />
+    <Compile Include="Resources\KfsObjectCodes.cs" />
     <Compile Include="Services\CopyItemService.cs" />
+    <Compile Include="Services\DataSigningService.cs" />
+    <Compile Include="Services\SlothService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app_offline.htm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\2009.3.1103.0\Black\loading.gif" />
     <Content Include="Content\2009.3.1103.0\Black\sprite.png" />
@@ -797,6 +901,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chosen.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\jquery.bt.css" />
@@ -806,7 +911,6 @@
     <Content Include="Content\print.css" />
     <Content Include="Content\public-main.css" />
     <Content Include="Content\quicksandstylesheet.css" />
-    <Content Include="Content\Site_old.css" />
     <Content Include="Content\telerik.common.css" />
     <Content Include="Content\telerik.common.min.css" />
     <Content Include="Content\telerik.vista.css" />
@@ -928,6 +1032,8 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\ItemEdit.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1280,87 +1386,27 @@
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Static\Preview.html" />
-    <Content Include="Views\Account\CasLogon.aspx" />
-    <Content Include="Views\Account\LogOn.aspx" />
-    <Content Include="Views\Account\ManageUsers.aspx" />
-    <Content Include="Views\Account\OpenIdAccount.aspx" />
-    <Content Include="Views\Account\OpenIdLogon.aspx" />
-    <Content Include="Views\ApplicationKey\ApplicationKeyForm.ascx" />
-    <Content Include="Views\ApplicationKey\CreateOld.aspx" />
-    <Content Include="Views\ApplicationKey\Edit.aspx" />
-    <Content Include="Views\ApplicationKey\IndexOld.aspx" />
-    <Content Include="Views\ApplicationManagement\CreateItemTypeOld.aspx" />
-    <Content Include="Views\ApplicationManagement\EditItemTypeOld.aspx" />
-    <Content Include="Views\ApplicationManagement\IndexOld.aspx" />
-    <Content Include="Views\ApplicationManagement\ListItemTypesOld.aspx" />
-    <Content Include="Views\Coupon\Create.aspx" />
-    <Content Include="Views\DisplayProfile\Create.aspx" />
-    <Content Include="Views\DisplayProfile\Edit.aspx" />
-    <Content Include="Views\DisplayProfile\List.aspx" />
-    <Content Include="Views\Error\Index.aspx" />
-    <Content Include="Views\ExtendedProperty\Create.aspx" />
-    <Content Include="Views\FID\CreateOld.aspx" />
-    <Content Include="Views\FID\DetailsOld.aspx" />
-    <Content Include="Views\FID\EditOld.aspx" />
-    <Content Include="Views\FID\IndexOld.aspx" />
-    <Content Include="Views\Help\Create.aspx" />
-    <Content Include="Views\Help\CreateItem.aspx" />
-    <Content Include="Views\Help\Details.aspx" />
-    <Content Include="Views\Help\Edit.aspx" />
-    <Content Include="Views\Help\Index.aspx" />
-    <Content Include="Views\Help\LinkMap.aspx" />
-    <Content Include="Views\Help\WatchVideo.aspx" />
-    <Content Include="Views\Home\About.aspx" />
-    <Content Include="Views\Home\AdminHomeOld.aspx" />
-    <Content Include="Views\Home\IndexOld.aspx" />
-    <Content Include="Views\ItemManagement\Create.aspx" />
-    <Content Include="Views\ItemManagement\DetailsOld.aspx" />
-    <Content Include="Views\ItemManagement\Edit.aspx" />
-    <Content Include="Views\ItemManagement\ItemMapPinsView.ascx" />
-    <Content Include="Views\ItemManagement\ListOld.aspx" />
-    <Content Include="Views\ItemManagement\MapOld.aspx" />
-    <Content Include="Views\Item\DetailsOld.aspx" />
-    <Content Include="Views\Item\MapOld.aspx" />
-    <Content Include="Views\Item\MapDirectionsOld.aspx" />
-    <Content Include="Views\MapPin\CreateOld.aspx" />
-    <Content Include="Views\MapPin\EditOld.aspx" />
-    <Content Include="Views\MapPin\MapPinView.ascx" />
-    <Content Include="Views\Payment\LinkToTransaction.aspx" />
-    <Content Include="Views\QuestionSet\CreateOld.aspx" />
-    <Content Include="Views\QuestionSet\DetailsOld.aspx" />
-    <Content Include="Views\QuestionSet\EditOld.aspx" />
-    <Content Include="Views\QuestionSet\LinkToItemOld.aspx" />
-    <Content Include="Views\QuestionSet\LinkToItemTypeOld.aspx" />
-    <Content Include="Views\QuestionSet\ListOld.aspx" />
-    <Content Include="Views\Question\Create.aspx" />
-    <Content Include="Views\Report\CreateOld.aspx" />
-    <Content Include="Views\Report\ViewReportOld.aspx" />
-    <Content Include="Views\Report\ViewSystemReport.aspx" />
-    <Content Include="Views\SDK\Index.aspx" />
-    <Content Include="Views\Search\IndexOld.aspx" />
-    <Content Include="Views\Shared\CheckView.ascx" />
-    <Content Include="Views\Shared\Error.aspx" />
-    <Content Include="Views\Shared\FIDForm.ascx" />
-    <Content Include="Views\Shared\HelpForm.ascx" />
-    <Content Include="Views\Shared\ItemBrowse.ascx" />
-    <Content Include="Views\Shared\ItemForm.ascx" />
-    <Content Include="Views\Shared\LogOnUserControl.ascx" />
-    <Content Include="Views\Shared\PageHeader.ascx" />
-    <Content Include="Views\Shared\QuestionForm.ascx" />
-    <Content Include="Views\Shared\SystemMessage.ascx" />
-    <Content Include="Views\Shared\TagView.ascx" />
-    <Content Include="Views\Shared\TemplateInstructions.ascx" />
-    <Content Include="Views\Shared\TransactionForm.ascx" />
-    <Content Include="Views\Tag\Index.aspx" />
-    <Content Include="Views\Template\EditOld.aspx" />
-    <Content Include="Views\Transaction\AdminLookupOld.aspx" />
-    <Content Include="Views\Transaction\CheckoutOld.aspx" />
-    <Content Include="Views\Transaction\ConfirmationOld.aspx" />
-    <Content Include="Views\Transaction\DetailsRefund.aspx" />
-    <Content Include="Views\Transaction\EditOld.aspx" />
-    <Content Include="Views\Transaction\LookupOld.aspx" />
-    <Content Include="Views\Transaction\PaymentResult.aspx" />
-    <Content Include="Views\Transaction\Refund.aspx" />
+    <Content Include="Views\Account\CasLogon.cshtml" />
+    <Content Include="Views\Account\CasLogon.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Account\ManageUsers.cshtml" />
+    <Content Include="Views\Account\OpenIdAccount.cshtml" />
+    <Content Include="Views\ApplicationKey\ApplicationKeyForm.cshtml" />
+    <Content Include="Views\ApplicationKey\Edit.cshtml" />
+    <Content Include="Views\Transaction\Link.cshtml" />
+    <Content Include="Views\Coupon\Create.cshtml" />
+    <Content Include="Views\DisplayProfile\Create.cshtml" />
+    <Content Include="Views\DisplayProfile\Edit.cshtml" />
+    <Content Include="Views\DisplayProfile\List.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\ExtendedProperty\Create.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\ItemManagement\Create.cshtml" />
+    <Content Include="Views\ItemManagement\Edit.cshtml" />
+    <Content Include="Views\ItemManagement\ItemMapPinsView.cshtml" />
+    <Content Include="Views\MapPin\MapPinView.cshtml" />
+    <Content Include="Views\Payments\Receipt.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1372,19 +1418,31 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Site.Master" />
-    <Content Include="Views\Shared\_PublicLayout.cshtml" />
+    <Content Include="Views\_ViewImports.cshtml" />
+    <Content Include="Views\Shared\_Analytics.cshtml" />
+    <Content Include="Views\Question\Create.cshtml" />
+    <Content Include="Views\Report\ViewSystemReport.cshtml" />
+    <Content Include="Views\Shared\CheckView.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\HelpForm.cshtml" />
+    <Content Include="Views\Shared\ItemForm.cshtml" />
+    <Content Include="Views\Shared\LogOnUserControl.cshtml" />
+    <Content Include="Views\Shared\PageHeader.cshtml" />
+    <Content Include="Views\Shared\SystemMessage.cshtml" />
+    <Content Include="Views\Shared\TemplateInstructions.cshtml" />
+    <Content Include="Views\Shared\TransactionForm.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\Shared\_ItemBrowseNew.cshtml" />
+    <Content Include="Views\Shared\_ItemBrowse.cshtml" />
     <Content Include="Views\Item\Details.cshtml" />
     <Content Include="Scripts\qTip\jquery.qtip.min.js.map" />
     <Content Include="Views\Item\Map.cshtml" />
     <Content Include="Views\Item\MapDirections.cshtml" />
-    <Content Include="Views\Transaction\Checkout.cshtml" />
-    <Content Include="Views\Shared\_QuestionFormNew.cshtml" />
+    <Content Include="Views\Payments\Checkout.cshtml" />
+    <Content Include="Views\Shared\_QuestionForm.cshtml" />
     <Content Include="Views\Test\TestCaptcha.cshtml" />
-    <Content Include="Views\Transaction\Confirmation.cshtml" />
+    <Content Include="Views\Payments\Confirmation.cshtml" />
     <Content Include="Views\ItemManagement\List.cshtml" />
     <Content Include="Views\Shared\_LogonPartial.cshtml" />
     <Content Include="Views\Home\AdminHome.cshtml" />
@@ -1407,10 +1465,10 @@
     <Content Include="Views\ApplicationManagement\Index.cshtml" />
     <Content Include="Views\ApplicationManagement\ListItemTypes.cshtml" />
     <Content Include="Views\Template\Edit.cshtml" />
-    <Content Include="Views\FID\Index.cshtml" />
-    <Content Include="Views\FID\Details.cshtml" />
-    <Content Include="Views\FID\Edit.cshtml" />
-    <Content Include="Views\FID\Create.cshtml" />
+    <Content Include="Views\FinancialAccount\Index.cshtml" />
+    <Content Include="Views\FinancialAccount\Details.cshtml" />
+    <Content Include="Views\FinancialAccount\Edit.cshtml" />
+    <Content Include="Views\FinancialAccount\Create.cshtml" />
     <Content Include="Views\ApplicationKey\Index.cshtml" />
     <Content Include="Views\ApplicationKey\Create.cshtml" />
     <Content Include="Views\ApplicationManagement\CreateItemType.cshtml" />
@@ -1420,9 +1478,16 @@
     <Content Include="Views\QuestionSet\Edit.cshtml" />
     <Content Include="Views\QuestionSet\LinkToItem.cshtml" />
     <Content Include="Views\QuestionSet\LinkToItemType.cshtml" />
+    <Content Include="Views\Tag\Index.cshtml" />
+    <Content Include="Views\Transaction\DetailsRefund.cshtml" />
+    <Content Include="Views\Transaction\Refund.cshtml" />
+    <Content Include="Views\Transaction\Details.cshtml" />
+    <Content Include="Views\Coupon\Details.cshtml" />
+    <Content Include="Views\ApplicationManagement\ViewUnCleared.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Checks\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1675,7 +1740,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50317</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50317/</IISUrl>
+          <IISUrl>http://localhost:50318/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -1685,12 +1750,18 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
+    <ItemGroup>
+      <RoslynFiles Include="$(CscToolPath)\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
+    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

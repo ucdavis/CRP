@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,13 +12,11 @@ using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.Helpers;
 using CRP.Mvc.Controllers.ViewModels;
+using CRP.Mvc.Controllers.ViewModels.ItemManagement;
 using CRP.Services;
-//using Elmah;
 using MvcContrib;
-using MvcContrib.Attributes;
 using Serilog;
 using UCDArch.Web.ActionResults;
-using UCDArch.Web.Controller;
 using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
@@ -36,7 +32,7 @@ namespace CRP.Controllers
             _copyItemService = copyItemService;
         }
 
-        //
+        //Tested 20200422
         // GET: /ItemManagement/
 
         public ActionResult Index()
@@ -45,78 +41,48 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// GET: /ItemManagement/List
+        /// Tested 20200422
         /// </summary>
+        /// <param name="transactionNumber"></param>
         /// <returns></returns>
-        //public ActionResult List()
-        //{
-        //    // list items that the user has editor rights to
-        //    var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
-
-        //    var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
-        //    // admins can see all
-        //    if (CurrentUser.IsInRole(RoleNames.Admin))
-        //    {
-        //        query = Repository.OfType<Item>().Queryable;
-        //    }
-
-        //    return View(query);
-        //}
-
-        /// <summary>
-        /// GET: /ItemManagement/List
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult ListOld(string transactionNumber)
-        {
-            var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
-
-            var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
-            // admins can see all
-            if (CurrentUser.IsInRole(RoleNames.Admin))
-            {
-                query = Repository.OfType<Item>().Queryable;
-            }
-            if (!string.IsNullOrEmpty(transactionNumber))
-            {
-                query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
-            }
-            return View(query); 
-        }
-
         public ActionResult List(string transactionNumber)
         {
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
             var query = Repository.OfType<Item>().Queryable.Where(a => a.Editors.Any(b => b.User == user));
+
             // admins can see all
             if (CurrentUser.IsInRole(RoleNames.Admin))
             {
                 query = Repository.OfType<Item>().Queryable;
             }
+
+            // fetch matching transactions
             if (!string.IsNullOrEmpty(transactionNumber))
             {
                 query = query.Where(a => a.Transactions.Any(b => b.ParentTransaction == null && b.TransactionNumber.Contains(transactionNumber)));
             }
 
+            query = query.OrderByDescending(a => a.DateCreated);
+
             var slimmedDown = query.Select(a => new ItemListView
             {
-                Id = a.Id,
-                Name = a.Name,
+                Id          = a.Id,
+                Name        = a.Name,
                 CostPerItem = a.CostPerItem,
-                Quantity = a.Quantity,
-                Sold = a.SoldCount,
-                Expiration = a.Expiration,
+                Quantity    = a.Quantity,
+                Sold        = a.SoldCount,
+                Expiration  = a.Expiration,
                 DateCreated = a.DateCreated,
-                Available = a.Available
+                Available   = a.Available
             }).ToList();
 
-            //return View(query.ToList());
             return View(slimmedDown);
         }
 
         /// <summary>
         /// GET: /ItemManagement/Create
+        /// Tested 20200505
         /// </summary>
         /// <returns></returns>
         [PageTracker]
@@ -130,6 +96,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/Create/
+        /// Tested 20200505
         /// </summary>
         /// <remarks>
         /// Description:   
@@ -149,9 +116,10 @@ namespace CRP.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [PageTracker]
-        public ActionResult Create(Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
+        public ActionResult Create(EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             ModelState.Clear();
+
             // get the file and add it into the item
             if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
@@ -174,13 +142,25 @@ namespace CRP.Controllers
                 ModelState.AddModelError("Image", @"An image is required.");
             }
 
-            // process the extended properties and tags
-            //item = PopulateObject.Item(Repository, item, extendedProperties, tags);
-            item = Copiers.PopulateItem(Repository, item, extendedProperties, tags, mapLink);
-
-            if(item.ExtendedPropertyAnswers != null && item.ExtendedPropertyAnswers.Count > 0)
+            //This was changed to a nullable decimal because text was setting the value to zero.
+            //Check it here because the copyItem sets the value and a null would trow an exception.
+            if (!item.CostPerItem.HasValue)
             {
-                foreach (var extendedPropertyAnswer in item.ExtendedPropertyAnswers)
+                ModelState.AddModelError("Item.CostPerItem", "Please enter a valid amount (Just a number).");
+                item.CostPerItem = 0m;
+            }
+            if (!item.Quantity.HasValue)
+            {
+                ModelState.AddModelError("Item.Quantity", "Please enter a number for the Quantity.");
+                item.Quantity = 0;
+            }
+
+            // setup new item CanChangeFinanceAccount will always be true on a create
+            var itemToCreate = Copiers.CopyItem(Repository, item, new Item(), extendedProperties, tags, mapLink, true);
+
+            if (itemToCreate.ExtendedPropertyAnswers != null && itemToCreate.ExtendedPropertyAnswers.Count > 0)
+            {
+                foreach (var extendedPropertyAnswer in itemToCreate.ExtendedPropertyAnswers)
                 {
                     if(string.IsNullOrWhiteSpace(extendedPropertyAnswer.Answer))
                     {
@@ -193,9 +173,9 @@ namespace CRP.Controllers
             var user = Repository.OfType<User>().Queryable.Where(a => a.LoginID == CurrentUser.Identity.Name).FirstOrDefault();
 
             // add permissions
-            var editor = new Editor(item, user);
+            var editor = new Editor(itemToCreate, user);
             editor.Owner = true;
-            item.AddEditor(editor);
+            itemToCreate.AddEditor(editor);
 
             // set the unit
             //item.Unit = user.Units.FirstOrDefault();
@@ -208,46 +188,46 @@ namespace CRP.Controllers
             // this should really not be null at any point.
             if (questionSet != null)
             {
-                item.AddTransactionQuestionSet(questionSet);
+                itemToCreate.AddTransactionQuestionSet(questionSet);
             }
 
-            if (item.ItemType != null)
+            if (itemToCreate.ItemType != null)
             {
                 // add the default question sets
-                foreach (var qs in item.ItemType.QuestionSets)
+                foreach (var qs in itemToCreate.ItemType.QuestionSets)
                 {
                     if (qs.TransactionLevel)
                     {
-                        item.AddTransactionQuestionSet(qs.QuestionSet);
+                        itemToCreate.AddTransactionQuestionSet(qs.QuestionSet);
                     }
                     else
                     {
-                        item.AddQuantityQuestionSet(qs.QuestionSet);
+                        itemToCreate.AddQuantityQuestionSet(qs.QuestionSet);
                     }
                 }
             }
 
-            if(item.Template == null)
+            if (itemToCreate.Template == null)
             {
                 var tempTemplate = Repository.OfType<Template>().Queryable.Where(a => a.Default).FirstOrDefault();
                 if (tempTemplate != null && !string.IsNullOrEmpty(tempTemplate.Text))
                 {
                     var template = new Template(tempTemplate.Text);
-                    item.Template = template;
+                    itemToCreate.Template = template;
                 }
             }
 
-            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, item.ValidationResults());
+            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, itemToCreate.ValidationResults());
 
             if (ModelState.IsValid)
             {
-                Repository.OfType<Item>().EnsurePersistent(item);
+                Repository.OfType<Item>().EnsurePersistent(itemToCreate);
                 Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction(a => a.List(null));
             }
             else
             {
-                var viewModel = ItemViewModel.Create(Repository, CurrentUser, item);
+                var viewModel = ItemViewModel.Create(Repository, CurrentUser, itemToCreate);
                 viewModel.IsNew = true;
                 return View(viewModel);
             }
@@ -255,6 +235,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/GetExtendedProperties/{id}
+        /// Tested 20200427
         /// </summary>
         /// <param name="id">Id of the item type</param>
         /// <returns></returns>
@@ -270,21 +251,11 @@ namespace CRP.Controllers
             return new JsonNetResult(itemType.ExtendedProperties);
         }
 
-        public ActionResult MapOld(int id)
-        {
-            var item = Repository.OfType<Item>().GetNullableById(id);
-            if (item == null || !Access.HasItemAccess(CurrentUser, item))
-            {
-                return this.RedirectToAction(a => a.List(null));
-            }
-
-            //var viewModel = ItemViewModel.Create(Repository, CurrentUser, item); // For now use this view model, but all we really need it the item.
-
-            //return View(viewModel);
-            return View(item);
-
-        }
-
+        /// <summary>
+        /// Tested 20200422
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Map(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
@@ -303,6 +274,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// GET: /ItemManagement/Edit/{id}
+        /// Tested main page, but not all tabs 20200505. Tested all tabs 20200511
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -323,6 +295,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/Edit/{id}
+        /// Tested 20200505
         /// </summary>
         /// <remarks>
         /// Description:
@@ -342,7 +315,7 @@ namespace CRP.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [PageTracker]
-        public ActionResult Edit(int id, [Bind(Exclude = "Id")]Item item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool fidIsDisabled)
+        public ActionResult Edit(int id, EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool CanChangeFinanceAccount )
         {
             ModelState.Clear();
             var destinationItem = Repository.OfType<Item>().GetNullableById(id);
@@ -355,7 +328,21 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.List(null));
             }
 
-            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink, fidIsDisabled);//PopulateObject.Item(Repository, item, extendedProperties, tags);
+            //This was changed to a nullable decimal because text was setting the value to zero.
+            //Check it here because the copyItem sets the value and a null would trow an exception.
+            if (!item.CostPerItem.HasValue)
+            {
+                ModelState.AddModelError("Item.CostPerItem", "Please enter a valid amount (Just a number).");
+                item.CostPerItem = 0m;
+            }
+
+            if (!item.Quantity.HasValue)
+            {
+                ModelState.AddModelError("Item.Quantity", "Please enter a number for the Quantity.");
+                item.Quantity = 0;
+            }
+
+            destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink, CanChangeFinanceAccount);
 
             if(destinationItem.ExtendedPropertyAnswers != null && destinationItem.ExtendedPropertyAnswers.Count > 0)
             {
@@ -409,6 +396,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /ItemManagement/RemoveEditor
+        /// Tested 20200424
         /// </summary>
         /// <remarks>
         /// Description:
@@ -458,12 +446,13 @@ namespace CRP.Controllers
                 }
             }
 
-            //return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
-            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+            var redirectUrl = Url.Action("Edit", "ItemManagement", new { id });
+            return Redirect(redirectUrl + "#Editors");
         }
 
         /// <summary>
         /// POST: /ItemManagement/AddEditor
+        /// Tested 20200424
         /// </summary>
         /// <remarks>
         /// Description:
@@ -481,10 +470,12 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult AddEditor(int id, int? userId)
         {
+            var returnUrl = Url.Action("Edit", "ItemManagement", new { id }) + "#Editors";
+
             if (!userId.HasValue)
             {
                 Message = NotificationMessages.STR_SelectUserFirst;
-                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+                return Redirect(returnUrl);
             }
 
             var item = Repository.OfType<Item>().GetNullableById(id);
@@ -508,7 +499,7 @@ namespace CRP.Controllers
             if(item.Editors.Where(a => a.User.LoginID == user.LoginID).Any())
             {
                 Message = NotificationMessages.STR_EditorAlreadyExists;
-                return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+                return Redirect(returnUrl);
 
             }
 
@@ -526,12 +517,12 @@ namespace CRP.Controllers
                 Message = "Unable to add editor.";
             }
 
-            //return Redirect(ReturnUrlGenerator.EditItemUrl(id, StaticValues.Tab_Editors));
-            return Redirect(Url.EditItemUrl(id, StaticValues.Tab_Editors));
+            return Redirect(returnUrl);
         }
 
         /// <summary>
         /// POST: /ItemManagement/SaveTemplate
+        /// Tested 20200507
         /// </summary>
         /// <remarks>
         /// Description:
@@ -553,7 +544,7 @@ namespace CRP.Controllers
 
             if (item == null || string.IsNullOrEmpty(textPaid) || !Access.HasItemAccess(CurrentUser, item))
             {
-                return new JsonNetResult(null);
+                return new JsonNetResult("Unable to save. No Access or Paid text was empty.");
             }
 
             var template = new Template(textPaid + StaticValues.ConfirmationTemplateDelimiter + textUnpaid);
@@ -572,14 +563,15 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Item>().EnsurePersistent(item);
-                return new JsonNetResult(true);
+                return new JsonNetResult("Template Saved");
             }
 
-            return new JsonNetResult(null);
+            return new JsonNetResult("Unable to Save.");
         }
 
         /// <summary>
         /// GET: /ItemManagement/Details/{id}
+        /// Tested 20200506
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -600,6 +592,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// Toggles the transaction is active.
+        /// TESTED 20200506 And fixed
         /// </summary>
         /// <param name="id">The id.</param>
         /// <param name="sort">The sort.</param>
@@ -608,75 +601,105 @@ namespace CRP.Controllers
         [HttpPost]
         public ActionResult ToggleTransactionIsActive(int id, string sort, string page)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-
-
+            // get transaction
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if (transaction == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Transaction");
                 return this.RedirectToAction(a => a.List(null));
             }
+
+            // check item
             if (transaction.Item == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
                 return this.RedirectToAction(a => a.List(null));
             }
-            if(!Access.HasItemAccess(CurrentUser, transaction.Item))
+
+            // check user access
+            if (!Access.HasItemAccess(CurrentUser, transaction.Item))
             {
                 Message = NotificationMessages.STR_NoEditorRights;
                 return this.RedirectToAction(a => a.List(null));
             }
-            if (transaction.IsActive)
+
+            if (transaction.IsActive && transaction.Paid)
             {
-                if(transaction.Paid)
-                {
-                    ModelState.AddModelError("Deactivate", NotificationMessages.STR_Paid_transactions_can_not_be_deactivated);
-                }
+                // you can't deactivate paid registrations
+                ModelState.AddModelError("Deactivate", NotificationMessages.STR_Paid_transactions_can_not_be_deactivated);
             }
-            else
+            else if (!transaction.IsActive && (transaction.Item.Sold + transaction.Quantity) > transaction.Item.Quantity)
             {
-                if((transaction.Item.Sold + transaction.Quantity) > transaction.Item.Quantity)
-                {
-                    ModelState.AddModelError("Activate", NotificationMessages.STR_Transaction_can_not_be_activated);
-                }
+                // you can't activate too many transactions
+                ModelState.AddModelError("Activate", NotificationMessages.STR_Transaction_can_not_be_activated);
             }
+
+            // swap active
             transaction.IsActive = !transaction.IsActive;
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
-            if(ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                Repository.OfType<Transaction>().EnsurePersistent(transaction);
-                Message = transaction.IsActive
-                              ? NotificationMessages.STR_Activated.Replace(NotificationMessages.ObjectType, "Transaction")
-                              :
-                                  NotificationMessages.STR_Deactivated.Replace(NotificationMessages.ObjectType,
-                                                                               "Transaction");
+                Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");
+                var errors = string.Empty;
+                try
+                {
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                            errors = $"{errors}{error.ErrorMessage}<br/>";
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e.InnerException?.Message);
+                }
+                if (!string.IsNullOrWhiteSpace(errors))
+                {
+                    ErrorMessage = errors;
+                }
+                return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
             }
-            else
-            {
-                Message = NotificationMessages.STR_UnableToUpdate.Replace(NotificationMessages.ObjectType, "Transaction");  
-            }
+
+            // persist transaction
+            Repository.OfType<Transaction>().EnsurePersistent(transaction);
+
+            // set message based on old state => new state
+            Message = transaction.IsActive
+                ? NotificationMessages.STR_Activated.Replace(NotificationMessages.ObjectType, "Transaction")
+                : NotificationMessages.STR_Deactivated.Replace(NotificationMessages.ObjectType, "Transaction");
 
             try
             {
+                // update counts
                 if (Repository.OfType<Transaction>().Queryable.Any(a => a.Item.Id == transaction.Item.Id && a.IsActive))
                 {
-                    transaction.Item.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == transaction.Item.Id && a.IsActive).Sum(a => a.Quantity);
+                    transaction.Item.SoldCount = Repository.OfType<Transaction>().Queryable
+                        .Where(a => a.Item.Id == transaction.Item.Id && a.IsActive)
+                        .Sum(a => a.Quantity);
                 }
                 else
                 {
                     transaction.Item.SoldCount = 0;
                 }
                 
+                // persist item
                 Repository.OfType<Item>().EnsurePersistent(transaction.Item);
             }
             catch (Exception ex)
             {
-                Log.Error(string.Format("Error updating Item SoldCount {0}", ex.Message));
+                Log.Error("Error updating Item SoldCount", ex);
             }
-            return Redirect(Url.DetailItemUrl(transaction.Item.Id, StaticValues.Tab_Transactions, pageAndSort["sort"], pageAndSort["page"]));              
-            //return this.RedirectToAction(a => a.Details(transaction.Item.Id));
+
+            return RedirectToAction("Details", "ItemManagement", new {id = transaction.Item.Id});
         }
+
+        /// <summary>
+        /// Tested 20200511
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [PageTracker]
         public ActionResult Copy(int id)
         {
@@ -703,46 +726,6 @@ namespace CRP.Controllers
 
             return this.RedirectToAction(a => a.Edit(newItem.Id)); 
         }
-
-        ///// <summary>
-        ///// Validates the parameters.
-        ///// </summary>
-        ///// <param name="pageName">The page name.</param>
-        ///// <param name="sort">The sort.</param>
-        ///// <param name="page">The page.</param>
-        ///// <returns></returns>
-        //private Dictionary<string, string> ValidateParameters(string pageName, string sort, string page)
-        //{
-        //    var rtValue = new Dictionary<string, string>(2);
-
-        //    Int32 validPage;
-        //    if (!int.TryParse(page, out validPage))
-        //    {
-        //        validPage = 1;
-        //    }
-        //    rtValue.Add("page", validPage.ToString());
-
-        //    var validSort = new List<string>();
-        //    validSort.Add("TransactionNumber-asc");
-        //    validSort.Add("TransactionNumber-desc");
-        //    validSort.Add("Quantity-asc");
-        //    validSort.Add("Quantity-desc");
-        //    validSort.Add("Paid-asc");
-        //    validSort.Add("Paid-desc");
-        //    validSort.Add("IsActive-asc");
-        //    validSort.Add("IsActive-desc");
-        //    if (validSort.Contains(sort))
-        //    {
-        //        rtValue.Add("sort", sort);
-        //    }
-        //    else
-        //    {
-        //        rtValue.Add("sort", string.Empty);
-        //    }
-
-        //    return rtValue;
-        //}        
-
     }
 
     public class ExtendedPropertyParameter

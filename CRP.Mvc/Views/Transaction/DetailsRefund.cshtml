@@ -1,0 +1,83 @@
+﻿@model CRP.Controllers.ViewModels.EditTransactionViewModel
+@using CRP.Controllers.Helpers
+@using CRP.Core.Resources
+
+@{
+    ViewBag.Title = "Refund Details";
+}
+
+<div class="boundary">
+    <h2>@ViewBag.Title</h2>
+    <h3>Internal use only</h3>
+    @if (Model.TransactionValue.Check)
+    {
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        This is a check, and you or your department is responsible for processing the refund.
+    </div>
+    }
+
+    <fieldset>
+        <legend>Information</legend>
+        <ul>
+            <li>
+                Transaction Number: @Model.TransactionValue.TransactionNumber
+            </li>               
+            <li>
+                Transaction Unique Identifier (Needed for Credit Card Refund): 
+                @Model.TransactionValue.TransactionGuid + @Model.Fid
+            </li>
+            <li>
+                Transaction Date:
+                @Model.TransactionValue.TransactionDate
+            </li>    
+            <li>
+                Contact Name:
+                @Model.ContactName
+            </li>
+            <li>
+                Contact Email:
+                @Model.ContactEmail
+            </li> 
+            <li>
+                Payment Method: @(Model.TransactionValue.Check ? "Check" : "Credit Card")
+            </li>                
+            <li>
+                Amount:
+                @Model.TransactionValue.AmountTotal.ToString("C")
+            </li>
+            <li>
+                Donation Total:
+                @Model.TransactionValue.DonationTotal.ToString("C")
+            </li>
+            <li>
+                Total:
+                @Model.TransactionValue.Total.ToString("C")
+            </li>
+            <li>
+                Total Paid:
+                @Model.TransactionValue.TotalPaid.ToString("C")
+            </li>
+            <li>
+                Refund Amount:
+                @Model.RefundAmount.ToString("C")
+            </li>
+            <li>
+                Refund Date:
+                @Model.CreateDate.ToString()
+            </li>
+            <li>
+                Refund Created By:
+                @Model.CreatedBy
+            </li>
+            <li>
+                Refund Reason:
+                @Model.CorrectionReason
+            </li>
+        </ul>
+    </fieldset>
+
+    <div>
+        @Html.ActionLink("Back to Item", "Details", "ItemManagement", null, null, "Refunds", new { id = Model.TransactionValue.Item.Id }, null)
+    </div>
+</div>

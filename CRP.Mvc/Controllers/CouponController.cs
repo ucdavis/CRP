@@ -7,10 +7,7 @@ using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using MvcContrib;
-using MvcContrib.Attributes;
 using UCDArch.Web.ActionResults;
-using UCDArch.Web.Controller;
-using UCDArch.Web.Validator;
 
 namespace CRP.Controllers
 {
@@ -23,20 +20,13 @@ namespace CRP.Controllers
             _couponService = couponService;
         }
 
-        //
-        // GET: /Coupon/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         /// <summary>
         /// GET: /Coupon/Create/{itemId}
+        /// Tested 20200422
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [UserOnlyAttribute]
+        [UserOnly]
         public ActionResult Create(int itemId)
         {
             var item = Repository.OfType<Item>().GetNullableById(itemId);
@@ -53,6 +43,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Coupon/Create/{itemId}
+        /// Tested 20200422
         /// </summary>
         /// <remarks>
         /// Description:
@@ -85,8 +76,9 @@ namespace CRP.Controllers
 
             if (ModelState.IsValid)
             {
-                Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Coupon");
-                return Redirect(Url.EditItemUrl(item.Id, StaticValues.Tab_Coupons));
+                Message = $"Coupon created: {coupon.Code}"; //NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType, "Coupon");
+                var redirectUrl = Url.Action("Edit", "ItemManagement", new {id = item.Id});
+                return Redirect(redirectUrl + "#Coupons");
             }
 
             var viewModel = CouponViewModel.Create(Repository, item, couponType);
@@ -131,6 +123,7 @@ namespace CRP.Controllers
 
         /// <summary>
         /// POST: /Coupon/Deactivate/{id}
+        /// Tested 20200422
         /// </summary>
         /// <remarks>
         /// Description:
@@ -166,7 +159,27 @@ namespace CRP.Controllers
             }
 
             // redirect to edit with the anchor to coupon
-            return Redirect(Url.EditItemUrl(coupon.Item.Id, StaticValues.Tab_Coupons));
+            var redirectUrl = Url.Action("Edit", "ItemManagement", new {id = coupon.Item.Id});
+            return Redirect(redirectUrl + "#Coupons");
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult Details(int id)
+        {
+            var coupon = Repository.OfType<Coupon>().GetNullableById(id);
+
+            if (coupon == null)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+
+            if (!Access.HasItemAccess(CurrentUser, coupon.Item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+
+            return View(coupon);
         }
     }
 }

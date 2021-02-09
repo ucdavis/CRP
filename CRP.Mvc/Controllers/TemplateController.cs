@@ -17,6 +17,8 @@ namespace CRP.Controllers
     {
         /// <summary>
         /// GET: /Template/Edit
+        /// Tested 20200408
+        /// Called from ApplicationManagement Page
         /// </summary>
         /// <returns></returns>
         public ActionResult Edit()
@@ -31,6 +33,12 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200408
+        /// </summary>
+        /// <param name="paidText"></param>
+        /// <param name="unpaidText"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(string paidText, string unpaidText)

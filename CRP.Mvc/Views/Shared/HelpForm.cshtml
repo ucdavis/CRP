@@ -1,0 +1,42 @@
+﻿@model CRP.Core.Domain.HelpTopic
+
+@Html.ValidationSummary(true, "Save was unsuccessful. Please correct the errors and try again.")
+
+@Html.AntiForgeryToken()
+
+<div class="form-group">
+    <label for="Question">Frequently Asked Question:</label>
+    @Html.TextBoxFor(x => x.Question, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.Question)
+</div>
+<div class="checkbox">
+    <label for="IsActive">
+        @Html.CheckBoxFor(x => x.IsActive)
+        Is Active
+    </label>
+</div>
+<ldiv class="checkbox">
+    <label for="AvailableToPublic">
+        @Html.CheckBoxFor(x => x.AvailableToPublic)
+        Available To Public
+    </label>
+</ldiv>
+<div class="checkbox">
+    <label for="IsVideo">
+        @Html.CheckBoxFor(x => x.IsVideo)
+        Video
+    </label>
+</div>
+<div class="form-group">
+    <label for="VideoName">Name of video:</label>
+    @Html.TextBoxFor(x => x.VideoName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.IsVideoNeedsVideoName)
+</div>
+<div class="form-group">
+    <label for="Answer">Answer:</label>
+    @Html.TextBoxFor(x => x.Answer, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.IsNotVideoNeedsAnswer)
+</div>
+<div class="form-group">
+    <input class="btn btn-default" type="submit" value="Save" />
+</div>

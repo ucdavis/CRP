@@ -1,0 +1,85 @@
+﻿@model CRP.Controllers.ViewModels.EditTransactionViewModel
+@using CRP.Controllers.Helpers
+@using CRP.Core.Resources
+
+@{
+    ViewBag.Title = "Refund";
+}
+<div class="boundary">
+    <h2>Refund</h2>
+    <h3>Internal use only</h3>
+
+    @Html.ValidationSummary("Refund was unsuccessful. Please correct the errors and try again.")
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        if (Model.TransactionValue.Check)
+        {
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                This is a check, and you or your department will be responsible for processing the refund.
+            </div>
+        }
+
+        <fieldset>
+            <legend>Information</legend>
+            <ul>
+                <li>
+                    Transaction Number: @Model.TransactionValue.TransactionNumber
+                </li>               
+                <li>
+                    Transaction Unique Identifier (Needed for Credit Card Refund): 
+                    @Model.TransactionValue.TransactionGuid  @Model.Fid
+                </li>
+                
+                <li>
+                    Transaction Date:
+                    @Model.TransactionValue.TransactionDate
+                </li>    
+                <li>
+                    Contact Name:
+                    @Model.ContactName
+                </li>
+                <li>
+                    Contact Email:
+                    @Model.ContactEmail
+                </li> 
+                <li>
+                    Payment Method: @(Model.TransactionValue.Check ? "Check" : "Credit Card")
+                </li>                
+                <li>
+                    Amount:
+                    @Model.TransactionValue.AmountTotal.ToString("C")
+                </li>
+                <li>
+                    Donation Total:
+                    @Model.TransactionValue.DonationTotal.ToString("C")
+                </li>
+                <li>
+                    Total:
+                    @Model.TransactionValue.Total.ToString("C")
+                </li>
+                <li>
+                    Total Paid:
+                    @Model.TransactionValue.TotalPaid.ToString("C")
+                </li>
+            </ul>
+           <div class="form-group">
+                <label for="Amount">Refund Amount:</label>
+                @Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new {@class="amount form-control"})
+                @Html.ValidationMessage("Amount")
+                @Html.ValidationMessage("TotalPaid")
+           </div>
+            
+            <div class="form-group">
+                <label for="CorrectionReason">Refund Reason:</label>
+                @Html.TextArea("CorrectionReason", Model.CorrectionReason, new { @class = "form-control" })
+                @Html.ValidationMessage("Transaction.CorrectionReason")
+            </div>
+        </fieldset>
+        <input type="submit" value="Refund" class="btn btn-primary"/> 
+        @Html.ActionLink("Back to Item", "Details", "ItemManagement", null, null, "Refunds", new { id = Model.TransactionValue.Item.Id }, null)
+    } 
+
+
+</div>

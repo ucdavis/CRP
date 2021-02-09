@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 <div class="boundary">
     <h2>Edit</h2>
@@ -10,8 +9,6 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.Hidden("CheckSort", Model.Sort)
-        @Html.Hidden("CheckPage", Model.Page)
         <div>
             <div>
                 <h4>Transaction Number:</h4>
@@ -56,7 +53,7 @@
             <hr/>
             <div class="form-group">
                 <label for="Amount">Correction:</label>
-                @Html.TextBox("Amount", Model.Amount != 0 ? string.Format("{0:0.00}", Model.Amount) : string.Empty, new { @class = "amount form-control" })
+                @Html.TextBox("Amount", Model.Amount != 0 ? Model.Amount.ToString("C") : string.Empty, new { @class = "amount form-control" })
                 @Html.ValidationMessageFor(x => x.Amount)
                 @Html.ValidationMessage("Transaction.CorrectionAmount")
             </div>

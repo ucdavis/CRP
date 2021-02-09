@@ -1,9 +1,10 @@
 ﻿@using Microsoft.Azure
+
+
 @model CRP.Core.Domain.Item
 
 @{
     ViewBag.Title = "Map";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -15,6 +16,8 @@
             <ul class="dropdown-menu">
                 <li>@Html.ActionLink("Edit", "Edit", "ItemManagement", new { id = Model.Id }, null)</li>
                 <li>@Html.ActionLink("Details", "Details", "ItemManagement", new { id = Model.Id }, null)</li>
+                <li class="divider"></li>
+                <li>@Html.ActionLink("Back to List", "List", "ItemManagement")</li>
             </ul>
         </div>
     </div>
@@ -50,12 +53,14 @@
         <p>
             @Html.ActionLink("Add Map Pin", "Create", "MapPin", new {itemid = @Model.Id}, new {@class="btn btn-primary"})            
         </p>
-        <table id="table">
+        <span class="help-block">The first pin you add should be the location of your event.</span>
+        <table id="table" class="table table-bordered">
             <thead>
             <tr>
                 <th></th>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Primary Location</th>
             </tr>
             </thead>
             <tbody>
@@ -68,6 +73,7 @@
                     </td>
                     <td>@item.Title</td>
                     <td>@item.Description</td>
+                    <td>@item.IsPrimary</td>
                 </tr>
             }
             </tbody>
@@ -78,7 +84,6 @@
 @section AdditionalStyles
 {
     @Styles.Render("~/Content/gPositions")
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
 }
 
 @section AdditionalScripts
@@ -91,8 +96,6 @@
             $("#map").gPositions({ loadAll: true, helpIcon: '@Url.Content("~/Images/question_blue.png")', mode: MapMode.Standard });
         });
     </script>
-    
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     
     <script type="text/javascript">
         $(function() {

@@ -256,7 +256,7 @@ namespace CRP.Services
             //MapLink
             //LinkLink
             rtItem.CheckPaymentInstructions = sourceItem.CheckPaymentInstructions;
-            rtItem.TouchnetFID = sourceItem.TouchnetFID;
+            rtItem.FinancialAccount = sourceItem.FinancialAccount;
 
         }
     }

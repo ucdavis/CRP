@@ -20,6 +20,7 @@
 
     <many-to-one name="ItemType" class="CRP.Core.Domain.ItemType, CRP.Core" column="ItemTypeId" cascade="none" fetch="join" />
     <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" not-null="true" fetch="join" />
+    <many-to-one name="FinancialAccount" class="CRP.Core.Domain.FinancialAccount, CRP.Core" cascade="none" column="FinancialAccountId" fetch="join" />
 
     <property name="DateCreated" column="DateCreated" />
     <property name="Available" column="Available" />
@@ -38,8 +39,8 @@
     <property name="DonationLinkInformation" column="DonationLinkInformation" />
     <property name="DonationLinkText" column="DonationLinkText" />
     <property name="DonationLinkLink" column="DonationLinkLink" />
-    
-    <property name="TouchnetFID" column="TouchnetFID"/>
+
+
 
     <bag name="Templates" table="Templates" cascade="all-delete-orphan" inverse="true" >
       <key column="ItemId" />

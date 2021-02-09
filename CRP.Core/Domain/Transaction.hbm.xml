@@ -28,6 +28,8 @@
     <property name="CorrectionReason" column="CorrectionReason"/>
     <property name="TransactionGuid" column="TransactionGuid"/>
     <property name="FidUsed" column="FidUsed"/>
+
+    <many-to-one name="FinancialAccount" class="CRP.Core.Domain.FinancialAccount" column="FinancialAccountId" fetch="join" />
     
     <many-to-one name="ParentTransaction" class="CRP.Core.Domain.Transaction, CRP.Core" column="TransactionId" fetch="join" />
     <property name="TransactionNumber" column="TransactionNumber" insert="false" update="false" />

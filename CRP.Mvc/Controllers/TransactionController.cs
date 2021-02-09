@@ -1,12 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Mail;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
@@ -16,17 +10,14 @@ using CRP.Core.Abstractions;
 using CRP.Core.Domain;
 using CRP.Core.Helpers;
 using CRP.Core.Resources;
-using Microsoft.Azure;
+using CRP.Mvc.Controllers.ViewModels.Transaction;
+using CRP.Mvc.Models.Sloth;
+using CRP.Mvc.Resources;
+using CRP.Mvc.Services;
 using MvcContrib;
-using MvcContrib.Attributes;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Serilog;
-using UCDArch.Core.PersistanceSupport;
-using UCDArch.Core.Utils;
-using UCDArch.Data.NHibernate;
+using UCDArch.Web.ActionResults;
 using UCDArch.Web.Attributes;
-using UCDArch.Web.Controller;
 using UCDArch.Web.Helpers;
 using UCDArch.Web.Validator;
 
@@ -34,952 +25,203 @@ namespace CRP.Controllers
 {
     public class TransactionController : ApplicationController
     {
-        private readonly IRepositoryWithTypedId<OpenIdUser, string> _openIdUserRepository;
         private readonly INotificationProvider _notificationProvider;
+        private readonly ISlothService _slothService;
 
-        public TransactionController(IRepositoryWithTypedId<OpenIdUser, string> openIdUserRepository, INotificationProvider notificationProvider)
+        public TransactionController(INotificationProvider notificationProvider, ISlothService slothService)
         {
-            _openIdUserRepository = openIdUserRepository;
             _notificationProvider = notificationProvider;
+            _slothService = slothService;
         }
 
-        #region Checkout current
-
-        
         /// <summary>
-        /// GET: /Transaction/Checkout/{id}
+        /// Tested 20200527
         /// </summary>
-        /// <param name="id">Item id</param>
-        /// <param name="referenceId">Reference Number for external applications</param>
-        /// <param name="coupon"></param>
-        /// <param name="password"> </param>
-        /// <param name="agribusinessExtraParams"></param>
-        /// <returns></returns>
-        //public ActionResult CheckoutOld(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
-        //{
-        //    var item = Repository.OfType<Item>().GetNullableById(id);
-
-        //    if (item == null)
-        //    {
-        //        Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-        //        return this.RedirectToAction<HomeController>(a => a.Index());
-        //    }
-
-        //    var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon, password);
-        //    viewModel.Quantity = 1;
-        //    viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
-        //    if(!viewModel.Answers.Any())
-        //    {
-        //        viewModel.Answers = PopulateItemTransactionAnswer(agribusinessExtraParams, item.QuestionSets);
-        //    }
-        //    viewModel.TotalAmountToRedisplay = viewModel.Quantity*item.CostPerItem;
-        //    viewModel.CouponAmountToDisplay = 0.0m; //They have not entered a coupon yet
-        //    viewModel.CouponTotalDiscountToDisplay = 0.0m;
-        //    return View(viewModel);
-        //}
-
-
-
-        /// <summary>
-        /// POST: /Transaction/Checkout/{id}
-        /// </summary>
-        /// <remarks>
-        /// Description:
-        ///     Checks the shopper out for the item
-        /// Assumption:
-        ///     Item is valid (not expired, full and is available)
-        /// PreCondition:
-        ///     Item has not expired
-        ///     Item is not full and has enough quantity to accept the checkout
-        /// PostCondition:
-        ///     Transaction item is created and "paid" field is marked false
-        ///         At least Check or Credit field is true
-        ///         Quantity answers are populated
-        ///         Transaction answers are populated
-        ///     If donation is present, separate transaction record is created and linked to parent object
-        ///         Donation field is marked true
-        /// </remarks>
         /// <param name="id"></param>
-        /// <param name="referenceIdHidden"></param>
-        /// <param name="quantity">The quantity.</param>
-        /// <param name="donation">The donation.</param>
-        /// <param name="displayAmount">total amount calculated on the form</param>
-        /// <param name="paymentType">Type of the payment.</param>
-        /// <param name="restrictedKey">The restricted key.</param>
-        /// <param name="coupon">The coupon.</param>
-        /// <param name="transactionAnswers">The transaction answers.</param>
-        /// <param name="quantityAnswers">The quantity answers.</param>
-        /// <param name="captchaValid">if set to <c>true</c> [captcha valid].</param>
         /// <returns></returns>
-        //[CaptchaValidator]
-        //[HttpPost]
-        //public ActionResult CheckoutOld(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers, bool captchaValid)
-        //{
-        //    // if the arrays are null create new blank ones
-        //    if (transactionAnswers==null) transactionAnswers = new QuestionAnswerParameter[0];
-        //    if (quantityAnswers==null) quantityAnswers = new QuestionAnswerParameter[0];
+        public ActionResult Details(int id)
+        {
+            var transaction = Repository.OfType<Transaction>().GetNullableById(id);
+            if (transaction == null)
+            {
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
 
-
-        //    #region DB Queries
-        //    // get the item
-        //    var item = Repository.OfType<Item>().GetNullableById(id);
-
-
-
-        //    // get all the questions in 1 queries
-        //    var questionIds = transactionAnswers.Select(b => b.QuestionId).ToList().Union(quantityAnswers.Select(c => c.QuestionId).ToList()).ToArray();
-        //    var allQuestions = Repository.OfType<Question>().Queryable.Where(a => questionIds.Contains(a.Id)).ToList();
-
-        //    if(!string.IsNullOrWhiteSpace(referenceIdHidden))
-        //    {
-        //        var refId = allQuestions.FirstOrDefault(a => a.Name == "Reference Id");
-        //        if(refId != null)
-        //        {
-        //            if(transactionAnswers.Any(a => a.QuestionId == refId.Id && string.IsNullOrWhiteSpace(a.Answer)))
-        //            {
-        //                transactionAnswers.First(a => a.QuestionId == refId.Id && string.IsNullOrWhiteSpace(a.Answer)).Answer = referenceIdHidden;
-        //            }
-        //        }
-        //    }
-
-        //    // get the coupon
-        //    var coup = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == coupon && a.Item == item && a.IsActive).FirstOrDefault();
-        //    #endregion
-
-        //    // invalid item, or not available for registration
-        //    if (item == null)
-        //    {
-        //        Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-        //        return this.RedirectToAction<HomeController>(a => a.Index());
-        //    }
-        //    if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to over ride and register for things
-        //    {
-        //        if (!item.IsAvailableForReg)
-        //        {
-        //            Message = NotificationMessages.STR_NotAvailable.Replace(NotificationMessages.ObjectType, "Item");
-        //            return this.RedirectToAction<HomeController>(a => a.Index());
-        //        }
-        //    }
-
-        //    if (!captchaValid)
-        //    {
-        //        ModelState.AddModelError("Captcha", "Captcha values are not valid.");
-        //    }
-
-        //    if(quantity < 1 )
-        //    {
-        //        ModelState.AddModelError("Quantity", "Quantity must be at least 1");
-        //    }
-
-        //    var transaction = new Transaction(item);
-
-        //    var questionCount = 0;
-        //    foreach (var itemQuestionSet in item.QuestionSets.Where(a => a.QuantityLevel))
-        //    {
-        //        questionCount += itemQuestionSet.QuestionSet.Questions.Count;
-        //    }
-        //    if (questionCount * quantity != quantityAnswers.Count())
-        //    {
-        //        ModelState.AddModelError("Quantity Level", "The number of answers does not match the number of Quantity Level questions.");
-        //    }
-
-        //    // fill the openid user if they are openid validated
-        //    if (HttpContext.Request.IsOpenId())
-        //    {
-        //        // doesn't matter if it's null, just assign what we have
-        //        transaction.OpenIDUser = _openIdUserRepository.GetNullableById(CurrentUser.Identity.Name);
-        //    }
-
-        //    // deal with selected payment type
-        //    if (paymentType == StaticValues.CreditCard)
-        //    {
-        //        transaction.Credit = true;
-        //        transaction.Check = false;
-        //    }
-        //    else if (paymentType == StaticValues.Check)
-        //    {
-        //        transaction.Check = true;
-        //        transaction.Credit = false;
-        //    }
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
             
-        //    // deal with the amount
-        //    var amount = item.CostPerItem*quantity; // get the initial amount
-        //    decimal discount = 0.0m;                // used to calculate total discount
-        //    decimal couponAmount = 0.0m;            // used to display individual discount of one coupon
-        //    // get the email
-        //    if (coup != null)
-        //    {
-        //        // calculate the coupon discount
-        //        var emailQ = allQuestions.Where(a => a.Name == StaticValues.Question_Email && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).FirstOrDefault();
-        //        if (emailQ != null)
-        //        {
-        //            // get the answer
-        //            var answer = transactionAnswers.Where(a => a.QuestionId == emailQ.Id).FirstOrDefault();
-        //            discount = coup.UseCoupon(answer != null ? answer.Answer : null, quantity);
-        //        }
-        //        else
-        //        {
-        //            discount = coup.UseCoupon(null, quantity);
-        //        }
-                
-        //        // if coupon is used set display value
-        //        if(discount == 0)
-        //        {
-        //            ModelState.AddModelError("Coupon", NotificationMessages.STR_Coupon_could_not_be_used);
-        //            transaction.Coupon = null;
-        //        }
-        //        else
-        //        {
-        //            couponAmount = coup.DiscountAmount;
-        //            // record the coupon usage to this transaction
-        //            transaction.Coupon = coup;
-        //        }
-
-
-        //    }
-        //    transaction.Amount = amount - discount;
-        //    transaction.Quantity = quantity;
-
-        //    // deal with the transaction answers
-        //    foreach (var qa in transactionAnswers)
-        //    {
-        //        var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
-
-        //        // if question is null just drop it
-        //        if (question != null)
-        //        {
-        //            //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
-        //            //                 ? qa.Answer
-        //            //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
-        //            var answer = CleanUpAnswer(question.QuestionType.Name, qa, question.ValidationClasses);
-
-        //            // validate each of the validators
-        //            foreach (var validator in question.Validators)
-        //            {
-        //                string message;
-        //                if (!Validate(validator, answer, question.Name, out message))
-        //                {
-        //                    ModelState.AddModelError("Transaction Question", message);
-        //                }
-        //            }
-
-        //            var qanswer = new TransactionAnswer(transaction, question.QuestionSet, question, answer);
-        //            transaction.AddTransactionAnswer(qanswer);
-        //        }
-        //        //TODO: consider writing this to a log or something
-        //    }
-            
-        //    // deal with quantity level answers
-        //    for (var i = 0; i < quantity; i++)
-        //    {
-        //        // generate the unique id for each quantity
-        //        var quantityId = Guid.NewGuid();
-
-        //        foreach (var qa in quantityAnswers.Where(a => a.QuantityIndex == i))
-        //        {
-        //            var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
-        //            // if question is null just drop it
-        //            if (question != null)
-        //            {
-        //                //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
-        //                //                 ? qa.Answer
-        //                //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
-
-        //                var answer = CleanUpAnswer(question.QuestionType.Name, qa, question.ValidationClasses);
-                        
-        //                var fieldName = string.Format("The answer for question \"{0}\" for {1} {2}", question.Name, item.QuantityName, (i + 1));
-
-        //                // validate each of the validators
-        //                foreach (var validator in question.Validators)
-        //                {
-        //                    string message;
-        //                    if (!Validate(validator, answer, fieldName, out message))
-        //                    {
-        //                        ModelState.AddModelError("Quantity Question", message);
-        //                    }
-        //                }
-
-        //                var qanswer = new QuantityAnswer(transaction, question.QuestionSet, question, answer,
-        //                                                 quantityId);
-        //                transaction.AddQuantityAnswer(qanswer);
-        //            }
-        //        }
-        //    }
-            
-
-        //    // deal with donation
-        //    if (donation.HasValue && donation.Value > 0.0m)
-        //    {
-        //        var donationTransaction = new Transaction(item);
-        //        donationTransaction.Donation = true;
-        //        donationTransaction.Amount = donation.Value;
-
-        //        transaction.AddChildTransaction(donationTransaction);
-        //    }
-
-        //    // check to see if it's a restricted item
-        //    if (!string.IsNullOrEmpty(item.RestrictedKey) && item.RestrictedKey != restrictedKey)
-        //    {
-        //        ModelState.AddModelError("Restricted Key", "The item is restricted please enter the passphrase.");
-        //    }
-
-        //    if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to over ride and register for things
-        //    {
-        //        // do a final check to make sure the inventory is there
-        //        if (item.Sold + quantity > item.Quantity)
-        //        {
-        //            ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
-        //        }
-        //    }
-        //    //if (transaction.Total == 0 && transaction.Credit)
-        //    //{
-        //    //    ModelState.AddModelError("Payment Method", "Please select check payment type when amount is zero.");
-        //    //}
-        //    if(transaction.Total == 0)
-        //    {
-        //        transaction.Credit = false;
-        //        transaction.Check = true;
-        //    }
-        //    if (transaction.Total != displayAmount)
-        //    {
-        //        ModelState.AddModelError("Total", "We are sorry, the total amount displayed on the form did not match the total we calculated.");
-        //    }
-
-        //    MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        // create the new transaction
-        //        Repository.OfType<Transaction>().EnsurePersistent(transaction);
-
-        //        if(transaction.Paid && transaction.Check)
-        //        {
-        //            if(transaction.Item.CostPerItem == 0.0m || couponAmount > 0.0m)
-        //            {
-        //                //Ok, it is paid because the amount is zero, and it is because a coupon was used or the cost was zero
-        //                try
-        //                {
-        //                    //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
-        //                    var saveId = transaction.Id;
-        //                    NHibernateSessionManager.Instance.GetSession().Evict(transaction);
-        //                    transaction = Repository.OfType<Transaction>().GetNullableById(saveId);
-        //                    // attempt to get the contact information question set and retrieve email address
-        //                    var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
-        //                    if (question != null)
-        //                    {
-        //                        // send an email to the user
-        //                        _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
-        //                    }
-        //                }
-        //                catch (Exception)
-        //                {
-                            
-
-        //                }
-        //            }
-        //        }
-
-        //        var updatedItem = Repository.OfType<Item>().GetNullableById(transaction.Item.Id);
-        //        if (updatedItem != null)
-        //        {
-        //            //For whatever reason, if you are logged in with your CAES user, the item is updated, 
-        //            //if you are logged in with open id (google), item is not updated.
-        //            var transactionQuantity = transaction.Quantity;
-        //            if (updatedItem.Transactions.Contains(transaction))
-        //            {
-        //                transactionQuantity = 0;
-        //            }
-        //            if (updatedItem.Quantity - (updatedItem.Sold + transactionQuantity) <= 10)
-        //            {
-        //                _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, transactionQuantity);
-        //            }
-
-
-        //        }            
-        //        // redirect to confirmation and let the user decide payment or not
-        //        return this.RedirectToAction(a => a.Confirmation(transaction.Id));
-        //    }
-
-        //    var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden, null, null);
-        //    viewModel.Quantity = quantity;
-        //    viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
-        //    viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);
-        //    viewModel.CheckPayment = (paymentType == StaticValues.Check);
-        //    viewModel.TotalAmountToRedisplay = transaction.Total;
-        //    viewModel.CouponAmountToDisplay = couponAmount;
-        //    viewModel.CouponTotalDiscountToDisplay = discount;
-        //    return View(viewModel);
-        //}
-
-        #endregion Checkout current
-
-        #region Checkout New
-
+            return View(transaction);
+        }
 
         /// <summary>
-        /// GET: /Transaction/Checkout/{id}
+        /// GET: /Payment/LinkToTransaction/{id}
+        /// Point Up: Previous name location
+        /// Method to act on payment checks. (Add, Edit, Deactivate)
+        /// Tested 20200602
         /// </summary>
-        /// <param name="id">Item id</param>
-        /// <param name="referenceId">Reference Number for external applications</param>
-        /// <param name="coupon"></param>
-        /// <param name="password"> </param>
-        /// <param name="agribusinessExtraParams"></param>
+        /// <param name="transactionId">Transaction Id</param>
         /// <returns></returns>
-        public ActionResult Checkout(int id, string referenceId, string coupon, string password, AgribusinessExtraParams agribusinessExtraParams = null)
+        public ActionResult Link(int transactionId)
         {
-            var item = Repository.OfType<Item>().GetNullableById(id);
+            var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
+            if (transaction == null) return this.RedirectToAction<ItemManagementController>(a => a.List(null));
 
-            if (item == null)
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
             {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction<HomeController>(a => a.Index());
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon, password);
-            viewModel.Quantity = 1;
-            viewModel.Answers = PopulateItemTransactionAnswer(viewModel.OpenIdUser, item.QuestionSets); // populate the open id stuff for transaction answer contact information
-            if (!viewModel.Answers.Any())
-            {
-                viewModel.Answers = PopulateItemTransactionAnswer(agribusinessExtraParams, item.QuestionSets);
-            }
-            viewModel.TotalAmountToRedisplay = viewModel.Quantity * item.CostPerItem;
-            viewModel.CouponAmountToDisplay = 0.0m; //They have not entered a coupon yet
-            viewModel.CouponTotalDiscountToDisplay = 0.0m;
+            var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
+            viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
+
             return View(viewModel);
         }
-
-
-
         /// <summary>
-        /// POST: /Transaction/Checkout/{id}
+        /// Was previously in the Payment Controller
+        /// Method to act on payment checks. (Add, Edit, Deactivate)
+        /// Tested 20200602
         /// </summary>
-        /// <remarks>
-        /// Description:
-        ///     Checks the shopper out for the item
-        /// Assumption:
-        ///     Item is valid (not expired, full and is available)
-        /// PreCondition:
-        ///     Item has not expired
-        ///     Item is not full and has enough quantity to accept the checkout
-        /// PostCondition:
-        ///     Transaction item is created and "paid" field is marked false
-        ///         At least Check or Credit field is true
-        ///         Quantity answers are populated
-        ///         Transaction answers are populated
-        ///     If donation is present, separate transaction record is created and linked to parent object
-        ///         Donation field is marked true
-        /// </remarks>
-        /// <param name="id"></param>
-        /// <param name="referenceIdHidden"></param>
-        /// <param name="quantity">The quantity.</param>
-        /// <param name="donation">The donation.</param>
-        /// <param name="displayAmount">total amount calculated on the form</param>
-        /// <param name="paymentType">Type of the payment.</param>
-        /// <param name="restrictedKey">The restricted key.</param>
-        /// <param name="coupon">The coupon.</param>
-        /// <param name="transactionAnswers">The transaction answers.</param>
-        /// <param name="quantityAnswers">The quantity answers.</param>
+        /// <param name="transactionId"></param>
+        /// <param name="Checks"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Checkout(int id, string referenceIdHidden, int quantity, decimal? donation, decimal? displayAmount, string paymentType, string restrictedKey, string coupon, QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
+        public ActionResult Link(int transactionId, PaymentLog[] Checks)
         {
-            bool captchaValid = false;
-            var response = Request.Form["g-Recaptcha-Response"];
-            using (var client = new HttpClient())
+            ModelState.Clear();
+            var checkFound = false;
+            // get the transaction
+            var transaction = Repository.OfType<Transaction>().GetNullableById(transactionId);
+            if (transaction == null)
             {
-
-                var googleResponse = await client.PostAsync(String.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", CloudConfigurationManager.GetSetting("NewRecaptchaPrivateKey"), response), null);
-                googleResponse.EnsureSuccessStatusCode();
-                var responseContent = JsonConvert.DeserializeObject(await googleResponse.Content.ReadAsStringAsync());
-                dynamic data = JObject.FromObject(responseContent);
-                captchaValid = data.success;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
+            }
+            if (transaction.Item == null || !Access.HasItemAccess(CurrentUser, transaction.Item))
+            {
+                Message = NotificationMessages.STR_NoEditorRights;
+                return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
+            bool checkErrorFound = false;
 
-            // if the arrays are null create new blank ones
-            if (transactionAnswers == null) transactionAnswers = new QuestionAnswerParameter[0];
-            if (quantityAnswers == null) quantityAnswers = new QuestionAnswerParameter[0];
-
-
-            #region DB Queries
-            // get the item
-            var item = Repository.OfType<Item>().GetNullableById(id);
-
-
-
-            // get all the questions in 1 queries
-            var questionIds = transactionAnswers.Select(b => b.QuestionId).ToList().Union(quantityAnswers.Select(c => c.QuestionId).ToList()).ToArray();
-            var allQuestions = Repository.OfType<Question>().Queryable.Where(a => questionIds.Contains(a.Id)).ToList();
-
-            if (!string.IsNullOrWhiteSpace(referenceIdHidden))
+            // go through and process the checks
+            foreach (var check in Checks)
             {
-                var refId = allQuestions.FirstOrDefault(a => a.Name == "Reference Id");
-                if (refId != null)
+                PaymentLog paymentLog;
+                //check.DisplayCheckInvalidMessage = false;
+                //if (check.Id <= 0 && check.Accepted && (string.IsNullOrEmpty(check.Name) || string.IsNullOrEmpty(check.Name.Trim()) || check.Amount <= 0.0m))
+                //{                    
+                //    check.DisplayCheckInvalidMessage = true;
+                //    checkErrorFound = true;
+                //}
+
+                //Invalid ones will be rolled back from the record and not saved.
+                // new check that is considered accepted
+                if (check.Id <= 0 && check.Accepted) // && !string.IsNullOrEmpty(check.Name) && check.Amount > 0.0m)
                 {
-                    if (transactionAnswers.Any(a => a.QuestionId == refId.Id && string.IsNullOrWhiteSpace(a.Answer)))
+                    //If all these are empty, they probably just don't want it.
+                    if (!string.IsNullOrEmpty(check.Name) || check.Amount != 0 || !string.IsNullOrEmpty(check.Notes))
                     {
-                        transactionAnswers.First(a => a.QuestionId == refId.Id && string.IsNullOrWhiteSpace(a.Answer)).Answer = referenceIdHidden;
-                    }
-                }
-            }
-
-            // get the coupon
-            var coup = Repository.OfType<Coupon>().Queryable.Where(a => a.Code == coupon && a.Item == item && a.IsActive).FirstOrDefault();
-            #endregion
-
-            // invalid item, or not available for registration
-            if (item == null)
-            {
-                Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Item");
-                return this.RedirectToAction<HomeController>(a => a.Index());
-            }
-            if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to over ride and register for things
-            {
-                if (!item.IsAvailableForReg)
-                {
-                    Message = NotificationMessages.STR_NotAvailable.Replace(NotificationMessages.ObjectType, "Item");
-                    return this.RedirectToAction<HomeController>(a => a.Index());
-                }
-            }
-
-            if (!captchaValid)
-            {
-                ModelState.AddModelError("Captcha", "Captcha missing or invalid. Are you a robot?");
-            }
-
-            if (quantity < 1)
-            {
-                ModelState.AddModelError("Quantity", "Quantity must be at least 1");
-            }
-
-            var transaction = new Transaction(item);
-
-            var questionCount = 0;
-            foreach (var itemQuestionSet in item.QuestionSets.Where(a => a.QuantityLevel))
-            {
-                questionCount += itemQuestionSet.QuestionSet.Questions.Count;
-            }
-            if (questionCount * quantity != quantityAnswers.Count())
-            {
-                ModelState.AddModelError("Quantity Level", "The number of answers does not match the number of Quantity Level questions.");
-            }
-
-            // fill the openid user if they are openid validated
-            if (HttpContext.Request.IsOpenId())
-            {
-                // doesn't matter if it's null, just assign what we have
-                transaction.OpenIDUser = _openIdUserRepository.GetNullableById(CurrentUser.Identity.Name);
-            }
-
-            // deal with selected payment type
-            if (paymentType == StaticValues.CreditCard)
-            {
-                transaction.Credit = true;
-                transaction.Check = false;
-            }
-            else if (paymentType == StaticValues.Check)
-            {
-                transaction.Check = true;
-                transaction.Credit = false;
-            }
-
-            // deal with the amount
-            var amount = item.CostPerItem * quantity; // get the initial amount
-            decimal discount = 0.0m;                // used to calculate total discount
-            decimal couponAmount = 0.0m;            // used to display individual discount of one coupon
-            // get the email
-            if (coup != null)
-            {
-                // calculate the coupon discount
-                var emailQ = allQuestions.Where(a => a.Name == StaticValues.Question_Email && a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).FirstOrDefault();
-                if (emailQ != null)
-                {
-                    // get the answer
-                    var answer = transactionAnswers.Where(a => a.QuestionId == emailQ.Id).FirstOrDefault();
-                    discount = coup.UseCoupon(answer != null ? answer.Answer : null, quantity);
-                }
-                else
-                {
-                    discount = coup.UseCoupon(null, quantity);
-                }
-
-                // if coupon is used set display value
-                if (discount == 0)
-                {
-                    ModelState.AddModelError("Coupon", NotificationMessages.STR_Coupon_could_not_be_used);
-                    transaction.Coupon = null;
-                }
-                else
-                {
-                    couponAmount = coup.DiscountAmount;
-                    // record the coupon usage to this transaction
-                    transaction.Coupon = coup;
-                }
-
-
-            }
-            transaction.Amount = amount - discount;
-            transaction.Quantity = quantity;
-
-            // deal with the transaction answers
-            foreach (var qa in transactionAnswers)
-            {
-                var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
-
-                // if question is null just drop it
-                if (question != null)
-                {
-                    //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
-                    //                 ? qa.Answer
-                    //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
-                    var answer = CleanUpAnswer(question.QuestionType.Name, qa, question.ValidationClasses);
-
-                    // validate each of the validators
-                    foreach (var validator in question.Validators)
-                    {
-                        string message;
-                        if (!Validate(validator, answer, question.Name, out message))
+                        checkFound = true;
+                        paymentLog = Copiers.CopyCheckValues(check, new PaymentLog());
+                        paymentLog.Check = true;
+                        transaction.AddPaymentLog(paymentLog);
+                        if (!paymentLog.IsValid())
                         {
-                            ModelState.AddModelError("Transaction Question", message);
+                            //var test = paymentLog.ValidationResults();
+                            MvcValidationAdapter.TransferValidationMessagesTo(ModelState, paymentLog.ValidationResults());
+                            paymentLog.DisplayCheckInvalidMessage = true;
+                            checkErrorFound = true;
                         }
                     }
-
-                    var qanswer = new TransactionAnswer(transaction, question.QuestionSet, question, answer);
-                    transaction.AddTransactionAnswer(qanswer);
                 }
-                //TODO: consider writing this to a log or something
-            }
-
-            // deal with quantity level answers
-            for (var i = 0; i < quantity; i++)
-            {
-                // generate the unique id for each quantity
-                var quantityId = Guid.NewGuid();
-
-                foreach (var qa in quantityAnswers.Where(a => a.QuantityIndex == i))
+                // update an existing one
+                else if (check.Id > 0)
                 {
-                    var question = allQuestions.Where(a => a.Id == qa.QuestionId).FirstOrDefault();
-                    // if question is null just drop it
-                    if (question != null)
+                    checkFound = true;
+                    var tempCheck = Repository.OfType<PaymentLog>().GetNullableById(check.Id);
+                    paymentLog = Copiers.CopyCheckValues(check, tempCheck);
+                    if (paymentLog.Id > 0 && paymentLog.Accepted)// && (string.IsNullOrEmpty(paymentLog.Name) || string.IsNullOrEmpty(paymentLog.Name.Trim()) || paymentLog.Amount <= 0.0m))
                     {
-                        //var answer = question.QuestionType.Name != QuestionTypeText.STR_CheckboxList
-                        //                 ? qa.Answer
-                        //                 : (qa.CblAnswer != null ? string.Join(", ", qa.CblAnswer) : string.Empty);
-
-                        var answer = CleanUpAnswer(question.QuestionType.Name, qa, question.ValidationClasses);
-
-                        var fieldName = string.Format("The answer for question \"{0}\" for {1} {2}", question.Name, item.QuantityName, (i + 1));
-
-                        // validate each of the validators
-                        foreach (var validator in question.Validators)
+                        if (!paymentLog.IsValid())
                         {
-                            string message;
-                            if (!Validate(validator, answer, fieldName, out message))
-                            {
-                                ModelState.AddModelError("Quantity Question", message);
-                            }
+                            var test = paymentLog.ValidationResults();
+                            paymentLog.DisplayCheckInvalidMessage = true;
+                            checkErrorFound = true;
                         }
-
-                        var qanswer = new QuantityAnswer(transaction, question.QuestionSet, question, answer,
-                                                         quantityId);
-                        transaction.AddQuantityAnswer(qanswer);
                     }
                 }
             }
-
-
-            // deal with donation
-            if (donation.HasValue && donation.Value > 0.0m)
+            if (checkErrorFound)
             {
-                var donationTransaction = new Transaction(item);
-                donationTransaction.Donation = true;
-                donationTransaction.Amount = donation.Value;
-
-                transaction.AddChildTransaction(donationTransaction);
+                ModelState.AddModelError("Check", "At least one check is invalid or incomplete");
             }
 
-            // check to see if it's a restricted item
-            if (!string.IsNullOrEmpty(item.RestrictedKey) && item.RestrictedKey != restrictedKey)
-            {
-                ModelState.AddModelError("Restricted Key", "The item is restricted please enter the passphrase.");
-            }
 
-            if (!Access.HasItemAccess(CurrentUser, item)) //Allow editors to over ride and register for things
+            //figure out the total of the checks
+            var checktotal = transaction.PaymentLogs.Where(a => a.Accepted).Sum(a => a.Amount);
+            var transactiontotal = transaction.Total;
+
+            // more money is coming in than the transaction total, make a donation for the rest
+            if (checktotal > transactiontotal)
             {
-                // do a final check to make sure the inventory is there
-                if (item.Sold + quantity > item.Quantity)
-                {
-                    ModelState.AddModelError("Quantity", "There is not enough inventory to complete your order.");
-                }
-            }
-            //if (transaction.Total == 0 && transaction.Credit)
-            //{
-            //    ModelState.AddModelError("Payment Method", "Please select check payment type when amount is zero.");
-            //}
-            if (transaction.Total == 0)
-            {
-                transaction.Credit = false;
-                transaction.Check = true;
-            }
-            if (transaction.Total != displayAmount)
-            {
-                ModelState.AddModelError("Total", "We are sorry, the total amount displayed on the form did not match the total we calculated.");
+                //var donation = new Transaction(transaction.Item);
+                //donation.Donation = true;
+                //donation.Amount = checktotal - transactiontotal;
+
+                //transaction.AddChildTransaction(donation);
+                ModelState.AddModelError("Checks", "The check amount has exceeded the total amount. Enter a donation first.");
             }
 
             MvcValidationAdapter.TransferValidationMessagesTo(ModelState, transaction.ValidationResults());
 
             if (ModelState.IsValid)
             {
-                // create the new transaction
                 Repository.OfType<Transaction>().EnsurePersistent(transaction);
-
-                if (transaction.Paid && transaction.Check)
+                if (checkFound)
                 {
-                    if (transaction.Item.CostPerItem == 0.0m || couponAmount > 0.0m)
-                    {
-                        //Ok, it is paid because the amount is zero, and it is because a coupon was used or the cost was zero
-                        try
-                        {
-                            //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
-                            var saveId = transaction.Id;
-                            NHibernateSessionManager.Instance.GetSession().Evict(transaction);
-                            transaction = Repository.OfType<Transaction>().GetNullableById(saveId);
-                            // attempt to get the contact information question set and retrieve email address
-                            var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
-                            if (question != null)
-                            {
-                                // send an email to the user
-                                _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex.Message);
-
-                        }
-                    }
-                }
-
-                var updatedItem = Repository.OfType<Item>().GetNullableById(transaction.Item.Id);
-                if (updatedItem != null)
-                {
-                    try
-                    {
-                        updatedItem.SoldCount = Repository.OfType<Transaction>().Queryable.Where(a => a.Item.Id == updatedItem.Id && a.IsActive).Sum(a => a.Quantity);
-                        Repository.OfType<Item>().EnsurePersistent(updatedItem);
-
-                        if ((updatedItem.Quantity - updatedItem.SoldCount) <= 10)
-                        {
-                            try
-                            {
-                                var soldAndPaid = updatedItem.SoldAndPaidQuantity;
-                                _notificationProvider.SendLowQuantityWarning(Repository, updatedItem, soldAndPaid);
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Error("Error trying to send email notification {0}", ex.Message);
-                            }
-                        }
-
-                        if (updatedItem.NotifyEditors)
-                        {
-                            try
-                            {
-                                _notificationProvider.SendPurchaseToOwners(Repository, updatedItem, transaction.Quantity);
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Error("Error trying to send email notification2 {0}", ex.Message);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(string.Format("Error Updating SoldCount from user checkout {0}", ex.Message));
-                    }
-                }
-                // redirect to confirmation and let the user decide payment or not
-                return this.RedirectToAction(a => a.Confirmation(transaction.Id));
-            }
-
-            var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden, null, null);
-            viewModel.Quantity = quantity;
-            viewModel.Answers = PopulateItemTransactionAnswer(transactionAnswers, quantityAnswers);
-            viewModel.CreditPayment = (paymentType == StaticValues.CreditCard);
-            viewModel.CheckPayment = (paymentType == StaticValues.Check);
-            viewModel.TotalAmountToRedisplay = transaction.Total;
-            viewModel.CouponAmountToDisplay = couponAmount;
-            viewModel.CouponTotalDiscountToDisplay = discount;
-            return View(viewModel);
-        }
-
-        #endregion Checkout New
-
-        /// <summary>
-        /// Cleans up answer.
-        /// Null bools get changed to false
-        /// Null radio get set to an empty string (because it may not have the required attribute)
-        /// Null CheckboxList get set to an empty string
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="qa">The qa.</param>
-        /// <param name="validationClasses"></param>
-        /// <returns>The answer</returns>
-        private static string CleanUpAnswer(string name, QuestionAnswerParameter qa, string validationClasses)
-        {
-            string answer;
-            if (name != QuestionTypeText.STR_CheckboxList)
-            {
-                if (name == QuestionTypeText.STR_Boolean)
-                {
-                    //Convert unchecked bool of null to false
-                    if (string.IsNullOrEmpty(qa.Answer) || qa.Answer.ToLower() == "false")
-                    {
-                        answer = "false";
-                    }
-                    else
-                    {
-                        answer = "true";
-                    }
-                }
-                else if(name == QuestionTypeText.STR_TextArea)
-                {
-                    answer = qa.Answer;
-                }                
-                else
-                {      
-                    answer = qa.Answer ?? string.Empty;
-                    if (validationClasses != null && validationClasses.Contains("email"))
-                    {
-                        answer = answer.ToLower();
-                    }
-                }
-            }
-            else
-            {
-                if (qa.CblAnswer != null)
-                {
-                    answer = string.Join(", ", qa.CblAnswer);
+                    Message = "Checks associated with transaction.";
                 }
                 else
                 {
-                    answer = string.Empty;
+                    Message = "No checks found to add or update.";
                 }
+                if (transaction.Paid && !transaction.Notified)
+                {
+                    // attempt to get the contact information question set and retrieve email address
+                    var question = transaction.TransactionAnswers.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
+                    if (question != null)
+                    {
+                        // send an email to the user
+                        _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
+                    }
+                }
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transaction.Item.Id }) + "#Checks");
             }
-            return answer ?? (string.Empty);  //Something seems to have changed in the view where an empty text area now has null instead of an empty string
-        }
+            var viewModel = LinkPaymentViewModel.Create(Repository, transaction);
+            viewModel.PaymentLogs = transaction.PaymentLogs.Where(a => a.Check);
+            viewModel.AddBlankCheck = false; //We had errors, we will display what they entered without adding a new one.
 
+            //JCS Ok we have an invalid object, where we have added paymentLogs, 
+            //if they just go back to the list, the automatic commit will save the changes,
+            //so tring a rollback...
+            Repository.OfType<Transaction>().DbContext.RollbackTransaction(); //Moved after so invalid checks are not removed from the view
 
-        /// <summary>
-        /// GET: /Transaction/Confirmation/{id}
-        /// </summary>
-        /// <remarks>
-        /// Description:
-        ///     This is a confirmation page that displays a transaction confirmation
-        /// </remarks>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public ActionResult ConfirmationOld(int id)
-        {
-            var transaction = Repository.OfType<Transaction>().GetNullableById(id);            
-
-            if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
-
-            Check.Require(transaction.Item != null);
-            if(transaction.Credit)
-            {
-                Check.Require(!string.IsNullOrEmpty(transaction.Item.TouchnetFID));
-            }
-
-            string postingString = CloudConfigurationManager.GetSetting("TouchNetPostingKey");
-            //string Fid = " FID=" + CloudConfigurationManager.GetSetting("TouchNetFid"); 
-            string Fid = " FID=" + transaction.Item.TouchnetFID; 
-            var validationKey = CalculateValidationString(postingString, transaction.TransactionGuid.ToString() + Fid, transaction.Total.ToString());
-            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url, Fid);
             return View(viewModel);
         }
-
-        public ActionResult Confirmation(int id)
-        {
-            var transaction = Repository.OfType<Transaction>().GetNullableById(id);
-
-            if (transaction == null) return this.RedirectToAction<HomeController>(a => a.Index());
-
-            Check.Require(transaction.Item != null);
-            if (transaction.Credit)
-            {
-                Check.Require(!string.IsNullOrEmpty(transaction.Item.TouchnetFID));
-            }
-
-            string postingString = CloudConfigurationManager.GetSetting("TouchNetPostingKey");
-            //string Fid = " FID=" + CloudConfigurationManager.GetSetting("TouchNetFid"); 
-            string Fid = " FID=" + transaction.Item.TouchnetFID;
-            var validationKey = CalculateValidationString(postingString, transaction.TransactionGuid.ToString() + Fid, transaction.Total.ToString());
-            var viewModel = PaymentConfirmationViewModel.Create(Repository, transaction, validationKey, Request, Url, Fid);
-            return View(viewModel);
-        }
-        /// <summary>
-        /// Calculates the validation string.
-        /// </summary>
-        /// <param name="postingKey">The posting key.</param>
-        /// <param name="extTransID">The TransactionId</param>
-        /// <param name="amt">The AMT.</param>
-        /// <returns></returns>
-        public static string CalculateValidationString(string postingKey, string extTransID, string amt)
-        {
-            MD5 hash = MD5.Create();
-            byte[] data = hash.ComputeHash(Encoding.Default.GetBytes(postingKey + extTransID + amt));
-            return Convert.ToBase64String(data);
-        }
-
-        // ReSharper disable InconsistentNaming
-
-        /// <summary>
-        /// The payment was successfully set to touch net.
-        /// </summary>
-        /// <param name="UPAY_SITE_ID">The touch net U Pay Site id.</param>
-        /// <param name="EXT_TRANS_ID">The transaction Id.</param>
-        /// <returns></returns>
-        public ActionResult PaymentSuccess(string UPAY_SITE_ID, string EXT_TRANS_ID)
-        {
-            Message = NotificationMessages.STR_TouchNetSuccess;
-            return this.RedirectToAction<HomeController>(a => a.Index());
-        }
-
-        /// <summary>
-        /// The payment was canceled.
-        /// </summary>
-        /// <param name="UPAY_SITE_ID">The touch net U Pay Site id.</param>
-        /// <param name="EXT_TRANS_ID">The transaction Id.</param>
-        /// <returns></returns>
-        public ActionResult PaymentCancel(string UPAY_SITE_ID, string EXT_TRANS_ID)
-        {
-            Message = NotificationMessages.STR_TouchNetCanceled;
-            return this.RedirectToAction<HomeController>(a => a.Index());
-        }
-
-        /// <summary>
-        /// There was an error from touch net.
-        /// </summary>
-        /// <param name="UPAY_SITE_ID">The touch net U Pay Site id.</param>
-        /// <param name="EXT_TRANS_ID">The transaction Id.</param>
-        /// <returns></returns>
-        public ActionResult PaymentError(string UPAY_SITE_ID, string EXT_TRANS_ID)
-        {
-            Message = NotificationMessages.STR_TouchNetError;
-            return this.RedirectToAction<HomeController>(a => a.Index());
-        }
-        // ReSharper restore InconsistentNaming
 
         /// <summary>
         /// Edit Get
+        /// To add a correction (change amount for checks)
+        /// Tested 20200519
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort"></param>
-        /// <param name="page"></param>
         /// <returns></returns>
         [AnyoneWithRole]
-        public ActionResult Edit(int id, string sort, string page)
+        public ActionResult Edit(int id)
         {
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if(transaction == null)
@@ -1016,23 +258,19 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
-            viewModel.Page = pageAndSort["page"];
-            viewModel.Sort = pageAndSort["sort"];
-
             return View(viewModel);
         }
 
         /// <summary>
         /// Edit Post
+        /// To add a correction (change amount for checks)
+        /// Tested 20200519
         /// </summary>
         /// <param name="transaction">The transaction.</param>
-        /// <param name="checkSort"></param>
-        /// <param name="checkPage"></param>
         /// <returns></returns>
         [HttpPost]
         [AnyoneWithRole]
-        public ActionResult Edit(Transaction transaction, string checkSort, string checkPage)
+        public ActionResult Edit(Transaction transaction)
         {
             ModelState.Clear();
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(transaction.Id);
@@ -1053,8 +291,6 @@ namespace CRP.Controllers
                 }
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
-
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", checkSort, checkPage);
 
             var correctionTransaction = new Transaction(transactionToUpdate.Item);
             correctionTransaction.Amount = transaction.Amount;
@@ -1081,15 +317,7 @@ namespace CRP.Controllers
             if (ModelState.IsValid)
             {
                 Repository.OfType<Transaction>().EnsurePersistent(transactionToUpdate);
-                //return this.RedirectToAction<ItemManagementController>(a => a.Details(transactionToUpdate.Item.Id));
-                return
-                    Redirect(Url.DetailItemUrl
-                    (
-                        transactionToUpdate.Item.Id,
-                        StaticValues.Tab_Checks,
-                        pageAndSort["sort"],
-                        pageAndSort["page"])
-                    );
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Checks");
             }
 
             //TODO: We could replace the line below with a rollback to be more consistent.
@@ -1111,8 +339,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             
             return View(viewModel);
         }
@@ -1120,15 +346,13 @@ namespace CRP.Controllers
         /// <summary>
         /// Refunds the specified id.
         /// Get ..\Transaction\Refund
+        /// Tested 20200602
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort">The sort.</param>
-        /// <param name="page">The page.</param>
         /// <returns></returns>
         [RefunderOnly]
-        public ActionResult Refund(int id, string sort, string page)
+        public ActionResult Refund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transaction = Repository.OfType<Transaction>().GetNullableById(id);
             if (transaction == null)
             {
@@ -1151,13 +375,7 @@ namespace CRP.Controllers
             if(transaction.ChildTransactions.Where(a => a.Refunded && a.IsActive).Any())
             {
                 Message = @"Active Refund already exists.";
-                return Redirect(Url.DetailItemUrl
-                    (
-                        transaction.Item.Id,
-                        StaticValues.Tab_Refunds,
-                        pageAndSort["sort"],
-                        pageAndSort["page"])
-                    );
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transaction.Item.Id }) + "#Refunds");
             }
             var viewModel = EditTransactionViewModel.Create(Repository, transaction);
             viewModel.TransactionValue = transaction;
@@ -1175,22 +393,18 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Page = pageAndSort["page"];
-            viewModel.Sort = pageAndSort["sort"];
-
             return View(viewModel);
         }
 
         /// <summary>
         /// Refunds the specified transaction.
+        /// Tested 20200602
         /// </summary>
         /// <param name="transaction">The transaction.</param>
-        /// <param name="refundSort">The refund sort.</param>
-        /// <param name="refundPage">The refund page.</param>
         /// <returns></returns>
         [RefunderOnly]
         [HttpPost]
-        public ActionResult Refund(Transaction transaction, string refundSort, string refundPage)
+        public ActionResult Refund(Transaction transaction)
         {
             ModelState.Clear();
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(transaction.Id);
@@ -1212,7 +426,6 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", refundSort, refundPage);
 
             var refundTransaction = new Transaction(transactionToUpdate.Item);
             refundTransaction.Amount = transaction.Amount;
@@ -1240,15 +453,11 @@ namespace CRP.Controllers
                 if(transactionToUpdate.Credit)
                 {
                     var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
-                    _notificationProvider.SendRefundNotification(user, refundTransaction, false);
+                    var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
+                    _notificationProvider.SendRefundNotification(user, refundTransaction, false, link);
+                    Message = "An email has been sent to Accounting to process the Credit Card Refund.";
                 }
-                return Redirect(Url.DetailItemUrl
-                    (
-                        transactionToUpdate.Item.Id,
-                        StaticValues.Tab_Refunds,
-                        pageAndSort["sort"],
-                        pageAndSort["page"])
-                    );
+                return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Refunds");
             }
 
             //TODO: We could replace the line below with a rollback to be more consistent.
@@ -1270,8 +479,6 @@ namespace CRP.Controllers
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             viewModel.CorrectionReason = transaction.CorrectionReason;
             viewModel.RefundAmount = transaction.Amount;
 
@@ -1279,11 +486,15 @@ namespace CRP.Controllers
 
         }
 
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [RefunderOnly]
         [HttpPost]
-        public ActionResult RemoveRefund(int id, string sort, string page)
+        public ActionResult RemoveRefund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToUpdate == null)
             {
@@ -1307,13 +518,7 @@ namespace CRP.Controllers
             if(childTransaction == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Refund");
-                return Redirect(Url.DetailItemUrl
-                    (
-                        transactionToUpdate.Item.Id,
-                        StaticValues.Tab_Refunds,
-                        pageAndSort["sort"],
-                        pageAndSort["page"])
-                    );
+                return RedirectToAction("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id });
             }
 
             childTransaction.IsActive = false;
@@ -1321,20 +526,24 @@ namespace CRP.Controllers
             if(transactionToUpdate.Credit)
             {
                 var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
-                _notificationProvider.SendRefundNotification(user, childTransaction, true);
+                var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
+                _notificationProvider.SendRefundNotification(user, childTransaction, true, link);
+                Message = "An email has been sent to Accounting to cancel the Credit Card Refund.";
             }
-            return Redirect(Url.DetailItemUrl
-                (
-                    transactionToUpdate.Item.Id,
-                    StaticValues.Tab_Refunds,
-                    pageAndSort["sort"],
-                    pageAndSort["page"])
-                );
+            else
+            {
+                Message = "Check refund canceled.";
+            }
+            return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Refunds");
         }
 
-        public ActionResult SendNotification(int id, string sort, string page)
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult SendNotification(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToUpdate = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToUpdate == null)
             {
@@ -1360,27 +569,23 @@ namespace CRP.Controllers
             {
                 // send an email to the user
                 _notificationProvider.SendConfirmation(Repository, transactionToUpdate, question.Answer);
+                Message = $"Notification sent to {question.Answer}";
             }
 
-            return Redirect(Url.DetailItemUrl
-            (
-                transactionToUpdate.Item.Id,
-                StaticValues.Tab_Notifications,
-                pageAndSort["sort"],
-                pageAndSort["page"])
-            );
+            return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Notifications");
+
+            //return RedirectToAction("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }); //Above uses the Fragment.
+
         }
 
         /// <summary>
         /// Details of the refund.
+        /// Tested 20200602
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="sort">The sort.</param>
-        /// <param name="page">The page.</param>
         /// <returns></returns>
-        public ActionResult DetailsRefund(int id, string sort, string page)
+        public ActionResult DetailsRefund(int id)
         {
-            var pageAndSort = ValidateParameters.PageAndSort("ItemDetails", sort, page);
             var transactionToView = Repository.OfType<Transaction>().GetNullableById(id);
             if (transactionToView == null)
             {
@@ -1403,13 +608,8 @@ namespace CRP.Controllers
             if(childTransaction == null)
             {
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType, "Refund");
-                return Redirect(Url.DetailItemUrl
-                    (
-                        transactionToView.Item.Id,
-                        StaticValues.Tab_Refunds,
-                        pageAndSort["sort"],
-                        pageAndSort["page"])
-                    );
+                return RedirectToAction("Details", "ItemManagement", new { id = transactionToView.Item.Id });
+
             }
 
             var viewModel = EditTransactionViewModel.Create(Repository, transactionToView);
@@ -1419,17 +619,17 @@ namespace CRP.Controllers
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_FirstName).FirstOrDefault().Answer;
+
             viewModel.ContactName = viewModel.ContactName + " " + transactionToView.TransactionAnswers.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_LastName).FirstOrDefault().Answer;
+
             viewModel.ContactEmail = transactionToView.TransactionAnswers.Where(
                     a =>
                     a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
                     a.Question.Name == StaticValues.Question_Email).FirstOrDefault().Answer;
 
-            viewModel.Sort = pageAndSort["sort"];
-            viewModel.Page = pageAndSort["page"];
             viewModel.CorrectionReason = childTransaction.CorrectionReason;
             viewModel.CreateDate = childTransaction.TransactionDate;
             viewModel.CreatedBy = childTransaction.CreatedBy;
@@ -1439,405 +639,20 @@ namespace CRP.Controllers
         }
 
         /// <summary>
-        /// POST: /Transaction/PaymentResult/
+        /// Tested 20200603
         /// </summary>
-        /// <remarks>
-        /// Description:
-        ///     Deals with the return result from the payment gateway.
-        /// </remarks>
-        [HttpPost]
-        [BypassAntiForgeryToken]
-        public ActionResult PaymentResult(PaymentResultParameters touchNetValues)
-        {
-            #region Actual Work
-            // validate to make sure a transaction value was received
-            if (!string.IsNullOrEmpty(touchNetValues.EXT_TRANS_ID))
-            {
-                string parsedTransaction = touchNetValues.EXT_TRANS_ID.Substring(0,
-                                                                                 touchNetValues.EXT_TRANS_ID.LastIndexOf
-                                                                                     (" FID="));
-                var transaction = Repository.OfType<Transaction>()
-                    .Queryable.Where(a => a.TransactionGuid == new Guid(parsedTransaction))
-                    .SingleOrDefault();
-                //var transaction = Repository.OfType<Transaction>().GetNullableById(touchNetValues.EXT_TRANS_ID.Value);
-
-                if(transaction == null)
-                {
-                    #region Email Error Results
-                    _notificationProvider.SendPaymentResultErrors(CloudConfigurationManager.GetSetting("EmailForErrors"), touchNetValues, Request.Params, null, PaymentResultType.TransactionNotFound);
-                    #endregion Email Error Results
-
-                    return View();
-                }
-
-                // create a payment log
-                var paymentLog = new PaymentLog(transaction.Total);
-                paymentLog.Credit = true;
-
-                // on success, save the valid information
-                if (touchNetValues.PMT_STATUS.ToLower() == "success")
-                {
-                    paymentLog.Name = touchNetValues.NAME_ON_ACCT;
-                    paymentLog.Amount = touchNetValues.PMT_AMT.Value;
-                    paymentLog.Accepted = true;
-                    paymentLog.GatewayTransactionId = touchNetValues.TPG_TRANS_ID;
-                    paymentLog.CardType = touchNetValues.CARD_TYPE;
-                    if (!transaction.IsActive)
-                    {
-                        //Possibly we could email someone here to say it has been re-activated
-                        transaction.IsActive = true;
-                    }
-                }
-
-                paymentLog.TnBillingAddress1 = touchNetValues.acct_addr;
-                paymentLog.TnBillingAddress2 = touchNetValues.acct_addr2;
-                paymentLog.TnBillingCity = touchNetValues.acct_city;
-                paymentLog.TnBillingState = touchNetValues.acct_state;
-                paymentLog.TnBillingZip = touchNetValues.acct_zip;
-                paymentLog.TnCancelLink = touchNetValues.CANCEL_LINK;
-                paymentLog.TnErrorLink = touchNetValues.ERROR_LINK;
-                paymentLog.TnPaymentDate = touchNetValues.pmt_date;
-                paymentLog.TnSubmit = touchNetValues.Submit;
-                paymentLog.TnSuccessLink = touchNetValues.SUCCESS_LINK;
-                paymentLog.TnSysTrackingId = touchNetValues.sys_tracking_id;
-                paymentLog.TnUpaySiteId = touchNetValues.UPAY_SITE_ID;
-                switch (touchNetValues.PMT_STATUS.ToLower())
-                {
-                    case "success":
-                        paymentLog.TnStatus = "S";
-                        break;
-                    case "cancelled":
-                    case "canceled":
-                        paymentLog.TnStatus = "C";
-                        break;
-                    default:
-                        paymentLog.TnStatus = "E";
-                        break;
-                }
-
-                if(touchNetValues.posting_key != CloudConfigurationManager.GetSetting("TouchNetPostingKey"))
-                {
-                    ModelState.AddModelError("PostingKey", "Posting Key Error");
-                    paymentLog.Accepted = false;
-                }
-                if (touchNetValues.UPAY_SITE_ID != CloudConfigurationManager.GetSetting("TouchNetSiteId"))
-                {
-                    ModelState.AddModelError("SiteId", "TouchNet Site Id Error");
-                    paymentLog.Accepted = false;
-                }
-                if (touchNetValues.TPG_TRANS_ID == "DUMMY_TRANS_ID")
-                {
-                    ModelState.AddModelError("TPG_TRANS_ID", "TouchNet TPG_TRANS_ID Error");
-                    paymentLog.Accepted = false;
-                }
-                if (touchNetValues.PMT_AMT != transaction.Total)
-                {
-                    paymentLog.Accepted = false;
-                    if (touchNetValues.PMT_AMT != 0 && paymentLog.TnStatus == "S")
-                    {
-                        ModelState.AddModelError("Amount", "TouchNet Amount does not match local amount");
-                    }
-                }
-
-                transaction.AddPaymentLog(paymentLog);
-                //paymentLog.Transaction = transaction;
-
-                paymentLog.TransferValidationMessagesTo(ModelState);
-
-                if (ModelState.IsValid)
-                {
-                    Repository.OfType<Transaction>().EnsurePersistent(transaction);
-                    if (paymentLog.Accepted)
-                    {
-                        // attempt to get the contact information question set and retrieve email address
-                        var question =
-                            transaction.TransactionAnswers.Where(
-                                a =>
-                                a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation &&
-                                a.Question.Name == StaticValues.Question_Email).FirstOrDefault();
-                        if (question != null)
-                        {
-                            // send an email to the user
-                            _notificationProvider.SendConfirmation(Repository, transaction, question.Answer);
-                        }
-                        if (transaction.TotalPaid > transaction.Total)
-                        {
-                            _notificationProvider.SendPaymentResultErrors(
-                                CloudConfigurationManager.GetSetting("EmailForErrors"), touchNetValues, Request.Params, null,
-                                PaymentResultType.OverPaid);
-                        }
-                    }
-                }
-                else
-                {
-                    #region InValid PaymentLog -- Email Results                   
-                    var body = new StringBuilder();
-                    try
-                    {
-                        body.Append("<br/><br/>Payment log values:<br/>");
-                        body.Append("Name:" + paymentLog.Name + "<br/>");
-                        body.Append("Amount:" + paymentLog.Amount + "<br/>");
-                        body.Append("Accepted:" + paymentLog.Accepted + "<br/>");
-                        body.Append("Gateway transaction id:" + paymentLog.GatewayTransactionId + "<br/>");
-                        body.Append("Card Type: " + paymentLog.CardType + "<br/>");
-                        body.Append("ModelState: " + ModelState.IsValid);
-
-                        body.Append("<br/><br/>===== modelstate errors text===<br/>");
-                        foreach (var result in ModelState.Values)
-                        {
-                            foreach (var errs in result.Errors)
-                            {
-                                body.Append("Error:" + errs.ErrorMessage + "<br/>");
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        body.Append(ex.Message);
-                    }
-                    _notificationProvider.SendPaymentResultErrors(CloudConfigurationManager.GetSetting("EmailForErrors"), touchNetValues, Request.Params, body.ToString(), PaymentResultType.InValidPaymentLog);
-                    #endregion InValid PaymentLog -- Email Results
-                }
-            }
-            #endregion
-
-            return View();
-        }
-
-
-        /// <summary>
-        /// Compares an answer against a regular expression
-        /// </summary>
-        /// <param name="pattern"></param>
-        /// <param name="answer"></param>
         /// <returns></returns>
-        private bool Validate(Validator validator, string answer, string fieldName, out string message)
-        {
-            // set as default so we can return without having to set it individually
-            message = string.Empty;
-
-            // check to make sure we have a reg ex
-            if (string.IsNullOrEmpty(validator.RegEx)) return true;
-
-            var regExVal = new Regex(validator.RegEx);
-            // valid
-            // check for when answer is null, because when doing a radio button it is null when nothing is selected
-            if (regExVal.IsMatch(answer ?? string.Empty)) return true;
-
-            // not valid input provide error message
-            message = string.Format(validator.ErrorMessage, fieldName);
-            return false;
-        }
-
-        /// <summary>
-        /// This one is used for Agribusiness to pass these values.
-        /// </summary>
-        /// <param name="agribusinessExtraParams"></param>
-        /// <param name="questionSets"></param>
-        /// <returns></returns>
-        private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(AgribusinessExtraParams agribusinessExtraParams, ICollection<ItemQuestionSet> questionSets)
-        {
-            var answers = new List<ItemTransactionAnswer>();
-
-            // if anything is null, just return no answers
-            if(agribusinessExtraParams == null || questionSets == null)
-                return answers;
-
-            // find the contact information question set
-            var questionSet = questionSets.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).Select(a => a.QuestionSet).FirstOrDefault();
-
-            // if it exists, fill in the questions
-            if(questionSet != null)
-            {
-                var questionAnswer = new Dictionary<string, string>();
-                questionAnswer.Add(StaticValues.Question_FirstName, agribusinessExtraParams.FN);
-                questionAnswer.Add(StaticValues.Question_LastName, agribusinessExtraParams.LN);
-                questionAnswer.Add(StaticValues.Question_Title, agribusinessExtraParams.Title);
-                questionAnswer.Add(StaticValues.Question_StreetAddress, agribusinessExtraParams.Address);
-                questionAnswer.Add(StaticValues.Question_AddressLine2, agribusinessExtraParams.Address2);
-                questionAnswer.Add(StaticValues.Question_City, agribusinessExtraParams.City);
-                questionAnswer.Add(StaticValues.Question_State, agribusinessExtraParams.State != null ? agribusinessExtraParams.State.Trim().ToUpper() : string.Empty);
-                questionAnswer.Add(StaticValues.Question_Zip, agribusinessExtraParams.Zip);
-                questionAnswer.Add(StaticValues.Question_PhoneNumber, agribusinessExtraParams.Phone != null ? agribusinessExtraParams.Phone.Replace('.', '-') : string.Empty);
-                questionAnswer.Add(StaticValues.Question_Email, agribusinessExtraParams.Email);
-                questionAnswer.Add(StaticValues.Question_Region, string.Empty);
-                foreach (var question in questionSet.Questions)
-                {
-                    //If it doesn't find the question, it will throw an exception. (a good thing.)
-                    var ans = questionAnswer[question.Name];
-                    // create the answer object
-                    var answer = new ItemTransactionAnswer()
-                    {
-                        Answer = ans,
-                        QuestionId = question.Id,
-                        QuestionSetId = question.QuestionSet.Id,
-                        Transaction = true
-                    };
-
-                    answers.Add(answer);
-                }
-
-            }
-
-            return answers;
-        }
-
-        private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(OpenIdUser openIdUser, ICollection<ItemQuestionSet> questionSets)
-        {
-            var answers = new List<ItemTransactionAnswer>();
-
-            // if anything is null, just return no answers
-            if (openIdUser == null || questionSets == null) return answers;
-
-            // find the contact information question set
-            var questionSet = questionSets.Where(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation).Select(a => a.QuestionSet).FirstOrDefault();
-
-            // if it exists, fill in the questions
-            if (questionSet != null)
-            {
-                var questionAnswer = new Dictionary<string, string>();
-                questionAnswer.Add(StaticValues.Question_FirstName, openIdUser.FirstName);
-                questionAnswer.Add(StaticValues.Question_LastName, openIdUser.LastName);
-                questionAnswer.Add(StaticValues.Question_StreetAddress, openIdUser.StreetAddress);
-                questionAnswer.Add(StaticValues.Question_AddressLine2, openIdUser.Address2);
-                questionAnswer.Add(StaticValues.Question_City, openIdUser.City);
-                questionAnswer.Add(StaticValues.Question_State, openIdUser.State);
-                questionAnswer.Add(StaticValues.Question_Zip, openIdUser.Zip);
-                questionAnswer.Add(StaticValues.Question_PhoneNumber, openIdUser.PhoneNumber);
-                questionAnswer.Add(StaticValues.Question_Email, openIdUser.Email);
-                questionAnswer.Add(StaticValues.Question_Region, string.Empty);
-                foreach (var question in questionSet.Questions)
-                {
-                    //If it doesn't find the question, it will throw an exception. (a good thing.)
-                    var ans = questionAnswer[question.Name];
-                    // create the answer object
-                    var answer = new ItemTransactionAnswer()
-                    {
-                        Answer = ans,
-                        QuestionId = question.Id,
-                        QuestionSetId = question.QuestionSet.Id,
-                        Transaction = true
-                    };
-
-                    answers.Add(answer);
-                }
-
-                #region old way answers were assigned
-                //foreach(var question in questionSet.Questions)
-                //{
-                //    var ans = string.Empty;
-          
-                //    if (question.Name == StaticValues.Question_FirstName)
-                //    {
-                //        ans = openIdUser.FirstName;
-                //    }
-                //    else if (question.Name == StaticValues.Question_LastName)
-                //    {
-                //        ans = openIdUser.LastName;
-                //    }
-                //    else if (question.Name == StaticValues.Question_StreetAddress)
-                //    {
-                //        ans = openIdUser.StreetAddress;
-                //    }
-                //    else if (question.Name == StaticValues.Question_AddressLine2)
-                //    {
-                //        ans = openIdUser.Address2;
-                //    }
-                //    else if (question.Name == StaticValues.Question_City)
-                //    {
-                //        ans = openIdUser.City;
-                //    }
-                //    else if (question.Name == StaticValues.Question_State)
-                //    {
-                //        ans = openIdUser.State;
-                //    }
-                //    else if (question.Name == StaticValues.Question_Zip)
-                //    {
-                //        ans = openIdUser.Zip;
-                //    }
-                //    else if (question.Name == StaticValues.Question_PhoneNumber)
-                //    {
-                //        ans = openIdUser.PhoneNumber;
-                //    }
-                //    else if (question.Name == StaticValues.Question_Email)
-                //    {
-                //        ans = openIdUser.Email;
-                //    }
-
-                //    // create the answer object
-                //    var answer = new ItemTransactionAnswer()
-                //    {
-                //        Answer = ans,
-                //        QuestionId = question.Id,
-                //        QuestionSetId = question.QuestionSet.Id,
-                //        Transaction = true
-                //    };
-
-                //    answers.Add(answer);
-                //}
-                #endregion old way answers were assigned
-            }
-
-            return answers;
-        }
-        private IEnumerable<ItemTransactionAnswer> PopulateItemTransactionAnswer(QuestionAnswerParameter[] transactionAnswers, QuestionAnswerParameter[] quantityAnswers)
-        {
-            var answers = new List<ItemTransactionAnswer>();
-
-            foreach (var qap in transactionAnswers)
-            {
-                var question = Repository.OfType<Question>().GetNullableById(qap.QuestionId);
-                var answer = qap.Answer;
-
-                if (question != null)
-                {
-                    if (question.QuestionType.Name == QuestionTypeText.STR_CheckboxList && qap.CblAnswer != null)
-                        answer = string.Join(",", qap.CblAnswer);
-                }
-
-                var a = new ItemTransactionAnswer()
-                            {
-                                Answer = answer,
-                                QuestionId = qap.QuestionId,
-                                QuestionSetId = qap.QuestionSetId,
-                                Transaction = true
-                            };
-
-                answers.Add(a);
-            }
-
-            foreach (var qap in quantityAnswers)
-            {
-                var question = Repository.OfType<Question>().GetNullableById(qap.QuestionId);
-                var answer = qap.Answer;
-
-                if (question != null)
-                {
-                    if (question.QuestionType.Name == QuestionTypeText.STR_CheckboxList && qap.CblAnswer != null)
-                        answer = string.Join(",", qap.CblAnswer);
-                }
-
-                var a = new ItemTransactionAnswer()
-                            {
-                                Answer = answer,
-                                QuestionId = qap.QuestionId,
-                                QuestionSetId = qap.QuestionSetId,
-                                QuantityIndex = qap.QuantityIndex,
-                                Transaction = false
-                            };
-
-                answers.Add(a);
-            }
-
-            return answers;
-        }
-
-
         public ActionResult Lookup()
         {
             return View(LookupViewModel.Create(Repository));
         }
 
+        /// <summary>
+        /// Tested 20200603p
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Lookup(string orderNumber, string email)
         {
@@ -1863,8 +678,12 @@ namespace CRP.Controllers
                     {
                         if (!transaction.Paid && transaction.IsActive)
                         {
-                            if (transaction.PaymentLogs.Where(a => a.TnStatus == "C" || a.TnStatus == "E").Any())
+                            if (transaction.PaymentLogs.Any(a => a.TnStatus == "A" || a.TnStatus == "S"))
                             {
+                                //There is a successful payment, don't show payment link.
+                            }
+                            else 
+                            { 
                                 if(!transaction.RefundIssued ) //Just in case
                                 {
                                     viewModel.ShowCreditCardReSubmit = true;
@@ -1895,6 +714,11 @@ namespace CRP.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Tested 20200603
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [AdminOnly]
         public ActionResult AdminLookup(string email)
         {
@@ -1916,39 +740,143 @@ namespace CRP.Controllers
 
             return View(transactions);
         }
-    }
 
-    public class QuestionAnswerParameter
-    {
-        public int QuestionId { get; set; }
-        public int QuestionSetId { get; set; }
-        public int QuantityIndex { get; set; }
-        public string Answer { get; set; }
-
-        public string[] CblAnswer { get; set; }
-    }
-
-    public class AgribusinessExtraParams
-    {
         /// <summary>
-        /// FirstName
+        /// Tested 20200605
         /// </summary>
-        public string FN { get; set; }
-        /// <summary>
-        /// LastName
-        /// </summary>
-        public string LN { get; set; }
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [BypassAntiForgeryToken]
+        public async Task<ActionResult> DepositNotify(TransactionDepositNotification model)
+        {
+            Log.Information("DepositNotify - Starting");
+            // parse id
+            if (!int.TryParse(model.MerchantTrackingNumber, out int transactionId))
+            {
+                Log.Information("DepositNotify - merchant tracking number bad format");
+                return new JsonNetResult(new
+                {
+                    message = "merchant tracking number bad format",
+                    success = false,
+                });
+            }
 
-        public string Title { get; set; }
-        public string Address { get; set; }
-        public string Address2 { get; set; }
-        public string City { get; set; }
-        /// <summary>
-        /// State (2 Character)
-        /// </summary>
-        public string State { get; set; }
-        public string Zip { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
+            // find transaction with payment
+            // Only a successful paymentLog will have a GatewayTransactionId...
+            var paymentLog = Repository.OfType<PaymentLog>().Queryable
+                .FirstOrDefault(p => p.GatewayTransactionId == model.ProcessorTrackingNumber
+                                  && p.Transaction.Id == transactionId);
+
+
+
+            if (paymentLog == null)
+            {
+                Log.Information("DepositNotify - transaction not found for merchant tracking number");
+                return new JsonNetResult(new
+                {
+                    message = "transaction not found for merchant tracking number",
+                    success = false,
+                });
+            }
+
+            if (paymentLog.TnStatus != "A")
+            {
+                Log.Error("DepositNotify - Error PaymentLog found without accepted TNStatus");
+            }
+
+            if (paymentLog.Cleared)
+            {
+                Log.Information("DepositNotify - transaction already cleared");
+                return new JsonNetResult(new
+                {
+                    message = "transaction already cleared",
+                    success = false,
+                });
+            }
+
+            var transId = paymentLog.Transaction.TransactionNumber;
+
+            // build transfer request
+            var total = paymentLog.Amount;
+            var fee = total * FeeSchedule.StandardRate;
+            var income = total - fee;
+
+            // create transfers
+            var debitHolding = new CreateTransfer()
+            {
+                Amount      = total,
+                Direction   = CreateTransfer.CreditDebit.Debit,
+                Chart       = KfsAccounts.HoldingChart,
+                Account     = KfsAccounts.HoldingAccount,
+                ObjectCode  = KfsObjectCodes.Income,
+                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+            };
+
+            var feeCredit = new CreateTransfer()
+            {
+                Amount      = fee,
+                Direction   = CreateTransfer.CreditDebit.Credit,
+                Chart       = KfsAccounts.FeeChart,
+                Account     = KfsAccounts.FeeAccount,
+                ObjectCode  = KfsObjectCodes.Income,
+                Description = $"Processing Fee - {transId}".SafeTruncate(40)
+            };
+
+            var incomeCredit = new CreateTransfer()
+            {
+                Amount      = income,
+                Direction   = CreateTransfer.CreditDebit.Credit,
+                Chart       = paymentLog.Transaction.Item.FinancialAccount.Chart,
+                Account     = paymentLog.Transaction.Item.FinancialAccount.Account,
+                SubAccount  = paymentLog.Transaction.Item.FinancialAccount.SubAccount,
+                ObjectCode  = KfsObjectCodes.Income,
+                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+            };
+
+            // setup transaction
+            var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
+
+            var request = new CreateTransaction()
+            {
+                AutoApprove            = true,
+                MerchantTrackingNumber = paymentLog.Transaction.Id.ToString(),
+                MerchantTrackingUrl    = merchantUrl,
+                KfsTrackingNumber      = model.KfsTrackingNumber,
+                TransactionDate        = DateTime.UtcNow,
+                Transfers              = new List<CreateTransfer>()
+                {
+                    debitHolding,
+                    feeCredit, 
+                    incomeCredit,
+                },
+                Source                 = "Registration CyberSource",
+                SourceType             = "CyberSource",
+                ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
+            };
+            Log.Information("DepositNotify - Created Transaction");
+
+            //var getIt = JsonConvert.SerializeObject(request); //Debug it so can test in swagger
+            try
+            {
+                var response = await _slothService.CreateTransaction(request);
+            }
+            catch (Exception e)
+            {
+                Log.Information("DepositNotify - Exception");
+                throw;
+            }
+
+            Log.Information("DepositNotify - Success Creating Transaction");
+            // mark transaction as cleared
+            paymentLog.Cleared = true;
+            Repository.OfType<PaymentLog>().EnsurePersistent(paymentLog);
+            Log.Information("DepositNotify - Success Saving PaymentLog");
+            return new JsonNetResult(new
+            {
+                success = true,
+            });
+        }
     }
 }

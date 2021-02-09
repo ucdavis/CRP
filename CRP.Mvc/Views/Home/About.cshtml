@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "About Us";
+
+    var version = System.Reflection.Assembly.GetAssembly(ViewContext.Controller.GetType())
+        .GetName().Version.ToString();
+}
+
+<div class="boundary">
+<h2>@ViewBag.Title</h2>
+<div style="text-align: center;">
+    <h3>Developed By The College Of Agricultural And Environmental Science Dean's Office</h3><br/><br/>
+    Version @version
+</div>
+
+</div>

@@ -19,7 +19,7 @@ namespace CRP.Core.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class StaticValues {
@@ -120,96 +120,6 @@ namespace CRP.Core.Resources {
         public static string OpenId {
             get {
                 return ResourceManager.GetString("OpenId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/CheckView.ascx.
-        /// </summary>
-        public static string Partial_CheckView {
-            get {
-                return ResourceManager.GetString("Partial_CheckView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/FIDForm.ascx.
-        /// </summary>
-        public static string Partial_FidForm {
-            get {
-                return ResourceManager.GetString("Partial_FidForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/HelpForm.ascx.
-        /// </summary>
-        public static string Partial_HelpForm {
-            get {
-                return ResourceManager.GetString("Partial_HelpForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/ItemBrowse.ascx.
-        /// </summary>
-        public static string Partial_ItemBrowse {
-            get {
-                return ResourceManager.GetString("Partial_ItemBrowse", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/ItemForm.ascx.
-        /// </summary>
-        public static string Partial_ItemForm {
-            get {
-                return ResourceManager.GetString("Partial_ItemForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/LogOnUserControl.ascx.
-        /// </summary>
-        public static string Partial_LogOnUserControl {
-            get {
-                return ResourceManager.GetString("Partial_LogOnUserControl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/PageHeader.ascx.
-        /// </summary>
-        public static string Partial_PageHeader {
-            get {
-                return ResourceManager.GetString("Partial_PageHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/QuestionForm.ascx.
-        /// </summary>
-        public static string Partial_QuestionForm {
-            get {
-                return ResourceManager.GetString("Partial_QuestionForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/TagView.ascx.
-        /// </summary>
-        public static string Partial_TagView {
-            get {
-                return ResourceManager.GetString("Partial_TagView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/TransactionForm.ascx.
-        /// </summary>
-        public static string Partial_TransactionForm {
-            get {
-                return ResourceManager.GetString("Partial_TransactionForm", resourceCulture);
             }
         }
         
@@ -660,24 +570,6 @@ namespace CRP.Core.Resources {
         public static string Upay_ValidationKey {
             get {
                 return ResourceManager.GetString("Upay_ValidationKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/PageHeader.ascx.
-        /// </summary>
-        public static string View_PageHeader {
-            get {
-                return ResourceManager.GetString("View_PageHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ~/Views/Shared/TemplateInstructions.ascx.
-        /// </summary>
-        public static string View_TemplateInstructions {
-            get {
-                return ResourceManager.GetString("View_TemplateInstructions", resourceCulture);
             }
         }
     }

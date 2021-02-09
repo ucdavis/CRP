@@ -1,0 +1,55 @@
+﻿@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.PaymentConfirmationViewModel
+
+@{
+    ViewBag.Title = "Confirmation";
+}
+
+<div class="boundary">
+    <h2>Registration Confirmation</h2>
+    <p>You have successfully registered for the following event:</p>
+    <div>
+        <label>Event: </label>
+        @Model.Transaction.Item.Name
+    </div>
+    <div>
+        <label>Transaction: </label>
+        @Model.Transaction.TransactionNumber
+    </div>
+    <div>
+        <label>Amount: </label>
+        @($"{Model.Transaction.Total:C}")
+    </div>
+    
+    @if (Model.Transaction.Credit)
+    {
+        <div>
+            @if (Model.Transaction.Paid)
+            {
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    It appears this has been paid. If you think it hasn't you may still pay.
+                </div>
+            }
+            else
+            {
+                <p>Payment is still due:</p>
+            }
+            
+            <form action="@Model.PostUrl" method="post" autocomplete="off" style="margin-right: 3px">
+                @foreach (var pair in Model.PaymentDictionary)
+                {
+                    <input type="hidden" name="@pair.Key" value="@pair.Value"/>
+                }
+                <input type="hidden" name="signature" value="@Model.Signature"/>
+                <input type="submit" class="btn btn-primary" value="Click here to be taken to our payment site"/>
+            </form>
+        </div>
+    }
+    else if (Model.Transaction.Total > 0)
+    {
+        <div>
+            @Html.Raw(Model.Transaction.Item.CheckPaymentInstructions)
+        </div>
+    }
+</div>

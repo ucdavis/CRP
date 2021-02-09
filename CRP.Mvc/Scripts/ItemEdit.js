@@ -1,171 +1,93 @@
-﻿$(document).ready(function () {
-    $("input#Item_Expiration").datepicker();
+﻿$(function() {
+  $("input#Item_Expiration").datepicker();
 
+  $("select#Item_ItemTypeId").change(function(event) {
+    var url = window.getExtendedPropertyUrl;
+    $.getJSON(url + "/" + $(this).val(), {}, function(result) {
+      // remove old questions;
+      $("div#ExtendedProperties")
+        .children()
+        .remove();
 
-    $("select#Item_ItemType").change(function (event) {
+      if (!result.length) {
+        return;
+      }
 
-        var url = getExtendedPropertyUrl;
-        $.getJSON(url + '/' + $(this).val(), {},
-                    function (result) {
+      // for each question, add the input, etc
+      $.each(result, function(index, item) {
+        var name = item.Name.replace(/ /g, "");
 
-                        $("div#ExtendedProperties").children().remove();
+        // create container
+        var container = $("<div class='form-group'>");
 
-                        var length = result.length;
+        // create the label
+        var label = $("<label>")
+          .attr("for", "item." + name)
+          .html(item.Name);
 
+        // must have a title, or bt breaks all of this.
+        var textBox = $("<input>")
+          .attr("type", "text")
+          .attr("name", "ExtendedProperties[" + index + "].value")
+          .attr("class", "required form-control");
 
-                        if (length > 0) {
-                            $.each(result, function (index, item) {
+        // create hidden field to store the extended property id
+        var hidden = $("<input>")
+          .attr("type", "hidden")
+          .attr("name", "ExtendedProperties[" + index + "].propertyId")
+          .val(item.Id);
 
-                                var name = item.Name.replace(/ /g, "");
+        // add date values
+        if (item.QuestionType.Name === "Date") {
+          textBox
+            .attr("title", "mm/dd/yyyy")
+            .attr("placeholder", "mm/dd/yyyy")
+            .attr("data-date-format", "mm/dd/yyyy")
+            .datepicker();
+        }
 
-                                // create the label
-                                var label = $("<label>").attr("for", "item." + name).html(item.Name);
-                                // must have a title, or bt breaks all of this.
-                                var textBox = $("<input>").attr("id", "ExtendedProperties[" + index + "]_value")
-                                                          .attr("name", "ExtendedProperties[" + index + "].value")
-                                                          .attr("title", "")
-                                                          .attr("class", "required")
-                                                          .attr("type", "text");                                                          
-                                // create hidden field to store the extended property id
-                                var hidden = $("<input>").attr("type", "hidden")
-                                                         .attr("id", "ExtendedProperties[" + index + "]_propertyId")
-                                                         .attr("name", "ExtendedProperties[" + index + "].propertyId")
-                                                         .val(item.Id);
-                                //debugger;
-                                if (item.QuestionType.Name == "Date") {
-                                    //textBox.datepicker().watermark("mm/dd/yyyy", { className: "watermark" });
-                                    textBox.datepicker().bt('mm/dd/yyyy format');
-                                }
+        // build and append tree
+        container
+          .append(label)
+          .append(textBox)
+          .append(hidden);
 
-                                var p = $("<p>").append(label).append(textBox).append(hidden);
-                                $("div#ExtendedProperties").append(p);
-                            });
-                        }
-                    });
+        $("div#ExtendedProperties").append(container);
+      });
     });
+  });
 
-
-    $("img#tagAddButton").click(function (event) {
-        var input = $("<input>").attr("id", "tags").attr("name", "tags").val($("input#tagInput").val());
-        input.attr("type", "text");
-        input.css("cursor", "pointer");
-        input.click(function (event) { $(this).remove(); });
-        $("div#tagContainer").append(input);
-
-        // blank the input
-        $("input#tagInput").val("");
+  $("img#tagAddButton").click(function(event) {
+    var input = $("<input>")
+      .attr("id", "tags")
+      .attr("name", "tags")
+      .val($("input#tagInput").val());
+    input.attr("type", "text");
+    input.css("cursor", "pointer");
+    input.click(function(event) {
+      $(this).remove();
     });
+    $("div#tagContainer").append(input);
 
-    $("input#tags").click(function (event) {
-        $(this).remove();
-    });
+    // blank the input
+    $("input#tagInput").val("");
+  });
 
-    $("a.FormSubmit").click(function (event) {
-        //$(this).parents("form#RemoveForm").submit();
+  $("input#tags").click(function(event) {
+    $(this).remove();
+  });
 
-        $(this).parent().submit();
-    });
+  $("a.FormSubmit").click(function(event) {
+    //$(this).parents("form#RemoveForm").submit();
 
-    //    $("textarea#BodyText").tinymce({
-    //        script_url: scriptUrl,
-    //        // General options
-    //        theme: "advanced",
-    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
+    $(this)
+      .parent()
+      .submit();
+  });
 
-    //        // Theme options
-    //        theme_advanced_buttons1: "save,print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo,|,bullist,numlist",
-    //        theme_advanced_buttons3: "",
-    //        theme_advanced_toolbar_location: "top",
-    //        theme_advanced_toolbar_align: "left",
-    //        theme_advanced_statusbar_location: "bottom",
-    //        theme_advanced_resizing: false,
-
-    //        // dimensions stuff
-    //        height: "400",
-
-    //        // Example content CSS (should be your site CSS)
-    //        //content_css: "css/Main.css",
-
-    //        // Drop lists for link/image/media/template dialogs
-    //        template_external_list_url: "js/template_list.js",
-    //        external_link_list_url: "js/link_list.js",
-    //        external_image_list_url: "js/image_list.js",
-    //        media_external_list_url: "js/media_list.js",
-
-    //        save_onsavecallback: function() {
-    //            var textbox = $(this);
-    //            var token = $($("input:hidden[name='__RequestVerificationToken']")[0]).val();
-
-    //            $.post(saveTemplateUrl, { id: id, text: textbox.val(), __RequestVerificationToken: token }
-    //                , function(result) { if (result) { alert("template saved."); } else { alert("template was unable to save."); } });
-    //        }
-    //    });    
-
-
-    //    $("textarea#Item_Description").tinymce({
-    //        script_url: scriptUrl,
-    //        // General options
-    //        theme: "advanced",
-    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
-
-    //        // Theme options
-    //        theme_advanced_buttons1: "print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
-    //        theme_advanced_buttons3: "",
-    //        theme_advanced_toolbar_location: "top",
-    //        theme_advanced_toolbar_align: "left",
-    //        theme_advanced_statusbar_location: "bottom",
-    //        theme_advanced_resizing: false,
-
-    //        // dimensions stuff
-    //        height: "400",
-
-    //        // Example content CSS (should be your site CSS)
-    //        //content_css: "css/Main.css",
-
-    //        // Drop lists for link/image/media/template dialogs
-    //        template_external_list_url: "js/template_list.js",
-    //        external_link_list_url: "js/link_list.js",
-    //        external_image_list_url: "js/image_list.js",
-    //        media_external_list_url: "js/media_list.js"
-    //    });
-
-    //    $("textarea#Item_CheckPaymentInstructions").tinymce({
-    //        script_url: scriptUrl,
-    //        // General options
-    //        theme: "advanced",
-    //        plugins: "safari,style,save,searchreplace,print,contextmenu,paste",
-
-    //        // Theme options
-    //        theme_advanced_buttons1: "print,|,bold,italic,underline,|,styleselect,formatselect,fontselect,fontsizeselect",
-    //        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,undo,redo",
-    //        theme_advanced_buttons3: "",
-    //        theme_advanced_toolbar_location: "top",
-    //        theme_advanced_toolbar_align: "left",
-    //        theme_advanced_statusbar_location: "bottom",
-    //        theme_advanced_resizing: false,
-
-    //        // dimensions stuff
-    //        height: "225",
-
-    //        // Example content CSS (should be your site CSS)
-    //        //content_css: "css/Main.css",
-
-    //        // Drop lists for link/image/media/template dialogs
-    //        template_external_list_url: "js/template_list.js",
-    //        external_link_list_url: "js/link_list.js",
-    //        external_image_list_url: "js/image_list.js",
-    //        media_external_list_url: "js/media_list.js"
-    //    });
-
-    $("input#Item_QuantityName").change(function (event) {
-        var quantityName = $(this).val();
-        $("#CostPerItemLabel").text("Cost Per " + quantityName + ":");
-        $("#QuantityLabel").text("Number of " + quantityName + "(s) Available:");
-    });
-
-    $("#Item_TouchnetFID").change(function (event) {
-        $("#TouchnetFidExtraLable").text(" " + $(this).val());
-    });
+  $("input#Item_QuantityName").change(function(event) {
+    var quantityName = $(this).val();
+    $("#CostPerItemLabel").text("Cost Per " + quantityName + ":");
+    $("#QuantityLabel").text("Number of " + quantityName + "(s) Available:");
+  });
 });

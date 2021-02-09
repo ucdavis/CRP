@@ -1,0 +1,78 @@
+﻿@model CRP.Core.Domain.Transaction
+@{
+    ViewBag.Title = "Transaction Details";
+}
+
+<div class="container">
+    <h2>@ViewBag.Title</h2>
+    <p>
+        @Html.ActionLink(linkText: "Back to Item", actionName:"Details", controllerName: "ItemManagement", protocol: null, hostName: null, routeValues: new {id = Model.Item.Id}, fragment: "Transactions", htmlAttributes:null)
+    </p>
+    
+    <dl>
+        <dd>Amount</dd>
+        <dt>@Model.Amount.ToString("C")</dt>
+        
+        <dd>Quantity</dd>
+        <dt>@Model.Quantity</dt>
+    </dl>
+    
+    @if (Model.Paid == false && Model.Credit == true && Model.Refunded == false)
+    {
+        <strong>Link to Pay Page:</strong>
+        <span>
+            @Url.Action("Confirmation", "Payments", new { id = Model.Id }, "https")
+        </span>
+    }
+
+    <h3>Payment Logs</h3>
+    <table id="paymentLogsTable" class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Amount</th>
+            <th>Is Check</th>
+            <th>Gateway Transaction Id</th>
+            <th>Transaction Date</th>
+            <th>Accepted</th>
+            <th>CC Status</th>
+            <th>Is CyberSource</th>
+            <th>Cleared</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach(var log in Model.PaymentLogs)
+            {
+                <tr>
+                    <td>@log.Id</td>
+                    <td>@log.Amount.ToString("C")</td>
+                    <td>@log.Check</td>
+                    <td>@log.GatewayTransactionId</td>
+                    <td>@log.TnPaymentDate</td>
+                    <td>@log.Accepted</td>
+                    <td>@log.TnStatus</td>
+                    <td>@(string.IsNullOrWhiteSpace(log.ReturnedResults) ? "No":"Yes")</td>
+                    @if (!string.IsNullOrWhiteSpace(log.ReturnedResults))
+                    {
+                        <td>@(log.Cleared ? "Yes": "No")</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section AdditionalScripts
+{
+    <script>
+        $(function() {
+            $('#paymentLogsTable').DataTable({
+            });
+        });
+    </script>
+}

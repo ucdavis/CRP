@@ -21,29 +21,36 @@ namespace CRP.Core.Domain
 
         private void SetDefaults()
         {
-            DatePayment = DateTime.UtcNow.ToPacificTime();
-            Accepted = false;
-            Check = false;
-            Credit = false;
-            CheckNumberRequired = false;
-            NameRequired = false;
-            AmountRequired = false;
+            DatePayment                  = DateTime.UtcNow.ToPacificTime();
+            Accepted                     = false;
+            Check                        = false;
+            Credit                       = false;
+            CheckNumberRequired          = false;
+            NameRequired                 = false;
+            AmountRequired               = false;
             GatewayTransactionIdRequired = false;
-            CardTypeRequired = false;
-            CheckOrCredit = false;
-            DisplayCheckInvalidMessage = false;
+            CardTypeRequired             = false;
+            CheckOrCredit                = false;
+            DisplayCheckInvalidMessage   = false;
         }
 
         /// <summary>
         /// Payee's name
         /// </summary>         
         [StringLength(200)]
+        [Required]
         public virtual string Name { get; set; }
+
         /// <summary>
         /// Amount paid
         /// </summary>
+        [Required]
+        [Range(0, 100_000_000)]
         public virtual decimal Amount { get; set; }
+
+        [Required]
         public virtual DateTime DatePayment { get; set; }
+
         [Required]
         public virtual Transaction Transaction { get; set; }
 
@@ -51,7 +58,7 @@ namespace CRP.Core.Domain
         /// <summary>
         /// Payment gateway transaction id
         /// </summary>
-        [StringLength(16)]
+        [StringLength(40)]
         public virtual string GatewayTransactionId { get; set; }
         /// <summary>
         /// Card type that was used to pay
@@ -72,6 +79,9 @@ namespace CRP.Core.Domain
         public virtual bool Credit { get; set; }
         public virtual string Notes { get; set; }
 
+        public virtual bool Cleared { get; set; }
+
+
         #region TouchNet Return Values
 
         public virtual string TnStatus { get; set; } //S=Success, C=Canceled, E=Error
@@ -87,6 +97,8 @@ namespace CRP.Core.Domain
         public virtual string TnSubmit { get; set; }
         public virtual string TnSuccessLink { get; set; }
         public virtual string TnCancelLink { get; set; }
+
+        public virtual string ReturnedResults { get; set; } //CyberSource Raw results
 
 
         #endregion TouchNet Return Values
@@ -195,6 +207,8 @@ namespace CRP.Core.Domain
 
         [AssertFalse(ErrorMessage = "Check or Credit must be selected.")]
         public virtual bool CheckOrCredit { get; set; }
+
+
         #endregion Fields ONLY used for complex validation, not in database
     }
 }

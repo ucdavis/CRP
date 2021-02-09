@@ -4,7 +4,6 @@
 
 @{
     ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -22,7 +21,7 @@
         @Html.AntiForgeryToken()
     
         <div class="form-horizontal">
-            <h4>QuestionSet</h4>
+            <h4>Question Set</h4>
             <hr />
             @Html.ValidationSummary("Create was unsuccessful. Please correct the errors and try again.", new { @class = "text-danger" })
             @Html.Hidden("Id", Model.QuestionSet.Id)
@@ -35,7 +34,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            @*<div class="form-group">
                 @Html.LabelFor(model => model.QuestionSet.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <div class="checkbox">
@@ -43,7 +42,7 @@
                         @Html.ValidationMessageFor(model => model.QuestionSet.IsActive, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            </div>
+            </div>*@
 
 
             <div class="form-group">
@@ -61,7 +60,7 @@
         @Html.ActionLink("Create", "Create", "Question", new {questionSetId=Model.QuestionSet.Id}, new {@class="btn btn-primary"})
         
     </p>
-    <table id="table">
+    <table id="table-questions" class="table table-bordered">
         <thead>
         <tr>
             <td></td>
@@ -80,7 +79,7 @@
                     @using (Html.BeginForm<QuestionController>(a => a.Delete(q.Id), FormMethod.Post, new {name = "DeleteQuestionForm"}))
                          {
                              @Html.AntiForgeryToken()
-                             <a class="DeleteQuestion" href="javascript:;">Delete</a>
+                             <button type="submit" class="btn-link">Delete</button>
                          }
                 </td>
                 <td>@q.Order</td>
@@ -108,23 +107,14 @@
 
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
         $(function() {
-            $("#table").dataTable({
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+            $("#table-questions").dataTable({
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }
                 ]
             });
-            // assign the submit event to each of the delete links
-            $("a.DeleteQuestion").click(function (event) { $(this).parents("form[name='DeleteQuestionForm']").submit(); });
         });
 
     </script>
-}
-
-@section AdditionalStyles
-{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
 }

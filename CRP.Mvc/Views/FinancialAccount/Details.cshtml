@@ -1,0 +1,46 @@
+﻿@model CRP.Core.Domain.FinancialAccount
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@section NavButtons
+{
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+}
+
+<div class="boundary">
+    <h2>Details</h2>
+
+    <div>
+        <h4>Touchnet FID</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-md-4">
+                Account Number
+            </dt>
+            <dd class="col-md-8">
+                @Model.GetAccountString()
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", "FinancialAccount", new { id = Model.Id }, new {@class="btn"}) |
+        @Html.ActionLink("Back to List", "Index", "FinancialAccount", null, new {@class="btn"})
+    </p>
+</div>

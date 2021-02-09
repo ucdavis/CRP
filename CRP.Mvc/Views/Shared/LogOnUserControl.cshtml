@@ -1,0 +1,13 @@
+﻿@using CRP.Controllers.Helpers
+
+@if (Request.IsAuthenticated)
+{
+    <li>
+        @if (!Request.IsOpenId())
+        {
+            @Page.User.Identity.Name
+        }
+
+        [@Html.ActionLink("Logout", "Logout", "Account")]
+    </li>
+} 

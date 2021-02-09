@@ -1,17 +1,10 @@
 ﻿@model CRP.Controllers.ViewModels.BrowseItemsViewModel
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
-
-    var DisplayText = "Upcoming events";
-    if (Model == null || Model.Items.Count <= 0)
-    {
-        DisplayText = "There are currently no events to browse";
-    }
+    ViewBag.Title = "Home";
 }
 
 <div class="homepage bg-second">
     <div class="boundary">
-        @Html.Partial("_ItemBrowseNew", Model.Items)
+        @Html.Partial("_ItemBrowse", Model?.Items)
     </div>
 </div>

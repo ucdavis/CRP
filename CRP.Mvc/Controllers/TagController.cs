@@ -11,7 +11,12 @@ namespace CRP.Controllers
     {
         //
         // GET: /Tag/
-
+        /// <summary>
+        /// Tested 2080408
+        /// Note, not currently used anywhere.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public ActionResult Index(string tag)
         {
             var existingTag = Repository.OfType<Tag>().Queryable.Where(a => a.Name == tag).FirstOrDefault();

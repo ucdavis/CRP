@@ -1,8 +1,8 @@
-﻿@model IEnumerable<CRP.Mvc.Controllers.ViewModels.ItemListView>
+﻿@using Microsoft.Azure
+@model IEnumerable<CRP.Mvc.Controllers.ViewModels.ItemListView>
 
 @{
     ViewBag.Title = "List2";
-    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
 @section NavButtons
@@ -15,8 +15,8 @@
 <div class="boundary">
 
     <p>
-        @Html.ActionLink("Create New", "Create") | 
-        <a href="https://www.youtube.com/watch?v=Zi1DyKgev8M&feature=youtu.be" target="_blank">Watch Demo</a>
+        @Html.ActionLink("Create New", "Create", "ItemManagement", null, new {@class="btn"}) |
+        <a href='@CloudConfigurationManager.GetSetting("WatchDemoLink")' target="_blank"> Watch Demo</a>
     </p>
     <p>
         @using (Html.BeginForm("List", "ItemManagement", FormMethod.Get))
@@ -26,7 +26,7 @@
             <input type="submit" value="Filter"/>
         }
     </p>
-    <table class="table">
+    <table class="table table-bordered">
         <thead>
         <tr>
             <th></th>
@@ -60,7 +60,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td nowrap>
                         @Html.ActionLink("Details", "Details", new {id = item.Id}) |
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                         @Html.ActionLink("Map", "Map", new { id = item.Id }) |
@@ -69,8 +69,8 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td data-order="@item.CostPerItem">
-                        @string.Format("{0:C}", item.CostPerItem)
+                    <td data-sort="@item.CostPerItem">
+                        @($"{item.CostPerItem:C}")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Quantity)
@@ -78,17 +78,17 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Sold)
                     </td>
-                    <td>
-                        @string.Format("{0:d}", item.Expiration)
+                    <td data-sort="@(item.Expiration?.Ticks)">
+                        @($"{item.Expiration:d}")
                     </td>
-                    <td>
+                    <td data-sort="@item.DateCreated.Ticks">
                         @Html.DisplayFor(modelItem => item.DateCreated)
                     </td>
-                    <td>
+                    <td data-sort="@item.Available">
                         @Html.DisplayFor(modelItem => item.Available)
                     </td>
                     <td>
-                        @Html.ActionLink("Register", "Checkout", "Transaction", new {id = item.Id}, null)
+                        @Html.ActionLink("Register", "Checkout", "Payments", new {id = item.Id}, null)
                     </td>
                 </tr>
             }
@@ -99,23 +99,14 @@
 
 @section AdditionalScripts
 {
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-
     <script type="text/javascript">
         $(function() {
-            $(".table").dataTable({
-                "aaSorting": [[6, "desc"]], //Default sort on second column
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0, -1] }, //Disables sort on icon columns
-                    { 'type': 'date', 'aTargets': [5, 6] },
-                    { 'type': 'boolean', 'aTargets': [7] }
+            $(".table").DataTable({
+                sorting: [[6, "desc"]], //Default sort on second column
+                columnDefs: [
+                    { orderable: false, 'targets': [0, -1] }, //Disables sort on icon columns
                 ]
             });
         });
     </script>
-}
-
-@section AdditionalStyles
-{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
 }
