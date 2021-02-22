@@ -62,7 +62,7 @@ namespace CRP.Controllers.ViewModels
                 reportQuestionSetIds.Contains(a.QuestionSet.Id)).ToArray();
             
             var childTransactions = transactions.Where(a => a.ParentTransaction != null && transIds.Contains(a.ParentTransaction.Id)).ToArray();
-            var needPaymentLogs = itemReport.Columns.Where(a => a.Property).Any(a => a.Name == StaticValues.Report_Paid || a.Name == StaticValues.Report_TotalPaid);
+            var needPaymentLogs = itemReport.Columns.Where(a => a.Property).Any(a => a.Name == StaticValues.Report_Paid || a.Name == StaticValues.Report_TotalPaid || a.Name == StaticValues.Report_TransactionGuid);
             var paymentLogs = needPaymentLogs ? repository.OfType<PaymentLog>().Queryable.Where(a => transIds.Contains(a.Transaction.Id))
                 .ToArray() : new PaymentLog[0];
 
@@ -244,7 +244,28 @@ namespace CRP.Controllers.ViewModels
                 }
                 else if (itemReportColumn.Name == StaticValues.Report_TransactionGuid)
                 {
-                    result = transaction.Credit ? transaction.TransactionGuid.ToString() : "n/a";
+                    var acceptedCreditCardPaymentLog = transaction.PaymentLogs.FirstOrDefault(a => a.Accepted && a.Credit);
+                    if (acceptedCreditCardPaymentLog != null)
+                    {
+                        if (acceptedCreditCardPaymentLog.TnStatus == "S")
+                        {
+                            result = transaction.TransactionGuid.ToString();
+                            result = $"{result} (Touchnet)";
+                        }
+
+                        if (acceptedCreditCardPaymentLog.TnStatus == "A")
+                        {
+                            result = acceptedCreditCardPaymentLog.GatewayTransactionId;
+                            if (acceptedCreditCardPaymentLog.Cleared)
+                            {
+                                result = $"{result} (Cleared)";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result = "n/a";
+                    }
                 }
             }
 
