@@ -16,7 +16,15 @@
         <tr>
             @foreach (var ch in Model.ColumnNames)
             {
-                <td>@ch</td>
+                if (ch == "TransactionGuid")
+                {
+                    <td>Credit Card Id</td>
+                }
+                else
+                {
+                    <td>@ch</td>
+                }
+                
             }
         </tr>
         </thead>
