@@ -58,7 +58,14 @@ namespace CRP.Controllers
                 var dataRow = sheet.CreateRow(0);
                 for (int i = 0; i < viewModel.ColumnNames.Count; i++)
                 {
-                    dataRow.CreateCell(i).SetCellValue(viewModel.ColumnNames.ElementAt(i));
+                    if (viewModel.ColumnNames.ElementAt(i) == "TransactionGuid")
+                    {
+                        dataRow.CreateCell(i).SetCellValue("Credit Card Id");
+                    }
+                    else
+                    {
+                        dataRow.CreateCell(i).SetCellValue(viewModel.ColumnNames.ElementAt(i));
+                    }
                 }
 
                 var rowCount = 0;
