@@ -270,7 +270,7 @@ Your Transaction number is: {TransactionNumber}
                     accountId = refundTransaction.ParentTransaction.Item.FinancialAccount.GetAccountString() ?? string.Empty;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 accountId = "Not Found";
             }
