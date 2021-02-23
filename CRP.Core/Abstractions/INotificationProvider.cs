@@ -11,7 +11,9 @@ using UCDArch.Core.Utils;
 using System.Linq;
 using System.Net;
 using Microsoft.Azure;
+using Newtonsoft.Json;
 using Serilog;
+
 
 
 namespace CRP.Core.Abstractions
@@ -22,7 +24,7 @@ namespace CRP.Core.Abstractions
 
         void SendLowQuantityWarning(IRepository repository, Item item, int soldAndPaid);
 
-        void SendRefundNotification(User user, Transaction refundTransaction, bool canceled, string link);
+        void SendRefundNotification(User user, Transaction refundTransaction, bool canceled, string link, PaymentLog paymentLog);
 
         void TestEmailFromService(MailMessage message);
 
@@ -237,7 +239,7 @@ Your Transaction number is: {TransactionNumber}
             _emailService.SendEmail(message);
         }
 
-        public void SendRefundNotification(User user, Transaction refundTransaction, bool canceled, string link)
+        public void SendRefundNotification(User user, Transaction refundTransaction, bool canceled, string link, PaymentLog paymentLog)
         {
             var email = CloudConfigurationManager.GetSetting("EmailForRefunds");
             if(string.IsNullOrWhiteSpace(email))
@@ -257,13 +259,46 @@ Your Transaction number is: {TransactionNumber}
             }
 
             string accountId;
-            if (refundTransaction.ParentTransaction.FinancialAccount != null)
+            try
             {
-                accountId = refundTransaction.ParentTransaction.FinancialAccount.GetAccountString();
+                if (refundTransaction.ParentTransaction.FinancialAccount != null)
+                {
+                    accountId = refundTransaction.ParentTransaction.FinancialAccount.GetAccountString();
+                }
+                else
+                {
+                    accountId = refundTransaction.ParentTransaction.Item.FinancialAccount.GetAccountString() ?? string.Empty;
+                }
             }
-            else
+            catch (Exception)
             {
-                accountId = refundTransaction.ParentTransaction.Item.FinancialAccount.GetAccountString() ?? string.Empty;
+                accountId = "Not Found";
+            }
+
+
+            var processor = "???";
+            var processorId = string.Empty;
+            var cleared = string.Empty;
+            string creditCardEmail = string.Empty;
+            if (paymentLog != null && paymentLog.TnStatus == "A")
+            {
+                processor = "CyberSource";
+                processorId = paymentLog.GatewayTransactionId;
+                cleared = paymentLog.Cleared ? "Cleared" : "Not cleared at time of refund. Check Link.";
+                try
+                {
+                    dynamic data = JsonConvert.DeserializeObject(paymentLog.ReturnedResults);
+                    creditCardEmail = data.req_bill_to_email;
+                }
+                catch (Exception)
+                {
+                    creditCardEmail = "???";
+                }
+
+            }
+            if (paymentLog != null && paymentLog.TnStatus == "S")
+            {
+                processor = "Touchnet";
             }
 
             var body = new StringBuilder("Refund Information<br/><br/>");
@@ -278,6 +313,15 @@ Your Transaction number is: {TransactionNumber}
             body.Append("<br/>");
             body.Append("<b>Details</b><br/>");
             body.Append($"  <b>Transaction ID :</b> {refundTransaction.ParentTransaction.TransactionGuid}<br/>");
+            body.Append($"  <b>Processor :</b> {processor}<br/>");
+            if (!string.IsNullOrWhiteSpace(processorId))
+            {
+                body.Append($"  <b>Processor ID :</b> {processorId}<br/>");
+            }
+            if (!string.IsNullOrWhiteSpace(cleared))
+            {
+                body.Append($"  <b>Cleared? :</b> {cleared}<br/>");
+            }
             body.Append($"  <b>Account ID :</b> {accountId}<br/>");
             body.Append($"  <b>Link to Payment Details :</b> {link}<br/>");
             body.Append(string.Format("  <b>{0} :</b> ${1}<br/>", "Refund Amount", refundTransaction.Amount));
@@ -300,6 +344,10 @@ Your Transaction number is: {TransactionNumber}
                 body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "First Name", contactFirstName));
                 body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Last Name", contactLastName));
                 body.Append(string.Format("  <b>{0} :</b> {1}<br/>", "Email", contactEmail));
+                if (!string.IsNullOrWhiteSpace(creditCardEmail))
+                {
+                    body.Append($"  <b>Credit Card Email :</b> {creditCardEmail}<br/>");
+                }
             }
             catch(Exception ex)
             {
