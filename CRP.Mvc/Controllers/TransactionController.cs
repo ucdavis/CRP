@@ -426,7 +426,6 @@ namespace CRP.Controllers
                 return this.RedirectToAction<ItemManagementController>(a => a.List(null));
             }
 
-
             var refundTransaction = new Transaction(transactionToUpdate.Item);
             refundTransaction.Amount = transaction.Amount;
             refundTransaction.CorrectionReason = transaction.CorrectionReason;
@@ -454,7 +453,8 @@ namespace CRP.Controllers
                 {
                     var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
                     var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
-                    _notificationProvider.SendRefundNotification(user, refundTransaction, false, link);
+                    var paymentLog = transactionToUpdate.PaymentLogs.FirstOrDefault(a => a.Accepted);
+                    _notificationProvider.SendRefundNotification(user, refundTransaction, false, link, paymentLog);
                     Message = "An email has been sent to Accounting to process the Credit Card Refund.";
                 }
                 return Redirect(Url.Action("Details", "ItemManagement", new { id = transactionToUpdate.Item.Id }) + "#Refunds");
@@ -527,7 +527,8 @@ namespace CRP.Controllers
             {
                 var user = Repository.OfType<User>().Queryable.First(a => a.LoginID == CurrentUser.Identity.Name);
                 var link = Url.Action("Details", "Transaction", new { id = transactionToUpdate.Id }, protocol: "https");
-                _notificationProvider.SendRefundNotification(user, childTransaction, true, link);
+                var paymentLog = transactionToUpdate.PaymentLogs.FirstOrDefault(a => a.Accepted);
+                _notificationProvider.SendRefundNotification(user, childTransaction, true, link, paymentLog);
                 Message = "An email has been sent to Accounting to cancel the Credit Card Refund.";
             }
             else
