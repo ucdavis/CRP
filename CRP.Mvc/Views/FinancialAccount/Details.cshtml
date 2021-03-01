@@ -36,7 +36,12 @@
             <dd class="col-md-8">
                 @Model.GetAccountString()
             </dd>
-
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => model.IsActive)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => model.IsActive)
+            </dd>
         </dl>
     </div>
     <p>

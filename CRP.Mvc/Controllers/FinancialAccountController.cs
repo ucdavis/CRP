@@ -102,6 +102,7 @@ namespace CRP.Controllers
                 Account     = model.Account.SafeToUpper(),
                 SubAccount  = model.SubAccount.SafeToUpper(),
                 Project     = model.Project.SafeToUpper(),
+                IsActive    = true, 
             };
 
 
@@ -178,6 +179,7 @@ namespace CRP.Controllers
             account.Account = model.Account.SafeToUpper();
             account.SubAccount = model.SubAccount.SafeToUpper();
             account.Project = model.Project.SafeToUpper();
+            account.IsActive = model.IsActive;
 
             //We are not doing the validation here because there are some edge cases we want to allow.
             //So we will redirect to the details page the will show validation issues
