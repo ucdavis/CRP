@@ -104,29 +104,13 @@ namespace CRP.Controllers
                 Project     = model.Project.SafeToUpper(),
             };
 
-            //if (!await _financialService.IsAccountValid(account.Chart, account.Account, account.SubAccount))
-            //{
-            //    ModelState.AddModelError("Account", "Valid Account Not Found.");
-            //}
 
-            //if (!string.IsNullOrWhiteSpace(account.Project) && !await _financialService.IsProjectValid(account.Project))
+            //var accountValidation = await _financialService.IsAccountValidForRegistration(account);
+            //if (!accountValidation.IsValid)
             //{
-            //    ModelState.AddModelError("Project", "Project Not Valid.");
+            //    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
+            //    return View(model);
             //}
-
-            //var accountLookup = new KfsAccount();
-            //accountLookup = await _financialService.GetAccount(account.Chart, account.Account);
-            //if (!accountLookup.IsValidIncomeAccount)
-            //{
-            //    ModelState.AddModelError("Account", "Not An Income Account.");
-            //}
-
-            var accountValidation = await _financialService.IsAccountValidForRegistration(account);
-            if (!accountValidation.IsValid)
-            {
-                ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
-                return View(model);
-            }
 
             if (!ModelState.IsValid)
             {
@@ -137,7 +121,9 @@ namespace CRP.Controllers
             Repository.OfType<FinancialAccount>().EnsurePersistent(account);
             Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType,
                                                                    nameof(FinancialAccount));
-            return this.RedirectToAction(a => a.Index());
+
+            return this.RedirectToAction(a => a.Details(account.Id));
+            //return this.RedirectToAction(a => a.Index());
         }
 
 
@@ -193,48 +179,15 @@ namespace CRP.Controllers
             account.SubAccount = model.SubAccount.SafeToUpper();
             account.Project = model.Project.SafeToUpper();
 
-            var accountValidation = await _financialService.IsAccountValidForRegistration(account);
-            if (!accountValidation.IsValid)
-            {
-                ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
-                return View(model);
-            }
-
-            //if (!await _financialService.IsAccountValid(account.Chart, account.Account, account.SubAccount))
+            //We are not doing the validation here because there are some edge cases we want to allow.
+            //So we will redirect to the details page the will show validation issues
+            //var accountValidation = await _financialService.IsAccountValidForRegistration(account);
+            //if (!accountValidation.IsValid)
             //{
-            //    ModelState.AddModelError("Account", "Valid Account Not Found.");
+            //    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
             //    return View(model);
             //}
 
-            //if (!string.IsNullOrWhiteSpace(account.Project) && !await _financialService.IsProjectValid(account.Project))
-            //{
-            //    ModelState.AddModelError("Project", "Project Not Valid.");
-            //    return View(model);
-            //}
-
-            //var accountLookup = new KfsAccount();
-            //accountLookup = await _financialService.GetAccount(account.Chart, account.Account);
-            //if (!accountLookup.IsValidIncomeAccount)
-            //{
-            //    ModelState.AddModelError("Account", "Not An Income Account.");
-            //    return View(model);
-            //}
-
-           
-            ////Ok, not check if the org rolls up to our orgs
-            //if (await _financialService.IsOrgChildOfOrg(accountLookup.chartOfAccountsCode,
-            //        accountLookup.organizationCode, "3", "AAES ") ||
-            //    await _financialService.IsOrgChildOfOrg(accountLookup.chartOfAccountsCode,
-            //        accountLookup.organizationCode,
-            //        "L", "AAES "))
-            //{
-            //    //Ok, one of ours
-            //}
-            //else
-            //{
-            //    ModelState.AddModelError("Account", "Account not in CAES org.");
-            //    return View(model);
-            //}
 
             if (!ModelState.IsValid)
             {
@@ -245,7 +198,8 @@ namespace CRP.Controllers
             Repository.OfType<FinancialAccount>().EnsurePersistent(account);
             Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
                 nameof(FinancialAccount));
-            return this.RedirectToAction(a => a.Index());
+            return this.RedirectToAction(a => a.Details(account.Id));
+            //return this.RedirectToAction(a => a.Index());
 
         }
     }
