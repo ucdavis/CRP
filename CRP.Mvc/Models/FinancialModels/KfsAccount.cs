@@ -30,29 +30,8 @@ namespace CRP.Mvc.Models.FinancialModels
                 {
                     return false;
                 }
-                //These subFundGroupTypeCode checks were copied from payments, but don't really apply to Registration
-                //if (string.IsNullOrWhiteSpace(subFundGroupTypeCode))
-                //{
-                //    return false;
-                //}
-
-                //if (subFundGroupTypeCode == "1") //Agency Accounts
-                //{
-                //    return true;
-                //}
-                //if (subFundGroupTypeCode == "4") //Sales and Service of Teaching Hospital
-                //{
-                //    return true;
-                //}
-                //if (subFundGroupTypeCode.Equals("M", StringComparison.OrdinalIgnoreCase)) //Self Supporting Activities(Other Sources
-                //{
-                //    return true;
-                //}
-
-                //if (subFundGroupTypeCode.Equals("Y", StringComparison.OrdinalIgnoreCase)) //Sales and Service Educational Activities
-                //{
-                //    return true;
-                //}
+                //Look at Payments subFundGroupTypeCode checks to see other income checks, but don't really apply to Registration
+                
 
                 if (string.IsNullOrWhiteSpace(subFundGroupCode))
                 {
