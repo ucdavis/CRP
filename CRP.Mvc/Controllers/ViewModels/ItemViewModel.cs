@@ -18,6 +18,7 @@ namespace CRP.Controllers.ViewModels
         public bool CanChangeFinanceAccount { get; set; }
 
         public bool FinancialAccountActive { get; set; } = true;
+        public string FinancialAccountWarning { get; set; }
 
         public string PaidText { get; set; }
 

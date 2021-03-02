@@ -88,6 +88,10 @@
         {
             <p class="alert-danger">Account is not active. Please select a different account and save if you will accept further Credit Card registrations.</p>
         }
+        @if (!string.IsNullOrWhiteSpace(Model.FinancialAccountWarning))
+        {
+            <p class="alert-danger">@Model.FinancialAccountWarning</p>
+        }
 
         @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--",  getFinancialAccountHtmlOptions())
         @Html.ValidationMessage("Item.FinancialAccount")

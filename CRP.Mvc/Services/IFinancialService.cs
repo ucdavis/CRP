@@ -276,7 +276,7 @@ namespace CRP.Mvc.Services
             {
                 rtValue.IsValid = false;
                 rtValue.Field = "Account";
-                rtValue.Message = "Not An Income Account.";
+                rtValue.Message = "Not An Income Account/Events Account.";
                 return rtValue;
             }
 

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers;
@@ -13,6 +14,7 @@ using CRP.Core.Resources;
 using CRP.Mvc.Controllers.Helpers;
 using CRP.Mvc.Controllers.ViewModels;
 using CRP.Mvc.Controllers.ViewModels.ItemManagement;
+using CRP.Mvc.Services;
 using CRP.Services;
 using MvcContrib;
 using Serilog;
@@ -25,11 +27,13 @@ namespace CRP.Controllers
     public class ItemManagementController : ApplicationController
     {
         private readonly ICopyItemService _copyItemService;
+        private readonly IFinancialService _financialService;
 
 
-        public ItemManagementController(ICopyItemService copyItemService)
+        public ItemManagementController(ICopyItemService copyItemService, IFinancialService financialService)
         {
             _copyItemService = copyItemService;
+            _financialService = financialService;
         }
 
         //Tested 20200422
@@ -279,7 +283,7 @@ namespace CRP.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [PageTracker]
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             var item = Repository.OfType<Item>().GetNullableById(id);
             if (item == null || !Access.HasItemAccess(CurrentUser, item))
@@ -289,6 +293,14 @@ namespace CRP.Controllers
 
             var viewModel = ItemViewModel.Create(Repository, CurrentUser, item);
 
+            if (item.FinancialAccount != null && item.FinancialAccount.IsActive)
+            {
+                var checkAccount = await _financialService.IsAccountValidForRegistration(item.FinancialAccount);
+                if (!checkAccount.IsValid)
+                {
+                    viewModel.FinancialAccountWarning = $"Warning! Account may be invalid: {checkAccount.Message}";
+                }
+            }
 
             return View(viewModel);
         }
