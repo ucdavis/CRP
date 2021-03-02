@@ -298,7 +298,7 @@ namespace CRP.Controllers
                 var checkAccount = await _financialService.IsAccountValidForRegistration(item.FinancialAccount);
                 if (!checkAccount.IsValid)
                 {
-                    viewModel.FinancialAccountWarning = $"Warning! Account may be invalid: {checkAccount.Message}";
+                    viewModel.FinancialAccountWarning = $"Warning! Account may be invalid. If you will continue to accept Credit Card payments for this event, you may want to submit a help ticket. Error: {checkAccount.Message}";
                 }
             }
 
