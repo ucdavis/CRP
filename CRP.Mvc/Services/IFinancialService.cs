@@ -283,10 +283,10 @@ namespace CRP.Mvc.Services
 
             //Ok, not check if the org rolls up to our orgs
             if (await IsOrgChildOfOrg(accountLookup.chartOfAccountsCode,
-                    accountLookup.organizationCode, "3", "AAES ") ||
+                    accountLookup.organizationCode, "3", "AAES") ||
                 await IsOrgChildOfOrg(accountLookup.chartOfAccountsCode,
                     accountLookup.organizationCode,
-                    "L", "AAES "))
+                    "L", "AAES"))
             {
                 rtValue.IsValid = true;
                 return rtValue;
