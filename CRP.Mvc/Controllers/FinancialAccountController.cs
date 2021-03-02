@@ -1,9 +1,13 @@
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers.Filter;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
+using CRP.Mvc.Models.FinancialModels;
+using CRP.Mvc.Services;
 using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
@@ -14,6 +18,12 @@ namespace CRP.Controllers
     [AdminOnly]
     public class FinancialAccountController : ApplicationController
     {
+        private readonly IFinancialService _financialService;
+
+        public FinancialAccountController(IFinancialService financialService)
+        {
+            _financialService = financialService;
+        }
 
         /// <summary>
         /// Index
@@ -34,7 +44,7 @@ namespace CRP.Controllers
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns></returns>
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             var account = Repository.OfType<FinancialAccount>().GetNullableById(id);
             if (account == null)
@@ -42,6 +52,17 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,
                     nameof(FinancialAccount));
                 return this.RedirectToAction(a => a.Index());
+            }
+
+            var accountValidation = await _financialService.IsAccountValidForRegistration(account);
+            if (!accountValidation.IsValid)
+            {
+                ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
+                ErrorMessage = $"Invalid Account: Field: {accountValidation.Field} Error: {accountValidation.Message}";
+            }
+            else
+            {
+                Message = "Account is still valid!";
             }
 
             return View(account);
@@ -65,7 +86,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [HttpPost]
         [PageTracker]
-        public ActionResult Create(FinancialAccount model)
+        public async Task<ActionResult> Create(FinancialAccount model)
         {
             if (!ModelState.IsValid)
             {
@@ -77,16 +98,33 @@ namespace CRP.Controllers
             {
                 Name        = model.Name,
                 Description = model.Description,
-                Chart       = model.Chart,
-                Account     = model.Account,
-                SubAccount  = model.SubAccount,
-                Project     = model.Project,
+                Chart       = model.Chart.SafeToUpper(),
+                Account     = model.Account.SafeToUpper(),
+                SubAccount  = model.SubAccount.SafeToUpper(),
+                Project     = model.Project.SafeToUpper(),
+                IsActive    = true, 
             };
+
+
+            //var accountValidation = await _financialService.IsAccountValidForRegistration(account);
+            //if (!accountValidation.IsValid)
+            //{
+            //    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
+            //    return View(model);
+            //}
+
+            if (!ModelState.IsValid)
+            {
+                Message = "Account Invalid";
+                return View(model);
+            }
 
             Repository.OfType<FinancialAccount>().EnsurePersistent(account);
             Message = NotificationMessages.STR_ObjectCreated.Replace(NotificationMessages.ObjectType,
                                                                    nameof(FinancialAccount));
-            return this.RedirectToAction(a => a.Index());
+
+            return this.RedirectToAction(a => a.Details(account.Id));
+            //return this.RedirectToAction(a => a.Index());
         }
 
 
@@ -107,6 +145,7 @@ namespace CRP.Controllers
                                                                       nameof(FinancialAccount));
                 return this.RedirectToAction(a => a.Index());
             }
+
             return View(account);
         }
 
@@ -119,7 +158,7 @@ namespace CRP.Controllers
         /// <returns></returns>
         [HttpPost]
         [PageTracker]
-        public ActionResult Edit(int id, FinancialAccount model)
+        public async Task<ActionResult> Edit(int id, FinancialAccount model)
         {
             var account = Repository.OfType<FinancialAccount>().GetNullableById(id);
             if (account == null)
@@ -136,15 +175,33 @@ namespace CRP.Controllers
 
             account.Name = model.Name;
             account.Description = model.Description;
-            account.Chart = model.Chart;
-            account.Account = model.Account;
-            account.SubAccount = model.SubAccount;
-            account.Project = model.Project;
+            account.Chart = model.Chart.SafeToUpper();
+            account.Account = model.Account.SafeToUpper();
+            account.SubAccount = model.SubAccount.SafeToUpper();
+            account.Project = model.Project.SafeToUpper();
+            account.IsActive = model.IsActive;
+
+            //We are not doing the validation here because there are some edge cases we want to allow.
+            //So we will redirect to the details page the will show validation issues
+            //var accountValidation = await _financialService.IsAccountValidForRegistration(account);
+            //if (!accountValidation.IsValid)
+            //{
+            //    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
+            //    return View(model);
+            //}
+
+
+            if (!ModelState.IsValid)
+            {
+                Message = "Account Invalid";
+                return View(model);
+            }
 
             Repository.OfType<FinancialAccount>().EnsurePersistent(account);
             Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
                 nameof(FinancialAccount));
-            return this.RedirectToAction(a => a.Index());
+            return this.RedirectToAction(a => a.Details(account.Id));
+            //return this.RedirectToAction(a => a.Index());
 
         }
     }
