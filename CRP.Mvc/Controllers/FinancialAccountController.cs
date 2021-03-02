@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -101,7 +102,7 @@ namespace CRP.Controllers
                 Chart       = model.Chart.SafeToUpper(),
                 Account     = model.Account.SafeToUpper(),
                 SubAccount  = model.SubAccount.SafeToUpper(),
-                Project     = model.Project.SafeToUpper(),
+                Project     = model.Project.SafeToUpper(), //Not used?
                 IsActive    = true, 
             };
 
@@ -116,6 +117,16 @@ namespace CRP.Controllers
             if (!ModelState.IsValid)
             {
                 Message = "Account Invalid";
+                return View(model);
+            }
+
+            if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
+                a.Chart == account.Chart &&
+                a.Account == account.Account &&
+                a.SubAccount == account.SubAccount &&
+                a.Project == account.Project))
+            {
+                ErrorMessage = "That account already exists";
                 return View(model);
             }
 
@@ -197,9 +208,21 @@ namespace CRP.Controllers
                 return View(model);
             }
 
+            var warning = string.Empty;
+            if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
+                a.IsActive && a.Id != account.Id && 
+                a.Chart == account.Chart &&
+                a.Account == account.Account &&
+                a.SubAccount == account.SubAccount &&
+                a.Project == account.Project))
+            {
+                warning = "WARNING That account already exists (But we also updated this)";
+            }
+
             Repository.OfType<FinancialAccount>().EnsurePersistent(account);
             Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
                 nameof(FinancialAccount));
+            Message = $"{Message} {warning}";
             return this.RedirectToAction(a => a.Details(account.Id));
             //return this.RedirectToAction(a => a.Index());
 
