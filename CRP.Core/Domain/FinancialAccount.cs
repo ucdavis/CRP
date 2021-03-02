@@ -45,7 +45,10 @@ namespace CRP.Core.Domain
         [DisplayFormat(NullDisplayText = "---------")]
         public virtual string Project { get; set; }
 
+        //May not use this. Don't think there is a place in the db...
         public virtual Unit Unit { get; set; }
+
+        public virtual bool IsActive { get; set; }
 
         public virtual string GetAccountString()
         {

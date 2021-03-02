@@ -606,6 +606,7 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
+    <Compile Include="Controllers\ViewModels\AccountValidationModel.cs" />
     <Compile Include="Controllers\ViewModels\BigMapViewModel.cs" />
     <Compile Include="Controllers\ViewModels\BrowseItemsViewModel.cs" />
     <Compile Include="Controllers\ViewModels\ConfirmationTemplateViewModel.cs" />
@@ -630,6 +631,7 @@
     <Compile Include="Controllers\ViewModels\UnclearedModel.cs" />
     <Compile Include="Helpers\HttpClientHelpers.cs" />
     <Compile Include="Models\Configuration\SlothSettings.cs" />
+    <Compile Include="Models\FinancialModels\KfsAccount.cs" />
     <Compile Include="Models\ReceiptResponseModel.cs" />
     <Compile Include="Controllers\ViewModels\ReportViewModel.cs" />
     <Compile Include="Controllers\ViewModels\SearchViewModel.cs" />
@@ -648,6 +650,7 @@
     <Compile Include="Resources\KfsObjectCodes.cs" />
     <Compile Include="Services\CopyItemService.cs" />
     <Compile Include="Services\DataSigningService.cs" />
+    <Compile Include="Services\IFinancialService.cs" />
     <Compile Include="Services\SlothService.cs" />
   </ItemGroup>
   <ItemGroup>

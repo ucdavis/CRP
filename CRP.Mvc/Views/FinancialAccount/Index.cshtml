@@ -27,7 +27,7 @@
             <th>
                 Account Number
             </th>
-
+            <th>Is Active</th>
         </tr>
         </thead>
         <tbody>
@@ -44,6 +44,7 @@
                 <td>
                     @item.GetAccountString()
                 </td>
+                <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
             </tr>
         }
         </tbody>
@@ -61,7 +62,8 @@
             $("#table").dataTable({
                 "aaSorting": [[1, "desc"]], //Default sort on second column
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [0] } //Disables sort on icon columns
+                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
+                    {'type': 'bool', 'targets': [3]}
                 ]
             });
 
