@@ -17,6 +17,8 @@ namespace CRP.Controllers.ViewModels
 
         public bool CanChangeFinanceAccount { get; set; }
 
+        public bool FinancialAccountActive { get; set; } = true;
+
         public string PaidText { get; set; }
 
         public string UnpaidText { get; set; }
@@ -41,12 +43,24 @@ namespace CRP.Controllers.ViewModels
         {
             Check.Require(repository != null, "Repository is required.");
 
+
+
             var viewModel = new ItemViewModel() {
                 ItemTypes         = repository.OfType<ItemType>().Queryable.Where(a => a.IsActive).ToList(),
                 Users             = repository.OfType<User>().Queryable.Where(a => a.ActiveUserId != null),
                 CurrentUser       = repository.OfType<User>().Queryable.Where(a => a.LoginID == principal.Identity.Name).FirstOrDefault(),
-                FinancialAccounts = repository.OfType<FinancialAccount>().GetAll().ToList(),
+                
             };
+            if (item != null && item.FinancialAccount != null && !item.FinancialAccount.IsActive)
+            {
+                //Add in inactive account
+                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive || a.Id == item.FinancialAccount.Id).ToList();
+                viewModel.FinancialAccountActive = false;
+            }
+            else
+            {
+                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive).ToList();
+            }
 
             viewModel.UserUnit = viewModel.CurrentUser.Units.FirstOrDefault();
             viewModel.CanChangeFinanceAccount = false;
