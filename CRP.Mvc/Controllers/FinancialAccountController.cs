@@ -107,13 +107,6 @@ namespace CRP.Controllers
             };
 
 
-            //var accountValidation = await _financialService.IsAccountValidForRegistration(account);
-            //if (!accountValidation.IsValid)
-            //{
-            //    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
-            //    return View(model);
-            //}
-
             if (!ModelState.IsValid)
             {
                 Message = "Account Invalid";
@@ -191,15 +184,6 @@ namespace CRP.Controllers
             account.SubAccount = model.SubAccount.SafeToUpper();
             account.Project = model.Project.SafeToUpper();
             account.IsActive = model.IsActive;
-
-            //We are not doing the validation here because there are some edge cases we want to allow.
-            //So we will redirect to the details page the will show validation issues
-            //var accountValidation = await _financialService.IsAccountValidForRegistration(account);
-            //if (!accountValidation.IsValid)
-            //{
-            //    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
-            //    return View(model);
-            //}
 
 
             if (!ModelState.IsValid)
