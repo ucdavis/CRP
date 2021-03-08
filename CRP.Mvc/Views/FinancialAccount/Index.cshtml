@@ -28,6 +28,7 @@
                 Account Number
             </th>
             <th>Is Active</th>
+            <th>Was added by User</th>
         </tr>
         </thead>
         <tbody>
@@ -45,6 +46,7 @@
                     @item.GetAccountString()
                 </td>
                 <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                <td>@Html.DisplayFor(modelItem => item.UserAdded)</td>
             </tr>
         }
         </tbody>
@@ -63,7 +65,7 @@
                 "aaSorting": [[1, "desc"]], //Default sort on second column
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
-                    {'type': 'bool', 'targets': [3]}
+                    {'type': 'bool', 'targets': [3,4]}
                 ]
             });
 

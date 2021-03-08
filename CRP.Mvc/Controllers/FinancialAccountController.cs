@@ -104,6 +104,7 @@ namespace CRP.Controllers
                 SubAccount  = model.SubAccount.SafeToUpper(),
                 Project     = model.Project.SafeToUpper(), //Not used?
                 IsActive    = true, 
+                UserAdded   = false, 
             };
 
 
@@ -177,13 +178,14 @@ namespace CRP.Controllers
                 return View(model);
             }
 
-            account.Name = model.Name;
+            account.Name        = model.Name;
             account.Description = model.Description;
-            account.Chart = model.Chart.SafeToUpper();
-            account.Account = model.Account.SafeToUpper();
-            account.SubAccount = model.SubAccount.SafeToUpper();
-            account.Project = model.Project.SafeToUpper();
-            account.IsActive = model.IsActive;
+            account.Chart       = model.Chart.SafeToUpper();
+            account.Account     = model.Account.SafeToUpper();
+            account.SubAccount  = model.SubAccount.SafeToUpper();
+            account.Project     = model.Project.SafeToUpper();
+            account.IsActive    = model.IsActive;
+            account.UserAdded   = model.UserAdded;
 
 
             if (!ModelState.IsValid)

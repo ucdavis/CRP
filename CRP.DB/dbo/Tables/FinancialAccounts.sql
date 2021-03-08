@@ -7,7 +7,8 @@
     [Project]     NVARCHAR (9)   NULL,
     [SubAccount]  NVARCHAR (5)   NULL,
     [UnitId]      INT            NULL,
-    [IsActive] BIT NOT NULL DEFAULT 1, 
+    [IsActive] BIT NOT NULL DEFAULT ((1)), 
+    [UserAdded] BIT NOT NULL DEFAULT ((0)), 
     CONSTRAINT [PK_FinancialAccounts] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
