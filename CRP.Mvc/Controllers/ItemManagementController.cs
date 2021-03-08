@@ -10,6 +10,7 @@ using CRP.Controllers.Helpers;
 using CRP.Controllers.Helpers.Filter;
 using CRP.Controllers.ViewModels;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.Helpers;
 using CRP.Mvc.Controllers.ViewModels;
@@ -120,7 +121,7 @@ namespace CRP.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [PageTracker]
-        public ActionResult Create(EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
+        public async Task<ActionResult> Create(EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink)
         {
             ModelState.Clear();
 
@@ -157,6 +158,41 @@ namespace CRP.Controllers
             {
                 ModelState.AddModelError("Item.Quantity", "Please enter a number for the Quantity.");
                 item.Quantity = 0;
+            }
+
+            var account = Repository.OfType<FinancialAccount>().GetNullableById(item.FinancialAccountId);
+            if (account == null && !string.IsNullOrWhiteSpace(item.UserAddedFinancialAccount))
+            {
+                var accountValidation = await _financialService.IsAccountValidForRegistration(item.UserAddedFinancialAccount);
+                if (!accountValidation.IsValid)
+                {
+                    ModelState.AddModelError("Item.UserAddedFinancialAccount", accountValidation.Message);
+                }
+                else
+                {
+                    //Ok, it is valid
+                    //Check if it exists
+                    //Otherwise create it 
+                    //Set the FinancialId to the id
+                    account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => 
+                        a.Chart == accountValidation.FinancialAccount.Chart &&
+                        a.Account == accountValidation.FinancialAccount.Account &&
+                        a.SubAccount == accountValidation.FinancialAccount.SubAccount);
+                    if (account != null)
+                    {
+                        item.FinancialAccountId = account.Id;
+                    }
+                    else
+                    {
+                        accountValidation.FinancialAccount.UserAdded = true;
+                        accountValidation.FinancialAccount.IsActive = true;
+                        accountValidation.FinancialAccount.Name = $"Added By: {User.Identity.Name}";
+                        accountValidation.FinancialAccount.Description = $"Added By: {User.Identity.Name} on {DateTime.UtcNow.ToPacificTime().ToShortDateString()}";
+                        Repository.OfType<FinancialAccount>().EnsurePersistent(accountValidation.FinancialAccount);
+                        item.FinancialAccountId = accountValidation.FinancialAccount.Id;
+                    }
+
+                }
             }
 
             // setup new item CanChangeFinanceAccount will always be true on a create

@@ -2,6 +2,7 @@
 @using CRP.Controllers.Helpers;
 @using Microsoft.Azure
 @using MvcContrib.FluentHtml
+@using MvcContrib.UI.InputBuilder.Views
 
 @{ 
     var selectedItemType = Model.ItemTypes.FirstOrDefault(t => t.Id == Model.Item?.ItemTypeId);
@@ -98,6 +99,16 @@
         <text class="help-block">*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</text>
         
     </div>
+
+    <p>(OR)</p>
+
+    <div class="form-group">
+        <label>User Added Account:</label>
+        @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
+        @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
+        <text class="help-block">If adding an account not in the list above, it must be a valid account. Separate chart, account, and sub account with -</text>
+    </div>
+
 
     <div class="form-group">
         <label>Summary:</label>

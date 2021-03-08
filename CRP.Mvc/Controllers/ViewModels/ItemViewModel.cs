@@ -6,6 +6,7 @@ using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.ViewModels.ItemManagement;
+using Microsoft.Ajax.Utilities;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
 
@@ -58,9 +59,13 @@ namespace CRP.Controllers.ViewModels
                 viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive || a.Id == item.FinancialAccount.Id).ToList();
                 viewModel.FinancialAccountActive = false;
             }
+            else if(item != null && item.FinancialAccount != null && item.FinancialAccount.UserAdded)
+            {
+                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive || a.Id == item.FinancialAccount.Id).ToList();
+            }
             else
             {
-                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive).ToList();
+                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive && !a.UserAdded).ToList();
             }
 
             viewModel.UserUnit = viewModel.CurrentUser.Units.FirstOrDefault();

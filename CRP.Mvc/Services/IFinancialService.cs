@@ -29,6 +29,8 @@ namespace CRP.Mvc.Services
         Task<bool> IsOrgChildOfOrg(string childChart, string childOrg, string parentChart, string parentOrg);
 
         Task<AccountValidationModel> IsAccountValidForRegistration(FinancialAccount account);
+        Task<AccountValidationModel> IsAccountValidForRegistration(string account);
+
     }
 
     public class FinancialService : IFinancialService
@@ -289,16 +291,53 @@ namespace CRP.Mvc.Services
                     "L", "AAES"))
             {
                 rtValue.IsValid = true;
-                return rtValue;
+                //return rtValue;
             }
             else
             {
                 rtValue.IsValid = false;
                 rtValue.Field = "Account";
                 rtValue.Message = "Account not in CAES org.";
-                return rtValue;
+                //return rtValue;
             }
 
+
+            return rtValue;
+        }
+
+        public async Task<AccountValidationModel> IsAccountValidForRegistration(string account)
+        {
+            var rtValue = new AccountValidationModel();
+            try
+            {
+                account = account.Trim();
+                var financialAccount = new FinancialAccount();
+                var delimiter = new string[] {"-"};
+                var accountArray = account.Split(delimiter, StringSplitOptions.None);
+                if (accountArray.Length < 2)
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Message = "Need chart and account";
+                    rtValue.Field = "Account";
+                    return rtValue;
+                }
+
+                financialAccount.Chart = accountArray[0].ToUpper();
+                financialAccount.Account = accountArray[1].ToUpper();
+                if (accountArray.Length > 2)
+                {
+                    financialAccount.SubAccount = accountArray[2].ToUpper();
+                }
+
+                rtValue = await IsAccountValidForRegistration(financialAccount);
+                rtValue.FinancialAccount = financialAccount;
+            }
+            catch
+            {
+                rtValue.IsValid = false;
+                rtValue.Message = "Unable to parse account string";
+                rtValue.Field = "Account";
+            }
 
             return rtValue;
         }
