@@ -104,15 +104,9 @@ namespace CRP.Controllers
                 SubAccount  = model.SubAccount.SafeToUpper(),
                 Project     = model.Project.SafeToUpper(), //Not used?
                 IsActive    = true, 
+                IsUserAdded   = false, 
             };
 
-
-            //var accountValidation = await _financialService.IsAccountValidForRegistration(account);
-            //if (!accountValidation.IsValid)
-            //{
-            //    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
-            //    return View(model);
-            //}
 
             if (!ModelState.IsValid)
             {
@@ -184,22 +178,14 @@ namespace CRP.Controllers
                 return View(model);
             }
 
-            account.Name = model.Name;
+            account.Name        = model.Name;
             account.Description = model.Description;
-            account.Chart = model.Chart.SafeToUpper();
-            account.Account = model.Account.SafeToUpper();
-            account.SubAccount = model.SubAccount.SafeToUpper();
-            account.Project = model.Project.SafeToUpper();
-            account.IsActive = model.IsActive;
-
-            //We are not doing the validation here because there are some edge cases we want to allow.
-            //So we will redirect to the details page the will show validation issues
-            //var accountValidation = await _financialService.IsAccountValidForRegistration(account);
-            //if (!accountValidation.IsValid)
-            //{
-            //    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
-            //    return View(model);
-            //}
+            account.Chart       = model.Chart.SafeToUpper();
+            account.Account     = model.Account.SafeToUpper();
+            account.SubAccount  = model.SubAccount.SafeToUpper();
+            account.Project     = model.Project.SafeToUpper();
+            account.IsActive    = model.IsActive;
+            account.IsUserAdded   = model.IsUserAdded;
 
 
             if (!ModelState.IsValid)

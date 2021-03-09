@@ -88,8 +88,10 @@ namespace CRP.Mvc.Controllers.ViewModels.ItemManagement
         [Required]
         public int UnitId { get; set; }
 
-        [Required]
+        
         public int FinancialAccountId { get; set; }
+
+        public string UserAddedFinancialAccount { get; set; }
 
         public string[] Tags { get; set; }
 
