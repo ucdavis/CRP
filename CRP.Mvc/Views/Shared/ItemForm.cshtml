@@ -33,7 +33,7 @@
 
                 return new { @class = "form-control", @required = true };
             };
-        }
+        } 
 
         @Html.DropDownListFor(x => x.Item.ItemTypeId, typeOptions, "--Select an item type--", getItemTyepHtmlOptions())
         @Html.ValidationMessageFor(x => x.Item.ItemTypeId)
