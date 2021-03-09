@@ -363,13 +363,69 @@ namespace CRP.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [PageTracker]
-        public ActionResult Edit(int id, EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool CanChangeFinanceAccount )
+        public async Task<ActionResult> Edit(int id, EditItemViewModel item, ExtendedPropertyParameter[] extendedProperties, string[] tags, string mapLink, bool CanChangeFinanceAccount )
         {
             ModelState.Clear();
             var destinationItem = Repository.OfType<Item>().GetNullableById(id);
-            
+            // Use DestinationItem to re-get if Account can be changed
+            CanChangeFinanceAccount = false;
+            if (CurrentUser.IsInRole(RoleNames.Admin))
+            {
+                CanChangeFinanceAccount = true;
+            }
+            else
+            {
+                if (destinationItem != null && destinationItem.Editors != null && destinationItem.Editors.Count > 0)
+                {
+                    var owner = destinationItem.Editors.Where(a => a.Owner).FirstOrDefault();
+                    if (owner != null && owner.User != null && owner.User.LoginID == CurrentUser.Identity.Name)
+                    {
+                        CanChangeFinanceAccount = true;
+                    }
+                }
+            }
+
+            if (CanChangeFinanceAccount)
+            {
+                var account = Repository.OfType<FinancialAccount>().GetNullableById(item.FinancialAccountId);
+                if (account == null && !string.IsNullOrWhiteSpace(item.UserAddedFinancialAccount))
+                {
+                    var accountValidation = await _financialService.IsAccountValidForRegistration(item.UserAddedFinancialAccount);
+                    if (!accountValidation.IsValid)
+                    {
+                        ModelState.AddModelError("Item.UserAddedFinancialAccount", $"{item.UserAddedFinancialAccount}: {accountValidation.Message}");
+                    }
+                    else
+                    {
+                        //Ok, it is valid
+                        //Check if it exists
+                        //Otherwise create it 
+                        //Set the FinancialId to the id
+                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a =>
+                            a.Chart == accountValidation.FinancialAccount.Chart &&
+                            a.Account == accountValidation.FinancialAccount.Account &&
+                            a.SubAccount == accountValidation.FinancialAccount.SubAccount);
+                        if (account != null)
+                        {
+                            item.FinancialAccountId = account.Id;
+                        }
+                        else
+                        {
+                            accountValidation.FinancialAccount.UserAdded = true;
+                            accountValidation.FinancialAccount.IsActive = true;
+                            accountValidation.FinancialAccount.Name = $"Added By: {User.Identity.Name}";
+                            accountValidation.FinancialAccount.Description = $"Added By: {User.Identity.Name} on {DateTime.UtcNow.ToPacificTime().ToShortDateString()}";
+                            Repository.OfType<FinancialAccount>().EnsurePersistent(accountValidation.FinancialAccount);
+                            item.FinancialAccountId = accountValidation.FinancialAccount.Id;
+                        }
+
+                    }
+                }
+            }
+
+
             // check rights to edit
-            if(destinationItem == null || !Access.HasItemAccess(CurrentUser, destinationItem))
+            if (destinationItem == null || !Access.HasItemAccess(CurrentUser, destinationItem))
             {
                 //Don't Have editor rights
                 Message = NotificationMessages.STR_NoEditorRights;
@@ -390,6 +446,7 @@ namespace CRP.Controllers
                 item.Quantity = 0;
             }
 
+            
             destinationItem = Copiers.CopyItem(Repository, item, destinationItem, extendedProperties, tags, mapLink, CanChangeFinanceAccount);
 
             if(destinationItem.ExtendedPropertyAnswers != null && destinationItem.ExtendedPropertyAnswers.Count > 0)
@@ -436,7 +493,7 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.Edit(id));
             }
             var viewModel = ItemViewModel.Create(Repository, CurrentUser, destinationItem);
-            
+
             //viewModel.Item = destinationItem;
             return View(viewModel);
         }
