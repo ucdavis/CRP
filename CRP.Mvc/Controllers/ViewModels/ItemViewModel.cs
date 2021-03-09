@@ -59,13 +59,13 @@ namespace CRP.Controllers.ViewModels
                 viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive || a.Id == item.FinancialAccount.Id).ToList();
                 viewModel.FinancialAccountActive = false;
             }
-            else if(item != null && item.FinancialAccount != null && item.FinancialAccount.UserAdded)
+            else if(item != null && item.FinancialAccount != null && item.FinancialAccount.IsUserAdded)
             {
                 viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive || a.Id == item.FinancialAccount.Id).ToList();
             }
             else
             {
-                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive && !a.UserAdded).ToList();
+                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive && !a.IsUserAdded).ToList();
             }
 
             viewModel.UserUnit = viewModel.CurrentUser.Units.FirstOrDefault();

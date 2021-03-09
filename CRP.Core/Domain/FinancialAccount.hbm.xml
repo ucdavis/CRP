@@ -15,7 +15,7 @@
     <property name="SubAccount" column="SubAccount" />
     <property name="Project" column="Project" />
     <property name="IsActive" column="IsActive" />
-    <property name="UserAdded" column="UserAdded" />
+    <property name="IsUserAdded" column="IsUserAdded" />
 
     <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" fetch="join" />
 

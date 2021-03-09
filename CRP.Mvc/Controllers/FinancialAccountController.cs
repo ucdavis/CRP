@@ -104,7 +104,7 @@ namespace CRP.Controllers
                 SubAccount  = model.SubAccount.SafeToUpper(),
                 Project     = model.Project.SafeToUpper(), //Not used?
                 IsActive    = true, 
-                UserAdded   = false, 
+                IsUserAdded   = false, 
             };
 
 
@@ -185,7 +185,7 @@ namespace CRP.Controllers
             account.SubAccount  = model.SubAccount.SafeToUpper();
             account.Project     = model.Project.SafeToUpper();
             account.IsActive    = model.IsActive;
-            account.UserAdded   = model.UserAdded;
+            account.IsUserAdded   = model.IsUserAdded;
 
 
             if (!ModelState.IsValid)

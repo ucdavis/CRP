@@ -184,7 +184,7 @@ namespace CRP.Controllers
                     }
                     else
                     {
-                        accountValidation.FinancialAccount.UserAdded = true;
+                        accountValidation.FinancialAccount.IsUserAdded = true;
                         accountValidation.FinancialAccount.IsActive = true;
                         accountValidation.FinancialAccount.Name = $"Added By: {User.Identity.Name}";
                         accountValidation.FinancialAccount.Description = $"Added By: {User.Identity.Name} on {DateTime.UtcNow.ToPacificTime().ToShortDateString()}";
@@ -411,7 +411,7 @@ namespace CRP.Controllers
                         }
                         else
                         {
-                            accountValidation.FinancialAccount.UserAdded = true;
+                            accountValidation.FinancialAccount.IsUserAdded = true;
                             accountValidation.FinancialAccount.IsActive = true;
                             accountValidation.FinancialAccount.Name = $"Added By: {User.Identity.Name}";
                             accountValidation.FinancialAccount.Description = $"Added By: {User.Identity.Name} on {DateTime.UtcNow.ToPacificTime().ToShortDateString()}";

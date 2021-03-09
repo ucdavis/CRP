@@ -49,7 +49,7 @@ namespace CRP.Core.Domain
         public virtual Unit Unit { get; set; }
 
         public virtual bool IsActive { get; set; }
-        public virtual bool UserAdded { get; set; }
+        public virtual bool IsUserAdded { get; set; }
 
         public virtual string GetAccountString()
         {
