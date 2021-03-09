@@ -166,7 +166,7 @@ namespace CRP.Controllers
                 var accountValidation = await _financialService.IsAccountValidForRegistration(item.UserAddedFinancialAccount);
                 if (!accountValidation.IsValid)
                 {
-                    ModelState.AddModelError("Item.UserAddedFinancialAccount", accountValidation.Message);
+                    ModelState.AddModelError("Item.UserAddedFinancialAccount", $"{item.UserAddedFinancialAccount}: {accountValidation.Message}");
                 }
                 else
                 {
