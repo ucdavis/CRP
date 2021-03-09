@@ -6,7 +6,6 @@ using CRP.Controllers.Helpers;
 using CRP.Core.Domain;
 using CRP.Core.Resources;
 using CRP.Mvc.Controllers.ViewModels.ItemManagement;
-using Microsoft.Ajax.Utilities;
 using UCDArch.Core.PersistanceSupport;
 using Check=UCDArch.Core.Utils.Check;
 
