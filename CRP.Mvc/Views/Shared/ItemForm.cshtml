@@ -55,6 +55,13 @@
 
     <fieldset class="field-border">
         <legend class="field-border">Account Information</legend>
+        <fieldset class="field-border">
+            <legend class="field-border">Instructions</legend>
+            <text class="help-block">If adding an account not in the dropdown list, it must be a valid account. Separate chart, account, and sub account with -</text>
+            <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be added.</text>
+            <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list. If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+        </fieldset>
+        
         <div class="form-group">
             <label>Account Number:</label>
             @{
@@ -109,8 +116,7 @@
             <label>User Added Account:</label>
             @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
             @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
-            <text class="help-block">If adding an account not in the list above, it must be a valid account. Separate chart, account, and sub account with -</text>
-            <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be added.</text>
+            
         </div>
     </fieldset>
 
