@@ -32,7 +32,7 @@
 
                 return new { @class = "form-control", @required = true };
             };
-        }
+        } 
 
         @Html.DropDownListFor(x => x.Item.ItemTypeId, typeOptions, "--Select an item type--", getItemTyepHtmlOptions())
         @Html.ValidationMessageFor(x => x.Item.ItemTypeId)
@@ -51,53 +51,73 @@
         <label>Unit:</label>
         @this.Select("Item.UnitId").Class("form-control").Options(Model.Units, x=>x.Id, x=>x.FullName).Selected(Model.Item != null ? Model.Item.UnitId : (Model.UserUnit != null ? Model.UserUnit.Id : 0 ))
     </div>
-    <div class="form-group">
-        <label>Account Number:</label>
-        @{
-            var accountDisabled = true;
-            if (Model.Item == null)
-            {
-                accountDisabled = false;
-            }
-            else if (Model.IsNew)
-            {
-                accountDisabled = false;
-            }
-            else if (Model.Item.FinancialAccountId == null)
-            {
-                accountDisabled = false;
-            }
-            else if (Model.CanChangeFinanceAccount)
-            {
-                accountDisabled = false;
-            }
 
-            var accountOptions = Model.FinancialAccounts.Select(a => new SelectListItem() { Text = a.GetAccountString(), Value = a.Id.ToString() });
-
-            Func<object> getFinancialAccountHtmlOptions = () =>
-            {
-                if (accountDisabled)
+    <fieldset class="field-border">
+        <legend class="field-border">Account Information</legend>
+        <fieldset class="field-border">
+            <legend class="field-border">Instructions</legend>
+            <text class="help-block">If adding an account not in the dropdown list, it must be a valid account. Separate chart, account, and sub account with -</text>
+            <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be added.</text>
+            <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list. If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+        </fieldset>
+        
+        <div class="form-group">
+            <label>Account Number:</label>
+            @{
+                var accountDisabled = true;
+                if (Model.Item == null)
                 {
-                    return new { @class = "form-control", @disabled = true };
+                    accountDisabled = false;
+                }
+                else if (Model.IsNew)
+                {
+                    accountDisabled = false;
+                }
+                else if (Model.Item.FinancialAccountId == null)
+                {
+                    accountDisabled = false;
+                }
+                else if (Model.CanChangeFinanceAccount)
+                {
+                    accountDisabled = false;
                 }
 
-                return new { @class = "form-control" };
-            };
-        }
-        @if (!Model.FinancialAccountActive)
-        {
-            <p class="alert-danger">Account is not active. Please select a different account and save if you will accept further Credit Card registrations.</p>
-        }
-        @if (!string.IsNullOrWhiteSpace(Model.FinancialAccountWarning))
-        {
-            <p class="alert-danger">@Model.FinancialAccountWarning</p>
-        }
+                var accountOptions = Model.FinancialAccounts.Select(a => new SelectListItem() { Text = a.GetAccountString(), Value = a.Id.ToString() });
 
-        @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--",  getFinancialAccountHtmlOptions())
-        @Html.ValidationMessage("Item.FinancialAccount")
-        <text class="help-block">*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</text>
-        
-    </div>
+                Func<object> getFinancialAccountHtmlOptions = () =>
+                {
+                    if (accountDisabled)
+                    {
+                        return new { @class = "form-control", @disabled = true };
+                    }
+
+                    return new { @class = "form-control" };
+                };
+            }
+            @if (!Model.FinancialAccountActive)
+            {
+                <p class="alert-danger">Account is not active. Please select a different account and save if you will accept further Credit Card registrations.</p>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.FinancialAccountWarning))
+            {
+                <p class="alert-danger">@Model.FinancialAccountWarning</p>
+            }
+
+            @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--",  getFinancialAccountHtmlOptions())
+            @Html.ValidationMessage("Item.FinancialAccount")
+            <text class="help-block">*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</text>
+            
+        </div>
+
+        <p>(OR)</p>
+
+        <div class="form-group">
+            <label>User Added Account:</label>
+            @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
+            @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
+            
+        </div>
+    </fieldset>
 
     <div class="form-group">
         <label>Summary:</label>
