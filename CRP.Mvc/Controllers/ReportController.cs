@@ -183,13 +183,15 @@ namespace CRP.Controllers
             {
                 // generates a report to show who is using the system the most
                 case SystemReport.DepartmentUsage:
-                    var data = Repository.OfType<Item>().GetAll();
+                    var data = Repository.OfType<Item>().Queryable
+                        .Where(a => a.DateCreated >= new DateTime(DateTime.Now.Year, 1, 1)).ToList();
 
                     return (from i in data.AsQueryable()
                            group i by i.Unit.FullName into g
                            select new SystemReportData(g.Key, g.Count())).ToList();
                 case SystemReport.DepartmentMoneyYtd:
-                    var data2 = Repository.OfType<Transaction>().GetAll();
+                    var data2 = Repository.OfType<Transaction>().Queryable
+                        .Where(a => a.TransactionDate >= new DateTime(DateTime.Now.Year, 1, 1)).ToList();
 
                     return (from t in data2.AsQueryable()
                            group t by t.Item.Unit.FullName into g
