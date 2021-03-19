@@ -801,7 +801,7 @@ namespace CRP.Controllers
 
             // build transfer request
             var total = paymentLog.Amount;
-            var fee = total * FeeSchedule.StandardRate;
+            var fee = Math.Round(total * FeeSchedule.StandardRate, 2); 
             var income = total - fee;
 
             // create transfers
