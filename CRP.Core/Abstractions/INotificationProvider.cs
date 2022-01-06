@@ -388,24 +388,20 @@ Your Transaction number is: {TransactionNumber}
 
         public void SendRegistrationConfirmation(IRepository repository, Transaction transaction, string emailAddress, string name, string url)
         {
+            var body = new StringBuilder($"Hi {name}, you have successfully registered for the following event: <br/><br/>");
+            body.Append($"  <b>Event :</b> {transaction.Item.Name}<br/>");
+            body.Append($"  <b>Transaction :</b> {transaction.TransactionNumber}<br/><br/>");
 
+            body.Append("<b>Payment may still be due.</b> If you need to access the payment portal to try again you may use this link:<br/>");
+            body.Append($"{url} <br/><br/>");
+
+
+            var message = new MailMessage("automatedemail@caes.ucdavis.edu", emailAddress) {IsBodyHtml = true};
+            message.Subject = "Registration Confirmation";
+            message.Body = body.ToString();
+            message.IsBodyHtml = true;
             
-            try
-            {
-                var body = new StringBuilder($"Hi {name}, you have successfully registered for the following event: <br/><br/>");
-                body.Append($"  <b>Event :</b> {transaction.Item.Name}<br/>");
-                body.Append($"  <b>Transaction :</b> {transaction.TransactionNumber}<br/><br/>");
-
-                body.Append("Payment may still be due. If you need to access the payment portal to try again you may use this link:<br/>");
-                body.Append($"{url} <br/><br/>");
-
-                body.Append("This is a notification only email. Do not reply.<br/><br/>");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            _emailService.SendEmail(message);
         }
     }
 
