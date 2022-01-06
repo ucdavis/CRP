@@ -390,7 +390,7 @@ Your Transaction number is: {TransactionNumber}
         {
             var body = new StringBuilder($"Hi {name}, you have successfully registered for the following event: <br/><br/>");
             body.Append($"  <b>Event :</b> {transaction.Item.Name}<br/>");
-            body.Append($"  <b>Transaction :</b> {transaction.TransactionNumber}<br/><br/>");
+            body.Append($"  <b>Transaction :</b> {DateTime.Now.Year}-{transaction.Id:D6}<br/><br/>");
 
             body.Append("<b>Payment may still be due.</b> If you need to access the payment portal to try again you may use this link:<br/>");
             body.Append($"{url} <br/><br/>");
