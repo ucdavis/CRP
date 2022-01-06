@@ -447,6 +447,23 @@ namespace CRP.Controllers
                     }
                 }
 
+                if (!transaction.Paid)
+                {
+                    try
+                    {
+                        var email = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).Answer;
+                        var name = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_FirstName).Answer;
+
+                        UrlHelper url = new UrlHelper(Request.RequestContext);
+                        var linkToPayment = url.Action("Confirmation", "Payments", new {id = transaction.Id}, "https");
+                        _notificationProvider.SendRegistrationConfirmation(Repository, transaction, email, name, linkToPayment);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(string.Format("Error sending user confirmation email {0}", ex.Message));
+                    }
+                }
+
                 // redirect to confirmation and let the user decide payment or not
                 return this.RedirectToAction(a => a.Confirmation(transaction.Id));
             }
