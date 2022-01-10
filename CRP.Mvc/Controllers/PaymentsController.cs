@@ -39,7 +39,7 @@ namespace CRP.Controllers
         {
             _openIdUserRepository = openIdUserRepository;
             _dataSigningService = dataSigningService;
-            _notificationProvider = notificationProvider;
+            _notificationProvider = notificationProvider; 
         }
 
         /// <summary>
