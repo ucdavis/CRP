@@ -449,11 +449,12 @@ namespace CRP.Controllers
 
                 var saveId2 = transaction.Id;
 
-
+                
                 try
                 {
+                    Log.Information($"Before evict. Id: {saveId2}");
                     //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
-                    
+
                     NHibernateSessionManager.Instance.GetSession().Evict(transaction);
                     transaction = Repository.OfType<Transaction>().GetNullableById(saveId2);
                     var isPaid = transaction.Paid;
