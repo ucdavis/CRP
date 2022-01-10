@@ -447,16 +447,29 @@ namespace CRP.Controllers
                     }
                 }
 
+                var saveId2 = transaction.Id;
+
                 if (!transaction.Paid)
                 {
                     try
                     {
+                        Log.Information("Attempting to send user confirmation email.");
+
+                        //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
+                        
+                        NHibernateSessionManager.Instance.GetSession().Evict(transaction);
+                        transaction = Repository.OfType<Transaction>().GetNullableById(saveId2);
+
+
                         var email = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).Answer;
                         var name = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_FirstName).Answer;
+                        Log.Information($"Email: {email} Name: {name}");
 
                         UrlHelper url = new UrlHelper(Request.RequestContext);
-                        var linkToPayment = url.Action("Confirmation", "Payments", new {id = transaction.Id}, "https");
+                        var linkToPayment = url.Action("Confirmation", "Payments", new { id = transaction.Id }, "https");
+                        Log.Information($"Payment link: {linkToPayment}");
                         _notificationProvider.SendRegistrationConfirmation(Repository, transaction, email, name, linkToPayment);
+                        Log.Information("Email sent.");
                     }
                     catch (Exception ex)
                     {
@@ -465,7 +478,7 @@ namespace CRP.Controllers
                 }
 
                 // redirect to confirmation and let the user decide payment or not
-                return this.RedirectToAction(a => a.Confirmation(transaction.Id));
+                return this.RedirectToAction(a => a.Confirmation(saveId2));
             }
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden, null, null);
