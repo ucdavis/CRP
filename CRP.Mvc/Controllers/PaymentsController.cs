@@ -449,33 +449,38 @@ namespace CRP.Controllers
 
                 var saveId2 = transaction.Id;
 
-                if (!transaction.Paid)
+                
+                try
                 {
-                    try
+                    Log.Information($"Before evict. Id: {saveId2}");
+                    //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
+
+                    NHibernateSessionManager.Instance.GetSession().Evict(transaction);
+                    transaction = Repository.OfType<Transaction>().GetNullableById(saveId2);
+                    var isPaid = transaction.Paid;
+
+                    Log.Information($"Paid Status: {isPaid}");
+
+                    if (!isPaid)
                     {
                         Log.Information("Attempting to send user confirmation email.");
-
-                        //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
-                        
-                        NHibernateSessionManager.Instance.GetSession().Evict(transaction);
-                        transaction = Repository.OfType<Transaction>().GetNullableById(saveId2);
-
 
                         var email = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).Answer;
                         var name = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_FirstName).Answer;
                         Log.Information($"Email: {email} Name: {name}");
 
                         UrlHelper url = new UrlHelper(Request.RequestContext);
-                        var linkToPayment = url.Action("Confirmation", "Payments", new { id = transaction.Id }, "https");
+                        var linkToPayment = url.Action("Confirmation", "Payments", new {id = transaction.Id}, "https");
                         Log.Information($"Payment link: {linkToPayment}");
                         _notificationProvider.SendRegistrationConfirmation(Repository, transaction, email, name, linkToPayment);
                         Log.Information("Email sent.");
                     }
-                    catch (Exception ex)
-                    {
-                        Log.Error(string.Format("Error sending user confirmation email {0}", ex.Message));
-                    }
                 }
+                catch (Exception ex)
+                {
+                    Log.Error(string.Format("Error sending user confirmation email {0}", ex.Message));
+                }
+                
 
                 // redirect to confirmation and let the user decide payment or not
                 return this.RedirectToAction(a => a.Confirmation(saveId2));
