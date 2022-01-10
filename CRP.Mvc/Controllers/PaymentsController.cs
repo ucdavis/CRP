@@ -447,7 +447,7 @@ namespace CRP.Controllers
                     }
                 }
 
-                var saveId = transaction.Id;
+                var saveId2 = transaction.Id;
 
                 if (!transaction.Paid)
                 {
@@ -458,7 +458,7 @@ namespace CRP.Controllers
                         //If the tranascation is not evicted, it doesn't refresh from the database and the transaction number is null.
                         
                         NHibernateSessionManager.Instance.GetSession().Evict(transaction);
-                        transaction = Repository.OfType<Transaction>().GetNullableById(saveId);
+                        transaction = Repository.OfType<Transaction>().GetNullableById(saveId2);
 
 
                         var email = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).Answer;
@@ -478,7 +478,7 @@ namespace CRP.Controllers
                 }
 
                 // redirect to confirmation and let the user decide payment or not
-                return this.RedirectToAction(a => a.Confirmation(saveId));
+                return this.RedirectToAction(a => a.Confirmation(saveId2));
             }
 
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceIdHidden, null, null);
