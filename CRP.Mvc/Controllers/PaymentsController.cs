@@ -467,6 +467,7 @@ namespace CRP.Controllers
 
                         UrlHelper url = new UrlHelper(Request.RequestContext);
                         var linkToPayment = url.Action("Confirmation", "Payments", new { id = transaction.Id }, "https");
+                        Log.Information($"Payment link: {linkToPayment}");
                         _notificationProvider.SendRegistrationConfirmation(Repository, transaction, email, name, linkToPayment);
                         Log.Information("Email sent.");
                     }
