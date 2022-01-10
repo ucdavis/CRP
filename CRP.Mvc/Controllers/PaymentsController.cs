@@ -451,12 +451,17 @@ namespace CRP.Controllers
                 {
                     try
                     {
+                        Log.Information("Attempting to send user confirmation email.");
                         var email = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_Email).Answer;
                         var name = transaction.TransactionAnswers.First(a => a.QuestionSet.Name == StaticValues.QuestionSet_ContactInformation && a.Question.Name == StaticValues.Question_FirstName).Answer;
+                        Log.Information($"Email: {email} Name: {name}");
 
-                        UrlHelper url = new UrlHelper(Request.RequestContext);
-                        var linkToPayment = url.Action("Confirmation", "Payments", new {id = transaction.Id}, "https");
+                        //UrlHelper url = new UrlHelper(Request.RequestContext);
+                        //var linkToPayment = url.Action("Confirmation", "Payments", new {id = transaction.Id}, "https");
+                        var baseURl = "https://registration.ucdavis.edu/Payments/Confirmation/";
+                        var linkToPayment = $"{baseURl}{transaction.Id}";
                         _notificationProvider.SendRegistrationConfirmation(Repository, transaction, email, name, linkToPayment);
+                        Log.Information("Email sent.");
                     }
                     catch (Exception ex)
                     {
