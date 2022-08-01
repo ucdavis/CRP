@@ -22,6 +22,8 @@ namespace CRP.Mvc.Models.FinancialModels
         public string ProjectName { get; set; } //Different Lookup
         public string SubAccountName { get; set; } //Different Lookup
 
+        public string ucFundNumber { get; set; }
+
         public bool IsValidIncomeAccount
         {
             get
@@ -33,21 +35,25 @@ namespace CRP.Mvc.Models.FinancialModels
                 //Look at Payments subFundGroupTypeCode checks to see other income checks, but don't really apply to Registration
                 
 
-                if (string.IsNullOrWhiteSpace(subFundGroupCode))
-                {
-                    return false;
-                }
+                //if (string.IsNullOrWhiteSpace(subFundGroupCode))
+                //{
+                //    return false;
+                //}
 
-                if (subFundGroupCode.Equals("OTHUNV", StringComparison.OrdinalIgnoreCase)) //OTHER SOURCE-UNIV RELATED EVENTS
+                //if (subFundGroupCode.Equals("OTHUNV", StringComparison.OrdinalIgnoreCase)) //OTHER SOURCE-UNIV RELATED EVENTS
+                //{
+                //    return true;
+                //}
+
+                //if (subFundGroupCode.Equals("OTHER", StringComparison.OrdinalIgnoreCase)) //OTHER SOURCES - NON RATE BASED
+                //{
+                //    return true;
+                //}
+
+                if(ucFundNumber == "68510")
                 {
                     return true;
                 }
-
-                if (subFundGroupCode.Equals("OTHER", StringComparison.OrdinalIgnoreCase)) //OTHER SOURCES - NON RATE BASED
-                {
-                    return true;
-                }
-
 
                 return false;
             }
