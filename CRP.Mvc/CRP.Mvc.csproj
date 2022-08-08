@@ -17,10 +17,10 @@
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressSSLPort>50318</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -76,6 +76,9 @@
     <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Elasticsearch.Net, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.7.8.1\lib\net461\Elasticsearch.Net.dll</HintPath>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
@@ -194,11 +197,29 @@
       <HintPath>..\packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.2.0.0\lib\net45\Serilog.dll</HintPath>
+      <HintPath>..\packages\Serilog.2.8.0\lib\net46\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Enrichers.ClientInfo, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Enrichers.ClientInfo.1.2.0\lib\net462\Serilog.Enrichers.ClientInfo.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Exceptions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Exceptions.1.1.0\lib\net452\Serilog.Exceptions.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Formatting.Compact, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Formatting.Compact.1.0.0\lib\net45\Serilog.Formatting.Compact.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Formatting.Elasticsearch, Version=0.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Formatting.Elasticsearch.8.4.1\lib\net45\Serilog.Formatting.Elasticsearch.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Elasticsearch, Version=8.4.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Elasticsearch.8.4.1\lib\net461\Serilog.Sinks.Elasticsearch.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.File.4.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.PeriodicBatching, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.PeriodicBatching.2.1.1\lib\net45\Serilog.Sinks.PeriodicBatching.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Sinks.Stackify, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Stackify.2.0.2\lib\net45\Serilog.Sinks.Stackify.dll</HintPath>
@@ -217,6 +238,9 @@
     <Reference Include="System.AppContext, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net463\System.AppContext.dll</HintPath>
     </Reference>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
@@ -224,8 +248,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Diagnostics.Tracing, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.Tracing.4.3.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
@@ -351,10 +375,6 @@
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Web.Mvc, Version=2013.2.611.340, Culture=neutral, PublicKeyToken=29ac1a93ec063d92, processorArchitecture=MSIL">
-      <HintPath>..\packages\TelerikMvcExtensions.2013.2.611\lib\net40\Telerik.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="UCDArch, Version=3.0.0.0, Culture=neutral, PublicKeyToken=667f3cb07abadf4b, processorArchitecture=MSIL">
       <HintPath>..\packages\UcdArch.5.1.1.167\lib\net451\UCDArch.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -369,131 +389,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_GlobalResources\EditorLocalization.bg-BG.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.bg-BG.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.da-DK.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.da-DK.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.de-DE.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.de-DE.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.en-US.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.en-US.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.fr-FR.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.fr-FR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.nl-NL.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.nl-NL.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.pl-PL.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.pl-PL.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.pt-BR.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.pt-BR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.pt-PT.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.pt-PT.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.ru-RU.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.ru-RU.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.uk-UA.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.uk-UA.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.zh-CN.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.zh-CN.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.bg-BG.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.bg-BG.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.da-DK.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.da-DK.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.de-DE.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.de-DE.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.en-US.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.en-US.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.es-ES.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.es-ES.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.fr-FR.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.fr-FR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.nl-NL.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.nl-NL.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.pl-PL.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.pl-PL.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.pt-BR.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.pt-BR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.pt-PT.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.pt-PT.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.ru-RU.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.ru-RU.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\GridLocalization.uk-UA.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -577,7 +472,6 @@
     <Compile Include="Controllers\Helpers\CASHelper.cs" />
     <Compile Include="Controllers\Helpers\Copiers.cs" />
     <Compile Include="Controllers\Helpers\CouponGenerator.cs" />
-    <Compile Include="Controllers\Helpers\CustomGridBuilder.cs" />
     <Compile Include="Controllers\Helpers\Filter\PageTrackingAttribute.cs" />
     <Compile Include="Controllers\Helpers\Filter\Recaptcha.cs" />
     <Compile Include="Controllers\Helpers\Filter\RequireOpenId.cs" />
@@ -692,206 +586,17 @@
     <Content Include="Content\2009.3.1103.0\Web20\sprite.png" />
     <Content Include="Content\2009.3.1103.0\WebBlue\loading.gif" />
     <Content Include="Content\2009.3.1103.0\WebBlue\sprite.png" />
-    <Content Include="Content\2013.2.611\Black\editor.png" />
-    <Content Include="Content\2013.2.611\Black\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Black\loading.gif" />
-    <Content Include="Content\2013.2.611\Black\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Black\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Black\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Black\sprite.png" />
-    <Content Include="Content\2013.2.611\Black\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Black\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Black\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Default\editor.png" />
-    <Content Include="Content\2013.2.611\Default\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Default\loading.gif" />
-    <Content Include="Content\2013.2.611\Default\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Default\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Default\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Default\sprite.png" />
-    <Content Include="Content\2013.2.611\Default\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Default\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Default\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Forest\editor.png" />
-    <Content Include="Content\2013.2.611\Forest\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Forest\loading.gif" />
-    <Content Include="Content\2013.2.611\Forest\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Forest\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Forest\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Forest\sprite.png" />
-    <Content Include="Content\2013.2.611\Forest\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Forest\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Forest\treeview-nodes.png" />
     <Content Include="Content\2013.2.611\Hay\editor.png" />
     <Content Include="Content\2013.2.611\Hay\imagebrowser.png" />
     <Content Include="Content\2013.2.611\Hay\loading.gif" />
     <Content Include="Content\2013.2.611\Hay\slider-h.gif" />
     <Content Include="Content\2013.2.611\Hay\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Hay\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Hay\sprite.png" />
-    <Content Include="Content\2013.2.611\Hay\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Hay\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Hay\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Metro\editor.png" />
-    <Content Include="Content\2013.2.611\Metro\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Metro\loading.gif" />
-    <Content Include="Content\2013.2.611\Metro\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Metro\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Metro\sprite.png" />
-    <Content Include="Content\2013.2.611\Office2007\editor.png" />
-    <Content Include="Content\2013.2.611\Office2007\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Office2007\loading.gif" />
-    <Content Include="Content\2013.2.611\Office2007\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Office2007\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Office2007\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Office2007\sprite.png" />
-    <Content Include="Content\2013.2.611\Office2007\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Office2007\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Office2007\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Office2010Black\editor.png" />
-    <Content Include="Content\2013.2.611\Office2010Black\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Office2010Black\loading.gif" />
-    <Content Include="Content\2013.2.611\Office2010Black\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Office2010Black\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Office2010Black\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Office2010Black\sprite.png" />
-    <Content Include="Content\2013.2.611\Office2010Black\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Office2010Black\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Office2010Black\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Office2010Blue\editor.png" />
-    <Content Include="Content\2013.2.611\Office2010Blue\gradient.png" />
-    <Content Include="Content\2013.2.611\Office2010Blue\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Office2010Blue\loading.gif" />
-    <Content Include="Content\2013.2.611\Office2010Blue\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Office2010Blue\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Office2010Blue\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Office2010Blue\sprite.png" />
-    <Content Include="Content\2013.2.611\Office2010Silver\editor.png" />
-    <Content Include="Content\2013.2.611\Office2010Silver\gradient.png" />
-    <Content Include="Content\2013.2.611\Office2010Silver\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Office2010Silver\loading.gif" />
-    <Content Include="Content\2013.2.611\Office2010Silver\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Office2010Silver\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Office2010Silver\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Office2010Silver\sprite.png" />
-    <Content Include="Content\2013.2.611\Outlook\editor.png" />
-    <Content Include="Content\2013.2.611\Outlook\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Outlook\loading.gif" />
-    <Content Include="Content\2013.2.611\Outlook\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Outlook\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Outlook\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Outlook\sprite.png" />
-    <Content Include="Content\2013.2.611\Outlook\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Outlook\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Outlook\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Simple\editor.png" />
-    <Content Include="Content\2013.2.611\Simple\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Simple\loading.gif" />
-    <Content Include="Content\2013.2.611\Simple\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Simple\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Simple\sprite.png" />
-    <Content Include="Content\2013.2.611\Simple\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Simple\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Simple\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Sitefinity\editor.png" />
-    <Content Include="Content\2013.2.611\Sitefinity\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Sitefinity\loading.gif" />
-    <Content Include="Content\2013.2.611\Sitefinity\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Sitefinity\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Sitefinity\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Sitefinity\sprite.png" />
-    <Content Include="Content\2013.2.611\Sitefinity\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Sitefinity\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Sitefinity\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Sunset\editor.png" />
-    <Content Include="Content\2013.2.611\Sunset\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Sunset\loading.gif" />
-    <Content Include="Content\2013.2.611\Sunset\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Sunset\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Sunset\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Sunset\sprite.png" />
-    <Content Include="Content\2013.2.611\Sunset\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Sunset\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Sunset\treeview-nodes.png" />
     <Content Include="Content\2013.2.611\telerik.black.min.css" />
     <Content Include="Content\2013.2.611\telerik.common.min.css" />
     <Content Include="Content\2013.2.611\telerik.default.min.css" />
     <Content Include="Content\2013.2.611\telerik.forest.min.css" />
     <Content Include="Content\2013.2.611\telerik.hay.min.css" />
     <Content Include="Content\2013.2.611\telerik.metro.min.css" />
-    <Content Include="Content\2013.2.611\telerik.office2007.min.css" />
-    <Content Include="Content\2013.2.611\telerik.office2010black.min.css" />
-    <Content Include="Content\2013.2.611\telerik.office2010blue.min.css" />
-    <Content Include="Content\2013.2.611\telerik.office2010silver.min.css" />
-    <Content Include="Content\2013.2.611\telerik.outlook.min.css" />
-    <Content Include="Content\2013.2.611\telerik.rtl.min.css" />
-    <Content Include="Content\2013.2.611\telerik.simple.min.css" />
-    <Content Include="Content\2013.2.611\telerik.sitefinity.min.css" />
-    <Content Include="Content\2013.2.611\telerik.sunset.min.css" />
-    <Content Include="Content\2013.2.611\telerik.telerik.min.css" />
-    <Content Include="Content\2013.2.611\telerik.transparent.min.css" />
-    <Content Include="Content\2013.2.611\telerik.vista.min.css" />
-    <Content Include="Content\2013.2.611\telerik.web20.min.css" />
-    <Content Include="Content\2013.2.611\telerik.webblue.min.css" />
-    <Content Include="Content\2013.2.611\telerik.windows7.min.css" />
-    <Content Include="Content\2013.2.611\Telerik\editor.png" />
-    <Content Include="Content\2013.2.611\Telerik\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Telerik\loading.gif" />
-    <Content Include="Content\2013.2.611\Telerik\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Telerik\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Telerik\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Telerik\sprite.png" />
-    <Content Include="Content\2013.2.611\Telerik\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Telerik\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Telerik\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Transparent\active.png" />
-    <Content Include="Content\2013.2.611\Transparent\editor.png" />
-    <Content Include="Content\2013.2.611\Transparent\gradient.png" />
-    <Content Include="Content\2013.2.611\Transparent\group.png" />
-    <Content Include="Content\2013.2.611\Transparent\hover.png" />
-    <Content Include="Content\2013.2.611\Transparent\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Transparent\loading.gif" />
-    <Content Include="Content\2013.2.611\Transparent\selected.png" />
-    <Content Include="Content\2013.2.611\Transparent\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Transparent\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Transparent\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Transparent\sprite.png" />
-    <Content Include="Content\2013.2.611\Transparent\toolbar.png" />
-    <Content Include="Content\2013.2.611\Transparent\widget.png" />
-    <Content Include="Content\2013.2.611\Vista\editor.png" />
-    <Content Include="Content\2013.2.611\Vista\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Vista\loading.gif" />
-    <Content Include="Content\2013.2.611\Vista\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Vista\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Vista\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Vista\sprite.png" />
-    <Content Include="Content\2013.2.611\Web20\editor.png" />
-    <Content Include="Content\2013.2.611\Web20\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Web20\loading.gif" />
-    <Content Include="Content\2013.2.611\Web20\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Web20\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Web20\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Web20\sprite.png" />
-    <Content Include="Content\2013.2.611\Web20\treeview-line.png" />
-    <Content Include="Content\2013.2.611\Web20\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\Web20\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\WebBlue\editor.png" />
-    <Content Include="Content\2013.2.611\WebBlue\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\WebBlue\loading.gif" />
-    <Content Include="Content\2013.2.611\WebBlue\slider-h.gif" />
-    <Content Include="Content\2013.2.611\WebBlue\slider-v.gif" />
-    <Content Include="Content\2013.2.611\WebBlue\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\WebBlue\sprite.png" />
-    <Content Include="Content\2013.2.611\WebBlue\treeview-line.png" />
-    <Content Include="Content\2013.2.611\WebBlue\treeview-nodes-rtl.png" />
-    <Content Include="Content\2013.2.611\WebBlue\treeview-nodes.png" />
-    <Content Include="Content\2013.2.611\Windows7\editor.png" />
-    <Content Include="Content\2013.2.611\Windows7\imagebrowser.png" />
-    <Content Include="Content\2013.2.611\Windows7\loading.gif" />
-    <Content Include="Content\2013.2.611\Windows7\slider-h.gif" />
-    <Content Include="Content\2013.2.611\Windows7\slider-v.gif" />
-    <Content Include="Content\2013.2.611\Windows7\sprite-vertical.png" />
-    <Content Include="Content\2013.2.611\Windows7\sprite.png" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker.min.css" />
     <Content Include="Content\bootstrap-datepicker.standalone.css" />
@@ -975,35 +680,6 @@
     <Content Include="Images\vidoop.ico" />
     <Content Include="Images\wordpress.ico" />
     <Content Include="Images\yahoo.gif" />
-    <Content Include="Scripts\2013.2.611\jquery-1.7.1.min.js" />
-    <Content Include="Scripts\2013.2.611\jquery.validate.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.all.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.autocomplete.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.calendar.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.chart.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.combobox.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.common.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.datepicker.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.datetimepicker.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.draganddrop.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.editor.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.grid.editing.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.grid.filtering.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.grid.grouping.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.grid.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.grid.reordering.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.grid.resizing.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.imagebrowser.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.list.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.menu.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.panelbar.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.slider.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.splitter.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.tabstrip.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.textbox.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.timepicker.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.treeview.min.js" />
-    <Content Include="Scripts\2013.2.611\telerik.upload.min.js" />
     <Content Include="Scripts\2013.2.611\telerik.window.min.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
@@ -1573,156 +1249,6 @@
     <Content Include="App_GlobalResources\GridLocalization.uk-UA.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>GridLocalization.uk-UA.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.ru-RU.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.ru-RU.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.pt-PT.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.pt-PT.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.pt-BR.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.pt-BR.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.pl-PL.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.pl-PL.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.nl-NL.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.nl-NL.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.fr-FR.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.fr-FR.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.es-ES.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.es-ES.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.en-US.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.en-US.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.de-DE.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.de-DE.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.da-DK.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.da-DK.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.bg-BG.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.bg-BG.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.zh-CN.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.zh-CN.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.uk-UA.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.uk-UA.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.ru-RU.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.ru-RU.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.pt-PT.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.pt-PT.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.pt-BR.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.pt-BR.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.pl-PL.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.pl-PL.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.nl-NL.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.nl-NL.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.fr-FR.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.fr-FR.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.en-US.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.en-US.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.de-DE.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.de-DE.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.da-DK.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.da-DK.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.bg-BG.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.bg-BG.designer.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <PropertyGroup>
