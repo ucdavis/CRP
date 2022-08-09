@@ -7,18 +7,18 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
 using Microsoft.Azure;
-using Telerik.Web.Mvc.UI;
+
 
 namespace CRP.Controllers.Helpers
 {
     public static class HtmlHelperExtensions
     {
-        public static CustomGridBuilder<T> Grid<T>(this HtmlHelper htmlHelper, IEnumerable<T> dataModel) where T : class
-        {
-            var builder = htmlHelper.Telerik().Grid(dataModel);
+        //public static CustomGridBuilder<T> Grid<T>(this HtmlHelper htmlHelper, IEnumerable<T> dataModel) where T : class
+        //{
+        //    var builder = htmlHelper.Telerik().Grid(dataModel);
 
-            return new CustomGridBuilder<T>(builder);
-        }
+        //    return new CustomGridBuilder<T>(builder);
+        //}
 
         //public static string GenerateCaptcha(this HtmlHelper helper)
         //{
