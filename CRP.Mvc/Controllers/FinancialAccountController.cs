@@ -27,7 +27,7 @@ namespace CRP.Controllers
         public FinancialAccountController(IFinancialService financialService)
         {
             _financialService = financialService;
-            RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs") == "true";
+            RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
         }
 
         /// <summary>
@@ -97,18 +97,18 @@ namespace CRP.Controllers
             {
                 if(string.IsNullOrWhiteSpace( model.Chart))
                 {
-                    ModelState.AddModelError("FinancialAccount.Chart", "Chart is currently required");
+                    ModelState.AddModelError("Chart", "Chart is currently required");
                 }
                 if (string.IsNullOrWhiteSpace(model.Account))
                 {
-                    ModelState.AddModelError("FinancialAccount.Account", "Account is currently required");
+                    ModelState.AddModelError("Account", "Account is currently required");
                 }
             }
             else
             {
                 if (string.IsNullOrWhiteSpace(model.FinancialSegmentString))
                 {
-                    ModelState.AddModelError("FinancialAccount.FinancialSegmentString", "Chart Of Accounts is required");
+                    ModelState.AddModelError("FinancialSegmentString", "Chart Of Accounts is required");
                 }
             }
             if (!ModelState.IsValid)
