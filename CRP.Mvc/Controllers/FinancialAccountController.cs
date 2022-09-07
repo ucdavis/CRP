@@ -104,6 +104,13 @@ namespace CRP.Controllers
                     ModelState.AddModelError("FinancialAccount.Account", "Account is currently required");
                 }
             }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.FinancialSegmentString))
+                {
+                    ModelState.AddModelError("FinancialAccount.FinancialSegmentString", "Chart Of Accounts is required");
+                }
+            }
             if (!ModelState.IsValid)
             {
                 Message = "Validation Failed";

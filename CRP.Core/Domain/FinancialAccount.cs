@@ -19,7 +19,7 @@ namespace CRP.Core.Domain
 
         [StringLength(128)]
         [DisplayName("Financial Segment String")]
-        public string FinancialSegmentString { get; set; }
+        public virtual string FinancialSegmentString { get; set; }
 
         /// <summary>
         /// Chart Code.
