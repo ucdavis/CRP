@@ -59,17 +59,23 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.Index());
             }
 
-            var accountValidation = await _financialService.IsAccountValidForRegistration(account);
-            if (!accountValidation.IsValid)
+            if(RequireKfs)
             {
-                ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
-                ErrorMessage = $"Invalid Account: Field: {accountValidation.Field} Error: {accountValidation.Message}";
+                var accountValidation = await _financialService.IsAccountValidForRegistration(account);
+                if (!accountValidation.IsValid)
+                {
+                    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
+                    ErrorMessage = $"Invalid Account: Field: {accountValidation.Field} Error: {accountValidation.Message}";
+                }
+                else
+                {
+                    Message = "Account is still valid!";
+                }
             }
             else
             {
-                Message = "Account is still valid!";
+                //TODO: AE COA validation
             }
-
             return View(account);
         }
 
@@ -228,6 +234,7 @@ namespace CRP.Controllers
             account.Project     = model.Project.SafeToUpper();
             account.IsActive    = model.IsActive;
             account.IsUserAdded   = model.IsUserAdded;
+            account.FinancialSegmentString = model.FinancialSegmentString.SafeToUpper();
 
 
             if (!ModelState.IsValid)
@@ -237,15 +244,28 @@ namespace CRP.Controllers
             }
 
             var warning = string.Empty;
-            if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
-                a.IsActive && a.Id != account.Id && 
-                a.Chart == account.Chart &&
-                a.Account == account.Account &&
-                a.SubAccount == account.SubAccount &&
-                a.Project == account.Project))
+            if (RequireKfs)
             {
-                warning = "WARNING That account already exists (But we also updated this)";
+                if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
+                    a.IsActive && a.Id != account.Id &&
+                    a.Chart == account.Chart &&
+                    a.Account == account.Account &&
+                    a.SubAccount == account.SubAccount &&
+                    a.Project == account.Project))
+                {
+                    warning = "WARNING That account already exists (But we also updated this)";
+                }
             }
+            else
+            {
+                if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
+                    a.IsActive && a.Id != account.Id &&
+                    a.FinancialSegmentString == account.FinancialSegmentString))
+                {
+                    warning = "WARNING That Financial Segment String already exists (But we also updated this)";
+                }
+            }
+
 
             Repository.OfType<FinancialAccount>().EnsurePersistent(account);
             Message = NotificationMessages.STR_ObjectSaved.Replace(NotificationMessages.ObjectType,
