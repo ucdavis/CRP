@@ -9,6 +9,7 @@ using CRP.Core.Helpers;
 using CRP.Core.Resources;
 using CRP.Mvc.Models.FinancialModels;
 using CRP.Mvc.Services;
+using Microsoft.Azure;
 using MvcContrib;
 using MvcContrib.Attributes;
 using UCDArch.Web.Controller;
@@ -21,9 +22,12 @@ namespace CRP.Controllers
     {
         private readonly IFinancialService _financialService;
 
+        private readonly bool RequireKfs ;
+
         public FinancialAccountController(IFinancialService financialService)
         {
             _financialService = financialService;
+            RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs") == "true";
         }
 
         /// <summary>
@@ -89,6 +93,17 @@ namespace CRP.Controllers
         [PageTracker]
         public async Task<ActionResult> Create(FinancialAccount model)
         {
+            if (RequireKfs)
+            {
+                if(string.IsNullOrWhiteSpace( model.Chart))
+                {
+                    ModelState.AddModelError("FinancialAccount.Chart", "Chart is currently required");
+                }
+                if (string.IsNullOrWhiteSpace(model.Account))
+                {
+                    ModelState.AddModelError("FinancialAccount.Account", "Account is currently required");
+                }
+            }
             if (!ModelState.IsValid)
             {
                 Message = "Validation Failed";
@@ -102,7 +117,8 @@ namespace CRP.Controllers
                 Chart       = model.Chart.SafeToUpper(),
                 Account     = model.Account.SafeToUpper(),
                 SubAccount  = model.SubAccount.SafeToUpper(),
-                Project     = model.Project.SafeToUpper(), //Not used?
+                Project     = model.Project.SafeToUpper(), //Not used
+                FinancialSegmentString = model.FinancialSegmentString.SafeToUpper(),
                 IsActive    = true, 
                 IsUserAdded   = false, 
             };
