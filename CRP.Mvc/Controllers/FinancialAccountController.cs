@@ -108,7 +108,7 @@ namespace CRP.Controllers
             {
                 if (string.IsNullOrWhiteSpace(model.FinancialSegmentString))
                 {
-                    ModelState.AddModelError("FinancialSegmentString", "Chart Of Accounts is required");
+                    ModelState.AddModelError("FinancialSegmentString", "Financial Segment String is required");
                 }
             }
             if (!ModelState.IsValid)
@@ -194,6 +194,25 @@ namespace CRP.Controllers
                 Message = NotificationMessages.STR_ObjectNotFound.Replace(NotificationMessages.ObjectType,
                                                                        nameof(FinancialAccount));
                 return this.RedirectToAction(a => a.Index());
+            }
+
+            if (RequireKfs)
+            {
+                if (string.IsNullOrWhiteSpace(model.Chart))
+                {
+                    ModelState.AddModelError("Chart", "Chart is currently required");
+                }
+                if (string.IsNullOrWhiteSpace(model.Account))
+                {
+                    ModelState.AddModelError("Account", "Account is currently required");
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.FinancialSegmentString))
+                {
+                    ModelState.AddModelError("FinancialSegmentString", "Financial Segment String is required");
+                }
             }
 
             if (!ModelState.IsValid)
