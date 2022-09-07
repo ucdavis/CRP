@@ -21,12 +21,13 @@ namespace CRP.Controllers
     public class FinancialAccountController : ApplicationController
     {
         private readonly IFinancialService _financialService;
-
+        private readonly IAggieEnterpriseService _aggieEnterpriseService;
         private readonly bool RequireKfs ;
 
-        public FinancialAccountController(IFinancialService financialService)
+        public FinancialAccountController(IFinancialService financialService, IAggieEnterpriseService aggieEnterpriseService)
         {
             _financialService = financialService;
+            _aggieEnterpriseService = aggieEnterpriseService;
             RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
         }
 
@@ -74,7 +75,11 @@ namespace CRP.Controllers
             }
             else
             {
-                //TODO: AE COA validation
+                if(! await _aggieEnterpriseService.IsAccountValid(account.FinancialSegmentString))
+                {
+                    ModelState.AddModelError("FinancialSegmentString", "Is not valid.");
+                    ErrorMessage = "Financial Segment String in not valid and/or usable with Registration";
+                }
             }
             return View(account);
         }
