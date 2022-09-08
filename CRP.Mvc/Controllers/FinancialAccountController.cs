@@ -1,19 +1,14 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using CRP.Controllers.Filter;
 using CRP.Controllers.Helpers.Filter;
 using CRP.Core.Domain;
 using CRP.Core.Helpers;
 using CRP.Core.Resources;
-using CRP.Mvc.Models.FinancialModels;
 using CRP.Mvc.Services;
 using Microsoft.Azure;
 using MvcContrib;
-using MvcContrib.Attributes;
-using UCDArch.Web.Controller;
-using UCDArch.Web.Helpers;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CRP.Controllers
 {
@@ -21,13 +16,11 @@ namespace CRP.Controllers
     public class FinancialAccountController : ApplicationController
     {
         private readonly IFinancialService _financialService;
-        private readonly IAggieEnterpriseService _aggieEnterpriseService;
         private readonly bool RequireKfs ;
 
-        public FinancialAccountController(IFinancialService financialService, IAggieEnterpriseService aggieEnterpriseService)
+        public FinancialAccountController(IFinancialService financialService)
         {
             _financialService = financialService;
-            _aggieEnterpriseService = aggieEnterpriseService;
             RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
         }
 
@@ -75,10 +68,11 @@ namespace CRP.Controllers
             }
             else
             {
-                if(! await _aggieEnterpriseService.IsAccountValid(account.FinancialSegmentString))
+                var accountValidation = await _financialService.IsAccountValidForRegistration(account.FinancialSegmentString);
+                if (! accountValidation.IsValid)
                 {
                     ModelState.AddModelError("FinancialSegmentString", "Is not valid.");
-                    ErrorMessage = "Financial Segment String in not valid and/or usable with Registration";
+                    ErrorMessage = $"Financial Segment String in not valid: {accountValidation.Message}";
                 }
             }
             return View(account);
@@ -104,6 +98,7 @@ namespace CRP.Controllers
         [PageTracker]
         public async Task<ActionResult> Create(FinancialAccount model)
         {
+            model.FinancialSegmentString = model.FinancialSegmentString.SafeToUpper();
             if (RequireKfs)
             {
                 if(string.IsNullOrWhiteSpace( model.Chart))
@@ -120,6 +115,18 @@ namespace CRP.Controllers
                 if (string.IsNullOrWhiteSpace(model.FinancialSegmentString))
                 {
                     ModelState.AddModelError("FinancialSegmentString", "Financial Segment String is required");
+                }
+                var accountValidation = await _financialService.IsAccountValidForRegistration(model.FinancialSegmentString);
+                if (!accountValidation.IsValid)
+                {
+                    ModelState.AddModelError("FinancialSegmentString", accountValidation.Message);
+                }
+                else
+                {
+                    if (accountValidation.IsWarning)
+                    {
+                        Message = $"Warning: COA may not be valid for use with Registration: {accountValidation.Message}";
+                    }
                 }
             }
             if (!ModelState.IsValid)
@@ -199,6 +206,7 @@ namespace CRP.Controllers
         [PageTracker]
         public async Task<ActionResult> Edit(int id, FinancialAccount model)
         {
+            model.FinancialSegmentString = model.FinancialSegmentString.SafeToUpper();
             var account = Repository.OfType<FinancialAccount>().GetNullableById(id);
             if (account == null)
             {
@@ -223,6 +231,18 @@ namespace CRP.Controllers
                 if (string.IsNullOrWhiteSpace(model.FinancialSegmentString))
                 {
                     ModelState.AddModelError("FinancialSegmentString", "Financial Segment String is required");
+                }
+                var accountValidation = await _financialService.IsAccountValidForRegistration(model.FinancialSegmentString);
+                if (!accountValidation.IsValid)
+                {
+                    ModelState.AddModelError("FinancialSegmentString", accountValidation.Message);
+                }
+                else
+                {
+                    if (accountValidation.IsWarning)
+                    {
+                        Message = $"Warning: COA may not be valid for use with Registration: {accountValidation.Message}";
+                    }
                 }
             }
 
