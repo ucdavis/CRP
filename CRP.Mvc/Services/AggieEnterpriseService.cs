@@ -15,7 +15,6 @@ namespace CRP.Mvc.Services
 {
     public interface IAggieEnterpriseService
     {
-        Task<bool> IsAccountValid(string financialSegmentString, bool validateCVRs = true);
         Task<AccountValidationModel> ValidateAccount(string financialSegmentString, bool validateCVRs = true);
     }
     public class AggieEnterpriseService : IAggieEnterpriseService
@@ -27,62 +26,6 @@ namespace CRP.Mvc.Services
             _aggieClient = GraphQlClient.Get(CloudConfigurationManager.GetSetting("GraphQlUrl"), CloudConfigurationManager.GetSetting("GraphToken"));
         }
 
-        public async Task<bool> IsAccountValid(string financialSegmentString, bool validateCVRs = true)
-        {
-            var segmentStringType = FinancialChartValidation.GetFinancialChartStringType(financialSegmentString);
-
-            if (segmentStringType == FinancialChartStringType.Gl)
-            {
-                var result = await _aggieClient.GlValidateChartstring.ExecuteAsync(financialSegmentString, validateCVRs);
-
-                var data = result.ReadData();
-
-                var isValid = data.GlValidateChartstring.ValidationResponse.Valid;
-
-                //if (isValid)
-                //{
-                //    //Is fund valid?
-                //    var fund = data.GlValidateChartstring.Segments.Fund;
-                //    if ("13U00,13U01,13U02".Contains(fund))//TODO: Make a configurable list of valid funds
-                //    {
-                //        //These three are excluded
-                //        isValid = false;
-                //    }
-                //    else
-                //    {
-                //        var funds = await _aggieClient.FundParents.ExecuteAsync(fund);
-                //        var dataFunds = funds.ReadData();
-                //        if (DoesFundRollUp.Fund(dataFunds.ErpFund, 2, "1200C") || DoesFundRollUp.Fund(dataFunds.ErpFund, 2, "1300C") || DoesFundRollUp.Fund(dataFunds.ErpFund, 2, "5000C"))
-                //        {
-                //            isValid = true;
-                //        }
-                //        else
-                //        {
-                //            isValid = false;
-                //        }
-                //    }
-                //}
-
-                return isValid;
-            }
-
-            if (segmentStringType == FinancialChartStringType.Ppm)
-            {
-                var result = await _aggieClient.PpmStringSegmentsValidate.ExecuteAsync(financialSegmentString);
-
-                var data = result.ReadData();
-
-                var isValid = data.PpmStringSegmentsValidate.ValidationResponse.Valid;
-
-                //TODO: Extra validation for PPM strings?
-
-                return isValid;
-            }
-
-
-
-            return false;
-        }
 
         public async Task<AccountValidationModel> ValidateAccount(string financialSegmentString, bool validateCVRs = true)
         {
@@ -103,6 +46,20 @@ namespace CRP.Mvc.Services
                         rtValue.Message = $"{rtValue.Message} {err}";
                     }
                     
+                }
+
+                if (rtValue.IsValid)
+                {
+                    var fund = data.GlValidateChartstring.Segments.Fund;
+                    if(fund != "13U20")
+                    {
+                        rtValue.IsWarning = true;
+                        rtValue.Message = $"Fund portion of the Financial Segment String must be 13U20 not {fund}";
+                    }
+                    else
+                    {
+                        //Check if Financial Dept roles up to Level C value AAES00C (College of Agricultural and Environmental Sciences)
+                    }
                 }
 
                 //if (isValid)
@@ -150,6 +107,7 @@ namespace CRP.Mvc.Services
 
 
                 //TODO: Extra validation for PPM strings?
+                // Task will need "glPostingFundCode": 13U20, to be valid from non admin side.
 
                 return rtValue;
             }
