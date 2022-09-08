@@ -74,6 +74,13 @@ namespace CRP.Controllers
                     ModelState.AddModelError("FinancialSegmentString", "Is not valid.");
                     ErrorMessage = $"Financial Segment String in not valid: {accountValidation.Message}";
                 }
+                else
+                {
+                    if (accountValidation.IsWarning)
+                    {
+                        Message = $"Warning: {accountValidation.Message}";
+                    }
+                }
             }
             return View(account);
         }
