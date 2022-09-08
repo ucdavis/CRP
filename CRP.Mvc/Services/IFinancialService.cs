@@ -313,7 +313,16 @@ namespace CRP.Mvc.Services
             }
             else
             {
-                rtValue = await _aggieEnterpriseService.ValidateAccount(account.FinancialSegmentString);
+                if (String.IsNullOrWhiteSpace(account.FinancialSegmentString))
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Message = "Financial Segment String is required";
+                    rtValue.Field = "FinancialSegmentString";
+                }
+                else
+                {
+                    rtValue = await _aggieEnterpriseService.ValidateAccount(account.FinancialSegmentString);
+                }
             }
 
             return rtValue;
@@ -357,7 +366,16 @@ namespace CRP.Mvc.Services
             }
             else
             {
-                rtValue = await _aggieEnterpriseService.ValidateAccount(account);
+                if (String.IsNullOrWhiteSpace(account))
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Message = "Financial Segment String is required";
+                    rtValue.Field = "FinancialSegmentString";
+                }
+                else
+                {
+                    rtValue = await _aggieEnterpriseService.ValidateAccount(account);
+                }
             }
             return rtValue;
         }
