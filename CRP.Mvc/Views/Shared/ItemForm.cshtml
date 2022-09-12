@@ -113,16 +113,21 @@
 
         <p>(OR)</p>
 
-        <div class="form-group">
-            <label>User Added Account:</label>
-            @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
-            @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
-        </div>
-        <div class="form-group">
-            <label>User Added Account Name:</label>
-            @Html.TextBoxFor(x => x.Item.UserAddedFinancialName, getFinancialAccountHtmlOptions())
-            @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialName)
-        </div>
+        <fieldset class="field-border">
+            <legend class="field-border">User Added</legend>
+            <div class="form-group">
+                <label>User Added Account:</label>
+                @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
+                @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
+            </div>
+            <div class="form-group">
+                <label>User Added Account Name:</label>
+                @Html.TextBoxFor(x => x.Item.UserAddedFinancialName, getFinancialAccountHtmlOptions())
+                @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialName)
+            </div>
+        </fieldset>
+
+
     </fieldset>
 
     <div class="form-group">
