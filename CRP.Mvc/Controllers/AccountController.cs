@@ -13,6 +13,7 @@ using UCDArch.Web.Controller;
 using MvcContrib;
 using UCDArch.Web.Validator;
 using OpenIdUser=CRP.Core.Domain.OpenIdUser;
+using System.Collections.Generic;
 
 namespace CRP.Controllers
 {
@@ -197,6 +198,38 @@ namespace CRP.Controllers
             //var adminPageUrl = CloudConfigurationManager.GetSetting("AdminPageUrl");
 
             return View();
+        }
+
+        [Authorize]
+        public RedirectToRouteResult Emulate(string id /* Login ID*/)
+        {
+            var allowedUsers = new List<string>();
+            allowedUsers.Add("jsylvest");
+            allowedUsers.Add("postit");
+            allowedUsers.Add("sweber");
+            
+            if (!allowedUsers.Contains(User.Identity.Name))
+            {
+                throw new Exception("Yaw can't do that.");
+            }
+            if (!string.IsNullOrEmpty(id))
+            {
+                //Message = "Emulating " + id;
+                Message = string.Format("Emulating {0}.  To exit emulation use /Account/EndEmulation", id);
+                FormsAuthentication.RedirectFromLoginPage(id, false);
+            }
+            else
+            {
+                Message = "Login ID not provided.  Use /Emulate/login";
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+        public RedirectToRouteResult EndEmulate()
+        {
+            FormsAuthentication.SignOut();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
