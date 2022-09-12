@@ -163,13 +163,18 @@ namespace CRP.Controllers
             var account = Repository.OfType<FinancialAccount>().GetNullableById(item.FinancialAccountId);
             if (account == null && !string.IsNullOrWhiteSpace(item.UserAddedFinancialAccount))
             {
+                if (string.IsNullOrWhiteSpace(item.UserAddedFinancialName))
+                {
+                    ModelState.AddModelError("item.UserAddedFinancialName", "When adding an account not in the list, the name is required");    
+                }
                 var accountValidation = await _financialService.IsAccountValidForRegistration(item.UserAddedFinancialAccount);
                 if (!accountValidation.IsValid)
                 {
                     ModelState.AddModelError("Item.UserAddedFinancialAccount", $"{item.UserAddedFinancialAccount}: {accountValidation.Message}");
                 }
-                else
+                if(ModelState.IsValid)
                 {
+                    
                     //Ok, it is valid
                     //Check if it exists
                     //Otherwise create it 
@@ -186,7 +191,7 @@ namespace CRP.Controllers
                     {
                         accountValidation.FinancialAccount.IsUserAdded = true;
                         accountValidation.FinancialAccount.IsActive = true;
-                        accountValidation.FinancialAccount.Name = $"Added By: {User.Identity.Name}";
+                        accountValidation.FinancialAccount.Name = item.UserAddedFinancialName;
                         accountValidation.FinancialAccount.Description = $"Added By: {User.Identity.Name} on {DateTime.UtcNow.ToPacificTime().ToShortDateString()}";
                         Repository.OfType<FinancialAccount>().EnsurePersistent(accountValidation.FinancialAccount);
                         item.FinancialAccountId = accountValidation.FinancialAccount.Id;
@@ -269,6 +274,11 @@ namespace CRP.Controllers
             {
                 var viewModel = ItemViewModel.Create(Repository, CurrentUser, itemToCreate);
                 viewModel.IsNew = true;
+                if (account == null && !string.IsNullOrWhiteSpace(item.UserAddedFinancialAccount))
+                {
+                    viewModel.Item.UserAddedFinancialAccount = item.UserAddedFinancialAccount;
+                    viewModel.Item.UserAddedFinancialName = item.UserAddedFinancialName;
+                }
                 return View(viewModel);
             }
         }
