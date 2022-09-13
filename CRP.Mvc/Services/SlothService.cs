@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Mvc.Helpers;
 using CRP.Mvc.Models.Configuration;
 using CRP.Mvc.Models.Sloth;
@@ -32,6 +33,9 @@ namespace CRP.Mvc.Services
             _settings = new SlothSettings();
             _settings.BaseUrl = CloudConfigurationManager.GetSetting("Sloth.BaseUrl");
             _settings.ApiKey = CloudConfigurationManager.GetSetting("Sloth.ApiKey");
+
+            _settings.RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
+            _settings.BaseUrlV2 = CloudConfigurationManager.GetSetting("Sloth.BaseUrlV2");
         }
 
         public async Task<Transaction> GetTransactionsByProcessorId(string id)
@@ -43,7 +47,7 @@ namespace CRP.Mvc.Services
                 var url = $"transactions/processor/{escapedId}";
 
                 var response = await client.GetAsync(url);
-                var result = await response.GetContentOrNullAsync<Transaction>();
+                var result = await response.GetContentOrNullAsync<Transaction>(); //Think this is the wrong transaction...
                 return result;
             }
         }
