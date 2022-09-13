@@ -64,6 +64,12 @@ namespace CRP.Mvc.Services
             {
                 BaseAddress = new Uri(_settings.BaseUrl),
             };
+            if (!_settings.RequireKfs)
+            {
+                client.BaseAddress = new Uri(_settings.BaseUrlV2);
+            }
+                
+                
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             client.DefaultRequestHeaders.Add("X-Auth-Token", _settings.ApiKey);
 

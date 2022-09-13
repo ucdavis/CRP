@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Core.Abstractions;
+using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
 using Microsoft.Azure;
 using Newtonsoft.Json;
@@ -53,6 +54,12 @@ namespace CRP.Mvc.Controllers
             Log.Information("About to hit exception");
             throw new NotImplementedException("Har Har har. We tested it.");
             Log.Information("Hit exception");
+        }
+
+        public ActionResult TestAccount()
+        {
+            var account = new KfsAccounts();
+            return Content($"{account.ClearingFinancialSegmentString} == {KfsAccounts.HoldingAccount}");
         }
 
 

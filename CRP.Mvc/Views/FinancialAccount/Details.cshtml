@@ -1,4 +1,5 @@
-﻿@model CRP.Core.Domain.FinancialAccount
+﻿
+@model CRP.Mvc.Controllers.ViewModels.Financial.FinancialAccountDetailsViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -17,47 +18,103 @@
     <div>
         <h4>Account Info</h4>
         <hr />
-        <dl class="dl-horizontal">
-            <dt class="col-md-4">
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd class="col-md-8">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-            <dt class="col-md-4">
-                @Html.DisplayNameFor(model => model.Description)
-            </dt>
-            <dd class="col-md-8">
-                @Html.DisplayFor(model => model.Description)
-            </dd>
-            <dt class="col-md-4">
-                Account Number
-            </dt>
-            <dd class="col-md-8">
-                @Model.GetAccountString()
-            </dd>
-            <dt class="col-md-4">
-                F... Segment String
-            </dt>
-            <dd class="col-md-8">
-                @Model.FinancialSegmentString
-            </dd>
-            <dt class="col-md-4">
-                @Html.DisplayNameFor(model => model.IsActive)
-            </dt>
-            <dd class="col-md-8">
-                @Html.DisplayFor(model => model.IsActive)
-            </dd>
-            <dt class="col-md-4">
-                @Html.DisplayNameFor(model => model.IsUserAdded)
-            </dt>
-            <dd class="col-md-8">
-                @Html.DisplayFor(model => model.IsUserAdded)
-            </dd>
-        </dl>
+            <dl class="dl-horizontal">
+                <dt class="col-md-4">
+                    @Html.DisplayNameFor(model => model.FinancialAccount.Name)
+                </dt>
+                <dd class="col-md-8">
+                    @Html.DisplayFor(model => model.FinancialAccount.Name)
+                </dd>
+                <dt class="col-md-4">
+                    @Html.DisplayNameFor(model => model.FinancialAccount.Description)
+                </dt>
+                <dd class="col-md-8">
+                    @Html.DisplayFor(model => model.FinancialAccount.Description)
+                </dd>
+                <dt class="col-md-4">
+                    Account Number
+                </dt>
+                <dd class="col-md-8">
+                    @Model.FinancialAccount.GetAccountString()
+                </dd>
+                <dt class="col-md-4">
+                    F... Segment String
+                </dt>
+                <dd class="col-md-8">
+                    @Model.FinancialAccount.FinancialSegmentString
+                </dd>
+                <dt class="col-md-4">
+                    @Html.DisplayNameFor(model => model.FinancialAccount.IsActive)
+                </dt>
+                <dd class="col-md-8">
+                    @Html.DisplayFor(model => model.FinancialAccount.IsActive)
+                </dd>
+                <dt class="col-md-4">
+                    @Html.DisplayNameFor(model => model.FinancialAccount.IsUserAdded)
+                </dt>
+                <dd class="col-md-8">
+                    @Html.DisplayFor(model => model.FinancialAccount.IsUserAdded)
+                </dd>
+            </dl>
     </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", "FinancialAccount", new { id = Model.Id }, new {@class="btn"}) |
-        @Html.ActionLink("Back to List", "Index", "FinancialAccount", null, new {@class="btn"})
-    </p>
+
+
+    <div>
+        @Html.ActionLink("Edit", "Edit", "FinancialAccount", new { id = Model.FinancialAccount.Id }, new { @class = "btn" }) |
+        @Html.ActionLink("Back to List", "Index", "FinancialAccount", null, new { @class = "btn" })
+    </div>
+
+    <div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Date Created
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.RelatedItems)
+                {
+                    <tr>
+                        <td nowrap>
+
+                            @Html.ActionLink("Edit Item", "Edit","ItemManagement", new {id=item.Id}, null)
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+
+                        <td data-sort="@item.Created.Ticks">
+                            @item.Created.ToShortDateString()
+                        </td>
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+
+
+
+@section AdditionalScripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $(".table").DataTable({
+                sorting: [[2, "desc"]], //Default sort on second column
+                columnDefs: [
+                    { orderable: false, 'targets': [0] }, //Disables sort on icon columns
+                ]
+            });
+        });
+    </script>
+}
