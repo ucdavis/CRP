@@ -55,11 +55,6 @@ namespace CRP.Mvc.Controllers
             Log.Information("Hit exception");
         }
 
-        public async Task<ContentResult> TestSloth()
-        {
-            var xxx = await _slothService.Test();
-            return Content("done");
-        }
 
 
 

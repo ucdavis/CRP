@@ -15,13 +15,9 @@ namespace CRP.Mvc.Services
 {
     public interface ISlothService
     {
-        Task<Transaction> GetTransactionsByProcessorId(string id);
-
-        Task<IList<Transaction>> GetTransactionsByKfsKey(string kfskey);
 
         Task<CreateSlothTransactionResponse> CreateTransaction(CreateTransaction transaction);
 
-        Task<Transaction> Test();
     }
 
     public class SlothService : ISlothService
@@ -38,33 +34,6 @@ namespace CRP.Mvc.Services
             _settings.BaseUrlV2 = CloudConfigurationManager.GetSetting("Sloth.BaseUrlV2");
         }
 
-        public async Task<Transaction> GetTransactionsByProcessorId(string id)
-        {
-            //Note: The transaction currently being used is CRP not Sloth so will not work.
-            using (var client = GetHttpClient())
-            {
-                var escapedId = Uri.EscapeUriString(id);
-                var url = $"transactions/processor/{escapedId}";
-
-                var response = await client.GetAsync(url);
-                var result = await response.GetContentOrNullAsync<Transaction>(); //Think this is the wrong transaction...
-                return result;
-            }
-        }
-
-        public async Task<IList<Transaction>> GetTransactionsByKfsKey(string kfskey)
-        {
-            //Note: The transaction currently being used is CRP not Sloth so will not work.
-            using (var client = GetHttpClient())
-            {
-                var escapedKey = Uri.EscapeUriString(kfskey);
-                var url = $"transactions/kfskey/{escapedKey}";
-
-                var response = await client.GetAsync(url);
-                var result = await response.GetContentOrNullAsync<IList<Transaction>>();
-                return result;
-            }
-        }
 
         public async Task<CreateSlothTransactionResponse> CreateTransaction(CreateTransaction transaction)
         {
@@ -88,18 +57,6 @@ namespace CRP.Mvc.Services
             }
         }
 
-        public async Task<Transaction> Test()
-        {
-            //Note: The transaction currently being used is CRP not Sloth so will not work.
-            using (var client = GetHttpClient())
-            {
-                var url = $"transactions";
-
-                var response = await client.GetAsync(url);
-                var result = await response.GetContentOrNullAsync<Transaction>();
-                return result;
-            }
-        }
 
         private HttpClient GetHttpClient()
         {
