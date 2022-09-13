@@ -9,26 +9,27 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Azure;
 using AggieEnterpriseApi.Extensions;
+using CRP.Mvc.Controllers.ViewModels;
 
 namespace CRP.Mvc.Services
 {
     public interface IAggieEnterpriseService
     {
-        Task<bool> IsAccountValid(string financialSegmentString, bool validateCVRs = true);
+        Task<AccountValidationModel> ValidateAccount(string financialSegmentString, bool validateCVRs = true);
     }
     public class AggieEnterpriseService : IAggieEnterpriseService
     {
         private readonly IAggieEnterpriseClient _aggieClient;
 
         public AggieEnterpriseService()
-        {
-            var xxx = CloudConfigurationManager.GetSetting("GraphQlUrl");
+        {           
             _aggieClient = GraphQlClient.Get(CloudConfigurationManager.GetSetting("GraphQlUrl"), CloudConfigurationManager.GetSetting("GraphToken"));
-            
         }
 
-        public async Task<bool> IsAccountValid(string financialSegmentString, bool validateCVRs = true)
+
+        public async Task<AccountValidationModel> ValidateAccount(string financialSegmentString, bool validateCVRs = true)
         {
+            var rtValue = new AccountValidationModel();
             var segmentStringType = FinancialChartValidation.GetFinancialChartStringType(financialSegmentString);
 
             if (segmentStringType == FinancialChartStringType.Gl)
@@ -37,33 +38,38 @@ namespace CRP.Mvc.Services
 
                 var data = result.ReadData();
 
-                var isValid = data.GlValidateChartstring.ValidationResponse.Valid;
+                rtValue.IsValid = data.GlValidateChartstring.ValidationResponse.Valid;
+                if (!rtValue.IsValid)
+                {
+                    foreach(var err in data.GlValidateChartstring.ValidationResponse.ErrorMessages)
+                    {
+                        rtValue.Message = $"{rtValue.Message} {err}";
+                    }
+                    
+                }
 
-                //if (isValid)
-                //{
-                //    //Is fund valid?
-                //    var fund = data.GlValidateChartstring.Segments.Fund;
-                //    if ("13U00,13U01,13U02".Contains(fund))//TODO: Make a configurable list of valid funds
-                //    {
-                //        //These three are excluded
-                //        isValid = false;
-                //    }
-                //    else
-                //    {
-                //        var funds = await _aggieClient.FundParents.ExecuteAsync(fund);
-                //        var dataFunds = funds.ReadData();
-                //        if (DoesFundRollUp.Fund(dataFunds.ErpFund, 2, "1200C") || DoesFundRollUp.Fund(dataFunds.ErpFund, 2, "1300C") || DoesFundRollUp.Fund(dataFunds.ErpFund, 2, "5000C"))
-                //        {
-                //            isValid = true;
-                //        }
-                //        else
-                //        {
-                //            isValid = false;
-                //        }
-                //    }
-                //}
+                if (rtValue.IsValid)
+                {
+                    var fund = data.GlValidateChartstring.Segments.Fund;
+                    if(fund != "13U20")
+                    {
+                        rtValue.IsWarning = true;
+                        rtValue.Message = $"Fund portion of the Financial Segment String must be 13U20 not {fund}";
+                    }
+                    else
+                    {
+                        //Check if Financial Dept roles up to Level C value AAES00C (College of Agricultural and Environmental Sciences)
+                        var rollupDepts = await _aggieClient.DeptParents.ExecuteAsync(data.GlValidateChartstring.Segments.Department);
+                        var dataRollupDeps = rollupDepts.ReadData();
+                        if(!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C")) //TODO: Use app setting?
+                        {
+                            rtValue.IsWarning = true;
+                            rtValue.Message = $"Department portion of the Financial Segment String must roll up to CAES. Dept does not: {data.GlValidateChartstring.Segments.Department}";
+                        }
+                    }
+                }
 
-                return isValid;
+                return rtValue;
             }
 
             if (segmentStringType == FinancialChartStringType.Ppm)
@@ -72,16 +78,26 @@ namespace CRP.Mvc.Services
 
                 var data = result.ReadData();
 
-                var isValid = data.PpmStringSegmentsValidate.ValidationResponse.Valid;
+                rtValue.IsValid = data.PpmStringSegmentsValidate.ValidationResponse.Valid;
+                if (!rtValue.IsValid)
+                {
+                    foreach (var err in data.PpmStringSegmentsValidate.ValidationResponse.ErrorMessages)
+                    {
+                        rtValue.Message = $"{rtValue.Message} {err}";
+                    }
+                }
+
 
                 //TODO: Extra validation for PPM strings?
+                // Task will need "glPostingFundCode": 13U20, to be valid from non admin side.
+                // Validate the org rolls up to caes? If so, need to parse it out of the string, or grab the first word of the returned organization 
 
-                return isValid;
+                return rtValue;
             }
 
 
 
-            return false;
+            return rtValue;
         }
 
         private PpmSegmentInput ConvertToPpmSegmentInput(PpmSegments segments)

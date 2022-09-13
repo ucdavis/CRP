@@ -14,6 +14,7 @@ using CRP.Mvc.Controllers.ViewModels.Transaction;
 using CRP.Mvc.Models.Sloth;
 using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
+using Microsoft.Azure;
 using MvcContrib;
 using Serilog;
 using UCDArch.Web.ActionResults;
@@ -32,6 +33,7 @@ namespace CRP.Controllers
         {
             _notificationProvider = notificationProvider;
             _slothService = slothService;
+            
         }
 
         /// <summary>
@@ -752,6 +754,8 @@ namespace CRP.Controllers
         [BypassAntiForgeryToken]
         public async Task<ActionResult> DepositNotify(TransactionDepositNotification model)
         {
+            var AggieEnterpriseAccounts = new KfsAccounts();
+            var RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
             Log.Information("DepositNotify - Starting");
             // parse id
             if (!int.TryParse(model.MerchantTrackingNumber, out int transactionId))
@@ -774,7 +778,7 @@ namespace CRP.Controllers
 
             if (paymentLog == null)
             {
-                Log.Information("DepositNotify - transaction not found for merchant tracking number");
+                Log.Error("DepositNotify - transaction not found for merchant tracking number");
                 return new JsonNetResult(new
                 {
                     message = "transaction not found for merchant tracking number",
@@ -836,6 +840,41 @@ namespace CRP.Controllers
                 Description = $"Funds Distribution - {transId}".SafeTruncate(40)
             };
 
+            if (!RequireKfs)
+            {
+                debitHolding = new CreateTransfer()
+                {
+                    Amount = total,
+                    Direction = CreateTransfer.CreditDebit.Debit,
+                    FinancialSegmentString = AggieEnterpriseAccounts.ClearingFinancialSegmentString,
+                    Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+                };
+                feeCredit = new CreateTransfer()
+                {
+                    Amount = fee,
+                    Direction = CreateTransfer.CreditDebit.Credit,
+                    FinancialSegmentString = AggieEnterpriseAccounts.FeeFinancialSegmentString, 
+                    Description = $"Processing Fee - {transId}".SafeTruncate(40)
+                };
+                incomeCredit = new CreateTransfer()
+                {
+                    Amount = income,
+                    Direction = CreateTransfer.CreditDebit.Credit,
+                    FinancialSegmentString = paymentLog.Transaction.Item.FinancialAccount.FinancialSegmentString,
+                    Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+                };
+                if(string.IsNullOrWhiteSpace(debitHolding.FinancialSegmentString) || string.IsNullOrWhiteSpace(feeCredit.FinancialSegmentString) || string.IsNullOrWhiteSpace(incomeCredit.FinancialSegmentString))
+                {
+                    Log.Error("Missing FinancialSegmentString for {transId}", transId);
+
+                    return new JsonNetResult(new
+                    {
+                        message = "Missing FinancialSegmentString",
+                        success = false,
+                    });
+                }
+            }
+
             // setup transaction
             var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
 
@@ -855,6 +894,7 @@ namespace CRP.Controllers
                 Source                 = "Registration CyberSource",
                 SourceType             = "CyberSource",
                 ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
+                Description            = $"Funds Distribution - {transId}"
             };
             Log.Information("DepositNotify - Created Transaction");
 

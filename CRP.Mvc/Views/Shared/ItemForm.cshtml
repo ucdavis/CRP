@@ -1,10 +1,12 @@
 ﻿@model CRP.Controllers.ViewModels.ItemViewModel
 @using CRP.Controllers.Helpers;
+@using CRP.Core.Helpers;
 @using Microsoft.Azure
 @using MvcContrib.FluentHtml
 
 @{ 
     var selectedItemType = Model.ItemTypes.FirstOrDefault(t => t.Id == Model.Item?.ItemTypeId);
+    var requireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
 }
 
 @Html.AntiForgeryToken()
@@ -56,11 +58,25 @@
         <legend class="field-border">Account Information</legend>
         <fieldset class="field-border">
             <legend class="field-border">Instructions</legend>
-            <text class="help-block">If adding an account not in the dropdown list, it must be a valid account. Separate chart, account, and sub account with -</text>
-            <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be added.</text>
-            <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list. If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+            @if (requireKfs == true)
+            {
+                <div>
+                    <text class="help-block">If adding an account not in the dropdown list, it must be a valid account. Separate chart, account, and sub account with -</text>
+                    <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be added.</text>
+                    <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list. If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <text class="help-block">The Registration site has moved to use Aggie Enterprise accounts</text>
+                    <text class="help-block">If adding an account not in the dropdown list, it must be a valid Chart Of Accounts string. </text>
+                    <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be used.</text>
+                    <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list. If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+                </div>
+            }
         </fieldset>
-        
+
         <div class="form-group">
             <label>Account Number:</label>
             @{
@@ -82,7 +98,7 @@
                     accountDisabled = false;
                 }
 
-                var accountOptions = Model.FinancialAccounts.Select(a => new SelectListItem() { Text = a.GetAccountString(), Value = a.Id.ToString() });
+                var accountOptions = Model.FinancialAccounts.Select(a => new SelectListItem() { Text = a.GetCoaForList(requireKfs), Value = a.Id.ToString() });
 
                 Func<object> getFinancialAccountHtmlOptions = () =>
                 {
@@ -103,20 +119,29 @@
                 <p class="alert-danger">@Model.FinancialAccountWarning</p>
             }
 
-            @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--",  getFinancialAccountHtmlOptions())
+            @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--", getFinancialAccountHtmlOptions())
             @Html.ValidationMessage("Item.FinancialAccount")
             <text class="help-block">*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</text>
-            
+
         </div>
 
         <p>(OR)</p>
 
-        <div class="form-group">
-            <label>User Added Account:</label>
-            @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
-            @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
-            
-        </div>
+        <fieldset class="field-border">
+            <legend class="field-border">User Added</legend>
+            <div class="form-group">
+                <label>User Added Account:</label>
+                @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
+                @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
+            </div>
+            <div class="form-group">
+                <label>User Added Account Name:</label>
+                @Html.TextBoxFor(x => x.Item.UserAddedFinancialName, getFinancialAccountHtmlOptions())
+                @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialName)
+            </div>
+        </fieldset>
+
+
     </fieldset>
 
     <div class="form-group">

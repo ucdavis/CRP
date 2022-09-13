@@ -62,5 +62,14 @@ namespace CRP.Core.Domain
 
             return $"{Chart}-{Account}-{SubAccount}";
         }
+
+        public virtual string GetCoaForList(bool useKfs = true)
+        {
+            if (useKfs)
+            {
+                return $"{Name}: {GetAccountString()}";
+            }
+            return $"{Name}: {FinancialSegmentString}";
+        }
     }
 }
