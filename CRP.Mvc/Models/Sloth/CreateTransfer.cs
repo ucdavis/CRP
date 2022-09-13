@@ -16,7 +16,6 @@ namespace CRP.Mvc.Models.Sloth
         /// Chart Code associated with transaction.
         /// </summary>
         [MaxLength(1)]
-        [Required]
         public string Chart { get; set; }
 
         /// <summary>
@@ -25,7 +24,6 @@ namespace CRP.Mvc.Models.Sloth
         /// </summary>
         [MaxLength(7)]
         [RegularExpression("[A-Z0-9]*")]
-        [Required]
         public string Account { get; set; }
 
         /// <summary>
@@ -43,7 +41,6 @@ namespace CRP.Mvc.Models.Sloth
         /// </summary>
         [MaxLength(4)]
         [RegularExpression("[A-Z0-9]*")]
-        [Required]
         public string ObjectCode { get; set; }
 
         /// <summary>
@@ -76,6 +73,8 @@ namespace CRP.Mvc.Models.Sloth
         /// </summary>
         [Required]
         public CreditDebit Direction { get; set; }
+
+        public string FinancialSegmentString { get; set; }
 
         public enum CreditDebit
         {

@@ -3,6 +3,7 @@ using CRP.Controllers.Helpers.Filter;
 using CRP.Core.Domain;
 using CRP.Core.Helpers;
 using CRP.Core.Resources;
+using CRP.Mvc.Controllers.ViewModels.Financial;
 using CRP.Mvc.Services;
 using Microsoft.Azure;
 using MvcContrib;
@@ -80,9 +81,17 @@ namespace CRP.Controllers
                     {
                         Message = $"Warning: {accountValidation.Message}";
                     }
+                    else
+                    {
+                        Message = "COA Financial Segment String is still valid!";
+                    }
                 }
             }
-            return View(account);
+
+            var model = new FinancialAccountDetailsViewModel();
+            model.FinancialAccount = account;
+            model.RelatedItems = Repository.OfType<Item>().Queryable.Where(a => a.FinancialAccount.Id == account.Id).Select(a => new ItemModel { Id = a.Id, Name = a.Name, Created = a.DateCreated.ToPacificTime()}).ToList();
+            return View(model);
         }
 
         /// <summary>
