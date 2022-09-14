@@ -51,22 +51,22 @@ namespace CRP.Mvc.Services
                 if (rtValue.IsValid)
                 {
                     var fund = data.GlValidateChartstring.Segments.Fund;
-                    if(fund != "13U20")
+                    if (fund != "13U20")
                     {
                         rtValue.IsWarning = true;
                         rtValue.Message = $"Fund portion of the Financial Segment String must be 13U20 not {fund}";
                     }
-                    else
+ 
+                    //Check if Financial Dept roles up to Level C value AAES00C (College of Agricultural and Environmental Sciences)
+                    var rollupDepts = await _aggieClient.DeptParents.ExecuteAsync(data.GlValidateChartstring.Segments.Department);
+                    var dataRollupDeps = rollupDepts.ReadData();
+                    if (!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C")) //TODO: Use app setting?
                     {
-                        //Check if Financial Dept roles up to Level C value AAES00C (College of Agricultural and Environmental Sciences)
-                        var rollupDepts = await _aggieClient.DeptParents.ExecuteAsync(data.GlValidateChartstring.Segments.Department);
-                        var dataRollupDeps = rollupDepts.ReadData();
-                        if(!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C")) //TODO: Use app setting?
-                        {
-                            rtValue.IsWarning = true;
-                            rtValue.Message = $"Department portion of the Financial Segment String must roll up to CAES. Dept does not: {data.GlValidateChartstring.Segments.Department}";
-                        }
+                        var saveWarning = rtValue.Message;
+                        rtValue.IsWarning = true;
+                        rtValue.Message = $"Department portion of the Financial Segment String must roll up to CAES. Dept does not: {data.GlValidateChartstring.Segments.Department} {saveWarning}";
                     }
+
                 }
 
                 return rtValue;
@@ -86,11 +86,23 @@ namespace CRP.Mvc.Services
                         rtValue.Message = $"{rtValue.Message} {err}";
                     }
                 }
-
+                else
+                {
+                    // Validate the org rolls up to caes? If so, need to parse it out of the string, or grab the first word of the returned organization 
+                    //I think this is correct, but we will need to test...
+                    var ppmSegments = FinancialChartValidation.GetPpmSegments(financialSegmentString);
+                    var rollupDepts = await _aggieClient.DeptParents.ExecuteAsync(ppmSegments.Organization);
+                    var dataRollupDeps = rollupDepts.ReadData();
+                    if (!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C")) //TODO: Use app setting?
+                    {
+                        rtValue.IsWarning = true;
+                        rtValue.Message = $"Department portion of the Financial Segment String must roll up to CAES. Dept(Organization) does not: {ppmSegments.Organization}";
+                    }
+                }
 
                 //TODO: Extra validation for PPM strings?
                 // Task will need "glPostingFundCode": 13U20, to be valid from non admin side.
-                // Validate the org rolls up to caes? If so, need to parse it out of the string, or grab the first word of the returned organization 
+                
 
                 return rtValue;
             }
