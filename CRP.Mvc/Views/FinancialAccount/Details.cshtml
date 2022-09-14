@@ -15,7 +15,7 @@
 <div class="boundary">
     <h2>Details</h2>
 
-    <div>
+    <div class="pull-left" style="width: 100%">
         <h4>Account Info</h4>
         <hr />
             <dl class="dl-horizontal">
@@ -59,13 +59,14 @@
     </div>
 
 
-    <div>
+    <div class="pull-left" style="width: 100%; margin: 20px;">
         @Html.ActionLink("Edit", "Edit", "FinancialAccount", new { id = Model.FinancialAccount.Id }, new { @class = "btn" }) |
         @Html.ActionLink("Back to List", "Index", "FinancialAccount", null, new { @class = "btn" })
     </div>
 
-    <div>
-
+    <div class="pull-left" style="width: 100%">
+        <h4>Items using this</h4>
+        <hr />
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -84,7 +85,7 @@
                     <tr>
                         <td nowrap>
 
-                            @Html.ActionLink("Edit Item", "Edit","ItemManagement", new {id=item.Id}, null)
+                            @Html.ActionLink("Edit Item", "Edit", "ItemManagement", new { id = item.Id }, null)
                         </td>
                         <td>
                             @item.Name
