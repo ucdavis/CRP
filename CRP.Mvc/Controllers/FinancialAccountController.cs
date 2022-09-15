@@ -171,14 +171,26 @@ namespace CRP.Controllers
                 return View(model);
             }
 
-            if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
-                a.Chart == account.Chart &&
-                a.Account == account.Account &&
-                a.SubAccount == account.SubAccount &&
-                a.Project == account.Project))
+            if (RequireKfs)
             {
-                ErrorMessage = "That account already exists";
-                return View(model);
+                if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
+                    a.Chart == account.Chart &&
+                    a.Account == account.Account &&
+                    a.SubAccount == account.SubAccount &&
+                    a.Project == account.Project))
+                {
+                    ErrorMessage = "That account already exists";
+                    return View(model);
+                }
+            }
+            else
+            {
+                if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
+                    a.FinancialSegmentString == account.FinancialSegmentString ))
+                {
+                    ErrorMessage = "That Financial Segment String already exists";
+                    return View(model);
+                }
             }
 
             Repository.OfType<FinancialAccount>().EnsurePersistent(account);
