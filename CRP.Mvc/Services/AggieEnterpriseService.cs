@@ -74,6 +74,9 @@ namespace CRP.Mvc.Services
 
             if (segmentStringType == FinancialChartStringType.Ppm)
             {
+                //TODO: Have a config setting to see if we allow PPM? (May not be working for go-live date)
+
+                
                 var result = await _aggieClient.PpmStringSegmentsValidate.ExecuteAsync(financialSegmentString);
 
                 var data = result.ReadData();
@@ -98,11 +101,34 @@ namespace CRP.Mvc.Services
                         rtValue.IsWarning = true;
                         rtValue.Message = $"Department portion of the Financial Segment String must roll up to CAES. Dept(Organization) does not: {ppmSegments.Organization}";
                     }
+
+                    // Task will need "glPostingFundCode": 13U20, to be valid from non admin side.
+                    var checkFundCode = await _aggieClient.PpmTaskByProjectNumberAndTaskNumber.ExecuteAsync(ppmSegments.Project, ppmSegments.Task);
+                    var checkFundCodeData = checkFundCode.ReadData();
+                    if(checkFundCodeData == null)
+                    {
+                        rtValue.IsValid = false;
+                        rtValue.Message = "Unable to check Task's funding code.";
+                    }
+                    else
+                    {
+                        if(checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode == null)
+                        {
+                            rtValue.IsValid = false;
+                            rtValue.Message = "GlPostingFundCode is null for this Task.";
+                        }
+                        else if (checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode != "13U20")
+                        {
+                            var saveWarning = rtValue.Message;
+                            rtValue.IsWarning = false;
+                            rtValue.Message = $"Task's funding code must be 13U20 not {checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode} {saveWarning}";
+                        }
+                    }
                 }
 
-                //TODO: Extra validation for PPM strings?
-                // Task will need "glPostingFundCode": 13U20, to be valid from non admin side.
-                
+
+
+
 
                 return rtValue;
             }
