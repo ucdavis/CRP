@@ -92,6 +92,7 @@ namespace CRP.Mvc.Controllers.ViewModels.ItemManagement
         public int FinancialAccountId { get; set; }
 
         public string UserAddedFinancialAccount { get; set; }
+        public string UserAddedFinancialName { get;set;}
 
         public string[] Tags { get; set; }
 
