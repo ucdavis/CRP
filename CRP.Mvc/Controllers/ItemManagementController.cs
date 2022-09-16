@@ -171,7 +171,7 @@ namespace CRP.Controllers
                     ModelState.AddModelError("item.UserAddedFinancialName", "When adding an account not in the list, the name is required");    
                 }
                 var accountValidation = await _financialService.IsAccountValidForRegistration(item.UserAddedFinancialAccount);
-                if (!accountValidation.IsValid)
+                if (!accountValidation.IsValid || !accountValidation.IsWarning)
                 {
                     ModelState.AddModelError("Item.UserAddedFinancialAccount", $"{item.UserAddedFinancialAccount}: {accountValidation.Message}");
                 }
@@ -410,7 +410,7 @@ namespace CRP.Controllers
                 if (account == null && !string.IsNullOrWhiteSpace(item.UserAddedFinancialAccount))
                 {
                     var accountValidation = await _financialService.IsAccountValidForRegistration(item.UserAddedFinancialAccount);
-                    if (!accountValidation.IsValid)
+                    if (!accountValidation.IsValid || !accountValidation.IsWarning)
                     {
                         ModelState.AddModelError("Item.UserAddedFinancialAccount", $"{item.UserAddedFinancialAccount}: {accountValidation.Message}");
                     }
