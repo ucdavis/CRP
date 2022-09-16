@@ -190,7 +190,7 @@ namespace CRP.Controllers
                     }
                     else
                     {
-                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == account.FinancialSegmentString);
+                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
                     }
                     if (account != null)
                     {
