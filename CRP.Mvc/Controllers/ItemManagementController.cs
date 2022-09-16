@@ -17,6 +17,7 @@ using CRP.Mvc.Controllers.ViewModels;
 using CRP.Mvc.Controllers.ViewModels.ItemManagement;
 using CRP.Mvc.Services;
 using CRP.Services;
+using Microsoft.Azure;
 using MvcContrib;
 using Serilog;
 using UCDArch.Web.ActionResults;
@@ -29,12 +30,14 @@ namespace CRP.Controllers
     {
         private readonly ICopyItemService _copyItemService;
         private readonly IFinancialService _financialService;
+        private readonly bool RequireKfs;
 
 
         public ItemManagementController(ICopyItemService copyItemService, IFinancialService financialService)
         {
             _copyItemService = copyItemService;
             _financialService = financialService;
+            RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
         }
 
         //Tested 20200422
@@ -174,15 +177,21 @@ namespace CRP.Controllers
                 }
                 if(ModelState.IsValid)
                 {
-                    
-                    //Ok, it is valid
-                    //Check if it exists
-                    //Otherwise create it 
-                    //Set the FinancialId to the id
-                    account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => 
-                        a.Chart == accountValidation.FinancialAccount.Chart &&
-                        a.Account == accountValidation.FinancialAccount.Account &&
-                        a.SubAccount == accountValidation.FinancialAccount.SubAccount);
+                    if (RequireKfs)
+                    {
+                        //Ok, it is valid
+                        //Check if it exists
+                        //Otherwise create it 
+                        //Set the FinancialId to the id
+                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a =>
+                            a.Chart == accountValidation.FinancialAccount.Chart &&
+                            a.Account == accountValidation.FinancialAccount.Account &&
+                            a.SubAccount == accountValidation.FinancialAccount.SubAccount);
+                    }
+                    else
+                    {
+                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == account.FinancialSegmentString);
+                    }
                     if (account != null)
                     {
                         item.FinancialAccountId = account.Id;
@@ -407,14 +416,21 @@ namespace CRP.Controllers
                     }
                     else
                     {
-                        //Ok, it is valid
-                        //Check if it exists
-                        //Otherwise create it 
-                        //Set the FinancialId to the id
-                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a =>
-                            a.Chart == accountValidation.FinancialAccount.Chart &&
-                            a.Account == accountValidation.FinancialAccount.Account &&
-                            a.SubAccount == accountValidation.FinancialAccount.SubAccount);
+                        if(RequireKfs)
+                        {
+                            //Ok, it is valid
+                            //Check if it exists
+                            //Otherwise create it 
+                            //Set the FinancialId to the id
+                            account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a =>
+                                a.Chart == accountValidation.FinancialAccount.Chart &&
+                                a.Account == accountValidation.FinancialAccount.Account &&
+                                a.SubAccount == accountValidation.FinancialAccount.SubAccount);
+                        }
+                        else
+                        {
+                            account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
+                        }
                         if (account != null)
                         {
                             item.FinancialAccountId = account.Id;
