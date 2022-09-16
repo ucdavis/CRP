@@ -190,7 +190,7 @@ namespace CRP.Controllers
                     }
                     else
                     {
-                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.IsActive && a.FinancialSegmentString == account.FinancialSegmentString);
+                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == account.FinancialSegmentString);
                     }
                     if (account != null)
                     {
@@ -416,14 +416,21 @@ namespace CRP.Controllers
                     }
                     else
                     {
-                        //Ok, it is valid
-                        //Check if it exists
-                        //Otherwise create it 
-                        //Set the FinancialId to the id
-                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a =>
-                            a.Chart == accountValidation.FinancialAccount.Chart &&
-                            a.Account == accountValidation.FinancialAccount.Account &&
-                            a.SubAccount == accountValidation.FinancialAccount.SubAccount);
+                        if(RequireKfs)
+                        {
+                            //Ok, it is valid
+                            //Check if it exists
+                            //Otherwise create it 
+                            //Set the FinancialId to the id
+                            account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a =>
+                                a.Chart == accountValidation.FinancialAccount.Chart &&
+                                a.Account == accountValidation.FinancialAccount.Account &&
+                                a.SubAccount == accountValidation.FinancialAccount.SubAccount);
+                        }
+                        else
+                        {
+                            account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
+                        }
                         if (account != null)
                         {
                             item.FinancialAccountId = account.Id;
