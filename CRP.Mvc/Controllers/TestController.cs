@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using CRP.Controllers;
 using CRP.Controllers.Filter;
 using CRP.Core.Abstractions;
+using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
 using Microsoft.Azure;
 using Newtonsoft.Json;
@@ -55,11 +56,12 @@ namespace CRP.Mvc.Controllers
             Log.Information("Hit exception");
         }
 
-        public async Task<ContentResult> TestSloth()
+        public ActionResult TestAccount()
         {
-            var xxx = await _slothService.Test();
-            return Content("done");
+            var account = new KfsAccounts();
+            return Content($"{account.ClearingFinancialSegmentString} == {KfsAccounts.HoldingAccount}");
         }
+
 
 
 
