@@ -366,6 +366,8 @@ namespace CRP.Mvc.Services
             }
             else
             {
+                var financialAccount = new FinancialAccount();
+                financialAccount.FinancialSegmentString = account;
                 if (String.IsNullOrWhiteSpace(account))
                 {
                     rtValue.IsValid = false;
@@ -375,6 +377,7 @@ namespace CRP.Mvc.Services
                 else
                 {
                     rtValue = await _aggieEnterpriseService.ValidateAccount(account);
+                    rtValue.FinancialAccount = financialAccount;
                 }
             }
             return rtValue;
