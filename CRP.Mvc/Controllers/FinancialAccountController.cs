@@ -7,6 +7,7 @@ using CRP.Mvc.Controllers.ViewModels.Financial;
 using CRP.Mvc.Services;
 using Microsoft.Azure;
 using MvcContrib;
+using NHibernate.Linq.Functions;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -114,7 +115,7 @@ namespace CRP.Controllers
         [PageTracker]
         public async Task<ActionResult> Create(FinancialAccount model)
         {
-            model.FinancialSegmentString = model.FinancialSegmentString.SafeToUpper();
+            model.FinancialSegmentString = model.FinancialSegmentString.SafeToUpper()?.Trim();
             if (RequireKfs)
             {
                 if(string.IsNullOrWhiteSpace( model.Chart))
@@ -159,7 +160,7 @@ namespace CRP.Controllers
                 Account     = model.Account.SafeToUpper(),
                 SubAccount  = model.SubAccount.SafeToUpper(),
                 Project     = model.Project.SafeToUpper(), //Not used
-                FinancialSegmentString = model.FinancialSegmentString.SafeToUpper(),
+                FinancialSegmentString = model.FinancialSegmentString.SafeToUpper()?.Trim(),
                 IsActive    = true, 
                 IsUserAdded   = false, 
             };

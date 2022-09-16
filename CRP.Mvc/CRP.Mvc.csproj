@@ -47,7 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AggieEnterpriseApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AggieEnterpriseApi.0.2.68\lib\netstandard2.0\AggieEnterpriseApi.dll</HintPath>
+      <HintPath>..\packages\AggieEnterpriseApi.0.2.72\lib\netstandard2.0\AggieEnterpriseApi.dll</HintPath>
     </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
