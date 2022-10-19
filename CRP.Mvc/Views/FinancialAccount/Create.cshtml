@@ -89,17 +89,19 @@
 @section AdditionalScripts
 {
 
-    <script src="https://localhost:3000/finjector.js?v=2" type="text/javascript"></script>
+    <script src="https://finjector.ucdavis.edu/finjector.js?v=3" type="text/javascript"></script>
 
     <script type="text/javascript">
 
         $("#popup").on("click",
             
             async function () {               
-                const chart = await window.Finjector.findChartSegmentString("https://localhost:3000/landing");
+                const chart = await window.Finjector.findChartSegmentString("https://finjector.ucdavis.edu/landing");
                 if (chart && chart.status === "success") {
-                    alert(chart.data);
                     $("#FinancialSegmentString").val(chart.data);
+                }
+                else {
+                    alert("Something went wrong with the CCOA picker")
                 }
                 return false;
             });
