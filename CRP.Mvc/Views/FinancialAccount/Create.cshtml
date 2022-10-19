@@ -68,7 +68,7 @@
                     <div class="input-group">
                         @Html.EditorFor(model => model.FinancialSegmentString, new { htmlAttributes = new { @class = "form-control" } })
                         <span class="input-group-btn">
-                            <button id="popup" class="btn" type="button">CCOA Picker</button>
+                            <button id="ccoa-picker" class="btn" type="button">CCOA Picker</button>
                         </span>
                     </div>
                     @Html.ValidationMessageFor(model => model.FinancialSegmentString, "", new { @class = "text-danger" })
@@ -93,7 +93,7 @@
 
     <script type="text/javascript">
 
-        $("#popup").on("click",
+        $("#ccoa-picker").on("click",
             
             async function () {               
                 const chart = await window.Finjector.findChartSegmentString("https://finjector.ucdavis.edu/landing");
