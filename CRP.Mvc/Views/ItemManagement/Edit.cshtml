@@ -168,7 +168,7 @@
                                         @if (!question.QuestionSet.SystemReusable || !question.QuestionSet.CollegeReusable || !question.QuestionSet.UserReusable)
                                         {
                                             <text>|</text>
-                                            @Html.ActionLink("Edit", "Edit", "QuestionSet", new {id = question.QuestionSet.Id}, null)
+                                            @Html.ActionLink("Edit", "Edit", "QuestionSet", new { id = question.QuestionSet.Id }, null)
                                         }
                                     </td>
                                     <td>@question.QuestionSet.Name</td>
@@ -181,27 +181,27 @@
             </div>
             <div id="@StaticValues.Tab_Templates" class="tab-pane">
 
-                    @Html.Partial("TemplateInstructions")
-                    <h3>Paid Template</h3>
-                    @Html.TextAreaFor(x => x.PaidText)
+                @Html.Partial("TemplateInstructions")
+                <h3>Paid Template</h3>
+                @Html.TextAreaFor(x => x.PaidText)
 
-                    <h3>Unpaid Template</h3>
-                    @Html.TextAreaFor(x => x.UnpaidText)
+                <h3>Unpaid Template</h3>
+                @Html.TextAreaFor(x => x.UnpaidText)
 
-                    <input style="margin-top: 15px; margin-bottom: 15px;" type="button" value="Save" class="btn btn-primary" onclick="SaveTemplateText()"/>
-                
-                    <text class="help-block">
-                        The Unpaid Template should be used if your event is free or if you allow a coupon that can reduce the price to zero.<br/>
-                        As the language would most likely be different between these two, they need to be different.<br/>
-                        If your event will always charge something, you can leave this blank.<br/>
-                        If you click on the "Template Fields" to the right, the replaceable text will be inserted where your cursor is in the text editor. 
-                    </text>
+                <input style="margin-top: 15px; margin-bottom: 15px;" type="button" value="Save" class="btn btn-primary" onclick="SaveTemplateText()" />
+
+                <text class="help-block">
+                    The Unpaid Template should be used if your event is free or if you allow a coupon that can reduce the price to zero.<br />
+                    As the language would most likely be different between these two, they need to be different.<br />
+                    If your event will always charge something, you can leave this blank.<br />
+                    If you click on the "Template Fields" to the right, the replaceable text will be inserted where your cursor is in the text editor.
+                </text>
 
             </div>
             <div id="@StaticValues.Tab_Coupons" class="tab-pane">
                 <fieldset>
                     <p>
-                        @Html.ActionLink("Generate Coupon", "Create", "Coupon", new { itemId = Model.Item.Id }, new {@class="btn btn-primary"})
+                        @Html.ActionLink("Generate Coupon", "Create", "Coupon", new { itemId = Model.Item.Id }, new { @class = "btn btn-primary" })
                     </p>
 
                     <table id="table-coupons" class="table table-bordered">
@@ -263,48 +263,54 @@
 @section AdditionalStyles
 {
     @Styles.Render("~/Content/Chosen")
-    
+
     @Styles.Render("~/Content/qtipcss")
     <style type="text/css">
         #Confirmation_Word_Bank {
-            margin-left:540px;
-            margin-top:35px;
-            background-color:#EFEFEF;
-            border:1px solid #7F7F7F;
-            float:right;
-            padding:5px;
-            position:absolute;
-            width:130px;
-            font-family:Trebuchet MS,Arial,Georgia;
-            font-size:0.8em;
+            margin-left: 540px;
+            margin-top: 35px;
+            background-color: #EFEFEF;
+            border: 1px solid #7F7F7F;
+            float: right;
+            padding: 5px;
+            position: absolute;
+            width: 130px;
+            font-family: Trebuchet MS,Arial,Georgia;
+            font-size: 0.8em;
         }
-        #Confirmation_Word_Bank a:link
-        {
-            color:#0B65C1;
-            font-weight:bold;
-            text-decoration:none;
-        }
-        #Confirmation_Word_Bank a:hover{color: #A50000}
+
+            #Confirmation_Word_Bank a:link {
+                color: #0B65C1;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            #Confirmation_Word_Bank a:hover {
+                color: #A50000
+            }
 
         #Confirmation_Word_Bank_Unpaid {
-            margin-left:540px;
-            margin-top:340px;
-            background-color:#EFEFEF;
-            border:1px solid #7F7F7F;
-            float:right;
-            padding:5px;
-            position:absolute;
-            width:130px;
-            font-family:Trebuchet MS,Arial,Georgia;
-            font-size:0.8em;
+            margin-left: 540px;
+            margin-top: 340px;
+            background-color: #EFEFEF;
+            border: 1px solid #7F7F7F;
+            float: right;
+            padding: 5px;
+            position: absolute;
+            width: 130px;
+            font-family: Trebuchet MS,Arial,Georgia;
+            font-size: 0.8em;
         }
-        #Confirmation_Word_Bank_Unpaid a:link
-        {
-            color:#0B65C1;
-            font-weight:bold;
-            text-decoration:none;
-        }
-        #Confirmation_Word_Bank_Unpaid a:hover{color: #A50000}
+
+            #Confirmation_Word_Bank_Unpaid a:link {
+                color: #0B65C1;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            #Confirmation_Word_Bank_Unpaid a:hover {
+                color: #A50000
+            }
     </style>
 }
 
@@ -427,7 +433,7 @@
                 }],
             });
 
-            
+
 
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 var target = $(e.target).attr("href"); // activated tab
@@ -440,8 +446,8 @@
             });
         });
     </script>
-    
-        <script type="text/javascript">
+
+    <script type="text/javascript">
         $(document).ready(function() {
             $("#ConfirmationWordBankHelp").attr("title", "");
             $("#ConfirmationWordBankHelpUnpaid").attr("title", "");
@@ -464,6 +470,25 @@
                 }
             });
         });
+    </script>
+
+    <script src="https://finjector.ucdavis.edu/finjector.js?v=3" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        $("#ccoa-picker").on("click",
+
+            async function () {
+                const chart = await window.Finjector.findChartSegmentString("https://finjector.ucdavis.edu/landing");
+                if (chart && chart.status === "success") {
+                    $("#Item_UserAddedFinancialAccount").val(chart.data);
+                }
+                else {
+                    alert("Something went wrong with the CCOA picker")
+                }
+                return false;
+            });
+
     </script>
 
 }
