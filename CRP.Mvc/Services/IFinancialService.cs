@@ -270,7 +270,7 @@ namespace CRP.Mvc.Services
                 {
                     rtValue.IsValid = false;
                     rtValue.Field = "Account";
-                    rtValue.Message = "Valid Account Not Found. (Invalid or Expired).";
+                    rtValue.Messages.Add("Valid Account Not Found. (Invalid or Expired).");
 
                     return rtValue;
                 }
@@ -279,7 +279,7 @@ namespace CRP.Mvc.Services
                 {
                     rtValue.IsValid = false;
                     rtValue.Field = "Project";
-                    rtValue.Message = "Project Not Valid.";
+                    rtValue.Messages.Add("Project Not Valid.");
                     return rtValue;
                 }
 
@@ -290,7 +290,7 @@ namespace CRP.Mvc.Services
                 {
                     rtValue.IsValid = false;
                     rtValue.Field = "Account";
-                    rtValue.Message = "Not An Income Account/Events Account.";
+                    rtValue.Messages.Add("Not An Income Account/Events Account.");
                     return rtValue;
                 }
 
@@ -308,7 +308,7 @@ namespace CRP.Mvc.Services
                 {
                     rtValue.IsValid = false;
                     rtValue.Field = "Account";
-                    rtValue.Message = "Account not in CAES org.";
+                    rtValue.Messages.Add("Account not in CAES org.");
                 }
             }
             else
@@ -316,7 +316,7 @@ namespace CRP.Mvc.Services
                 if (String.IsNullOrWhiteSpace(account.FinancialSegmentString))
                 {
                     rtValue.IsValid = false;
-                    rtValue.Message = "Financial Segment String is required";
+                    rtValue.Messages.Add("Financial Segment String is required");
                     rtValue.Field = "FinancialSegmentString";
                 }
                 else
@@ -342,7 +342,7 @@ namespace CRP.Mvc.Services
                     if (accountArray.Length < 2)
                     {
                         rtValue.IsValid = false;
-                        rtValue.Message = "Need chart and account";
+                        rtValue.Messages.Add("Need chart and account");
                         rtValue.Field = "Account";
                         return rtValue;
                     }
@@ -360,7 +360,7 @@ namespace CRP.Mvc.Services
                 catch
                 {
                     rtValue.IsValid = false;
-                    rtValue.Message = "Unable to parse account string";
+                    rtValue.Messages.Add("Unable to parse account string");
                     rtValue.Field = "Account";
                 }
             }
@@ -371,7 +371,7 @@ namespace CRP.Mvc.Services
                 if (String.IsNullOrWhiteSpace(account))
                 {
                     rtValue.IsValid = false;
-                    rtValue.Message = "Financial Segment String is required";
+                    rtValue.Messages.Add("Financial Segment String is required");
                     rtValue.Field = "FinancialSegmentString";
                 }
                 else

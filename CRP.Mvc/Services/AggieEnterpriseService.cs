@@ -43,7 +43,7 @@ namespace CRP.Mvc.Services
                 {
                     foreach(var err in data.GlValidateChartstring.ValidationResponse.ErrorMessages)
                     {
-                        rtValue.Message = $"{rtValue.Message} {err}";
+                        rtValue.Messages.Add(err);
                     }
                     
                 }
@@ -54,7 +54,7 @@ namespace CRP.Mvc.Services
                     if (fund != "13U20")
                     {
                         rtValue.IsWarning = true;
-                        rtValue.Message = $"Fund portion of the Financial Segment String must be 13U20 not {fund}";
+                        rtValue.Messages.Add($"Fund portion of the Financial Segment String must be 13U20 not {fund}");
                     }
  
                     //Check if Financial Dept roles up to Level C value AAES00C (College of Agricultural and Environmental Sciences)
@@ -62,12 +62,17 @@ namespace CRP.Mvc.Services
                     var dataRollupDeps = rollupDepts.ReadData();
                     if (!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C")) //TODO: Use app setting?
                     {
-                        var saveWarning = rtValue.Message;
                         rtValue.IsWarning = true;
-                        rtValue.Message = $"Department portion of the Financial Segment String must roll up to CAES. Dept does not: {data.GlValidateChartstring.Segments.Department} {saveWarning}";
+                        rtValue.Messages.Add($"Department portion of the Financial Segment String must roll up to CAES. Dept does not: {data.GlValidateChartstring.Segments.Department}");
                     }
-
+                    
+                    if (data.GlValidateChartstring.Segments.Account != "410004")
+                    {
+                        rtValue.IsWarning = true;
+                        rtValue.Messages.Add($"Natural Account portion of the Financial Segment String must be 410004 not {data.GlValidateChartstring.Segments.Account}");
+                    }
                 }
+
 
                 return rtValue;
             }
@@ -86,7 +91,7 @@ namespace CRP.Mvc.Services
                 {
                     foreach (var err in data.PpmStringSegmentsValidate.ValidationResponse.ErrorMessages)
                     {
-                        rtValue.Message = $"{rtValue.Message} {err}";
+                        rtValue.Messages.Add(err);
                     }
                 }
                 else
@@ -99,7 +104,7 @@ namespace CRP.Mvc.Services
                     if (!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C")) //TODO: Use app setting?
                     {
                         rtValue.IsWarning = true;
-                        rtValue.Message = $"Department portion of the Financial Segment String must roll up to CAES. Dept(Organization) does not: {ppmSegments.Organization}";
+                        rtValue.Messages.Add($"Department portion of the Financial Segment String must roll up to CAES. Dept(Organization) does not: {ppmSegments.Organization}");
                     }
 
                     // Task will need "glPostingFundCode": 13U20, to be valid from non admin side.
@@ -108,21 +113,26 @@ namespace CRP.Mvc.Services
                     if(checkFundCodeData == null)
                     {
                         rtValue.IsValid = false;
-                        rtValue.Message = "Unable to check Task's funding code.";
+                        rtValue.Messages.Add("Unable to check Task's GL funding code.");
                     }
                     else
                     {
                         if(checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode == null)
                         {
                             rtValue.IsValid = false;
-                            rtValue.Message = "GlPostingFundCode is null for this Task.";
+                            rtValue.Messages.Add("GlPostingFundCode is null for this Task.");
                         }
                         else if (checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode != "13U20")
                         {
-                            var saveWarning = rtValue.Message;
                             rtValue.IsWarning = false;
-                            rtValue.Message = $"Task's funding code must be 13U20 not {checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode} {saveWarning}";
+                            rtValue.Messages.Add($"Task's GL funding code must be 13U20 not {checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode}");
                         }
+                    }
+
+                    if(ppmSegments.ExpenditureType != "410004")
+                    {
+                        rtValue.IsValid = false;
+                        rtValue.Messages.Add($"Expenditure Type (Natural Account) must be 410004 not {ppmSegments.ExpenditureType}");
                     }
                 }
 
