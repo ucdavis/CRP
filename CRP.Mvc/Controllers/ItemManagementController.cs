@@ -170,6 +170,7 @@ namespace CRP.Controllers
                 {
                     ModelState.AddModelError("item.UserAddedFinancialName", "When adding an account not in the list, the name is required");    
                 }
+                item.UserAddedFinancialAccount = item.UserAddedFinancialAccount.SafeToUpper()?.Trim();
                 var accountValidation = await _financialService.IsAccountValidForRegistration(item.UserAddedFinancialAccount);
                 if (!accountValidation.IsValid || accountValidation.IsWarning)
                 {
@@ -409,6 +410,7 @@ namespace CRP.Controllers
                 var account = Repository.OfType<FinancialAccount>().GetNullableById(item.FinancialAccountId);
                 if (account == null && !string.IsNullOrWhiteSpace(item.UserAddedFinancialAccount))
                 {
+                    item.UserAddedFinancialAccount = item.UserAddedFinancialAccount.SafeToUpper()?.Trim();
                     var accountValidation = await _financialService.IsAccountValidForRegistration(item.UserAddedFinancialAccount);
                     if (!accountValidation.IsValid || accountValidation.IsWarning)
                     {
