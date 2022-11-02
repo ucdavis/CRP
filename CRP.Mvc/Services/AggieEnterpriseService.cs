@@ -143,6 +143,12 @@ namespace CRP.Mvc.Services
                 return rtValue;
             }
 
+            if (segmentStringType == FinancialChartStringType.Invalid)
+            {
+                rtValue.IsValid = false;
+                rtValue.Messages.Add("Invalid Financial Segment String format");
+                return rtValue;
+            }
 
 
             return rtValue;
