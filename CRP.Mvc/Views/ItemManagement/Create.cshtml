@@ -51,7 +51,7 @@
         $("#ccoa-picker").on("click",
 
             async function () {
-                const chart = await window.Finjector.findChartSegmentString("https://finjector.ucdavis.edu/landing");
+                const chart = await window.Finjector.findChartSegmentString();
                 if (chart && chart.status === "success") {
                     $("#Item_UserAddedFinancialAccount").val(chart.data);
                 }
