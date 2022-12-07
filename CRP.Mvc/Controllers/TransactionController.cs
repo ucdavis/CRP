@@ -878,23 +878,35 @@ namespace CRP.Controllers
             // setup transaction
             var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
 
+            var meta = new Dictionary<string,string>();
+            try
+            {
+                meta.Add("Event Id", paymentLog.Transaction.Item.Id.ToString());
+                meta.Add("Event Name", paymentLog.Transaction.Item.Name);
+            }
+            catch{
+                Log.Error("DepositNotify - Error parsing meta data");
+            }
+            
+
             var request = new CreateTransaction()
             {
-                AutoApprove            = true,
-                MerchantTrackingNumber = paymentLog.Transaction.Id.ToString(),
-                MerchantTrackingUrl    = merchantUrl,
-                KfsTrackingNumber      = model.KfsTrackingNumber,
-                TransactionDate        = DateTime.UtcNow,
-                Transfers              = new List<CreateTransfer>()
+                AutoApprove             = true,
+                MerchantTrackingNumber  = paymentLog.Transaction.Id.ToString(),
+                MerchantTrackingUrl     = merchantUrl,
+                KfsTrackingNumber       = model.KfsTrackingNumber,
+                TransactionDate         = DateTime.UtcNow,
+                Transfers               = new List<CreateTransfer>()
                 {
                     debitHolding,
                     feeCredit, 
                     incomeCredit,
                 },
-                Source                 = "Registration CyberSource",
-                SourceType             = "CyberSource",
+                Source                  = "Registration CyberSource",
+                SourceType              = "CyberSource",
                 ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
-                Description            = $"Funds Distribution - {transId}"
+                Description             = $"Funds Distribution - {transId}",
+                Metadata                = meta,
             };
             Log.Information("DepositNotify - Created Transaction");
 
