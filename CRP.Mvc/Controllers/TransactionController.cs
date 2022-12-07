@@ -906,7 +906,7 @@ namespace CRP.Controllers
                 SourceType              = "CyberSource",
                 ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
                 Description             = $"Funds Distribution - {transId}",
-                Metadata                = meta.Any() ? meta : null,
+                Metadata                = meta,
             };
             Log.Information("DepositNotify - Created Transaction");
 
