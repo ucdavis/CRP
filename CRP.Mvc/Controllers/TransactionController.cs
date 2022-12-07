@@ -881,16 +881,8 @@ namespace CRP.Controllers
             var meta = new Dictionary<string,string>();
             try
             {
-                var transaction = Repository.OfType<Transaction>().GetNullableById(paymentLog.Transaction.Id);
-                if(transaction != null)
-                {
-                    meta.Add("Event Id", transaction.Item.Id.ToString());
-                    meta.Add("Event Name", transaction.Item.Name);
-                }
-                else
-                {
-                    Log.Error("DepositNotify - transaction not found for merchant tracking number");
-                }
+                meta.Add("Event Id", paymentLog.Transaction.Item.Id.ToString());
+                meta.Add("Event Name", paymentLog.Transaction.Item.Name);
             }
             catch{
                 Log.Error("DepositNotify - Error parsing meta data");
