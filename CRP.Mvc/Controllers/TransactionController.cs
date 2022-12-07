@@ -878,23 +878,43 @@ namespace CRP.Controllers
             // setup transaction
             var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
 
+            var meta = new Dictionary<string,string>();
+            try
+            {
+                var transaction = Repository.OfType<Transaction>().GetNullableById(paymentLog.Transaction.Id);
+                if(transaction != null)
+                {
+                    meta.Add("Event Id", transaction.Item.Id.ToString());
+                    meta.Add("Event Name", transaction.Item.Name);
+                }
+                else
+                {
+                    Log.Error("DepositNotify - transaction not found for merchant tracking number");
+                }
+            }
+            catch{
+                Log.Error("DepositNotify - Error parsing meta data");
+            }
+            
+
             var request = new CreateTransaction()
             {
-                AutoApprove            = true,
-                MerchantTrackingNumber = paymentLog.Transaction.Id.ToString(),
-                MerchantTrackingUrl    = merchantUrl,
-                KfsTrackingNumber      = model.KfsTrackingNumber,
-                TransactionDate        = DateTime.UtcNow,
-                Transfers              = new List<CreateTransfer>()
+                AutoApprove             = true,
+                MerchantTrackingNumber  = paymentLog.Transaction.Id.ToString(),
+                MerchantTrackingUrl     = merchantUrl,
+                KfsTrackingNumber       = model.KfsTrackingNumber,
+                TransactionDate         = DateTime.UtcNow,
+                Transfers               = new List<CreateTransfer>()
                 {
                     debitHolding,
                     feeCredit, 
                     incomeCredit,
                 },
-                Source                 = "Registration CyberSource",
-                SourceType             = "CyberSource",
+                Source                  = "Registration CyberSource",
+                SourceType              = "CyberSource",
                 ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
-                Description            = $"Funds Distribution - {transId}"
+                Description             = $"Funds Distribution - {transId}",
+                Metadata                = meta.Any() ? meta : null,
             };
             Log.Information("DepositNotify - Created Transaction");
 
