@@ -60,7 +60,18 @@ namespace CRP.Mvc.Models.Sloth
 
         public string Description { get; set; } //If it isn't set, Sloth with use one of the transfer descriptions...
 
-        public Dictionary<string, string> Metadata { get; set; }
+        public IList<MetadataEntry> Metadata { get; set; } = new List<MetadataEntry>();
+
+        public void AddMetadata(string name, string value)
+        {
+            Metadata.Add(new MetadataEntry { Name = name, Value = value });
+        }
+
+        public class MetadataEntry
+        {
+            public string Name { get; set; }
+            public string Value { get; set; }
+        }
 
         [Required]
         public IList<CreateTransfer> Transfers { get; set; }

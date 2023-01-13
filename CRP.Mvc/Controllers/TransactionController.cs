@@ -877,16 +877,6 @@ namespace CRP.Controllers
 
             // setup transaction
             var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
-
-            var meta = new Dictionary<string,string>();
-            try
-            {
-                meta.Add("Event Id", paymentLog.Transaction.Item.Id.ToString());
-                meta.Add("Event Name", paymentLog.Transaction.Item.Name);
-            }
-            catch{
-                Log.Error("DepositNotify - Error parsing meta data");
-            }
             
 
             var request = new CreateTransaction()
@@ -906,8 +896,17 @@ namespace CRP.Controllers
                 SourceType              = "CyberSource",
                 ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
                 Description             = $"Funds Distribution - {transId}",
-                Metadata                = meta,
             };
+
+            try
+            {
+                request.AddMetadata("Event Id", paymentLog.Transaction.Item.Id.ToString());
+                request.AddMetadata("Event Name", paymentLog.Transaction.Item.Name);
+            }
+            catch
+            {
+                Log.Error("DepositNotify - Error parsing meta data");
+            }
             Log.Information("DepositNotify - Created Transaction");
 
             //var getIt = JsonConvert.SerializeObject(request); //Debug it so can test in swagger
