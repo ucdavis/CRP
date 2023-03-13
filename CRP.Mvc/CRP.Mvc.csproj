@@ -268,8 +268,8 @@
     <Reference Include="StrawberryShake.Core, Version=12.16.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StrawberryShake.Core.12.16.0\lib\netstandard2.0\StrawberryShake.Core.dll</HintPath>
     </Reference>
-    <Reference Include="StrawberryShake.Resources, Version=12.11.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StrawberryShake.Resources.12.11.1\lib\netstandard2.0\StrawberryShake.Resources.dll</HintPath>
+    <Reference Include="StrawberryShake.Resources, Version=12.16.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StrawberryShake.Resources.12.16.0\lib\netstandard2.0\StrawberryShake.Resources.dll</HintPath>
     </Reference>
     <Reference Include="StrawberryShake.Tools.Configuration, Version=12.16.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StrawberryShake.Tools.Configuration.12.16.0\lib\netstandard2.0\StrawberryShake.Tools.Configuration.dll</HintPath>
