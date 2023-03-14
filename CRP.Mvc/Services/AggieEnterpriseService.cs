@@ -23,13 +23,13 @@ namespace CRP.Mvc.Services
 
         public async Task<AccountValidationModel> ValidateAccount(string financialSegmentString, bool validateCVRs = true)
         {
-            //var _aggieClient = GraphQlClient.Get(
-            //    CloudConfigurationManager.GetSetting("AggieEnterprise.GraphQlUrl"), 
-            //    CloudConfigurationManager.GetSetting("AggieEnterprise.TokenEndpoint"), 
-            //    CloudConfigurationManager.GetSetting("AggieEnterprise.ConsumerKey"), 
-            //    CloudConfigurationManager.GetSetting("AggieEnterprise.ConsumerSecret"), 
-            //    $"{CloudConfigurationManager.GetSetting("AggieEnterprise.ScopeApp")}-{CloudConfigurationManager.GetSetting("AggieEnterprise.ScopeEnv")}");
-            var _aggieClient = GraphQlClient.Get(CloudConfigurationManager.GetSetting("AggieEnterprise.GraphQlUrl"), CloudConfigurationManager.GetSetting("AggieEnterprise.GraphToken"));
+            var _aggieClient = GraphQlClient.Get(
+                CloudConfigurationManager.GetSetting("AggieEnterprise.GraphQlUrl"),
+                CloudConfigurationManager.GetSetting("AggieEnterprise.TokenEndpoint"),
+                CloudConfigurationManager.GetSetting("AggieEnterprise.ConsumerKey"),
+                CloudConfigurationManager.GetSetting("AggieEnterprise.ConsumerSecret"),
+                $"{CloudConfigurationManager.GetSetting("AggieEnterprise.ScopeApp")}-{CloudConfigurationManager.GetSetting("AggieEnterprise.ScopeEnv")}");
+            //var _aggieClient = GraphQlClient.Get(CloudConfigurationManager.GetSetting("AggieEnterprise.GraphQlUrl"), CloudConfigurationManager.GetSetting("AggieEnterprise.GraphToken"));
 
             var rtValue = new AccountValidationModel();
             var segmentStringType = FinancialChartValidation.GetFinancialChartStringType(financialSegmentString);
