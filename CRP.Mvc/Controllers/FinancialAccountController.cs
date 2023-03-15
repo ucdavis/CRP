@@ -18,11 +18,13 @@ namespace CRP.Controllers
     public class FinancialAccountController : ApplicationController
     {
         private readonly IFinancialService _financialService;
+        private IAggieEnterpriseService aggieEnterpriseService;
         private readonly bool RequireKfs ;
 
-        public FinancialAccountController(IFinancialService financialService)
+        public FinancialAccountController(IFinancialService financialService, IAggieEnterpriseService aggieEnterpriseService)
         {
             _financialService = financialService;
+            this.aggieEnterpriseService = aggieEnterpriseService;
             RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
         }
 
@@ -125,6 +127,14 @@ namespace CRP.Controllers
                 if (string.IsNullOrWhiteSpace(model.Account))
                 {
                     ModelState.AddModelError("Account", "Account is currently required");
+                }
+                if (!string.IsNullOrWhiteSpace(model.FinancialSegmentString))
+                {                   
+                    var CoaValidation = await aggieEnterpriseService.ValidateAccount(model.FinancialSegmentString);
+                    if (!CoaValidation.IsValid)
+                    {
+                        ModelState.AddModelError("FinancialSegmentString", CoaValidation.Message);
+                    }
                 }
             }
             else
@@ -253,6 +263,15 @@ namespace CRP.Controllers
                 if (string.IsNullOrWhiteSpace(model.Account))
                 {
                     ModelState.AddModelError("Account", "Account is currently required");
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.FinancialSegmentString))
+                {
+                    var CoaValidation = await aggieEnterpriseService.ValidateAccount(model.FinancialSegmentString);
+                    if (!CoaValidation.IsValid)
+                    {
+                        ModelState.AddModelError("FinancialSegmentString", CoaValidation.Message);
+                    }
                 }
             }
             else
