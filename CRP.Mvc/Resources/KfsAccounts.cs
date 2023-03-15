@@ -18,7 +18,7 @@ namespace CRP.Mvc.Resources
         public const string FeeAccount = "REGIFEE";
 
         //Same as holding
-        public string ClearingFinancialSegmentString { get; set; } = CloudConfigurationManager.GetSetting("ClearingFinancialSegmentString").SafeToUpper();
-        public string FeeFinancialSegmentString { get; set; } = CloudConfigurationManager.GetSetting("FeeFinancialSegmentString").SafeToUpper();
+        public string ClearingFinancialSegmentString { get; set; } = CloudConfigurationManager.GetSetting("AggieEnterprise:ClearingFinancialSegmentString").SafeToUpper();
+        public string FeeFinancialSegmentString { get; set; } = CloudConfigurationManager.GetSetting("AggieEnterprise:FeeFinancialSegmentString").SafeToUpper();
     }
 }
