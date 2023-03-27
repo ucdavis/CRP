@@ -8,8 +8,14 @@ namespace CRP.Mvc.Controllers.ViewModels.Financial
 {
     public class FinancialAccountDetailsViewModel
     {
+        public FinancialAccountDetailsViewModel()
+        {
+            RelatedItems = new List<ItemModel>();
+            Duplicates = new List<FinancialAccount>();
+        }
         public FinancialAccount FinancialAccount { get; set; }
         public List<ItemModel> RelatedItems { get; set; }
+        public List<FinancialAccount> Duplicates { get; set; }
     }
 
     public class ItemModel

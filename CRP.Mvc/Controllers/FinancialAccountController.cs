@@ -94,6 +94,21 @@ namespace CRP.Controllers
             var model = new FinancialAccountDetailsViewModel();
             model.FinancialAccount = account;
             model.RelatedItems = Repository.OfType<Item>().Queryable.Where(a => a.FinancialAccount.Id == account.Id).Select(a => new ItemModel { Id = a.Id, Name = a.Name, Created = a.DateCreated.ToPacificTime()}).ToList();
+
+            if (RequireKfs)
+            {
+                if(!string.IsNullOrWhiteSpace(account.Account))
+                {
+                    model.Duplicates = Repository.OfType<FinancialAccount>().Queryable.Where(a =>a.Id != account.Id &&  a.Chart == account.Chart && a.Account == account.Account ).ToList();
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(account.FinancialSegmentString))
+                {
+                    model.Duplicates = Repository.OfType<FinancialAccount>().Queryable.Where(a => a.Id != account.Id && a.FinancialSegmentString == account.FinancialSegmentString).ToList();
+                }
+            }
             return View(model);
         }
 
