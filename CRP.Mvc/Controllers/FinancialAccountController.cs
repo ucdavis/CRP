@@ -180,6 +180,18 @@ namespace CRP.Controllers
                 {
                     ModelState.AddModelError("Account", "Account is currently required");
                 }
+
+                if (ModelState.IsValid)
+                {
+                    //Ok, we have values so validate them
+                    var accountValidation = await _financialService.IsAccountValidForRegistration(model);
+                    if(!accountValidation.IsValid)
+                    {
+                        ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
+                        ErrorMessage = $"Invalid KFS Account: Field: {accountValidation.Field} Error: {accountValidation.Message}";
+                    }
+                }
+
                 if (!string.IsNullOrWhiteSpace(model.FinancialSegmentString))
                 {
                     var CoaValidation = await aggieEnterpriseService.ValidateAccount(model.FinancialSegmentString); //Replace with call into financial service? DOn't worry as this code will be removed after the go live date?
