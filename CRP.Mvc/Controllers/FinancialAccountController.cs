@@ -19,14 +19,12 @@ namespace CRP.Controllers
     {
         private readonly IFinancialService _financialService;
         private IAggieEnterpriseService aggieEnterpriseService;
-        private readonly bool RequireKfs ;
         private readonly bool UseCoa;
 
         public FinancialAccountController(IFinancialService financialService, IAggieEnterpriseService aggieEnterpriseService)
         {
             _financialService = financialService;
             this.aggieEnterpriseService = aggieEnterpriseService;
-            RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
             UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
         }
 

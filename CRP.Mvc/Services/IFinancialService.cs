@@ -41,12 +41,12 @@ namespace CRP.Mvc.Services
         private static readonly string FinancialOrgLookupUrl = CloudConfigurationManager.GetSetting("FinancialOrgLookupUrl");
         private IAggieEnterpriseService _aggieEnterpriseService;
 
-        private readonly bool RequireKfs;
+        private readonly bool UseCoa;
 
         public FinancialService(IAggieEnterpriseService aggieEnterpriseService)
         {
             _aggieEnterpriseService = aggieEnterpriseService;
-            RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
+            UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
         }
         
 
@@ -265,7 +265,20 @@ namespace CRP.Mvc.Services
         {
             var rtValue = new AccountValidationModel();
             
-            if(RequireKfs)
+            if(UseCoa)
+            {
+                if (String.IsNullOrWhiteSpace(account.FinancialSegmentString))
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Messages.Add("Financial Segment String is required");
+                    rtValue.Field = "FinancialSegmentString";
+                }
+                else
+                {
+                    rtValue = await _aggieEnterpriseService.ValidateAccount(account.FinancialSegmentString);
+                }
+            }
+            else
             {
                 if (!await IsAccountValid(account.Chart, account.Account, account.SubAccount))
                 {
@@ -310,20 +323,7 @@ namespace CRP.Mvc.Services
                     rtValue.IsValid = false;
                     rtValue.Field = "Account";
                     rtValue.Messages.Add("Account not in CAES org.");
-                }
-            }
-            else
-            {
-                if (String.IsNullOrWhiteSpace(account.FinancialSegmentString))
-                {
-                    rtValue.IsValid = false;
-                    rtValue.Messages.Add("Financial Segment String is required");
-                    rtValue.Field = "FinancialSegmentString";
-                }
-                else
-                {
-                    rtValue = await _aggieEnterpriseService.ValidateAccount(account.FinancialSegmentString);
-                }
+                }                
             }
 
             return rtValue;
@@ -332,7 +332,33 @@ namespace CRP.Mvc.Services
         public async Task<AccountValidationModel> IsAccountValidForRegistration(string account)
         {
             var rtValue = new AccountValidationModel();
-            if (RequireKfs)
+            if (UseCoa)
+            {
+                var financialAccount = new FinancialAccount();
+                financialAccount.FinancialSegmentString = account;
+                if (String.IsNullOrWhiteSpace(account))
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Messages.Add("Financial Segment String is required");
+                    rtValue.Field = "FinancialSegmentString";
+                }
+                else
+                {
+                    try
+                    {
+                        rtValue = await _aggieEnterpriseService.ValidateAccount(account);
+                    }
+                    catch (Exception ex)
+                    {
+                        rtValue.IsValid = false;
+                        rtValue.Messages.Add("An error occurred validating against Aggie Enterprise");
+                        rtValue.Field = "FinancialSegmentString";
+                        Log.Error(ex, "An error occurred validating against Aggie Enterprise");
+                    }
+                    rtValue.FinancialAccount = financialAccount;
+                }
+            }
+            else
             {
                 try
                 {
@@ -363,24 +389,9 @@ namespace CRP.Mvc.Services
                     rtValue.IsValid = false;
                     rtValue.Messages.Add("Unable to parse account string");
                     rtValue.Field = "Account";
-                }
+                }                
             }
-            else
-            {
-                var financialAccount = new FinancialAccount();
-                financialAccount.FinancialSegmentString = account;
-                if (String.IsNullOrWhiteSpace(account))
-                {
-                    rtValue.IsValid = false;
-                    rtValue.Messages.Add("Financial Segment String is required");
-                    rtValue.Field = "FinancialSegmentString";
-                }
-                else
-                {
-                    rtValue = await _aggieEnterpriseService.ValidateAccount(account);
-                    rtValue.FinancialAccount = financialAccount;
-                }
-            }
+
             return rtValue;
         }
         public async Task<AccountValidationModel> IsCoaValidForRegistration(string account)
