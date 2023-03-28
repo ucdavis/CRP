@@ -61,6 +61,7 @@ namespace CRP.Controllers
 
             if (UseCoa)
             {
+                //This checks Coa or KFS depending on config settings.
                 var accountValidation = await _financialService.IsAccountValidForRegistration(account.FinancialSegmentString);
                 if (!accountValidation.IsValid)
                 {
