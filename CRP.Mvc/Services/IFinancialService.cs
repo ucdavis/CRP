@@ -31,6 +31,7 @@ namespace CRP.Mvc.Services
 
         Task<AccountValidationModel> IsAccountValidForRegistration(FinancialAccount account);
         Task<AccountValidationModel> IsAccountValidForRegistration(string account);
+        Task<AccountValidationModel> IsCoaValidForRegistration(string account); //A specific check without using conditional flags
 
     }
 
@@ -380,6 +381,26 @@ namespace CRP.Mvc.Services
                     rtValue.FinancialAccount = financialAccount;
                 }
             }
+            return rtValue;
+        }
+        public async Task<AccountValidationModel> IsCoaValidForRegistration(string account)
+        {
+            var rtValue = new AccountValidationModel();
+
+            var financialAccount = new FinancialAccount();
+            financialAccount.FinancialSegmentString = account;
+            if (String.IsNullOrWhiteSpace(account))
+            {
+                rtValue.IsValid = false;
+                rtValue.Messages.Add("Financial Segment String is required");
+                rtValue.Field = "FinancialSegmentString";
+            }
+            else
+            {
+                rtValue = await _aggieEnterpriseService.ValidateAccount(account);
+                rtValue.FinancialAccount = financialAccount;
+            }
+
             return rtValue;
         }
     }

@@ -20,12 +20,14 @@ namespace CRP.Controllers
         private readonly IFinancialService _financialService;
         private IAggieEnterpriseService aggieEnterpriseService;
         private readonly bool RequireKfs ;
+        private readonly bool UseCoa;
 
         public FinancialAccountController(IFinancialService financialService, IAggieEnterpriseService aggieEnterpriseService)
         {
             _financialService = financialService;
             this.aggieEnterpriseService = aggieEnterpriseService;
             RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
+            UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
         }
 
         /// <summary>
@@ -57,23 +59,10 @@ namespace CRP.Controllers
                 return this.RedirectToAction(a => a.Index());
             }
 
-            if(RequireKfs)
-            {
-                var accountValidation = await _financialService.IsAccountValidForRegistration(account);
-                if (!accountValidation.IsValid)
-                {
-                    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
-                    ErrorMessage = $"Invalid Account: Field: {accountValidation.Field} Error: {accountValidation.Message}";
-                }
-                else
-                {
-                    Message = "Account is still valid!";
-                }
-            }
-            else
+            if (UseCoa)
             {
                 var accountValidation = await _financialService.IsAccountValidForRegistration(account.FinancialSegmentString);
-                if (! accountValidation.IsValid)
+                if (!accountValidation.IsValid)
                 {
                     ModelState.AddModelError("FinancialSegmentString", "Is not valid.");
                     ErrorMessage = $"Financial Segment String in not valid: {accountValidation.Message}";
@@ -90,24 +79,48 @@ namespace CRP.Controllers
                     }
                 }
             }
+            else
+            {               
+                var accountValidation = await _financialService.IsAccountValidForRegistration(account);
+                if (!accountValidation.IsValid)
+                {
+                    ModelState.AddModelError(accountValidation.Field, accountValidation.Message);
+                    ErrorMessage = $"Invalid KFS Account: Field: {accountValidation.Field} Error: {accountValidation.Message}";
+                }
+                else
+                {
+                    Message = "Account is still valid!";
+                }
+                //If it has both, check both
+                if (!string.IsNullOrWhiteSpace(account.FinancialSegmentString))
+                {
+                    var aEaccountValidation = await _financialService.IsCoaValidForRegistration(account.FinancialSegmentString);
+                    if (!aEaccountValidation.IsValid)
+                    {
+                        ModelState.AddModelError("FinancialSegmentString", aEaccountValidation.Message);
+                        ErrorMessage = $"{ErrorMessage} - Financial Segment String in not valid: {aEaccountValidation.Message}";
+                    }
+                }
+            }
+
 
             var model = new FinancialAccountDetailsViewModel();
             model.FinancialAccount = account;
             model.RelatedItems = Repository.OfType<Item>().Queryable.Where(a => a.FinancialAccount.Id == account.Id).Select(a => new ItemModel { Id = a.Id, Name = a.Name, Created = a.DateCreated.ToPacificTime()}).ToList();
 
-            if (RequireKfs)
-            {
-                if(!string.IsNullOrWhiteSpace(account.Account))
-                {
-                    model.Duplicates = Repository.OfType<FinancialAccount>().Queryable.Where(a =>a.Id != account.Id &&  a.Chart == account.Chart && a.Account == account.Account ).ToList();
-                }
-            }
-            else
+            if (UseCoa)
             {
                 if (!string.IsNullOrWhiteSpace(account.FinancialSegmentString))
                 {
                     model.Duplicates = Repository.OfType<FinancialAccount>().Queryable.Where(a => a.Id != account.Id && a.FinancialSegmentString == account.FinancialSegmentString).ToList();
                 }
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(account.Account))
+                {
+                    model.Duplicates = Repository.OfType<FinancialAccount>().Queryable.Where(a => a.Id != account.Id && a.Chart == account.Chart && a.Account == account.Account).ToList();
+                }                
             }
             return View(model);
         }
@@ -133,26 +146,7 @@ namespace CRP.Controllers
         public async Task<ActionResult> Create(FinancialAccount model)
         {
             model.FinancialSegmentString = model.FinancialSegmentString.SafeToUpper()?.Trim();
-            if (RequireKfs)
-            {
-                if(string.IsNullOrWhiteSpace( model.Chart))
-                {
-                    ModelState.AddModelError("Chart", "Chart is currently required");
-                }
-                if (string.IsNullOrWhiteSpace(model.Account))
-                {
-                    ModelState.AddModelError("Account", "Account is currently required");
-                }
-                if (!string.IsNullOrWhiteSpace(model.FinancialSegmentString))
-                {                   
-                    var CoaValidation = await aggieEnterpriseService.ValidateAccount(model.FinancialSegmentString);
-                    if (!CoaValidation.IsValid)
-                    {
-                        ModelState.AddModelError("FinancialSegmentString", CoaValidation.Message);
-                    }
-                }
-            }
-            else
+            if (UseCoa)
             {
                 if (string.IsNullOrWhiteSpace(model.FinancialSegmentString))
                 {
@@ -168,6 +162,25 @@ namespace CRP.Controllers
                     if (accountValidation.IsWarning)
                     {
                         Message = $"Warning: COA may not be valid for use with Registration: {accountValidation.Message}";
+                    }
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.Chart))
+                {
+                    ModelState.AddModelError("Chart", "Chart is currently required");
+                }
+                if (string.IsNullOrWhiteSpace(model.Account))
+                {
+                    ModelState.AddModelError("Account", "Account is currently required");
+                }
+                if (!string.IsNullOrWhiteSpace(model.FinancialSegmentString))
+                {
+                    var CoaValidation = await aggieEnterpriseService.ValidateAccount(model.FinancialSegmentString);
+                    if (!CoaValidation.IsValid)
+                    {
+                        ModelState.AddModelError("FinancialSegmentString", CoaValidation.Message);
                     }
                 }
             }
