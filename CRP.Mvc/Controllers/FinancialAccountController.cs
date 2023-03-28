@@ -101,6 +101,10 @@ namespace CRP.Controllers
                         ModelState.AddModelError("FinancialSegmentString", aEaccountValidation.Message);
                         ErrorMessage = $"{ErrorMessage} - Financial Segment String in not valid: {aEaccountValidation.Message}";
                     }
+                    if(aEaccountValidation.IsWarning)
+                    {
+                        Message = $"Coa Warning: {accountValidation.Message}";
+                    }
                 }
             }
 
