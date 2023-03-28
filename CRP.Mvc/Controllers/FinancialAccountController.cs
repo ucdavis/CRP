@@ -178,7 +178,7 @@ namespace CRP.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(model.FinancialSegmentString))
                 {
-                    var CoaValidation = await aggieEnterpriseService.ValidateAccount(model.FinancialSegmentString);
+                    var CoaValidation = await aggieEnterpriseService.ValidateAccount(model.FinancialSegmentString); //Replace with call into financial service? DOn't worry as this code will be removed after the go live date?
                     if (!CoaValidation.IsValid)
                     {
                         ModelState.AddModelError("FinancialSegmentString", CoaValidation.Message);
@@ -193,15 +193,15 @@ namespace CRP.Controllers
 
             var account = new FinancialAccount()
             {
-                Name        = model.Name,
-                Description = model.Description,
-                Chart       = model.Chart.SafeToUpper(),
-                Account     = model.Account.SafeToUpper(),
-                SubAccount  = model.SubAccount.SafeToUpper(),
-                Project     = model.Project.SafeToUpper(), //Not used
+                Name                   = model.Name,
+                Description            = model.Description,
+                Chart                  = model.Chart.SafeToUpper(),
+                Account                = model.Account.SafeToUpper(),
+                SubAccount             = model.SubAccount.SafeToUpper(),
+                Project                = model.Project.SafeToUpper(), //Not used
                 FinancialSegmentString = model.FinancialSegmentString.SafeToUpper()?.Trim(),
-                IsActive    = true, 
-                IsUserAdded   = false, 
+                IsActive               = true, 
+                IsUserAdded            = false, 
             };
 
 
@@ -211,7 +211,15 @@ namespace CRP.Controllers
                 return View(model);
             }
 
-            if (RequireKfs)
+            if (UseCoa)
+            {
+                if (Repository.OfType<FinancialAccount>().Queryable.Any(a => a.FinancialSegmentString == account.FinancialSegmentString))
+                {
+                    ErrorMessage = "That Financial Segment String already exists";
+                    return View(model);
+                }
+            }
+            else
             {
                 if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
                     a.Chart == account.Chart &&
@@ -222,14 +230,13 @@ namespace CRP.Controllers
                     ErrorMessage = "That account already exists";
                     return View(model);
                 }
-            }
-            else
-            {
-                if (Repository.OfType<FinancialAccount>().Queryable.Any(a =>
-                    a.FinancialSegmentString == account.FinancialSegmentString ))
+                //Ok, we want/need to allow dups because the existing accounts may map to more than one.
+                if (!string.IsNullOrWhiteSpace(account.FinancialSegmentString))
                 {
-                    ErrorMessage = "That Financial Segment String already exists";
-                    return View(model);
+                    if (Repository.OfType<FinancialAccount>().Queryable.Any(a => a.FinancialSegmentString == account.FinancialSegmentString))
+                    {
+                        Message = "Warning! That Financial Segment String already exists";
+                    }
                 }
             }
 
