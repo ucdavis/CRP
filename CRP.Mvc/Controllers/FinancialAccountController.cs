@@ -103,7 +103,7 @@ namespace CRP.Controllers
                     }
                     if(aEaccountValidation.IsWarning)
                     {
-                        Message = $"Coa Warning: {accountValidation.Message}";
+                        Message = $"Coa Warning: {aEaccountValidation.Message}";
                     }
                 }
             }
