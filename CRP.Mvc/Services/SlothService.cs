@@ -30,8 +30,7 @@ namespace CRP.Mvc.Services
             _settings.BaseUrl = CloudConfigurationManager.GetSetting("Sloth.BaseUrl");
             _settings.ApiKey = CloudConfigurationManager.GetSetting("Sloth.ApiKey");
 
-            _settings.RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
-            _settings.BaseUrlV2 = CloudConfigurationManager.GetSetting("Sloth.BaseUrlV2");
+            _settings.UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
         }
 
 
@@ -60,13 +59,19 @@ namespace CRP.Mvc.Services
 
         private HttpClient GetHttpClient()
         {
+            if (_settings.BaseUrl.EndsWith("v1/", StringComparison.OrdinalIgnoreCase) || _settings.BaseUrl.EndsWith("v2/", StringComparison.OrdinalIgnoreCase))
+            {
+                Log.Error("Sloth BaseUrl should not end with version");
+                //Replace the end of the string
+                _settings.BaseUrl = _settings.BaseUrl.Substring(0, _settings.BaseUrl.Length - 3);
+            }
             var client = new HttpClient()
             {
-                BaseAddress = new Uri(_settings.BaseUrl),
-            };
-            if (!_settings.RequireKfs)
+                BaseAddress = new Uri($"{_settings.BaseUrl}v1/"),
+            };  
+            if (_settings.UseCoa)
             {
-                client.BaseAddress = new Uri(_settings.BaseUrlV2);
+                client.BaseAddress = new Uri($"{_settings.BaseUrl}v2/");
             }
                 
                 

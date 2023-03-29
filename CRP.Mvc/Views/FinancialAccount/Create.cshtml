@@ -1,7 +1,10 @@
-﻿@model CRP.Core.Domain.FinancialAccount
+﻿@using Microsoft.Azure
+@using CRP.Core.Helpers;
+@model CRP.Core.Domain.FinancialAccount
 
 @{
     ViewBag.Title = "Create";
+    var useCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
 }
 @section NavButtons
 {
@@ -17,72 +20,73 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            <h4>Financial Account</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-horizontal">
+    <h4>Financial Account</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                </div>
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Chart, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Chart, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Chart, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Account, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Account, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Account, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.SubAccount, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.SubAccount, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SubAccount, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.FinancialSegmentString, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.FinancialSegmentString, new { htmlAttributes = new { @class = "form-control" } })
-                        <span class="input-group-btn">
-                            <button id="ccoa-picker" class="btn" type="button">CCOA Picker</button>
-                        </span>
-                    </div>
-                    @Html.ValidationMessageFor(model => model.FinancialSegmentString, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" /> |
-                    @Html.ActionLink("Cancel", "Index", "FinancialAccount", null, new { @class = "btn" })
-                </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @if (!useCoa)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Chart, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Chart, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Chart, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Account, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Account, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Account, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SubAccount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SubAccount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SubAccount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    <div class="form-group">
+        @Html.LabelFor(model => model.FinancialSegmentString, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="input-group">
+                @Html.EditorFor(model => model.FinancialSegmentString, new { htmlAttributes = new { @class = "form-control" } })
+                <span class="input-group-btn">
+                    <button id="ccoa-picker" class="btn" type="button">CCOA Picker</button>
+                </span>
+            </div>
+            @Html.ValidationMessageFor(model => model.FinancialSegmentString, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" /> |
+            @Html.ActionLink("Cancel", "Index", "FinancialAccount", null, new { @class = "btn" })
+        </div>
+    </div>
+</div>
     }
 </div>
 
@@ -94,8 +98,8 @@
     <script type="text/javascript">
 
         $("#ccoa-picker").on("click",
-            
-            async function () {               
+
+            async function () {
                 const chart = await window.Finjector.findChartSegmentString();
                 if (chart && chart.status === "success") {
                     $("#FinancialSegmentString").val(chart.data);
@@ -105,6 +109,6 @@
                 }
                 return false;
             });
-        
+
     </script>
 }

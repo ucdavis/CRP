@@ -55,6 +55,10 @@ namespace CRP.Core.Domain
 
         public virtual string GetAccountString()
         {
+            if(string.IsNullOrWhiteSpace(Account))
+            {
+                return String.Empty;
+            }
             if (string.IsNullOrWhiteSpace(SubAccount))
             {
                 return $"{Chart}-{Account}";
@@ -63,13 +67,13 @@ namespace CRP.Core.Domain
             return $"{Chart}-{Account}-{SubAccount}";
         }
 
-        public virtual string GetCoaForList(bool useKfs = true)
+        public virtual string GetCoaForList(bool useCoa = false)
         {
-            if (useKfs)
+            if (useCoa)
             {
-                return $"{Name}: {GetAccountString()}";
+                return $"{Name}: {FinancialSegmentString}";                
             }
-            return $"{Name}: {FinancialSegmentString}";
+            return $"{Name}: {GetAccountString()}";
         }
     }
 }

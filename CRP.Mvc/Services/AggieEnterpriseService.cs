@@ -10,6 +10,7 @@ using System.Web;
 using Microsoft.Azure;
 using AggieEnterpriseApi.Extensions;
 using CRP.Mvc.Controllers.ViewModels;
+using MvcContrib.FluentHtml.Elements;
 
 namespace CRP.Mvc.Services
 {
@@ -19,25 +20,26 @@ namespace CRP.Mvc.Services
     }
     public class AggieEnterpriseService : IAggieEnterpriseService
     {
-        private readonly IAggieEnterpriseClient _aggieClient;
-
-        public AggieEnterpriseService()
-        {           
-            _aggieClient = GraphQlClient.Get(CloudConfigurationManager.GetSetting("GraphQlUrl"), CloudConfigurationManager.GetSetting("GraphToken"));
-        }
 
 
         public async Task<AccountValidationModel> ValidateAccount(string financialSegmentString, bool validateCVRs = true)
         {
+
+            //var _aggieClient = GraphQlClient.Get(CloudConfigurationManager.GetSetting("AggieEnterprise:GraphQlUrl"), CloudConfigurationManager.GetSetting("AggieEnterprise:GraphToken"));
+            var _aggieClient = GraphQlClient.Get(
+                CloudConfigurationManager.GetSetting("AggieEnterprise:GraphQlUrl"), 
+                CloudConfigurationManager.GetSetting("AggieEnterprise:TokenEndpoint"), 
+                CloudConfigurationManager.GetSetting("AggieEnterprise:ConsumerKey"),
+                CloudConfigurationManager.GetSetting("AggieEnterprise:ConsumerSecret"), 
+                $"{CloudConfigurationManager.GetSetting("AggieEnterprise:ScopeApp")}-{CloudConfigurationManager.GetSetting("AggieEnterprise:ScopeEnv")}");
+
+
             var rtValue = new AccountValidationModel();
             var segmentStringType = FinancialChartValidation.GetFinancialChartStringType(financialSegmentString);
-
             if (segmentStringType == FinancialChartStringType.Gl)
             {
                 var result = await _aggieClient.GlValidateChartstring.ExecuteAsync(financialSegmentString, validateCVRs);
-
                 var data = result.ReadData();
-
                 rtValue.IsValid = data.GlValidateChartstring.ValidationResponse.Valid;
                 if (!rtValue.IsValid)
                 {
@@ -45,7 +47,6 @@ namespace CRP.Mvc.Services
                     {
                         rtValue.Messages.Add(err);
                     }
-                    
                 }
 
                 if (rtValue.IsValid)

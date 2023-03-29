@@ -50,7 +50,8 @@ namespace CRP.Mvc
 
             return logConfig.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(esUrl))
             {
-                IndexFormat = "aspnet-registration-{0:yyyy.MM}"
+                IndexFormat = "aspnet-registration-{0:yyyy.MM}",
+                TypeName = null
             });
         }
     }

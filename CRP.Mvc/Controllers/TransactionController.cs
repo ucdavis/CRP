@@ -755,7 +755,7 @@ namespace CRP.Controllers
         public async Task<ActionResult> DepositNotify(TransactionDepositNotification model)
         {
             var AggieEnterpriseAccounts = new KfsAccounts();
-            var RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
+            var UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
             Log.Information("DepositNotify - Starting");
             // parse id
             if (!int.TryParse(model.MerchantTrackingNumber, out int transactionId))
@@ -808,39 +808,12 @@ namespace CRP.Controllers
             var fee = Math.Round(total * FeeSchedule.StandardRate, 2); 
             var income = total - fee;
 
+            var debitHolding = new CreateTransfer();
+            var feeCredit = new CreateTransfer();
+            var incomeCredit = new CreateTransfer();
+
             // create transfers
-            var debitHolding = new CreateTransfer()
-            {
-                Amount      = total,
-                Direction   = CreateTransfer.CreditDebit.Debit,
-                Chart       = KfsAccounts.HoldingChart,
-                Account     = KfsAccounts.HoldingAccount,
-                ObjectCode  = KfsObjectCodes.Income,
-                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
-            };
-
-            var feeCredit = new CreateTransfer()
-            {
-                Amount      = fee,
-                Direction   = CreateTransfer.CreditDebit.Credit,
-                Chart       = KfsAccounts.FeeChart,
-                Account     = KfsAccounts.FeeAccount,
-                ObjectCode  = KfsObjectCodes.Income,
-                Description = $"Processing Fee - {transId}".SafeTruncate(40)
-            };
-
-            var incomeCredit = new CreateTransfer()
-            {
-                Amount      = income,
-                Direction   = CreateTransfer.CreditDebit.Credit,
-                Chart       = paymentLog.Transaction.Item.FinancialAccount.Chart,
-                Account     = paymentLog.Transaction.Item.FinancialAccount.Account,
-                SubAccount  = paymentLog.Transaction.Item.FinancialAccount.SubAccount,
-                ObjectCode  = KfsObjectCodes.Income,
-                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
-            };
-
-            if (!RequireKfs)
+            if (UseCoa)
             {
                 debitHolding = new CreateTransfer()
                 {
@@ -874,11 +847,44 @@ namespace CRP.Controllers
                     });
                 }
             }
+            else
+            {
+                debitHolding = new CreateTransfer()
+                {
+                    Amount = total,
+                    Direction = CreateTransfer.CreditDebit.Debit,
+                    Chart = KfsAccounts.HoldingChart,
+                    Account = KfsAccounts.HoldingAccount,
+                    ObjectCode = KfsObjectCodes.Income,
+                    Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+                };
+
+                feeCredit = new CreateTransfer()
+                {
+                    Amount = fee,
+                    Direction = CreateTransfer.CreditDebit.Credit,
+                    Chart = KfsAccounts.FeeChart,
+                    Account = KfsAccounts.FeeAccount,
+                    ObjectCode = KfsObjectCodes.Income,
+                    Description = $"Processing Fee - {transId}".SafeTruncate(40)
+                };
+
+                incomeCredit = new CreateTransfer()
+                {
+                    Amount = income,
+                    Direction = CreateTransfer.CreditDebit.Credit,
+                    Chart = paymentLog.Transaction.Item.FinancialAccount.Chart,
+                    Account = paymentLog.Transaction.Item.FinancialAccount.Account,
+                    SubAccount = paymentLog.Transaction.Item.FinancialAccount.SubAccount,
+                    ObjectCode = KfsObjectCodes.Income,
+                    Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+                };
+            }
 
             // setup transaction
             var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
-            
 
+            //ValidateFinancialSegmentStrings //is false: Don't have sloth reject if the COA isn't valid. Possibly have a config setting here
             var request = new CreateTransaction()
             {
                 AutoApprove             = true,

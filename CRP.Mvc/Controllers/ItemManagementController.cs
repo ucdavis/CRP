@@ -30,14 +30,14 @@ namespace CRP.Controllers
     {
         private readonly ICopyItemService _copyItemService;
         private readonly IFinancialService _financialService;
-        private readonly bool RequireKfs;
+        private readonly bool UseCoa;
 
 
         public ItemManagementController(ICopyItemService copyItemService, IFinancialService financialService)
         {
             _copyItemService = copyItemService;
             _financialService = financialService;
-            RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
+            UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
         }
 
         //Tested 20200422
@@ -178,7 +178,11 @@ namespace CRP.Controllers
                 }
                 if(ModelState.IsValid)
                 {
-                    if (RequireKfs)
+                    if (UseCoa)
+                    {
+                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
+                    }
+                    else
                     {
                         //Ok, it is valid
                         //Check if it exists
@@ -188,10 +192,7 @@ namespace CRP.Controllers
                             a.Chart == accountValidation.FinancialAccount.Chart &&
                             a.Account == accountValidation.FinancialAccount.Account &&
                             a.SubAccount == accountValidation.FinancialAccount.SubAccount);
-                    }
-                    else
-                    {
-                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
+
                     }
                     if (account != null)
                     {
@@ -418,8 +419,12 @@ namespace CRP.Controllers
                     }
                     else
                     {
-                        if(RequireKfs)
+                        if(UseCoa)
                         {
+                            account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
+                        }
+                        else
+                        {                            
                             //Ok, it is valid
                             //Check if it exists
                             //Otherwise create it 
@@ -428,10 +433,6 @@ namespace CRP.Controllers
                                 a.Chart == accountValidation.FinancialAccount.Chart &&
                                 a.Account == accountValidation.FinancialAccount.Account &&
                                 a.SubAccount == accountValidation.FinancialAccount.SubAccount);
-                        }
-                        else
-                        {
-                            account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
                         }
                         if (account != null)
                         {

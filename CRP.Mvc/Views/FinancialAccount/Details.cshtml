@@ -18,44 +18,44 @@
     <div class="pull-left" style="width: 100%">
         <h4>Account Info</h4>
         <hr />
-            <dl class="dl-horizontal">
-                <dt class="col-md-4">
-                    @Html.DisplayNameFor(model => model.FinancialAccount.Name)
-                </dt>
-                <dd class="col-md-8">
-                    @Html.DisplayFor(model => model.FinancialAccount.Name)
-                </dd>
-                <dt class="col-md-4">
-                    @Html.DisplayNameFor(model => model.FinancialAccount.Description)
-                </dt>
-                <dd class="col-md-8">
-                    @Html.DisplayFor(model => model.FinancialAccount.Description)
-                </dd>
-                <dt class="col-md-4">
-                    Account Number
-                </dt>
-                <dd class="col-md-8">
-                    @Model.FinancialAccount.GetAccountString()
-                </dd>
-                <dt class="col-md-4">
-                    F... Segment String
-                </dt>
-                <dd class="col-md-8">
-                    @Model.FinancialAccount.FinancialSegmentString
-                </dd>
-                <dt class="col-md-4">
-                    @Html.DisplayNameFor(model => model.FinancialAccount.IsActive)
-                </dt>
-                <dd class="col-md-8">
-                    @Html.DisplayFor(model => model.FinancialAccount.IsActive)
-                </dd>
-                <dt class="col-md-4">
-                    @Html.DisplayNameFor(model => model.FinancialAccount.IsUserAdded)
-                </dt>
-                <dd class="col-md-8">
-                    @Html.DisplayFor(model => model.FinancialAccount.IsUserAdded)
-                </dd>
-            </dl>
+        <dl class="dl-horizontal">
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => model.FinancialAccount.Name)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => model.FinancialAccount.Name)
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => model.FinancialAccount.Description)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => model.FinancialAccount.Description)
+            </dd>
+            <dt class="col-md-4">
+                Account Number
+            </dt>
+            <dd class="col-md-8">
+                @Model.FinancialAccount.GetAccountString()
+            </dd>
+            <dt class="col-md-4">
+                F... Segment String
+            </dt>
+            <dd class="col-md-8">
+                @Model.FinancialAccount.FinancialSegmentString
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => model.FinancialAccount.IsActive)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => model.FinancialAccount.IsActive)
+            </dd>
+            <dt class="col-md-4">
+                @Html.DisplayNameFor(model => model.FinancialAccount.IsUserAdded)
+            </dt>
+            <dd class="col-md-8">
+                @Html.DisplayFor(model => model.FinancialAccount.IsUserAdded)
+            </dd>
+        </dl>
     </div>
 
 
@@ -64,10 +64,10 @@
         @Html.ActionLink("Back to List", "Index", "FinancialAccount", null, new { @class = "btn" })
     </div>
 
-    <div class="pull-left" style="width: 100%">
+    <div class="pull-left" style="width: 100%; margin-bottom: 100px;">
         <h4>Items using this</h4>
         <hr />
-        <table class="table table-bordered">
+        <table id="related" class="table table-bordered">
             <thead>
                 <tr>
                     <th></th>
@@ -100,7 +100,54 @@
                 }
             </tbody>
         </table>
+        <hr />
+        <h4>Duplicate Accounts</h4>
+        <hr />
+        <table id="dups" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Account Number
+                    </th>
+                    <th>Financial Segment String</th>
+                    <th>Active</th>
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Duplicates)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink("View", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @item.GetAccountString()
+                        </td>
+                        <td>@item.FinancialSegmentString</td>
+                        <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IsUserAdded)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
+
+
 </div>
 
 
@@ -110,12 +157,22 @@
 {
     <script type="text/javascript">
         $(function () {
-            $(".table").DataTable({
+            $("#related").DataTable({
                 sorting: [[2, "desc"]], //Default sort on second column
                 columnDefs: [
                     { orderable: false, 'targets': [0] }, //Disables sort on icon columns
                 ]
             });
+        });
+        $(function () {
+            $("#dups").dataTable({
+                "aaSorting": [[1, "desc"]], //Default sort on second column
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [5, 6] }
+                ]
+            });
+
         });
     </script>
 }
