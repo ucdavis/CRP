@@ -755,7 +755,7 @@ namespace CRP.Controllers
         public async Task<ActionResult> DepositNotify(TransactionDepositNotification model)
         {
             var AggieEnterpriseAccounts = new KfsAccounts();
-            var RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
+            var UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
             Log.Information("DepositNotify - Starting");
             // parse id
             if (!int.TryParse(model.MerchantTrackingNumber, out int transactionId))
@@ -840,7 +840,7 @@ namespace CRP.Controllers
                 Description = $"Funds Distribution - {transId}".SafeTruncate(40)
             };
 
-            if (!RequireKfs)
+            if (UseCoa)
             {
                 debitHolding = new CreateTransfer()
                 {

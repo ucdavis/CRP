@@ -30,7 +30,7 @@ namespace CRP.Mvc.Services
             _settings.BaseUrl = CloudConfigurationManager.GetSetting("Sloth.BaseUrl");
             _settings.ApiKey = CloudConfigurationManager.GetSetting("Sloth.ApiKey");
 
-            _settings.RequireKfs = CloudConfigurationManager.GetSetting("RequireKfs").SafeToUpper() == "TRUE";
+            _settings.UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
             _settings.BaseUrlV2 = CloudConfigurationManager.GetSetting("Sloth.BaseUrlV2");
         }
 
@@ -64,7 +64,7 @@ namespace CRP.Mvc.Services
             {
                 BaseAddress = new Uri(_settings.BaseUrl),
             };
-            if (!_settings.RequireKfs)
+            if (_settings.UseCoa)
             {
                 client.BaseAddress = new Uri(_settings.BaseUrlV2);
             }

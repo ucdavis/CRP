@@ -9,6 +9,6 @@ namespace CRP.Mvc.Models.Configuration
 
         public string ApiKey { get; set; }
 
-        public bool RequireKfs { get; set; }
+        public bool UseCoa { get; set; }
     }
 }
