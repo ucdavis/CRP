@@ -59,6 +59,7 @@ namespace CRP.Mvc.Models.Sloth
         public string SourceType { get; set; }
 
         public string Description { get; set; } //If it isn't set, Sloth with use one of the transfer descriptions...
+        public bool ValidateFinancialSegmentStrings { get; set; } = false; //Don't have sloth reject if the COA isn't valid.
 
         public IList<MetadataEntry> Metadata { get; set; } = new List<MetadataEntry>();
 
