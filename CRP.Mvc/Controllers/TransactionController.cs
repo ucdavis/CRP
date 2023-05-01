@@ -883,6 +883,7 @@ namespace CRP.Controllers
 
             // setup transaction
             var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
+            merchantUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}{merchantUrl}";
 
             //ValidateFinancialSegmentStrings //is false: Don't have sloth reject if the COA isn't valid. Possibly have a config setting here
             var request = new CreateTransaction()
