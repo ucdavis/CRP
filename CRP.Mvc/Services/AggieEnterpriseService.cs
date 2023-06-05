@@ -83,14 +83,14 @@ namespace CRP.Mvc.Services
                 //TODO: Have a config setting to see if we allow PPM? (May not be working for go-live date)
 
                 
-                var result = await _aggieClient.PpmStringSegmentsValidate.ExecuteAsync(financialSegmentString);
+                var result = await _aggieClient.PpmSegmentStringValidate.ExecuteAsync(financialSegmentString);
 
                 var data = result.ReadData();
 
-                rtValue.IsValid = data.PpmStringSegmentsValidate.ValidationResponse.Valid;
+                rtValue.IsValid = data.PpmSegmentStringValidate.ValidationResponse.Valid;
                 if (!rtValue.IsValid)
                 {
-                    foreach (var err in data.PpmStringSegmentsValidate.ValidationResponse.ErrorMessages)
+                    foreach (var err in data.PpmSegmentStringValidate.ValidationResponse.ErrorMessages)
                     {
                         rtValue.Messages.Add(err);
                     }
