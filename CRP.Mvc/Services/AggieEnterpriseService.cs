@@ -132,7 +132,7 @@ namespace CRP.Mvc.Services
 
                     if(ppmSegments.ExpenditureType != "410004")
                     {
-                        rtValue.IsValid = false;
+                        rtValue.IsWarning = false;
                         rtValue.Messages.Add($"Expenditure Type (Natural Account) must be 410004 not {ppmSegments.ExpenditureType}");
                     }
                 }
