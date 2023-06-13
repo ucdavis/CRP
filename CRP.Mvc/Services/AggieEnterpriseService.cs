@@ -125,14 +125,14 @@ namespace CRP.Mvc.Services
                         }
                         else if (checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode != "13U20")
                         {
-                            rtValue.IsWarning = false;
+                            rtValue.IsWarning = true;
                             rtValue.Messages.Add($"Task's GL funding code must be 13U20 not {checkFundCodeData.PpmTaskByProjectNumberAndTaskNumber.GlPostingFundCode}");
                         }
                     }
 
                     if(ppmSegments.ExpenditureType != "410004")
                     {
-                        rtValue.IsWarning = false;
+                        rtValue.IsWarning = true;
                         rtValue.Messages.Add($"Expenditure Type (Natural Account) must be 410004 not {ppmSegments.ExpenditureType}");
                     }
                 }
