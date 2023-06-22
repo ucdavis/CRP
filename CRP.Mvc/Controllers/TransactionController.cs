@@ -815,8 +815,6 @@ namespace CRP.Controllers
             // create transfers
             if (UseCoa)
             {
-                Log.Information("ClearingFinancialSegmentString is {0}", AggieEnterpriseAccounts.ClearingFinancialSegmentString);
-                Log.Information("FeeFinancialSegmentString is {0}", AggieEnterpriseAccounts.FeeFinancialSegmentString);
                 debitHolding = new CreateTransfer()
                 {
                     Amount = total,
@@ -842,6 +840,8 @@ namespace CRP.Controllers
                 {
                     Log.Error("Missing FinancialSegmentString for {transId}", transId);
                     Log.Information("incomeCredit.FinancialSegmentString is {0}", incomeCredit.FinancialSegmentString);
+                    Log.Information("ClearingFinancialSegmentString is {0}", AggieEnterpriseAccounts.ClearingFinancialSegmentString);
+                    Log.Information("FeeFinancialSegmentString is {0}", AggieEnterpriseAccounts.FeeFinancialSegmentString);
                     return new JsonNetResult(new
                     {
                         message = "Missing FinancialSegmentString",
