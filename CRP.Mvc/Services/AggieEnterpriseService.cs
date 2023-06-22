@@ -61,10 +61,12 @@ namespace CRP.Mvc.Services
                     //Check if Financial Dept roles up to Level C value AAES00C (College of Agricultural and Environmental Sciences)
                     var rollupDepts = await _aggieClient.DeptParents.ExecuteAsync(data.GlValidateChartstring.Segments.Department);
                     var dataRollupDeps = rollupDepts.ReadData();
-                    if (!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C")) //TODO: Use app setting?
+                    //check if it rolls up to AAES00C or 9AAES0D
+
+                    if (!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C") && !DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "9AAES0D")) //TODO: Use app setting?
                     {
                         rtValue.IsWarning = true;
-                        rtValue.Messages.Add($"Department portion of the Financial Segment String must roll up to CAES. Dept does not: {data.GlValidateChartstring.Segments.Department}");
+                        rtValue.Messages.Add($"Department portion of the Financial Segment String must roll up to CAES or ANR. Dept does not: {data.GlValidateChartstring.Segments.Department}");
                     }
                     
                     if (data.GlValidateChartstring.Segments.Account != "410004")
@@ -102,7 +104,7 @@ namespace CRP.Mvc.Services
                     var ppmSegments = FinancialChartValidation.GetPpmSegments(financialSegmentString);
                     var rollupDepts = await _aggieClient.DeptParents.ExecuteAsync(ppmSegments.Organization);
                     var dataRollupDeps = rollupDepts.ReadData();
-                    if (!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C")) //TODO: Use app setting?
+                    if (!DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "AAES00C") && !DoesDeptRollUp.Dept(dataRollupDeps.ErpFinancialDepartment, "9AAES0D")) //TODO: Use app setting?
                     {
                         rtValue.IsWarning = true;
                         rtValue.Messages.Add($"Department portion of the Financial Segment String must roll up to CAES. Dept(Organization) does not: {ppmSegments.Organization}");
