@@ -841,7 +841,7 @@ namespace CRP.Controllers
                 if(string.IsNullOrWhiteSpace(debitHolding.FinancialSegmentString) || string.IsNullOrWhiteSpace(feeCredit.FinancialSegmentString) || string.IsNullOrWhiteSpace(incomeCredit.FinancialSegmentString))
                 {
                     Log.Error("Missing FinancialSegmentString for {transId}", transId);
-                    Log.Information("debitHolding.FinancialSegmentString is {0}", debitHolding.FinancialSegmentString);
+                    Log.Information("incomeCredit.FinancialSegmentString is {0}", incomeCredit.FinancialSegmentString);
                     return new JsonNetResult(new
                     {
                         message = "Missing FinancialSegmentString",
