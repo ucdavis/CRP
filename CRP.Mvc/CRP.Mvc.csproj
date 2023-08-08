@@ -734,6 +734,7 @@
     <Content Include="Images\Media\gunrock_banner_final.svg" />
     <Content Include="Images\Media\gunrock_smaller.svg" />
     <Content Include="Images\Media\location_icon.svg" />
+    <Content Include="Images\Media\other_icon2.svg" />
     <Content Include="Images\Media\payment_icon.svg" />
     <Content Include="Images\Media\registrationlogo.svg" />
     <Content Include="Images\Media\thumbnail.jpg" />
