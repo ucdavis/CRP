@@ -94,10 +94,16 @@
                             if (ep.ExtendedProperty.Name.ToLower().Contains("location"))
                             {
                                 <img src="@Url.Content("~/Images/Media/location_icon.svg")" alt="Location icon">
-                            }
-                            if (ep.ExtendedProperty.Name.ToLower().Contains("contact"))
+                            }else  if (ep.ExtendedProperty.Name.ToLower().Contains("contact"))
                             {
-                                <img src="@Url.Content("~/Images/Media/contact.svg")" alt="Location icon">
+                                <img src="@Url.Content("~/Images/Media/contact.svg")" alt="Contact icon">
+                            }else if (ep.ExtendedProperty.Name.ToLower().Contains("time"))
+                            {
+                                <img src="@Url.Content("~/Images/Media/time_icon.svg")" alt="Time icon">
+                            }
+                            else
+                            {
+                                <img src="@Url.Content("~/Images/Media/other_icon2.svg")" alt="info icon">
                             }
                         }
                     </div>
