@@ -756,6 +756,10 @@ namespace CRP.Controllers
         {
             var AggieEnterpriseAccounts = new KfsAccounts();
             var UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
+            //Ok, so if we turn off the AutoApprove, we can turn onn the UseCoa a few days early.
+            //Then it will create V2 txns, but not approve them. We can manually approve them once prod AE is available.
+            var SlothAutoApprove = CloudConfigurationManager.GetSetting("SlothAutoApprove").SafeToUpper() == "TRUE";
+
             Log.Information("DepositNotify - Starting");
             // parse id
             if (!int.TryParse(model.MerchantTrackingNumber, out int transactionId))
@@ -890,7 +894,7 @@ namespace CRP.Controllers
             //ValidateFinancialSegmentStrings //is false: Don't have sloth reject if the COA isn't valid. Possibly have a config setting here
             var request = new CreateTransaction()
             {
-                AutoApprove             = true,
+                AutoApprove             = SlothAutoApprove,
                 MerchantTrackingNumber  = paymentLog.Transaction.Id.ToString(),
                 MerchantTrackingUrl     = merchantUrl,
                 KfsTrackingNumber       = model.KfsTrackingNumber,

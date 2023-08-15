@@ -180,7 +180,7 @@ namespace CRP.Controllers
                 {
                     if (UseCoa)
                     {
-                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
+                        account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString && a.IsActive);
                     }
                     else
                     {
@@ -202,7 +202,7 @@ namespace CRP.Controllers
                     {
                         accountValidation.FinancialAccount.IsUserAdded = true;
                         accountValidation.FinancialAccount.IsActive = true;
-                        accountValidation.FinancialAccount.Name = item.UserAddedFinancialName;
+                        accountValidation.FinancialAccount.Name = $"{item.UserAddedFinancialName.Trim()} Added By: {User.Identity.Name}".SafeTruncate(128);
                         accountValidation.FinancialAccount.Description = $"Added By: {User.Identity.Name} on {DateTime.UtcNow.ToPacificTime().ToShortDateString()}";
                         Repository.OfType<FinancialAccount>().EnsurePersistent(accountValidation.FinancialAccount);
                         item.FinancialAccountId = accountValidation.FinancialAccount.Id;
@@ -421,7 +421,7 @@ namespace CRP.Controllers
                     {
                         if(UseCoa)
                         {
-                            account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString);
+                            account = Repository.OfType<FinancialAccount>().Queryable.FirstOrDefault(a => a.FinancialSegmentString == accountValidation.FinancialAccount.FinancialSegmentString && a.IsActive);
                         }
                         else
                         {                            
@@ -442,7 +442,7 @@ namespace CRP.Controllers
                         {
                             accountValidation.FinancialAccount.IsUserAdded = true;
                             accountValidation.FinancialAccount.IsActive = true;
-                            accountValidation.FinancialAccount.Name = $"Added By: {User.Identity.Name}";
+                            accountValidation.FinancialAccount.Name = $"{item.UserAddedFinancialName.Trim()} Added By: {User.Identity.Name}".SafeTruncate(128);
                             accountValidation.FinancialAccount.Description = $"Added By: {User.Identity.Name} on {DateTime.UtcNow.ToPacificTime().ToShortDateString()}";
                             Repository.OfType<FinancialAccount>().EnsurePersistent(accountValidation.FinancialAccount);
                             item.FinancialAccountId = accountValidation.FinancialAccount.Id;
