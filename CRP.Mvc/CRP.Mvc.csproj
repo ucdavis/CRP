@@ -726,6 +726,7 @@
     <Content Include="Images\Media\120-icon.jpg" />
     <Content Include="Images\Media\152-icon.jpg" />
     <Content Include="Images\Media\76-icon.jpg" />
+    <Content Include="Images\Media\caes-logo-v2.svg" />
     <Content Include="Images\Media\caeslogo.svg" />
     <Content Include="Images\Media\contact.svg" />
     <Content Include="Images\Media\date_icon.svg" />
