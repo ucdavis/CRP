@@ -14,6 +14,7 @@ using CRP.Mvc.Controllers.ViewModels.Transaction;
 using CRP.Mvc.Models.Sloth;
 using CRP.Mvc.Resources;
 using CRP.Mvc.Services;
+using Microsoft.Azure;
 using MvcContrib;
 using Serilog;
 using UCDArch.Web.ActionResults;
@@ -32,6 +33,7 @@ namespace CRP.Controllers
         {
             _notificationProvider = notificationProvider;
             _slothService = slothService;
+            
         }
 
         /// <summary>
@@ -752,6 +754,12 @@ namespace CRP.Controllers
         [BypassAntiForgeryToken]
         public async Task<ActionResult> DepositNotify(TransactionDepositNotification model)
         {
+            var AggieEnterpriseAccounts = new KfsAccounts();
+            var UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
+            //Ok, so if we turn off the AutoApprove, we can turn onn the UseCoa a few days early.
+            //Then it will create V2 txns, but not approve them. We can manually approve them once prod AE is available.
+            var SlothAutoApprove = CloudConfigurationManager.GetSetting("SlothAutoApprove").SafeToUpper() == "TRUE";
+
             Log.Information("DepositNotify - Starting");
             // parse id
             if (!int.TryParse(model.MerchantTrackingNumber, out int transactionId))
@@ -774,7 +782,7 @@ namespace CRP.Controllers
 
             if (paymentLog == null)
             {
-                Log.Information("DepositNotify - transaction not found for merchant tracking number");
+                Log.Error("DepositNotify - transaction not found for merchant tracking number");
                 return new JsonNetResult(new
                 {
                     message = "transaction not found for merchant tracking number",
@@ -804,58 +812,114 @@ namespace CRP.Controllers
             var fee = Math.Round(total * FeeSchedule.StandardRate, 2); 
             var income = total - fee;
 
+            var debitHolding = new CreateTransfer();
+            var feeCredit = new CreateTransfer();
+            var incomeCredit = new CreateTransfer();
+
             // create transfers
-            var debitHolding = new CreateTransfer()
+            if (UseCoa)
             {
-                Amount      = total,
-                Direction   = CreateTransfer.CreditDebit.Debit,
-                Chart       = KfsAccounts.HoldingChart,
-                Account     = KfsAccounts.HoldingAccount,
-                ObjectCode  = KfsObjectCodes.Income,
-                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
-            };
+                debitHolding = new CreateTransfer()
+                {
+                    Amount = total,
+                    Direction = CreateTransfer.CreditDebit.Debit,
+                    FinancialSegmentString = AggieEnterpriseAccounts.ClearingFinancialSegmentString,
+                    Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+                };
+                feeCredit = new CreateTransfer()
+                {
+                    Amount = fee,
+                    Direction = CreateTransfer.CreditDebit.Credit,
+                    FinancialSegmentString = AggieEnterpriseAccounts.FeeFinancialSegmentString, 
+                    Description = $"Processing Fee - {transId}".SafeTruncate(40)
+                };
+                incomeCredit = new CreateTransfer()
+                {
+                    Amount = income,
+                    Direction = CreateTransfer.CreditDebit.Credit,
+                    FinancialSegmentString = paymentLog.Transaction.Item.FinancialAccount.FinancialSegmentString,
+                    Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+                };
+                if(string.IsNullOrWhiteSpace(debitHolding.FinancialSegmentString) || string.IsNullOrWhiteSpace(feeCredit.FinancialSegmentString) || string.IsNullOrWhiteSpace(incomeCredit.FinancialSegmentString))
+                {
+                    Log.Error("Missing FinancialSegmentString for {transId}", transId);
+                    Log.Information("incomeCredit.FinancialSegmentString is {0}", incomeCredit.FinancialSegmentString);
+                    Log.Information("ClearingFinancialSegmentString is {0}", AggieEnterpriseAccounts.ClearingFinancialSegmentString);
+                    Log.Information("FeeFinancialSegmentString is {0}", AggieEnterpriseAccounts.FeeFinancialSegmentString);
+                    return new JsonNetResult(new
+                    {
+                        message = "Missing FinancialSegmentString",
+                        success = false,
+                    });
+                }
+            }
+            else
+            {
+                debitHolding = new CreateTransfer()
+                {
+                    Amount = total,
+                    Direction = CreateTransfer.CreditDebit.Debit,
+                    Chart = KfsAccounts.HoldingChart,
+                    Account = KfsAccounts.HoldingAccount,
+                    ObjectCode = KfsObjectCodes.Income,
+                    Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+                };
 
-            var feeCredit = new CreateTransfer()
-            {
-                Amount      = fee,
-                Direction   = CreateTransfer.CreditDebit.Credit,
-                Chart       = KfsAccounts.FeeChart,
-                Account     = KfsAccounts.FeeAccount,
-                ObjectCode  = KfsObjectCodes.Income,
-                Description = $"Processing Fee - {transId}".SafeTruncate(40)
-            };
+                feeCredit = new CreateTransfer()
+                {
+                    Amount = fee,
+                    Direction = CreateTransfer.CreditDebit.Credit,
+                    Chart = KfsAccounts.FeeChart,
+                    Account = KfsAccounts.FeeAccount,
+                    ObjectCode = KfsObjectCodes.Income,
+                    Description = $"Processing Fee - {transId}".SafeTruncate(40)
+                };
 
-            var incomeCredit = new CreateTransfer()
-            {
-                Amount      = income,
-                Direction   = CreateTransfer.CreditDebit.Credit,
-                Chart       = paymentLog.Transaction.Item.FinancialAccount.Chart,
-                Account     = paymentLog.Transaction.Item.FinancialAccount.Account,
-                SubAccount  = paymentLog.Transaction.Item.FinancialAccount.SubAccount,
-                ObjectCode  = KfsObjectCodes.Income,
-                Description = $"Funds Distribution - {transId}".SafeTruncate(40)
-            };
+                incomeCredit = new CreateTransfer()
+                {
+                    Amount = income,
+                    Direction = CreateTransfer.CreditDebit.Credit,
+                    Chart = paymentLog.Transaction.Item.FinancialAccount.Chart,
+                    Account = paymentLog.Transaction.Item.FinancialAccount.Account,
+                    SubAccount = paymentLog.Transaction.Item.FinancialAccount.SubAccount,
+                    ObjectCode = KfsObjectCodes.Income,
+                    Description = $"Funds Distribution - {transId}".SafeTruncate(40)
+                };
+            }
 
             // setup transaction
-            var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id});
+            var merchantUrl = Url.Action("Details", "Transaction",  new {id = paymentLog.Transaction.Id}, Request.Url.Scheme);
+ 
 
+            //ValidateFinancialSegmentStrings //is false: Don't have sloth reject if the COA isn't valid. Possibly have a config setting here
             var request = new CreateTransaction()
             {
-                AutoApprove            = true,
-                MerchantTrackingNumber = paymentLog.Transaction.Id.ToString(),
-                MerchantTrackingUrl    = merchantUrl,
-                KfsTrackingNumber      = model.KfsTrackingNumber,
-                TransactionDate        = DateTime.UtcNow,
-                Transfers              = new List<CreateTransfer>()
+                AutoApprove             = SlothAutoApprove,
+                MerchantTrackingNumber  = paymentLog.Transaction.Id.ToString(),
+                MerchantTrackingUrl     = merchantUrl,
+                KfsTrackingNumber       = model.KfsTrackingNumber,
+                TransactionDate         = DateTime.UtcNow,
+                Transfers               = new List<CreateTransfer>()
                 {
                     debitHolding,
                     feeCredit, 
                     incomeCredit,
                 },
-                Source                 = "Registration CyberSource",
-                SourceType             = "CyberSource",
+                Source                  = "Registration CyberSource",
+                SourceType              = "CyberSource",
                 ProcessorTrackingNumber = paymentLog.GatewayTransactionId,
+                Description             = $"Funds Distribution - {transId}",
             };
+
+            try
+            {
+                request.AddMetadata("Event Id", paymentLog.Transaction.Item.Id.ToString());
+                request.AddMetadata("Event Name", paymentLog.Transaction.Item.Name);
+            }
+            catch
+            {
+                Log.Error("DepositNotify - Error parsing meta data");
+            }
             Log.Information("DepositNotify - Created Transaction");
 
             //var getIt = JsonConvert.SerializeObject(request); //Debug it so can test in swagger

@@ -13,6 +13,7 @@
     </PostConversionCheckOutFromScc>
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <CompatibilityMode>130</CompatibilityMode>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -45,7 +46,7 @@
     <ProjectGuid>{55957b51-df36-4e9c-a3fa-637bbd05ae53}</ProjectGuid>
     <GenerateDatabaseFile>False</GenerateDatabaseFile>
     <GenerateCreateScript>False</GenerateCreateScript>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <DefaultSchema>dbo</DefaultSchema>
     <TargetLanguage>CS</TargetLanguage>
     <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>

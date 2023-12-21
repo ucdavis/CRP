@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CRP.Core.Domain;
+using CRP.Core.Helpers;
 using CRP.Mvc.Controllers.ViewModels;
 using CRP.Mvc.Models.FinancialModels;
 using Microsoft.Azure;
@@ -30,6 +31,7 @@ namespace CRP.Mvc.Services
 
         Task<AccountValidationModel> IsAccountValidForRegistration(FinancialAccount account);
         Task<AccountValidationModel> IsAccountValidForRegistration(string account);
+        Task<AccountValidationModel> IsCoaValidForRegistration(string account); //A specific check without using conditional flags
 
     }
 
@@ -37,7 +39,16 @@ namespace CRP.Mvc.Services
     {
         private static readonly string FinancialLookupUrl = CloudConfigurationManager.GetSetting("FinancialLookupUrl");
         private static readonly string FinancialOrgLookupUrl = CloudConfigurationManager.GetSetting("FinancialOrgLookupUrl");
+        private IAggieEnterpriseService _aggieEnterpriseService;
 
+        private readonly bool UseCoa;
+
+        public FinancialService(IAggieEnterpriseService aggieEnterpriseService)
+        {
+            _aggieEnterpriseService = aggieEnterpriseService;
+            UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
+        }
+        
 
         public async Task<string> GetAccountName(string chart, string account, string subAccount)
         {
@@ -253,52 +264,67 @@ namespace CRP.Mvc.Services
         public async Task<AccountValidationModel> IsAccountValidForRegistration(FinancialAccount account)
         {
             var rtValue = new AccountValidationModel();
-
-            if (!await IsAccountValid(account.Chart, account.Account, account.SubAccount))
+            
+            if(UseCoa)
             {
-                rtValue.IsValid = false;
-                rtValue.Field = "Account";
-                rtValue.Message = "Valid Account Not Found. (Invalid or Expired).";
-
-                return rtValue;
-            }
-
-            if (!string.IsNullOrWhiteSpace(account.Project) && !await IsProjectValid(account.Project))
-            {
-                rtValue.IsValid = false;
-                rtValue.Field = "Project";
-                rtValue.Message = "Project Not Valid.";
-                return rtValue;
-            }
-
-
-            var accountLookup = new KfsAccount();
-            accountLookup = await GetAccount(account.Chart, account.Account);
-            if (!accountLookup.IsValidIncomeAccount)
-            {
-                rtValue.IsValid = false;
-                rtValue.Field = "Account";
-                rtValue.Message = "Not An Income Account/Events Account.";
-                return rtValue;
-            }
-
-
-            //Ok, not check if the org rolls up to our orgs
-            if (await IsOrgChildOfOrg(accountLookup.chartOfAccountsCode,
-                    accountLookup.organizationCode, "3", "AAES") ||
-                await IsOrgChildOfOrg(accountLookup.chartOfAccountsCode,
-                    accountLookup.organizationCode,
-                    "L", "AAES"))
-            {
-                rtValue.IsValid = true;
+                if (String.IsNullOrWhiteSpace(account.FinancialSegmentString))
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Messages.Add("Financial Segment String is required");
+                    rtValue.Field = "FinancialSegmentString";
+                }
+                else
+                {
+                    rtValue = await _aggieEnterpriseService.ValidateAccount(account.FinancialSegmentString);
+                }
             }
             else
             {
-                rtValue.IsValid = false;
-                rtValue.Field = "Account";
-                rtValue.Message = "Account not in CAES org.";
-            }
+                if (!await IsAccountValid(account.Chart, account.Account, account.SubAccount))
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Field = "Account";
+                    rtValue.Messages.Add("Valid Account Not Found. (Invalid or Expired).");
 
+                    return rtValue;
+                }
+
+                if (!string.IsNullOrWhiteSpace(account.Project) && !await IsProjectValid(account.Project))
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Field = "Project";
+                    rtValue.Messages.Add("Project Not Valid.");
+                    return rtValue;
+                }
+
+
+                var accountLookup = new KfsAccount();
+                accountLookup = await GetAccount(account.Chart, account.Account);
+                if (!accountLookup.IsValidIncomeAccount)
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Field = "Account";
+                    rtValue.Messages.Add("Not An Income Account/Events Account.");
+                    return rtValue;
+                }
+
+
+                //Ok, not check if the org rolls up to our orgs
+                if (await IsOrgChildOfOrg(accountLookup.chartOfAccountsCode,
+                        accountLookup.organizationCode, "3", "AAES") ||
+                    await IsOrgChildOfOrg(accountLookup.chartOfAccountsCode,
+                        accountLookup.organizationCode,
+                        "L", "AAES"))
+                {
+                    rtValue.IsValid = true;
+                }
+                else
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Field = "Account";
+                    rtValue.Messages.Add("Account not in CAES org.");
+                }                
+            }
 
             return rtValue;
         }
@@ -306,35 +332,84 @@ namespace CRP.Mvc.Services
         public async Task<AccountValidationModel> IsAccountValidForRegistration(string account)
         {
             var rtValue = new AccountValidationModel();
-            try
+            if (UseCoa)
             {
-                account = account.Trim();
                 var financialAccount = new FinancialAccount();
-                var delimiter = new string[] {"-"};
-                var accountArray = account.Split(delimiter, StringSplitOptions.None);
-                if (accountArray.Length < 2)
+                financialAccount.FinancialSegmentString = account;
+                if (String.IsNullOrWhiteSpace(account))
                 {
                     rtValue.IsValid = false;
-                    rtValue.Message = "Need chart and account";
-                    rtValue.Field = "Account";
-                    return rtValue;
+                    rtValue.Messages.Add("Financial Segment String is required");
+                    rtValue.Field = "FinancialSegmentString";
                 }
-
-                financialAccount.Chart = accountArray[0].ToUpper();
-                financialAccount.Account = accountArray[1].ToUpper();
-                if (accountArray.Length > 2)
+                else
                 {
-                    financialAccount.SubAccount = accountArray[2].ToUpper();
+                    try
+                    {
+                        rtValue = await _aggieEnterpriseService.ValidateAccount(account);
+                    }
+                    catch (Exception ex)
+                    {
+                        rtValue.IsValid = false;
+                        rtValue.Messages.Add("An error occurred validating against Aggie Enterprise");
+                        rtValue.Field = "FinancialSegmentString";
+                        Log.Error(ex, "An error occurred validating against Aggie Enterprise");
+                    }
+                    rtValue.FinancialAccount = financialAccount;
                 }
-
-                rtValue = await IsAccountValidForRegistration(financialAccount);
-                rtValue.FinancialAccount = financialAccount;
             }
-            catch
+            else
+            {
+                try
+                {
+                    account = account.Trim();
+                    var financialAccount = new FinancialAccount();
+                    var delimiter = new string[] { "-" };
+                    var accountArray = account.Split(delimiter, StringSplitOptions.None);
+                    if (accountArray.Length < 2)
+                    {
+                        rtValue.IsValid = false;
+                        rtValue.Messages.Add("Need chart and account");
+                        rtValue.Field = "Account";
+                        return rtValue;
+                    }
+
+                    financialAccount.Chart = accountArray[0].ToUpper();
+                    financialAccount.Account = accountArray[1].ToUpper();
+                    if (accountArray.Length > 2)
+                    {
+                        financialAccount.SubAccount = accountArray[2].ToUpper();
+                    }
+
+                    rtValue = await IsAccountValidForRegistration(financialAccount);
+                    rtValue.FinancialAccount = financialAccount;
+                }
+                catch
+                {
+                    rtValue.IsValid = false;
+                    rtValue.Messages.Add("Unable to parse account string");
+                    rtValue.Field = "Account";
+                }                
+            }
+
+            return rtValue;
+        }
+        public async Task<AccountValidationModel> IsCoaValidForRegistration(string account)
+        {
+            var rtValue = new AccountValidationModel();
+
+            var financialAccount = new FinancialAccount();
+            financialAccount.FinancialSegmentString = account;
+            if (String.IsNullOrWhiteSpace(account))
             {
                 rtValue.IsValid = false;
-                rtValue.Message = "Unable to parse account string";
-                rtValue.Field = "Account";
+                rtValue.Messages.Add("Financial Segment String is required");
+                rtValue.Field = "FinancialSegmentString";
+            }
+            else
+            {
+                rtValue = await _aggieEnterpriseService.ValidateAccount(account);
+                rtValue.FinancialAccount = financialAccount;
             }
 
             return rtValue;

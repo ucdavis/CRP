@@ -31,6 +31,7 @@ namespace CRP.Mvc
             container.Register(Component.For<IEmailService>().ImplementedBy<EmailService>().Named("emailService"));
             container.Register(Component.For<ISlothService>().ImplementedBy<SlothService>().Named("slothService"));
             container.Register(Component.For<IFinancialService>().ImplementedBy<FinancialService>().Named("FinancialService"));
+            container.Register(Component.For<IAggieEnterpriseService>().ImplementedBy<AggieEnterpriseService>().Named("AggieEnterpriseService"));
         }
 
         private static void AddGenericRepositoriesTo(IWindsorContainer container)

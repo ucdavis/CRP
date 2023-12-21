@@ -1,10 +1,12 @@
 ﻿@model CRP.Controllers.ViewModels.ItemViewModel
 @using CRP.Controllers.Helpers;
+@using CRP.Core.Helpers;
 @using Microsoft.Azure
 @using MvcContrib.FluentHtml
 
-@{ 
+@{
     var selectedItemType = Model.ItemTypes.FirstOrDefault(t => t.Id == Model.Item?.ItemTypeId);
+    var useCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
 }
 
 @Html.AntiForgeryToken()
@@ -14,7 +16,7 @@
     <legend><a href="@CloudConfigurationManager.GetSetting("WatchDemoLink")'" target="_blank">Watch Demo</a></legend>
     <div class="form-group">
         <label>Item Type:</label>
-        @{ 
+        @{
             var typeDisabled = false;
             if (Model.Item != null || !Model.IsNew)
             {
@@ -32,7 +34,7 @@
 
                 return new { @class = "form-control", @required = true };
             };
-        } 
+        }
 
         @Html.DropDownListFor(x => x.Item.ItemTypeId, typeOptions, "--Select an item type--", getItemTyepHtmlOptions())
         @Html.ValidationMessageFor(x => x.Item.ItemTypeId)
@@ -44,23 +46,37 @@
 
     <div class="form-group">
         <label>Name:</label>
-        @Html.TextBoxFor(x => x.Item.Name, new { @class="form-control" })
+        @Html.TextBoxFor(x => x.Item.Name, new { @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Item.Name)
     </div>
     <div class="form-group">
         <label>Unit:</label>
-        @this.Select("Item.UnitId").Class("form-control").Options(Model.Units, x=>x.Id, x=>x.FullName).Selected(Model.Item != null ? Model.Item.UnitId : (Model.UserUnit != null ? Model.UserUnit.Id : 0 ))
+        @this.Select("Item.UnitId").Class("form-control").Options(Model.Units, x => x.Id, x => x.FullName).Selected(Model.Item != null ? Model.Item.UnitId : (Model.UserUnit != null ? Model.UserUnit.Id : 0))
     </div>
 
     <fieldset class="field-border">
         <legend class="field-border">Account Information</legend>
         <fieldset class="field-border">
             <legend class="field-border">Instructions</legend>
-            <text class="help-block">If adding an account not in the dropdown list, it must be a valid account. Separate chart, account, and sub account with -</text>
-            <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be added.</text>
-            <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list. If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+            @if (useCoa == false)
+            {
+                <div>
+                    <text class="help-block">If adding an account not in the dropdown list, it must be a valid account. Separate chart, account, and sub account with -</text>
+                    <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be added.</text>
+                    <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list (Choose --Select an Account Number--). If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <text class="help-block">The Registration site has moved to use Aggie Enterprise accounts</text>
+                    <text class="help-block">If adding an account not in the dropdown list, it must be a valid Chart Of Accounts string. </text>
+                    <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be used.</text>
+                    <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list (Choose --Select an Account Number--). If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+                </div>
+            }
         </fieldset>
-        
+
         <div class="form-group">
             <label>Account Number:</label>
             @{
@@ -82,7 +98,7 @@
                     accountDisabled = false;
                 }
 
-                var accountOptions = Model.FinancialAccounts.Select(a => new SelectListItem() { Text = a.GetAccountString(), Value = a.Id.ToString() });
+                var accountOptions = Model.FinancialAccounts.Select(a => new SelectListItem() { Text = a.GetCoaForList(useCoa), Value = a.Id.ToString() });
 
                 Func<object> getFinancialAccountHtmlOptions = () =>
                 {
@@ -103,25 +119,52 @@
                 <p class="alert-danger">@Model.FinancialAccountWarning</p>
             }
 
-            @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--",  getFinancialAccountHtmlOptions())
+            @Html.DropDownListFor(x => x.Item.FinancialAccountId, accountOptions, "--Select an Account Number--", getFinancialAccountHtmlOptions())
             @Html.ValidationMessage("Item.FinancialAccount")
             <text class="help-block">*Note: If you choose the wrong Account Number, you may not receive your payments made by Credit Card.</text>
-            
+
         </div>
 
-        <p>(OR)</p>
+        <p>(OR) *See instructions above.</p>
 
-        <div class="form-group">
-            <label>User Added Account:</label>
-            @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
-            @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
-            
-        </div>
+        <fieldset class="field-border">
+            <legend class="field-border">User Added</legend>
+            <div class="form-group">
+                <label>User Added Account:</label>
+                <div class="input-group">
+                    @Html.TextBoxFor(x => x.Item.UserAddedFinancialAccount, getFinancialAccountHtmlOptions())
+                    @if (useCoa)
+                    {
+                        <span class="input-group-btn">
+
+                            @if (accountDisabled)
+                            {
+                                <button id="ccoa-picker" class="btn" disabled type="button">COA Picker</button>
+                            }
+                            else
+                            {
+                                <button id="ccoa-picker" class="btn" type="button">COA Picker</button>
+                            }
+
+                        </span>
+                    }
+                </div>
+
+                @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialAccount)
+            </div>
+            <div class="form-group">
+                <label>User Added Account Name:</label>
+                @Html.TextBoxFor(x => x.Item.UserAddedFinancialName, getFinancialAccountHtmlOptions())
+                @Html.ValidationMessageFor(x => x.Item.UserAddedFinancialName)
+            </div>
+        </fieldset>
+
+
     </fieldset>
 
     <div class="form-group">
         <label>Summary:</label>
-        @Html.TextAreaFor(x => x.Item.Summary, new { @class="form-control", rows="5", @data_toggle="tooltip", @title = "A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters."})
+        @Html.TextAreaFor(x => x.Item.Summary, new { @class = "form-control", rows = "5", @data_toggle = "tooltip", @title = "A short summary of the item to display on the home page with the other active items. Line breaks will not display. Max 750 characters." })
         @Html.ValidationMessageFor(x => x.Item.Summary)
     </div>
     <div class="form-group">
@@ -136,9 +179,9 @@
                 ? Html.HtmlEncode("<h1>Thank you for your purchase!</h1> <h2>Please mail your RSVP card and payment to:</h2> <address>College of Agricultural and Environmental Sciences<br />150 Mrak Hall<br />One Shields Ave.<br />Davis, CA 95616<br /></address><h2>Please make checks payable to UC Regents.</h2>")
                 : Html.HtmlEncode(Model.Item.CheckPaymentInstructions);
         }
-        
+
         <textarea class="form-control" cols="20" data-val="true" data-val-required="The CheckPaymentInstructions field is required." id="Item_CheckPaymentInstructions" name="Item.CheckPaymentInstructions" rows="5">@checkPaymentInstructionsValue</textarea>
-        
+
         @Html.ValidationMessageFor(x => x.Item.CheckPaymentInstructions)
     </div>
     <div class="checkbox">
@@ -158,12 +201,12 @@
 
     <div class="form-group">
         <label>Name Of Item:</label>
-        @Html.TextBoxFor(x => x.Item.QuantityName, new { @Value = Model.Item?.QuantityName ?? "Ticket", @class="form-control" })
+        @Html.TextBoxFor(x => x.Item.QuantityName, new { @Value = Model.Item?.QuantityName ?? "Ticket", @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Item.QuantityName)
     </div>
     <div class="form-group">
         <label id="CostPerItemLabel">Cost Per @(Model.Item?.QuantityName ?? "Ticket"):</label>
-        @Html.TextBoxFor(x => x.Item.CostPerItem, "{0:0.00}", new { @class="form-control" })
+        @Html.TextBoxFor(x => x.Item.CostPerItem, "{0:0.00}", new { @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Item.CostPerItem)
     </div>
     <div class="form-group">
@@ -173,12 +216,12 @@
     </div>
     <div class="form-group">
         <label for="Item.Expiration">Last Day To Register Online:</label>
-        @Html.TextBoxFor(x => x.Item.Expiration, "{0:d}", new { @class="form-control", @data_provider="datepicker" })
+        @Html.TextBoxFor(x => x.Item.Expiration, "{0:d}", new { @class = "form-control", @data_provider = "datepicker" })
         @Html.ValidationMessageFor(x => x.Item.Expiration)
     </div>
     <div class="form-group">
         <label for="Item.Link">Link:</label>
-        @Html.TextBoxFor(x => x.Item.Link, new { @class = "form-control validateLink", @data_toggle="tooltip", @title = "You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html", @placeholder= "Example: http://www.ucdavis.edu/index.html" })
+        @Html.TextBoxFor(x => x.Item.Link, new { @class = "form-control validateLink", @data_toggle = "tooltip", @title = "You need the http:// or https:// at the start for a valid URL. For example: http://www.ucdavis.edu/index.html", @placeholder = "Example: http://www.ucdavis.edu/index.html" })
         @Html.ValidationMessageFor(x => x.Item.Link)
         <text class="help-block">The link can be used to point to your own website for more information.</text>
     </div>
@@ -186,7 +229,7 @@
         <legend class="field-border">Optional Donation Link</legend>
         <div class="form-group">
             <label>Donation Legend:</label>
-            @Html.TextBoxFor(x => x.Item.DonationLinkLegend, new { @class="form-control" })
+            @Html.TextBoxFor(x => x.Item.DonationLinkLegend, new { @class = "form-control" })
             @Html.ValidationMessageFor(x => x.Item.DonationLinkLegend)
         </div>
         <div class="form-group">
@@ -196,7 +239,7 @@
         </div>
         <div class="form-group">
             <label>Donation Link:</label>
-            @Html.TextBoxFor(x => x.Item.DonationLinkLink, new { @class = "form-control", @data_toggle ="tooltip", @title = "If this is blank, it will not show up to the user. Validation Has been removed for this field. You need to test it before making this available to the public." })
+            @Html.TextBoxFor(x => x.Item.DonationLinkLink, new { @class = "form-control", @data_toggle = "tooltip", @title = "If this is blank, it will not show up to the user. Validation Has been removed for this field. You need to test it before making this available to the public." })
             @Html.ValidationMessageFor(x => x.Item.DonationLinkLink)
         </div>
         <div class="form-group">
@@ -206,7 +249,7 @@
                     ? Model.Item.DonationLinkText
                     : "Click here";
             }
-            @Html.TextBoxFor(x => x.Item.DonationLinkText, new { @class = "form-control", @Value = defaultDonationLinkText, @data_toggle ="tooltip", @title = "This is the text that will appear in the clickable link." })
+            @Html.TextBoxFor(x => x.Item.DonationLinkText, new { @class = "form-control", @Value = defaultDonationLinkText, @data_toggle = "tooltip", @title = "This is the text that will appear in the clickable link." })
             @Html.ValidationMessageFor(x => x.Item.DonationLinkText)
         </div>
     </fieldset>
@@ -232,21 +275,21 @@
     </div>
     <div class="form-group">
         <label>Restricted Password:</label>
-        @Html.TextBoxFor(x => x.Item.RestrictedKey, new { @class="form-control" })
+        @Html.TextBoxFor(x => x.Item.RestrictedKey, new { @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Item.RestrictedKey)
     </div>
     <div class="form-group">
-    Direct Link to Register:
-    @if (Model.Item?.Id == null)
-    {
-        <span>Save Item to see link</span>
-    }
-    else
-    {
-        <span>
-            @Url.Action("Details", "Item", new { id = Model.Item?.Id }, "https")
-        </span>
-    }
+        Direct Link to Register:
+        @if (Model.Item?.Id == null)
+        {
+            <span>Save Item to see link</span>
+        }
+        else
+        {
+            <span>
+                @Url.Action("Details", "Item", new { id = Model.Item?.Id }, "https")
+            </span>
+        }
     </div>
 </fieldset>
 
@@ -293,9 +336,9 @@
     <text class="help-block">
         The maximum picture size is 4 meg. It must have an aspec ratio of 16:9 (1200x675 preferred). <br />
         A free online resize tool can be found at: http://www.picresize.com/  <br />
-        This one is a little better for cropping if you need to change the aspect ratio: http://resizeimage.net/ <br/>
+        This one is a little better for cropping if you need to change the aspect ratio: http://resizeimage.net/ <br />
         We don't specifically endorse these websites, but we have used them in the past.
-     </text>
+    </text>
     @Html.ValidationMessage("Image")
 </fieldset>
 
@@ -318,3 +361,4 @@
     </div>
 </fieldset>
 <input type="submit" value="Save" class="btn btn-primary" />
+

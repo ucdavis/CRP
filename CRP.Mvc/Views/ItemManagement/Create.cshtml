@@ -8,7 +8,7 @@
 
     <h2>Create</h2>
 
-    @Html.ValidationSummary(false,"Create was unsuccessful. Please correct the errors and try again.")
+    @Html.ValidationSummary(false, "Create was unsuccessful. Please correct the errors and try again.")
 
     @using (Html.BeginForm("Create", "ItemManagement", FormMethod.Post, new { @enctype = "multipart/form-data" }))
     {
@@ -43,4 +43,24 @@
             $("#Item_FinancialAccountId").chosen();
         });
     </script>
+
+    <script src="https://finjector.ucdavis.edu/finjector.js?v=3" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        $("#ccoa-picker").on("click",
+
+            async function () {
+                const chart = await window.Finjector.findChartSegmentString();
+                if (chart && chart.status === "success") {
+                    $("#Item_UserAddedFinancialAccount").val(chart.data);
+                }
+                else {
+                    alert("Something went wrong with the CCOA picker")
+                }
+                return false;
+            });
+
+    </script>
 }
+

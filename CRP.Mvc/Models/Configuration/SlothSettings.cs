@@ -7,5 +7,7 @@ namespace CRP.Mvc.Models.Configuration
         public string BaseUrl { get; set; }
 
         public string ApiKey { get; set; }
+
+        public bool UseCoa { get; set; }
     }
 }

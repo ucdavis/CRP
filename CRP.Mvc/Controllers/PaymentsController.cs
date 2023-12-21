@@ -81,6 +81,18 @@ namespace CRP.Controllers
                 }
             }
 
+            //TODO: Add a check/Flag here to make sure if it has CC as an option that the Financial Account is active and has a COA (Create a new flag)
+            var UseCoa = CloudConfigurationManager.GetSetting("UseCoa").SafeToUpper() == "TRUE";
+            if(UseCoa && item.AllowCreditPayment)
+            {
+                if (item.FinancialAccount == null || !item.FinancialAccount.IsActive || string.IsNullOrWhiteSpace(item.FinancialAccount.FinancialSegmentString))
+                {
+                    ErrorMessage = "This event is not configured to accept registrations at this time.  Please reach out to the event contact below.";
+                    return this.RedirectToAction<ItemController>(a => a.Details(id));
+                }
+            }
+
+
             var viewModel = ItemDetailViewModel.Create(Repository, _openIdUserRepository, item, CurrentUser.Identity.Name, referenceId, coupon, password);
             viewModel.Quantity = 1;
             viewModel.Answers = new List<ItemTransactionAnswer>(); //We don't support openId or Agri business anymore. But keeping the commented code below in case I've introduced a problem 20200608.

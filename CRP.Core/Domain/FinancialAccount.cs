@@ -17,11 +17,14 @@ namespace CRP.Core.Domain
 
         public virtual string Description { get; set; }
 
+        [StringLength(128)]
+        [DisplayName("Financial Segment String")]
+        public virtual string FinancialSegmentString { get; set; }
+
         /// <summary>
         /// Chart Code.
         /// </summary>
         [StringLength(1)]
-        [Required]
         public virtual string Chart { get; set; }
 
         /// <summary>
@@ -30,7 +33,6 @@ namespace CRP.Core.Domain
         /// </summary>
         [StringLength(7)]
         [RegularExpression("[A-Z0-9]*")]
-        [Required]
         public virtual string Account { get; set; }
 
         /// <summary>
@@ -53,12 +55,25 @@ namespace CRP.Core.Domain
 
         public virtual string GetAccountString()
         {
+            if(string.IsNullOrWhiteSpace(Account))
+            {
+                return String.Empty;
+            }
             if (string.IsNullOrWhiteSpace(SubAccount))
             {
                 return $"{Chart}-{Account}";
             }
 
             return $"{Chart}-{Account}-{SubAccount}";
+        }
+
+        public virtual string GetCoaForList(bool useCoa = false)
+        {
+            if (useCoa)
+            {
+                return $"{Name}: {FinancialSegmentString}";                
+            }
+            return $"{Name}: {GetAccountString()}";
         }
     }
 }

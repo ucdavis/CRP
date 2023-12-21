@@ -16,6 +16,7 @@
     <property name="Project" column="Project" />
     <property name="IsActive" column="IsActive" />
     <property name="IsUserAdded" column="IsUserAdded" />
+	<property name="FinancialSegmentString" column="FinancialSegmentString" />
 
     <many-to-one name="Unit" class="CRP.Core.Domain.Unit, CRP.Core" column="UnitId" cascade="none" fetch="join" />
 
