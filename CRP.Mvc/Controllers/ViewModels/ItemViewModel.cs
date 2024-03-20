@@ -52,19 +52,24 @@ namespace CRP.Controllers.ViewModels
                 CurrentUser       = repository.OfType<User>().Queryable.Where(a => a.LoginID == principal.Identity.Name).FirstOrDefault(),
                 
             };
+
+            //Financial filter:
+            //Added By: kstanigu
+            var userAddedFilter = $"Added By: {principal.Identity.Name}";
+
             if (item != null && item.FinancialAccount != null && !item.FinancialAccount.IsActive)
             {
                 //Add in inactive account
-                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive || a.Id == item.FinancialAccount.Id).ToList();
+                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => (a.IsActive && !a.IsUserAdded) || (a.IsActive && a.IsUserAdded && a.Description.StartsWith(userAddedFilter)) || a.Id == item.FinancialAccount.Id).ToList();
                 viewModel.FinancialAccountActive = false;
             }
             else if(item != null && item.FinancialAccount != null && item.FinancialAccount.IsUserAdded)
             {
-                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive || a.Id == item.FinancialAccount.Id).ToList();
+                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => (a.IsActive && !a.IsUserAdded) || (a.IsActive && a.IsUserAdded && a.Description.StartsWith(userAddedFilter)) || a.Id == item.FinancialAccount.Id).ToList();
             }
             else
             {
-                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => a.IsActive && !a.IsUserAdded).ToList();
+                viewModel.FinancialAccounts = repository.OfType<FinancialAccount>().Queryable.Where(a => (a.IsActive && !a.IsUserAdded) || (a.IsActive && a.IsUserAdded && a.Description.StartsWith(userAddedFilter))).ToList();
             }
 
             viewModel.UserUnit = viewModel.CurrentUser.Units.FirstOrDefault();
