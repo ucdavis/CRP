@@ -23,7 +23,6 @@
                 @using (Html.BeginForm())
                 {
                     @Html.AntiForgeryToken()
-
                     <div class="form-group">
                         <label for="Name">Name</label>
                         @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
@@ -54,14 +53,14 @@
                             }
                         </div>
 
-                        <img id="AddOptions" src="@Url.Content("~/Images/plus.png")" style="width: 24px; height: 24px;"/>
+                        <img id="AddOptions" src="@Url.Content("~/Images/plus.png")" style="width: 24px; height: 24px;" />
                         @Html.ValidationMessage("Question.Options")
                     </div>
-                    
+
 
                     <fieldset>
                         <legend for="Validators">Validators:</legend>
-                        
+
                         @for (var i = 0; i < validators.Count; i++)
                         {
                             var id = "Validators[" + i + "]";
@@ -71,7 +70,7 @@
 
                             <div class="checkbox">
                                 <label>
-                                    @Html.CheckBox(name, match, new {id, value = validator.Id})
+                                    @Html.CheckBox(name, match, new { id, value = validator.Id })
                                     @validator.Name
                                 </label>
                             </div>
@@ -80,7 +79,7 @@
                         @Html.ValidationMessage("Question.Validators")
                     </fieldset>
 
-                    <input type="submit" value="Create" class="btn btn-primary pull-right" />
+                    <input type="submit" value="Create" class="btn btn-primary" style="margin: 16px 0;">
                 }
             </div>
             <div class="col-lg-6">
