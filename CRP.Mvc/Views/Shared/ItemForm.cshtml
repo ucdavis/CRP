@@ -73,6 +73,7 @@
                     <text class="help-block">If adding an account not in the dropdown list, it must be a valid Chart Of Accounts string. </text>
                     <text class="help-block">The Registration system is used for event related income only.  Accounts must be within CA&ES and in an event fund type to be used.</text>
                     <text class="help-block">To add an account with the "User Added Account" you must clear out any selected account from the dropdown list (Choose --Select an Account Number--). If the account is valid, it will be added to the dropdown list for this event when it is saved.</text>
+                    <text class="help-block">NOTE!!! if adding a new account (COA Picker), you must also supply it a name.</text>
                 </div>
             }
         </fieldset>
@@ -112,7 +113,7 @@
             }
             @if (!Model.FinancialAccountActive)
             {
-                <p class="alert-danger">Account is not active. Please select a different account and save if you will accept further Credit Card registrations.</p>
+                <p class="alert-danger">Account is not active in this site (or you didn't give it a name). See instructions above. Please select a different account and save if you will accept further Credit Card registrations.</p>
             }
             @if (!string.IsNullOrWhiteSpace(Model.FinancialAccountWarning))
             {
