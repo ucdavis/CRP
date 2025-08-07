@@ -1,0 +1,60 @@
+﻿@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@model CRP.Controllers.ViewModels.UserItemDetailViewModel
+    
+<div class="tab-pane" id="Refunds">
+    <table id="table-Refunds" class="table table-bordered">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Transaction</th>
+                <th id="credit-card-title" title="Click on the image to see the credit card transaction ID. You can search with this id to filter the list below.">Credit Card Id</th>
+                <th>Amount</th>
+                <th>Total Paid</th>
+                <th>Paid</th>
+                <th>Refund Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Transactions)
+            {
+                <tr>
+                    <td>
+                        @if (!item.RefundIssued)
+                        {
+                            @Html.ActionLink("Refund", "Refund", "Transaction", new {id = item.Id}, null)
+                        }
+                        else
+                        {
+                            using (Html.BeginForm<TransactionController>(x => x.RemoveRefund(item.Id), FormMethod.Post, new {@class = "display_inline"}))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-link">Undo</button>
+                            }
+                            <div>
+                                |
+                                @Html.ActionLink("Details", "DetailsRefund", "Transaction", new {id = item.Id}, null)
+                            </div>
+                        }
+
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>
+                    <td data-sort="@item.TransactionGuid">
+                        @if (item.Credit)
+                        {
+                            <i class="fa fa-credit-card" aria-hidden="true"></i>
+                            @item.TransactionGuid
+                        }
+                    </td>
+                    <td data-sort="@item.Amount">@string.Format("{0:C}", item.Amount)</td>
+                    <td data-sort="@item.TotalPaid">@string.Format("{0:$#,##0.00;($#,##0.00); }", item.TotalPaid)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Paid)</td>
+                    <td>@string.Format("{0:$#,##0.00;($#,##0.00); }", item.RefundAmount)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
