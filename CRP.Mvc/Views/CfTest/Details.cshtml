@@ -1,0 +1,132 @@
+﻿@using Microsoft.Web.Mvc.Html
+@model CRP.Controllers.ViewModels.UserItemDetailViewModel
+
+@{
+    ViewBag.Title = "DetailsNew";
+}
+
+@section AdditionalStyles
+{
+    @Styles.Render("~/Content/qtipcss")
+}
+
+@section NavButtons
+{
+    <div class="pull-right" style="margin-left: 10px;">
+        <div class="dropdown">
+
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Item Actions <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Edit", "Edit", "ItemManagement", new { id = Model.Item.Id }, null)</li>
+                <li>@Html.ActionLink("Map", "Map", "ItemManagement", new { id = Model.Item.Id }, null)</li>
+                <li class="divider"></li>
+                <li>@Html.ActionLink("Back to List", "List", "ItemManagement")</li>
+            </ul>
+        </div>
+    </div>
+    <div class="pull-right">
+        @Html.Partial("_LogonPartial")
+    </div>
+
+}
+
+<div class="boundary">
+
+    <h2>Details: @Model.Item.Name</h2>
+    <h3>Sold: @Model.Item.Sold</h3>
+
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#Transactions" data-toggle="tab">Transactions</a></li>
+        <li><a href="#Checks" data-toggle="tab">Checks</a></li>
+        <li><a href="#Reports" data-toggle="tab">Reports</a></li>
+        <li><a href="#Refunds" data-toggle="tab">Refunds</a></li>
+        <li><a href="#Notifications" data-toggle="tab">Notifications</a></li>
+    </ul>
+    <div class="tab-content">
+        @Html.Partial("_TabTransactions", Model.Transactions)       
+        @Html.Partial("_TabChecks")
+        @Html.Partial("_TabReports")
+        @Html.Partial("_TabRefunds")
+        @Html.Partial("_TabNotifications", Model.Transactions)  
+    </div>
+
+
+</div>
+
+@section AdditionalScripts
+{
+    @Scripts.Render("~/bundles/qtip")
+    <script type="text/javascript">
+        $(function () {
+            $("#table-Transactions").dataTable({
+                stateSave: true,
+                stateDuration: 60 * 5,
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [4,5,6]},
+                ]
+            });
+            $("#table-Checks").dataTable({
+                stateSave: true,
+                stateDuration: 60 * 5,
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [5]},
+                ]
+            });
+            $("#table-Reports").dataTable({
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                ]
+            });
+            $("#table-Refunds").dataTable({
+                stateSave: true,
+                stateDuration: 60 * 5,
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [5]},
+                ]
+            });
+            $("#table-Notifications").dataTable({
+                stateSave: true,
+                stateDuration: 60 * 5,
+                "sorting": [[1, "desc"]], //Default sort on second column
+                "columnDefs": [
+                    { 'orderable': false, 'targets': [0] }, //Disables sort on icon columns
+                    { 'type': 'bool', 'targets': [2,4,6]},
+                ]
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $("a.FormSubmit").click(function () { $(this).parents("form").submit(); }); // Probably not needed anymore...
+
+            //Select active tab with link
+            $('#myTab a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+
+            // store the currently selected tab in the hash value
+            $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+                var id = $(e.target).attr("href").substr(1);
+                window.location.hash = id;
+            });
+
+            // on load of the page: switch to the currently selected tab
+            var hash = window.location.hash;
+            $('#myTab a[href="' + hash + '"]').tab('show');
+
+        });
+    </script>
+
+}
+
+

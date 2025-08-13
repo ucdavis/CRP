@@ -557,6 +557,7 @@
     <Compile Include="Controllers\Helpers\ValidateParameters.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\CfTestController.cs" />
     <Compile Include="Controllers\ItemManagementController.cs" />
     <Compile Include="Controllers\MapPinController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
@@ -1237,6 +1238,12 @@
     <Content Include="Views\Transaction\Details.cshtml" />
     <Content Include="Views\Coupon\Details.cshtml" />
     <Content Include="Views\ApplicationManagement\ViewUnCleared.cshtml" />
+    <Content Include="Views\CfTest\_TabChecks.cshtml" />
+    <Content Include="Views\CfTest\_TabNotifications.cshtml" />
+    <Content Include="Views\CfTest\_TabRefunds.cshtml" />
+    <Content Include="Views\CfTest\_TabReports.cshtml" />
+    <Content Include="Views\CfTest\_TabTransactions.cshtml" />
+    <Content Include="Views\CfTest\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,43 @@
+﻿@using CRP.Controllers
+@using Microsoft.Web.Mvc
+@model IEnumerable<CRP.Core.Domain.Transaction>
+    
+<div class="tab-pane" id="Notifications">
+    <table id="table-Notifications" class="table table-bordered">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Transaction</th>
+                <th>Notified</th>
+                <th>Notified Date</th>
+                <th>Paid</th>
+                <th>TotalPaid</th>
+                <th>Check</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Where(a => a.ParentTransaction == null && a.IsActive && (a.Paid || a.Notified)))
+            {
+                <tr>
+                    <td>
+                        @using (Html.BeginForm<TransactionController>(x => x.SendNotification(item.Id), FormMethod.Post, new {@class = "display_inline"}))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-link">Send</button>
+                        }
+
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Notified)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NotifiedDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Paid)</td>
+                    <td data-sort="@item.TotalPaid">@string.Format("{0:$#,##0.00;($#,##0.00); }", item.TotalPaid)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Check)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+

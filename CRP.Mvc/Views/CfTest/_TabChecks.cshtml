@@ -1,0 +1,36 @@
+﻿@model CRP.Controllers.ViewModels.UserItemDetailViewModel
+    
+<div class="tab-pane" id="Checks">
+    <table id="table-Checks" class="table table-bordered">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Transaction Number</th>
+                <th>Contact Name</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Transactions.Where(a => a.Check && a.ParentTransaction == null && a.IsActive))
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink("Select", "Link", "Transaction", new { transactionId = item.Id}, null) |
+                        @Html.ActionLink("Edit", "Edit", "Transaction", new {id = item.Id}, null)
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => Model.CheckName.FirstOrDefault(z => z.TransactionNumber == item.TransactionNumber).FullName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                    <td data-sort="@item.Total">@string.Format("{0:C}", item.Total)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Paid)</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
