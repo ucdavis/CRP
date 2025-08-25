@@ -13,6 +13,7 @@ namespace CRP.Mvc
     {
         protected void Application_Start()
         {
+            System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true; // will add it one, in the web.config
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             LogConfig.ConfigureLogging();
             AreaRegistration.RegisterAllAreas();
@@ -22,3 +23,4 @@ namespace CRP.Mvc
         }
     }
 }
+
