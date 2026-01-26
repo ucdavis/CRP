@@ -67,27 +67,35 @@ namespace CRP.Services
             var user = repository.OfType<User>().Queryable.Where(a => a.LoginID == currentUserName).Single();
             foreach (var itemReport in sourceItem.Reports)
             {
-                var rtItemReport = new ItemReport(itemReport.Name, rtItem, user);
-                foreach (var itemReportColumn in itemReport.Columns)
+                try
                 {
-                    var rtColumn = new ItemReportColumn(itemReportColumn.Name, rtItemReport);
-                    rtColumn.Order = itemReportColumn.Order;
-                    rtColumn.Property = itemReportColumn.Property;
-                    rtColumn.Quantity = itemReportColumn.Quantity;
-                    if (itemReportColumn.QuestionSet != null)
+                    var rtItemReport = new ItemReport(itemReport.Name, rtItem, user);
+                    foreach (var itemReportColumn in itemReport.Columns)
                     {
-                        rtColumn.QuestionSet = questionSetDict[itemReportColumn.QuestionSet.Id];
+                        var rtColumn = new ItemReportColumn(itemReportColumn.Name, rtItemReport);
+                        rtColumn.Order = itemReportColumn.Order;
+                        rtColumn.Property = itemReportColumn.Property;
+                        rtColumn.Quantity = itemReportColumn.Quantity;
+                        if (itemReportColumn.QuestionSet != null)
+                        {
+                            rtColumn.QuestionSet = questionSetDict[itemReportColumn.QuestionSet.Id];
+                        }
+                        rtColumn.Transaction = itemReportColumn.Transaction;
+                        rtColumn.Format = itemReportColumn.Format;
+                        rtItemReport.AddReportColumn(rtColumn);
                     }
-                    rtColumn.Transaction = itemReportColumn.Transaction;
-                    rtColumn.Format = itemReportColumn.Format;
-                    rtItemReport.AddReportColumn(rtColumn);
+                    if (rtItemReport.IsValid())
+                    {
+                        repository.OfType<ItemReport>().EnsurePersistent(rtItemReport);
+                        rtItem.Reports.Add(rtItemReport);
+                    }
                 }
-                if (rtItemReport.IsValid())
+                catch (Exception ex)
                 {
-                    repository.OfType<ItemReport>().EnsurePersistent(rtItemReport);
-                    rtItem.Reports.Add(rtItemReport);
+                    //Can happen if questionSets for the report change, then we try to copy them.
+                    //Don't really care if the report isn't created, they can make a new one.
+                    //var msg = ex.Message;
                 }
-                
             }
         }
 
